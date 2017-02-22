@@ -8,10 +8,10 @@ pub enum UnitSign {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Factor(pub i32);
+pub struct Factor(pub u32);
 
 #[derive(Clone, Debug, PartialEq)]
-pub struct Exponent(pub UnitSign, pub i32);
+pub struct Exponent(pub UnitSign, pub u32);
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum SimpleUnit {
@@ -107,7 +107,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_Component() {
+    fn validate_Component_with_annotations() {
         let simple_unit = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
         let negative_exp = Exponent(UnitSign::Negative, 10);
         let annotatable = Annotatable::UnitWithPower(simple_unit, negative_exp);
@@ -115,7 +115,95 @@ mod tests {
 
         assert_eq!(
             parse_Component("km-10{%vol}").unwrap(),
-            Component::AnnotatedAnnotatable(annotatable, annotation)
+            Component::AnnotatedAnnotatable(annotatable.clone(), annotation.clone())
+            );
+
+        assert_eq!(
+            parse_Component("km-10").unwrap(),
+            Component::Annotatable(annotatable.clone())
+            );
+
+        let annotation = Annotation("wet tis.");
+
+        assert_eq!(
+            parse_Component("{wet tis.}").unwrap(),
+            Component::Annotation(annotation.clone())
+            );
+    }
+
+    #[test]
+    fn validate_Component_with_factor() {
+        assert_eq!(
+            parse_Component("123").unwrap(),
+            Component::Factor(Factor(123))
+            );
+    }
+
+    #[test]
+    fn validate_Component_with_term() {
+        assert_eq!(
+            parse_Component("(123)").unwrap(),
+            Component::Term(Box::new(Term::Basic(Component::Factor(Factor(123)))))
+            );
+    }
+
+    #[test]
+    fn validate_Term_with_dot() {
+        assert_eq!(
+            parse_Term("g.m").unwrap(),
+            Term::DotCombined(
+                Box::new(
+                    Term::Basic(
+                        Component::Annotatable(
+                            Annotatable::Unit(
+                                SimpleUnit::Atom(ATOMS[2].clone())
+                            )
+                        )
+                    )
+                ),
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::Atom(ATOMS[0].clone())
+                    )
+                )
             )
+        );
+    }
+
+    #[test]
+    fn validate_Term_with_slash() {
+        assert_eq!(
+            parse_Term("kg/s").unwrap(),
+            Term::SlashCombined(
+                Box::new(
+                    Term::Basic(
+                        Component::Annotatable(
+                            Annotatable::Unit(
+                                SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[2].clone())
+                            )
+                        )
+                    )
+                ),
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::Atom(ATOMS[1].clone())
+                    )
+                )
+            )
+        );
+    }
+
+    #[test]
+    fn validate_Term_basic() {
+        assert_eq!(
+            parse_Term("g").unwrap(),
+            Term::Basic(
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::Atom(ATOMS[2].clone())
+                    )
+                )
+            )
+        );
     }
 }

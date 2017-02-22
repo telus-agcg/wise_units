@@ -20,7 +20,7 @@ pub Component: Component<'input> = {
 };
 
 pub Annotation: Annotation<'input> = {
-    "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}"))
+    "{" <s:r"[!-z|~ ]*\}"> => Annotation(s.trim_right_matches("}"))
 };
 
 pub Annotatable: Annotatable = {
@@ -39,11 +39,15 @@ pub AtomSymbol: Atom = {
 };
 
 AtomByPrimaryCode: Atom = {
-    "m" => ATOMS[0].clone()
+    "m" => ATOMS[0].clone(),
+    "s" => ATOMS[1].clone(),
+    "g" => ATOMS[2].clone(),
 };
 
 AtomBySecondaryCode: Atom = {
-    "M" => ATOMS[0].clone()
+    "M" => ATOMS[0].clone(),
+    "S" => ATOMS[1].clone(),
+    "G" => ATOMS[2].clone(),
 };
 
 pub PrefixSymbol: Prefix = {
@@ -68,8 +72,8 @@ Factor: Factor = {
     <Digits> => Factor(<>),
 };
 
-Digits: i32 = {
-    <s:r"[1-9]+[0-9]*">  => i32::from_str(s).unwrap()
+Digits: u32 = {
+    <s:r"[1-9]+[0-9]*">  => u32::from_str(s).unwrap()
 };
 
 Sign: UnitSign = { PositiveSign, NegativeSign };
