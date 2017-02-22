@@ -1,0 +1,79 @@
+use atom::{Atom, ATOMS};
+use std::str::FromStr;
+use parser_terms::*;
+use prefix::{Prefix, PREFIXES};
+
+grammar;
+
+pub Term: Term<'input> = {
+    <t:Term> "." <c:Component> => Term::DotCombined(Box::new(t), c),
+    <t:Term> "/" <c:Component> => Term::SlashCombined(Box::new(t), c),
+    <Component> => Term::Basic(<>),
+};
+
+pub Component: Component<'input> = {
+    <Annotatable><Annotation> => Component::AnnotatedAnnotatable(<>),
+    <Annotatable> => Component::Annotatable(<>),
+    <Annotation> => Component::Annotation(<>),
+    <Factor> => Component::Factor(<>),
+    "(" <Term> ")" => Component::Term(Box::new(<>)),
+};
+
+pub Annotation: Annotation<'input> = {
+    "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}"))
+};
+
+pub Annotatable: Annotatable = {
+    <SimpleUnit><Exponent> => Annotatable::UnitWithPower(<>),
+    <SimpleUnit> => Annotatable::Unit(<>),
+};
+
+pub SimpleUnit: SimpleUnit = {
+    <AtomSymbol> => SimpleUnit::Atom(<>),
+    <PrefixSymbol><AtomSymbol> => SimpleUnit::PrefixedAtom(<>)
+};
+
+pub AtomSymbol: Atom = {
+    <AtomByPrimaryCode>,
+    <AtomBySecondaryCode>
+};
+
+AtomByPrimaryCode: Atom = {
+    "m" => ATOMS[0].clone()
+};
+
+AtomBySecondaryCode: Atom = {
+    "M" => ATOMS[0].clone()
+};
+
+pub PrefixSymbol: Prefix = {
+    <PrefixByPrimaryCode>,
+    <PrefixBySecondaryCode>
+};
+
+PrefixByPrimaryCode: Prefix = {
+    "k" => PREFIXES[7].clone()
+};
+
+PrefixBySecondaryCode: Prefix = {
+    "K" => PREFIXES[7].clone()
+};
+
+pub Exponent: Exponent = {
+    <Sign><Digits> => Exponent(<>),
+    <d:Digits> => Exponent(UnitSign::Positive, d)
+};
+
+Factor: Factor = {
+    <Digits> => Factor(<>),
+};
+
+Digits: i32 = {
+    <s:r"[1-9]+[0-9]*">  => i32::from_str(s).unwrap()
+};
+
+Sign: UnitSign = { PositiveSign, NegativeSign };
+PositiveSign: UnitSign = <s:"+"> => UnitSign::Positive;
+NegativeSign: UnitSign = <s:"-"> => UnitSign::Negative;
+
+// vi:ft=rust

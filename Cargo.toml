@@ -1,0 +1,11 @@
+[package]
+name = "wu"
+version = "0.1.0"
+authors = ["Steve Loveless <steve@agrian.com>"]
+build = "build.rs"
+
+[build-dependencies]
+lalrpop = "0.12.5"
+
+[dependencies]
+lalrpop-util = "0.12.5"

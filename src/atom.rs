@@ -1,0 +1,417 @@
+use std::fmt;
+
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum Classification {
+    Apoth,
+    Avoirdupois,
+    BritLength,
+    BritVolumes,
+    CGS,
+    Chemical,
+    Clinical,
+    Const,
+    Dimless,
+    Heat,
+    Infotech,
+    Intcust,
+    ISO1000,
+    Levels,
+    Misc,
+    SI,
+    Troy,
+    Typeset,
+    USLengths,
+    USVolumes,
+}
+
+impl Default for Classification {
+    fn default() -> Classification { Classification::SI }
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum Property {
+    Acceleration,
+    Acidity,
+    Action,
+    ActionArea,
+    AmountOfAllergen,
+    AmountOfFibrinogen,
+    AmountOfInfectuousAgent,
+    AmountOfInformation,
+    AmountOfProliferatingOrganism,
+    AmountOfSubstance,
+    AmountOfSubstanceDissolvedParticles,
+    Arbitrary,
+    ArbitraryBiologicActivity,
+    ArbitraryELISAUnit,
+    Area,
+    BiologicActivityAmylase,
+    BiologicActivityAnticardiolipinIgA,
+    BiologicActivityAnticardiolipinIgG,
+    BiologicActivityAnticardiolipinIgM,
+    BiologicActivityAntistreptolysinO,
+    BiologicActivityFactorVIIIInhibitor,
+    BiologicActivityFactorXaInhibitor,
+    BiologicActivityPhosphatase,
+    BiologicActivityTuberculin,
+    BiologicInfectivity,
+    Brightness,
+    CatalyticActivity,
+    DepthOfWater,
+    DoseEquivalent,
+    DryVolume,
+    DynamicViscosity,
+    EhrlichUnit,
+    ElectricCapacitance,
+    ElectricCharge,
+    ElectricConductance,
+    ElectricCurrent,
+    ElectricPermittivity,
+    ElectricPotential,
+    ElectricPotentialLevel,
+    ElectricResistance,
+    Energy,
+    EnergyDose,
+    FluidResistance,
+    FluidVolume,
+    FluxOfMagneticInduction,
+    Force,
+    Fraction,
+    Frequency,
+    GaugeOfCatheters,
+    HeightOfHorses,
+    HomeopathicPotencyHahnemann,
+    HomeopathicPotencyKorsakov,
+    HomeopathicPotencyRetired,
+    Illuminance,
+    Inductance,
+    IonDose,
+    KinematicViscosity,
+    Length,
+    Level,
+    LinearMassDensity,
+    LineicNumber,
+    LuminousFlux,
+    LuminousIntensity,
+    LuminousIntensityDensity,
+    MagneticFieldIntensity,
+    MagneticFlux,
+    MagneticFluxDensity,
+    MagneticPermeability,
+    MagneticTension,
+    Mass,
+    MassConcentration,
+    MassFraction,
+    MetabolicCost,
+    Number,
+    PlaneAngle,
+    Power,
+    PowerLevel,
+    Pressure,
+    PressureLevel,
+    ProcedureDefinedAntigen,
+    ProcedureDefinedPoliomyelitis,
+    ProcedureDefinedProtein,
+    ProcedureDefinedRagweedAllergen,
+    ProcedureDefinedReferenceAllergen,
+    Radioactivity,
+    RefractionOfLens,
+    RefractionOfPrism,
+    SignalTransmissionRate,
+    Slope,
+    SolidAngle,
+    Temperature,
+    Time,
+    Unclassified,
+    Velocity,
+    ViewAreaInMicroscope,
+    Volume,
+    XRayAttenuation,
+}
+
+impl Default for Property {
+    fn default() -> Property { Property::Unclassified }
+}
+
+impl fmt::Display for Property {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        let string = match *self {
+            Property::Acceleration => "acceleration",
+            Property::Acidity => "acidity",
+            Property::Action => "action",
+            Property::ActionArea => "action area",
+            Property::AmountOfAllergen => "amount of an allergen callibrated through in-vivo testing based on the ID50EAL method of (intradermal dilution for 50mm sum of erythema diameters",
+            Property::AmountOfFibrinogen => "amount of fibrinogen broken down into the measured d-dimers",
+            Property::AmountOfInfectuousAgent => "amount of an infectuous agent",
+            Property::AmountOfInformation => "amount of information",
+            Property::AmountOfProliferatingOrganism => "amount of a proliferating organism",
+            Property::AmountOfSubstance => "amount of substance",
+            Property::AmountOfSubstanceDissolvedParticles => "amount of substance (dissolved particles)",
+            Property::Arbitrary => "arbitrary",
+            Property::ArbitraryBiologicActivity => "arbitrary biologic activity",
+            Property::ArbitraryELISAUnit => "arbitrary ELISA activity",
+            Property::Area => "area",
+            Property::BiologicActivityAmylase => "biologic activity of amylase",
+            Property::BiologicActivityAnticardiolipinIgA => "biologic activity of anticardiolipin IgA",
+            Property::BiologicActivityAnticardiolipinIgG => "biologic activity of anticardiolipin IgG",
+            Property::BiologicActivityAnticardiolipinIgM => "biologic activity of anticardiolipin IgM",
+            Property::BiologicActivityAntistreptolysinO => "biologic activity antistreptolysin O",
+            Property::BiologicActivityFactorVIIIInhibitor => "biologic activity of factor VIII inhibitor",
+            Property::BiologicActivityFactorXaInhibitor => "biologic activity of factor Xa inhibitor (heparin)",
+            Property::BiologicActivityPhosphatase => "biologic activity of phosphatase",
+            Property::BiologicActivityTuberculin => "biologic activity of tuberculin",
+            Property::BiologicInfectivity => "biologic activity (infectivity) of an infectuous agent preparation",
+            Property::Brightness => "brightness",
+            Property::CatalyticActivity => "catalytic activity",
+            Property::DepthOfWater => "depth of water",
+            Property::DoseEquivalent => "dose equivalent",
+            Property::DryVolume => "dry volume",
+            Property::DynamicViscosity => "dynamic viscosity",
+            Property::EhrlichUnit => "Ehrlich unit",
+            Property::ElectricCapacitance => "electric capacitance",
+            Property::ElectricCharge => "electric charge",
+            Property::ElectricConductance => "electric conductance",
+            Property::ElectricCurrent => "electric current",
+            Property::ElectricPermittivity => "electric permittivity",
+            Property::ElectricPotential => "electric potential",
+            Property::ElectricPotentialLevel => "electric potential level",
+            Property::ElectricResistance => "electric resistance",
+            Property::Energy => "energy",
+            Property::EnergyDose => "energy dose",
+            Property::FluidResistance => "fluid resistance",
+            Property::FluidVolume => "fluid volume",
+            Property::FluxOfMagneticInduction => "flux of magnetic induction",
+            Property::Force => "force",
+            Property::Fraction => "fraction",
+            Property::Frequency => "frequency",
+            Property::GaugeOfCatheters => "gauge of catheters",
+            Property::HeightOfHorses => "height of horses",
+            Property::HomeopathicPotencyHahnemann => "homeopathic potency (Hahnemann)",
+            Property::HomeopathicPotencyKorsakov => "homeopathic potency (Korsakov)",
+            Property::HomeopathicPotencyRetired => "homeopathic potency (retired)",
+            Property::Illuminance => "illuminance",
+            Property::Inductance => "inductance",
+            Property::IonDose => "ion dose",
+            Property::KinematicViscosity => "kinematic viscosity",
+            Property::Length => "length",
+            Property::Level => "level",
+            Property::LinearMassDensity => "linear mass density (of textile thread)",
+            Property::LineicNumber => "lineic number",
+            Property::LuminousFlux => "luminous flux",
+            Property::LuminousIntensity => "luminous intensity",
+            Property::LuminousIntensityDensity => "lum. intensity density",
+            Property::MagneticFieldIntensity => "magnetic field density",
+            Property::MagneticFlux => "magnetic flux",
+            Property::MagneticFluxDensity => "magnetic flux density",
+            Property::MagneticPermeability => "magnetic permeability",
+            Property::MagneticTension => "magnetic tension",
+            Property::Mass => "mass",
+            Property::MassConcentration => "mass concentration",
+            Property::MassFraction => "mass fraction",
+            Property::MetabolicCost => "metabolic cost of physical activity",
+            Property::Number => "number",
+            Property::PlaneAngle => "plane angle",
+            Property::Power => "power level",
+            Property::PowerLevel => "power level",
+            Property::Pressure => "pressure",
+            Property::PressureLevel => "pressure level",
+            Property::ProcedureDefinedAntigen => "procedure defined amount of antigen substance",
+            Property::ProcedureDefinedPoliomyelitis => "procedure defined amount of a poliomyelitis d-antigen substance",
+            Property::ProcedureDefinedProtein => "procedure defined amount of a protein substance",
+            Property::ProcedureDefinedRagweedAllergen => "procedure defined amount of the major allergen of ragweed.",
+            Property::ProcedureDefinedReferenceAllergen => "procedure defined amount of an allergen using some reference standard",
+            Property::Radioactivity => "radioactivity",
+            Property::RefractionOfLens => "refraction of a lens",
+            Property::RefractionOfPrism => "refraction of a prism",
+            Property::SignalTransmissionRate => "signal transmission rate",
+            Property::Slope => "slope",
+            Property::SolidAngle => "solid angle",
+            Property::Temperature => "temperature",
+            Property::Time => "time",
+            Property::Unclassified => "(unclassified)",
+            Property::Velocity => "velocity",
+            Property::ViewAreaInMicroscope => "view area in microscope",
+            Property::Volume => "volume",
+            Property::XRayAttenuation => "x-ray attenuation",
+        };
+
+        write!(formatter, "{}", string)
+    }
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum AtomType {
+    Base,
+    Derived,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Atom {
+    pub atom_type: AtomType,
+    pub classification: Classification,
+    pub names: &'static [&'static str],
+    pub primary_code: &'static str,
+    pub print_symbol: Option<&'static str>,
+    pub property: Property,
+    pub scale: f64,
+    pub secondary_code: &'static str,
+    arbitrary: bool,
+    dim: &'static str,
+    metric: bool,
+    special: bool,
+}
+
+impl Atom {
+    fn dim(&self) -> String {
+        // Commenting to save from implemented composition module
+        // if self.is_terminal() {
+            self.property.to_string()
+        // } else {
+        //     self.composition_string()
+        // }
+    }
+
+    fn is_arbitrary(&self) -> bool {
+        self.arbitrary
+    }
+
+    fn is_base(&self) -> bool {
+        match self.atom_type {
+            AtomType::Base => true,
+            AtomType::Derived => false
+        }
+    }
+
+    fn is_derived(&self) -> bool {
+        match self.atom_type {
+            AtomType::Base => false,
+            AtomType::Derived => true
+        }
+    }
+
+    fn is_metric(&self) -> bool {
+        self.metric
+    }
+}
+
+
+pub static ATOMS: [Atom; 7] = [
+    Atom {
+        atom_type: AtomType::Base,
+        classification: Classification::SI,
+        names: &["meter"],
+        primary_code: "m",
+        print_symbol: Some("m"),
+        property: Property::Length,
+        scale: 1.0,
+        secondary_code: "M",
+        arbitrary: false,
+        dim: "L",
+        metric: true,
+        special: false,
+    },
+    Atom {
+        atom_type: AtomType::Base,
+        classification: Classification::SI,
+        names: &["second"],
+        primary_code: "s",
+        print_symbol: Some("s"),
+        property: Property::Time,
+        scale: 1.0,
+        secondary_code: "S",
+        arbitrary: false,
+        dim: "T",
+        metric: true,
+        special: false,
+    },
+    Atom {
+        atom_type: AtomType::Base,
+        classification: Classification::SI,
+        names: &["gram"],
+        primary_code: "g",
+        print_symbol: Some("g"),
+        property: Property::Mass,
+        scale: 1.0,
+        secondary_code: "G",
+        arbitrary: false,
+        dim: "M",
+        metric: true,
+        special: false,
+    },
+    Atom {
+        atom_type: AtomType::Base,
+        classification: Classification::SI,
+        names: &["radian"],
+        primary_code: "rad",
+        print_symbol: Some("rad"),
+        property: Property::PlaneAngle,
+        scale: 1.0,
+        secondary_code: "RAD",
+        arbitrary: false,
+        dim: "A",
+        metric: true,
+        special: false,
+    },
+    Atom {
+        atom_type: AtomType::Base,
+        classification: Classification::SI,
+        names: &["Kelvin"],
+        primary_code: "K",
+        print_symbol: Some("K"),
+        property: Property::Temperature,
+        scale: 1.0,
+        secondary_code: "K",
+        arbitrary: false,
+        dim: "C",
+        metric: true,
+        special: false,
+    },
+    Atom {
+        atom_type: AtomType::Base,
+        classification: Classification::SI,
+        names: &["Coulomb"],
+        primary_code: "C",
+        print_symbol: Some("C"),
+        property: Property::ElectricCharge,
+        scale: 1.0,
+        secondary_code: "C",
+        arbitrary: false,
+        dim: "Q",
+        metric: true,
+        special: false,
+    },
+    Atom {
+        atom_type: AtomType::Base,
+        classification: Classification::SI,
+        names: &["candela"],
+        primary_code: "cd",
+        print_symbol: Some("cd"),
+        property: Property::LuminousIntensity,
+        scale: 1.0,
+        secondary_code: "CD",
+        arbitrary: false,
+        dim: "F",
+        metric: true,
+        special: false,
+    },
+    // Atom::Derived(DerivedAtom {
+    //     names: &["the number ten for arbitrary powers"],
+    //     print_symbol: Some("10"),
+    //     primary_code: "10*",
+    //     secondary_code: Some("10*"),
+    //     scale: Scale::Scalar(ScalarScale {
+    //         value: 10.0,
+    //         unit: Unit {
+    //             expression: Cow::Borrowed("1"),
+    //             mode: UnitDisplayMode::PrimaryKey,
+    //             // not sure if this is right...
+    //             terms: None,
+    //         }
+    //     }),
+    //     classification: Classification::Dimless,
+    //     property: Property::Number,
+    //     metric: false,
+    //     special: false,
+    //     arbitrary: false,
+    // })
+];
