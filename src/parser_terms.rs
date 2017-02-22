@@ -30,8 +30,8 @@ pub struct Annotation<'a>(pub &'a str);
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Term<'a> {
-    DotCombined(Box<Term<'a>>, Component<'a>),
-    SlashCombined(Box<Term<'a>>, Component<'a>),
+    DotCombined(Component<'a>, Box<Term<'a>>),
+    SlashCombined(Component<'a>, Box<Term<'a>>),
     Basic(Component<'a>),
 }
 
@@ -152,18 +152,18 @@ mod tests {
         assert_eq!(
             parse_Term("g.m").unwrap(),
             Term::DotCombined(
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::Atom(ATOMS[2].clone())
+                    )
+                ),
                 Box::new(
                     Term::Basic(
                         Component::Annotatable(
                             Annotatable::Unit(
-                                SimpleUnit::Atom(ATOMS[2].clone())
+                                SimpleUnit::Atom(ATOMS[0].clone())
                             )
                         )
-                    )
-                ),
-                Component::Annotatable(
-                    Annotatable::Unit(
-                        SimpleUnit::Atom(ATOMS[0].clone())
                     )
                 )
             )
@@ -175,18 +175,18 @@ mod tests {
         assert_eq!(
             parse_Term("kg/s").unwrap(),
             Term::SlashCombined(
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[2].clone())
+                    )
+                ),
                 Box::new(
                     Term::Basic(
                         Component::Annotatable(
                             Annotatable::Unit(
-                                SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[2].clone())
+                                SimpleUnit::Atom(ATOMS[1].clone())
                             )
                         )
-                    )
-                ),
-                Component::Annotatable(
-                    Annotatable::Unit(
-                        SimpleUnit::Atom(ATOMS[1].clone())
                     )
                 )
             )

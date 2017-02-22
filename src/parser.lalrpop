@@ -6,8 +6,8 @@ use prefix::{Prefix, PREFIXES};
 grammar;
 
 pub Term: Term<'input> = {
-    <t:Term> "." <c:Component> => Term::DotCombined(Box::new(t), c),
-    <t:Term> "/" <c:Component> => Term::SlashCombined(Box::new(t), c),
+    <c:Component> "." <t:Term> => Term::DotCombined(c, Box::new(t)),
+    <c:Component> "/" <t:Term> => Term::SlashCombined(c, Box::new(t)),
     <Component> => Term::Basic(<>),
 };
 
