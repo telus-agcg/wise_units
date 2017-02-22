@@ -5,6 +5,11 @@ use prefix::{Prefix, PREFIXES};
 
 grammar;
 
+pub MainTerm: Term<'input> = {
+    "/" <Term>,
+    <Term>
+};
+
 pub Term: Term<'input> = {
     <c:Component> "." <t:Term> => Term::DotCombined(c, Box::new(t)),
     <c:Component> "/" <t:Term> => Term::SlashCombined(c, Box::new(t)),
@@ -20,7 +25,7 @@ pub Component: Component<'input> = {
 };
 
 pub Annotation: Annotation<'input> = {
-    "{" <s:r"[!-z|~ ]*\}"> => Annotation(s.trim_right_matches("}"))
+    "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}"))
 };
 
 pub Annotatable: Annotatable = {

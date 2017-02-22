@@ -52,25 +52,25 @@ mod tests {
     use prefix::*;
 
     #[test]
-    fn validate_Exp() {
+    fn validate_exponent() {
         assert_eq!(parse_Exponent("123").unwrap(), Exponent(UnitSign::Positive, 123));
         assert_eq!(parse_Exponent("-123").unwrap(), Exponent(UnitSign::Negative, 123));
     }
 
     #[test]
-    fn validate_PrefixSymbol() {
+    fn validate_prefix_symbol() {
         assert_eq!(parse_PrefixSymbol("k").unwrap(), PREFIXES[7]);
         assert_eq!(parse_PrefixSymbol("K").unwrap(), PREFIXES[7]);
     }
 
     #[test]
-    fn validate_AtomSymbol() {
+    fn validate_atom_symbol() {
         assert_eq!(parse_AtomSymbol("m").unwrap(), ATOMS[0]);
         assert_eq!(parse_AtomSymbol("M").unwrap(), ATOMS[0]);
     }
 
     #[test]
-    fn validate_SimpleUnit() {
+    fn validate_simple_unit() {
         let su_atom = SimpleUnit::Atom(ATOMS[0].clone());
         let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
 
@@ -83,7 +83,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_Annotatable() {
+    fn validate_annotatable() {
         let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
         let ann = Annotatable::Unit(su_pre_atom.clone());
 
@@ -102,12 +102,12 @@ mod tests {
     }
 
     #[test]
-    fn validate_Annotation() {
+    fn validate_annotation() {
         assert_eq!(parse_Annotation("{things123}").unwrap(), Annotation("things123"));
     }
 
     #[test]
-    fn validate_Component_with_annotations() {
+    fn validate_component_with_annotations() {
         let simple_unit = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
         let negative_exp = Exponent(UnitSign::Negative, 10);
         let annotatable = Annotatable::UnitWithPower(simple_unit, negative_exp);
@@ -123,16 +123,16 @@ mod tests {
             Component::Annotatable(annotatable.clone())
             );
 
-        let annotation = Annotation("wet tis.");
+        let annotation = Annotation("wet'tis.");
 
         assert_eq!(
-            parse_Component("{wet tis.}").unwrap(),
+            parse_Component("{wet'tis.}").unwrap(),
             Component::Annotation(annotation.clone())
             );
     }
 
     #[test]
-    fn validate_Component_with_factor() {
+    fn validate_component_with_factor() {
         assert_eq!(
             parse_Component("123").unwrap(),
             Component::Factor(Factor(123))
@@ -140,7 +140,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_Component_with_term() {
+    fn validate_component_with_term() {
         assert_eq!(
             parse_Component("(123)").unwrap(),
             Component::Term(Box::new(Term::Basic(Component::Factor(Factor(123)))))
@@ -148,7 +148,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_Term_with_dot() {
+    fn validate_term_with_dot() {
         assert_eq!(
             parse_Term("g.m").unwrap(),
             Term::DotCombined(
@@ -171,7 +171,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_Term_with_slash() {
+    fn validate_term_with_slash() {
         assert_eq!(
             parse_Term("kg/s").unwrap(),
             Term::SlashCombined(
@@ -194,7 +194,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_Term_basic() {
+    fn validate_term_basic() {
         assert_eq!(
             parse_Term("g").unwrap(),
             Term::Basic(
@@ -202,6 +202,21 @@ mod tests {
                     Annotatable::Unit(
                         SimpleUnit::Atom(ATOMS[2].clone())
                     )
+                )
+            )
+        );
+    }
+
+    #[test]
+    fn validate_main_term_with_slash() {
+        assert_eq!(
+            parse_MainTerm("/g{tot'nit}").unwrap(),
+            Term::Basic(
+                Component::AnnotatedAnnotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::Atom(ATOMS[2].clone())
+                    ),
+                    Annotation("tot'nit")
                 )
             )
         );
