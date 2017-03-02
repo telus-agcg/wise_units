@@ -262,7 +262,7 @@ pub struct Atom {
 }
 
 impl Atom {
-    fn dim(&self) -> String {
+    pub fn dim(&self) -> String {
         // Commenting to save from implemented composition module
         // if self.is_terminal() {
             self.property.to_string()
@@ -271,25 +271,25 @@ impl Atom {
         // }
     }
 
-    fn is_arbitrary(&self) -> bool {
+    pub fn is_arbitrary(&self) -> bool {
         self.arbitrary
     }
 
-    fn is_base(&self) -> bool {
+    pub fn is_base(&self) -> bool {
         match self.atom_type {
             AtomType::Base => true,
             AtomType::Derived => false
         }
     }
 
-    fn is_derived(&self) -> bool {
+    pub fn is_derived(&self) -> bool {
         match self.atom_type {
             AtomType::Base => false,
             AtomType::Derived => true
         }
     }
 
-    fn is_metric(&self) -> bool {
+    pub fn is_metric(&self) -> bool {
         self.metric
     }
 }

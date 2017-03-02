@@ -1,10 +1,21 @@
 use atom::Atom;
 use prefix::Prefix;
+use std::collections::BTreeMap;
+use std::fmt;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum UnitSign {
     Positive,
     Negative
+}
+
+impl fmt::Display for UnitSign {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UnitSign::Positive => write!(f, ""),
+            UnitSign::Negative => write!(f, "-"),
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -13,10 +24,40 @@ pub struct Factor(pub u32);
 #[derive(Clone, Debug, PartialEq)]
 pub struct Exponent(pub UnitSign, pub u32);
 
+impl Exponent {
+    pub fn as_i32(&self) -> i32 {
+        match self.0 {
+            UnitSign::Positive => { self.1 as i32 },
+            UnitSign::Negative => { !self.1 as i32 },
+        }
+    }
+}
+
+impl fmt::Display for Exponent {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}{}", self.0, self.1)
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub enum SimpleUnit {
     Atom(Atom),
     PrefixedAtom(Prefix, Atom),
+}
+
+impl SimpleUnit {
+    pub fn composition(&self) -> BTreeMap<String, i32> {
+        let mut map: BTreeMap<String, i32> = BTreeMap::new();
+
+        match *self {
+            SimpleUnit::Atom(ref atom) => {
+                map.insert(String::from(atom.dim), 1);
+            },
+            _ => { map.insert(String::from("blah"), 0); }
+        }
+
+        map
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -25,31 +66,38 @@ pub enum Annotatable {
     UnitWithPower(SimpleUnit, Exponent),
 }
 
+impl Annotatable {
+    pub fn composition(&self) -> BTreeMap<String, i32> {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => simple_unit.composition(),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let mut map: BTreeMap<String, i32> = BTreeMap::new();
+
+                match *simple_unit {
+                    SimpleUnit::Atom(ref atom) => {
+                        let exp: i32 = exponent.as_i32();
+                        map.insert(String::from(atom.dim), exp);
+                    },
+                    _ => { map.insert(String::from("blah"), 0); }
+                }
+
+                map
+            }
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq)]
 pub struct Annotation<'a>(pub &'a str);
-
-#[derive(Clone, Debug, PartialEq)]
-pub enum Term<'a> {
-    DotCombined(Component<'a>, Box<Term<'a>>),
-    SlashCombined(Component<'a>, Box<Term<'a>>),
-    Basic(Component<'a>),
-}
-
-#[derive(Clone, Debug, PartialEq)]
-pub enum Component<'a> {
-    AnnotatedAnnotatable(Annotatable, Annotation<'a>),
-    Annotatable(Annotatable),
-    Annotation(Annotation<'a>),
-    Factor(Factor),
-    Term(Box<Term<'a>>),
-}
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use parser::*;
     use atom::*;
+    use component::Component;
+    use parser::*;
     use prefix::*;
+    use term::Term;
 
     #[test]
     fn validate_exponent() {

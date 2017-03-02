@@ -1,7 +1,9 @@
 use atom::{Atom, ATOMS};
+use component::Component;
 use std::str::FromStr;
 use parser_terms::*;
 use prefix::{Prefix, PREFIXES};
+use term::Term;
 
 grammar;
 
