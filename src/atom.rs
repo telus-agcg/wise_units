@@ -7,10 +7,6 @@ pub enum AtomType {
     Derived,
 }
 
-pub trait TAtom {
-    fn classification() -> Classification;
-}
-
 #[derive(Clone, Debug, PartialEq)]
 pub struct Atom {
     pub atom_type: AtomType,

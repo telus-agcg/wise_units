@@ -1,6 +1,5 @@
 pub mod atom;
 pub mod classification;
-pub mod atoms;
 pub mod component;
 pub mod measurement;
 pub mod parser_terms;
