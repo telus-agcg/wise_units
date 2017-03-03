@@ -1,3 +1,4 @@
+use atom::Dimension;
 use component::Component;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
@@ -24,7 +25,7 @@ impl<'a> Term<'a> {
     //     }
     // }
 
-    pub fn composition(&self) -> BTreeMap<String, i32> {
+    pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Term::Basic(ref component) => component.composition(),
             Term::SlashCombined(ref component, ref box_term) => {
@@ -63,11 +64,11 @@ impl<'a> Term<'a> {
 
     fn composition_string(&self) -> String {
         let composition = self.composition();
-        println!("composition: {:?}", composition);
+        // println!("composition: {:?}", composition);
 
         composition.into_iter()
             .map(|(k, v)| match v {
-                1 => k.to_owned(),
+                1 => k.to_string(),
                 _ => format!("{}{}", k, v),
             })
             .collect::<Vec<String>>()
@@ -85,31 +86,32 @@ impl<'a> Term<'a> {
 
 #[cfg(test)]
 mod tests {
+    use atom::Dimension;
     use parser::*;
     use std::collections::BTreeMap;
 
     #[test]
     fn validate_composition() {
         let term = parse_MainTerm("m").unwrap();
-        let mut map: BTreeMap<String, i32> = BTreeMap::new();
-        map.insert("L".to_string(), 1);
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 1);
         assert_eq!(term.composition(), map);
 
         let term = parse_MainTerm("m2").unwrap();
-        let mut map: BTreeMap<String, i32> = BTreeMap::new();
-        map.insert("L".to_string(), 2);
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
         assert_eq!(term.composition(), map);
 
         let term = parse_MainTerm("m2/s").unwrap();
-        let mut map: BTreeMap<String, i32> = BTreeMap::new();
-        map.insert("L".to_string(), 2);
-        map.insert("T".to_string(), -1);
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        map.insert(Dimension::Time, -1);
         assert_eq!(term.composition(), map);
 
         let term = parse_MainTerm("s/m2").unwrap();
-        let mut map: BTreeMap<String, i32> = BTreeMap::new();
-        map.insert("L".to_string(), -2);
-        map.insert("T".to_string(), 1);
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, -2);
+        map.insert(Dimension::Time, 1);
         assert_eq!(term.composition(), map);
     }
 

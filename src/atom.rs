@@ -1,4 +1,5 @@
 pub use classification::Classification;
+pub use dimension::Dimension;
 pub use property::Property;
 
 #[derive(Clone, Debug, PartialEq)]
@@ -19,7 +20,7 @@ pub struct Atom {
     pub secondary_code: &'static str,
     arbitrary: bool,
     // TODO: making public for testing
-    pub dim: &'static str,
+    pub dim: Dimension,
     metric: bool,
     special: bool,
 }
@@ -69,7 +70,7 @@ pub static ATOMS: [Atom; 7] = [
         scale: 1.0,
         secondary_code: "M",
         arbitrary: false,
-        dim: "L",
+        dim: Dimension::Length,
         metric: true,
         special: false,
     },
@@ -83,7 +84,7 @@ pub static ATOMS: [Atom; 7] = [
         scale: 1.0,
         secondary_code: "S",
         arbitrary: false,
-        dim: "T",
+        dim: Dimension::Time,
         metric: true,
         special: false,
     },
@@ -97,7 +98,7 @@ pub static ATOMS: [Atom; 7] = [
         scale: 1.0,
         secondary_code: "G",
         arbitrary: false,
-        dim: "M",
+        dim: Dimension::Mass,
         metric: true,
         special: false,
     },
@@ -111,7 +112,7 @@ pub static ATOMS: [Atom; 7] = [
         scale: 1.0,
         secondary_code: "RAD",
         arbitrary: false,
-        dim: "A",
+        dim: Dimension::PlaneAngle,
         metric: true,
         special: false,
     },
@@ -125,7 +126,7 @@ pub static ATOMS: [Atom; 7] = [
         scale: 1.0,
         secondary_code: "K",
         arbitrary: false,
-        dim: "C",
+        dim: Dimension::Temperature,
         metric: true,
         special: false,
     },
@@ -139,7 +140,7 @@ pub static ATOMS: [Atom; 7] = [
         scale: 1.0,
         secondary_code: "C",
         arbitrary: false,
-        dim: "Q",
+        dim: Dimension::ElectricCharge,
         metric: true,
         special: false,
     },
@@ -153,7 +154,7 @@ pub static ATOMS: [Atom; 7] = [
         scale: 1.0,
         secondary_code: "CD",
         arbitrary: false,
-        dim: "F",
+        dim: Dimension::LuminousIntensity,
         metric: true,
         special: false,
     },

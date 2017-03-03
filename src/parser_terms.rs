@@ -1,4 +1,4 @@
-use atom::Atom;
+use atom::{Atom, Dimension};
 use prefix::Prefix;
 use std::collections::BTreeMap;
 use std::fmt;
@@ -46,14 +46,15 @@ pub enum SimpleUnit {
 }
 
 impl SimpleUnit {
-    pub fn composition(&self) -> BTreeMap<String, i32> {
-        let mut map: BTreeMap<String, i32> = BTreeMap::new();
+    pub fn composition(&self) -> BTreeMap<Dimension, i32> {
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
         match *self {
             SimpleUnit::Atom(ref atom) => {
-                map.insert(String::from(atom.dim), 1);
+                map.insert(atom.dim.clone(), 1);
             },
-            _ => { map.insert(String::from("blah"), 0); }
+            // TODO: Fix!
+            _ => { map.insert(Dimension::Length, 0); }
         }
 
         map
@@ -67,18 +68,19 @@ pub enum Annotatable {
 }
 
 impl Annotatable {
-    pub fn composition(&self) -> BTreeMap<String, i32> {
+    pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Annotatable::Unit(ref simple_unit) => simple_unit.composition(),
             Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
-                let mut map: BTreeMap<String, i32> = BTreeMap::new();
+                let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
                 match *simple_unit {
                     SimpleUnit::Atom(ref atom) => {
                         let exp: i32 = exponent.as_i32();
-                        map.insert(String::from(atom.dim), exp);
+                        map.insert(atom.dim.clone(), exp);
                     },
-                    _ => { map.insert(String::from("blah"), 0); }
+                    // TODO: Fix!
+                    _ => { map.insert(Dimension::Length, 0); }
                 }
 
                 map

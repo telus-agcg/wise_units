@@ -1,3 +1,4 @@
+use atom::Dimension;
 use parser_terms::{Annotatable, Annotation, Factor};
 use std::collections::BTreeMap;
 use term::Term;
@@ -23,7 +24,7 @@ impl<'a> Component<'a> {
     //     }
     // }
 
-    pub fn composition(&self) -> BTreeMap<String, i32> {
+    pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Component::Annotatable(ref annotatable) => {
                 annotatable.composition()
