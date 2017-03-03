@@ -59,6 +59,17 @@ impl SimpleUnit {
 
         map
     }
+
+    pub fn is_special(&self) -> bool {
+        match *self {
+            SimpleUnit::Atom(ref atom) => {
+                atom.special
+            },
+            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
+                atom.special
+            }
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -84,6 +95,17 @@ impl Annotatable {
                 }
 
                 map
+            }
+        }
+    }
+
+    pub fn is_special(&self) -> bool {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => {
+                simple_unit.is_special()
+            },
+            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
+                simple_unit.is_special()
             }
         }
     }

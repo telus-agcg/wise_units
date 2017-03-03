@@ -10,6 +10,7 @@ pub enum AtomType {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Atom {
+    pub arbitrary: bool,
     pub atom_type: AtomType,
     pub classification: Classification,
     pub names: &'static [&'static str],
@@ -18,11 +19,10 @@ pub struct Atom {
     pub property: Property,
     pub scale: f64,
     pub secondary_code: &'static str,
-    arbitrary: bool,
+    pub special: bool,
     // TODO: making public for testing
     pub dim: Dimension,
     metric: bool,
-    special: bool,
 }
 
 impl Atom {
@@ -33,10 +33,6 @@ impl Atom {
         // } else {
         //     self.composition_string()
         // }
-    }
-
-    pub fn is_arbitrary(&self) -> bool {
-        self.arbitrary
     }
 
     pub fn is_base(&self) -> bool {

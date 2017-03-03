@@ -36,6 +36,20 @@ impl<'a> Component<'a> {
             _ => { BTreeMap::new() }
         }
     }
+
+    pub fn is_special(&self) -> bool {
+        match *self {
+            Component::AnnotatedAnnotatable(ref annotatable, ref __annotation) => {
+                annotatable.is_special()
+            },
+            Component::Annotatable(ref annotatable) => {
+                annotatable.is_special()
+            },
+            Component::Annotation(_) => false,
+            Component::Factor(_) => false,
+            Component::Term(_) => false,
+        }
+    }
 }
 
 // #[cfg(test)]

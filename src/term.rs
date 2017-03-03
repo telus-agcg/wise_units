@@ -76,11 +76,20 @@ impl<'a> Term<'a> {
             .join(".")
     }
 
-    pub fn is_compatible_with(&self, other: &Term) -> bool {
+    pub fn is_compatible_with<'b>(&self, other: &Term<'b>) -> bool {
         let me = self.composition();
         let other = other.composition();
 
         me == other
+    }
+
+    pub fn is_special(&self) -> bool {
+        match *self {
+            Term::Basic(ref component) => {
+                component.is_special()
+            },
+            _ => false
+        }
     }
 }
 
