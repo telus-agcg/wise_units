@@ -74,6 +74,13 @@ impl<'a> Term<'a> {
             .as_slice()
             .join(".")
     }
+
+    pub fn is_compatible_with(&self, other: &Term) -> bool {
+        let me = self.composition();
+        let other = other.composition();
+
+        me == other
+    }
 }
 
 #[cfg(test)]
@@ -119,5 +126,12 @@ mod tests {
 
         let term = parse_MainTerm("s/m2").unwrap();
         assert_eq!(term.composition_string(), "L-2.T");
+    }
+
+    #[test]
+    fn validate_is_compatible_with() {
+        let me = parse_MainTerm("m2").unwrap();
+        let other = parse_MainTerm("m3/m").unwrap();
+        assert!(me.is_compatible_with(&other))
     }
 }
