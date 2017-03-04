@@ -39,6 +39,17 @@ impl Annotatable {
             }
         }
     }
+
+    pub fn prefix_scalar(&self) -> f64 {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => {
+                simple_unit.prefix_scalar()
+            },
+            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
+                simple_unit.prefix_scalar()
+            }
+        }
+    }
 }
 
 #[cfg(test)]
@@ -66,5 +77,24 @@ mod tests {
         assert_eq!(&parse_Annotatable("km").unwrap(), &ann);
         assert_eq!(&parse_Annotatable("km10").unwrap(), &ann_with_pos_power);
         assert_eq!(&parse_Annotatable("km-10").unwrap(), &ann_with_neg_power);
+    }
+
+    #[test]
+    fn validate_prefix_scalar() {
+        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
+        let ann = Annotatable::Unit(su_pre_atom.clone());
+
+        let ann_with_pos_power = Annotatable::UnitWithPower(
+            su_pre_atom.clone(),
+            Exponent(UnitSign::Positive, 10)
+            );
+
+        let ann_with_neg_power = Annotatable::UnitWithPower(
+            su_pre_atom.clone(),
+            Exponent(UnitSign::Negative, 10)
+            );
+        assert_eq!(ann.prefix_scalar(), 1000.0);
+        assert_eq!(ann_with_pos_power.prefix_scalar(), 1000.0);
+        assert_eq!(ann_with_neg_power.prefix_scalar(), 1000.0);
     }
 }

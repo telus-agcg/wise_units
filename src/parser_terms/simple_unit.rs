@@ -13,9 +13,7 @@ impl SimpleUnit {
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
         match *self {
-            SimpleUnit::Atom(ref atom) => {
-                map.insert(atom.dim.clone(), 1);
-            },
+            SimpleUnit::Atom(ref atom) => { map.insert(atom.dim.clone(), 1); },
             // TODO: Fix!
             _ => { map.insert(Dimension::Length, 0); }
         }
@@ -25,12 +23,15 @@ impl SimpleUnit {
 
     pub fn is_special(&self) -> bool {
         match *self {
-            SimpleUnit::Atom(ref atom) => {
-                atom.special
-            },
-            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
-                atom.special
-            }
+            SimpleUnit::Atom(ref atom) => atom.special,
+            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => atom.special
+        }
+    }
+
+    pub fn prefix_scalar(&self) -> f64 {
+        match *self {
+            SimpleUnit::Atom(_) => 1.0,
+            SimpleUnit::PrefixedAtom(ref prefix, ref _atom) => prefix.scalar
         }
     }
 }
@@ -53,5 +54,14 @@ mod tests {
         assert_eq!(&parse_SimpleUnit("kM").unwrap(), &su_pre_atom);
         assert_eq!(&parse_SimpleUnit("Km").unwrap(), &su_pre_atom);
         assert_eq!(&parse_SimpleUnit("KM").unwrap(), &su_pre_atom);
+    }
+
+    #[test]
+    fn validate_prefix_scalar() {
+        let su_atom = SimpleUnit::Atom(ATOMS[0].clone());
+        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
+
+        assert_eq!(su_atom.prefix_scalar(), 1.0);
+        assert_eq!(su_pre_atom.prefix_scalar(), 1000.0);
     }
 }

@@ -91,33 +91,117 @@ impl<'a> Term<'a> {
             _ => false
         }
     }
+
+    pub fn prefix_scalar(&self) -> f64 {
+        match *self {
+            Term::DotCombined(ref component, ref box_term) => {
+                let comp_prefix = component.prefix_scalar();
+                let ref term = *box_term;
+                let term_prefix = term.prefix_scalar();
+
+                comp_prefix * term_prefix
+            },
+            Term::SlashCombined(ref component, ref box_term) => {
+                let comp_prefix = component.prefix_scalar();
+                let ref term = *box_term;
+                let term_prefix = term.prefix_scalar();
+
+                comp_prefix / term_prefix
+            },
+            Term::Basic(ref component) => {
+                component.prefix_scalar()
+            }
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use atom::Dimension;
+    use atom::{ATOMS, Dimension};
     use parser::*;
+    use parser_terms::*;
+    use prefix::PREFIXES;
     use std::collections::BTreeMap;
 
     #[test]
+    fn validate_term_with_dot() {
+        assert_eq!(
+            parse_Term("g.m").unwrap(),
+            Term::DotCombined(
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::Atom(ATOMS[2].clone())
+                    )
+                ),
+                Box::new(
+                    Term::Basic(
+                        Component::Annotatable(
+                            Annotatable::Unit(
+                                SimpleUnit::Atom(ATOMS[0].clone())
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+    #[test]
+    fn validate_term_with_slash() {
+        assert_eq!(
+            parse_Term("kg/s").unwrap(),
+            Term::SlashCombined(
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[2].clone())
+                    )
+                ),
+                Box::new(
+                    Term::Basic(
+                        Component::Annotatable(
+                            Annotatable::Unit(
+                                SimpleUnit::Atom(ATOMS[1].clone())
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+
+    #[test]
+    fn validate_term_basic() {
+        assert_eq!(
+            parse_Term("g").unwrap(),
+            Term::Basic(
+                Component::Annotatable(
+                    Annotatable::Unit(
+                        SimpleUnit::Atom(ATOMS[2].clone())
+                    )
+                )
+            )
+        );
+    }
+
+    #[test]
     fn validate_composition() {
-        let term = parse_MainTerm("m").unwrap();
+        let term = parse_Term("m").unwrap();
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
         map.insert(Dimension::Length, 1);
         assert_eq!(term.composition(), map);
 
-        let term = parse_MainTerm("m2").unwrap();
+        let term = parse_Term("m2").unwrap();
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
         map.insert(Dimension::Length, 2);
         assert_eq!(term.composition(), map);
 
-        let term = parse_MainTerm("m2/s").unwrap();
+        let term = parse_Term("m2/s").unwrap();
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
         map.insert(Dimension::Length, 2);
         map.insert(Dimension::Time, -1);
         assert_eq!(term.composition(), map);
 
-        let term = parse_MainTerm("s/m2").unwrap();
+        let term = parse_Term("s/m2").unwrap();
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
         map.insert(Dimension::Length, -2);
         map.insert(Dimension::Time, 1);
@@ -126,23 +210,41 @@ mod tests {
 
     #[test]
     fn validate_composition_string() {
-        let term = parse_MainTerm("m").unwrap();
+        let term = parse_Term("m").unwrap();
         assert_eq!(term.composition_string(), "L");
 
-        let term = parse_MainTerm("m2").unwrap();
+        let term = parse_Term("m2").unwrap();
         assert_eq!(term.composition_string(), "L2");
 
-        let term = parse_MainTerm("m2/s").unwrap();
+        let term = parse_Term("m2/s").unwrap();
         assert_eq!(term.composition_string(), "L2.T-1");
 
-        let term = parse_MainTerm("s/m2").unwrap();
+        let term = parse_Term("s/m2").unwrap();
         assert_eq!(term.composition_string(), "L-2.T");
     }
 
     #[test]
     fn validate_is_compatible_with() {
-        let me = parse_MainTerm("m2").unwrap();
-        let other = parse_MainTerm("m3/m").unwrap();
+        let me = parse_Term("m2").unwrap();
+        let other = parse_Term("m3/m").unwrap();
         assert!(me.is_compatible_with(&other))
+    }
+
+    #[test]
+    fn validate_prefix_scalar_dot_combined() {
+        let term = parse_Term("m2.s").unwrap();
+        assert_eq!(term.prefix_scalar(), 1.0);
+
+        let term = parse_Term("km.kg").unwrap();
+        assert_eq!(term.prefix_scalar(), 1_000_000.0);
+    }
+
+    #[test]
+    fn validate_prefix_scalar_slash_combined() {
+        let term = parse_Term("m2/s").unwrap();
+        assert_eq!(term.prefix_scalar(), 1.0);
+
+        let term = parse_Term("km/kg").unwrap();
+        assert_eq!(term.prefix_scalar(), 1.0);
     }
 }
