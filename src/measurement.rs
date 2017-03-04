@@ -1,5 +1,5 @@
 use parser::parse_MainTerm;
-use term::Term;
+use parser_terms::Term;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Measurement<'a> {
@@ -45,8 +45,7 @@ impl<'a> Measurement<'a> {
 mod tests {
     use super::*;
     use atom::ATOMS;
-    use component::Component;
-    use parser_terms::*;
+    use parser_terms::{Annotatable, Component, SimpleUnit, Term};
 
     #[test]
     fn validate_new() {

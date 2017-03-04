@@ -1,7 +1,6 @@
 use atom::Dimension;
-use parser_terms::{Annotatable, Annotation, Factor};
+use parser_terms::{Annotatable, Annotation, Factor, Term};
 use std::collections::BTreeMap;
-use term::Term;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Component<'a> {

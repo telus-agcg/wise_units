@@ -1,5 +1,5 @@
 use atom::Dimension;
-use component::Component;
+use parser_terms::Component;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 
