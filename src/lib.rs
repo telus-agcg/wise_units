@@ -6,3 +6,5 @@ pub mod parser_terms;
 pub mod parser;
 pub mod prefix;
 pub mod property;
+
+pub use measurement::Measurement;

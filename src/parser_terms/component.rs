@@ -63,6 +63,48 @@ impl<'a> Component<'a> {
             _ => 1.0
         }
     }
+
+    pub fn scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            Component::Term(ref box_term) => {
+                let ref term = *box_term;
+                term.scalar(magnitude)
+            },
+            Component::Factor(_) => 1.0,
+            Component::Annotation(_) => 1.0,
+            Component::Annotatable(ref annotatable) => {
+                annotatable.scalar(magnitude)
+            },
+            Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
+                annotatable.scalar(magnitude)
+            }
+        }
+    }
+
+    pub fn scalar_default(&self) -> f64 {
+        self.scalar(1.0)
+    }
+
+    pub fn magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            Component::Term(ref box_term) => {
+                let ref term = *box_term;
+                term.magnitude(scalar)
+            },
+            Component::Factor(_) => 1.0,
+            Component::Annotation(_) => 1.0,
+            Component::Annotatable(ref annotatable) => {
+                annotatable.magnitude(scalar)
+            },
+            Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
+                annotatable.magnitude(scalar)
+            }
+        }
+    }
+
+    pub fn magnitude_default(&self) -> f64 {
+        self.magnitude(1.0)
+    }
 }
 
 #[cfg(test)]

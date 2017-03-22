@@ -3,7 +3,7 @@ use parser_terms::Term;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Measurement<'a> {
-    value: f64,
+    pub value: f64,
     term: Term<'a>,
 }
 
@@ -33,11 +33,37 @@ impl<'a> Measurement<'a> {
         }
 
         let new_measurement = Measurement {
-            value: 1.0,
+            value: self.converted_value(&other_term),
             term: other_term
         };
 
         Ok(new_measurement)
+    }
+
+    pub fn is_special(&self) -> bool {
+        let ref t = self.term;
+
+        t.is_special()
+    }
+
+    pub fn scalar(&self, magnitude: f64) -> f64 {
+        if self.is_special() {
+            self.term.scalar(magnitude)
+        } else {
+            self.value * self.term.scalar_default()
+        }
+    }
+
+    pub fn scalar_default(&self) -> f64 {
+        self.scalar(self.value)
+    }
+
+    fn converted_value(&self, other_term: &Term) -> f64 {
+        if other_term.is_special() {
+            other_term.magnitude(self.scalar_default())
+        } else {
+            self.scalar_default() / other_term.scalar_default()
+        }
     }
 }
 

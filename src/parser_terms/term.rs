@@ -35,10 +35,7 @@ impl<'a> Term<'a> {
 
                 for (term_dim_name, term_value) in term_composition {
                     match component_composition.entry(term_dim_name) {
-                        Entry::Vacant(e) => {
-                            println!("term value: {}", term_value);
-                            e.insert(-term_value);
-                        },
+                        Entry::Vacant(e) => { e.insert(-term_value); },
                         Entry::Occupied(mut e) => { *e.get_mut() -= term_value; }
                     }
                 }
@@ -64,7 +61,6 @@ impl<'a> Term<'a> {
 
     fn composition_string(&self) -> String {
         let composition = self.composition();
-        // println!("composition: {:?}", composition);
 
         composition.into_iter()
             .map(|(k, v)| match v {
@@ -90,6 +86,46 @@ impl<'a> Term<'a> {
             },
             _ => false
         }
+    }
+
+    pub fn magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            Term::DotCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.magnitude(scalar) * term.magnitude(scalar)
+            },
+            Term::SlashCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.magnitude(scalar) * term.magnitude(scalar)
+            },
+            Term::Basic(ref component) => {
+                component.magnitude(scalar)
+            }
+        }
+    }
+
+    pub fn magnitude_default(&self) -> f64 {
+        self.magnitude(1.0)
+    }
+
+    pub fn scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            Term::DotCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.scalar(magnitude) * term.scalar(magnitude)
+            },
+            Term::SlashCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.scalar(magnitude) * term.scalar(magnitude)
+            },
+            Term::Basic(ref component) => {
+                component.scalar(magnitude)
+            }
+        }
+    }
+
+    pub fn scalar_default(&self) -> f64 {
+        self.scalar(1.0)
     }
 
     pub fn prefix_scalar(&self) -> f64 {
@@ -209,6 +245,31 @@ mod tests {
     }
 
     #[test]
+    fn validate_composition_with_prefix() {
+        let term = parse_Term("km").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 1);
+        assert_eq!(term.composition(), map);
+
+        let term = parse_Term("km2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        assert_eq!(term.composition(), map);
+
+        let term = parse_Term("km2/s").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        map.insert(Dimension::Time, -1);
+        assert_eq!(term.composition(), map);
+
+        let term = parse_Term("s/km2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, -2);
+        map.insert(Dimension::Time, 1);
+        assert_eq!(term.composition(), map);
+    }
+
+    #[test]
     fn validate_composition_string() {
         let term = parse_Term("m").unwrap();
         assert_eq!(term.composition_string(), "L");
@@ -224,9 +285,33 @@ mod tests {
     }
 
     #[test]
+    fn validate_composition_string_with_prefix() {
+        let term = parse_Term("km").unwrap();
+        assert_eq!(term.composition_string(), "L");
+
+        let term = parse_Term("km2").unwrap();
+        assert_eq!(term.composition_string(), "L2");
+
+        let term = parse_Term("km2/s").unwrap();
+        assert_eq!(term.composition_string(), "L2.T-1");
+
+        let term = parse_Term("s/km2").unwrap();
+        assert_eq!(term.composition_string(), "L-2.T");
+    }
+
+    #[test]
     fn validate_is_compatible_with() {
         let me = parse_Term("m2").unwrap();
         let other = parse_Term("m3/m").unwrap();
+        assert!(me.is_compatible_with(&other))
+    }
+
+    #[test]
+    fn validate_is_compatible_with_with_prefix() {
+        let me = parse_Term("m").unwrap();
+        let other = parse_Term("km").unwrap();
+        println!("me: {:?}", me.composition_string());
+        println!("other: {:?}", other.composition_string());
         assert!(me.is_compatible_with(&other))
     }
 

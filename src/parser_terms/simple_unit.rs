@@ -14,8 +14,9 @@ impl SimpleUnit {
 
         match *self {
             SimpleUnit::Atom(ref atom) => { map.insert(atom.dim.clone(), 1); },
-            // TODO: Fix!
-            _ => { map.insert(Dimension::Length, 0); }
+            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
+                map.insert(atom.dim.clone(), 1);
+            },
         }
 
         map
@@ -33,6 +34,23 @@ impl SimpleUnit {
             SimpleUnit::Atom(_) => 1.0,
             SimpleUnit::PrefixedAtom(ref prefix, ref _atom) => prefix.scalar
         }
+    }
+
+    pub fn scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref atom) => atom.scale * magnitude,
+            SimpleUnit::PrefixedAtom(ref prefix, ref atom) => {
+                prefix.scalar * atom.scale * magnitude
+            }
+        }
+    }
+
+    pub fn scalar_default(&self) -> f64 {
+        self.scalar(1.0)
+    }
+
+    pub fn magnitude(&self, scalar: f64) -> f64 {
+        scalar
     }
 }
 

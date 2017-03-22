@@ -20,8 +20,10 @@ impl Annotatable {
                         let exp: i32 = exponent.as_i32();
                         map.insert(atom.dim.clone(), exp);
                     },
-                    // TODO: Fix!
-                    _ => { map.insert(Dimension::Length, 0); }
+                    SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
+                        let exp: i32 = exponent.as_i32();
+                        map.insert(atom.dim.clone(), exp);
+                    },
                 }
 
                 map
@@ -49,6 +51,36 @@ impl Annotatable {
                 simple_unit.prefix_scalar()
             }
         }
+    }
+
+    pub fn scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => {
+                simple_unit.scalar(magnitude)
+            },
+            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
+                simple_unit.scalar(magnitude)
+            }
+        }
+    }
+
+    pub fn scalar_default(&self) -> f64 {
+        self.scalar(1.0)
+    }
+
+    pub fn magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => {
+                simple_unit.magnitude(scalar)
+            },
+            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
+                simple_unit.magnitude(scalar)
+            }
+        }
+    }
+
+    pub fn magnitude_default(&self) -> f64 {
+        self.magnitude(1.0)
     }
 }
 
