@@ -1,4 +1,4 @@
-use atom::{Atom, ATOMS};
+use atom::*;
 use std::str::FromStr;
 use parser_terms::*;
 use prefix::{Prefix, PREFIXES};
@@ -38,21 +38,21 @@ pub SimpleUnit: SimpleUnit = {
     <PrefixSymbol><AtomSymbol> => SimpleUnit::PrefixedAtom(<>)
 };
 
-pub AtomSymbol: Atom = {
+pub AtomSymbol: Box<Atom> = {
     <AtomByPrimaryCode>,
     <AtomBySecondaryCode>
 };
 
-AtomByPrimaryCode: Atom = {
-    "m" => ATOMS[0].clone(),
-    "s" => ATOMS[1].clone(),
-    "g" => ATOMS[2].clone(),
+AtomByPrimaryCode: Box<Atom> = {
+    "m" => Box::new(Meter {}) as Box<Atom>,
+    "s" => Box::new(Second {}) as Box<Atom>,
+    "g" => Box::new(Gram {}) as Box<Atom>,
 };
 
-AtomBySecondaryCode: Atom = {
-    "M" => ATOMS[0].clone(),
-    "S" => ATOMS[1].clone(),
-    "G" => ATOMS[2].clone(),
+AtomBySecondaryCode: Box<Atom> = {
+    "M" => Box::new(Meter {}) as Box<Atom>,
+    "S" => Box::new(Second {}) as Box<Atom>,
+    "G" => Box::new(Gram {}) as Box<Atom>,
 };
 
 pub PrefixSymbol: Prefix = {

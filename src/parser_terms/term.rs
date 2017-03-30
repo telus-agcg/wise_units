@@ -3,7 +3,6 @@ use parser_terms::Component;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 
-#[derive(Clone, Debug, PartialEq)]
 pub enum Term<'a> {
     DotCombined(Component<'a>, Box<Term<'a>>),
     SlashCombined(Component<'a>, Box<Term<'a>>),

@@ -1,2 +1,2 @@
-#[derive(Clone, Debug, PartialEq)]
+#[derive(PartialEq)]
 pub struct Factor(pub u32);

@@ -1,7 +1,6 @@
 use parser::parse_MainTerm;
 use parser_terms::Term;
 
-#[derive(Clone, Debug, PartialEq)]
 pub struct Measurement<'a> {
     pub value: f64,
     term: Term<'a>,

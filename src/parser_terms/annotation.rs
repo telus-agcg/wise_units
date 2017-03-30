@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, PartialEq)]
+#[derive(PartialEq)]
 pub struct Annotation<'a>(pub &'a str);
 
 #[cfg(test)]

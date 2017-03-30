@@ -2,10 +2,9 @@ use atom::{Atom, Dimension};
 use prefix::Prefix;
 use std::collections::BTreeMap;
 
-#[derive(Clone, Debug, PartialEq)]
 pub enum SimpleUnit {
-    Atom(Atom),
-    PrefixedAtom(Prefix, Atom),
+    Atom(Box<Atom>),
+    PrefixedAtom(Prefix, Box<Atom>),
 }
 
 impl SimpleUnit {
@@ -13,9 +12,9 @@ impl SimpleUnit {
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
         match *self {
-            SimpleUnit::Atom(ref atom) => { map.insert(atom.dim.clone(), 1); },
+            SimpleUnit::Atom(ref atom) => { map.insert(atom.dim(), 1); },
             SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
-                map.insert(atom.dim.clone(), 1);
+                map.insert(atom.dim(), 1);
             },
         }
 
@@ -24,8 +23,8 @@ impl SimpleUnit {
 
     pub fn is_special(&self) -> bool {
         match *self {
-            SimpleUnit::Atom(ref atom) => atom.special,
-            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => atom.special
+            SimpleUnit::Atom(ref atom) => atom.special(),
+            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => atom.special()
         }
     }
 
@@ -38,9 +37,9 @@ impl SimpleUnit {
 
     pub fn scalar(&self, magnitude: f64) -> f64 {
         match *self {
-            SimpleUnit::Atom(ref atom) => atom.scale * magnitude,
+            SimpleUnit::Atom(ref atom) => atom.scale() * magnitude,
             SimpleUnit::PrefixedAtom(ref prefix, ref atom) => {
-                prefix.scalar * atom.scale * magnitude
+                prefix.scalar * atom.scale() * magnitude
             }
         }
     }

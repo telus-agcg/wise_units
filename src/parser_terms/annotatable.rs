@@ -2,7 +2,6 @@ use atom::Dimension;
 use parser_terms::{Exponent, SimpleUnit};
 use std::collections::BTreeMap;
 
-#[derive(Clone, Debug, PartialEq)]
 pub enum Annotatable {
     Unit(SimpleUnit),
     UnitWithPower(SimpleUnit, Exponent),
@@ -16,13 +15,15 @@ impl Annotatable {
                 let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
                 match *simple_unit {
-                    SimpleUnit::Atom(ref atom) => {
+                    SimpleUnit::Atom(ref box_atom) => {
                         let exp: i32 = exponent.as_i32();
-                        map.insert(atom.dim.clone(), exp);
+                        let ref atom = **box_atom;
+                        map.insert(atom.dim(), exp);
                     },
-                    SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
+                    SimpleUnit::PrefixedAtom(ref _prefix, ref box_atom) => {
                         let exp: i32 = exponent.as_i32();
-                        map.insert(atom.dim.clone(), exp);
+                        let ref atom = *box_atom;
+                        map.insert(atom.dim(), exp);
                     },
                 }
 
