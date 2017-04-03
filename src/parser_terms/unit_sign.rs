@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum UnitSign {
     Positive,
     Negative

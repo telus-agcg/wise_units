@@ -1,23 +1,13 @@
 mod atom_type;
-mod candela;
-mod coulomb;
-mod gram;
-mod kelvin;
-mod meter;
-mod radian;
-mod second;
+pub mod base;
 
 pub use atom::atom_type::AtomType;
-pub use atom::candela::Candela;
-pub use atom::coulomb::Coulomb;
-pub use atom::gram::Gram;
-pub use atom::kelvin::Kelvin;
-pub use atom::meter::Meter;
-pub use atom::radian::Radian;
-pub use atom::second::Second;
 pub use classification::Classification;
 pub use dimension::Dimension;
 pub use property::Property;
+
+use std::cmp::PartialEq;
+use std::fmt;
 
 pub trait Atom {
     fn arbitrary(&self) -> bool;
@@ -34,55 +24,21 @@ pub trait Atom {
     fn metric(&self) -> bool;
 }
 
-// impl Atom {
-//     pub fn dim(&self) -> String {
-//         // Commenting to save from implemented composition module
-//         // if self.is_terminal() {
-//             self.property.to_string()
-//         // } else {
-//         //     self.composition_string()
-//         // }
-//     }
+impl<'a> fmt::Display for Atom {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.primary_code())
+    }
+}
 
-//     pub fn is_base(&self) -> bool {
-//         match self.atom_type {
-//             AtomType::Base => true,
-//             AtomType::Derived => false
-//         }
-//     }
+impl<'a> PartialEq for &'a Box<Atom> {
+    fn eq(&self, other: &&'a Box<Atom>) -> bool {
+        self.primary_code() == other.primary_code()
+    }
+}
 
-//     pub fn is_derived(&self) -> bool {
-//         match self.atom_type {
-//             AtomType::Base => false,
-//             AtomType::Derived => true
-//         }
-//     }
-
-//     pub fn is_metric(&self) -> bool {
-//         self.metric
-//     }
-// }
-
-
-// pub static ATOMS: [Atom; 7] = [
-//     // Atom::Derived(DerivedAtom {
-//     //     names: &["the number ten for arbitrary powers"],
-//     //     print_symbol: Some("10"),
-//     //     primary_code: "10*",
-//     //     secondary_code: Some("10*"),
-//     //     scale: Scale::Scalar(ScalarScale {
-//     //         value: 10.0,
-//     //         unit: Unit {
-//     //             expression: Cow::Borrowed("1"),
-//     //             mode: UnitDisplayMode::PrimaryKey,
-//     //             // not sure if this is right...
-//     //             terms: None,
-//     //         }
-//     //     }),
-//     //     classification: Classification::Dimless,
-//     //     property: Property::Number,
-//     //     metric: false,
-//     //     special: false,
-//     //     arbitrary: false,
-//     // })
-// ];
+impl fmt::Debug for Atom {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        println!("debug self pc: {}", &self.primary_code());
+        write!(f, "Atom ({})", &self.primary_code())
+    }
+}

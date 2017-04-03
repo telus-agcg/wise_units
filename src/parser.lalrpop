@@ -1,4 +1,5 @@
-use atom::*;
+use atom::Atom;
+use atom::base::*;
 use std::str::FromStr;
 use parser_terms::*;
 use prefix::{Prefix, PREFIXES};
@@ -44,15 +45,21 @@ pub AtomSymbol: Box<Atom> = {
 };
 
 AtomByPrimaryCode: Box<Atom> = {
-    "m" => Box::new(Meter {}) as Box<Atom>,
-    "s" => Box::new(Second {}) as Box<Atom>,
-    "g" => Box::new(Gram {}) as Box<Atom>,
+    "m" => Box::new(Meter) as Box<Atom>,
+    "s" => Box::new(Second) as Box<Atom>,
+    "g" => Box::new(Gram) as Box<Atom>,
+    "rad" => Box::new(Radian) as Box<Atom>,
+    "K" => Box::new(Kelvin) as Box<Atom>,
+    "C" => Box::new(Coulomb) as Box<Atom>,
+    "cd" => Box::new(Candela) as Box<Atom>,
 };
 
 AtomBySecondaryCode: Box<Atom> = {
-    "M" => Box::new(Meter {}) as Box<Atom>,
-    "S" => Box::new(Second {}) as Box<Atom>,
-    "G" => Box::new(Gram {}) as Box<Atom>,
+    "M" => Box::new(Meter) as Box<Atom>,
+    "S" => Box::new(Second) as Box<Atom>,
+    "G" => Box::new(Gram) as Box<Atom>,
+    "RAD" => Box::new(Radian) as Box<Atom>,
+    "CD" => Box::new(Candela) as Box<Atom>,
 };
 
 pub PrefixSymbol: Prefix = {

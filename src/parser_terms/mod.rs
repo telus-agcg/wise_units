@@ -19,7 +19,8 @@ pub use parser_terms::unit_sign::UnitSign;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use atom::ATOMS;
+    use atom::Atom;
+    use atom::base::{Gram, Meter};
     use parser::*;
     use prefix::PREFIXES;
 
@@ -31,8 +32,12 @@ mod tests {
 
     #[test]
     fn validate_atom_symbol() {
-        assert_eq!(parse_AtomSymbol("m").unwrap(), ATOMS[0]);
-        assert_eq!(parse_AtomSymbol("M").unwrap(), ATOMS[0]);
+        let meter = Box::new(Meter) as Box<Atom>;
+        let atom_symbol = parse_AtomSymbol("m").unwrap() as Box<Atom>;
+        assert_eq!(&atom_symbol, &meter);
+
+        let atom_symbol = parse_AtomSymbol("M").unwrap() as Box<Atom>;
+        assert_eq!(&atom_symbol, &meter);
     }
 
     #[test]
@@ -42,7 +47,7 @@ mod tests {
             Term::Basic(
                 Component::AnnotatedAnnotatable(
                     Annotatable::Unit(
-                        SimpleUnit::Atom(ATOMS[2].clone())
+                        SimpleUnit::Atom(Box::new(Gram))
                     ),
                     Annotation("tot'nit")
                 )

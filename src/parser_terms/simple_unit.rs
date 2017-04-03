@@ -1,7 +1,9 @@
 use atom::{Atom, Dimension};
 use prefix::Prefix;
 use std::collections::BTreeMap;
+use std::fmt;
 
+#[derive(Debug)]
 pub enum SimpleUnit {
     Atom(Box<Atom>),
     PrefixedAtom(Prefix, Box<Atom>),
@@ -53,17 +55,53 @@ impl SimpleUnit {
     }
 }
 
+impl fmt::Display for SimpleUnit {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SimpleUnit::Atom(ref box_atom) => {
+                let ref atom = *box_atom;
+                write!(f, "{}", atom)
+            },
+            SimpleUnit::PrefixedAtom(ref prefix, ref box_atom) => {
+                let ref atom = *box_atom;
+                write!(f, "{}{}", prefix, atom)
+            },
+        }
+    }
+}
+
+impl PartialEq for SimpleUnit {
+    fn eq(&self, rhs: &Self) -> bool {
+        match *self {
+            SimpleUnit::Atom(ref box_atom) => {
+                match *rhs {
+                    SimpleUnit::Atom(ref box_rhs) => box_atom == box_rhs,
+                    SimpleUnit::PrefixedAtom(ref _prefix, ref _box_rhs) => false
+                }
+            },
+            SimpleUnit::PrefixedAtom(ref prefix, ref box_atom) => {
+                match *rhs {
+                    SimpleUnit::Atom(ref _box_rhs) => false,
+                    SimpleUnit::PrefixedAtom(ref rhs_prefix, ref box_rhs) => {
+                        prefix == rhs_prefix && box_atom == box_rhs
+                    }
+                }
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::SimpleUnit;
-    use atom::ATOMS;
+    use atom::base::Meter;
     use parser::parse_SimpleUnit;
     use prefix::PREFIXES;
 
     #[test]
     fn validate_simple_unit() {
-        let su_atom = SimpleUnit::Atom(ATOMS[0].clone());
-        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
+        let su_atom = SimpleUnit::Atom(Box::new(Meter));
+        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Meter));
 
         assert_eq!(&parse_SimpleUnit("m").unwrap(), &su_atom);
         assert_eq!(&parse_SimpleUnit("km").unwrap(), &su_pre_atom);
@@ -75,8 +113,8 @@ mod tests {
 
     #[test]
     fn validate_prefix_scalar() {
-        let su_atom = SimpleUnit::Atom(ATOMS[0].clone());
-        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
+        let su_atom = SimpleUnit::Atom(Box::new(Meter));
+        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Meter));
 
         assert_eq!(su_atom.prefix_scalar(), 1.0);
         assert_eq!(su_pre_atom.prefix_scalar(), 1000.0);

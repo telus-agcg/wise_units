@@ -9,6 +9,7 @@ pub enum Dimension {
     PlaneAngle,         // A
     Temperature,        // C
     Time,               // T
+    None,               // For dimless units
 }
 
 impl fmt::Display for Dimension {
@@ -21,6 +22,7 @@ impl fmt::Display for Dimension {
             Dimension::PlaneAngle => { write!(f, "A") },
             Dimension::Temperature => { write!(f, "C") },
             Dimension::Time => { write!(f, "T") },
+            Dimension::None => { Ok(()) },
         }
     }
 }

@@ -1,4 +1,5 @@
 use atom::Classification;
+use std::fmt;
 
 #[derive(Clone, Debug, PartialEq, PartialOrd)]
 pub struct Prefix {
@@ -8,6 +9,12 @@ pub struct Prefix {
     pub print_symbol: Option<&'static str>,
     pub scalar: f64,
     pub secondary_code: &'static str,
+}
+
+impl<'a> fmt::Display for Prefix {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.primary_code)
+    }
 }
 
 pub static PREFIXES: [Prefix; 24] = [

@@ -1,7 +1,9 @@
 use atom::Dimension;
 use parser_terms::{Exponent, SimpleUnit};
 use std::collections::BTreeMap;
+use std::fmt;
 
+#[derive(Debug, PartialEq)]
 pub enum Annotatable {
     Unit(SimpleUnit),
     UnitWithPower(SimpleUnit, Exponent),
@@ -85,26 +87,36 @@ impl Annotatable {
     }
 }
 
+impl fmt::Display for Annotatable {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => { write!(f, "{}", simple_unit) },
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                write!(f, "{}{}", simple_unit, exponent)
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Annotatable;
-    use atom::ATOMS;
+    use atom::base::Meter;
     use parser::parse_Annotatable;
     use parser_terms::{Exponent, SimpleUnit, UnitSign};
     use prefix::PREFIXES;
 
     #[test]
     fn validate_annotatable() {
-        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
-        let ann = Annotatable::Unit(su_pre_atom.clone());
+        let ann = Annotatable::Unit(make_su_pre_atom());
 
         let ann_with_pos_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_atom(),
             Exponent(UnitSign::Positive, 10)
             );
 
         let ann_with_neg_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_atom(),
             Exponent(UnitSign::Negative, 10)
             );
         assert_eq!(&parse_Annotatable("km").unwrap(), &ann);
@@ -114,20 +126,23 @@ mod tests {
 
     #[test]
     fn validate_prefix_scalar() {
-        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
-        let ann = Annotatable::Unit(su_pre_atom.clone());
+        let ann = Annotatable::Unit(make_su_pre_atom());
 
         let ann_with_pos_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_atom(),
             Exponent(UnitSign::Positive, 10)
             );
 
         let ann_with_neg_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_atom(),
             Exponent(UnitSign::Negative, 10)
             );
         assert_eq!(ann.prefix_scalar(), 1000.0);
         assert_eq!(ann_with_pos_power.prefix_scalar(), 1000.0);
         assert_eq!(ann_with_neg_power.prefix_scalar(), 1000.0);
+    }
+
+    fn make_su_pre_atom() -> SimpleUnit {
+        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Meter))
     }
 }

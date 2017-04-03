@@ -1,7 +1,9 @@
 use atom::Dimension;
 use parser_terms::{Annotatable, Annotation, Factor, Term};
 use std::collections::BTreeMap;
+use std::fmt;
 
+#[derive(Debug, PartialEq)]
 pub enum Component<'a> {
     AnnotatedAnnotatable(Annotatable, Annotation<'a>),
     Annotatable(Annotatable),
@@ -106,36 +108,50 @@ impl<'a> Component<'a> {
     }
 }
 
+impl<'a> fmt::Display for Component<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Component::AnnotatedAnnotatable(ref annotatable, ref annotation) => {
+                write!(f, "{}{{{}}}", annotatable, annotation)
+            },
+            Component::Annotatable(ref annotatable) => { write!(f, "{}", annotatable) },
+            Component::Annotation(ref annotation) => { write!(f, "{}", annotation) },
+            Component::Factor(ref factor) => { write!(f, "{}", factor) },
+            Component::Term(ref box_term) => {
+                let ref term = *box_term;
+                write!(f, "{}", term)
+            },
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Component;
-    use atom::ATOMS;
+    use atom::base::Meter;
     use parser::parse_Component;
     use parser_terms::{Annotatable, Annotation, Exponent, Factor, SimpleUnit, Term, UnitSign};
     use prefix::PREFIXES;
 
     #[test]
     fn validate_component_with_annotations() {
-        let simple_unit = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
-        let negative_exp = Exponent(UnitSign::Negative, 10);
-        let annotatable = Annotatable::UnitWithPower(simple_unit, negative_exp);
         let annotation = Annotation("%vol");
 
         assert_eq!(
             parse_Component("km-10{%vol}").unwrap(),
-            Component::AnnotatedAnnotatable(annotatable.clone(), annotation.clone())
+            Component::AnnotatedAnnotatable(make_annotatable(), annotation)
             );
 
         assert_eq!(
             parse_Component("km-10").unwrap(),
-            Component::Annotatable(annotatable.clone())
+            Component::Annotatable(make_annotatable())
             );
 
         let annotation = Annotation("wet'tis.");
 
         assert_eq!(
             parse_Component("{wet'tis.}").unwrap(),
-            Component::Annotation(annotation.clone())
+            Component::Annotation(annotation)
             );
     }
 
@@ -177,5 +193,12 @@ mod tests {
     fn validate_prefix_scalar_with_term() {
         let component = parse_Component("(123)").unwrap();
         assert_eq!(component.prefix_scalar(), 1.0);
+    }
+
+    fn make_annotatable() -> Annotatable {
+        let simple_unit = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Meter));
+        let negative_exp = Exponent(UnitSign::Negative, 10);
+
+        Annotatable::UnitWithPower(simple_unit, negative_exp)
     }
 }
