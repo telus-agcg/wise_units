@@ -34,4 +34,20 @@ fn validate_conversions() {
     let subject = Measurement::new(1.0, "s/km2");
     let converted = subject.convert_to("s/m2").unwrap();
     assert_eq!(converted.value, 1000.0);
+
+    let subject = Measurement::new(5.0, "[pi].m2");
+    let converted = subject.convert_to("m2").unwrap();
+    assert_eq!((converted.value * 10_000.0).round() / 10_000.0, 15.708);
+
+    let subject = Measurement::new(500.0, "%");
+    let converted = subject.convert_to("10^").unwrap();
+    assert_eq!(converted.value, 5.0);
+
+    let subject = Measurement::new(1.0, "[pi]");
+    let converted = subject.convert_to("[ppth]").unwrap();
+    assert_eq!(round_value(converted.value), 314.1593);
+}
+
+fn round_value(value: f64) -> f64 {
+    (value * 10_000.0).round() / 10_000.0
 }

@@ -1,5 +1,6 @@
 mod atom_type;
 pub mod base;
+pub mod derived;
 
 pub use atom::atom_type::AtomType;
 pub use classification::Classification;
