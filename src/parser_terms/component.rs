@@ -26,9 +26,7 @@ impl<'a> Component<'a> {
 
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
-            Component::Annotatable(ref annotatable) => {
-                annotatable.composition()
-            },
+            Component::Annotatable(ref annotatable) => { annotatable.composition() },
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
                 term.composition()

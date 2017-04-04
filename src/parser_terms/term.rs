@@ -288,6 +288,14 @@ mod tests {
     }
 
     #[test]
+    fn validate_composition_with_dimless() {
+        let term = parse_Term("[pi].m2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        assert_eq!(term.composition(), map);
+    }
+
+    #[test]
     fn validate_composition_string() {
         let term = parse_Term("m").unwrap();
         assert_eq!(term.composition_string(), "L");

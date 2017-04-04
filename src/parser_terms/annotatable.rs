@@ -20,12 +20,20 @@ impl Annotatable {
                     SimpleUnit::Atom(ref box_atom) => {
                         let exp: i32 = exponent.as_i32();
                         let ref atom = **box_atom;
-                        map.insert(atom.dim(), exp);
+                        let atom_dim = atom.dim();
+
+                        if atom_dim != Dimension::None {
+                            map.insert(atom_dim, exp);
+                        }
                     },
                     SimpleUnit::PrefixedAtom(ref _prefix, ref box_atom) => {
                         let exp: i32 = exponent.as_i32();
                         let ref atom = *box_atom;
-                        map.insert(atom.dim(), exp);
+                        let atom_dim = atom.dim();
+
+                        if atom_dim != Dimension::None {
+                            map.insert(atom_dim, exp);
+                        }
                     },
                 }
 
@@ -102,9 +110,11 @@ impl fmt::Display for Annotatable {
 mod tests {
     use super::Annotatable;
     use atom::base::Meter;
+    use dimension::Dimension;
     use parser::parse_Annotatable;
     use parser_terms::{Exponent, SimpleUnit, UnitSign};
     use prefix::PREFIXES;
+    use std::collections::BTreeMap;
 
     #[test]
     fn validate_annotatable() {
@@ -140,6 +150,63 @@ mod tests {
         assert_eq!(ann.prefix_scalar(), 1000.0);
         assert_eq!(ann_with_pos_power.prefix_scalar(), 1000.0);
         assert_eq!(ann_with_neg_power.prefix_scalar(), 1000.0);
+    }
+
+    #[test]
+    fn validate_composition() {
+        let annotatable = parse_Annotatable("m").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 1);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("m2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("m2/s").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        map.insert(Dimension::Time, -1);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("s/m2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, -2);
+        map.insert(Dimension::Time, 1);
+        assert_eq!(annotatable.composition(), map);
+    }
+
+    #[test]
+    fn validate_composition_with_prefix() {
+        let annotatable = parse_Annotatable("km").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 1);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("km2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("km2/s").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        map.insert(Dimension::Time, -1);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("s/km2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, -2);
+        map.insert(Dimension::Time, 1);
+        assert_eq!(annotatable.composition(), map);
+    }
+
+    #[test]
+    fn validate_composition_dimless() {
+        let annotatable = parse_Annotatable("[pi]").unwrap();
+        let map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        assert_eq!(annotatable.composition(), map);
     }
 
     fn make_su_pre_atom() -> SimpleUnit {

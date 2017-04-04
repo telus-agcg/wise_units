@@ -14,9 +14,19 @@ impl SimpleUnit {
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
         match *self {
-            SimpleUnit::Atom(ref atom) => { map.insert(atom.dim(), 1); },
+            SimpleUnit::Atom(ref atom) => {
+                let atom_dim = atom.dim();
+
+                if atom_dim != Dimension::None {
+                    map.insert(atom.dim(), 1);
+                }
+            },
             SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
-                map.insert(atom.dim(), 1);
+                let atom_dim = atom.dim();
+
+                if atom_dim != Dimension::None {
+                    map.insert(atom.dim(), 1);
+                }
             },
         }
 
