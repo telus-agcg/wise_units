@@ -1,4 +1,4 @@
-use atom::Classification;
+use unit::Classification;
 use std::fmt;
 
 #[derive(Clone, Debug, PartialEq, PartialOrd)]

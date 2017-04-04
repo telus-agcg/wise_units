@@ -1,13 +1,12 @@
-use atom::{Atom, AtomType};
 use classification::Classification;
 pub use dimension::Dimension;
 use property::Property;
+use unit::{Unit, UnitType};
 
 #[derive(Debug, Default)]
 pub struct Second;
 
-impl Atom for Second {
-    fn atom_type(&self) -> AtomType { AtomType::Base }
+impl Unit for Second {
     fn classification(&self) -> Classification { Classification::SI }
     fn dim(&self) -> Dimension { Dimension::Time }
     fn is_arbitrary(&self) -> bool { false }
@@ -19,4 +18,5 @@ impl Atom for Second {
     fn property(&self) -> Property { Property::Time }
     fn scale(&self) -> f64 { 1.0 }
     fn secondary_code(&self) -> String { "S".to_string()}
+    fn unit_type(&self) -> UnitType { UnitType::Base }
 }

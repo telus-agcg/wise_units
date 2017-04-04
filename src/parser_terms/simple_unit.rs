@@ -1,12 +1,12 @@
-use atom::{Atom, Dimension};
 use prefix::Prefix;
 use std::collections::BTreeMap;
 use std::fmt;
+use unit::{Unit, Dimension};
 
 #[derive(Debug)]
 pub enum SimpleUnit {
-    Atom(Box<Atom>),
-    PrefixedAtom(Prefix, Box<Atom>),
+    Atom(Box<Unit>),
+    PrefixedAtom(Prefix, Box<Unit>),
 }
 
 impl SimpleUnit {
@@ -14,18 +14,18 @@ impl SimpleUnit {
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
         match *self {
-            SimpleUnit::Atom(ref atom) => {
-                let atom_dim = atom.dim();
+            SimpleUnit::Atom(ref unit) => {
+                let unit_dim = unit.dim();
 
-                if atom_dim != Dimension::None {
-                    map.insert(atom.dim(), 1);
+                if unit_dim != Dimension::None {
+                    map.insert(unit.dim(), 1);
                 }
             },
-            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
-                let atom_dim = atom.dim();
+            SimpleUnit::PrefixedAtom(ref _prefix, ref unit) => {
+                let unit_dim = unit.dim();
 
-                if atom_dim != Dimension::None {
-                    map.insert(atom.dim(), 1);
+                if unit_dim != Dimension::None {
+                    map.insert(unit.dim(), 1);
                 }
             },
         }
@@ -35,23 +35,23 @@ impl SimpleUnit {
 
     pub fn is_special(&self) -> bool {
         match *self {
-            SimpleUnit::Atom(ref atom) => atom.is_special(),
-            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => atom.is_special()
+            SimpleUnit::Atom(ref unit) => unit.is_special(),
+            SimpleUnit::PrefixedAtom(ref _prefix, ref unit) => unit.is_special()
         }
     }
 
     pub fn prefix_scalar(&self) -> f64 {
         match *self {
             SimpleUnit::Atom(_) => 1.0,
-            SimpleUnit::PrefixedAtom(ref prefix, ref _atom) => prefix.scalar
+            SimpleUnit::PrefixedAtom(ref prefix, ref _unit) => prefix.scalar
         }
     }
 
     pub fn scalar(&self, magnitude: f64) -> f64 {
         match *self {
-            SimpleUnit::Atom(ref atom) => atom.scale() * magnitude,
-            SimpleUnit::PrefixedAtom(ref prefix, ref atom) => {
-                prefix.scalar * atom.scale() * magnitude
+            SimpleUnit::Atom(ref unit) => unit.scale() * magnitude,
+            SimpleUnit::PrefixedAtom(ref prefix, ref unit) => {
+                prefix.scalar * unit.scale() * magnitude
             }
         }
     }
@@ -68,13 +68,13 @@ impl SimpleUnit {
 impl fmt::Display for SimpleUnit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            SimpleUnit::Atom(ref box_atom) => {
-                let ref atom = *box_atom;
-                write!(f, "{}", atom)
+            SimpleUnit::Atom(ref box_unit) => {
+                let ref unit = *box_unit;
+                write!(f, "{}", unit)
             },
-            SimpleUnit::PrefixedAtom(ref prefix, ref box_atom) => {
-                let ref atom = *box_atom;
-                write!(f, "{}{}", prefix, atom)
+            SimpleUnit::PrefixedAtom(ref prefix, ref box_unit) => {
+                let ref unit = *box_unit;
+                write!(f, "{}{}", prefix, unit)
             },
         }
     }
@@ -83,17 +83,17 @@ impl fmt::Display for SimpleUnit {
 impl PartialEq for SimpleUnit {
     fn eq(&self, rhs: &Self) -> bool {
         match *self {
-            SimpleUnit::Atom(ref box_atom) => {
+            SimpleUnit::Atom(ref box_unit) => {
                 match *rhs {
-                    SimpleUnit::Atom(ref box_rhs) => box_atom == box_rhs,
+                    SimpleUnit::Atom(ref box_rhs) => box_unit == box_rhs,
                     SimpleUnit::PrefixedAtom(ref _prefix, ref _box_rhs) => false
                 }
             },
-            SimpleUnit::PrefixedAtom(ref prefix, ref box_atom) => {
+            SimpleUnit::PrefixedAtom(ref prefix, ref box_unit) => {
                 match *rhs {
                     SimpleUnit::Atom(ref _box_rhs) => false,
                     SimpleUnit::PrefixedAtom(ref rhs_prefix, ref box_rhs) => {
-                        prefix == rhs_prefix && box_atom == box_rhs
+                        prefix == rhs_prefix && box_unit == box_rhs
                     }
                 }
             }
@@ -104,7 +104,7 @@ impl PartialEq for SimpleUnit {
 #[cfg(test)]
 mod tests {
     use super::SimpleUnit;
-    use atom::base::Meter;
+    use unit::base::Meter;
     use parser::parse_SimpleUnit;
     use prefix::PREFIXES;
 

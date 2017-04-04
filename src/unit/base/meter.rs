@@ -1,13 +1,12 @@
-use atom::{Atom, AtomType};
 use classification::Classification;
 pub use dimension::Dimension;
 use property::Property;
+use unit::{Unit, UnitType};
 
 #[derive(Debug, Default)]
 pub struct Meter;
 
-impl Atom for Meter {
-    fn atom_type(&self) -> AtomType { AtomType::Base }
+impl Unit for Meter {
     fn classification(&self) -> Classification { Classification::SI }
     fn dim(&self) -> Dimension { Dimension::Length }
     fn is_arbitrary(&self) -> bool { false }
@@ -19,4 +18,5 @@ impl Atom for Meter {
     fn property(&self) -> Property { Property::Length }
     fn scale(&self) -> f64 { 1.0 }
     fn secondary_code(&self) -> String { "M".to_string()}
+    fn unit_type(&self) -> UnitType { UnitType::Base }
 }

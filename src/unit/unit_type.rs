@@ -1,5 +1,5 @@
 #[derive(Debug, PartialEq)]
-pub enum AtomType {
+pub enum UnitType {
     Base,
     Derived,
 }

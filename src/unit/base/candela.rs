@@ -1,13 +1,12 @@
-use atom::{Atom, AtomType};
 use classification::Classification;
 pub use dimension::Dimension;
 use property::Property;
+use unit::{Unit, UnitType};
 
 #[derive(Debug, Default)]
 pub struct Candela;
 
-impl Atom for Candela {
-    fn atom_type(&self) -> AtomType { AtomType::Base }
+impl Unit for Candela {
     fn classification(&self) -> Classification { Classification::SI }
     fn dim(&self) -> Dimension { Dimension::LuminousIntensity }
     fn is_arbitrary(&self) -> bool { false }
@@ -19,4 +18,5 @@ impl Atom for Candela {
     fn property(&self) -> Property { Property::LuminousIntensity }
     fn scale(&self) -> f64 { 1.0 }
     fn secondary_code(&self) -> String { "CD".to_string()}
+    fn unit_type(&self) -> UnitType { UnitType::Base }
 }

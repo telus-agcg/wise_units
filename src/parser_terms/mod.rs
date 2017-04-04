@@ -19,8 +19,8 @@ pub use parser_terms::unit_sign::UnitSign;
 #[cfg(test)]
 mod tests {
     use super::*;
-    use atom::Atom;
-    use atom::base::{Gram, Meter};
+    use unit::Unit;
+    use unit::base::{Gram, Meter};
     use parser::*;
     use prefix::PREFIXES;
 
@@ -32,11 +32,11 @@ mod tests {
 
     #[test]
     fn validate_atom_symbol() {
-        let meter = Box::new(Meter) as Box<Atom>;
-        let atom_symbol = parse_AtomSymbol("m").unwrap() as Box<Atom>;
+        let meter = Box::new(Meter) as Box<Unit>;
+        let atom_symbol = parse_AtomSymbol("m").unwrap() as Box<Unit>;
         assert_eq!(&atom_symbol, &meter);
 
-        let atom_symbol = parse_AtomSymbol("M").unwrap() as Box<Atom>;
+        let atom_symbol = parse_AtomSymbol("M").unwrap() as Box<Unit>;
         assert_eq!(&atom_symbol, &meter);
     }
 

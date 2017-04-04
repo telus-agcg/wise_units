@@ -1,8 +1,8 @@
-use atom::Dimension;
 use parser_terms::Component;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
 use std::fmt;
+use unit::Dimension;
 
 #[derive(Debug, PartialEq)]
 pub enum Term<'a> {
@@ -170,12 +170,12 @@ impl<'a> fmt::Display for Term<'a> {
 
 #[cfg(test)]
 mod tests {
-    use atom::Dimension;
-    use atom::base::{Gram, Meter, Second};
     use parser::*;
     use parser_terms::*;
     use prefix::PREFIXES;
     use std::collections::BTreeMap;
+    use unit::Dimension;
+    use unit::base::{Gram, Meter, Second};
 
     #[test]
     fn validate_term_with_dot() {

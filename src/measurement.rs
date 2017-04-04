@@ -103,8 +103,8 @@ impl<'a> PartialEq for Measurement<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use atom::base::Meter;
     use parser_terms::{Annotatable, Component, SimpleUnit, Term};
+    use unit::base::Meter;
 
     #[test]
     fn validate_new() {

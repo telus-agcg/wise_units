@@ -1,7 +1,7 @@
-use atom::Dimension;
 use parser_terms::{Annotatable, Annotation, Factor, Term};
 use std::collections::BTreeMap;
 use std::fmt;
+use unit::Dimension;
 
 #[derive(Debug, PartialEq)]
 pub enum Component<'a> {
@@ -126,7 +126,7 @@ impl<'a> fmt::Display for Component<'a> {
 #[cfg(test)]
 mod tests {
     use super::Component;
-    use atom::base::Meter;
+    use unit::base::Meter;
     use parser::parse_Component;
     use parser_terms::{Annotatable, Annotation, Exponent, Factor, SimpleUnit, Term, UnitSign};
     use prefix::PREFIXES;
