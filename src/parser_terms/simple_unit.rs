@@ -25,8 +25,8 @@ impl SimpleUnit {
 
     pub fn is_special(&self) -> bool {
         match *self {
-            SimpleUnit::Atom(ref atom) => atom.special(),
-            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => atom.special()
+            SimpleUnit::Atom(ref atom) => atom.is_special(),
+            SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => atom.is_special()
         }
     }
 

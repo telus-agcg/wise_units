@@ -109,6 +109,7 @@ mod tests {
     #[test]
     fn validate_new() {
         let m = Measurement::new(1.0, "m");
+
         assert_eq!(m.value, 1.0);
         assert_eq!(
             m.term,

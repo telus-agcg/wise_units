@@ -10,18 +10,18 @@ use std::cmp::PartialEq;
 use std::fmt;
 
 pub trait Atom {
-    fn arbitrary(&self) -> bool;
     fn atom_type(&self) -> AtomType;
     fn classification(&self) -> Classification;
+    fn dim(&self) -> Dimension;
+    fn is_arbitrary(&self) -> bool;
+    fn is_metric(&self) -> bool;
+    fn is_special(&self) -> bool;
     fn names(&self) -> Vec<String>;
     fn primary_code(&self) -> String;
     fn print_symbol(&self) -> Option<String>;
     fn property(&self) -> Property;
     fn scale(&self) -> f64;
     fn secondary_code(&self) -> String;
-    fn special(&self) -> bool;
-    fn dim(&self) -> Dimension;
-    fn metric(&self) -> bool;
 }
 
 impl<'a> fmt::Display for Atom {
