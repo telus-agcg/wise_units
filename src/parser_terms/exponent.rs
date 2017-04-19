@@ -1,7 +1,7 @@
 use std::fmt;
 use parser_terms::UnitSign;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct Exponent(pub UnitSign, pub u32);
 
 impl Exponent {

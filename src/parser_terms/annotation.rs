@@ -1,5 +1,13 @@
-#[derive(Clone, Debug, PartialEq)]
+use std::fmt;
+
+#[derive(Debug, PartialEq)]
 pub struct Annotation<'a>(pub &'a str);
+
+impl<'a> fmt::Display for Annotation<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
 
 #[cfg(test)]
 mod tests {

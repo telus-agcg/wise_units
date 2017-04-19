@@ -1,8 +1,9 @@
-use atom::Dimension;
 use parser_terms::{Exponent, SimpleUnit};
 use std::collections::BTreeMap;
+use std::fmt;
+use unit::Dimension;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum Annotatable {
     Unit(SimpleUnit),
     UnitWithPower(SimpleUnit, Exponent),
@@ -16,13 +17,23 @@ impl Annotatable {
                 let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
 
                 match *simple_unit {
-                    SimpleUnit::Atom(ref atom) => {
+                    SimpleUnit::Atom(ref box_unit) => {
                         let exp: i32 = exponent.as_i32();
-                        map.insert(atom.dim.clone(), exp);
+                        let ref unit = **box_unit;
+                        let unit_dim = unit.dim();
+
+                        if unit_dim != Dimension::None {
+                            map.insert(unit_dim, exp);
+                        }
                     },
-                    SimpleUnit::PrefixedAtom(ref _prefix, ref atom) => {
+                    SimpleUnit::PrefixedAtom(ref _prefix, ref box_unit) => {
                         let exp: i32 = exponent.as_i32();
-                        map.insert(atom.dim.clone(), exp);
+                        let ref unit = *box_unit;
+                        let unit_dim = unit.dim();
+
+                        if unit_dim != Dimension::None {
+                            map.insert(unit_dim, exp);
+                        }
                     },
                 }
 
@@ -84,26 +95,38 @@ impl Annotatable {
     }
 }
 
+impl fmt::Display for Annotatable {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => { write!(f, "{}", simple_unit) },
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                write!(f, "{}{}", simple_unit, exponent)
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Annotatable;
-    use atom::ATOMS;
+    use unit::base::Meter;
+    use dimension::Dimension;
     use parser::parse_Annotatable;
     use parser_terms::{Exponent, SimpleUnit, UnitSign};
     use prefix::PREFIXES;
+    use std::collections::BTreeMap;
 
     #[test]
     fn validate_annotatable() {
-        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
-        let ann = Annotatable::Unit(su_pre_atom.clone());
+        let ann = Annotatable::Unit(make_su_pre_unit());
 
         let ann_with_pos_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_unit(),
             Exponent(UnitSign::Positive, 10)
             );
 
         let ann_with_neg_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_unit(),
             Exponent(UnitSign::Negative, 10)
             );
         assert_eq!(&parse_Annotatable("km").unwrap(), &ann);
@@ -113,20 +136,56 @@ mod tests {
 
     #[test]
     fn validate_prefix_scalar() {
-        let su_pre_atom = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[0].clone());
-        let ann = Annotatable::Unit(su_pre_atom.clone());
+        let ann = Annotatable::Unit(make_su_pre_unit());
 
         let ann_with_pos_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_unit(),
             Exponent(UnitSign::Positive, 10)
             );
 
         let ann_with_neg_power = Annotatable::UnitWithPower(
-            su_pre_atom.clone(),
+            make_su_pre_unit(),
             Exponent(UnitSign::Negative, 10)
             );
         assert_eq!(ann.prefix_scalar(), 1000.0);
         assert_eq!(ann_with_pos_power.prefix_scalar(), 1000.0);
         assert_eq!(ann_with_neg_power.prefix_scalar(), 1000.0);
+    }
+
+    #[test]
+    fn validate_composition() {
+        let annotatable = parse_Annotatable("m").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 1);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("m2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        assert_eq!(annotatable.composition(), map);
+    }
+
+    #[test]
+    fn validate_composition_with_prefix() {
+        let annotatable = parse_Annotatable("km").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 1);
+        assert_eq!(annotatable.composition(), map);
+
+        let annotatable = parse_Annotatable("km2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        assert_eq!(annotatable.composition(), map);
+    }
+
+    #[test]
+    fn validate_composition_dimless() {
+        let annotatable = parse_Annotatable("[pi]").unwrap();
+        let map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        assert_eq!(annotatable.composition(), map);
+    }
+
+    fn make_su_pre_unit() -> SimpleUnit {
+        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Meter))
     }
 }

@@ -1,4 +1,6 @@
-use atom::{Atom, ATOMS};
+use unit::Unit;
+use unit::base::*;
+use unit::derived::*;
 use std::str::FromStr;
 use parser_terms::*;
 use prefix::{Prefix, PREFIXES};
@@ -38,21 +40,39 @@ pub SimpleUnit: SimpleUnit = {
     <PrefixSymbol><AtomSymbol> => SimpleUnit::PrefixedAtom(<>)
 };
 
-pub AtomSymbol: Atom = {
-    <AtomByPrimaryCode>,
-    <AtomBySecondaryCode>
+pub AtomSymbol: Box<Unit> = {
+    <UnitByPrimaryCode>,
+    <UnitBySecondaryCode>
 };
 
-AtomByPrimaryCode: Atom = {
-    "m" => ATOMS[0].clone(),
-    "s" => ATOMS[1].clone(),
-    "g" => ATOMS[2].clone(),
+UnitByPrimaryCode: Box<Unit> = {
+    "m" => Box::new(Meter) as Box<Unit>,
+    "s" => Box::new(Second) as Box<Unit>,
+    "g" => Box::new(Gram) as Box<Unit>,
+    "rad" => Box::new(Radian) as Box<Unit>,
+    "K" => Box::new(Kelvin) as Box<Unit>,
+    "C" => Box::new(Coulomb) as Box<Unit>,
+    "cd" => Box::new(Candela) as Box<Unit>,
+
+    "10^" => Box::new(TheNumberTenForArbitraryPowersCaret) as Box<Unit>,
+    "10*" => Box::new(TheNumberTenForArbitraryPowersStar) as Box<Unit>,
+    "[pi]" => Box::new(TheNumberPi) as Box<Unit>,
+    "%" => Box::new(Percent) as Box<Unit>,
+    "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
+    "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
+    "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
 };
 
-AtomBySecondaryCode: Atom = {
-    "M" => ATOMS[0].clone(),
-    "S" => ATOMS[1].clone(),
-    "G" => ATOMS[2].clone(),
+UnitBySecondaryCode: Box<Unit> = {
+    "M" => Box::new(Meter) as Box<Unit>,
+    "S" => Box::new(Second) as Box<Unit>,
+    "G" => Box::new(Gram) as Box<Unit>,
+    "RAD" => Box::new(Radian) as Box<Unit>,
+    "CD" => Box::new(Candela) as Box<Unit>,
+    "[PI]" => Box::new(TheNumberPi) as Box<Unit>,
+    "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,
+    "[PPM]" => Box::new(PartsPerMillion) as Box<Unit>,
+    "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
 };
 
 pub PrefixSymbol: Prefix = {

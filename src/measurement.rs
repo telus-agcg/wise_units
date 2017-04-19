@@ -1,7 +1,8 @@
 use parser::parse_MainTerm;
 use parser_terms::Term;
+use std::fmt;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug)]
 pub struct Measurement<'a> {
     pub value: f64,
     term: Term<'a>,
@@ -58,6 +59,20 @@ impl<'a> Measurement<'a> {
         self.scalar(self.value)
     }
 
+    /// The Measurement's Term as a String.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use wu::Measurement;
+    /// let km = Measurement::new(1.0, "km");
+    /// assert_eq!(km.term_string(), "km".to_string());
+    /// ```
+    ///
+    pub fn term_string(&self) -> String {
+        self.term.to_string()
+    }
+
     fn converted_value(&self, other_term: &Term) -> f64 {
         if other_term.is_special() {
             other_term.magnitude(self.scalar_default())
@@ -67,26 +82,45 @@ impl<'a> Measurement<'a> {
     }
 }
 
+impl<'a> fmt::Display for Measurement<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}{}", self.value, self.term)
+    }
+}
+
+impl<'a> PartialEq for Measurement<'a> {
+    fn eq(&self, other: &Self) -> bool {
+        let my_term_string = self.term_string();
+
+        if let Ok(converted_other) = other.convert_to(&my_term_string) {
+            self.to_string() == converted_other.to_string()
+        } else {
+            false
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use atom::ATOMS;
     use parser_terms::{Annotatable, Component, SimpleUnit, Term};
+    use unit::base::Meter;
 
     #[test]
     fn validate_new() {
         let m = Measurement::new(1.0, "m");
+
         assert_eq!(m.value, 1.0);
         assert_eq!(
             m.term,
             Term::Basic(
                 Component::Annotatable(
                     Annotatable::Unit(
-                        SimpleUnit::Atom(ATOMS[0].clone())
+                        SimpleUnit::Atom(Box::new(Meter))
+                        )
                     )
                 )
-            )
-        );
+            );
     }
 
     #[test]
@@ -98,5 +132,42 @@ mod tests {
         let mut other = m.convert_to("m").unwrap();
         other.value = 2.0;
         assert_ne!(other, m);
+    }
+
+    #[test]
+    fn validate_display() {
+        assert_eq!(Measurement::new(1.0, "m").to_string(), "1m".to_string());
+        assert_eq!(Measurement::new(1.1, "m").to_string(), "1.1m".to_string());
+        assert_eq!(Measurement::new(1.1, "m2").to_string(), "1.1m2".to_string());
+        assert_eq!(Measurement::new(1.1, "km2").to_string(), "1.1km2".to_string());
+        assert_eq!(Measurement::new(1.1, "km2/s").to_string(), "1.1km2/s".to_string());
+        assert_eq!(Measurement::new(1.1, "km2/s.rad").to_string(), "1.1km2/s.rad".to_string());
+    }
+
+    #[test]
+    fn validate_eq_same_unit() {
+        let m1 = Measurement::new(1.0, "m");
+        let m2 = Measurement::new(1.0, "m");
+        assert_eq!(&m1, &m2);
+
+        let m2 = Measurement::new(1.1, "m");
+        assert_ne!(m1, m2);
+    }
+
+    #[test]
+    fn validate_eq_unit_with_prefix() {
+        let m = Measurement::new(1000.0, "m");
+        let km = Measurement::new(1.0, "km");
+        assert_eq!(&m, &km);
+
+        let km = Measurement::new(1.1, "km");
+        assert_ne!(&m, &km);
+    }
+
+    #[test]
+    fn validate_eq_different_unit() {
+        let m = Measurement::new(1.0, "m");
+        let s = Measurement::new(1.0, "s");
+        assert_ne!(&m, &s);
     }
 }

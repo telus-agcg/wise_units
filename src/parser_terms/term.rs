@@ -1,9 +1,10 @@
-use atom::Dimension;
 use parser_terms::Component;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
+use std::fmt;
+use unit::Dimension;
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum Term<'a> {
     DotCombined(Component<'a>, Box<Term<'a>>),
     SlashCombined(Component<'a>, Box<Term<'a>>),
@@ -151,13 +152,30 @@ impl<'a> Term<'a> {
     }
 }
 
+impl<'a> fmt::Display for Term<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Term::DotCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                write!(f, "{}.{}", &component, &term)
+            },
+            Term::SlashCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                write!(f, "{}/{}", component, term)
+            },
+            Term::Basic(ref component) => { write!(f, "{}", component) },
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use atom::{ATOMS, Dimension};
     use parser::*;
     use parser_terms::*;
     use prefix::PREFIXES;
     use std::collections::BTreeMap;
+    use unit::Dimension;
+    use unit::base::{Gram, Meter, Second};
 
     #[test]
     fn validate_term_with_dot() {
@@ -166,14 +184,14 @@ mod tests {
             Term::DotCombined(
                 Component::Annotatable(
                     Annotatable::Unit(
-                        SimpleUnit::Atom(ATOMS[2].clone())
+                        SimpleUnit::Atom(Box::new(Gram))
                     )
                 ),
                 Box::new(
                     Term::Basic(
                         Component::Annotatable(
                             Annotatable::Unit(
-                                SimpleUnit::Atom(ATOMS[0].clone())
+                                SimpleUnit::Atom(Box::new(Meter))
                             )
                         )
                     )
@@ -189,14 +207,14 @@ mod tests {
             Term::SlashCombined(
                 Component::Annotatable(
                     Annotatable::Unit(
-                        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), ATOMS[2].clone())
+                        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Gram))
                     )
                 ),
                 Box::new(
                     Term::Basic(
                         Component::Annotatable(
                             Annotatable::Unit(
-                                SimpleUnit::Atom(ATOMS[1].clone())
+                                SimpleUnit::Atom(Box::new(Second))
                             )
                         )
                     )
@@ -212,7 +230,7 @@ mod tests {
             Term::Basic(
                 Component::Annotatable(
                     Annotatable::Unit(
-                        SimpleUnit::Atom(ATOMS[2].clone())
+                        SimpleUnit::Atom(Box::new(Gram))
                     )
                 )
             )
@@ -270,6 +288,14 @@ mod tests {
     }
 
     #[test]
+    fn validate_composition_with_dimless() {
+        let term = parse_Term("[pi].m2").unwrap();
+        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+        map.insert(Dimension::Length, 2);
+        assert_eq!(term.composition(), map);
+    }
+
+    #[test]
     fn validate_composition_string() {
         let term = parse_Term("m").unwrap();
         assert_eq!(term.composition_string(), "L");
@@ -310,8 +336,6 @@ mod tests {
     fn validate_is_compatible_with_with_prefix() {
         let me = parse_Term("m").unwrap();
         let other = parse_Term("km").unwrap();
-        println!("me: {:?}", me.composition_string());
-        println!("other: {:?}", other.composition_string());
         assert!(me.is_compatible_with(&other))
     }
 

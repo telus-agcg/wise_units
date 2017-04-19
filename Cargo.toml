@@ -9,3 +9,6 @@ lalrpop = "0.12.5"
 
 [dependencies]
 lalrpop-util = "0.12.5"
+
+[dev-dependencies]
+pretty_assertions = "*"
