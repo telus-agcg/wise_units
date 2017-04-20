@@ -1,8 +1,10 @@
 pub mod base;
 pub mod derived;
+pub mod prefix;
 mod unit_type;
 
 pub use unit::unit_type::UnitType;
+pub use unit::prefix::Prefix;
 pub use classification::Classification;
 pub use dimension::Dimension;
 pub use property::Property;

@@ -110,10 +110,10 @@ impl fmt::Display for Annotatable {
 mod tests {
     use super::Annotatable;
     use unit::base::Meter;
+    use unit::prefix::Kilo;
     use dimension::Dimension;
     use parser::parse_Annotatable;
     use parser_terms::{Exponent, SimpleUnit, UnitSign};
-    use prefix::PREFIXES;
     use std::collections::BTreeMap;
 
     #[test]
@@ -186,6 +186,6 @@ mod tests {
     }
 
     fn make_su_pre_unit() -> SimpleUnit {
-        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Meter))
+        SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Meter))
     }
 }
