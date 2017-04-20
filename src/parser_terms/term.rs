@@ -172,10 +172,10 @@ impl<'a> fmt::Display for Term<'a> {
 mod tests {
     use parser::*;
     use parser_terms::*;
-    use prefix::PREFIXES;
     use std::collections::BTreeMap;
     use unit::Dimension;
     use unit::base::{Gram, Meter, Second};
+    use unit::prefix::Kilo;
 
     #[test]
     fn validate_term_with_dot() {
@@ -207,7 +207,7 @@ mod tests {
             Term::SlashCombined(
                 Component::Annotatable(
                     Annotatable::Unit(
-                        SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Gram))
+                        SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Gram))
                     )
                 ),
                 Box::new(

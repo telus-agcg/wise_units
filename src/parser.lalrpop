@@ -1,9 +1,9 @@
-use unit::Unit;
+use unit::{Prefix, Unit};
 use unit::base::*;
 use unit::derived::*;
+use unit::prefix::*;
 use std::str::FromStr;
 use parser_terms::*;
-use prefix::{Prefix, PREFIXES};
 
 grammar;
 
@@ -75,17 +75,61 @@ UnitBySecondaryCode: Box<Unit> = {
     "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
 };
 
-pub PrefixSymbol: Prefix = {
+pub PrefixSymbol: Box<Prefix> = {
     <PrefixByPrimaryCode>,
     <PrefixBySecondaryCode>
 };
 
-PrefixByPrimaryCode: Prefix = {
-    "k" => PREFIXES[7].clone()
+PrefixByPrimaryCode: Box<Prefix> = {
+    "Y" => Box::new(Yotta) as Box<Prefix>,
+    "Z" => Box::new(Zetta) as Box<Prefix>,
+    "E" => Box::new(Exa) as Box<Prefix>,
+    "P" => Box::new(Peta) as Box<Prefix>,
+    "T" => Box::new(Tera) as Box<Prefix>,
+    "G" => Box::new(Giga) as Box<Prefix>,
+    "M" => Box::new(Mega) as Box<Prefix>,
+    "k" => Box::new(Kilo) as Box<Prefix>,
+    "h" => Box::new(Hecto) as Box<Prefix>,
+    "da" => Box::new(Deka) as Box<Prefix>,
+    "d" => Box::new(Deci) as Box<Prefix>,
+    "c" => Box::new(Centi) as Box<Prefix>,
+    "m" => Box::new(Milli) as Box<Prefix>,
+    "u" => Box::new(Micro) as Box<Prefix>,
+    "n" => Box::new(Nano) as Box<Prefix>,
+    "p" => Box::new(Pico) as Box<Prefix>,
+    "f" => Box::new(Femto) as Box<Prefix>,
+    "a" => Box::new(Atto) as Box<Prefix>,
+    "z" => Box::new(Zepto) as Box<Prefix>,
+    "y" => Box::new(Yocto) as Box<Prefix>,
+    "Mi" => Box::new(Mebi) as Box<Prefix>,
+    "Gi" => Box::new(Gibi) as Box<Prefix>,
+    "Ti" => Box::new(Tebi) as Box<Prefix>,
 };
 
-PrefixBySecondaryCode: Prefix = {
-    "K" => PREFIXES[7].clone()
+PrefixBySecondaryCode: Box<Prefix> = {
+    "YA" => Box::new(Yotta) as Box<Prefix>,
+    "ZA" => Box::new(Zetta) as Box<Prefix>,
+    "EX" => Box::new(Exa) as Box<Prefix>,
+    "PT" => Box::new(Peta) as Box<Prefix>,
+    "TR" => Box::new(Tera) as Box<Prefix>,
+    "GA" => Box::new(Giga) as Box<Prefix>,
+    "MA" => Box::new(Mega) as Box<Prefix>,
+    "K" => Box::new(Kilo) as Box<Prefix>,
+    "H" => Box::new(Hecto) as Box<Prefix>,
+    "DA" => Box::new(Deka) as Box<Prefix>,
+    "D" => Box::new(Deci) as Box<Prefix>,
+    "C" => Box::new(Centi) as Box<Prefix>,
+    // "M" => Box::new(Milli) as Box<Prefix>,
+    "U" => Box::new(Micro) as Box<Prefix>,
+    "N" => Box::new(Nano) as Box<Prefix>,
+    // "P" => Box::new(Pico) as Box<Prefix>,
+    "F" => Box::new(Femto) as Box<Prefix>,
+    "A" => Box::new(Atto) as Box<Prefix>,
+    "ZO" => Box::new(Zepto) as Box<Prefix>,
+    "YO" => Box::new(Yocto) as Box<Prefix>,
+    "MIB" => Box::new(Mebi) as Box<Prefix>,
+    "GIB" => Box::new(Gibi) as Box<Prefix>,
+    "TIB" => Box::new(Tebi) as Box<Prefix>,
 };
 
 pub Exponent: Exponent = {

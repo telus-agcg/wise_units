@@ -127,9 +127,9 @@ impl<'a> fmt::Display for Component<'a> {
 mod tests {
     use super::Component;
     use unit::base::Meter;
+    use unit::prefix::Kilo;
     use parser::parse_Component;
     use parser_terms::{Annotatable, Annotation, Exponent, Factor, SimpleUnit, Term, UnitSign};
-    use prefix::PREFIXES;
 
     #[test]
     fn validate_component_with_annotations() {
@@ -194,7 +194,7 @@ mod tests {
     }
 
     fn make_annotatable() -> Annotatable {
-        let simple_unit = SimpleUnit::PrefixedAtom(PREFIXES[7].clone(), Box::new(Meter));
+        let simple_unit = SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Meter));
         let negative_exp = Exponent(UnitSign::Negative, 10);
 
         Annotatable::UnitWithPower(simple_unit, negative_exp)

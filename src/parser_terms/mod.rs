@@ -21,13 +21,18 @@ mod tests {
     use super::*;
     use unit::Unit;
     use unit::base::{Gram, Meter};
+    use unit::prefix::{Kilo, Prefix};
     use parser::*;
-    use prefix::PREFIXES;
 
     #[test]
     fn validate_prefix_symbol() {
-        assert_eq!(parse_PrefixSymbol("k").unwrap(), PREFIXES[7]);
-        assert_eq!(parse_PrefixSymbol("K").unwrap(), PREFIXES[7]);
+        let kilo = Box::new(Kilo) as Box<Prefix>;
+        let prefix_symbol = parse_PrefixSymbol("k").unwrap();
+
+        assert_eq!(&prefix_symbol, &kilo);
+
+        let prefix_symbol = parse_PrefixSymbol("K").unwrap();
+        assert_eq!(&prefix_symbol, &kilo);
     }
 
     #[test]
