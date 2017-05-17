@@ -44,3 +44,28 @@ impl fmt::Debug for Unit {
         write!(f, "Unit ({})", &self.primary_code())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use super::base::*;
+    use parser::parse_AtomSymbol;
+
+    #[test]
+    fn validate_parsing_by_primary_code() {
+        let subject = parse_AtomSymbol("1").unwrap();
+        let unit = Box::new(TheUnity) as Box<Unit>;
+        assert_eq!(&subject, &unit);
+
+        let subject = parse_AtomSymbol("m").unwrap();
+        let unit = Box::new(Meter) as Box<Unit>;
+        assert_eq!(&subject, &unit);
+    }
+
+    #[test]
+    fn validate_parsing_by_secondary_code() {
+        let subject = parse_AtomSymbol("M").unwrap();
+        let unit = Box::new(Meter) as Box<Unit>;
+        assert_eq!(&subject, &unit);
+    }
+}

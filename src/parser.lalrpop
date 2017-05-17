@@ -36,8 +36,8 @@ pub Annotatable: Annotatable = {
 };
 
 pub SimpleUnit: SimpleUnit = {
+    <PrefixSymbol><AtomSymbol> => SimpleUnit::PrefixedAtom(<>),
     <AtomSymbol> => SimpleUnit::Atom(<>),
-    <PrefixSymbol><AtomSymbol> => SimpleUnit::PrefixedAtom(<>)
 };
 
 pub AtomSymbol: Box<Unit> = {
@@ -46,6 +46,7 @@ pub AtomSymbol: Box<Unit> = {
 };
 
 UnitByPrimaryCode: Box<Unit> = {
+    "1" => Box::new(TheUnity) as Box<Unit>,
     "m" => Box::new(Meter) as Box<Unit>,
     "s" => Box::new(Second) as Box<Unit>,
     "g" => Box::new(Gram) as Box<Unit>,
@@ -68,6 +69,7 @@ UnitBySecondaryCode: Box<Unit> = {
     "S" => Box::new(Second) as Box<Unit>,
     "G" => Box::new(Gram) as Box<Unit>,
     "RAD" => Box::new(Radian) as Box<Unit>,
+
     "CD" => Box::new(Candela) as Box<Unit>,
     "[PI]" => Box::new(TheNumberPi) as Box<Unit>,
     "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,

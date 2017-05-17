@@ -3,6 +3,14 @@ use wu::Measurement;
 
 #[test]
 fn validate_conversions() {
+    let subject = Measurement::new(500.0, "1");
+    let converted = subject.convert_to("10^").unwrap();
+    assert_eq!(converted.value, 50.0);
+
+    let subject = Measurement::new(500.0, "1");
+    let converted = subject.convert_to("%").unwrap();
+    assert_eq!(converted.value, 50_000.0);
+
     let subject = Measurement::new(1.0, "m");
     let converted = subject.convert_to("km").unwrap();
     assert_eq!(converted.value, 0.001);
