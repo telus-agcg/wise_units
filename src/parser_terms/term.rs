@@ -298,31 +298,31 @@ mod tests {
     #[test]
     fn validate_composition_string() {
         let term = parse_Term("m").unwrap();
-        assert_eq!(term.composition_string(), "L");
+        assert_eq!(term.composition_string(), "L".to_string());
 
         let term = parse_Term("m2").unwrap();
-        assert_eq!(term.composition_string(), "L2");
+        assert_eq!(term.composition_string(), "L2".to_string());
 
         let term = parse_Term("m2/s").unwrap();
-        assert_eq!(term.composition_string(), "L2.T-1");
+        assert_eq!(term.composition_string(), "L2.T-1".to_string());
 
         let term = parse_Term("s/m2").unwrap();
-        assert_eq!(term.composition_string(), "L-2.T");
+        assert_eq!(term.composition_string(), "L-2.T".to_string());
     }
 
     #[test]
     fn validate_composition_string_with_prefix() {
         let term = parse_Term("km").unwrap();
-        assert_eq!(term.composition_string(), "L");
+        assert_eq!(term.composition_string(), "L".to_string());
 
         let term = parse_Term("km2").unwrap();
-        assert_eq!(term.composition_string(), "L2");
+        assert_eq!(term.composition_string(), "L2".to_string());
 
         let term = parse_Term("km2/s").unwrap();
-        assert_eq!(term.composition_string(), "L2.T-1");
+        assert_eq!(term.composition_string(), "L2.T-1".to_string());
 
         let term = parse_Term("s/km2").unwrap();
-        assert_eq!(term.composition_string(), "L-2.T");
+        assert_eq!(term.composition_string(), "L-2.T".to_string());
     }
 
     #[test]
