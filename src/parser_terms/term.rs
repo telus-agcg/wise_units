@@ -12,20 +12,6 @@ pub enum Term<'a> {
 }
 
 impl<'a> Term<'a> {
-    // pub fn factor(&self) -> u32 {
-    //     match *self {
-    //         Term::DotCombined(ref component, ref box_term) => {
-    //             let component_factor = component.factor();
-    //             let ref term = *box_term;
-    //             let term_factor = term.factor();
-
-    //             // Not sure if this is right...
-    //             component_factor * term_factor
-    //         }
-    //         _ => 1
-    //     }
-    // }
-
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Term::Basic(ref component) => component.composition(),
@@ -82,72 +68,22 @@ impl<'a> Term<'a> {
 
     pub fn is_special(&self) -> bool {
         match *self {
-            Term::Basic(ref component) => {
-                component.is_special()
-            },
+            Term::Basic(ref component) => component.is_special(),
             _ => false
         }
     }
 
-    pub fn magnitude(&self, scalar: f64) -> f64 {
+    pub fn scalar(&self) -> f64 {
         match *self {
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
-                component.magnitude(scalar) * term.magnitude(scalar)
+                component.scalar() * term.scalar()
             },
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
-                component.magnitude(scalar) * term.magnitude(scalar)
+                component.scalar() / term.scalar()
             },
-            Term::Basic(ref component) => {
-                component.magnitude(scalar)
-            }
-        }
-    }
-
-    pub fn magnitude_default(&self) -> f64 {
-        self.magnitude(1.0)
-    }
-
-    pub fn scalar(&self, magnitude: f64) -> f64 {
-        match *self {
-            Term::DotCombined(ref component, ref box_term) => {
-                let ref term = *box_term;
-                component.scalar(magnitude) * term.scalar(magnitude)
-            },
-            Term::SlashCombined(ref component, ref box_term) => {
-                let ref term = *box_term;
-                component.scalar(magnitude) * term.scalar(magnitude)
-            },
-            Term::Basic(ref component) => {
-                component.scalar(magnitude)
-            }
-        }
-    }
-
-    pub fn scalar_default(&self) -> f64 {
-        self.scalar(1.0)
-    }
-
-    pub fn prefix_scalar(&self) -> f64 {
-        match *self {
-            Term::DotCombined(ref component, ref box_term) => {
-                let comp_prefix = component.prefix_scalar();
-                let ref term = *box_term;
-                let term_prefix = term.prefix_scalar();
-
-                comp_prefix * term_prefix
-            },
-            Term::SlashCombined(ref component, ref box_term) => {
-                let comp_prefix = component.prefix_scalar();
-                let ref term = *box_term;
-                let term_prefix = term.prefix_scalar();
-
-                comp_prefix / term_prefix
-            },
-            Term::Basic(ref component) => {
-                component.prefix_scalar()
-            }
+            Term::Basic(ref component) => component.scalar()
         }
     }
 }
@@ -172,13 +108,14 @@ impl<'a> fmt::Display for Term<'a> {
 mod tests {
     use parser::*;
     use parser_terms::*;
+    use parser_terms::UnitSign::*;
     use std::collections::BTreeMap;
     use unit::Dimension;
     use unit::base::{Gram, Meter, Second};
     use unit::prefix::Kilo;
 
     #[test]
-    fn validate_term_with_dot() {
+    fn validate_parsing_term_with_dot() {
         assert_eq!(
             parse_Term("g.m").unwrap(),
             Term::DotCombined(
@@ -201,7 +138,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_term_with_slash() {
+    fn validate_parsing_term_with_slash() {
         assert_eq!(
             parse_Term("kg/s").unwrap(),
             Term::SlashCombined(
@@ -224,7 +161,40 @@ mod tests {
     }
 
     #[test]
-    fn validate_term_basic() {
+    fn validate_parsing_term_basic_with_prefix_and_exponent() {
+        assert_eq!(
+            parse_Term("kg2").unwrap(),
+            Term::Basic(
+                Component::Annotatable(
+                    Annotatable::UnitWithPower(
+                        SimpleUnit::PrefixedAtom(
+                            Box::new(Kilo),
+                            Box::new(Gram)
+                        ),
+                        Exponent(Positive, 2)
+                    )
+                )
+            )
+        );
+    }
+
+    #[test]
+    fn validate_parsing_term_basic_with_exponent() {
+        assert_eq!(
+            parse_Term("g2").unwrap(),
+            Term::Basic(
+                Component::Annotatable(
+                    Annotatable::UnitWithPower(
+                        SimpleUnit::Atom(Box::new(Gram)),
+                        Exponent(Positive, 2)
+                    )
+                )
+            )
+        );
+    }
+
+    #[test]
+    fn validate_parsing_term_basic() {
         assert_eq!(
             parse_Term("g").unwrap(),
             Term::Basic(
@@ -337,23 +307,5 @@ mod tests {
         let me = parse_Term("m").unwrap();
         let other = parse_Term("km").unwrap();
         assert!(me.is_compatible_with(&other))
-    }
-
-    #[test]
-    fn validate_prefix_scalar_dot_combined() {
-        let term = parse_Term("m2.s").unwrap();
-        assert_eq!(term.prefix_scalar(), 1.0);
-
-        let term = parse_Term("km.kg").unwrap();
-        assert_eq!(term.prefix_scalar(), 1_000_000.0);
-    }
-
-    #[test]
-    fn validate_prefix_scalar_slash_combined() {
-        let term = parse_Term("m2/s").unwrap();
-        assert_eq!(term.prefix_scalar(), 1.0);
-
-        let term = parse_Term("km/kg").unwrap();
-        assert_eq!(term.prefix_scalar(), 1.0);
     }
 }

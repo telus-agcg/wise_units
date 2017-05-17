@@ -46,15 +46,15 @@ pub use self::mebi::Mebi;
 pub use self::gibi::Gibi;
 pub use self::tebi::Tebi;
 
-use unit::{Classification, UnitType};
+use unit::{Definition, Classification, UnitType};
 use std::fmt;
 
 pub trait Prefix {
     fn classification(&self) -> Classification;
+    fn definition(&self) -> Definition;
     fn names(&self) -> Vec<String>;
     fn primary_code(&self) -> String;
     fn print_symbol(&self) -> Option<String>;
-    fn scalar(&self) -> f64;
     fn secondary_code(&self) -> String;
     fn unit_type(&self) -> UnitType;
 }
@@ -74,5 +74,33 @@ impl<'a> PartialEq for &'a Box<Prefix> {
 impl fmt::Debug for Prefix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Prefix ({})", &self.primary_code())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use parser::parse_PrefixSymbol;
+
+    #[test]
+    fn validate_parsing_by_primary_code() {
+        let subject = parse_PrefixSymbol("Y").unwrap();
+        let prefix = Box::new(Yotta) as Box<Prefix>;
+        assert_eq!(&subject, &prefix);
+
+        let subject = parse_PrefixSymbol("Z").unwrap();
+        let prefix = Box::new(Zetta) as Box<Prefix>;
+        assert_eq!(&subject, &prefix);
+    }
+
+    #[test]
+    fn validate_parsing_by_secondary_code() {
+        let subject = parse_PrefixSymbol("YA").unwrap();
+        let prefix = Box::new(Yotta) as Box<Prefix>;
+        assert_eq!(&subject, &prefix);
+
+        let subject = parse_PrefixSymbol("ZA").unwrap();
+        let prefix = Box::new(Zetta) as Box<Prefix>;
+        assert_eq!(&subject, &prefix);
     }
 }

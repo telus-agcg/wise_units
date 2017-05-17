@@ -8,7 +8,7 @@ impl Exponent {
     pub fn as_i32(&self) -> i32 {
         match self.0 {
             UnitSign::Positive => { self.1 as i32 },
-            UnitSign::Negative => { !self.1 as i32 },
+            UnitSign::Negative => { 0 - self.1 as i32 },
         }
     }
 }

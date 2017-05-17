@@ -53,45 +53,16 @@ impl Annotatable {
         }
     }
 
-    pub fn prefix_scalar(&self) -> f64 {
+    pub fn scalar(&self) -> f64 {
         match *self {
             Annotatable::Unit(ref simple_unit) => {
-                simple_unit.prefix_scalar()
+                simple_unit.scalar()
             },
-            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
-                simple_unit.prefix_scalar()
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.scalar().powi(e)
             }
         }
-    }
-
-    pub fn scalar(&self, magnitude: f64) -> f64 {
-        match *self {
-            Annotatable::Unit(ref simple_unit) => {
-                simple_unit.scalar(magnitude)
-            },
-            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
-                simple_unit.scalar(magnitude)
-            }
-        }
-    }
-
-    pub fn scalar_default(&self) -> f64 {
-        self.scalar(1.0)
-    }
-
-    pub fn magnitude(&self, scalar: f64) -> f64 {
-        match *self {
-            Annotatable::Unit(ref simple_unit) => {
-                simple_unit.magnitude(scalar)
-            },
-            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
-                simple_unit.magnitude(scalar)
-            }
-        }
-    }
-
-    pub fn magnitude_default(&self) -> f64 {
-        self.magnitude(1.0)
     }
 }
 
@@ -117,7 +88,7 @@ mod tests {
     use std::collections::BTreeMap;
 
     #[test]
-    fn validate_annotatable() {
+    fn validate_parsing_annotatable() {
         let ann = Annotatable::Unit(make_su_pre_unit());
 
         let ann_with_pos_power = Annotatable::UnitWithPower(
@@ -132,24 +103,6 @@ mod tests {
         assert_eq!(&parse_Annotatable("km").unwrap(), &ann);
         assert_eq!(&parse_Annotatable("km10").unwrap(), &ann_with_pos_power);
         assert_eq!(&parse_Annotatable("km-10").unwrap(), &ann_with_neg_power);
-    }
-
-    #[test]
-    fn validate_prefix_scalar() {
-        let ann = Annotatable::Unit(make_su_pre_unit());
-
-        let ann_with_pos_power = Annotatable::UnitWithPower(
-            make_su_pre_unit(),
-            Exponent(UnitSign::Positive, 10)
-            );
-
-        let ann_with_neg_power = Annotatable::UnitWithPower(
-            make_su_pre_unit(),
-            Exponent(UnitSign::Negative, 10)
-            );
-        assert_eq!(ann.prefix_scalar(), 1000.0);
-        assert_eq!(ann_with_pos_power.prefix_scalar(), 1000.0);
-        assert_eq!(ann_with_neg_power.prefix_scalar(), 1000.0);
     }
 
     #[test]

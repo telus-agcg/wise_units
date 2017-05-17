@@ -2,9 +2,12 @@ pub mod base;
 pub mod derived;
 pub mod prefix;
 mod unit_type;
+pub mod definition;
 
-pub use unit::unit_type::UnitType;
+pub use unit::definition::Definition;
 pub use unit::prefix::Prefix;
+pub use unit::unit_type::UnitType;
+pub use measurement::Measurement;
 pub use classification::Classification;
 pub use dimension::Dimension;
 pub use property::Property;
@@ -22,9 +25,9 @@ pub trait Unit {
     fn primary_code(&self) -> String;
     fn print_symbol(&self) -> Option<String>;
     fn property(&self) -> Property;
-    fn scale(&self) -> f64;
     fn secondary_code(&self) -> String;
     fn unit_type(&self) -> UnitType;
+    fn definition(&self) -> Definition;
 }
 
 impl<'a> fmt::Display for Unit {

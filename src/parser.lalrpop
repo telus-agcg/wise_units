@@ -139,12 +139,12 @@ pub Exponent: Exponent = {
     <d:Digits> => Exponent(UnitSign::Positive, d)
 };
 
-Factor: Factor = {
+pub Factor: Factor = {
     <Digits> => Factor(<>),
 };
 
 Digits: u32 = {
-    <s:r"[1-9]+[0-9]*">  => u32::from_str(s).unwrap()
+    <s:r"[0-9]+"> => u32::from_str(s).unwrap()
 };
 
 Sign: UnitSign = { PositiveSign, NegativeSign };
