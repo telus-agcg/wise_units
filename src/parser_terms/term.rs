@@ -46,19 +46,6 @@ impl<'a> Term<'a> {
         }
     }
 
-    fn composition_string(&self) -> String {
-        let composition = self.composition();
-
-        composition.into_iter()
-            .map(|(k, v)| match v {
-                1 => k.to_string(),
-                _ => format!("{}{}", k, v),
-            })
-            .collect::<Vec<String>>()
-            .as_slice()
-            .join(".")
-    }
-
     pub fn is_compatible_with<'b>(&self, other: &Term<'b>) -> bool {
         let me = self.composition();
         let other = other.composition();
@@ -263,36 +250,6 @@ mod tests {
         let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
         map.insert(Dimension::Length, 2);
         assert_eq!(term.composition(), map);
-    }
-
-    #[test]
-    fn validate_composition_string() {
-        let term = parse_Term("m").unwrap();
-        assert_eq!(term.composition_string(), "L".to_string());
-
-        let term = parse_Term("m2").unwrap();
-        assert_eq!(term.composition_string(), "L2".to_string());
-
-        let term = parse_Term("m2/s").unwrap();
-        assert_eq!(term.composition_string(), "L2.T-1".to_string());
-
-        let term = parse_Term("s/m2").unwrap();
-        assert_eq!(term.composition_string(), "L-2.T".to_string());
-    }
-
-    #[test]
-    fn validate_composition_string_with_prefix() {
-        let term = parse_Term("km").unwrap();
-        assert_eq!(term.composition_string(), "L".to_string());
-
-        let term = parse_Term("km2").unwrap();
-        assert_eq!(term.composition_string(), "L2".to_string());
-
-        let term = parse_Term("km2/s").unwrap();
-        assert_eq!(term.composition_string(), "L2.T-1".to_string());
-
-        let term = parse_Term("s/km2").unwrap();
-        assert_eq!(term.composition_string(), "L-2.T".to_string());
     }
 
     #[test]
