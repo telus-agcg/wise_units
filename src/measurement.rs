@@ -34,7 +34,7 @@ impl<'a> Measurement<'a> {
         }
 
         let new_measurement = Measurement {
-            value: self.converted_value(&other_term),
+            value: self.converted_scalar(&other_term),
             term: other_term
         };
 
@@ -48,7 +48,7 @@ impl<'a> Measurement<'a> {
     }
 
     pub fn scalar(&self) -> f64 {
-      self.value * self.term.scalar()
+        self.value * self.term.scalar()
     }
 
     /// The Measurement's Term as a String.
@@ -65,8 +65,8 @@ impl<'a> Measurement<'a> {
         self.term.to_string()
     }
 
-    fn converted_value(&self, other_term: &Term) -> f64 {
-      self.scalar() / other_term.scalar()
+    fn converted_scalar(&self, other_term: &Term) -> f64 {
+            self.scalar() / other_term.scalar()
     }
 }
 
