@@ -47,6 +47,15 @@ impl SimpleUnit {
             }
         }
     }
+
+    pub fn calculate_scalar(&self, input: f64) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.definition().calculate_scalar(input),
+            SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
+                box_prefix.definition().scalar() * box_unit.definition().calculate_scalar(input)
+            }
+        }
+    }
 }
 
 impl fmt::Display for SimpleUnit {

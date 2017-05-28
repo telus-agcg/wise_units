@@ -1,15 +1,16 @@
-use parser_terms::{Exponent, SimpleUnit};
+use parser_terms::{Exponent, SimpleUnit, SpecialUnit};
 use std::collections::BTreeMap;
 use std::fmt;
 use unit::Dimension;
 
 #[derive(Debug, PartialEq)]
-pub enum Annotatable {
+pub enum Annotatable<'a> {
     Unit(SimpleUnit),
     UnitWithPower(SimpleUnit, Exponent),
+    SpecialUnit(SpecialUnit<'a>),
 }
 
-impl Annotatable {
+impl<'a> Annotatable<'a> {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Annotatable::Unit(ref simple_unit) => simple_unit.composition(),
@@ -38,7 +39,8 @@ impl Annotatable {
                 }
 
                 map
-            }
+            },
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.composition(),
         }
     }
 
@@ -49,6 +51,9 @@ impl Annotatable {
             },
             Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
                 simple_unit.is_special()
+            },
+            Annotatable::SpecialUnit(ref special_unit) => {
+                special_unit.is_special()
             }
         }
     }
@@ -61,18 +66,31 @@ impl Annotatable {
             Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
                 let e = exponent.as_i32();
                 simple_unit.scalar().powi(e)
-            }
+            },
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.scalar(),
+        }
+    }
+
+    pub fn calculate_scalar(&self, input: f64) -> f64 {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => simple_unit.calculate_scalar(input),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.calculate_scalar(input).powi(e)
+            },
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.calculate_scalar(input),
         }
     }
 }
 
-impl fmt::Display for Annotatable {
+impl<'a> fmt::Display for Annotatable<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Annotatable::Unit(ref simple_unit) => { write!(f, "{}", simple_unit) },
             Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
                 write!(f, "{}{}", simple_unit, exponent)
             }
+            Annotatable::SpecialUnit(ref special_unit) => { write!(f, "{}", special_unit) },
         }
     }
 }

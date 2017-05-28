@@ -5,8 +5,8 @@ use unit::Dimension;
 
 #[derive(Debug, PartialEq)]
 pub enum Component<'a> {
-    AnnotatedAnnotatable(Annotatable, Annotation<'a>),
-    Annotatable(Annotatable),
+    AnnotatedAnnotatable(Annotatable<'a>, Annotation<'a>),
+    Annotatable(Annotatable<'a>),
     Annotation(Annotation<'a>),
     Factor(Factor),
     Term(Box<Term<'a>>),
@@ -26,7 +26,7 @@ impl<'a> Component<'a> {
 
     pub fn is_special(&self) -> bool {
         match *self {
-            Component::AnnotatedAnnotatable(ref annotatable, ref __annotation) => {
+            Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
                 annotatable.is_special()
             },
             Component::Annotatable(ref annotatable) => {
@@ -49,6 +49,23 @@ impl<'a> Component<'a> {
             },
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
                 annotatable.scalar()
+            }
+        }
+    }
+
+    pub fn calculate_scalar(&self, input: f64) -> f64 {
+        match *self {
+            Component::Term(ref box_term) => {
+                let ref term = *box_term;
+                term.calculate_scalar(input)
+            },
+            Component::Factor(ref factor) => { factor.0 as f64 * input },
+            Component::Annotation(_) => input,
+            Component::Annotatable(ref annotatable) => {
+                annotatable.calculate_scalar(input)
+            },
+            Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
+                annotatable.calculate_scalar(input)
             }
         }
     }
@@ -117,7 +134,7 @@ mod tests {
             );
     }
 
-    fn make_annotatable() -> Annotatable {
+    fn make_annotatable<'a>() -> Annotatable<'a> {
         let simple_unit = SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Meter));
         let negative_exp = Exponent(UnitSign::Negative, 10);
 

@@ -10,5 +10,8 @@ lalrpop = "0.13.0"
 [dependencies]
 lalrpop-util = "0.13.0"
 
+[dependencies.regex]
+version = "0.2.1"
+
 [dev-dependencies]
 pretty_assertions = "*"

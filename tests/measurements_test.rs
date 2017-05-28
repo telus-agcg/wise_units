@@ -54,6 +54,10 @@ fn validate_conversions() {
     let subject = Measurement::new(1.0, "[pi]");
     let converted = subject.convert_to("[ppth]").unwrap();
     assert_eq!(round_value(converted.value), 3141.5927);
+
+    let subject = Measurement::new(25.0, "Cel");
+    let converted = subject.convert_to("K").unwrap();
+    assert_eq!(round_value(converted.value), 298.15);
 }
 
 fn round_value(value: f64) -> f64 {

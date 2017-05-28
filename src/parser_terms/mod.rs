@@ -3,7 +3,9 @@ mod annotation;
 mod component;
 mod exponent;
 mod factor;
+mod function_symbol;
 mod simple_unit;
+mod special_unit;
 mod term;
 mod unit_sign;
 
@@ -12,7 +14,9 @@ pub use parser_terms::annotation::Annotation;
 pub use parser_terms::component::Component;
 pub use parser_terms::exponent::Exponent;
 pub use parser_terms::factor::Factor;
+pub use parser_terms::function_symbol::FunctionSymbol;
 pub use parser_terms::simple_unit::SimpleUnit;
+pub use parser_terms::special_unit::SpecialUnit;
 pub use parser_terms::term::Term;
 pub use parser_terms::unit_sign::UnitSign;
 

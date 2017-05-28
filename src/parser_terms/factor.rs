@@ -7,6 +7,7 @@ use std::fmt;
 /// be defined."
 ///
 /// This struct serves essentially to make up the part of the parser's AST.
+///
 #[derive(Debug, PartialEq)]
 pub struct Factor(pub u32);
 

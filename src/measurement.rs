@@ -66,7 +66,11 @@ impl<'a> Measurement<'a> {
     }
 
     fn converted_scalar(&self, other_term: &Term) -> f64 {
+        if self.is_special() {
+            self.term.calculate_scalar(self.value) / other_term.calculate_scalar(self.value)
+        } else {
             self.scalar() / other_term.scalar()
+        }
     }
 }
 

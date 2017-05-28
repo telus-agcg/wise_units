@@ -30,9 +30,20 @@ pub Annotation: Annotation<'input> = {
     "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}"))
 };
 
-pub Annotatable: Annotatable = {
+pub Annotatable: Annotatable<'input> = {
     <SimpleUnit><Exponent> => Annotatable::UnitWithPower(<>),
     <SimpleUnit> => Annotatable::Unit(<>),
+    <SpecialUnit> => Annotatable::SpecialUnit(<>),
+};
+
+pub SpecialUnit: SpecialUnit<'input> = {
+    <fs:FunctionSymbol> "(" <fpn:FloatingPointNumber> <t:Term> ")" => {
+        SpecialUnit(fs, fpn, Box::new(t))
+    }
+};
+
+pub FunctionSymbol: FunctionSymbol = {
+    "cel"      => FunctionSymbol::Cel,
 };
 
 pub SimpleUnit: SimpleUnit = {
@@ -62,6 +73,7 @@ UnitByPrimaryCode: Box<Unit> = {
     "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
     "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "Cel" => Box::new(DegreeCelsius) as Box<Unit>,
 };
 
 UnitBySecondaryCode: Box<Unit> = {
@@ -75,6 +87,7 @@ UnitBySecondaryCode: Box<Unit> = {
     "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[PPM]" => Box::new(PartsPerMillion) as Box<Unit>,
     "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "CEL" => Box::new(DegreeCelsius) as Box<Unit>,
 };
 
 pub PrefixSymbol: Box<Prefix> = {
@@ -145,6 +158,10 @@ pub Factor: Factor = {
 
 Digits: u32 = {
     <s:r"[0-9]+"> => u32::from_str(s).unwrap()
+};
+
+FloatingPointNumber: f64 = {
+    <s:r"[+-]?[0-9]+\.[0-9]+"> => f64::from_str(s).unwrap()
 };
 
 Sign: UnitSign = { PositiveSign, NegativeSign };

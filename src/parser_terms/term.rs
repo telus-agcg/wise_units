@@ -48,20 +48,28 @@ impl<'a> Term<'a> {
 
     pub fn is_compatible_with<'b>(&self, other: &Term<'b>) -> bool {
         let me = self.composition();
-        let other = other.composition();
+        let other_comp = other.composition();
 
-        me == other
+        me == other_comp
     }
 
     pub fn is_special(&self) -> bool {
         match *self {
             Term::Basic(ref component) => component.is_special(),
-            _ => false
+            Term::SlashCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.is_special() || term.is_special()
+            },
+            Term::DotCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.is_special() || term.is_special()
+            },
         }
     }
 
     pub fn scalar(&self) -> f64 {
         match *self {
+            Term::Basic(ref component) => component.scalar(),
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.scalar() * term.scalar()
@@ -70,7 +78,20 @@ impl<'a> Term<'a> {
                 let ref term = *box_term;
                 component.scalar() / term.scalar()
             },
-            Term::Basic(ref component) => component.scalar()
+        }
+    }
+
+    pub fn calculate_scalar(&self, input: f64) -> f64 {
+        match *self {
+            Term::Basic(ref component) => { component.calculate_scalar(input) },
+            Term::DotCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.calculate_scalar(input) * term.calculate_scalar(input)
+            },
+            Term::SlashCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.calculate_scalar(input) * term.calculate_scalar(input)
+            },
         }
     }
 }

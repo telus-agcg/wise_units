@@ -24,7 +24,6 @@ impl<'a> Definition<'a> {
     pub fn new(value: f64, expression: &'a str) -> Self {
         // TODO: unwrap
         let main_term = parse_MainTerm(expression).unwrap();
-        println!("main term: {:?}", main_term);
 
         Definition {
             value: value,
@@ -39,6 +38,14 @@ impl<'a> Definition<'a> {
             self.value
         } else {
             self.value * self.term.scalar()
+        }
+    }
+
+    pub fn calculate_scalar(&self, input: f64) -> f64 {
+        if self.term.to_string() == "1".to_string() {
+            self.value
+        } else {
+            self.term.calculate_scalar(input)
         }
     }
 }
