@@ -10,7 +10,7 @@ pub struct Measurement<'a> {
 
 #[derive(Debug)]
 pub enum ConversionError {
-    Incompatible
+    IncompatibleUnitTypes
 }
 
 impl<'a> Measurement<'a> {
@@ -30,7 +30,7 @@ impl<'a> Measurement<'a> {
         let my_term = &self.term;
 
         if !my_term.is_compatible_with(&other_term) {
-            return Err(ConversionError::Incompatible)
+            return Err(ConversionError::IncompatibleUnitTypes)
         }
 
         let new_measurement = Measurement {
