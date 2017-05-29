@@ -53,19 +53,57 @@ impl<'a> Component<'a> {
         }
     }
 
-    pub fn calculate_scalar(&self, input: f64) -> f64 {
+    pub fn magnitude(&self) -> f64 {
         match *self {
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
-                term.calculate_scalar(input)
+                term.magnitude()
             },
-            Component::Factor(ref factor) => { factor.0 as f64 * input },
-            Component::Annotation(_) => input,
+            Component::Factor(ref factor) => factor.0 as f64,
+            Component::Annotation(_) => 1.0,
             Component::Annotatable(ref annotatable) => {
-                annotatable.calculate_scalar(input)
+                annotatable.magnitude()
             },
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
-                annotatable.calculate_scalar(input)
+                annotatable.magnitude()
+            }
+        }
+    }
+
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            Component::Term(ref box_term) => {
+                let ref term = *box_term;
+                term.calculate_scalar(magnitude)
+            },
+            Component::Factor(ref factor) => {
+                factor.0 as f64 * magnitude
+            },
+            Component::Annotation(_) => magnitude,
+            Component::Annotatable(ref annotatable) => {
+                annotatable.calculate_scalar(magnitude)
+            },
+            Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
+                annotatable.calculate_scalar(magnitude)
+            }
+        }
+    }
+
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            Component::Term(ref box_term) => {
+                let ref term = *box_term;
+                term.calculate_magnitude(scalar)
+            },
+            Component::Factor(ref factor) => {
+                factor.0 as f64 * scalar
+            },
+            Component::Annotation(_) => scalar,
+            Component::Annotatable(ref annotatable) => {
+                annotatable.calculate_magnitude(scalar)
+            },
+            Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
+                annotatable.calculate_magnitude(scalar)
             }
         }
     }

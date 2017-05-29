@@ -48,7 +48,21 @@ impl<'a> Measurement<'a> {
     }
 
     pub fn scalar(&self) -> f64 {
-        self.value * self.term.scalar()
+        if self.is_special() {
+            let magnitude = self.value;
+            self.term.calculate_scalar(magnitude)
+        } else {
+            self.value * self.term.scalar()
+        }
+    }
+
+    pub fn magnitude(&self) -> f64 {
+        if self.is_special() {
+            let scalar = self.scalar();
+            self.term.calculate_magnitude(scalar)
+        } else {
+            self.value * self.term.magnitude()
+        }
     }
 
     /// The Measurement's Term as a String.
@@ -66,11 +80,15 @@ impl<'a> Measurement<'a> {
     }
 
     fn converted_scalar(&self, other_term: &Term) -> f64 {
-        if self.is_special() {
-            self.term.calculate_scalar(self.value) / other_term.calculate_scalar(self.value)
-        } else {
-            self.scalar() / other_term.scalar()
+        if !self.is_special() {
+            if other_term.is_special() {
+                return other_term.calculate_magnitude(self.value)
+            } else {
+                return self.scalar() / other_term.scalar()
+            }
         }
+
+        self.term.calculate_scalar(self.value)
     }
 }
 

@@ -58,6 +58,10 @@ fn validate_conversions() {
     let subject = Measurement::new(25.0, "Cel");
     let converted = subject.convert_to("K").unwrap();
     assert_eq!(round_value(converted.value), 298.15);
+
+    let subject = Measurement::new(298.15, "K");
+    let converted = subject.convert_to("Cel").unwrap();
+    assert_eq!(round_value(converted.value), 25.0);
 }
 
 fn round_value(value: f64) -> f64 {

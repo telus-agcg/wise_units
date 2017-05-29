@@ -81,16 +81,44 @@ impl<'a> Term<'a> {
         }
     }
 
-    pub fn calculate_scalar(&self, input: f64) -> f64 {
+    pub fn magnitude(&self) -> f64 {
         match *self {
-            Term::Basic(ref component) => { component.calculate_scalar(input) },
+            Term::Basic(ref component) => component.magnitude(),
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
-                component.calculate_scalar(input) * term.calculate_scalar(input)
+                component.magnitude() * term.magnitude()
             },
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
-                component.calculate_scalar(input) * term.calculate_scalar(input)
+                component.magnitude() / term.magnitude()
+            },
+        }
+    }
+
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            Term::Basic(ref component) => { component.calculate_scalar(magnitude) },
+            Term::DotCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.calculate_scalar(magnitude) * term.calculate_scalar(magnitude)
+            },
+            Term::SlashCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.calculate_scalar(magnitude) * term.calculate_scalar(magnitude)
+            },
+        }
+    }
+
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            Term::Basic(ref component) => { component.calculate_magnitude(scalar) },
+            Term::DotCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.calculate_magnitude(scalar) * term.calculate_magnitude(scalar)
+            },
+            Term::SlashCombined(ref component, ref box_term) => {
+                let ref term = *box_term;
+                component.calculate_magnitude(scalar) * term.calculate_magnitude(scalar)
             },
         }
     }

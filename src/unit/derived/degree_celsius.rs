@@ -19,4 +19,12 @@ impl Unit for DegreeCelsius {
     fn property(&self)       -> Property { Property::Temperature }
     fn secondary_code(&self) -> String { "CEL".to_string()}
     fn unit_type(&self)      -> UnitType { UnitType::Derived }
+
+    fn calculate_scalar(&self, input: f64) -> f64 {
+        input + 273.15
+    }
+
+    fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        scalar - 273.15
+    }
 }

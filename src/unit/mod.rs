@@ -17,6 +17,7 @@ use std::fmt;
 
 pub trait Unit {
     fn classification(&self) -> Classification;
+    fn definition(&self) -> Definition;
     fn dim(&self) -> Dimension;
     fn is_arbitrary(&self) -> bool;
     fn is_metric(&self) -> bool;
@@ -27,7 +28,22 @@ pub trait Unit {
     fn property(&self) -> Property;
     fn secondary_code(&self) -> String;
     fn unit_type(&self) -> UnitType;
-    fn definition(&self) -> Definition;
+
+    fn scalar(&self) -> f64 {
+        self.definition().scalar()
+    }
+
+    fn magnitude(&self) -> f64 {
+        self.definition().magnitude()
+    }
+
+    fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        self.definition().calculate_scalar(magnitude)
+    }
+
+    fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        self.definition().calculate_magnitude(scalar)
+    }
 }
 
 impl<'a> fmt::Display for Unit {

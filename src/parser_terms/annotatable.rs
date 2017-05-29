@@ -71,14 +71,38 @@ impl<'a> Annotatable<'a> {
         }
     }
 
-    pub fn calculate_scalar(&self, input: f64) -> f64 {
+    pub fn magnitude(&self) -> f64 {
         match *self {
-            Annotatable::Unit(ref simple_unit) => simple_unit.calculate_scalar(input),
+            Annotatable::Unit(ref simple_unit) => {
+                simple_unit.magnitude()
+            },
             Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
                 let e = exponent.as_i32();
-                simple_unit.calculate_scalar(input).powi(e)
+                simple_unit.magnitude().powi(e)
             },
-            Annotatable::SpecialUnit(ref special_unit) => special_unit.calculate_scalar(input),
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.magnitude(),
+        }
+    }
+
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => simple_unit.calculate_scalar(magnitude),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.calculate_scalar(magnitude).powi(e)
+            },
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.calculate_scalar(magnitude),
+        }
+    }
+
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => simple_unit.calculate_magnitude(scalar),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.calculate_magnitude(scalar).powi(e)
+            },
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.calculate_magnitude(scalar),
         }
     }
 }

@@ -41,18 +41,40 @@ impl SimpleUnit {
 
     pub fn scalar(&self) -> f64 {
         match *self {
-            SimpleUnit::Atom(ref box_unit) => box_unit.definition().scalar(),
+            SimpleUnit::Atom(ref box_unit) => box_unit.scalar(),
             SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
-                box_prefix.definition().scalar() * box_unit.definition().scalar()
+                box_prefix.definition().scalar() * box_unit.scalar()
             }
         }
     }
 
-    pub fn calculate_scalar(&self, input: f64) -> f64 {
+    pub fn magnitude(&self) -> f64 {
         match *self {
-            SimpleUnit::Atom(ref box_unit) => box_unit.definition().calculate_scalar(input),
+            SimpleUnit::Atom(ref box_unit) => box_unit.magnitude(),
             SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
-                box_prefix.definition().scalar() * box_unit.definition().calculate_scalar(input)
+                box_prefix.definition().magnitude() * box_unit.magnitude()
+            }
+        }
+    }
+
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.calculate_scalar(magnitude),
+            SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
+                // Should the Prefix's scalar be a function of its value and
+                // the definition??
+                box_prefix.definition().scalar() * box_unit.calculate_scalar(magnitude)
+            }
+        }
+    }
+
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.calculate_magnitude(scalar),
+            SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
+                // Should the Prefix's scalar be a function of its value and
+                // the definition??
+                box_prefix.definition().scalar() * box_unit.calculate_magnitude(scalar)
             }
         }
     }

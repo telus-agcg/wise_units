@@ -14,8 +14,13 @@ impl<'a> SpecialUnit<'a> {
         comp
     }
 
-    // Not sure if returning 1.0 makes sense here...
+    // TODO: Not sure if returning 1.0 makes sense here...
     pub fn scalar(&self) -> f64 {
+        1.0
+    }
+
+    // TODO: Not sure if returning 1.0 makes sense here...
+    pub fn magnitude(&self) -> f64 {
         1.0
     }
 
@@ -23,8 +28,12 @@ impl<'a> SpecialUnit<'a> {
         true
     }
 
-    pub fn calculate_scalar(&self, input: f64) -> f64 {
-        self.0.calculate_scalar(input)
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        self.calculate_magnitude(magnitude)
+    }
+
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        self.2.calculate_magnitude(scalar)
     }
 }
 
