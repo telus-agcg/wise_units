@@ -80,15 +80,21 @@ impl<'a> Measurement<'a> {
     }
 
     fn converted_scalar(&self, other_term: &Term) -> f64 {
-        if !self.is_special() {
+        if self.is_special() {
             if other_term.is_special() {
-                return other_term.calculate_magnitude(self.value)
+                let ts = self.term.calculate_scalar(self.value);
+                other_term.calculate_magnitude(ts)
             } else {
-                return self.scalar() / other_term.scalar()
+                self.term.calculate_scalar(self.value)
+            }
+        } else {
+            if other_term.is_special() {
+                other_term.calculate_magnitude(self.value)
+            } else {
+                self.scalar() / other_term.scalar()
             }
         }
 
-        self.term.calculate_scalar(self.value)
     }
 }
 
