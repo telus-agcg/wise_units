@@ -19,14 +19,14 @@ impl SimpleUnit {
                 if unit_dim != Dimension::None {
                     map.insert(box_unit.dim(), 1);
                 }
-            },
+            }
             SimpleUnit::PrefixedAtom(ref _box_prefix, ref box_unit) => {
                 let unit_dim = box_unit.dim();
 
                 if unit_dim != Dimension::None {
                     map.insert(box_unit.dim(), 1);
                 }
-            },
+            }
         }
 
         map
@@ -35,7 +35,7 @@ impl SimpleUnit {
     pub fn is_special(&self) -> bool {
         match *self {
             SimpleUnit::Atom(ref box_unit) => box_unit.is_special(),
-            SimpleUnit::PrefixedAtom(ref _box_prefix, ref box_unit) => box_unit.is_special()
+            SimpleUnit::PrefixedAtom(ref _box_prefix, ref box_unit) => box_unit.is_special(),
         }
     }
 
@@ -86,12 +86,12 @@ impl fmt::Display for SimpleUnit {
             SimpleUnit::Atom(ref box_unit) => {
                 let ref unit = *box_unit;
                 write!(f, "{}", unit)
-            },
+            }
             SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
                 let ref prefix = *box_prefix;
                 let ref unit = *box_unit;
                 write!(f, "{}{}", prefix, unit)
-            },
+            }
         }
     }
 }
@@ -102,9 +102,9 @@ impl PartialEq for SimpleUnit {
             SimpleUnit::Atom(ref box_unit) => {
                 match *rhs {
                     SimpleUnit::Atom(ref box_rhs) => box_unit == box_rhs,
-                    SimpleUnit::PrefixedAtom(ref _box_prefix, ref _box_rhs) => false
+                    SimpleUnit::PrefixedAtom(ref _box_prefix, ref _box_rhs) => false,
                 }
-            },
+            }
             SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
                 match *rhs {
                     SimpleUnit::Atom(ref _box_rhs) => false,

@@ -2,5 +2,5 @@
 pub enum UnitType {
     Base,
     Derived,
-    Prefix
+    Prefix,
 }

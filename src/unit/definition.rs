@@ -16,7 +16,7 @@ use parser_terms::Term;
 ///
 pub struct Definition<'a> {
     pub value: f64,
-    pub term: Term<'a>
+    pub term: Term<'a>,
 }
 
 impl<'a> Definition<'a> {
@@ -27,7 +27,7 @@ impl<'a> Definition<'a> {
 
         Definition {
             value: value,
-            term: main_term
+            term: main_term,
         }
     }
 

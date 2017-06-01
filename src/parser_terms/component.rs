@@ -15,12 +15,12 @@ pub enum Component<'a> {
 impl<'a> Component<'a> {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
-            Component::Annotatable(ref annotatable) => { annotatable.composition() },
+            Component::Annotatable(ref annotatable) => annotatable.composition(),
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
                 term.composition()
-            },
-            _ => { BTreeMap::new() }
+            }
+            _ => BTreeMap::new(),
         }
     }
 
@@ -28,11 +28,9 @@ impl<'a> Component<'a> {
         match *self {
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
                 annotatable.is_special()
-            },
-            Component::Annotatable(ref annotatable) => {
-                annotatable.is_special()
-            },
-            _ => false
+            }
+            Component::Annotatable(ref annotatable) => annotatable.is_special(),
+            _ => false,
         }
     }
 
@@ -41,12 +39,10 @@ impl<'a> Component<'a> {
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
                 term.scalar()
-            },
+            }
             Component::Factor(ref factor) => factor.0 as f64,
             Component::Annotation(_) => 1.0,
-            Component::Annotatable(ref annotatable) => {
-                annotatable.scalar()
-            },
+            Component::Annotatable(ref annotatable) => annotatable.scalar(),
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
                 annotatable.scalar()
             }
@@ -58,12 +54,10 @@ impl<'a> Component<'a> {
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
                 term.magnitude()
-            },
+            }
             Component::Factor(ref factor) => factor.0 as f64,
             Component::Annotation(_) => 1.0,
-            Component::Annotatable(ref annotatable) => {
-                annotatable.magnitude()
-            },
+            Component::Annotatable(ref annotatable) => annotatable.magnitude(),
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
                 annotatable.magnitude()
             }
@@ -75,14 +69,10 @@ impl<'a> Component<'a> {
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
                 term.calculate_scalar(magnitude)
-            },
-            Component::Factor(ref factor) => {
-                factor.0 as f64 * magnitude
-            },
+            }
+            Component::Factor(ref factor) => factor.0 as f64 * magnitude,
             Component::Annotation(_) => magnitude,
-            Component::Annotatable(ref annotatable) => {
-                annotatable.calculate_scalar(magnitude)
-            },
+            Component::Annotatable(ref annotatable) => annotatable.calculate_scalar(magnitude),
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
                 annotatable.calculate_scalar(magnitude)
             }
@@ -94,14 +84,10 @@ impl<'a> Component<'a> {
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
                 term.calculate_magnitude(scalar)
-            },
-            Component::Factor(ref factor) => {
-                factor.0 as f64 * scalar
-            },
+            }
+            Component::Factor(ref factor) => factor.0 as f64 * scalar,
             Component::Annotation(_) => scalar,
-            Component::Annotatable(ref annotatable) => {
-                annotatable.calculate_magnitude(scalar)
-            },
+            Component::Annotatable(ref annotatable) => annotatable.calculate_magnitude(scalar),
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
                 annotatable.calculate_magnitude(scalar)
             }
@@ -114,14 +100,14 @@ impl<'a> fmt::Display for Component<'a> {
         match *self {
             Component::AnnotatedAnnotatable(ref annotatable, ref annotation) => {
                 write!(f, "{}{{{}}}", annotatable, annotation)
-            },
-            Component::Annotatable(ref annotatable) => { write!(f, "{}", annotatable) },
-            Component::Annotation(ref annotation) => { write!(f, "{}", annotation) },
-            Component::Factor(ref factor) => { write!(f, "{}", factor) },
+            }
+            Component::Annotatable(ref annotatable) => write!(f, "{}", annotatable),
+            Component::Annotation(ref annotation) => write!(f, "{}", annotation),
+            Component::Factor(ref factor) => write!(f, "{}", factor),
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
                 write!(f, "{}", term)
-            },
+            }
         }
     }
 }
@@ -138,38 +124,28 @@ mod tests {
     fn validate_parsing_component_with_annotations() {
         let annotation = Annotation("%vol");
 
-        assert_eq!(
-            parse_Component("km-10{%vol}").unwrap(),
-            Component::AnnotatedAnnotatable(make_annotatable(), annotation)
-            );
+        assert_eq!(parse_Component("km-10{%vol}").unwrap(),
+                   Component::AnnotatedAnnotatable(make_annotatable(), annotation));
 
-        assert_eq!(
-            parse_Component("km-10").unwrap(),
-            Component::Annotatable(make_annotatable())
-            );
+        assert_eq!(parse_Component("km-10").unwrap(),
+                   Component::Annotatable(make_annotatable()));
 
         let annotation = Annotation("wet'tis.");
 
-        assert_eq!(
-            parse_Component("{wet'tis.}").unwrap(),
-            Component::Annotation(annotation)
-            );
+        assert_eq!(parse_Component("{wet'tis.}").unwrap(),
+                   Component::Annotation(annotation));
     }
 
     #[test]
     fn validate_parsing_component_with_factor() {
-        assert_eq!(
-            parse_Component("123").unwrap(),
-            Component::Factor(Factor(123))
-            );
+        assert_eq!(parse_Component("123").unwrap(),
+                   Component::Factor(Factor(123)));
     }
 
     #[test]
     fn validate_parsing_component_with_term() {
-        assert_eq!(
-            parse_Component("(123)").unwrap(),
-            Component::Term(Box::new(Term::Basic(Component::Factor(Factor(123)))))
-            );
+        assert_eq!(parse_Component("(123)").unwrap(),
+                   Component::Term(Box::new(Term::Basic(Component::Factor(Factor(123))))));
     }
 
     fn make_annotatable<'a>() -> Annotatable<'a> {

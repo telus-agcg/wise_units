@@ -10,7 +10,7 @@ pub struct Measurement<'a> {
 
 #[derive(Debug)]
 pub enum ConversionError {
-    IncompatibleUnitTypes
+    IncompatibleUnitTypes,
 }
 
 impl<'a> Measurement<'a> {
@@ -21,7 +21,7 @@ impl<'a> Measurement<'a> {
 
         Measurement {
             value: value,
-            term: main_term
+            term: main_term,
         }
     }
 
@@ -30,12 +30,12 @@ impl<'a> Measurement<'a> {
         let my_term = &self.term;
 
         if !my_term.is_compatible_with(&other_term) {
-            return Err(ConversionError::IncompatibleUnitTypes)
+            return Err(ConversionError::IncompatibleUnitTypes);
         }
 
         let new_measurement = Measurement {
             value: self.converted_scalar(&other_term),
-            term: other_term
+            term: other_term,
         };
 
         Ok(new_measurement)
@@ -155,9 +155,12 @@ mod tests {
         assert_eq!(Measurement::new(1.0, "m").to_string(), "1m".to_string());
         assert_eq!(Measurement::new(1.1, "m").to_string(), "1.1m".to_string());
         assert_eq!(Measurement::new(1.1, "m2").to_string(), "1.1m2".to_string());
-        assert_eq!(Measurement::new(1.1, "km2").to_string(), "1.1km2".to_string());
-        assert_eq!(Measurement::new(1.1, "km2/s").to_string(), "1.1km2/s".to_string());
-        assert_eq!(Measurement::new(1.1, "km2/s.rad").to_string(), "1.1km2/s.rad".to_string());
+        assert_eq!(Measurement::new(1.1, "km2").to_string(),
+                   "1.1km2".to_string());
+        assert_eq!(Measurement::new(1.1, "km2/s").to_string(),
+                   "1.1km2/s".to_string());
+        assert_eq!(Measurement::new(1.1, "km2/s.rad").to_string(),
+                   "1.1km2/s.rad".to_string());
     }
 
     #[test]

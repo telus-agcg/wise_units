@@ -3,7 +3,7 @@ use std::fmt;
 #[derive(Debug, PartialEq)]
 pub enum UnitSign {
     Positive,
-    Negative
+    Negative,
 }
 
 impl fmt::Display for UnitSign {

@@ -7,8 +7,8 @@ pub struct Exponent(pub UnitSign, pub u32);
 impl Exponent {
     pub fn as_i32(&self) -> i32 {
         match self.0 {
-            UnitSign::Positive => { self.1 as i32 },
-            UnitSign::Negative => { 0 - self.1 as i32 },
+            UnitSign::Positive => self.1 as i32,
+            UnitSign::Negative => 0 - self.1 as i32,
         }
     }
 }
@@ -27,7 +27,9 @@ mod tests {
 
     #[test]
     fn validate_exponent() {
-        assert_eq!(parse_Exponent("123").unwrap(), Exponent(UnitSign::Positive, 123));
-        assert_eq!(parse_Exponent("-123").unwrap(), Exponent(UnitSign::Negative, 123));
+        assert_eq!(parse_Exponent("123").unwrap(),
+                   Exponent(UnitSign::Positive, 123));
+        assert_eq!(parse_Exponent("-123").unwrap(),
+                   Exponent(UnitSign::Negative, 123));
     }
 }

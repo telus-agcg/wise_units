@@ -22,13 +22,17 @@ impl<'a> Term<'a> {
 
                 for (term_dim_name, term_value) in term_composition {
                     match component_composition.entry(term_dim_name) {
-                        Entry::Vacant(e) => { e.insert(-term_value); },
-                        Entry::Occupied(mut e) => { *e.get_mut() -= term_value; }
+                        Entry::Vacant(e) => {
+                            e.insert(-term_value);
+                        }
+                        Entry::Occupied(mut e) => {
+                            *e.get_mut() -= term_value;
+                        }
                     }
                 }
 
                 component_composition
-            },
+            }
             Term::DotCombined(ref component, ref box_term) => {
                 let mut component_composition = component.composition();
                 let ref term = *box_term;
@@ -36,8 +40,12 @@ impl<'a> Term<'a> {
 
                 for (term_dim_name, term_value) in term_composition {
                     match component_composition.entry(term_dim_name) {
-                        Entry::Vacant(e) => { e.insert(term_value); },
-                        Entry::Occupied(mut e) => { *e.get_mut() += term_value; }
+                        Entry::Vacant(e) => {
+                            e.insert(term_value);
+                        }
+                        Entry::Occupied(mut e) => {
+                            *e.get_mut() += term_value;
+                        }
                     }
                 }
 
@@ -59,11 +67,11 @@ impl<'a> Term<'a> {
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.is_special() || term.is_special()
-            },
+            }
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.is_special() || term.is_special()
-            },
+            }
         }
     }
 
@@ -73,11 +81,11 @@ impl<'a> Term<'a> {
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.scalar() * term.scalar()
-            },
+            }
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.scalar() / term.scalar()
-            },
+            }
         }
     }
 
@@ -87,39 +95,39 @@ impl<'a> Term<'a> {
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.magnitude() * term.magnitude()
-            },
+            }
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.magnitude() / term.magnitude()
-            },
+            }
         }
     }
 
     pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
         match *self {
-            Term::Basic(ref component) => { component.calculate_scalar(magnitude) },
+            Term::Basic(ref component) => component.calculate_scalar(magnitude),
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.calculate_scalar(magnitude) * term.calculate_scalar(magnitude)
-            },
+            }
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.calculate_scalar(magnitude) * term.calculate_scalar(magnitude)
-            },
+            }
         }
     }
 
     pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
         match *self {
-            Term::Basic(ref component) => { component.calculate_magnitude(scalar) },
+            Term::Basic(ref component) => component.calculate_magnitude(scalar),
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.calculate_magnitude(scalar) * term.calculate_magnitude(scalar)
-            },
+            }
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 component.calculate_magnitude(scalar) * term.calculate_magnitude(scalar)
-            },
+            }
         }
     }
 }
@@ -130,12 +138,12 @@ impl<'a> fmt::Display for Term<'a> {
             Term::DotCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 write!(f, "{}.{}", &component, &term)
-            },
+            }
             Term::SlashCombined(ref component, ref box_term) => {
                 let ref term = *box_term;
                 write!(f, "{}/{}", component, term)
-            },
-            Term::Basic(ref component) => { write!(f, "{}", component) },
+            }
+            Term::Basic(ref component) => write!(f, "{}", component),
         }
     }
 }

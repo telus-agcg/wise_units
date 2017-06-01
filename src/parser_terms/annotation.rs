@@ -16,6 +16,7 @@ mod tests {
 
     #[test]
     fn validate_annotation() {
-        assert_eq!(parse_Annotation("{things123}").unwrap(), Annotation("things123"));
+        assert_eq!(parse_Annotation("{things123}").unwrap(),
+                   Annotation("things123"));
     }
 }
