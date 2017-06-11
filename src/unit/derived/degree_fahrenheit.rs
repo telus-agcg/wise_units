@@ -7,11 +7,11 @@ use unit::{Definition, Unit, UnitType};
 pub struct DegreeFahrenheit;
 
 impl Unit for DegreeFahrenheit {
-    fn classification(&self) -> Classification { Classification::SI }
+    fn classification(&self) -> Classification { Classification::Heat }
     fn definition(&self)     -> Definition { Definition::new(1.0, "degf(5 K/9)") }
     fn dim(&self)            -> Dimension { Dimension::Temperature }
     fn is_arbitrary(&self)   -> bool { false }
-    fn is_metric(&self)      -> bool { true }
+    fn is_metric(&self)      -> bool { false }
     fn is_special(&self)     -> bool { true }
     fn names(&self)          -> Vec<String> { vec!["degree Fahrenheit".to_string()] }
     fn primary_code(&self)   -> String { "[degF]".to_string()}
