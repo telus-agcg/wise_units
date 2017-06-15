@@ -78,21 +78,16 @@ impl<'a> Measurement<'a> {
     pub fn term_string(&self) -> String { self.term.to_string() }
 
     fn converted_scalar(&self, other_term: &Term) -> f64 {
-        if self.is_special() {
-            if other_term.is_special() {
-                let ts = self.term.calculate_scalar(self.value);
-                other_term.calculate_magnitude(ts)
-            } else {
-                self.term.calculate_scalar(self.value)
-            }
+        if self.is_special() && other_term.is_special() {
+            let ts = self.term.calculate_scalar(self.value);
+            other_term.calculate_magnitude(ts)
+        } else if self.is_special() {
+            self.term.calculate_scalar(self.value)
+        } else if other_term.is_special() {
+            other_term.calculate_magnitude(self.value)
         } else {
-            if other_term.is_special() {
-                other_term.calculate_magnitude(self.value)
-            } else {
-                self.scalar() / other_term.scalar()
-            }
+            self.scalar() / other_term.scalar()
         }
-
     }
 }
 
@@ -128,9 +123,9 @@ mod tests {
         assert_eq!(
             m.term,
             Term::Basic(Component::Annotatable(
-                Annotatable::Unit(SimpleUnit::Atom(Box::new(Meter))),
-            ))
-        );
+                    Annotatable::Unit(SimpleUnit::Atom(Box::new(Meter))),
+                    ))
+            );
     }
 
     #[test]
@@ -152,15 +147,15 @@ mod tests {
         assert_eq!(
             Measurement::new(1.1, "km2").to_string(),
             "1.1km2".to_string()
-        );
+            );
         assert_eq!(
             Measurement::new(1.1, "km2/s").to_string(),
             "1.1km2/s".to_string()
-        );
+            );
         assert_eq!(
             Measurement::new(1.1, "km2/s.rad").to_string(),
             "1.1km2/s.rad".to_string()
-        );
+            );
     }
 
     #[test]

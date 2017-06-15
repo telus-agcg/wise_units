@@ -203,7 +203,7 @@ impl fmt::Display for Property {
             Property::MetabolicCost => "metabolic cost of physical activity",
             Property::Number => "number",
             Property::PlaneAngle => "plane angle",
-            Property::Power => "power level",
+            Property::Power => "power",
             Property::PowerLevel => "power level",
             Property::Pressure => "pressure",
             Property::PressureLevel => "pressure level",

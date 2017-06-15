@@ -34,7 +34,7 @@ impl<'a> Definition<'a> {
     pub fn scalar(&self) -> f64 {
         // Don't call (possibly) recursively if the Term is TheUnity (since that
         // is the base of all units).
-        if self.term.to_string() == "1".to_string() {
+        if self.term.to_string() == "1" {
             self.value
         } else {
             self.value * self.term.scalar()
@@ -44,7 +44,7 @@ impl<'a> Definition<'a> {
     pub fn magnitude(&self) -> f64 {
         // Don't call (possibly) recursively if the Term is TheUnity (since that
         // is the base of all units).
-        if self.term.to_string() == "1".to_string() {
+        if self.term.to_string() == "1" {
             self.value
         } else {
             self.value * self.term.magnitude()
@@ -52,7 +52,7 @@ impl<'a> Definition<'a> {
     }
 
     pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
-        if self.term.to_string() == "1".to_string() {
+        if self.term.to_string() == "1" {
             self.value
         } else {
             self.term.calculate_scalar(magnitude)
@@ -60,7 +60,7 @@ impl<'a> Definition<'a> {
     }
 
     pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
-        if self.term.to_string() == "1".to_string() {
+        if self.term.to_string() == "1" {
             self.value
         } else {
             self.term.calculate_magnitude(scalar)

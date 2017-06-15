@@ -9,9 +9,7 @@ pub struct SpecialUnit<'a>(pub FunctionSymbol, pub f64, pub Box<Term<'a>>);
 impl<'a> SpecialUnit<'a> {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         let ref term = self.2;
-        let comp = term.composition();
-
-        comp
+        term.composition()
     }
 
     // TODO: Not sure if returning 1.0 makes sense here...
