@@ -10,26 +10,32 @@ pub enum SimpleUnit {
 
 impl SimpleUnit {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
-        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
-
         match *self {
             SimpleUnit::Atom(ref box_unit) => {
-                let unit_dim = box_unit.dim();
-
-                if unit_dim != Dimension::None {
-                    map.insert(box_unit.dim(), 1);
+                if box_unit.definition().term.to_string() == "1".to_string() {
+                    let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+                    let unit_dim = box_unit.dim();
+                    if unit_dim != Dimension::None {
+                        map.insert(box_unit.dim(), 1);
+                    }
+                    map
+                } else {
+                    box_unit.definition().term.composition()
                 }
-            }
+            },
             SimpleUnit::PrefixedAtom(ref _box_prefix, ref box_unit) => {
-                let unit_dim = box_unit.dim();
-
-                if unit_dim != Dimension::None {
-                    map.insert(box_unit.dim(), 1);
+                if box_unit.definition().term.to_string() == "1".to_string() {
+                    let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+                    let unit_dim = box_unit.dim();
+                    if unit_dim != Dimension::None {
+                        map.insert(box_unit.dim(), 1);
+                    }
+                    map
+                } else {
+                    box_unit.definition().term.composition()
                 }
-            }
+            },
         }
-
-        map
     }
 
     pub fn is_special(&self) -> bool {
