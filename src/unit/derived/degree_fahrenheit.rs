@@ -8,7 +8,7 @@ pub struct DegreeFahrenheit;
 
 impl Unit for DegreeFahrenheit {
     fn classification(&self) -> Classification { Classification::Heat }
-    fn definition(&self)     -> Definition { Definition::new(1.0, "degf(5 K/9)") }
+    fn definition(&self)     -> Definition { Definition::new(1.0, "degf(5.0 K/9)") }
     fn dim(&self)            -> Dimension { Dimension::Temperature }
     fn is_arbitrary(&self)   -> bool { false }
     fn is_metric(&self)      -> bool { false }

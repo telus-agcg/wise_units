@@ -54,6 +54,10 @@ fn validate_conversions() {
     let subject = Measurement::new(1.0, "[pi]");
     let converted = subject.convert_to("[ppth]").unwrap();
     assert_eq!(round_value(converted.value), 3141.5927);
+
+    let subject = Measurement::new(2.0, "l");
+    let converted = subject.convert_to("m3").unwrap();
+    assert_eq!(round_value(converted.value), 0.002);
 }
 
 #[test]

@@ -15,6 +15,7 @@ pub enum Component<'a> {
 impl<'a> Component<'a> {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
+            Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => annotatable.composition(),
             Component::Annotatable(ref annotatable) => annotatable.composition(),
             Component::Term(ref box_term) => {
                 let ref term = *box_term;
