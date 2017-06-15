@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 use std::fmt;
-use unit::{Prefix, Unit, Dimension};
+use unit::{Dimension, Prefix, Unit};
 
 #[derive(Debug)]
 pub enum SimpleUnit {
@@ -22,7 +22,7 @@ impl SimpleUnit {
                 } else {
                     box_unit.definition().term.composition()
                 }
-            },
+            }
             SimpleUnit::PrefixedAtom(ref _box_prefix, ref box_unit) => {
                 if box_unit.definition().term.to_string() == "1".to_string() {
                     let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
@@ -34,7 +34,7 @@ impl SimpleUnit {
                 } else {
                     box_unit.definition().term.composition()
                 }
-            },
+            }
         }
     }
 
@@ -126,9 +126,9 @@ impl PartialEq for SimpleUnit {
 #[cfg(test)]
 mod tests {
     use super::SimpleUnit;
+    use parser::parse_SimpleUnit;
     use unit::base::Meter;
     use unit::prefix::Kilo;
-    use parser::parse_SimpleUnit;
 
     #[test]
     fn validate_parsing_simple_unit() {

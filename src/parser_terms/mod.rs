@@ -23,10 +23,10 @@ pub use parser_terms::unit_sign::UnitSign;
 #[cfg(test)]
 mod tests {
     use super::*;
+    use parser::*;
     use unit::Unit;
     use unit::base::{Gram, Meter};
     use unit::prefix::{Kilo, Prefix};
-    use parser::*;
 
     #[test]
     fn validate_prefix_symbol() {
@@ -53,14 +53,10 @@ mod tests {
     fn validate_main_term_with_slash() {
         assert_eq!(
             parse_MainTerm("/g{tot'nit}").unwrap(),
-            Term::Basic(
-                Component::AnnotatedAnnotatable(
-                    Annotatable::Unit(
-                        SimpleUnit::Atom(Box::new(Gram))
-                    ),
-                    Annotation("tot'nit")
-                )
-            )
+            Term::Basic(Component::AnnotatedAnnotatable(
+                Annotatable::Unit(SimpleUnit::Atom(Box::new(Gram))),
+                Annotation("tot'nit"),
+            ))
         );
     }
 }

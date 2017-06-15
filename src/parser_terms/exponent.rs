@@ -1,5 +1,5 @@
-use std::fmt;
 use parser_terms::UnitSign;
+use std::fmt;
 
 #[derive(Debug, PartialEq)]
 pub struct Exponent(pub UnitSign, pub u32);
@@ -14,9 +14,7 @@ impl Exponent {
 }
 
 impl fmt::Display for Exponent {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}{}", self.0, self.1)
-    }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}{}", self.0, self.1) }
 }
 
 #[cfg(test)]
@@ -27,9 +25,13 @@ mod tests {
 
     #[test]
     fn validate_exponent() {
-        assert_eq!(parse_Exponent("123").unwrap(),
-                   Exponent(UnitSign::Positive, 123));
-        assert_eq!(parse_Exponent("-123").unwrap(),
-                   Exponent(UnitSign::Negative, 123));
+        assert_eq!(
+            parse_Exponent("123").unwrap(),
+            Exponent(UnitSign::Positive, 123)
+        );
+        assert_eq!(
+            parse_Exponent("-123").unwrap(),
+            Exponent(UnitSign::Negative, 123)
+        );
     }
 }

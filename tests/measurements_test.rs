@@ -87,6 +87,4 @@ fn validate_special_conversions() {
     assert_eq!(round_value(converted.value), 98.6);
 }
 
-fn round_value(value: f64) -> f64 {
-    (value * 10_000.0).round() / 10_000.0
-}
+fn round_value(value: f64) -> f64 { (value * 10_000.0).round() / 10_000.0 }

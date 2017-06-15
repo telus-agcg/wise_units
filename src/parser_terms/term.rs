@@ -163,20 +163,10 @@ mod tests {
         assert_eq!(
             parse_Term("g.m").unwrap(),
             Term::DotCombined(
-                Component::Annotatable(
-                    Annotatable::Unit(
-                        SimpleUnit::Atom(Box::new(Gram))
-                    )
-                ),
-                Box::new(
-                    Term::Basic(
-                        Component::Annotatable(
-                            Annotatable::Unit(
-                                SimpleUnit::Atom(Box::new(Meter))
-                            )
-                        )
-                    )
-                )
+                Component::Annotatable(Annotatable::Unit(SimpleUnit::Atom(Box::new(Gram)))),
+                Box::new(Term::Basic(Component::Annotatable(
+                    Annotatable::Unit(SimpleUnit::Atom(Box::new(Meter))),
+                ))),
             )
         );
     }
@@ -186,20 +176,12 @@ mod tests {
         assert_eq!(
             parse_Term("kg/s").unwrap(),
             Term::SlashCombined(
-                Component::Annotatable(
-                    Annotatable::Unit(
-                        SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Gram))
-                    )
-                ),
-                Box::new(
-                    Term::Basic(
-                        Component::Annotatable(
-                            Annotatable::Unit(
-                                SimpleUnit::Atom(Box::new(Second))
-                            )
-                        )
-                    )
-                )
+                Component::Annotatable(Annotatable::Unit(
+                    SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Gram)),
+                )),
+                Box::new(Term::Basic(Component::Annotatable(
+                    Annotatable::Unit(SimpleUnit::Atom(Box::new(Second))),
+                ))),
             )
         );
     }
@@ -208,17 +190,10 @@ mod tests {
     fn validate_parsing_term_basic_with_prefix_and_exponent() {
         assert_eq!(
             parse_Term("kg2").unwrap(),
-            Term::Basic(
-                Component::Annotatable(
-                    Annotatable::UnitWithPower(
-                        SimpleUnit::PrefixedAtom(
-                            Box::new(Kilo),
-                            Box::new(Gram)
-                        ),
-                        Exponent(Positive, 2)
-                    )
-                )
-            )
+            Term::Basic(Component::Annotatable(Annotatable::UnitWithPower(
+                SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Gram)),
+                Exponent(Positive, 2),
+            )))
         );
     }
 
@@ -226,14 +201,10 @@ mod tests {
     fn validate_parsing_term_basic_with_exponent() {
         assert_eq!(
             parse_Term("g2").unwrap(),
-            Term::Basic(
-                Component::Annotatable(
-                    Annotatable::UnitWithPower(
-                        SimpleUnit::Atom(Box::new(Gram)),
-                        Exponent(Positive, 2)
-                    )
-                )
-            )
+            Term::Basic(Component::Annotatable(Annotatable::UnitWithPower(
+                SimpleUnit::Atom(Box::new(Gram)),
+                Exponent(Positive, 2),
+            )))
         );
     }
 
@@ -241,13 +212,9 @@ mod tests {
     fn validate_parsing_term_basic() {
         assert_eq!(
             parse_Term("g").unwrap(),
-            Term::Basic(
-                Component::Annotatable(
-                    Annotatable::Unit(
-                        SimpleUnit::Atom(Box::new(Gram))
-                    )
-                )
-            )
+            Term::Basic(Component::Annotatable(
+                Annotatable::Unit(SimpleUnit::Atom(Box::new(Gram))),
+            ))
         );
     }
 

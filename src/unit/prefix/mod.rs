@@ -22,32 +22,32 @@ mod mebi;
 mod gibi;
 mod tebi;
 
-pub use self::yotta::Yotta;
-pub use self::zetta::Zetta;
-pub use self::exa::Exa;
-pub use self::peta::Peta;
-pub use self::tera::Tera;
-pub use self::giga::Giga;
-pub use self::mega::Mega;
-pub use self::kilo::Kilo;
-pub use self::hecto::Hecto;
-pub use self::deka::Deka;
-pub use self::deci::Deci;
-pub use self::centi::Centi;
-pub use self::milli::Milli;
-pub use self::micro::Micro;
-pub use self::nano::Nano;
-pub use self::pico::Pico;
-pub use self::femto::Femto;
 pub use self::atto::Atto;
-pub use self::zepto::Zepto;
-pub use self::yocto::Yocto;
-pub use self::mebi::Mebi;
+pub use self::centi::Centi;
+pub use self::deci::Deci;
+pub use self::deka::Deka;
+pub use self::exa::Exa;
+pub use self::femto::Femto;
 pub use self::gibi::Gibi;
+pub use self::giga::Giga;
+pub use self::hecto::Hecto;
+pub use self::kilo::Kilo;
+pub use self::mebi::Mebi;
+pub use self::mega::Mega;
+pub use self::micro::Micro;
+pub use self::milli::Milli;
+pub use self::nano::Nano;
+pub use self::peta::Peta;
+pub use self::pico::Pico;
 pub use self::tebi::Tebi;
-
-use unit::{Definition, Classification, UnitType};
+pub use self::tera::Tera;
+pub use self::yocto::Yocto;
+pub use self::yotta::Yotta;
+pub use self::zepto::Zepto;
+pub use self::zetta::Zetta;
 use std::fmt;
+
+use unit::{Classification, Definition, UnitType};
 
 pub trait Prefix {
     fn classification(&self) -> Classification;
@@ -60,15 +60,11 @@ pub trait Prefix {
 }
 
 impl<'a> fmt::Display for Prefix {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.primary_code())
-    }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.primary_code()) }
 }
 
 impl<'a> PartialEq for &'a Box<Prefix> {
-    fn eq(&self, other: &&'a Box<Prefix>) -> bool {
-        self.primary_code() == other.primary_code()
-    }
+    fn eq(&self, other: &&'a Box<Prefix>) -> bool { self.primary_code() == other.primary_code() }
 }
 
 impl fmt::Debug for Prefix {

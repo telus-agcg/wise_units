@@ -4,9 +4,7 @@ use std::fmt;
 pub struct Annotation<'a>(pub &'a str);
 
 impl<'a> fmt::Display for Annotation<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.0)
-    }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.0) }
 }
 
 #[cfg(test)]
@@ -16,7 +14,9 @@ mod tests {
 
     #[test]
     fn validate_annotation() {
-        assert_eq!(parse_Annotation("{things123}").unwrap(),
-                   Annotation("things123"));
+        assert_eq!(
+            parse_Annotation("{things123}").unwrap(),
+            Annotation("things123")
+        );
     }
 }

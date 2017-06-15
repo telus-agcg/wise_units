@@ -4,16 +4,16 @@ pub mod prefix;
 mod unit_type;
 pub mod definition;
 
-pub use unit::definition::Definition;
-pub use unit::prefix::Prefix;
-pub use unit::unit_type::UnitType;
-pub use measurement::Measurement;
 pub use classification::Classification;
 pub use dimension::Dimension;
+pub use measurement::Measurement;
 pub use property::Property;
 
 use std::cmp::PartialEq;
 use std::fmt;
+pub use unit::definition::Definition;
+pub use unit::prefix::Prefix;
+pub use unit::unit_type::UnitType;
 
 pub trait Unit {
     fn classification(&self) -> Classification;
@@ -29,13 +29,9 @@ pub trait Unit {
     fn secondary_code(&self) -> String;
     fn unit_type(&self) -> UnitType;
 
-    fn scalar(&self) -> f64 {
-        self.definition().scalar()
-    }
+    fn scalar(&self) -> f64 { self.definition().scalar() }
 
-    fn magnitude(&self) -> f64 {
-        self.definition().magnitude()
-    }
+    fn magnitude(&self) -> f64 { self.definition().magnitude() }
 
     fn calculate_scalar(&self, magnitude: f64) -> f64 {
         self.definition().calculate_scalar(magnitude)
@@ -47,15 +43,11 @@ pub trait Unit {
 }
 
 impl<'a> fmt::Display for Unit {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.primary_code())
-    }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.primary_code()) }
 }
 
 impl<'a> PartialEq for &'a Box<Unit> {
-    fn eq(&self, other: &&'a Box<Unit>) -> bool {
-        self.primary_code() == other.primary_code()
-    }
+    fn eq(&self, other: &&'a Box<Unit>) -> bool { self.primary_code() == other.primary_code() }
 }
 
 impl fmt::Debug for Unit {

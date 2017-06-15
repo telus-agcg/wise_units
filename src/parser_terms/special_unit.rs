@@ -15,26 +15,16 @@ impl<'a> SpecialUnit<'a> {
     }
 
     // TODO: Not sure if returning 1.0 makes sense here...
-    pub fn scalar(&self) -> f64 {
-        1.0
-    }
+    pub fn scalar(&self) -> f64 { 1.0 }
 
     // TODO: Not sure if returning 1.0 makes sense here...
-    pub fn magnitude(&self) -> f64 {
-        1.0
-    }
+    pub fn magnitude(&self) -> f64 { 1.0 }
 
-    pub fn is_special(&self) -> bool {
-        true
-    }
+    pub fn is_special(&self) -> bool { true }
 
-    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
-        self.calculate_magnitude(magnitude)
-    }
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 { self.calculate_magnitude(magnitude) }
 
-    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
-        self.2.calculate_magnitude(scalar)
-    }
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 { self.2.calculate_magnitude(scalar) }
 }
 
 impl<'a> fmt::Display for SpecialUnit<'a> {
@@ -57,16 +47,10 @@ mod tests {
             SpecialUnit(
                 FunctionSymbol::Cel,
                 1.0,
-                Box::new(
-                    Term::Basic(
-                        Component::Annotatable(
-                            Annotatable::Unit(
-                                SimpleUnit::Atom(Box::new(Kelvin))
-                                )
-                            )
-                        )
-                    )
-                )
-            );
+                Box::new(Term::Basic(Component::Annotatable(
+                    Annotatable::Unit(SimpleUnit::Atom(Box::new(Kelvin))),
+                ))),
+            )
+        );
     }
 }

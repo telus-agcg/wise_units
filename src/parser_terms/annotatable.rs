@@ -112,22 +112,22 @@ impl<'a> fmt::Display for Annotatable<'a> {
 #[cfg(test)]
 mod tests {
     use super::Annotatable;
-    use unit::base::Meter;
-    use unit::prefix::Kilo;
     use dimension::Dimension;
     use parser::parse_Annotatable;
     use parser_terms::{Exponent, SimpleUnit, UnitSign};
     use std::collections::BTreeMap;
+    use unit::base::Meter;
+    use unit::prefix::Kilo;
 
     #[test]
     fn validate_parsing_annotatable() {
         let ann = Annotatable::Unit(make_su_pre_unit());
 
-        let ann_with_pos_power = Annotatable::UnitWithPower(make_su_pre_unit(),
-                                                            Exponent(UnitSign::Positive, 10));
+        let ann_with_pos_power =
+            Annotatable::UnitWithPower(make_su_pre_unit(), Exponent(UnitSign::Positive, 10));
 
-        let ann_with_neg_power = Annotatable::UnitWithPower(make_su_pre_unit(),
-                                                            Exponent(UnitSign::Negative, 10));
+        let ann_with_neg_power =
+            Annotatable::UnitWithPower(make_su_pre_unit(), Exponent(UnitSign::Negative, 10));
         assert_eq!(&parse_Annotatable("km").unwrap(), &ann);
         assert_eq!(&parse_Annotatable("km10").unwrap(), &ann_with_pos_power);
         assert_eq!(&parse_Annotatable("km-10").unwrap(), &ann_with_neg_power);
