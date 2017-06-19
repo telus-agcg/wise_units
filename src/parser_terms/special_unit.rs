@@ -3,6 +3,9 @@ use std::collections::BTreeMap;
 use std::fmt;
 use unit::Dimension;
 
+/// A SpecialUnit node in the AST represents a Unit whose definition is a
+/// function of other non-special units.
+///
 #[derive(Debug, PartialEq)]
 pub struct SpecialUnit<'a>(pub FunctionSymbol, pub f64, pub Box<Term<'a>>);
 
@@ -50,5 +53,12 @@ mod tests {
                 ))),
             )
         );
+    }
+
+    #[test]
+    fn validate_display() {
+        let cel = parse_SpecialUnit("cel(1.0 K)").unwrap();
+        let c = format!("{}", cel);
+        assert_eq!(c, "cel(1 K)".to_string());
     }
 }

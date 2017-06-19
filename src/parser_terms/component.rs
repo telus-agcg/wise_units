@@ -3,6 +3,9 @@ use std::collections::BTreeMap;
 use std::fmt;
 use unit::Dimension;
 
+/// A Component is the largest chunk of a Term; a Term is a combination of just
+/// a Term _or_ of a Term and a Component.
+///
 #[derive(Debug, PartialEq)]
 pub enum Component<'a> {
     AnnotatedAnnotatable(Annotatable<'a>, Annotation<'a>),

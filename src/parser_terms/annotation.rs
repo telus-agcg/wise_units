@@ -1,5 +1,11 @@
 use std::fmt;
 
+/// A unit can have an annotation; from the UCUM:
+///
+/// "The material enclosed in curly braces is called annotation. Annotations do
+/// not contribute to the semantics of the unit but are meaningless by
+/// definition."
+///
 #[derive(Debug, PartialEq)]
 pub struct Annotation<'a>(pub &'a str);
 

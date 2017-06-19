@@ -1,5 +1,8 @@
 use std::fmt;
 
+/// UCUM depends on dimensional analysis to reflect the meaning of units. It
+/// uses dimensions to determine if two units are commensurable.
+///
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum Dimension {
     ElectricCharge,     // Q

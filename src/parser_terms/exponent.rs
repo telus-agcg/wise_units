@@ -1,6 +1,8 @@
 use parser_terms::UnitSign;
 use std::fmt;
 
+/// Really, this is just part of the AST of a unit.
+///
 #[derive(Debug, PartialEq)]
 pub struct Exponent(pub UnitSign, pub u32);
 

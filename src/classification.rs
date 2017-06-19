@@ -1,3 +1,6 @@
+/// Classification signifies the system of units from which a unit is defined
+/// in.
+///
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Classification {
     Apoth,

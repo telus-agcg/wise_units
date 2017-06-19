@@ -2,6 +2,9 @@ use std::collections::BTreeMap;
 use std::fmt;
 use unit::{Dimension, Prefix, Unit};
 
+/// The smallest node in the AST with real meaning; it is either just a wrapper
+/// around a Unit ("m") or is the combination of a Prefix and a Unit ("km").
+///
 #[derive(Debug)]
 pub enum SimpleUnit {
     Atom(Box<Unit>),

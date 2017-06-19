@@ -4,6 +4,12 @@ use std::collections::btree_map::Entry;
 use std::fmt;
 use unit::Dimension;
 
+/// The almost-root level node in the AST, it represents how a Term can be
+/// combined with other Terms: sometimes Terms are combined multiplicatively
+/// (DotCombined, ex "[pi].m2"), sometimes on a Term-per-Term basis
+/// (SlashCombined, "m2/s"), and sometimes they stand by themselves (Basic,
+/// "m2").
+///
 #[derive(Debug, PartialEq)]
 pub enum Term<'a> {
     DotCombined(Component<'a>, Box<Term<'a>>),

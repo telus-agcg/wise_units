@@ -1,5 +1,9 @@
 use std::fmt;
 
+/// Property categorizes the unit by use. Not much mention of it in the UCUM
+/// HTML spec, but is used throughout the XML description:
+/// http://unitsofmeasure.org/ucum-essence.xml
+///
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Property {
     Acceleration,
@@ -234,5 +238,16 @@ impl fmt::Display for Property {
         };
 
         write!(formatter, "{}", string)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn validate_display() {
+        let a = format!("{}", Property::Acceleration);
+        assert_eq!(a, "acceleration".to_string());
     }
 }

@@ -26,8 +26,8 @@ mod tests {
         assert_eq!(factor, Factor(0));
     }
 
-    // This seems to fail since we've got UnitByPrimaryCode defined to parse
-    // "1" as TheUnity. If I comment that out, this passes.
+    // TODO: This seems to fail since we've got UnitByPrimaryCode defined to
+    // parse "1" as TheUnity. If I comment that out, this passes.
     //
     // #[test]
     // fn validate_parsing_1() {

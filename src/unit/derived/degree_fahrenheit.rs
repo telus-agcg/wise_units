@@ -20,7 +20,11 @@ impl Unit for DegreeFahrenheit {
     fn secondary_code(&self) -> String { "[DEGF]".to_string() }
     fn unit_type(&self) -> UnitType { UnitType::Derived }
 
+    // Override the trait function to supply the function that's used for
+    // converting from Kelvin to Fahrenheit.
     fn calculate_scalar(&self, magnitude: f64) -> f64 { 5.0 / 9.0 * (magnitude + 459.67) }
 
+    // Override the trait function to supply the function that's used for
+    // converting from Fahrenheit to Kelvin.
     fn calculate_magnitude(&self, scalar: f64) -> f64 { 9.0 * scalar / 5.0 - 459.67 }
 }

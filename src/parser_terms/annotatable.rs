@@ -3,6 +3,10 @@ use std::collections::BTreeMap;
 use std::fmt;
 use unit::Dimension;
 
+/// An Annotatable is part of a unit that can be annotated. This either parses
+/// from a) just a SimpleUnit, b) a SimpleUnit combined with an exponent, c)
+/// a SpecialUnit.
+///
 #[derive(Debug, PartialEq)]
 pub enum Annotatable<'a> {
     Unit(SimpleUnit),
