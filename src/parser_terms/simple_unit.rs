@@ -1,7 +1,10 @@
 use std::collections::BTreeMap;
 use std::fmt;
-use unit::{Prefix, Unit, Dimension};
+use unit::{Dimension, Prefix, Unit};
 
+/// The smallest node in the AST with real meaning; it is either just a wrapper
+/// around a Unit ("m") or is the combination of a Prefix and a Unit ("km").
+///
 #[derive(Debug)]
 pub enum SimpleUnit {
     Atom(Box<Unit>),
@@ -10,57 +13,79 @@ pub enum SimpleUnit {
 
 impl SimpleUnit {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
-        let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
-
         match *self {
-            SimpleUnit::Atom(ref unit) => {
-                let unit_dim = unit.dim();
-
-                if unit_dim != Dimension::None {
-                    map.insert(unit.dim(), 1);
+            SimpleUnit::Atom(ref box_unit) => {
+                if box_unit.definition().term.to_string() == "1".to_string() {
+                    let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+                    let unit_dim = box_unit.dim();
+                    if unit_dim != Dimension::None {
+                        map.insert(box_unit.dim(), 1);
+                    }
+                    map
+                } else {
+                    box_unit.definition().term.composition()
                 }
-            },
-            SimpleUnit::PrefixedAtom(ref _prefix, ref unit) => {
-                let unit_dim = unit.dim();
-
-                if unit_dim != Dimension::None {
-                    map.insert(unit.dim(), 1);
+            }
+            SimpleUnit::PrefixedAtom(ref _box_prefix, ref box_unit) => {
+                if box_unit.definition().term.to_string() == "1".to_string() {
+                    let mut map: BTreeMap<Dimension, i32> = BTreeMap::new();
+                    let unit_dim = box_unit.dim();
+                    if unit_dim != Dimension::None {
+                        map.insert(box_unit.dim(), 1);
+                    }
+                    map
+                } else {
+                    box_unit.definition().term.composition()
                 }
-            },
-        }
-
-        map
-    }
-
-    pub fn is_special(&self) -> bool {
-        match *self {
-            SimpleUnit::Atom(ref unit) => unit.is_special(),
-            SimpleUnit::PrefixedAtom(ref _prefix, ref unit) => unit.is_special()
-        }
-    }
-
-    pub fn prefix_scalar(&self) -> f64 {
-        match *self {
-            SimpleUnit::Atom(_) => 1.0,
-            SimpleUnit::PrefixedAtom(ref prefix, ref _unit) => prefix.scalar()
-        }
-    }
-
-    pub fn scalar(&self, magnitude: f64) -> f64 {
-        match *self {
-            SimpleUnit::Atom(ref unit) => unit.scale() * magnitude,
-            SimpleUnit::PrefixedAtom(ref prefix, ref unit) => {
-                prefix.scalar() * unit.scale() * magnitude
             }
         }
     }
 
-    pub fn scalar_default(&self) -> f64 {
-        self.scalar(1.0)
+    pub fn is_special(&self) -> bool {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.is_special(),
+            SimpleUnit::PrefixedAtom(ref _box_prefix, ref box_unit) => box_unit.is_special(),
+        }
     }
 
-    pub fn magnitude(&self, scalar: f64) -> f64 {
-        scalar
+    pub fn scalar(&self) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.scalar(),
+            SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
+                box_prefix.definition().scalar() * box_unit.scalar()
+            }
+        }
+    }
+
+    pub fn magnitude(&self) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.magnitude(),
+            SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
+                box_prefix.definition().magnitude() * box_unit.magnitude()
+            }
+        }
+    }
+
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.calculate_scalar(magnitude),
+            SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
+                // Should the Prefix's scalar be a function of its value and
+                // the definition??
+                box_prefix.definition().scalar() * box_unit.calculate_scalar(magnitude)
+            }
+        }
+    }
+
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            SimpleUnit::Atom(ref box_unit) => box_unit.calculate_magnitude(scalar),
+            SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
+                // Should the Prefix's scalar be a function of its value and
+                // the definition??
+                box_prefix.definition().scalar() * box_unit.calculate_magnitude(scalar)
+            }
+        }
     }
 }
 
@@ -70,12 +95,12 @@ impl fmt::Display for SimpleUnit {
             SimpleUnit::Atom(ref box_unit) => {
                 let ref unit = *box_unit;
                 write!(f, "{}", unit)
-            },
+            }
             SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
                 let ref prefix = *box_prefix;
                 let ref unit = *box_unit;
                 write!(f, "{}{}", prefix, unit)
-            },
+            }
         }
     }
 }
@@ -86,9 +111,9 @@ impl PartialEq for SimpleUnit {
             SimpleUnit::Atom(ref box_unit) => {
                 match *rhs {
                     SimpleUnit::Atom(ref box_rhs) => box_unit == box_rhs,
-                    SimpleUnit::PrefixedAtom(ref _box_prefix, ref _box_rhs) => false
+                    SimpleUnit::PrefixedAtom(ref _box_prefix, ref _box_rhs) => false,
                 }
-            },
+            }
             SimpleUnit::PrefixedAtom(ref box_prefix, ref box_unit) => {
                 match *rhs {
                     SimpleUnit::Atom(ref _box_rhs) => false,
@@ -104,12 +129,12 @@ impl PartialEq for SimpleUnit {
 #[cfg(test)]
 mod tests {
     use super::SimpleUnit;
+    use parser::parse_SimpleUnit;
     use unit::base::Meter;
     use unit::prefix::Kilo;
-    use parser::parse_SimpleUnit;
 
     #[test]
-    fn validate_simple_unit() {
+    fn validate_parsing_simple_unit() {
         let su_atom = SimpleUnit::Atom(Box::new(Meter));
         let su_pre_atom = SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Meter));
 
@@ -119,14 +144,5 @@ mod tests {
         assert_eq!(&parse_SimpleUnit("kM").unwrap(), &su_pre_atom);
         assert_eq!(&parse_SimpleUnit("Km").unwrap(), &su_pre_atom);
         assert_eq!(&parse_SimpleUnit("KM").unwrap(), &su_pre_atom);
-    }
-
-    #[test]
-    fn validate_prefix_scalar() {
-        let su_atom = SimpleUnit::Atom(Box::new(Meter));
-        let su_pre_atom = SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Meter));
-
-        assert_eq!(su_atom.prefix_scalar(), 1.0);
-        assert_eq!(su_pre_atom.prefix_scalar(), 1000.0);
     }
 }

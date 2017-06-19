@@ -1,5 +1,9 @@
 use std::fmt;
 
+/// Property categorizes the unit by use. Not much mention of it in the UCUM
+/// HTML spec, but is used throughout the XML description:
+/// http://unitsofmeasure.org/ucum-essence.xml
+///
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Property {
     Acceleration,
@@ -112,27 +116,47 @@ impl fmt::Display for Property {
             Property::Acidity => "acidity",
             Property::Action => "action",
             Property::ActionArea => "action area",
-            Property::AmountOfAllergen => "amount of an allergen callibrated through in-vivo testing based on the ID50EAL method of (intradermal dilution for 50mm sum of erythema diameters",
-            Property::AmountOfFibrinogen => "amount of fibrinogen broken down into the measured d-dimers",
+            Property::AmountOfAllergen => {
+                "amount of an allergen callibrated through in-vivo testing based \
+                    on the ID50EAL method of (intradermal dilution for 50mm sum \
+                                              of erythema diameters"
+            }
+            Property::AmountOfFibrinogen => {
+                "amount of fibrinogen broken down into the measured d-dimers"
+            }
             Property::AmountOfInfectuousAgent => "amount of an infectuous agent",
             Property::AmountOfInformation => "amount of information",
             Property::AmountOfProliferatingOrganism => "amount of a proliferating organism",
             Property::AmountOfSubstance => "amount of substance",
-            Property::AmountOfSubstanceDissolvedParticles => "amount of substance (dissolved particles)",
+            Property::AmountOfSubstanceDissolvedParticles => {
+                "amount of substance (dissolved particles)"
+            }
             Property::Arbitrary => "arbitrary",
             Property::ArbitraryBiologicActivity => "arbitrary biologic activity",
             Property::ArbitraryELISAUnit => "arbitrary ELISA activity",
             Property::Area => "area",
             Property::BiologicActivityAmylase => "biologic activity of amylase",
-            Property::BiologicActivityAnticardiolipinIgA => "biologic activity of anticardiolipin IgA",
-            Property::BiologicActivityAnticardiolipinIgG => "biologic activity of anticardiolipin IgG",
-            Property::BiologicActivityAnticardiolipinIgM => "biologic activity of anticardiolipin IgM",
+            Property::BiologicActivityAnticardiolipinIgA => {
+                "biologic activity of anticardiolipin IgA"
+            }
+            Property::BiologicActivityAnticardiolipinIgG => {
+                "biologic activity of anticardiolipin IgG"
+            }
+            Property::BiologicActivityAnticardiolipinIgM => {
+                "biologic activity of anticardiolipin IgM"
+            }
             Property::BiologicActivityAntistreptolysinO => "biologic activity antistreptolysin O",
-            Property::BiologicActivityFactorVIIIInhibitor => "biologic activity of factor VIII inhibitor",
-            Property::BiologicActivityFactorXaInhibitor => "biologic activity of factor Xa inhibitor (heparin)",
+            Property::BiologicActivityFactorVIIIInhibitor => {
+                "biologic activity of factor VIII inhibitor"
+            }
+            Property::BiologicActivityFactorXaInhibitor => {
+                "biologic activity of factor Xa inhibitor (heparin)"
+            }
             Property::BiologicActivityPhosphatase => "biologic activity of phosphatase",
             Property::BiologicActivityTuberculin => "biologic activity of tuberculin",
-            Property::BiologicInfectivity => "biologic activity (infectivity) of an infectuous agent preparation",
+            Property::BiologicInfectivity => {
+                "biologic activity (infectivity) of an infectuous agent preparation"
+            }
             Property::Brightness => "brightness",
             Property::CatalyticActivity => "catalytic activity",
             Property::DepthOfWater => "depth of water",
@@ -183,15 +207,21 @@ impl fmt::Display for Property {
             Property::MetabolicCost => "metabolic cost of physical activity",
             Property::Number => "number",
             Property::PlaneAngle => "plane angle",
-            Property::Power => "power level",
+            Property::Power => "power",
             Property::PowerLevel => "power level",
             Property::Pressure => "pressure",
             Property::PressureLevel => "pressure level",
             Property::ProcedureDefinedAntigen => "procedure defined amount of antigen substance",
-            Property::ProcedureDefinedPoliomyelitis => "procedure defined amount of a poliomyelitis d-antigen substance",
+            Property::ProcedureDefinedPoliomyelitis => {
+                "procedure defined amount of a poliomyelitis d-antigen substance"
+            }
             Property::ProcedureDefinedProtein => "procedure defined amount of a protein substance",
-            Property::ProcedureDefinedRagweedAllergen => "procedure defined amount of the major allergen of ragweed.",
-            Property::ProcedureDefinedReferenceAllergen => "procedure defined amount of an allergen using some reference standard",
+            Property::ProcedureDefinedRagweedAllergen => {
+                "procedure defined amount of the major allergen of ragweed."
+            }
+            Property::ProcedureDefinedReferenceAllergen => {
+                "procedure defined amount of an allergen using some reference standard"
+            }
             Property::Radioactivity => "radioactivity",
             Property::RefractionOfLens => "refraction of a lens",
             Property::RefractionOfPrism => "refraction of a prism",
@@ -208,5 +238,16 @@ impl fmt::Display for Property {
         };
 
         write!(formatter, "{}", string)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn validate_display() {
+        let a = format!("{}", Property::Acceleration);
+        assert_eq!(a, "acceleration".to_string());
     }
 }

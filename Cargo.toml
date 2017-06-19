@@ -5,10 +5,13 @@ authors = ["Steve Loveless <steve@agrian.com>"]
 build = "build.rs"
 
 [build-dependencies]
-lalrpop = "0.12.5"
+lalrpop = "0.13.0"
 
 [dependencies]
-lalrpop-util = "0.12.5"
+lalrpop-util = "0.13.0"
+
+[dependencies.regex]
+version = "0.2.1"
 
 [dev-dependencies]
 pretty_assertions = "*"

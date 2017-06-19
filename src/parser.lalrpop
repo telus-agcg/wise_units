@@ -30,14 +30,26 @@ pub Annotation: Annotation<'input> = {
     "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}"))
 };
 
-pub Annotatable: Annotatable = {
+pub Annotatable: Annotatable<'input> = {
     <SimpleUnit><Exponent> => Annotatable::UnitWithPower(<>),
     <SimpleUnit> => Annotatable::Unit(<>),
+    <SpecialUnit> => Annotatable::SpecialUnit(<>),
+};
+
+pub SpecialUnit: SpecialUnit<'input> = {
+    <fs:FunctionSymbol> "(" <fpn:FloatingPointNumber> <t:Term> ")" => {
+        SpecialUnit(fs, fpn, Box::new(t))
+    }
+};
+
+pub FunctionSymbol: FunctionSymbol = {
+    "cel"      => FunctionSymbol::Cel,
+    "degf"      => FunctionSymbol::DegF,
 };
 
 pub SimpleUnit: SimpleUnit = {
+    <PrefixSymbol><AtomSymbol> => SimpleUnit::PrefixedAtom(<>),
     <AtomSymbol> => SimpleUnit::Atom(<>),
-    <PrefixSymbol><AtomSymbol> => SimpleUnit::PrefixedAtom(<>)
 };
 
 pub AtomSymbol: Box<Unit> = {
@@ -46,6 +58,7 @@ pub AtomSymbol: Box<Unit> = {
 };
 
 UnitByPrimaryCode: Box<Unit> = {
+    "1" => Box::new(TheUnity) as Box<Unit>,
     "m" => Box::new(Meter) as Box<Unit>,
     "s" => Box::new(Second) as Box<Unit>,
     "g" => Box::new(Gram) as Box<Unit>,
@@ -61,6 +74,9 @@ UnitByPrimaryCode: Box<Unit> = {
     "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
     "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "Cel" => Box::new(DegreeCelsius) as Box<Unit>,
+    "l" => Box::new(Liter) as Box<Unit>,
+    "[degF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
 };
 
 UnitBySecondaryCode: Box<Unit> = {
@@ -68,11 +84,15 @@ UnitBySecondaryCode: Box<Unit> = {
     "S" => Box::new(Second) as Box<Unit>,
     "G" => Box::new(Gram) as Box<Unit>,
     "RAD" => Box::new(Radian) as Box<Unit>,
+
     "CD" => Box::new(Candela) as Box<Unit>,
     "[PI]" => Box::new(TheNumberPi) as Box<Unit>,
     "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[PPM]" => Box::new(PartsPerMillion) as Box<Unit>,
     "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "CEL" => Box::new(DegreeCelsius) as Box<Unit>,
+    "L" => Box::new(Liter) as Box<Unit>,
+    "[DEGF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
 };
 
 pub PrefixSymbol: Box<Prefix> = {
@@ -137,12 +157,16 @@ pub Exponent: Exponent = {
     <d:Digits> => Exponent(UnitSign::Positive, d)
 };
 
-Factor: Factor = {
+pub Factor: Factor = {
     <Digits> => Factor(<>),
 };
 
 Digits: u32 = {
-    <s:r"[1-9]+[0-9]*">  => u32::from_str(s).unwrap()
+    <s:r"[0-9]+"> => u32::from_str(s).unwrap()
+};
+
+FloatingPointNumber: f64 = {
+    <s:r"[+-]?[0-9]+\.[0-9]+"> => f64::from_str(s).unwrap()
 };
 
 Sign: UnitSign = { PositiveSign, NegativeSign };

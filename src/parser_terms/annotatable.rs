@@ -1,15 +1,20 @@
-use parser_terms::{Exponent, SimpleUnit};
+use parser_terms::{Exponent, SimpleUnit, SpecialUnit};
 use std::collections::BTreeMap;
 use std::fmt;
 use unit::Dimension;
 
+/// An Annotatable is part of a unit that can be annotated. This either parses
+/// from a) just a SimpleUnit, b) a SimpleUnit combined with an exponent, c)
+/// a SpecialUnit.
+///
 #[derive(Debug, PartialEq)]
-pub enum Annotatable {
+pub enum Annotatable<'a> {
     Unit(SimpleUnit),
     UnitWithPower(SimpleUnit, Exponent),
+    SpecialUnit(SpecialUnit<'a>),
 }
 
-impl Annotatable {
+impl<'a> Annotatable<'a> {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Annotatable::Unit(ref simple_unit) => simple_unit.composition(),
@@ -25,7 +30,7 @@ impl Annotatable {
                         if unit_dim != Dimension::None {
                             map.insert(unit_dim, exp);
                         }
-                    },
+                    }
                     SimpleUnit::PrefixedAtom(ref _prefix, ref box_unit) => {
                         let exp: i32 = exponent.as_i32();
                         let ref unit = *box_unit;
@@ -34,74 +39,76 @@ impl Annotatable {
                         if unit_dim != Dimension::None {
                             map.insert(unit_dim, exp);
                         }
-                    },
+                    }
                 }
 
                 map
             }
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.composition(),
         }
     }
 
     pub fn is_special(&self) -> bool {
         match *self {
-            Annotatable::Unit(ref simple_unit) => {
-                simple_unit.is_special()
-            },
-            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
-                simple_unit.is_special()
-            }
+            Annotatable::Unit(ref simple_unit) => simple_unit.is_special(),
+            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => simple_unit.is_special(),
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.is_special(),
         }
     }
 
-    pub fn prefix_scalar(&self) -> f64 {
+    pub fn scalar(&self) -> f64 {
         match *self {
-            Annotatable::Unit(ref simple_unit) => {
-                simple_unit.prefix_scalar()
-            },
-            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
-                simple_unit.prefix_scalar()
+            Annotatable::Unit(ref simple_unit) => simple_unit.scalar(),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.scalar().powi(e)
             }
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.scalar(),
         }
     }
 
-    pub fn scalar(&self, magnitude: f64) -> f64 {
+    pub fn magnitude(&self) -> f64 {
         match *self {
-            Annotatable::Unit(ref simple_unit) => {
-                simple_unit.scalar(magnitude)
-            },
-            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
-                simple_unit.scalar(magnitude)
+            Annotatable::Unit(ref simple_unit) => simple_unit.magnitude(),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.magnitude().powi(e)
             }
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.magnitude(),
         }
     }
 
-    pub fn scalar_default(&self) -> f64 {
-        self.scalar(1.0)
-    }
-
-    pub fn magnitude(&self, scalar: f64) -> f64 {
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
         match *self {
-            Annotatable::Unit(ref simple_unit) => {
-                simple_unit.magnitude(scalar)
-            },
-            Annotatable::UnitWithPower(ref simple_unit, ref _exponent) => {
-                simple_unit.magnitude(scalar)
+            Annotatable::Unit(ref simple_unit) => simple_unit.calculate_scalar(magnitude),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.calculate_scalar(magnitude).powi(e)
             }
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.calculate_scalar(magnitude),
         }
     }
 
-    pub fn magnitude_default(&self) -> f64 {
-        self.magnitude(1.0)
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        match *self {
+            Annotatable::Unit(ref simple_unit) => simple_unit.calculate_magnitude(scalar),
+            Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
+                let e = exponent.as_i32();
+                simple_unit.calculate_magnitude(scalar).powi(e)
+            }
+            Annotatable::SpecialUnit(ref special_unit) => special_unit.calculate_magnitude(scalar),
+        }
     }
 }
 
-impl fmt::Display for Annotatable {
+impl<'a> fmt::Display for Annotatable<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Annotatable::Unit(ref simple_unit) => { write!(f, "{}", simple_unit) },
+            Annotatable::Unit(ref simple_unit) => write!(f, "{}", simple_unit),
             Annotatable::UnitWithPower(ref simple_unit, ref exponent) => {
                 write!(f, "{}{}", simple_unit, exponent)
             }
+            Annotatable::SpecialUnit(ref special_unit) => write!(f, "{}", special_unit),
         }
     }
 }
@@ -109,47 +116,25 @@ impl fmt::Display for Annotatable {
 #[cfg(test)]
 mod tests {
     use super::Annotatable;
-    use unit::base::Meter;
-    use unit::prefix::Kilo;
     use dimension::Dimension;
     use parser::parse_Annotatable;
     use parser_terms::{Exponent, SimpleUnit, UnitSign};
     use std::collections::BTreeMap;
+    use unit::base::Meter;
+    use unit::prefix::Kilo;
 
     #[test]
-    fn validate_annotatable() {
+    fn validate_parsing_annotatable() {
         let ann = Annotatable::Unit(make_su_pre_unit());
 
-        let ann_with_pos_power = Annotatable::UnitWithPower(
-            make_su_pre_unit(),
-            Exponent(UnitSign::Positive, 10)
-            );
+        let ann_with_pos_power =
+            Annotatable::UnitWithPower(make_su_pre_unit(), Exponent(UnitSign::Positive, 10));
 
-        let ann_with_neg_power = Annotatable::UnitWithPower(
-            make_su_pre_unit(),
-            Exponent(UnitSign::Negative, 10)
-            );
+        let ann_with_neg_power =
+            Annotatable::UnitWithPower(make_su_pre_unit(), Exponent(UnitSign::Negative, 10));
         assert_eq!(&parse_Annotatable("km").unwrap(), &ann);
         assert_eq!(&parse_Annotatable("km10").unwrap(), &ann_with_pos_power);
         assert_eq!(&parse_Annotatable("km-10").unwrap(), &ann_with_neg_power);
-    }
-
-    #[test]
-    fn validate_prefix_scalar() {
-        let ann = Annotatable::Unit(make_su_pre_unit());
-
-        let ann_with_pos_power = Annotatable::UnitWithPower(
-            make_su_pre_unit(),
-            Exponent(UnitSign::Positive, 10)
-            );
-
-        let ann_with_neg_power = Annotatable::UnitWithPower(
-            make_su_pre_unit(),
-            Exponent(UnitSign::Negative, 10)
-            );
-        assert_eq!(ann.prefix_scalar(), 1000.0);
-        assert_eq!(ann_with_pos_power.prefix_scalar(), 1000.0);
-        assert_eq!(ann_with_neg_power.prefix_scalar(), 1000.0);
     }
 
     #[test]

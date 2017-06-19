@@ -1,9 +1,11 @@
 use std::fmt;
 
+/// Simple node in the AST for representing if an Exponent is positive or
+/// negative.
 #[derive(Debug, PartialEq)]
 pub enum UnitSign {
     Positive,
-    Negative
+    Negative,
 }
 
 impl fmt::Display for UnitSign {

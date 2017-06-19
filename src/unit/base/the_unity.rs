@@ -4,19 +4,20 @@ use property::Property;
 use unit::{Definition, Unit, UnitType};
 
 #[derive(Debug, Default)]
-pub struct Gram;
+pub struct TheUnity;
 
-impl Unit for Gram {
+/// This isn't directly defined in the UCUM, yet is used all over the place.
+impl Unit for TheUnity {
     fn classification(&self) -> Classification { Classification::SI }
     fn definition(&self) -> Definition { Definition::new(1.0, "1") }
-    fn dim(&self) -> Dimension { Dimension::Mass }
+    fn dim(&self) -> Dimension { Dimension::None }
     fn is_arbitrary(&self) -> bool { false }
     fn is_metric(&self) -> bool { true }
     fn is_special(&self) -> bool { false }
-    fn names(&self) -> Vec<String> { vec!["gram".to_string()] }
-    fn primary_code(&self) -> String { "g".to_string() }
-    fn print_symbol(&self) -> Option<String> { Some("g".to_string()) }
-    fn property(&self) -> Property { Property::Mass }
-    fn secondary_code(&self) -> String { "G".to_string() }
+    fn names(&self) -> Vec<String> { vec!["the unity".to_string()] }
+    fn primary_code(&self) -> String { "1".to_string() }
+    fn print_symbol(&self) -> Option<String> { None }
+    fn property(&self) -> Property { Property::Unclassified }
+    fn secondary_code(&self) -> String { "1".to_string() }
     fn unit_type(&self) -> UnitType { UnitType::Base }
 }
