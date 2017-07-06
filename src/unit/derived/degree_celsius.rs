@@ -21,10 +21,10 @@ impl Unit for DegreeCelsius {
     fn unit_type(&self) -> UnitType { UnitType::Derived }
 
     // Override the trait function to supply the function that's used for
-    // converting from Kelvin to Celsius.
+    // converting from Celsius to Kelvin.
     fn calculate_scalar(&self, magnitude: f64) -> f64 { magnitude + 273.15 }
 
     // Override the trait function to supply the function that's used for
-    // converting from Celsius to Kelvin.
+    // converting from Kelvin to Celsius.
     fn calculate_magnitude(&self, scalar: f64) -> f64 { scalar - 273.15 }
 }

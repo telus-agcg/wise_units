@@ -106,6 +106,18 @@ fn validate_special_conversions() {
     let subject = Measurement::new(37.0, "Cel");
     let converted = subject.convert_to("[degF]").unwrap();
     assert_floats_eq(converted.value, 98.6);
+
+    let subject = Measurement::new(100.0, "[degRe]");
+    let converted = subject.convert_to("K").unwrap();
+    assert_floats_eq(converted.value, 398.15);
+
+    let subject = Measurement::new(398.15, "K");
+    let converted = subject.convert_to("[degRe]").unwrap();
+    assert_floats_eq(converted.value, 100.0);
+
+    let subject = Measurement::new(100.0, "[degRe]");
+    let converted = subject.convert_to("Cel").unwrap();
+    assert_floats_eq(converted.value, 125.0);
 }
 
 // Because the precision of floats can vary, using assert_eq! with float values
@@ -116,5 +128,5 @@ fn assert_floats_eq(actual: f64, expected: f64) {
     let error_threshold = std::f32::EPSILON as f64;
     let difference = actual - expected;
 
-    assert!(difference.abs() < error_threshold, "Actual - expected was {}", difference);
+    assert!(difference.abs() < error_threshold, "Actual: {}, Expected: {}, Diff: {}", actual, expected, difference);
 }

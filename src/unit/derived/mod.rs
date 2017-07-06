@@ -11,10 +11,12 @@ mod mole;
 mod degree_celsius;
 mod liter;
 mod degree_fahrenheit;
+mod degree_reaumur;
 mod ph;
 
 pub use self::degree_celsius::DegreeCelsius;
 pub use self::degree_fahrenheit::DegreeFahrenheit;
+pub use self::degree_reaumur::DegreeReaumur;
 pub use self::liter::Liter;
 pub use self::mole::Mole;
 pub use self::parts_per_billion::PartsPerBillion;

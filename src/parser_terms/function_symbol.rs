@@ -7,6 +7,7 @@ use std::fmt;
 pub enum FunctionSymbol {
     Cel,
     DegF,
+    DegRe,
     PH,
 }
 
@@ -15,6 +16,7 @@ impl fmt::Display for FunctionSymbol {
         match *self {
             FunctionSymbol::Cel => write!(f, "cel"),
             FunctionSymbol::DegF => write!(f, "degf"),
+            FunctionSymbol::DegRe => write!(f, "degre"),
             FunctionSymbol::PH => write!(f, "pH"),
         }
     }

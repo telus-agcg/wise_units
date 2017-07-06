@@ -45,6 +45,7 @@ pub SpecialUnit: SpecialUnit<'input> = {
 pub FunctionSymbol: FunctionSymbol = {
     "cel"  => FunctionSymbol::Cel,
     "degf" => FunctionSymbol::DegF,
+    "degre"   => FunctionSymbol::DegRe,
     "pH"   => FunctionSymbol::PH,
 };
 
@@ -79,6 +80,7 @@ UnitByPrimaryCode: Box<Unit> = {
     "Cel" => Box::new(DegreeCelsius) as Box<Unit>,
     "l" => Box::new(Liter) as Box<Unit>,
     "[degF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "[degRe]" => Box::new(DegreeReaumur) as Box<Unit>,
     "[pH]" => Box::new(PH) as Box<Unit>,
 };
 
