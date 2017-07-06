@@ -64,6 +64,14 @@ fn validate_number_conversions() {
     let subject = Measurement::new(1.0, "[pi]");
     let converted = subject.convert_to("[ppth]").unwrap();
     assert_floats_eq(converted.value, 3141.592_653_589);
+
+    let subject = Measurement::new(7.0, "[pH]");
+    let converted = subject.convert_to("mol/l").unwrap();
+    assert_floats_eq(converted.value, 0.000_000_1);
+
+    let subject = Measurement::new(7.0, "mol/l");
+    let converted = subject.convert_to("[pH]").unwrap();
+    assert_floats_eq(converted.value, -0.845098040014257);
 }
 
 #[test]
@@ -106,7 +114,7 @@ fn validate_special_conversions() {
 // threshold.
 fn assert_floats_eq(actual: f64, expected: f64) {
     let error_threshold = std::f32::EPSILON as f64;
-    let difference = (actual - expected).abs();
+    let difference = actual - expected;
 
-    assert!(difference < error_threshold, "Difference in floats was {}", difference);
+    assert!(difference.abs() < error_threshold, "Actual - expected was {}", difference);
 }

@@ -43,8 +43,9 @@ pub SpecialUnit: SpecialUnit<'input> = {
 };
 
 pub FunctionSymbol: FunctionSymbol = {
-    "cel"      => FunctionSymbol::Cel,
-    "degf"      => FunctionSymbol::DegF,
+    "cel"  => FunctionSymbol::Cel,
+    "degf" => FunctionSymbol::DegF,
+    "pH"   => FunctionSymbol::PH,
 };
 
 pub SimpleUnit: SimpleUnit = {
@@ -74,9 +75,11 @@ UnitByPrimaryCode: Box<Unit> = {
     "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
     "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "mol" => Box::new(Mole) as Box<Unit>,
     "Cel" => Box::new(DegreeCelsius) as Box<Unit>,
     "l" => Box::new(Liter) as Box<Unit>,
     "[degF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "[pH]" => Box::new(PH) as Box<Unit>,
 };
 
 UnitBySecondaryCode: Box<Unit> = {
@@ -90,9 +93,11 @@ UnitBySecondaryCode: Box<Unit> = {
     "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[PPM]" => Box::new(PartsPerMillion) as Box<Unit>,
     "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "MOL" => Box::new(Mole) as Box<Unit>,
     "CEL" => Box::new(DegreeCelsius) as Box<Unit>,
     "L" => Box::new(Liter) as Box<Unit>,
     "[DEGF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "[PH]" => Box::new(PH) as Box<Unit>,
 };
 
 pub PrefixSymbol: Box<Prefix> = {
