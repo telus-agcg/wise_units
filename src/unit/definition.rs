@@ -14,6 +14,7 @@ use parser_terms::Term;
 /// describe it, but this `definition` is how the unit is compared to other
 /// units.
 ///
+#[derive(Debug)]
 pub struct Definition<'a> {
     pub value: f64,
     pub term: Term<'a>,

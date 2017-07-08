@@ -8,6 +8,7 @@ pub enum FunctionSymbol {
     Cel,
     DegF,
     DegRe,
+    OneHundredTan,
     PH,
 }
 
@@ -17,6 +18,7 @@ impl fmt::Display for FunctionSymbol {
             FunctionSymbol::Cel => write!(f, "cel"),
             FunctionSymbol::DegF => write!(f, "degf"),
             FunctionSymbol::DegRe => write!(f, "degre"),
+            FunctionSymbol::OneHundredTan => write!(f, "100tan"),
             FunctionSymbol::PH => write!(f, "pH"),
         }
     }

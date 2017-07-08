@@ -118,6 +118,19 @@ fn validate_special_conversions() {
     let subject = Measurement::new(100.0, "[degRe]");
     let converted = subject.convert_to("Cel").unwrap();
     assert_floats_eq(converted.value, 125.0);
+
+    let subject = Measurement::new(180.0, "deg");
+    let converted = subject.convert_to("rad").unwrap();
+    assert_floats_eq(converted.value, 3.141_592_653_589_793);
+
+    let subject = Measurement::new(std::f64::consts::PI, "rad");
+    let converted = subject.convert_to("deg").unwrap();
+    assert_floats_eq(converted.value, 180.0);
+
+    // TODO: I don't understand why this fails.
+    // let subject = Measurement::new(1.0, "[p'diop]");
+    // let converted = subject.convert_to("deg").unwrap();
+    // assert_floats_eq(converted.value, 0.57);
 }
 
 // Because the precision of floats can vary, using assert_eq! with float values

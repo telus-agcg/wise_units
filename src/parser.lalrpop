@@ -46,6 +46,7 @@ pub FunctionSymbol: FunctionSymbol = {
     "cel"  => FunctionSymbol::Cel,
     "degf" => FunctionSymbol::DegF,
     "degre"   => FunctionSymbol::DegRe,
+    "100tan" => FunctionSymbol::OneHundredTan,
     "pH"   => FunctionSymbol::PH,
 };
 
@@ -78,9 +79,11 @@ UnitByPrimaryCode: Box<Unit> = {
     "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
     "mol" => Box::new(Mole) as Box<Unit>,
     "Cel" => Box::new(DegreeCelsius) as Box<Unit>,
+    "deg" => Box::new(Degree) as Box<Unit>,
     "l" => Box::new(Liter) as Box<Unit>,
     "[degF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
     "[degRe]" => Box::new(DegreeReaumur) as Box<Unit>,
+    "[p'diop]" => Box::new(PrismDiopter) as Box<Unit>,
     "[pH]" => Box::new(PH) as Box<Unit>,
 };
 
@@ -97,8 +100,10 @@ UnitBySecondaryCode: Box<Unit> = {
     "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
     "MOL" => Box::new(Mole) as Box<Unit>,
     "CEL" => Box::new(DegreeCelsius) as Box<Unit>,
+    "DEG" => Box::new(Degree) as Box<Unit>,
     "L" => Box::new(Liter) as Box<Unit>,
     "[DEGF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "[P'DIOP]" => Box::new(PrismDiopter) as Box<Unit>,
     "[PH]" => Box::new(PH) as Box<Unit>,
 };
 

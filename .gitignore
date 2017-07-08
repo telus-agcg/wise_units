@@ -6,3 +6,9 @@ src/parser.rs
 tags
 
 *.bk
+
+GPATH
+
+GRTAGS
+
+GTAGS
