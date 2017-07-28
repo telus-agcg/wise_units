@@ -1,5 +1,5 @@
 [package]
-name = "wu"
+name = "wise_units"
 version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 build = "build.rs"
