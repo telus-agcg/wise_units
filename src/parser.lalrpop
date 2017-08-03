@@ -72,19 +72,29 @@ UnitByPrimaryCode: Box<Unit> = {
 
     "10^" => Box::new(TheNumberTenForArbitraryPowersCaret) as Box<Unit>,
     "10*" => Box::new(TheNumberTenForArbitraryPowersStar) as Box<Unit>,
-    "[pi]" => Box::new(TheNumberPi) as Box<Unit>,
     "%" => Box::new(Percent) as Box<Unit>,
-    "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
-    "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
-    "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
-    "mol" => Box::new(Mole) as Box<Unit>,
+
+    "ar" => Box::new(Are) as Box<Unit>,
     "Cel" => Box::new(DegreeCelsius) as Box<Unit>,
     "deg" => Box::new(Degree) as Box<Unit>,
     "l" => Box::new(Liter) as Box<Unit>,
+    "mol" => Box::new(Mole) as Box<Unit>,
+
+    "[acr_us]" => Box::new(AcreUS) as Box<Unit>,
     "[degF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
     "[degRe]" => Box::new(DegreeReaumur) as Box<Unit>,
-    "[p'diop]" => Box::new(PrismDiopter) as Box<Unit>,
+    "[foz_us]" => Box::new(FluidOunceUS) as Box<Unit>,
+    "[gal_us]" => Box::new(QueenAnnesWineGallon) as Box<Unit>,
+    "[gil_us]" => Box::new(GillUS) as Box<Unit>,
+    "[in_i]" => Box::new(InchInternational) as Box<Unit>,
     "[pH]" => Box::new(PH) as Box<Unit>,
+    "[pi]" => Box::new(TheNumberPi) as Box<Unit>,
+    "[pt_us]" => Box::new(PintUS) as Box<Unit>,
+    "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
+    "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
+    "[p'diop]" => Box::new(PrismDiopter) as Box<Unit>,
+    "[qt_us]" => Box::new(QuartUS) as Box<Unit>,
 };
 
 UnitBySecondaryCode: Box<Unit> = {
@@ -93,18 +103,28 @@ UnitBySecondaryCode: Box<Unit> = {
     "G" => Box::new(Gram) as Box<Unit>,
     "RAD" => Box::new(Radian) as Box<Unit>,
 
+    "AR" => Box::new(Are) as Box<Unit>,
     "CD" => Box::new(Candela) as Box<Unit>,
-    "[PI]" => Box::new(TheNumberPi) as Box<Unit>,
-    "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,
-    "[PPM]" => Box::new(PartsPerMillion) as Box<Unit>,
-    "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
-    "MOL" => Box::new(Mole) as Box<Unit>,
     "CEL" => Box::new(DegreeCelsius) as Box<Unit>,
     "DEG" => Box::new(Degree) as Box<Unit>,
     "L" => Box::new(Liter) as Box<Unit>,
+    "MOL" => Box::new(Mole) as Box<Unit>,
+
+    "[ACR_US]" => Box::new(AcreUS) as Box<Unit>,
     "[DEGF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
-    "[P'DIOP]" => Box::new(PrismDiopter) as Box<Unit>,
+    "[FOZ_US]" => Box::new(FluidOunceUS) as Box<Unit>,
+    "[GAL_US]" => Box::new(QueenAnnesWineGallon) as Box<Unit>,
+    "[GIL_US]" => Box::new(GillUS) as Box<Unit>,
+    "[IN_I]" => Box::new(InchInternational) as Box<Unit>,
+    "[PI]" => Box::new(TheNumberPi) as Box<Unit>,
+    "[PT_US]" => Box::new(PintUS) as Box<Unit>,
     "[PH]" => Box::new(PH) as Box<Unit>,
+    "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,
+    "[PPM]" => Box::new(PartsPerMillion) as Box<Unit>,
+    "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "[P'DIOP]" => Box::new(PrismDiopter) as Box<Unit>,
+    "[QT_US]" => Box::new(QuartUS) as Box<Unit>,
+};
 };
 
 pub PrefixSymbol: Box<Prefix> = {
