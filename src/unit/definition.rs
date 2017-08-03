@@ -15,14 +15,14 @@ use parser_terms::Term;
 /// units.
 ///
 #[derive(Debug)]
-pub struct Definition<'a> {
+pub struct Definition {
     pub value: f64,
-    pub term: Term<'a>,
+    pub term: Term,
 }
 
-impl<'a> Definition<'a> {
+impl Definition {
     // TODO: wrong lifetime for expression here
-    pub fn new(value: f64, expression: &'a str) -> Self {
+    pub fn new<'a>(value: f64, expression: &'a str) -> Self {
         // TODO: unwrap
         let main_term = parse_MainTerm(expression).unwrap();
 

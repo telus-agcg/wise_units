@@ -22,9 +22,9 @@ use std::fmt;
 /// ```
 ///
 #[derive(Debug)]
-pub struct Measurement<'a> {
+pub struct Measurement {
     pub value: f64,
-    term: Term<'a>,
+    pub term: Term,
 }
 
 /// Errors when trying to convert between types that aren't commensurable.
@@ -34,9 +34,8 @@ pub enum ConversionError {
     IncompatibleUnitTypes,
 }
 
-impl<'a> Measurement<'a> {
-    // TODO: wrong lifetime for expression here
-    pub fn new(value: f64, expression: &'a str) -> Self {
+impl Measurement {
+    pub fn new<'a>(value: f64, expression: &'a str) -> Self {
         // TODO: unwrap
         let main_term = parse_MainTerm(expression).unwrap();
 
@@ -50,7 +49,7 @@ impl<'a> Measurement<'a> {
     /// using a str of characters that represents the other unit type: ex.
     /// `"m2/s"`.
     ///
-    pub fn convert_to(&self, expression: &'a str) -> Result<Measurement<'a>, ConversionError> {
+    pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, ConversionError> {
         let other_term = parse_MainTerm(expression).unwrap();
         let my_term = &self.term;
 
@@ -163,13 +162,13 @@ impl<'a> Measurement<'a> {
     }
 }
 
-impl<'a> fmt::Display for Measurement<'a> {
+impl fmt::Display for Measurement {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}{}", self.value, self.term)
     }
 }
 
-impl<'a> PartialEq for Measurement<'a> {
+impl PartialEq for Measurement {
     fn eq(&self, other: &Self) -> bool {
         let my_term_string = self.term_string();
 

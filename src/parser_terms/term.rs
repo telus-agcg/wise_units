@@ -11,13 +11,13 @@ use unit::Dimension;
 /// "m2").
 ///
 #[derive(Debug, PartialEq)]
-pub enum Term<'a> {
-    DotCombined(Component<'a>, Box<Term<'a>>),
-    SlashCombined(Component<'a>, Box<Term<'a>>),
-    Basic(Component<'a>),
+pub enum Term {
+    DotCombined(Component, Box<Term>),
+    SlashCombined(Component, Box<Term>),
+    Basic(Component),
 }
 
-impl<'a> Term<'a> {
+impl Term {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Term::Basic(ref component) => component.composition(),
@@ -60,7 +60,7 @@ impl<'a> Term<'a> {
         }
     }
 
-    pub fn is_compatible_with<'b>(&self, other: &Term<'b>) -> bool {
+    pub fn is_compatible_with(&self, other: &Term) -> bool {
         let me = self.composition();
         let other_comp = other.composition();
 
@@ -138,7 +138,7 @@ impl<'a> Term<'a> {
     }
 }
 
-impl<'a> fmt::Display for Term<'a> {
+impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Term::DotCombined(ref component, ref box_term) => {

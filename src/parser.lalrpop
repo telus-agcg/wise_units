@@ -7,18 +7,18 @@ use parser_terms::*;
 
 grammar;
 
-pub MainTerm: Term<'input> = {
+pub MainTerm: Term = {
     "/" <Term>,
     <Term>
 };
 
-pub Term: Term<'input> = {
+pub Term: Term = {
     <c:Component> "." <t:Term> => Term::DotCombined(c, Box::new(t)),
     <c:Component> "/" <t:Term> => Term::SlashCombined(c, Box::new(t)),
     <Component> => Term::Basic(<>),
 };
 
-pub Component: Component<'input> = {
+pub Component: Component = {
     <Annotatable><Annotation> => Component::AnnotatedAnnotatable(<>),
     <Annotatable> => Component::Annotatable(<>),
     <Annotation> => Component::Annotation(<>),
@@ -26,17 +26,17 @@ pub Component: Component<'input> = {
     "(" <Term> ")" => Component::Term(Box::new(<>)),
 };
 
-pub Annotation: Annotation<'input> = {
-    "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}"))
+pub Annotation: Annotation = {
+    "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}").to_string())
 };
 
-pub Annotatable: Annotatable<'input> = {
+pub Annotatable: Annotatable = {
     <SimpleUnit><Exponent> => Annotatable::UnitWithPower(<>),
     <SimpleUnit> => Annotatable::Unit(<>),
     <SpecialUnit> => Annotatable::SpecialUnit(<>),
 };
 
-pub SpecialUnit: SpecialUnit<'input> = {
+pub SpecialUnit: SpecialUnit = {
     <fs:FunctionSymbol> "(" <fpn:FloatingPointNumber> <t:Term> ")" => {
         SpecialUnit(fs, fpn, Box::new(t))
     }

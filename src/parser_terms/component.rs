@@ -7,15 +7,15 @@ use unit::Dimension;
 /// a Term _or_ of a Term and a Component.
 ///
 #[derive(Debug, PartialEq)]
-pub enum Component<'a> {
-    AnnotatedAnnotatable(Annotatable<'a>, Annotation<'a>),
-    Annotatable(Annotatable<'a>),
-    Annotation(Annotation<'a>),
+pub enum Component {
+    AnnotatedAnnotatable(Annotatable, Annotation),
+    Annotatable(Annotatable),
+    Annotation(Annotation),
     Factor(Factor),
-    Term(Box<Term<'a>>),
+    Term(Box<Term>),
 }
 
-impl<'a> Component<'a> {
+impl Component {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Component::AnnotatedAnnotatable(ref annotatable, ref _annotation) => {
@@ -101,7 +101,7 @@ impl<'a> Component<'a> {
     }
 }
 
-impl<'a> fmt::Display for Component<'a> {
+impl fmt::Display for Component {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Component::AnnotatedAnnotatable(ref annotatable, ref annotation) => {
@@ -128,7 +128,7 @@ mod tests {
 
     #[test]
     fn validate_parsing_component_with_annotations() {
-        let annotation = Annotation("%vol");
+        let annotation = Annotation("%vol".to_string());
 
         assert_eq!(
             parse_Component("km-10{%vol}").unwrap(),
@@ -140,7 +140,7 @@ mod tests {
             Component::Annotatable(make_annotatable())
         );
 
-        let annotation = Annotation("wet'tis.");
+        let annotation = Annotation("wet'tis.".to_string());
 
         assert_eq!(
             parse_Component("{wet'tis.}").unwrap(),
@@ -164,7 +164,7 @@ mod tests {
         );
     }
 
-    fn make_annotatable<'a>() -> Annotatable<'a> {
+    fn make_annotatable() -> Annotatable {
         let simple_unit = SimpleUnit::PrefixedAtom(Box::new(Kilo), Box::new(Meter));
         let negative_exp = Exponent(UnitSign::Negative, 10);
 
