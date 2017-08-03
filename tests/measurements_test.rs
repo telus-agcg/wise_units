@@ -1,6 +1,6 @@
-extern crate wu;
+extern crate wise_units;
 
-use wu::Measurement;
+use wise_units::Measurement;
 
 #[test]
 fn validate_unity_conversions() {

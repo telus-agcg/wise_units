@@ -9,7 +9,7 @@ use std::fmt;
 /// # Examples
 ///
 /// ```
-/// use wu::Measurement;
+/// use wise_units::Measurement;
 ///
 /// let one_km = Measurement::new(1.0, "km");
 /// let in_meters = one_km.convert_to("m").unwrap();
@@ -83,7 +83,7 @@ impl<'a> Measurement<'a> {
     /// # Examples
     ///
     /// ```
-    /// use wu::Measurement;
+    /// use wise_units::Measurement;
     ///
     /// let five_meters = Measurement::new(5.0, "m");
     /// assert_eq!(five_meters.scalar(), 5.0);
@@ -113,7 +113,7 @@ impl<'a> Measurement<'a> {
     /// # Examples
     ///
     /// ```
-    /// use wu::Measurement;
+    /// use wise_units::Measurement;
     ///
     /// let five_meters = Measurement::new(5.0, "m");
     /// assert_eq!(five_meters.magnitude(), 5.0);
@@ -142,7 +142,7 @@ impl<'a> Measurement<'a> {
     /// # Example
     ///
     /// ```
-    /// use wu::Measurement;
+    /// use wise_units::Measurement;
     /// let km = Measurement::new(1.0, "km");
     /// assert_eq!(km.term_string(), "km".to_string());
     /// ```

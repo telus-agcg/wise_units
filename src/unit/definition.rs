@@ -5,7 +5,7 @@ use parser_terms::Term;
 /// of some scalar and another, more basic unit). For example a "degree" is:
 ///
 /// ```
-/// use wu::unit::Definition;
+/// use wise_units::unit::Definition;
 ///
 /// Definition::new(2.0, "[pi].rad/360");
 /// ```
