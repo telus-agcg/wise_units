@@ -1,6 +1,7 @@
 use parser::parse_MainTerm;
 use parser_terms::Term;
 use std::fmt;
+use std::ops::{Add, Div, Mul, Sub};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Term`, where the Term represents the
@@ -176,6 +177,65 @@ impl PartialEq for Measurement {
             self.to_string() == converted_other.to_string()
         } else {
             false
+        }
+    }
+}
+
+impl Add for Measurement {
+    type Output = Measurement;
+
+    fn add(self, other: Measurement) -> Measurement {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value + other_converted.value;
+
+        Measurement {
+            value: new_value,
+            term: self.term
+        }
+    }
+}
+
+impl Sub for Measurement {
+    type Output = Measurement;
+
+    fn sub(self, other: Measurement) -> Measurement {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value - other_converted.value;
+
+        Measurement {
+            value: new_value,
+            term: self.term
+        }
+    }
+}
+impl Div for Measurement {
+    type Output = Measurement;
+
+    fn div(self, other: Measurement) -> Measurement {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value / other_converted.value;
+
+        Measurement {
+            value: new_value,
+            term: self.term
+        }
+    }
+}
+
+impl Mul for Measurement {
+    type Output = Measurement;
+
+    fn mul(self, other: Measurement) -> Measurement {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value * other_converted.value;
+
+        Measurement {
+            value: new_value,
+            term: self.term
         }
     }
 }
