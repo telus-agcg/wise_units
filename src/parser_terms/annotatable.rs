@@ -7,7 +7,7 @@ use unit::Dimension;
 /// from a) just a SimpleUnit, b) a SimpleUnit combined with an exponent, c)
 /// a SpecialUnit.
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Annotatable {
     Unit(SimpleUnit),
     UnitWithPower(SimpleUnit, Exponent),

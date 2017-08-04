@@ -6,7 +6,7 @@ use std::fmt;
 /// not contribute to the semantics of the unit but are meaningless by
 /// definition."
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Annotation(pub String);
 
 impl fmt::Display for Annotation {

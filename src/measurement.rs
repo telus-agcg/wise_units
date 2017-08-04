@@ -183,6 +183,8 @@ impl PartialEq for Measurement {
     }
 }
 
+impl Eq for Measurement {}
+
 impl Add for Measurement {
     type Output = Measurement;
 

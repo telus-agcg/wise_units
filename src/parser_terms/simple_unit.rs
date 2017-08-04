@@ -5,7 +5,7 @@ use unit::{Dimension, Prefix, Unit};
 /// The smallest node in the AST with real meaning; it is either just a wrapper
 /// around a Unit ("m") or is the combination of a Prefix and a Unit ("km").
 ///
-#[derive(Debug)]
+#[derive(Debug, Eq)]
 pub enum SimpleUnit {
     Atom(Box<Unit>),
     PrefixedAtom(Box<Prefix>, Box<Unit>),

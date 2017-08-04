@@ -10,7 +10,7 @@ use unit::Dimension;
 /// (SlashCombined, "m2/s"), and sometimes they stand by themselves (Basic,
 /// "m2").
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Term {
     DotCombined(Component, Box<Term>),
     SlashCombined(Component, Box<Term>),

@@ -3,7 +3,7 @@ use std::fmt;
 
 /// Really, this is just part of the AST of a unit.
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Exponent(pub UnitSign, pub u32);
 
 impl Exponent {

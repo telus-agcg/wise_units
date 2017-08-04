@@ -1,12 +1,13 @@
 use parser_terms::{FunctionSymbol, Term};
 use std::collections::BTreeMap;
+use std::cmp::PartialEq;
 use std::fmt;
 use unit::Dimension;
 
 /// A SpecialUnit node in the AST represents a Unit whose definition is a
 /// function of other non-special units.
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug)]
 pub struct SpecialUnit(pub FunctionSymbol, pub f64, pub Box<Term>);
 
 impl SpecialUnit {
@@ -33,6 +34,12 @@ impl fmt::Display for SpecialUnit {
         write!(f, "{}({} {})", self.0, self.1, self.2)
     }
 }
+
+impl PartialEq for SpecialUnit {
+    fn eq(&self, other: &SpecialUnit) -> bool { self.composition() == other.composition() }
+}
+
+impl Eq for SpecialUnit {}
 
 #[cfg(test)]
 mod tests {

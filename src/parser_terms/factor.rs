@@ -8,7 +8,7 @@ use std::fmt;
 ///
 /// This struct serves essentially to make up the part of the parser's AST.
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Factor(pub u32);
 
 impl fmt::Display for Factor {

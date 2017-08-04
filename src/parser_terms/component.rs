@@ -6,7 +6,7 @@ use unit::Dimension;
 /// A Component is the largest chunk of a Term; a Term is a combination of just
 /// a Term _or_ of a Term and a Component.
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Component {
     AnnotatedAnnotatable(Annotatable, Annotation),
     Annotatable(Annotatable),
