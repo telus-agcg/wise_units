@@ -66,6 +66,10 @@ impl Measurement {
         Ok(new_measurement)
     }
 
+    pub fn is_compatible_with(&self, other: &Measurement) -> bool {
+        self.term.is_compatible_with(&other.term)
+    }
+
     /// Checks if the associated Term is "special". "Special" units are ones
     /// that must be converted using a function in combination with some other
     /// non-special units. For example, Celsius is special since it must be
@@ -171,10 +175,8 @@ impl fmt::Display for Measurement {
 
 impl PartialEq for Measurement {
     fn eq(&self, other: &Self) -> bool {
-        let my_term_string = self.term_string();
-
-        if let Ok(converted_other) = other.convert_to(&my_term_string) {
-            self.to_string() == converted_other.to_string()
+        if self.is_compatible_with(other) {
+            self.scalar() == other.scalar()
         } else {
             false
         }
