@@ -84,6 +84,7 @@ UnitByPrimaryCode: Box<Unit> = {
     "[degF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
     "[degRe]" => Box::new(DegreeReaumur) as Box<Unit>,
     "[foz_us]" => Box::new(FluidOunceUS) as Box<Unit>,
+    "[ft_us]" => Box::new(FootUS) as Box<Unit>,
     "[gal_us]" => Box::new(QueenAnnesWineGallon) as Box<Unit>,
     "[gil_us]" => Box::new(GillUS) as Box<Unit>,
     "[in_i]" => Box::new(InchInternational) as Box<Unit>,
@@ -95,6 +96,7 @@ UnitByPrimaryCode: Box<Unit> = {
     "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[p'diop]" => Box::new(PrismDiopter) as Box<Unit>,
     "[qt_us]" => Box::new(QuartUS) as Box<Unit>,
+    "[rd_us]" => Box::new(RodUS) as Box<Unit>,
 };
 
 UnitBySecondaryCode: Box<Unit> = {
@@ -113,6 +115,7 @@ UnitBySecondaryCode: Box<Unit> = {
     "[ACR_US]" => Box::new(AcreUS) as Box<Unit>,
     "[DEGF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
     "[FOZ_US]" => Box::new(FluidOunceUS) as Box<Unit>,
+    "[FT_US]" => Box::new(FootUS) as Box<Unit>,
     "[GAL_US]" => Box::new(QueenAnnesWineGallon) as Box<Unit>,
     "[GIL_US]" => Box::new(GillUS) as Box<Unit>,
     "[IN_I]" => Box::new(InchInternational) as Box<Unit>,
@@ -124,6 +127,7 @@ UnitBySecondaryCode: Box<Unit> = {
     "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
     "[P'DIOP]" => Box::new(PrismDiopter) as Box<Unit>,
     "[QT_US]" => Box::new(QuartUS) as Box<Unit>,
+    "[RD_US]" => Box::new(RodUS) as Box<Unit>,
 };
 };
 
