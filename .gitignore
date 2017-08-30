@@ -14,3 +14,5 @@ GRTAGS
 GTAGS
 
 .tags
+
+.vscode/tasks.json

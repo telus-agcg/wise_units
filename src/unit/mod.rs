@@ -52,6 +52,10 @@ impl PartialEq for Box<Unit> {
 
 impl Eq for Box<Unit> {}
 
+// impl<'a> PartialEq for &'a Box<Unit> {
+//     fn eq(&self, other: &&'a Box<Unit>) -> bool { self.primary_code() == other.primary_code() }
+// }
+
 impl fmt::Debug for Unit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Unit ({})", &self.primary_code())
