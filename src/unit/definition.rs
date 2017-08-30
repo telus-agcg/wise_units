@@ -5,7 +5,7 @@ use parser_terms::Term;
 /// of some scalar and another, more basic unit). For example a "degree" is:
 ///
 /// ```
-/// use wu::unit::Definition;
+/// use wise_units::unit::Definition;
 ///
 /// Definition::new(2.0, "[pi].rad/360");
 /// ```
@@ -14,14 +14,15 @@ use parser_terms::Term;
 /// describe it, but this `definition` is how the unit is compared to other
 /// units.
 ///
-pub struct Definition<'a> {
+#[derive(Debug)]
+pub struct Definition {
     pub value: f64,
-    pub term: Term<'a>,
+    pub term: Term,
 }
 
-impl<'a> Definition<'a> {
+impl Definition {
     // TODO: wrong lifetime for expression here
-    pub fn new(value: f64, expression: &'a str) -> Self {
+    pub fn new<'a>(value: f64, expression: &'a str) -> Self {
         // TODO: unwrap
         let main_term = parse_MainTerm(expression).unwrap();
 

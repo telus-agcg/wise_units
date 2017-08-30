@@ -55,7 +55,7 @@ mod tests {
             parse_MainTerm("/g{tot'nit}").unwrap(),
             Term::Basic(Component::AnnotatedAnnotatable(
                 Annotatable::Unit(SimpleUnit::Atom(Box::new(Gram))),
-                Annotation("tot'nit"),
+                Annotation("tot'nit".to_string()),
             ))
         );
     }

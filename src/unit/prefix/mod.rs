@@ -59,13 +59,15 @@ pub trait Prefix {
     fn unit_type(&self) -> UnitType;
 }
 
-impl<'a> fmt::Display for Prefix {
+impl fmt::Display for Prefix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.primary_code()) }
 }
 
-impl<'a> PartialEq for &'a Box<Prefix> {
-    fn eq(&self, other: &&'a Box<Prefix>) -> bool { self.primary_code() == other.primary_code() }
+impl PartialEq for Box<Prefix> {
+    fn eq(&self, other: &Box<Prefix>) -> bool { self.primary_code() == other.primary_code() }
 }
+
+impl Eq for Box<Prefix> {}
 
 impl fmt::Debug for Prefix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

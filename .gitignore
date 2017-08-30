@@ -6,3 +6,13 @@ src/parser.rs
 tags
 
 *.bk
+
+GPATH
+
+GRTAGS
+
+GTAGS
+
+.tags
+
+.vscode/tasks.json

@@ -1,6 +1,6 @@
-extern crate wu;
+extern crate wise_units;
 
-use wu::Measurement;
+use wise_units::Measurement;
 
 #[test]
 fn validate_unity_conversions() {
@@ -64,6 +64,14 @@ fn validate_number_conversions() {
     let subject = Measurement::new(1.0, "[pi]");
     let converted = subject.convert_to("[ppth]").unwrap();
     assert_floats_eq(converted.value, 3141.592_653_589);
+
+    let subject = Measurement::new(7.0, "[pH]");
+    let converted = subject.convert_to("mol/l").unwrap();
+    assert_floats_eq(converted.value, 0.000_000_1);
+
+    let subject = Measurement::new(7.0, "mol/l");
+    let converted = subject.convert_to("[pH]").unwrap();
+    assert_floats_eq(converted.value, -0.845098040014257);
 }
 
 #[test]
@@ -98,6 +106,31 @@ fn validate_special_conversions() {
     let subject = Measurement::new(37.0, "Cel");
     let converted = subject.convert_to("[degF]").unwrap();
     assert_floats_eq(converted.value, 98.6);
+
+    let subject = Measurement::new(100.0, "[degRe]");
+    let converted = subject.convert_to("K").unwrap();
+    assert_floats_eq(converted.value, 398.15);
+
+    let subject = Measurement::new(398.15, "K");
+    let converted = subject.convert_to("[degRe]").unwrap();
+    assert_floats_eq(converted.value, 100.0);
+
+    let subject = Measurement::new(100.0, "[degRe]");
+    let converted = subject.convert_to("Cel").unwrap();
+    assert_floats_eq(converted.value, 125.0);
+
+    let subject = Measurement::new(180.0, "deg");
+    let converted = subject.convert_to("rad").unwrap();
+    assert_floats_eq(converted.value, 3.141_592_653_589_793);
+
+    let subject = Measurement::new(std::f64::consts::PI, "rad");
+    let converted = subject.convert_to("deg").unwrap();
+    assert_floats_eq(converted.value, 180.0);
+
+    // TODO: I don't understand why this fails.
+    // let subject = Measurement::new(1.0, "[p'diop]");
+    // let converted = subject.convert_to("deg").unwrap();
+    // assert_floats_eq(converted.value, 0.57);
 }
 
 // Because the precision of floats can vary, using assert_eq! with float values
@@ -106,7 +139,7 @@ fn validate_special_conversions() {
 // threshold.
 fn assert_floats_eq(actual: f64, expected: f64) {
     let error_threshold = std::f32::EPSILON as f64;
-    let difference = (actual - expected).abs();
+    let difference = actual - expected;
 
-    assert!(difference < error_threshold, "Difference in floats was {}", difference);
+    assert!(difference.abs() < error_threshold, "Actual: {}, Expected: {}, Diff: {}", actual, expected, difference);
 }

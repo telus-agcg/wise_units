@@ -7,18 +7,20 @@ use parser_terms::*;
 
 grammar;
 
-pub MainTerm: Term<'input> = {
+pub MainTerm: Term = {
+    // Term needs to know if this is a "per" term or not. Right now the slash
+    // just gets discarded from the AST.
     "/" <Term>,
     <Term>
 };
 
-pub Term: Term<'input> = {
+pub Term: Term = {
     <c:Component> "." <t:Term> => Term::DotCombined(c, Box::new(t)),
     <c:Component> "/" <t:Term> => Term::SlashCombined(c, Box::new(t)),
     <Component> => Term::Basic(<>),
 };
 
-pub Component: Component<'input> = {
+pub Component: Component = {
     <Annotatable><Annotation> => Component::AnnotatedAnnotatable(<>),
     <Annotatable> => Component::Annotatable(<>),
     <Annotation> => Component::Annotation(<>),
@@ -26,25 +28,28 @@ pub Component: Component<'input> = {
     "(" <Term> ")" => Component::Term(Box::new(<>)),
 };
 
-pub Annotation: Annotation<'input> = {
-    "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}"))
+pub Annotation: Annotation = {
+    "{" <s:r"[!-z|~]*\}"> => Annotation(s.trim_right_matches("}").to_string())
 };
 
-pub Annotatable: Annotatable<'input> = {
+pub Annotatable: Annotatable = {
     <SimpleUnit><Exponent> => Annotatable::UnitWithPower(<>),
     <SimpleUnit> => Annotatable::Unit(<>),
     <SpecialUnit> => Annotatable::SpecialUnit(<>),
 };
 
-pub SpecialUnit: SpecialUnit<'input> = {
+pub SpecialUnit: SpecialUnit = {
     <fs:FunctionSymbol> "(" <fpn:FloatingPointNumber> <t:Term> ")" => {
         SpecialUnit(fs, fpn, Box::new(t))
     }
 };
 
 pub FunctionSymbol: FunctionSymbol = {
-    "cel"      => FunctionSymbol::Cel,
-    "degf"      => FunctionSymbol::DegF,
+    "cel"  => FunctionSymbol::Cel,
+    "degf" => FunctionSymbol::DegF,
+    "degre"   => FunctionSymbol::DegRe,
+    "100tan" => FunctionSymbol::OneHundredTan,
+    "pH"   => FunctionSymbol::PH,
 };
 
 pub SimpleUnit: SimpleUnit = {
@@ -54,7 +59,9 @@ pub SimpleUnit: SimpleUnit = {
 
 pub AtomSymbol: Box<Unit> = {
     <UnitByPrimaryCode>,
-    <UnitBySecondaryCode>
+    <UnitBySecondaryCode>,
+    <UnitByPrintSymbol>,
+    <UnitByName>
 };
 
 UnitByPrimaryCode: Box<Unit> = {
@@ -69,14 +76,31 @@ UnitByPrimaryCode: Box<Unit> = {
 
     "10^" => Box::new(TheNumberTenForArbitraryPowersCaret) as Box<Unit>,
     "10*" => Box::new(TheNumberTenForArbitraryPowersStar) as Box<Unit>,
-    "[pi]" => Box::new(TheNumberPi) as Box<Unit>,
     "%" => Box::new(Percent) as Box<Unit>,
-    "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
-    "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
-    "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
+
+    "ar" => Box::new(Are) as Box<Unit>,
     "Cel" => Box::new(DegreeCelsius) as Box<Unit>,
+    "deg" => Box::new(Degree) as Box<Unit>,
     "l" => Box::new(Liter) as Box<Unit>,
+    "mol" => Box::new(Mole) as Box<Unit>,
+
+    "[acr_us]" => Box::new(AcreUS) as Box<Unit>,
     "[degF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "[degRe]" => Box::new(DegreeReaumur) as Box<Unit>,
+    "[foz_us]" => Box::new(FluidOunceUS) as Box<Unit>,
+    "[ft_us]" => Box::new(FootUS) as Box<Unit>,
+    "[gal_us]" => Box::new(QueenAnnesWineGallon) as Box<Unit>,
+    "[gil_us]" => Box::new(GillUS) as Box<Unit>,
+    "[in_i]" => Box::new(InchInternational) as Box<Unit>,
+    "[pH]" => Box::new(PH) as Box<Unit>,
+    "[pi]" => Box::new(TheNumberPi) as Box<Unit>,
+    "[pt_us]" => Box::new(PintUS) as Box<Unit>,
+    "[ppb]" => Box::new(PartsPerBillion) as Box<Unit>,
+    "[ppm]" => Box::new(PartsPerMillion) as Box<Unit>,
+    "[ppth]" => Box::new(PartsPerThousand) as Box<Unit>,
+    "[p'diop]" => Box::new(PrismDiopter) as Box<Unit>,
+    "[qt_us]" => Box::new(QuartUS) as Box<Unit>,
+    "[rd_us]" => Box::new(RodUS) as Box<Unit>,
 };
 
 UnitBySecondaryCode: Box<Unit> = {
@@ -85,14 +109,81 @@ UnitBySecondaryCode: Box<Unit> = {
     "G" => Box::new(Gram) as Box<Unit>,
     "RAD" => Box::new(Radian) as Box<Unit>,
 
+    "AR" => Box::new(Are) as Box<Unit>,
     "CD" => Box::new(Candela) as Box<Unit>,
+    "CEL" => Box::new(DegreeCelsius) as Box<Unit>,
+    "DEG" => Box::new(Degree) as Box<Unit>,
+    "L" => Box::new(Liter) as Box<Unit>,
+    "MOL" => Box::new(Mole) as Box<Unit>,
+
+    "[ACR_US]" => Box::new(AcreUS) as Box<Unit>,
+    "[DEGF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "[FOZ_US]" => Box::new(FluidOunceUS) as Box<Unit>,
+    "[FT_US]" => Box::new(FootUS) as Box<Unit>,
+    "[GAL_US]" => Box::new(QueenAnnesWineGallon) as Box<Unit>,
+    "[GIL_US]" => Box::new(GillUS) as Box<Unit>,
+    "[IN_I]" => Box::new(InchInternational) as Box<Unit>,
     "[PI]" => Box::new(TheNumberPi) as Box<Unit>,
+    "[PT_US]" => Box::new(PintUS) as Box<Unit>,
+    "[PH]" => Box::new(PH) as Box<Unit>,
     "[PPTH]" => Box::new(PartsPerThousand) as Box<Unit>,
     "[PPM]" => Box::new(PartsPerMillion) as Box<Unit>,
     "[PPB]" => Box::new(PartsPerBillion) as Box<Unit>,
-    "CEL" => Box::new(DegreeCelsius) as Box<Unit>,
-    "L" => Box::new(Liter) as Box<Unit>,
-    "[DEGF]" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "[P'DIOP]" => Box::new(PrismDiopter) as Box<Unit>,
+    "[QT_US]" => Box::new(QuartUS) as Box<Unit>,
+    "[RD_US]" => Box::new(RodUS) as Box<Unit>,
+};
+
+UnitByPrintSymbol: Box<Unit> = {
+    "π" => Box::new(TheNumberPi) as Box<Unit>,
+
+    "a" => Box::new(Are) as Box<Unit>,
+    "°C" => Box::new(DegreeCelsius) as Box<Unit>,
+    "°F" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "°R" => Box::new(DegreeReaumur) as Box<Unit>,
+    "°" => Box::new(Degree) as Box<Unit>,
+    "ft(us)" => Box::new(FootUS) as Box<Unit>,
+    "oz fl" => Box::new(FluidOunceUS) as Box<Unit>,
+    "ppb" => Box::new(PartsPerBillion) as Box<Unit>,
+    "ppm" => Box::new(PartsPerMillion) as Box<Unit>,
+    "ppth" => Box::new(PartsPerThousand) as Box<Unit>,
+    "PD" => Box::new(PrismDiopter) as Box<Unit>,
+};
+
+UnitByName: Box<Unit> = {
+    "meter" => Box::new(Meter) as Box<Unit>,
+    "second" => Box::new(Second) as Box<Unit>,
+    "gram" => Box::new(Gram) as Box<Unit>,
+    "radian" => Box::new(Radian) as Box<Unit>,
+    "Kelvin" => Box::new(Kelvin) as Box<Unit>,
+    "Coulomb" => Box::new(Coulomb) as Box<Unit>,
+    "candela" => Box::new(Candela) as Box<Unit>,
+
+    "percent" => Box::new(Percent) as Box<Unit>,
+
+    "acre" => Box::new(AcreUS) as Box<Unit>,
+    "are" => Box::new(Are) as Box<Unit>,
+    "degree Celsius" => Box::new(DegreeCelsius) as Box<Unit>,
+    "degree Fahrenheit" => Box::new(DegreeFahrenheit) as Box<Unit>,
+    "degree Reaumur" => Box::new(DegreeReaumur) as Box<Unit>,
+    "degree" => Box::new(Degree) as Box<Unit>,
+    // "foot" => Box::new(FootUS) as Box<Unit>,
+    "liter" => Box::new(Liter) as Box<Unit>,
+    "mole" => Box::new(Mole) as Box<Unit>,
+    "rod" => Box::new(RodUS) as Box<Unit>,
+
+    "fluid ounce" => Box::new(FluidOunceUS) as Box<Unit>,
+    "Queen Anne's wine gallon" => Box::new(QueenAnnesWineGallon) as Box<Unit>,
+    "gill" => Box::new(GillUS) as Box<Unit>,
+    "inch" => Box::new(InchInternational) as Box<Unit>,
+    "pH" => Box::new(PH) as Box<Unit>,
+    "the number pi" => Box::new(TheNumberPi) as Box<Unit>,
+    "pint" => Box::new(PintUS) as Box<Unit>,
+    "parts per billion" => Box::new(PartsPerBillion) as Box<Unit>,
+    "parts per million" => Box::new(PartsPerMillion) as Box<Unit>,
+    "parts per thousand" => Box::new(PartsPerThousand) as Box<Unit>,
+    "prism diopter" => Box::new(PrismDiopter) as Box<Unit>,
+    "quart" => Box::new(QuartUS) as Box<Unit>,
 };
 
 pub PrefixSymbol: Box<Prefix> = {
@@ -150,6 +241,34 @@ PrefixBySecondaryCode: Box<Prefix> = {
     "MIB" => Box::new(Mebi) as Box<Prefix>,
     "GIB" => Box::new(Gibi) as Box<Prefix>,
     "TIB" => Box::new(Tebi) as Box<Prefix>,
+};
+
+PrefixByPrintSymbol: Box<Prefix> = {
+    "µ" => Box::new(Micro) as Box<Prefix>,
+};
+
+PrefixByName: Box<Prefix> = {
+    "yotta" => Box::new(Yotta) as Box<Prefix>,
+    "zetta" => Box::new(Zetta) as Box<Prefix>,
+    "exa" => Box::new(Exa) as Box<Prefix>,
+    "peta" => Box::new(Peta) as Box<Prefix>,
+    "tera" => Box::new(Tera) as Box<Prefix>,
+    "giga" => Box::new(Giga) as Box<Prefix>,
+    "mega" => Box::new(Mega) as Box<Prefix>,
+    "kilo" => Box::new(Kilo) as Box<Prefix>,
+    "hecho" => Box::new(Hecto) as Box<Prefix>,
+    "deka" => Box::new(Deka) as Box<Prefix>,
+    "deci" => Box::new(Deci) as Box<Prefix>,
+    "centi" => Box::new(Centi) as Box<Prefix>,
+    "micro" => Box::new(Micro) as Box<Prefix>,
+    "nano" => Box::new(Nano) as Box<Prefix>,
+    "femto" => Box::new(Femto) as Box<Prefix>,
+    "atto" => Box::new(Atto) as Box<Prefix>,
+    "zepto" => Box::new(Zepto) as Box<Prefix>,
+    "yocto" => Box::new(Yocto) as Box<Prefix>,
+    "mebi" => Box::new(Mebi) as Box<Prefix>,
+    "gibi" => Box::new(Gibi) as Box<Prefix>,
+    "tebi" => Box::new(Tebi) as Box<Prefix>,
 };
 
 pub Exponent: Exponent = {

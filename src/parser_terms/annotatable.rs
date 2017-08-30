@@ -7,14 +7,14 @@ use unit::Dimension;
 /// from a) just a SimpleUnit, b) a SimpleUnit combined with an exponent, c)
 /// a SpecialUnit.
 ///
-#[derive(Debug, PartialEq)]
-pub enum Annotatable<'a> {
+#[derive(Debug, PartialEq, Eq)]
+pub enum Annotatable {
     Unit(SimpleUnit),
     UnitWithPower(SimpleUnit, Exponent),
-    SpecialUnit(SpecialUnit<'a>),
+    SpecialUnit(SpecialUnit),
 }
 
-impl<'a> Annotatable<'a> {
+impl Annotatable {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         match *self {
             Annotatable::Unit(ref simple_unit) => simple_unit.composition(),
@@ -101,7 +101,7 @@ impl<'a> Annotatable<'a> {
     }
 }
 
-impl<'a> fmt::Display for Annotatable<'a> {
+impl fmt::Display for Annotatable {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             Annotatable::Unit(ref simple_unit) => write!(f, "{}", simple_unit),

@@ -3,10 +3,13 @@ use std::fmt;
 /// Exists just to represent part of the unit's AST when that unit is defined
 /// by a function of other units.
 ///
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum FunctionSymbol {
     Cel,
     DegF,
+    DegRe,
+    OneHundredTan,
+    PH,
 }
 
 impl fmt::Display for FunctionSymbol {
@@ -14,6 +17,9 @@ impl fmt::Display for FunctionSymbol {
         match *self {
             FunctionSymbol::Cel => write!(f, "cel"),
             FunctionSymbol::DegF => write!(f, "degf"),
+            FunctionSymbol::DegRe => write!(f, "degre"),
+            FunctionSymbol::OneHundredTan => write!(f, "100tan"),
+            FunctionSymbol::PH => write!(f, "pH"),
         }
     }
 }

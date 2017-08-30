@@ -42,13 +42,19 @@ pub trait Unit {
     }
 }
 
-impl<'a> fmt::Display for Unit {
+impl fmt::Display for Unit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.primary_code()) }
 }
 
-impl<'a> PartialEq for &'a Box<Unit> {
-    fn eq(&self, other: &&'a Box<Unit>) -> bool { self.primary_code() == other.primary_code() }
+impl PartialEq for Box<Unit> {
+    fn eq(&self, other: &Box<Unit>) -> bool { self.primary_code() == other.primary_code() }
 }
+
+impl Eq for Box<Unit> {}
+
+// impl<'a> PartialEq for &'a Box<Unit> {
+//     fn eq(&self, other: &&'a Box<Unit>) -> bool { self.primary_code() == other.primary_code() }
+// }
 
 impl fmt::Debug for Unit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

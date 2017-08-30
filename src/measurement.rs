@@ -1,6 +1,7 @@
 use parser::parse_MainTerm;
 use parser_terms::Term;
 use std::fmt;
+use std::ops::{Add, Div, Mul};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Term`, where the Term represents the
@@ -24,7 +25,7 @@ use std::fmt;
 #[derive(Debug)]
 pub struct Measurement<'a> {
     pub value: f64,
-    term: Term<'a>,
+    pub term: Term<'a>,
 }
 
 /// Errors when trying to convert between types that aren't commensurable.
@@ -177,6 +178,63 @@ impl<'a> PartialEq for Measurement<'a> {
             self.to_string() == converted_other.to_string()
         } else {
             false
+        }
+    }
+}
+
+impl<'a> Add for Measurement<'a> {
+    type Output = Measurement<'a>;
+
+    fn add(self, other: Measurement) -> Measurement<'a> {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value + other_converted.value;
+
+        Measurement {
+            value: new_value,
+            term: self.term
+        }
+    }
+}
+
+impl<'pointer, 'term> Add for &'pointer Measurement<'term> {
+    type Output = Measurement<'term>;
+
+    fn add(self, other: &'pointer Measurement) -> Measurement<'term> {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value + other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl<'a> Div for Measurement<'a> {
+    type Output = Measurement<'a>;
+
+    fn div(self, other: Measurement) -> Measurement<'a> {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value / other_converted.value;
+
+        Measurement {
+            value: new_value,
+            term: self.term
+        }
+    }
+}
+
+impl<'a> Mul for Measurement<'a> {
+    type Output = Measurement<'a>;
+
+    fn mul(self, other: Measurement) -> Measurement<'a> {
+        let unit = self.term_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value * other_converted.value;
+
+        Measurement {
+            value: new_value,
+            term: self.term
         }
     }
 }

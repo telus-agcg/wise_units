@@ -1,15 +1,16 @@
 use parser_terms::{FunctionSymbol, Term};
 use std::collections::BTreeMap;
+use std::cmp::PartialEq;
 use std::fmt;
 use unit::Dimension;
 
 /// A SpecialUnit node in the AST represents a Unit whose definition is a
 /// function of other non-special units.
 ///
-#[derive(Debug, PartialEq)]
-pub struct SpecialUnit<'a>(pub FunctionSymbol, pub f64, pub Box<Term<'a>>);
+#[derive(Debug)]
+pub struct SpecialUnit(pub FunctionSymbol, pub f64, pub Box<Term>);
 
-impl<'a> SpecialUnit<'a> {
+impl SpecialUnit {
     pub fn composition(&self) -> BTreeMap<Dimension, i32> {
         let ref term = self.2;
         term.composition()
@@ -28,11 +29,17 @@ impl<'a> SpecialUnit<'a> {
     pub fn calculate_magnitude(&self, scalar: f64) -> f64 { self.2.calculate_magnitude(scalar) }
 }
 
-impl<'a> fmt::Display for SpecialUnit<'a> {
+impl fmt::Display for SpecialUnit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}({} {})", self.0, self.1, self.2)
     }
 }
+
+impl PartialEq for SpecialUnit {
+    fn eq(&self, other: &SpecialUnit) -> bool { self.composition() == other.composition() }
+}
+
+impl Eq for SpecialUnit {}
 
 #[cfg(test)]
 mod tests {
