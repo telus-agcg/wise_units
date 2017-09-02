@@ -2,15 +2,16 @@ use parser::parse_MainTerm;
 use parser_terms::Term;
 use std::fmt;
 use std::ops::{Add, Div, Mul};
+use unit::Unit;
 
 /// A Measurement is the prime interface for consumers of the library. It
-/// consists of some scalar value and a `Term`, where the Term represents the
+/// consists of some scalar value and a `Unit`, where the Unit represents the
 /// type of unit.
 ///
 /// # Examples
 ///
 /// ```
-/// use wu::Measurement;
+/// use wise_units::Measurement;
 ///
 /// let one_km = Measurement::new(1.0, "km");
 /// let in_meters = one_km.convert_to("m").unwrap();
@@ -23,9 +24,9 @@ use std::ops::{Add, Div, Mul};
 /// ```
 ///
 #[derive(Debug)]
-pub struct Measurement<'a> {
+pub struct Measurement {
     pub value: f64,
-    pub term: Term<'a>,
+    pub unit: Unit,
 }
 
 /// Errors when trying to convert between types that aren't commensurable.
@@ -35,15 +36,15 @@ pub enum ConversionError {
     IncompatibleUnitTypes,
 }
 
-impl<'a> Measurement<'a> {
-    // TODO: wrong lifetime for expression here
-    pub fn new(value: f64, expression: &'a str) -> Self {
-        // TODO: unwrap
-        let main_term = parse_MainTerm(expression).unwrap();
+impl Measurement {
+    pub fn new<'a>(value: f64, expression: &'a str) -> Self {
+        // TODO: Decouple parser and interpreter
+        let mut interpreter = Interpreter;
+        let su = interpreter.interpret(expression);
 
         Measurement {
             value: value,
-            term: main_term,
+            unit: su,
         }
     }
 
@@ -51,40 +52,39 @@ impl<'a> Measurement<'a> {
     /// using a str of characters that represents the other unit type: ex.
     /// `"m2/s"`.
     ///
-    pub fn convert_to(&self, expression: &'a str) -> Result<Measurement<'a>, ConversionError> {
-        let other_term = parse_MainTerm(expression).unwrap();
-        let my_term = &self.term;
+    pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, ConversionError> {
+        let my_unit = &self.unit;
 
-        if !my_term.is_compatible_with(&other_term) {
+        if !my_unit.is_compatible_with(&other_unit) {
             return Err(ConversionError::IncompatibleUnitTypes);
         }
 
         let new_measurement = Measurement {
-            value: self.converted_scalar(&other_term),
-            term: other_term,
+            value: self.converted_scalar(&other_unit),
+            unit: other_unit,
         };
 
         Ok(new_measurement)
     }
 
-    /// Checks if the associated Term is "special". "Special" units are ones
+    /// Checks if the associated Unit is "special". "Special" units are ones
     /// that must be converted using a function in combination with some other
     /// non-special units. For example, Celsius is special since it must be
     /// first converted to Kelvin before converting to the requested unit.
     ///
     pub fn is_special(&self) -> bool {
-        let ref t = self.term;
+        let ref u = self.unit;
 
-        t.is_special()
+        u.is_special()
     }
 
     /// This scalar is the Measurement's value combined with any scalars that
-    /// are part of the Term's designation.
+    /// are part of the Unit's designation.
     ///
     /// # Examples
     ///
     /// ```
-    /// use wu::Measurement;
+    /// use wise_units::Measurement;
     ///
     /// let five_meters = Measurement::new(5.0, "m");
     /// assert_eq!(five_meters.scalar(), 5.0);
@@ -102,19 +102,19 @@ impl<'a> Measurement<'a> {
     pub fn scalar(&self) -> f64 {
         if self.is_special() {
             let magnitude = self.value;
-            self.term.calculate_scalar(magnitude)
+            self.unit.calculate_scalar(magnitude)
         } else {
-            self.value * self.term.scalar()
+            self.value * self.unit.scalar()
         }
     }
 
     /// This magnitude is the Measurement's value combined with any magnitude
-    /// that is part of the Term's designation.
+    /// that is part of the Unit's designation.
     ///
     /// # Examples
     ///
     /// ```
-    /// use wu::Measurement;
+    /// use wise_units::Measurement;
     ///
     /// let five_meters = Measurement::new(5.0, "m");
     /// assert_eq!(five_meters.magnitude(), 5.0);
@@ -132,49 +132,49 @@ impl<'a> Measurement<'a> {
     pub fn magnitude(&self) -> f64 {
         if self.is_special() {
             let scalar = self.scalar();
-            self.term.calculate_magnitude(scalar)
+            self.unit.calculate_magnitude(scalar)
         } else {
-            self.value * self.term.magnitude()
+            self.value * self.unit.magnitude()
         }
     }
 
-    /// The Measurement's Term as a String.
+    /// The Measurement's Unit as a String.
     ///
     /// # Example
     ///
     /// ```
-    /// use wu::Measurement;
+    /// use wise_units::Measurement;
     /// let km = Measurement::new(1.0, "km");
-    /// assert_eq!(km.term_string(), "km".to_string());
+    /// assert_eq!(km.unit_string(), "km".to_string());
     /// ```
     ///
-    pub fn term_string(&self) -> String { self.term.to_string() }
+    pub fn unit_string(&self) -> String { self.unit.to_string() }
 
-    fn converted_scalar(&self, other_term: &Term) -> f64 {
-        if self.is_special() && other_term.is_special() {
-            let ts = self.term.calculate_scalar(self.value);
-            other_term.calculate_magnitude(ts)
+    fn converted_scalar(&self, other_unit: &Unit) -> f64 {
+        if self.is_special() && other_unit.is_special() {
+            let ts = self.unit.calculate_scalar(self.value);
+            other_unit.calculate_magnitude(ts)
         } else if self.is_special() {
-            self.term.calculate_scalar(self.value)
-        } else if other_term.is_special() {
-            other_term.calculate_magnitude(self.value)
+            self.unit.calculate_scalar(self.value)
+        } else if other_unit.is_special() {
+            other_unit.calculate_magnitude(self.value)
         } else {
-            self.scalar() / other_term.scalar()
+            self.scalar() / other_unit.scalar()
         }
     }
 }
 
-impl<'a> fmt::Display for Measurement<'a> {
+impl fmt::Display for Measurement {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}{}", self.value, self.term)
+        write!(f, "{}{}", self.value, self.unit)
     }
 }
 
-impl<'a> PartialEq for Measurement<'a> {
+impl PartialEq for Measurement {
     fn eq(&self, other: &Self) -> bool {
-        let my_term_string = self.term_string();
+        let my_unit_string = self.unit_string();
 
-        if let Ok(converted_other) = other.convert_to(&my_term_string) {
+        if let Ok(converted_other) = other.convert_to(&my_unit_string) {
             self.to_string() == converted_other.to_string()
         } else {
             false
@@ -182,26 +182,26 @@ impl<'a> PartialEq for Measurement<'a> {
     }
 }
 
-impl<'a> Add for Measurement<'a> {
-    type Output = Measurement<'a>;
+impl Add for Measurement {
+    type Output = Measurement;
 
-    fn add(self, other: Measurement) -> Measurement<'a> {
-        let unit = self.term_string();
+    fn add(self, other: Measurement) -> Measurement {
+        let unit = self.unit_string();
         let other_converted = other.convert_to(&unit).unwrap();
         let new_value = self.value + other_converted.value;
 
         Measurement {
             value: new_value,
-            term: self.term
+            unit: self.unit
         }
     }
 }
 
-impl<'pointer, 'term> Add for &'pointer Measurement<'term> {
-    type Output = Measurement<'term>;
+impl<'pointer> Add for &'pointer Measurement {
+    type Output = Measurement;
 
-    fn add(self, other: &'pointer Measurement) -> Measurement<'term> {
-        let unit = self.term_string();
+    fn add(self, other: &'pointer Measurement) -> Measurement {
+        let unit = self.unit_string();
         let other_converted = other.convert_to(&unit).unwrap();
         let new_value = self.value + other_converted.value;
 
@@ -209,32 +209,32 @@ impl<'pointer, 'term> Add for &'pointer Measurement<'term> {
     }
 }
 
-impl<'a> Div for Measurement<'a> {
-    type Output = Measurement<'a>;
+impl Div for Measurement {
+    type Output = Measurement;
 
-    fn div(self, other: Measurement) -> Measurement<'a> {
-        let unit = self.term_string();
+    fn div(self, other: Measurement) -> Measurement {
+        let unit = self.unit_string();
         let other_converted = other.convert_to(&unit).unwrap();
         let new_value = self.value / other_converted.value;
 
         Measurement {
             value: new_value,
-            term: self.term
+            unit: self.unit
         }
     }
 }
 
-impl<'a> Mul for Measurement<'a> {
-    type Output = Measurement<'a>;
+impl Mul for Measurement {
+    type Output = Measurement;
 
-    fn mul(self, other: Measurement) -> Measurement<'a> {
-        let unit = self.term_string();
+    fn mul(self, other: Measurement) -> Measurement {
+        let unit = self.unit_string();
         let other_converted = other.convert_to(&unit).unwrap();
         let new_value = self.value * other_converted.value;
 
         Measurement {
             value: new_value,
-            term: self.term
+            unit: self.unit
         }
     }
 }
@@ -242,20 +242,21 @@ impl<'a> Mul for Measurement<'a> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use parser_terms::{Annotatable, Component, SimpleUnit, Term};
-    use unit::base::Meter;
+    use atom::Atom;
+    use term::Term;
+    use unit::Unit;
 
     #[test]
     fn validate_new() {
         let m = Measurement::new(1.0, "m");
 
+        let expected_unit = Unit {
+            expression: "m".to_string(),
+            terms: vec![Term::new(Some(Atom::Meter), None)],
+        };
+
         assert_eq!(m.value, 1.0);
-        assert_eq!(
-            m.term,
-            Term::Basic(Component::Annotatable(
-                    Annotatable::Unit(SimpleUnit::Atom(Box::new(Meter))),
-                    ))
-            );
+        assert_eq!(m.unit, expected_unit);
     }
 
     #[test]

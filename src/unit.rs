@@ -1,13 +1,13 @@
 use composition::Composition;
-use summary_term::SummaryTerm;
+use term::Term;
 
 #[derive(Debug, PartialEq)]
-pub struct SummaryUnit {
+pub struct Unit {
     pub expression: String,
-    pub terms: Vec<SummaryTerm>,
+    pub terms: Vec<Term>,
 }
 
-impl SummaryUnit {
+impl Unit {
     pub fn is_special(&self) -> bool {
         self.terms.iter().any(|ref term| {
             match term.atom {
@@ -58,7 +58,7 @@ impl SummaryUnit {
         composition
     }
 
-    pub fn is_compatible_with(&self, other_unit: &SummaryUnit) -> bool {
+    pub fn is_compatible_with(&self, other_unit: &Unit) -> bool {
         let me = self.composition();
         let other_comp = other_unit.composition();
 

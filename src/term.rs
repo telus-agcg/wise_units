@@ -1,18 +1,19 @@
+use atom::Atom;
 use composition::Composition;
-use parser_terms::{PrefixContainer, UnitContainer};
+use prefix::Prefix;
 
 #[derive(Debug, PartialEq)]
-pub struct SummaryTerm {
-    pub atom: Option<UnitContainer>,
-    pub prefix: Option<PrefixContainer>,
+pub struct Term {
+    pub atom: Option<Atom>,
+    pub prefix: Option<Prefix>,
     pub factor: u32,
     pub exponent: i32,
     pub annotation: Option<String>
 }
 
-impl SummaryTerm {
-    pub fn new(atom: Option<UnitContainer>, prefix: Option<PrefixContainer>) -> Self {
-        SummaryTerm {
+impl Term {
+    pub fn new(atom: Option<Atom>, prefix: Option<Prefix>) -> Self {
+        Term {
             atom: atom,
             prefix: prefix,
             factor: 1,
