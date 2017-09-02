@@ -2,17 +2,25 @@
 #[macro_use]
 extern crate pretty_assertions;
 
-extern crate lalrpop_util;
+#[macro_use]
+extern crate pest;
 
-pub mod classification;
-pub mod dimension;
+#[macro_use]
+extern crate pest_derive;
+
+pub mod definition;
 pub mod measurement;
-pub mod parser_terms;
-pub mod parser;
-pub mod property;
-pub mod summary_unit;
 pub mod unit;
 
 mod atom;
+mod composition;
+mod classification;
+mod dimension;
+mod interpreter;
+mod prefix;
+mod property;
+mod unit_parser;
 mod term;
+mod unit_type;
+
 pub use measurement::Measurement;

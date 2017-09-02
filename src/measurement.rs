@@ -1,7 +1,6 @@
-use parser::parse_MainTerm;
-use parser_terms::Term;
 use std::fmt;
 use std::ops::{Add, Div, Mul};
+use interpreter::Interpreter;
 use unit::Unit;
 
 /// A Measurement is the prime interface for consumers of the library. It
@@ -54,6 +53,9 @@ impl Measurement {
     ///
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, ConversionError> {
         let my_unit = &self.unit;
+
+        let mut interpreter = Interpreter;
+        let other_unit = interpreter.interpret(expression);
 
         if !my_unit.is_compatible_with(&other_unit) {
             return Err(ConversionError::IncompatibleUnitTypes);

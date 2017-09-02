@@ -1,4 +1,5 @@
 use composition::Composition;
+use std::fmt;
 use term::Term;
 
 #[derive(Debug, PartialEq)]
@@ -63,6 +64,12 @@ impl Unit {
         let other_comp = other_unit.composition();
 
         me == other_comp
+    }
+}
+
+impl fmt::Display for Unit {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.expression)
     }
 }
 
