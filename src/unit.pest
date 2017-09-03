@@ -37,78 +37,78 @@ prefixed_atom = { prefix_symbol ~ atom_symbol }
 // Atoms
 atom_symbol = {
     // Put base units first since they're most used.
-    candela                 |
-        coulomb                 |
-        gram                    |
-        kelvin                  |
-        meter                   |
-        radian                  |
-        second                  |
+    candela     |
+        coulomb |
+        gram    |
+        kelvin  |
+        meter   |
+        radian  |
+        second  |
 
         // Derived units
-        acre_us                 |
-        are                     |
-        degree_celsius          |
-        degree_fahrenheit       |
-        degree_reaumur          |
-        degree                  |
-        fluid_ounce_us          |
-        foot_international      |
-        foot_us                 |
-        gill_us                 |
-        inch_international      |
-        liter                   |
-        mole                    |
-        parts_per_billion       |
-        parts_per_million       |
-        parts_per_thousand      |
-        percent                 |
-        ph                      |
-        pint_us                 |
-        prism_diopter           |
-        quart_us                |
-        queen_annes_wine_gallon |
-        rod_us                  |
-        the_number_pi           |
+        acre_us                                   |
+        are                                       |
+        degree_celsius                            |
+        degree_fahrenheit                         |
+        degree_reaumur                            |
+        degree                                    |
+        fluid_ounce_us                            |
+        foot_international                        |
+        foot_us                                   |
+        gill_us                                   |
+        inch_international                        |
+        liter                                     |
+        mole                                      |
+        parts_per_billion                         |
+        parts_per_million                         |
+        parts_per_thousand                        |
+        percent                                   |
+        ph                                        |
+        pint_us                                   |
+        prism_diopter                             |
+        quart_us                                  |
+        queen_annes_wine_gallon                   |
+        rod_us                                    |
+        the_number_pi                             |
         the_number_ten_for_arbitrary_powers_caret |
         the_number_ten_for_arbitrary_powers_star
 }
 
-// Order: primary_code | secondary_code | print_symbol (if any) | name(s)
-candela                 = { "cd" | "CD" | "candela" }
-coulomb                 = { "C" | "Coulomb" }
-gram                    = { "g" | "G" | "gram" }
-kelvin                  = { "K" | "Kelvin" }
-meter                   = { "m" | "M" | "meter" }
-radian                  = { "rad" | "RAD" | "radian" }
-second                  = { "s" | "S" | "second" }
+// Order:   name        | primary_code | secondary_code | print_symbol (if any)
+candela = { "candela"   | "cd"           | "CD" }
+coulomb = { "Coulomb"   | "C" }
+gram    = { "gram"      | "g"            | "G" }
+kelvin  = { "Kelvin"    | "K" }
+meter   = { "meter"     | "m"            | "M" }
+radian  = { "radian"    | "rad"          | "RAD" }
+second  = { "second"    | "s"            | "S" }
 
-acre_us                 = { "[acr_us]" | "[ACR_US]" | "acre" }
-are                     = { "ar" | "AR" | "a" | "are" }
-degree                  = { "deg" | "DEG" | "°" | "degree" }
-degree_celsius          = { "Cel" | "CEL" | "°C" | "degree Celsius" }
-degree_fahrenheit       = { "[degF]" | "[DEGF]" | "°F" | "degree Fahrenheit" }
-degree_reaumur          = { "[degRe]" | "°Ré" | "degree Réaumur" }
-fluid_ounce_us          = { "[foz_us]" | "[FOZ_US]" | "oz fl" | "fluid ounce" }
-foot_international      = { "[ft_i]" | "[FT_I]" | "ft" | "foot" }
-foot_us                 = { "[ft_us]" | "[FT_US]" | "ft(us)" }
-gill_us                 = { "[gil_us]" | "[GIL_US]" | "gill" }
-inch_international      = { "[in_i]" | "[IN_I]" | "in" | "inch" }
-liter                   = { "l" | "L" | "liter" }
-mole                    = { "mol" | "MOL" | "mole" }
-parts_per_billion       = { "[ppb]" | "[PPB]" | "ppb" | "parts per billion" }
-parts_per_million       = { "[ppm]" | "[PPM]" | "ppm" | "parts per million" }
-parts_per_thousand      = { "[ppth]" | "[PPTH]" | "ppt" | "parts per thousand" }
-percent                 = { "%" | "percent" }
-ph                      = { "[pH]" | "[PH]" | "pH" }
-pint_us                 = { "[pt_us]" | "[PT_US]" | "pint" }
-prism_diopter           = { "[p'diop]" | "[P'DIOP]" | "PD" | "prism diopter" }
-quart_us                = { "[qt_us]"| "[QT_US]" | "quart" }
-queen_annes_wine_gallon = { "[gal_us]" | "[GAL_US]" | "Queen Anne's wine gallon" }
-rod_us                  = { "[rd_us]" | "[RD_US]" | "rod" }
-the_number_pi           = { "[pi]" | "[PI]" | "π" | "the number pi" }
+acre_us                                   = { "acre"                     | "[acr_us]"  | "[ACR_US]" }
+are                                       = { "are"                      | "ar"        | "AR"         | "a" }
+degree                                    = { "degree"                   | "deg"       | "DEG"        | "°" }
+degree_celsius                            = { "degree Celsius"           | "Cel"       | "CEL"        | "°C" }
+degree_fahrenheit                         = { "degree Fahrenheit"        | "[degF]"    | "[DEGF]"     | "°F" }
+degree_reaumur                            = { "degree Réaumur"           | "[degRe]"   | "°Ré" }
+fluid_ounce_us                            = { "fluid ounce"              | "[foz_us]"  | "[FOZ_US]"   | "oz fl" }
+foot_international                        = { "foot"                     | "[ft_i]"    | "[FT_I]"     | "ft" }
+foot_us                                   = { "ft(us)"                   | "[ft_us]"   | "[FT_US]" }
+gill_us                                   = { "gill"                     | "[gil_us]"  | "[GIL_US]" }
+inch_international                        = { "inch"                     | "[in_i]"    | "[IN_I]"     | "in" }
+liter                                     = { "liter"                    | "l"         | "L" }
+mole                                      = { "mole"                     | "mol"       | "MOL" }
+parts_per_billion                         = { "parts per billion"        | "[ppb]"     | "[PPB]"      | "ppb" }
+parts_per_million                         = { "parts per million"        | "[ppm]"     | "[PPM]"      | "ppm" }
+parts_per_thousand                        = { "parts per thousand"       | "[ppth]"    | "[PPTH]"     | "ppt" }
+percent                                   = { "%"                        | "percent" }
+ph                                        = { "pH"                       | "[pH]"      | "[PH]" }
+pint_us                                   = { "pint"                     | "[pt_us]"   | "[PT_US]" }
+prism_diopter                             = { "prism diopter"            | "[p'diop]"  | "[P'DIOP]"   | "PD" }
+quart_us                                  = { "quart"                    | "[qt_us]"   | "[QT_US]" }
+queen_annes_wine_gallon                   = { "Queen Anne's wine gallon" | "[gal_us]"  | "[GAL_US]" }
+rod_us                                    = { "rod"                      | "[rd_us]"   | "[RD_US]" }
+the_number_pi                             = { "the number pi"            | "[pi]"      | "[PI]"       | "π" }
 the_number_ten_for_arbitrary_powers_caret = { "10^" }
-the_number_ten_for_arbitrary_powers_star = { "10*" }
+the_number_ten_for_arbitrary_powers_star  = { "10*" }
 
 // Prefixes
 prefix_symbol = {
@@ -136,28 +136,28 @@ prefix_symbol = {
         yotta
 }
 
-atto  = { "a"  | "A"       | "atto" }
-centi = { "c"  | "C"       | "centi" }
-deci  = { "d"  | "D"       | "deci" }
-deka  = { "da" | "DA"      | "deka" }
-exa   = { "E"  | "EX"      | "exa" }
-femto = { "f"  | "F"       | "femto" }
-gibi  = { "Gi" | "GIB"     | "gibi" }
-giga  = { "G"  | "GA"      | "giga" }
-hecto = { "h"  | "H"       | "hecto" }
-kilo  = { "k"  | "K"       | "kilo" }
-mebi  = { "Mi" | "MIB"     | "mebi" }
-mega  = { "M"  | "MA"      | "mega" }
-micro = { "u"  | "U"       | "µ" | "micro" }
-milli = { "m"  | "milli" }
-nano  = { "n"  | "N"       | "nano" }
-peta  = { "P"  | "PT"      | "peta" }
-tebi  = { "Ti" | "TIB"     | "tebi" }
-tera  = { "T"  | "TR"      | "tera" }
-yocto = { "y"  | "YO"      | "yocto" }
-yotta = { "Y"  | "YA"      | "yotta" }
-zepto = { "z"  | "ZO"      | "zepto" }
-zetta = { "Z"  | "ZA"      | "zetta" }
+atto  = { "atto"  | "a"   | "A" }
+centi = { "centi" | "c"   | "C" }
+deci  = { "deci"  | "d"   | "D" }
+deka  = { "deka"  | "da"  | "DA" }
+exa   = { "exa"   | "E"   | "EX" }
+femto = { "femto" | "f"   | "F" }
+gibi  = { "gibi"  | "Gi"  | "GIB" }
+giga  = { "giga"  | "G"   | "GA" }
+hecto = { "hecto" | "h"   | "H" }
+kilo  = { "kilo"  | "k"   | "K" }
+mebi  = { "mebi"  | "Mi"  | "MIB" }
+mega  = { "mega"  | "M"   | "MA" }
+micro = { "micro" | "u"   | "U"     | "µ" }
+milli = { "milli" | "m" }
+nano  = { "nano"  | "n"   | "N" }
+peta  = { "peta"  | "P"   | "PT" }
+tebi  = { "tebi"  | "Ti"  | "TIB" }
+tera  = { "tera"  | "T"   | "TR" }
+yocto = { "yocto" | "y"   | "YO" }
+yotta = { "yotta" | "Y"   | "YA" }
+zepto = { "zepto" | "z"   | "ZO" }
+zetta = { "zetta" | "Z"   | "ZA" }
 
 
 exponent = { sign? ~ digits }

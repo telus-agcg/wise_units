@@ -12,7 +12,10 @@ pub struct Interpreter;
 impl Interpreter {
     pub fn interpret<'a>(&mut self, expression: &'a str) -> Unit {
         let pairs = UnitParser::parse_str(Rule::term, expression)
-            .unwrap_or_else(|e| panic!("{}", e));
+            .unwrap_or_else(|e| {
+                println!("Parsing error: {}", e);
+                panic!("Unable to parse \"{}\"", expression);
+            });
         let terms = self.visit_with_pairs(pairs);
 
         Unit {
@@ -155,23 +158,11 @@ impl Interpreter {
         prefixed_atom
     }
 
-    fn visit_digits<I: Input>(&mut self, pair: Pair<Rule, I>) -> String {
-        let mut digits = String::new();
+    fn visit_digits<I: Input>(&mut self, pair: Pair<Rule, I>) -> i32 {
+        let span = pair.into_span();
+        let string = span.as_str();
 
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::digit => {
-                    digits.push_str(inner_pair.into_span().as_str());
-                },
-                Rule::digits => {
-                    let new_digits = self.visit_digits(inner_pair);
-                    digits.push_str(&new_digits);
-                },
-                _ => unreachable!()
-            }
-        }
-
-        digits
+        string.parse::<i32>().unwrap_or_else(|e| panic!("{}", e))
     }
 
     fn visit_exponent<I: Input>(&mut self, pair: Pair<Rule, I>) -> i32 {
@@ -183,7 +174,7 @@ impl Interpreter {
                     e = 123;
                 },
                 Rule::digits => {
-                    e = self.visit_digits(inner_pair).parse::<i32>().unwrap();
+                    e = self.visit_digits(inner_pair);
                 },
                 _ => unreachable!()
             }
@@ -260,8 +251,56 @@ impl Interpreter {
         annotatable
     }
 
-    // fn visit_annotated_annotatable<I: Input>(&mut self, pair: Pair<Rule, I>) -> (Option<Prefix>, Option<Atom>, i32, String) {
-    // }
+    fn visit_annotation_string<I: Input>(&mut self, pair: Pair<Rule, I>) -> (Option<String>) {
+        let mut annotation_string = None;
+
+        for inner_pair in pair.into_inner() {
+            match inner_pair.as_rule() {
+                Rule::annotation_string => {
+                    annotation_string = Some(inner_pair.into_span().as_str().to_string())
+                },
+                _ => unreachable!(),
+            }
+        }
+
+        annotation_string
+    }
+
+    fn visit_annotation<I: Input>(&mut self, pair: Pair<Rule, I>) -> (Option<String>) {
+        let mut annotation = None;
+
+        for inner_pair in pair.into_inner() {
+            match inner_pair.as_rule() {
+                Rule::annotation_string => {
+                    annotation = self.visit_annotation_string(inner_pair);
+                },
+                _ => unreachable!(),
+            }
+        }
+
+        annotation
+    }
+
+    fn visit_annotated_annotatable<I: Input>(&mut self, pair: Pair<Rule, I>) -> (Option<Prefix>, Option<Atom>, i32, Option<String>) {
+        let mut annotated_annotatable = (None, None, 1, None);
+
+        for inner_pair in pair.into_inner() {
+            match inner_pair.as_rule() {
+                Rule::annotatable => {
+                    let (prefix, atom, exponent) = self.visit_annotatable(inner_pair);
+                    annotated_annotatable.0 = prefix;
+                    annotated_annotatable.1 = atom;
+                    annotated_annotatable.2 = exponent;
+                },
+                Rule::annotation => {
+                    annotated_annotatable.3 = self.visit_annotation(inner_pair);
+                },
+                _ => unreachable!(),
+            }
+        }
+
+        annotated_annotatable
+    }
 
     fn visit_factor<I: Input>(&mut self, pair: Pair<Rule, I>) -> u32 {
         let mut factor = 0;
@@ -269,14 +308,13 @@ impl Interpreter {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::digits => {
-                    let digits = self.visit_digits(inner_pair);
-                    factor = digits.parse::<u32>().unwrap();
+                    factor = self.visit_digits(inner_pair);
                 },
                 _ => unreachable!()
             }
         }
 
-        factor
+        factor as u32
     }
 
     fn visit_basic_component<I: Input>(&mut self, pair: Pair<Rule, I>) -> Vec<Term> {
@@ -287,7 +325,11 @@ impl Interpreter {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::annotated_annotatable => {
-                    println!("supp");
+                    let (prefix, atom, exponent, annotation) = self.visit_annotated_annotatable(inner_pair);
+                    term.prefix = prefix;
+                    term.atom = atom;
+                    term.exponent = exponent;
+                    term.annotation = annotation;
                 },
                 Rule::annotatable => {
                     let (prefix, atom, exponent) = self.visit_annotatable(inner_pair);
