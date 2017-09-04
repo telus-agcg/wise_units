@@ -171,10 +171,17 @@ impl Interpreter {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::sign => {
-                    e = 123;
+                    let span = inner_pair.into_span();
+                    let string = span.as_str();
+
+                    match string {
+                        "+" => {},
+                        "-" => { e = -e; },
+                        _ => unreachable!()
+                    }
                 },
                 Rule::digits => {
-                    e = self.visit_digits(inner_pair);
+                    e *= self.visit_digits(inner_pair);
                 },
                 _ => unreachable!()
             }
@@ -423,13 +430,14 @@ impl Interpreter {
                     terms.append(&mut new_terms);
                 },
                 Rule::term => {
-                    let mut new_terms = self.visit_with_pairs(inner_pair.into_inner());
+                  let mut new_terms = self.visit_with_pairs(inner_pair.into_inner());
 
-                    for new_term in &mut new_terms {
-                        new_term.exponent = -new_term.exponent;
-                    }
+                  for new_term in &mut new_terms {
+                    new_term.exponent = -new_term.exponent;
+                    println!("visit_slash_term/term: {}", new_term.exponent);
+                  }
 
-                    terms.append(&mut new_terms);
+                  terms.append(&mut new_terms);
                 },
                 _ => unreachable!()
             }
@@ -477,6 +485,37 @@ mod tests {
     use super::*;
     use atom::Atom;
     use unit::Unit;
+
+    #[test]
+    fn validate_exponent() {
+        let mut i = Interpreter;
+        let actual = i.interpret("m-3");
+
+        let mut expected_term = Term::new(Some(Atom::Meter), None);
+        expected_term.exponent = -3;
+
+        let expected = Unit {
+            expression: "m-3".to_string(),
+            terms: vec![expected_term]
+        };
+
+        assert_eq!(actual, expected);
+
+        let actual = i.interpret("km2/m-3");
+
+        let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
+        term1.exponent = 2;
+
+        let mut term2 = Term::new(Some(Atom::Meter), None);
+        term2.exponent = 3;
+
+        let expected = Unit {
+            expression: "km2/m-3".to_string(),
+            terms: vec![term1, term2]
+        };
+
+        assert_eq!(actual, expected);
+    }
 
     #[test]
     fn validate_interpret_basic_term() {

@@ -164,6 +164,6 @@ exponent = { sign? ~ digits }
 factor = { digits }
 digits = @{ digit+ }
 digit = { '0'..'9' }
-sign = { "+" | "-" }
+sign = { "-" | "+" }
 
 // vim:ft=rust
