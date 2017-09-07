@@ -253,7 +253,6 @@ mod tests {
         let m = Measurement::new(1.0, "m");
 
         let expected_unit = Unit {
-            expression: "m".to_string(),
             terms: vec![Term::new(Some(Atom::Meter), None)],
         };
 

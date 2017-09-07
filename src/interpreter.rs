@@ -19,7 +19,6 @@ impl Interpreter {
         let terms = self.visit_with_pairs(pairs);
 
         Unit {
-            expression: expression.to_string(),
             terms: terms
         }
     }
@@ -434,7 +433,6 @@ impl Interpreter {
 
                   for new_term in &mut new_terms {
                     new_term.exponent = -new_term.exponent;
-                    println!("visit_slash_term/term: {}", new_term.exponent);
                   }
 
                   terms.append(&mut new_terms);
@@ -495,7 +493,6 @@ mod tests {
         expected_term.exponent = -3;
 
         let expected = Unit {
-            expression: "m-3".to_string(),
             terms: vec![expected_term]
         };
 
@@ -510,7 +507,6 @@ mod tests {
         term2.exponent = 3;
 
         let expected = Unit {
-            expression: "km2/m-3".to_string(),
             terms: vec![term1, term2]
         };
 
@@ -522,7 +518,6 @@ mod tests {
         let mut i = Interpreter;
         let actual = i.interpret("m");
         let expected = Unit {
-            expression: "m".to_string(),
             terms: vec![Term::new(Some(Atom::Meter), None)]
         };
 
@@ -537,7 +532,6 @@ mod tests {
         expected_term.exponent = 2;
 
         let expected = Unit {
-            expression: "m2".to_string(),
             terms: vec![expected_term]
         };
 
@@ -550,7 +544,6 @@ mod tests {
         let actual = i.interpret("km");
 
         let expected = Unit {
-            expression: "km".to_string(),
             terms: vec![Term::new(Some(Atom::Meter), Some(Prefix::Kilo))]
         };
 
@@ -566,7 +559,6 @@ mod tests {
         expected_term.factor = 2;
 
         let expected = Unit {
-            expression: "2m".to_string(),
             terms: vec![expected_term]
         };
 
@@ -583,7 +575,6 @@ mod tests {
 
 
         let expected = Unit {
-            expression: "m/s".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -599,7 +590,6 @@ mod tests {
         expected_denominator_term.exponent = -1;
 
         let expected = Unit {
-            expression: "km/s".to_string(),
             terms: vec![expected_numerator_term, expected_denominator_term]
         };
 
@@ -615,7 +605,6 @@ mod tests {
         expected_denominator_term.exponent = -1;
 
         let expected = Unit {
-            expression: "m/ks".to_string(),
             terms: vec![expected_numerator_term, expected_denominator_term]
         };
 
@@ -632,7 +621,6 @@ mod tests {
         second_term.exponent = -1;
 
         let expected = Unit {
-            expression: "m2/s".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -648,7 +636,6 @@ mod tests {
         second_term.exponent = -2;
 
         let expected = Unit {
-            expression: "m/s2".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -665,7 +652,6 @@ mod tests {
         second_term.exponent = -2;
 
         let expected = Unit {
-            expression: "m2/s2".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -682,7 +668,6 @@ mod tests {
         second_term.exponent = -1;
 
         let expected = Unit {
-            expression: "2m/s".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -699,7 +684,6 @@ mod tests {
         second_term.factor = 2;
 
         let expected = Unit {
-            expression: "m/2s".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -714,7 +698,6 @@ mod tests {
         let second_term = Term::new(Some(Atom::Second), None);
 
         let expected = Unit {
-            expression: "m.s".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -730,7 +713,6 @@ mod tests {
         let second_term = Term::new(Some(Atom::Second), None);
 
         let expected = Unit {
-            expression: "m2.s".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -746,7 +728,6 @@ mod tests {
         second_term.exponent = 2;
 
         let expected = Unit {
-            expression: "m.s2".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -764,7 +745,6 @@ mod tests {
 
 
         let expected = Unit {
-            expression: "m2.s2".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -780,7 +760,6 @@ mod tests {
         let second_term = Term::new(Some(Atom::Second), None);
 
         let expected = Unit {
-            expression: "2m.s".to_string(),
             terms: vec![meter_term, second_term]
         };
 
@@ -796,7 +775,6 @@ mod tests {
         second_term.factor = 2;
 
         let expected = Unit {
-            expression: "m.2s".to_string(),
             terms: vec![meter_term, second_term]
         };
 

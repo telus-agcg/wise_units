@@ -4,7 +4,6 @@ use term::Term;
 
 #[derive(Debug, PartialEq)]
 pub struct Unit {
-    pub expression: String,
     pub terms: Vec<Term>,
 }
 
