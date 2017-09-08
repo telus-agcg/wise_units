@@ -478,6 +478,56 @@ mod tests {
     }
 
     #[test]
+    fn validate_interpret_term_with_dot_term_then_slash_component() {
+        parses_to! {
+            parser: UnitParser,
+            input: "[acr_us].[in_i]/[acr_us]",
+            rule: Rule::term,
+            tokens: [
+                term(0, 24, [
+                    dot_term(0, 24, [
+                        component(0, 8, [
+                            basic_component(0, 8, [
+                                annotatable(0, 8, [
+                                    simple_unit(0, 8, [
+                                        atom_symbol(0, 8, [acre_us(0, 8)])
+                                    ])
+                               ])
+                            ])
+                        ]),
+                        term(9, 24, [
+                             slash_term(9, 24, [
+                                component(9, 15, [
+                                    basic_component(9, 15, [
+                                        annotatable(9, 15, [
+                                            simple_unit(9, 15, [
+                                                atom_symbol(9, 15, [inch_international(9, 15)])
+                                            ])
+                                        ])
+                                    ])
+                                ]),
+                                term(16, 24, [
+                                    basic_term(16, 24, [
+                                        component(16, 24, [
+                                            basic_component(16, 24, [
+                                                annotatable(16, 24, [
+                                                    simple_unit(16, 24, [
+                                                        atom_symbol(16, 24, [acre_us(16, 24)])
+                                                    ])
+                                                ])
+                                            ])
+                                        ])
+                                    ])
+                                ])
+                             ])
+                        ])
+                   ])
+                ])
+            ]
+        };
+    }
+
+    #[test]
     fn validate_main_term() {
         let pairs = UnitParser::parse_str(Rule::main_term, "km/s");
         assert!(pairs.is_ok());

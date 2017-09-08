@@ -27,27 +27,26 @@ impl Interpreter {
         let mut terms: Vec<Term> = vec![];
 
         for pair in pairs {
-            for inner_pair in pair.into_inner() {
-                let mut other_terms = match inner_pair.as_rule() {
-                    Rule::term => self.visit_with_pairs(inner_pair.into_inner()),
-                    Rule::dot_term => self.visit_term(inner_pair),
-                    Rule::slash_term => self.visit_term(inner_pair),
-                    Rule::basic_term => self.visit_term(inner_pair),
-                    Rule::component => self.visit_component(inner_pair),
-                    Rule::annotatable => {
-                        let (prefix, atom, exponent) = self.visit_annotatable(inner_pair);
-                        let mut term = Term::new(atom, prefix);
-                        term.exponent = exponent;
-                        vec![term]
-                    },
-                    _ => {
-                        println!("visit_with_pairs: unreachable rule: {:?}", inner_pair);
-                        unreachable!()
-                    },
-                };
+            let mut other_terms = match pair.as_rule() {
+                Rule::term => self.visit_with_pairs(pair.into_inner()),
+                Rule::dot_term => self.visit_dot_term(pair),
+                Rule::slash_term => self.visit_slash_term(pair),
+                Rule::basic_term => self.visit_basic_term(pair),
+                Rule::component => self.visit_component(pair),
+                Rule::annotatable => {
+                    let (prefix, atom, exponent) = self.visit_annotatable(pair);
+                    let mut term = Term::new(atom, prefix);
+                    term.exponent = exponent;
+
+                    vec![term]
+                },
+                _ => {
+                    println!("visit_with_pairs: unreachable rule: {:?}", pair);
+                    unreachable!()
+                },
+            };
 
                 terms.append(&mut other_terms);
-            }
         }
 
         terms
@@ -776,6 +775,22 @@ mod tests {
 
         let expected = Unit {
             terms: vec![meter_term, second_term]
+        };
+
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn validate_interpret_term_with_dot_term_then_slash_component() {
+        let mut i = Interpreter;
+        let actual = i.interpret("[acr_us].[in_i]/[acr_us]");
+        let acre_term = Term::new(Some(Atom::AcreUS), None);
+        let inch_term = Term::new(Some(Atom::InchInternational), None);
+        let mut acre2_term = Term::new(Some(Atom::AcreUS), None);
+        acre2_term.exponent = -1;
+
+        let expected = Unit {
+            terms: vec![acre_term, inch_term, acre2_term]
         };
 
         assert_eq!(actual, expected);
