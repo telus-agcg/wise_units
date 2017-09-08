@@ -142,6 +142,13 @@ mod tests {
             rule: Rule::atom_symbol,
             tokens: [atom_symbol(0, 1, [kelvin(0, 1)])]
         }
+
+        parses_to! {
+            parser: UnitParser,
+            input: "10*",
+            rule: Rule::atom_symbol,
+            tokens: [atom_symbol(0, 3, [the_number_ten_for_arbitrary_powers_star(0, 3)])]
+        }
     }
 
     #[test]

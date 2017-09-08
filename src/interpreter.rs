@@ -65,6 +65,7 @@ impl Interpreter {
                 Rule::meter => Atom::Meter,
                 Rule::radian => Atom::Radian,
                 Rule::second => Atom::Second,
+                Rule::the_unity => Atom::TheUnity,
 
                 // Derived units last.
                 Rule::acre_us => Atom::AcreUS,

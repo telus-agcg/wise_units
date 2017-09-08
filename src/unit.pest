@@ -37,7 +37,7 @@ prefixed_atom = { prefix_symbol ~ atom_symbol }
 // Atoms
 atom_symbol = {
     // Put base units first since they're most used.
-    candela     |
+    candela |
         coulomb |
         gram    |
         kelvin  |
@@ -71,7 +71,8 @@ atom_symbol = {
         rod_us                                    |
         the_number_pi                             |
         the_number_ten_for_arbitrary_powers_caret |
-        the_number_ten_for_arbitrary_powers_star
+        the_number_ten_for_arbitrary_powers_star  |
+        the_unity
 }
 
 // Order:   name        | primary_code | secondary_code | print_symbol (if any)
@@ -82,6 +83,7 @@ kelvin  = { "Kelvin"    | "K" }
 meter   = { "meter"     | "m"            | "M" }
 radian  = { "radian"    | "rad"          | "RAD" }
 second  = { "second"    | "s"            | "S" }
+the_unity = { "1" }
 
 acre_us                                   = { "acre"                     | "[acr_us]"  | "[ACR_US]" }
 are                                       = { "are"                      | "ar"        | "AR"         | "a" }
