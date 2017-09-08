@@ -1,3 +1,4 @@
+use composition::Composition;
 use std::fmt;
 use std::ops::{Add, Div, Mul};
 use interpreter::Interpreter;
@@ -140,6 +141,26 @@ impl Measurement {
         }
     }
 
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        let unit_comp = Composition::new_unity();
+
+        if self.unit.composition() == unit_comp {
+            self.value
+        } else {
+            self.unit.calculate_scalar(magnitude)
+        }
+    }
+
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        let unit_comp = Composition::new_unity();
+
+        if self.unit.composition() == unit_comp {
+            self.value
+        } else {
+            self.unit.calculate_magnitude(scalar)
+        }
+    }
+
     /// The Measurement's Unit as a String.
     ///
     /// # Example
@@ -273,7 +294,7 @@ mod tests {
 
     #[test]
     fn validate_display() {
-        assert_eq!(Measurement::new(1.0, "m").to_string(), "1m".to_string());
+        assert_eq!(Measurement::new(1.0, "meter").to_string(), "1m".to_string());
         assert_eq!(Measurement::new(1.1, "m").to_string(), "1.1m".to_string());
         assert_eq!(Measurement::new(1.1, "m2").to_string(), "1.1m2".to_string());
         assert_eq!(

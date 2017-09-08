@@ -1,10 +1,9 @@
 use composition::Composition;
 use classification::Classification;
-use definition::Definition;
 use dimension::Dimension;
+use measurement::Measurement;
 use property::Property;
 use unit_type::UnitType;
-
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Atom {
@@ -86,7 +85,7 @@ impl Atom {
         }
     }
 
-    pub fn definition(&self) -> Definition {
+    pub fn definition(&self) -> Measurement {
         match *self {
             Atom::TheUnity |
                 Atom::Candela |
@@ -95,36 +94,36 @@ impl Atom {
                 Atom::Kelvin |
                 Atom::Meter |
                 Atom::Radian |
-                Atom::Second => Definition::new(1.0, "1"),
-            Atom::AcreUS => Definition::new(160.0, "[rd_us]2"),
-            Atom::Are => Definition::new(100.0, "m2"),
-            Atom::Degree => Definition::new(2.0, "[pi].rad/360"),
-            Atom::DegreeCelsius => Definition::new(1.0, "cel(1.0 K)"),
-            Atom::DegreeFahrenheit => Definition::new(1.0, "degf(5.0 K/9)"),
-            Atom::DegreeReaumur => Definition::new(1.0, "degre(5.0 K/4)"),
-            Atom::FluidOunceUS => Definition::new(1.0, "[gil_us]/4"),
-            Atom::FootInternational => Definition::new(12.0, "[in_i]"),
-            Atom::FootUS => Definition::new(1200.0, "m/3937"),
-            Atom::GillUS => Definition::new(1.0, "[pt_us]/4"),
-            Atom::InchInternational => Definition::new(254e-2, "cm"),
-            Atom::Liter => Definition::new(1.0, "dm3"),
-            Atom::Mole => Definition::new(6.0221367, "10*23"),
-            Atom::PartsPerBillion => Definition::new(1.0, "10*-9"),
-            Atom::PartsPerMillion => Definition::new(1.0, "10*-6"),
-            Atom::PartsPerThousand => Definition::new(1.0, "10*-3"),
-            Atom::Percent => Definition::new(1.0, "10*-2"),
-            Atom::PH => Definition::new(1.0, "ph(1.0 mol/l)"),
-            Atom::PintUS => Definition::new(1.0, "[qt_us]/2"),
-            Atom::PrismDiopter => Definition::new(1.0, "100tan(1.0 rad)"),
-            Atom::QuartUS => Definition::new(1.0, "[gal_us]/4"),
-            Atom::QueenAnnesWineGallon => Definition::new(231.0, "[in_i]3"),
-            Atom::RodUS => Definition::new(16.6, "[ft_us]"),
-            Atom::TheNumberPi => Definition::new(
+                Atom::Second => Measurement::new(1.0, "1"),
+            Atom::AcreUS => Measurement::new(160.0, "[rd_us]2"),
+            Atom::Are => Measurement::new(100.0, "m2"),
+            Atom::Degree => Measurement::new(2.0, "[pi].rad/360"),
+            Atom::DegreeCelsius => Measurement::new(1.0, "cel(1.0 K)"),
+            Atom::DegreeFahrenheit => Measurement::new(1.0, "degf(5.0 K/9)"),
+            Atom::DegreeReaumur => Measurement::new(1.0, "degre(5.0 K/4)"),
+            Atom::FluidOunceUS => Measurement::new(1.0, "[gil_us]/4"),
+            Atom::FootInternational => Measurement::new(12.0, "[in_i]"),
+            Atom::FootUS => Measurement::new(1200.0, "m/3937"),
+            Atom::GillUS => Measurement::new(1.0, "[pt_us]/4"),
+            Atom::InchInternational => Measurement::new(254e-2, "cm"),
+            Atom::Liter => Measurement::new(1.0, "dm3"),
+            Atom::Mole => Measurement::new(6.0221367, "10*23"),
+            Atom::PartsPerBillion => Measurement::new(1.0, "10*-9"),
+            Atom::PartsPerMillion => Measurement::new(1.0, "10*-6"),
+            Atom::PartsPerThousand => Measurement::new(1.0, "10*-3"),
+            Atom::Percent => Measurement::new(1.0, "10*-2"),
+            Atom::PH => Measurement::new(1.0, "ph(1.0 mol/l)"),
+            Atom::PintUS => Measurement::new(1.0, "[qt_us]/2"),
+            Atom::PrismDiopter => Measurement::new(1.0, "100tan(1.0 rad)"),
+            Atom::QuartUS => Measurement::new(1.0, "[gal_us]/4"),
+            Atom::QueenAnnesWineGallon => Measurement::new(231.0, "[in_i]3"),
+            Atom::RodUS => Measurement::new(16.6, "[ft_us]"),
+            Atom::TheNumberPi => Measurement::new(
                 3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3,
                 "1",
              ),
-            Atom::TheNumberTenForArbitraryPowersCaret => Definition::new(10.0, "1"),
-            Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
+            Atom::TheNumberTenForArbitraryPowersCaret => Measurement::new(10.0, "1"),
+            Atom::TheNumberTenForArbitraryPowersStar => Measurement::new(10.0, "1"),
         }
     }
 
