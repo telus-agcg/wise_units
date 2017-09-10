@@ -389,7 +389,7 @@ impl Atom {
     pub fn scalar(&self) -> f64 {
         match *self {
             Atom::TheUnity => 1.0,
-            _ => self.definition().scalar(),
+            _ => self.calculate_scalar(1.0),
         }
     }
 

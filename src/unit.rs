@@ -17,6 +17,7 @@ impl Unit {
         })
     }
 
+    /// Use this when calculating the scalar when *not* part of a Measurable.
     pub fn scalar(&self) -> f64 {
         self.calculate_scalar(1.0)
     }
@@ -25,6 +26,7 @@ impl Unit {
         self.calculate_magnitude(self.scalar())
     }
 
+    /// Use this when calculating the scalar when it's part of a Measurable.
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         self.terms.iter()
             .fold(1.0, |acc, ref term| {
