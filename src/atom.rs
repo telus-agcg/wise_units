@@ -397,7 +397,7 @@ impl Atom {
     pub fn magnitude(&self) -> f64 {
         match *self {
             Atom::TheUnity => 1.0,
-            _ => self.definition().magnitude(),
+            _ => self.calculate_magnitude(self.scalar())
         }
     }
 
@@ -419,7 +419,7 @@ impl Atom {
             Atom::DegreeReaumur => (value - 273.15) * 0.8,
             Atom::PH => -value.log10(),
             Atom::PrismDiopter => (value / 100.0).atan(),
-            _ => self.definition().calculate_magnitude(value)
+            _ => 1.0,
         }
     }
 }
@@ -1049,6 +1049,172 @@ mod tests {
     fn validate_scalar_the_number_pi() {
         let atom = Atom::TheNumberPi;
         assert_floats_eq(atom.scalar(), 3.141_592_653_589_793);
+    }
+
+    #[test]
+    fn validate_magnitude_base_atoms() {
+        let base_atoms = vec![
+            Atom::TheUnity,
+            Atom::Candela,
+            Atom::Coulomb,
+            Atom::Gram,
+            Atom::Kelvin,
+            Atom::Meter,
+            Atom::Radian,
+            Atom::Second,
+        ];
+        for base_atom in base_atoms {
+            assert_eq!(base_atom.magnitude(), 1.0);
+        }
+    }
+
+    #[test]
+    fn validate_magnitude_acre_us() {
+        let atom = Atom::AcreUS;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_are() {
+        let atom = Atom::Are;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_degree() {
+        let atom = Atom::Degree;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_magnitude_degree_celsius() {
+        let atom = Atom::DegreeCelsius;
+        assert_floats_eq(atom.magnitude(), 0.0174_532_925_199_432_95);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_magnitude_degree_fahrenheit() {
+        let atom = Atom::DegreeFahrenheit;
+        assert_floats_eq(atom.magnitude(), 0.0174_532_925_199_432_95);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_magnitude_degree_reaumur() {
+        let atom = Atom::DegreeReaumur;
+        assert_floats_eq(atom.magnitude(), 0.0174_532_925_199_432_95);
+    }
+
+    #[test]
+    fn validate_magnitude_fluid_ounce_us() {
+        let atom = Atom::FluidOunceUS;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_foot_international() {
+        let atom = Atom::FootInternational;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_foot_us() {
+        let atom = Atom::FootUS;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_gill_us() {
+        let atom = Atom::GillUS;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_inch_international() {
+        let atom = Atom::InchInternational;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_liter() {
+        let atom = Atom::Liter;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_mole() {
+        let atom = Atom::Mole;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_parts_per_billion() {
+        let atom = Atom::PartsPerBillion;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_parts_per_million() {
+        let atom = Atom::PartsPerMillion;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_parts_per_thousand() {
+        let atom = Atom::PartsPerThousand;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_percent() {
+        let atom = Atom::Percent;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_magnitude_ph() {
+        let atom = Atom::PH;
+        assert_floats_eq(atom.magnitude(), 1.0e-09);
+    }
+
+    #[test]
+    fn validate_magnitude_pint_us() {
+        let atom = Atom::PintUS;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_magnitude_prism_diopter() {
+        let atom = Atom::PrismDiopter;
+        assert_floats_eq(atom.magnitude(), 0.000_473_176_473);
+    }
+
+    #[test]
+    fn validate_magnitude_quart_us() {
+        let atom = Atom::QuartUS;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_queen_annes_wine_gallon() {
+        let atom = Atom::QueenAnnesWineGallon;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_rod_us() {
+        let atom = Atom::RodUS;
+        assert_floats_eq(atom.magnitude(), 1.0);
+    }
+
+    #[test]
+    fn validate_magnitude_the_number_pi() {
+        let atom = Atom::TheNumberPi;
+        assert_floats_eq(atom.magnitude(), 1.0);
     }
 
     #[test]
