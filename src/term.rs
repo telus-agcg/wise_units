@@ -79,11 +79,9 @@ impl Term {
 
                 for (dim, exp) in atom_composition.into_iter() {
                     let atom_exp = if exp == 1 { 0 } else { exp };
-                    println!("atom_exp: {}", &atom_exp);
                     new_composition.insert(dim, atom_exp + self.exponent);
                 }
 
-                println!("new composition: {:?}", &new_composition);
                 Some(new_composition)
             },
             None => None

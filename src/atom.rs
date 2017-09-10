@@ -1,7 +1,8 @@
 use composition::Composition;
 use classification::Classification;
 use dimension::Dimension;
-use measurement::Measurement;
+use measurable::Measurable;
+use definition::Definition;
 use property::Property;
 use unit_type::UnitType;
 
@@ -48,36 +49,36 @@ pub enum Atom {
 impl Atom {
     pub fn classification(&self) -> Classification {
         match *self {
-            Atom::TheUnity |
-                Atom::Candela |
-                Atom::Coulomb |
+            Atom::TheUnity          |
+                Atom::Candela       |
+                Atom::Coulomb       |
                 Atom::DegreeCelsius |
-                Atom::Gram |
-                Atom::Kelvin |
-                Atom::Meter |
-                Atom::Radian |
-                Atom::Second |
+                Atom::Gram          |
+                Atom::Kelvin        |
+                Atom::Meter         |
+                Atom::Radian        |
+                Atom::Second        |
                 Atom::Mole => Classification::SI,
-            Atom::AcreUS |
+            Atom::AcreUS     |
                 Atom::FootUS |
                 Atom::RodUS => Classification::USLengths,
-            Atom::Are |
+            Atom::Are        |
                 Atom::Degree |
                 Atom::Liter => Classification::ISO1000,
             Atom::DegreeFahrenheit |
                 Atom::DegreeReaumur => Classification::Heat,
             Atom::FluidOunceUS |
-                Atom::GillUS |
-                Atom::PintUS |
-                Atom::QuartUS |
+                Atom::GillUS   |
+                Atom::PintUS   |
+                Atom::QuartUS  |
                 Atom::QueenAnnesWineGallon => Classification::USVolumes,
             Atom::InchInternational |
                 Atom::FootInternational => Classification::Intcust,
-            Atom::PartsPerBillion |
-                Atom::PartsPerMillion |
-                Atom::PartsPerThousand |
-                Atom::Percent |
-                Atom::TheNumberPi |
+            Atom::PartsPerBillion                         |
+                Atom::PartsPerMillion                     |
+                Atom::PartsPerThousand                    |
+                Atom::Percent                             |
+                Atom::TheNumberPi                         |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => Classification::Dimless,
             Atom::PH => Classification::Chemical,
@@ -85,45 +86,45 @@ impl Atom {
         }
     }
 
-    pub fn definition(&self) -> Measurement {
+    pub fn definition(&self) -> Definition {
         match *self {
-            Atom::TheUnity |
+            Atom::TheUnity    |
                 Atom::Candela |
                 Atom::Coulomb |
-                Atom::Gram |
-                Atom::Kelvin |
-                Atom::Meter |
-                Atom::Radian |
-                Atom::Second => Measurement::new(1.0, "1"),
-            Atom::AcreUS => Measurement::new(160.0, "[rd_us]2"),
-            Atom::Are => Measurement::new(100.0, "m2"),
-            Atom::Degree => Measurement::new(2.0, "[pi].rad/360"),
-            Atom::DegreeCelsius => Measurement::new(1.0, "cel(1.0 K)"),
-            Atom::DegreeFahrenheit => Measurement::new(1.0, "degf(5.0 K/9)"),
-            Atom::DegreeReaumur => Measurement::new(1.0, "degre(5.0 K/4)"),
-            Atom::FluidOunceUS => Measurement::new(1.0, "[gil_us]/4"),
-            Atom::FootInternational => Measurement::new(12.0, "[in_i]"),
-            Atom::FootUS => Measurement::new(1200.0, "m/3937"),
-            Atom::GillUS => Measurement::new(1.0, "[pt_us]/4"),
-            Atom::InchInternational => Measurement::new(254e-2, "cm"),
-            Atom::Liter => Measurement::new(1.0, "dm3"),
-            Atom::Mole => Measurement::new(6.0221367, "10*23"),
-            Atom::PartsPerBillion => Measurement::new(1.0, "10*-9"),
-            Atom::PartsPerMillion => Measurement::new(1.0, "10*-6"),
-            Atom::PartsPerThousand => Measurement::new(1.0, "10*-3"),
-            Atom::Percent => Measurement::new(1.0, "10*-2"),
-            Atom::PH => Measurement::new(1.0, "ph(1.0 mol/l)"),
-            Atom::PintUS => Measurement::new(1.0, "[qt_us]/2"),
-            Atom::PrismDiopter => Measurement::new(1.0, "100tan(1.0 rad)"),
-            Atom::QuartUS => Measurement::new(1.0, "[gal_us]/4"),
-            Atom::QueenAnnesWineGallon => Measurement::new(231.0, "[in_i]3"),
-            Atom::RodUS => Measurement::new(16.6, "[ft_us]"),
-            Atom::TheNumberPi => Measurement::new(
+                Atom::Gram    |
+                Atom::Kelvin  |
+                Atom::Meter   |
+                Atom::Radian  |
+                Atom::Second => Definition::new(1.0, "1"),
+            Atom::AcreUS => Definition::new(160.0, "[rd_us]2"),
+            Atom::Are => Definition::new(100.0, "m2"),
+            Atom::Degree => Definition::new(2.0, "[pi].rad/360"),
+            Atom::DegreeCelsius => Definition::new(1.0, "cel(1.0 K)"),
+            Atom::DegreeFahrenheit => Definition::new(1.0, "degf(5.0 K/9)"),
+            Atom::DegreeReaumur => Definition::new(1.0, "degre(5.0 K/4)"),
+            Atom::FluidOunceUS => Definition::new(1.0, "[gil_us]/4"),
+            Atom::FootInternational => Definition::new(12.0, "[in_i]"),
+            Atom::FootUS => Definition::new(1200.0, "m/3937"),
+            Atom::GillUS => Definition::new(1.0, "[pt_us]/4"),
+            Atom::InchInternational => Definition::new(254.0e-2, "cm"),
+            Atom::Liter => Definition::new(1.0, "dm3"),
+            Atom::Mole => Definition::new(6.0221367, "10*23"),
+            Atom::PartsPerBillion => Definition::new(1.0, "10*-9"),
+            Atom::PartsPerMillion => Definition::new(1.0, "10*-6"),
+            Atom::PartsPerThousand => Definition::new(1.0, "10*-3"),
+            Atom::Percent => Definition::new(1.0, "10*-2"),
+            Atom::PH => Definition::new(1.0, "ph(1.0 mol/l)"),
+            Atom::PintUS => Definition::new(1.0, "[qt_us]/2"),
+            Atom::PrismDiopter => Definition::new(1.0, "100tan(1.0 rad)"),
+            Atom::QuartUS => Definition::new(1.0, "[gal_us]/4"),
+            Atom::QueenAnnesWineGallon => Definition::new(231.0, "[in_i]3"),
+            Atom::RodUS => Definition::new(16.6, "[ft_us]"),
+            Atom::TheNumberPi => Definition::new(
                 3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3,
                 "1",
              ),
-            Atom::TheNumberTenForArbitraryPowersCaret => Measurement::new(10.0, "1"),
-            Atom::TheNumberTenForArbitraryPowersStar => Measurement::new(10.0, "1"),
+            Atom::TheNumberTenForArbitraryPowersCaret => Definition::new(10.0, "1"),
+            Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
         }
     }
 
@@ -167,17 +168,17 @@ impl Atom {
 
     pub fn is_metric(&self) -> bool {
         match *self {
-            Atom::TheUnity |
-                Atom::Candela |
-                Atom::Coulomb |
+            Atom::TheUnity          |
+                Atom::Candela       |
+                Atom::Coulomb       |
                 Atom::DegreeCelsius |
-                Atom::Gram |
-                Atom::Kelvin |
-                Atom::Meter |
-                Atom::Radian |
-                Atom::Second |
-                Atom::Are |
-                Atom::Liter |
+                Atom::Gram          |
+                Atom::Kelvin        |
+                Atom::Meter         |
+                Atom::Radian        |
+                Atom::Second        |
+                Atom::Are           |
+                Atom::Liter         |
                 Atom::Mole => true,
             _ => false
         }
@@ -185,10 +186,10 @@ impl Atom {
 
     pub fn is_special(&self) -> bool {
         match *self {
-            Atom::DegreeCelsius |
+            Atom::DegreeCelsius        |
                 Atom::DegreeFahrenheit |
-                Atom::DegreeReaumur |
-                Atom::PH |
+                Atom::DegreeReaumur    |
+                Atom::PH               |
                 Atom::PrismDiopter => true,
             _ => false
         }
@@ -278,15 +279,15 @@ impl Atom {
 
     pub fn print_symbol(&self) -> Option<String> {
         match *self {
-            Atom::Candela |
+            Atom::Candela     |
                 Atom::Coulomb |
-                Atom::Gram |
-                Atom::Kelvin |
-                Atom::Meter |
-                Atom::Radian |
-                Atom::Second |
-                Atom::Liter |
-                Atom::Mole |
+                Atom::Gram    |
+                Atom::Kelvin  |
+                Atom::Meter   |
+                Atom::Radian  |
+                Atom::Second  |
+                Atom::Liter   |
+                Atom::Mole    |
                 Atom::Percent => Some(self.primary_code()),
             Atom::Are => Some("a".to_string()),
             Atom::Degree => Some("°".to_string()),
@@ -314,13 +315,13 @@ impl Atom {
             Atom::Candela => Property::LuminousIntensity,
             Atom::Coulomb => Property::ElectricCharge,
             Atom::Gram => Property::Mass,
-            Atom::Kelvin |
-                Atom::DegreeCelsius |
+            Atom::Kelvin               |
+                Atom::DegreeCelsius    |
                 Atom::DegreeFahrenheit |
                 Atom::DegreeReaumur => Property::Temperature,
-            Atom::Meter |
+            Atom::Meter                 |
                 Atom::FootInternational |
-                Atom::FootUS |
+                Atom::FootUS            |
                 Atom::InchInternational |
                 Atom::RodUS => Property::Length,
             Atom::Radian |
@@ -329,17 +330,17 @@ impl Atom {
             Atom::AcreUS |
                 Atom::Are => Property::Area,
             Atom::FluidOunceUS |
-                Atom::GillUS |
-                Atom::PintUS |
-                Atom::QuartUS |
+                Atom::GillUS   |
+                Atom::PintUS   |
+                Atom::QuartUS  |
                 Atom::QueenAnnesWineGallon => Property::FluidVolume,
             Atom::Liter => Property::Volume,
             Atom::Mole => Property::AmountOfSubstance,
-            Atom::PartsPerBillion |
+            Atom::PartsPerBillion     |
                 Atom::PartsPerMillion |
                 Atom::PartsPerThousand => Property::Fraction,
-            Atom::Percent |
-                Atom::TheNumberPi |
+            Atom::Percent                                 |
+                Atom::TheNumberPi                         |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar=> Property::Number,
             Atom::PH => Property::Acidity,
@@ -381,22 +382,23 @@ impl Atom {
             Atom::QueenAnnesWineGallon => "[GAL_US]".to_string(),
             Atom::RodUS => "[RD_US]".to_string(),
             Atom::TheNumberPi => "[PI]".to_string(),
-            Atom::DegreeReaumur |
-                Atom::Percent |
+            Atom::DegreeReaumur                           |
+                Atom::Percent                             |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => self.primary_code(),
         }
     }
 
+    // TODO: is this necessary?
     pub fn unit_type(&self) -> UnitType {
         match *self {
-            Atom::TheUnity |
+            Atom::TheUnity    |
                 Atom::Candela |
                 Atom::Coulomb |
-                Atom::Gram |
-                Atom::Kelvin |
-                Atom::Meter |
-                Atom::Radian |
+                Atom::Gram    |
+                Atom::Kelvin  |
+                Atom::Meter   |
+                Atom::Radian  |
                 Atom::Second => UnitType::Base,
             _ => UnitType::Derived,
         }
@@ -416,25 +418,28 @@ impl Atom {
         }
     }
 
-    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
+    pub fn calculate_scalar(&self, value: f64) -> f64 {
         match *self {
-            Atom::DegreeCelsius => magnitude + 273.15,
-            Atom::DegreeFahrenheit => 5.0 / 9.0 * (magnitude + 459.67),
-            Atom::DegreeReaumur => (magnitude / 0.8) + 273.15,
-            Atom::PH => 10.0_f64.powf(-magnitude),
-            Atom::PrismDiopter => magnitude.tan() * 100.0,
-            _ => self.definition().calculate_scalar(magnitude)
+            Atom::DegreeCelsius => value + 273.15,
+            Atom::DegreeFahrenheit => 5.0 / 9.0 * (value + 459.67),
+            Atom::DegreeReaumur => (value / 0.8) + 273.15,
+            Atom::PH => 10.0_f64.powf(-value),
+            Atom::PrismDiopter => value.tan() * 100.0,
+            _ => self.definition().calculate_scalar(value)
         }
     }
 
-    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
+    pub fn calculate_magnitude(&self, value: f64) -> f64 {
         match *self {
-            Atom::DegreeCelsius => scalar - 273.15,
-            Atom::DegreeFahrenheit => 9.0 * scalar / 5.0 - 459.67,
-            Atom::DegreeReaumur => (scalar - 273.15) * 0.8,
-            Atom::PH => -scalar.log10(),
-            Atom::PrismDiopter => (scalar / 100.0).atan(),
-            _ => self.definition().calculate_magnitude(scalar)
+            Atom::DegreeCelsius => value - 273.15,
+            Atom::DegreeFahrenheit => 9.0 * value / 5.0 - 459.67,
+            Atom::DegreeReaumur => (value - 273.15) * 0.8,
+            Atom::PH => -value.log10(),
+            Atom::PrismDiopter => (value / 100.0).atan(),
+            _ => self.definition().calculate_magnitude(value)
+        }
+    }
+}
         }
     }
 }
@@ -443,6 +448,8 @@ impl Atom {
 mod tests {
     use super::Atom;
     use classification::Classification;
+    use composition::Composition;
+    use dimension::Dimension;
     use prefix::Prefix;
     use term::Term;
 
@@ -857,5 +864,181 @@ mod tests {
 
         assert_eq!(atom.definition().value, 10.0);
         assert_eq!(atom.definition().unit.terms, vec![term]);
+    }
+    #[test]
+    fn validate_scalar_base_atoms() {
+        let base_atoms = vec![
+            Atom::TheUnity,
+            Atom::Candela,
+            Atom::Coulomb,
+            Atom::Gram,
+            Atom::Kelvin,
+            Atom::Meter,
+            Atom::Radian,
+            Atom::Second,
+        ];
+        for base_atom in base_atoms {
+            assert_eq!(base_atom.scalar(), 1.0);
+        }
+    }
+
+    #[test]
+    fn validate_scalar_acre_us() {
+        let atom = Atom::AcreUS;
+        assert_floats_eq(atom.scalar(), 4046.872_609_874_252);
+    }
+
+    #[test]
+    fn validate_scalar_are() {
+        let atom = Atom::Are;
+        assert_floats_eq(atom.scalar(), 100.0);
+    }
+
+    #[test]
+    fn validate_scalar_degree() {
+        let atom = Atom::Degree;
+        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_scalar_degree_celsius() {
+        let atom = Atom::DegreeCelsius;
+        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_scalar_degree_fahrenheit() {
+        let atom = Atom::DegreeFahrenheit;
+        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_scalar_degree_reaumur() {
+        let atom = Atom::DegreeReaumur;
+        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+    }
+
+    #[test]
+    fn validate_scalar_fluid_ounce_us() {
+        let atom = Atom::FluidOunceUS;
+        assert_floats_eq(atom.scalar(), 2.95735295625e-05);
+    }
+
+    #[test]
+    fn validate_scalar_foot_international() {
+        let atom = Atom::FootInternational;
+        assert_floats_eq(atom.scalar(), 0.3048);
+    }
+
+    #[test]
+    fn validate_scalar_foot_us() {
+        let atom = Atom::FootUS;
+        assert_floats_eq(atom.scalar(), 0.304_800_609_601_219_2);
+    }
+
+    #[test]
+    fn validate_scalar_gill_us() {
+        let atom = Atom::GillUS;
+        assert_floats_eq(atom.scalar(), 0.000_118_294_118_25);
+    }
+
+    #[test]
+    fn validate_scalar_inch_international() {
+        let atom = Atom::InchInternational;
+        assert_floats_eq(atom.scalar(), 0.0254);
+    }
+
+    #[test]
+    fn validate_scalar_liter() {
+        let atom = Atom::Liter;
+        assert_floats_eq(atom.scalar(), 0.001);
+    }
+
+    #[test]
+    fn validate_scalar_mole() {
+        let atom = Atom::Mole;
+        assert_floats_eq(atom.scalar(), 6.0221367e+23);
+    }
+
+    #[test]
+    fn validate_scalar_parts_per_billion() {
+        let atom = Atom::PartsPerBillion;
+        assert_floats_eq(atom.scalar(), 1.0e-09);
+    }
+
+    #[test]
+    fn validate_scalar_parts_per_million() {
+        let atom = Atom::PartsPerMillion;
+        assert_floats_eq(atom.scalar(), 1.0e-06);
+    }
+
+    #[test]
+    fn validate_scalar_parts_per_thousand() {
+        let atom = Atom::PartsPerThousand;
+        assert_floats_eq(atom.scalar(), 1.0e-03);
+    }
+
+    #[test]
+    fn validate_scalar_percent() {
+        let atom = Atom::Percent;
+        assert_floats_eq(atom.scalar(), 0.01);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_scalar_ph() {
+        let atom = Atom::PH;
+        assert_floats_eq(atom.scalar(), 1.0e-09);
+    }
+
+    #[test]
+    fn validate_scalar_pint_us() {
+        let atom = Atom::PintUS;
+        assert_floats_eq(atom.scalar(), 0.000_473_176_473);
+    }
+
+    #[test]
+    #[ignore(reason = "Special Units")]
+    fn validate_scalar_prism_diopter() {
+        let atom = Atom::PrismDiopter;
+        assert_floats_eq(atom.scalar(), 0.000_473_176_473);
+    }
+
+    #[test]
+    fn validate_scalar_quart_us() {
+        let atom = Atom::QuartUS;
+        assert_floats_eq(atom.scalar(), 0.000_946_352_946);
+    }
+
+    #[test]
+    fn validate_scalar_queen_annes_wine_gallon() {
+        let atom = Atom::QueenAnnesWineGallon;
+        assert_floats_eq(atom.scalar(), 0.003_785_411_784);
+    }
+
+    #[test]
+    fn validate_scalar_rod_us() {
+        let atom = Atom::RodUS;
+        assert_floats_eq(atom.scalar(), 5.029_210_058_420_117);
+    }
+
+    #[test]
+    fn validate_scalar_the_number_pi() {
+        let atom = Atom::TheNumberPi;
+        assert_floats_eq(atom.scalar(), 3.141_592_653_589_793);
+    }
+
+    // Because the precision of floats can vary, using assert_eq! with float values
+    // is not recommended; clippy's recommendation is to calculate the absolute
+    // value of the difference and make sure that it's under some acceptable
+    // threshold.
+    fn assert_floats_eq(actual: f64, expected: f64) {
+        let error_threshold = ::std::f32::EPSILON as f64;
+        let difference = actual - expected;
+
+        assert!(difference.abs() < error_threshold, "Actual: {}, Expected: {}, Diff: {}", actual, expected, difference);
     }
 }

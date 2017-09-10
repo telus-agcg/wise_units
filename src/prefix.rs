@@ -1,6 +1,7 @@
 use composition::Composition;
 use classification::Classification;
-use measurement::Measurement;
+use definition::Definition;
+use measurable::Measurable;
 use unit_type::UnitType;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -36,32 +37,32 @@ impl Prefix {
         Classification::SI
     }
 
-    pub fn definition(&self) -> Measurement {
+    pub fn definition(&self) -> Definition {
         match *self {
-            Prefix::Atto => Measurement::new(1e-18, "1"),
-            Prefix::Centi => Measurement::new(1e-2, "1"),
-            Prefix::Deci => Measurement::new(1e-1, "1"),
-            Prefix::Deka => Measurement::new(1e1, "1"),
-            Prefix::Exa => Measurement::new(1e18, "1"),
-            Prefix::Femto => Measurement::new(1e-15, "1"),
-            Prefix::Gibi => Measurement::new(1_073_741_824.0, "1"),
-            Prefix::Giga => Measurement::new(1e9, "1"),
-            Prefix::Hecto => Measurement::new(1e2, "1"),
-            Prefix::Kibi => Measurement::new(1024.0, "1"),
-            Prefix::Kilo => Measurement::new(1e3, "1"),
-            Prefix::Mebi => Measurement::new(1_048_576.0, "1"),
-            Prefix::Mega => Measurement::new(1e6, "1"),
-            Prefix::Micro => Measurement::new(1e-6, "1"),
-            Prefix::Milli => Measurement::new(1e-3, "1"),
-            Prefix::Nano => Measurement::new(1e-9, "1"),
-            Prefix::Peta => Measurement::new(1e15, "1"),
-            Prefix::Pico => Measurement::new(1e-12, "1"),
-            Prefix::Tebi => Measurement::new(1_099_511_627_776.0, "1"),
-            Prefix::Tera => Measurement::new(1e12, "1"),
-            Prefix::Yocto => Measurement::new(1e-24, "1"),
-            Prefix::Yotta => Measurement::new(1e24, "1"),
-            Prefix::Zepto => Measurement::new(1e-21, "1"),
-            Prefix::Zetta => Measurement::new(1e21, "1"),
+            Prefix::Atto => Definition::new(1e-18, "1"),
+            Prefix::Centi => Definition::new(1e-2, "1"),
+            Prefix::Deci => Definition::new(1e-1, "1"),
+            Prefix::Deka => Definition::new(1e1, "1"),
+            Prefix::Exa => Definition::new(1e18, "1"),
+            Prefix::Femto => Definition::new(1e-15, "1"),
+            Prefix::Gibi => Definition::new(1_073_741_824.0, "1"),
+            Prefix::Giga => Definition::new(1e9, "1"),
+            Prefix::Hecto => Definition::new(1e2, "1"),
+            Prefix::Kibi => Definition::new(1024.0, "1"),
+            Prefix::Kilo => Definition::new(1e3, "1"),
+            Prefix::Mebi => Definition::new(1_048_576.0, "1"),
+            Prefix::Mega => Definition::new(1e6, "1"),
+            Prefix::Micro => Definition::new(1e-6, "1"),
+            Prefix::Milli => Definition::new(1e-3, "1"),
+            Prefix::Nano => Definition::new(1e-9, "1"),
+            Prefix::Peta => Definition::new(1e15, "1"),
+            Prefix::Pico => Definition::new(1e-12, "1"),
+            Prefix::Tebi => Definition::new(1_099_511_627_776.0, "1"),
+            Prefix::Tera => Definition::new(1e12, "1"),
+            Prefix::Yocto => Definition::new(1e-24, "1"),
+            Prefix::Yotta => Definition::new(1e24, "1"),
+            Prefix::Zepto => Definition::new(1e-21, "1"),
+            Prefix::Zetta => Definition::new(1e21, "1"),
         }
     }
 

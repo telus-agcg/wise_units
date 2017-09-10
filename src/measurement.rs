@@ -1,4 +1,4 @@
-use composition::Composition;
+use measurable::Measurable;
 use std::fmt;
 use std::ops::{Add, Div, Mul};
 use interpreter::Interpreter;
@@ -36,6 +36,75 @@ pub enum ConversionError {
     IncompatibleUnitTypes,
 }
 
+impl Measurable for Measurement {
+    fn get_unit(&self) -> &Unit {
+        &self.unit
+    }
+
+    fn get_value(&self) -> f64 {
+        self.value
+    }
+
+    /// This scalar is the Measurement's value combined with any scalars that
+    /// are part of the Unit's designation.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use wise_units::Measurement;
+    ///
+    /// let five_meters = Measurement::new(5.0, "m");
+    /// assert_eq!(five_meters.scalar(), 5.0);
+    ///
+    /// let five_meters_squared = Measurement::new(5.0, "m2");
+    /// assert_eq!(five_meters_squared.scalar(), 5.0);
+    ///
+    /// let five_three_meters = Measurement::new(5.0, "[pi].m");
+    /// assert_eq!(five_three_meters.scalar(), 15.707_963_267_948_966);
+    ///
+    /// let sixty_five_f = Measurement::new(65.0, "[degF]");
+    /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
+    /// ```
+    ///
+    fn scalar(&self) -> f64 {
+        if self.is_special() {
+            self.unit.calculate_scalar(self.value)
+        } else {
+            self.value * self.unit.calculate_scalar(1.0)
+        }
+    }
+
+    /// This magnitude is the Measurement's value combined with any magnitude
+    /// that is part of the Unit's designation.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use wise_units::Measurement;
+    ///
+    /// let five_meters = Measurement::new(5.0, "m");
+    /// assert_eq!(five_meters.magnitude(), 5.0);
+    ///
+    /// let five_meters_squared = Measurement::new(5.0, "m2");
+    /// assert_eq!(five_meters_squared.magnitude(), 5.0);
+    ///
+    /// let five_three_meters = Measurement::new(5.0, "[pi].m");
+    /// assert_eq!(five_three_meters.magnitude(), 15.707_963_267_948_966);
+    ///
+    /// let sixty_five_f = Measurement::new(65.0, "[degF]");
+    /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
+    /// ```
+    ///
+    fn magnitude(&self) -> f64 {
+        if self.is_special() {
+            let scalar = self.scalar();
+            self.unit.calculate_magnitude(scalar)
+        } else {
+            self.value * self.unit.calculate_magnitude(1.0)
+        }
+    }
+}
+
 impl Measurement {
     pub fn new<'a>(value: f64, expression: &'a str) -> Self {
         // TODO: Decouple parser and interpreter
@@ -70,97 +139,6 @@ impl Measurement {
         Ok(new_measurement)
     }
 
-    /// Checks if the associated Unit is "special". "Special" units are ones
-    /// that must be converted using a function in combination with some other
-    /// non-special units. For example, Celsius is special since it must be
-    /// first converted to Kelvin before converting to the requested unit.
-    ///
-    pub fn is_special(&self) -> bool {
-        let ref u = self.unit;
-
-        u.is_special()
-    }
-
-    /// This scalar is the Measurement's value combined with any scalars that
-    /// are part of the Unit's designation.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use wise_units::Measurement;
-    ///
-    /// let five_meters = Measurement::new(5.0, "m");
-    /// assert_eq!(five_meters.scalar(), 5.0);
-    ///
-    /// let five_meters_squared = Measurement::new(5.0, "m2");
-    /// assert_eq!(five_meters_squared.scalar(), 5.0);
-    ///
-    /// let five_three_meters = Measurement::new(5.0, "[pi].m");
-    /// assert_eq!(five_three_meters.scalar(), 15.707_963_267_948_966);
-    ///
-    /// let sixty_five_f = Measurement::new(65.0, "[degF]");
-    /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
-    /// ```
-    ///
-    pub fn scalar(&self) -> f64 {
-        if self.is_special() {
-            let magnitude = self.value;
-            self.unit.calculate_scalar(magnitude)
-        } else {
-            self.value * self.unit.scalar()
-        }
-    }
-
-    /// This magnitude is the Measurement's value combined with any magnitude
-    /// that is part of the Unit's designation.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use wise_units::Measurement;
-    ///
-    /// let five_meters = Measurement::new(5.0, "m");
-    /// assert_eq!(five_meters.magnitude(), 5.0);
-    ///
-    /// let five_meters_squared = Measurement::new(5.0, "m2");
-    /// assert_eq!(five_meters_squared.magnitude(), 5.0);
-    ///
-    /// let five_three_meters = Measurement::new(5.0, "[pi].m");
-    /// assert_eq!(five_three_meters.magnitude(), 15.707_963_267_948_966);
-    ///
-    /// let sixty_five_f = Measurement::new(65.0, "[degF]");
-    /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
-    /// ```
-    ///
-    pub fn magnitude(&self) -> f64 {
-        if self.is_special() {
-            let scalar = self.scalar();
-            self.unit.calculate_magnitude(scalar)
-        } else {
-            self.value * self.unit.magnitude()
-        }
-    }
-
-    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
-        let unit_comp = Composition::new_unity();
-
-        if self.unit.composition() == unit_comp {
-            self.value
-        } else {
-            self.unit.calculate_scalar(magnitude)
-        }
-    }
-
-    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
-        let unit_comp = Composition::new_unity();
-
-        if self.unit.composition() == unit_comp {
-            self.value
-        } else {
-            self.unit.calculate_magnitude(scalar)
-        }
-    }
-
     /// The Measurement's Unit as a String.
     ///
     /// # Example
@@ -182,7 +160,7 @@ impl Measurement {
         } else if other_unit.is_special() {
             other_unit.calculate_magnitude(self.value)
         } else {
-            self.scalar() / other_unit.scalar()
+            self.scalar() / other_unit.calculate_scalar(1.0)
         }
     }
 }
@@ -283,13 +261,20 @@ mod tests {
 
     #[test]
     fn validate_convert_to() {
-        let m = Measurement::new(1.0, "m");
-        let other = m.convert_to("m").unwrap();
-        assert_eq!(other, m);
+        let meter = Measurement::new(1.0, "m");
+        let other = meter.convert_to("m").unwrap();
+        assert_eq!(other, meter);
 
-        let mut other = m.convert_to("m").unwrap();
+        let mut other = meter.convert_to("m").unwrap();
         other.value = 2.0;
-        assert_ne!(other, m);
+        assert_ne!(other, meter);
+        assert_eq!(other.unit.to_string(), "m".to_string());
+
+        // let other = meter.convert_to("km").unwrap();
+        // assert_eq!(other, meter);
+
+        // let mut other = meter.convert_to("m").unwrap();
+        // other.value = 2.0;
     }
 
     #[test]
