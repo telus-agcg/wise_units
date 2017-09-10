@@ -69,7 +69,7 @@ impl Term {
     pub fn composition(&self) -> Option<Composition> {
         match self.atom {
             Some(ref atom) => {
-                let atom_composition = atom.dimension();
+                let atom_composition = atom.composition();
 
                 if self.exponent == 1 {
                     return Some(atom_composition);

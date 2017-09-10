@@ -128,36 +128,18 @@ impl Atom {
         }
     }
 
-    pub fn dimension(&self) -> Composition {
+    pub fn composition(&self) -> Composition {
         match *self {
-            Atom::TheUnity |
-            Atom::Candela |
-            Atom::Coulomb |
-            Atom::Gram |
-            Atom::Kelvin |
-            Atom::Meter |
-            Atom::Radian |
-            Atom::Second => self.base_unit_composition(),
+            Atom::TheUnity => Composition::new_unity(),
+            Atom::Candela => Composition::new_from_values(Dimension::LuminousIntensity, 1),
+            Atom::Coulomb => Composition::new_from_values(Dimension::ElectricCharge, 1),
+            Atom::Gram => Composition::new_from_values(Dimension::Mass, 1),
+            Atom::Kelvin => Composition::new_from_values(Dimension::Temperature, 1),
+            Atom::Meter => Composition::new_from_values(Dimension::Length, 1),
+            Atom::Radian => Composition::new_from_values(Dimension::PlaneAngle, 1),
+            Atom::Second => Composition::new_from_values(Dimension::Time, 1),
             _ => self.definition().unit.composition()
         }
-    }
-
-    fn base_unit_composition(&self) -> Composition {
-        let mut composition = Composition::new();
-
-        match *self {
-            Atom::TheUnity => composition.insert(Dimension::None, 0),
-            Atom::Candela => composition.insert(Dimension::LuminousIntensity, 1),
-            Atom::Coulomb => composition.insert(Dimension::ElectricCharge, 1),
-            Atom::Gram => composition.insert(Dimension::Mass, 1),
-            Atom::Kelvin => composition.insert(Dimension::Temperature, 1),
-            Atom::Meter => composition.insert(Dimension::Length, 1),
-            Atom::Radian => composition.insert(Dimension::PlaneAngle, 1),
-            Atom::Second => composition.insert(Dimension::Time, 1),
-            _ => (),
-        }
-
-        composition
     }
 
     pub fn is_arbitrary(&self) -> bool {
@@ -865,6 +847,38 @@ mod tests {
         assert_eq!(atom.definition().value, 10.0);
         assert_eq!(atom.definition().unit.terms, vec![term]);
     }
+
+    #[test]
+    fn validate_composition() {
+        let atom = Atom::Candela;
+        let composition = Composition::new_from_values(Dimension::LuminousIntensity, 1);
+        assert_eq!(atom.composition(), composition);
+
+        let atom = Atom::Coulomb;
+        let composition = Composition::new_from_values(Dimension::ElectricCharge, 1);
+        assert_eq!(atom.composition(), composition);
+
+        let atom = Atom::Gram;
+        let composition = Composition::new_from_values(Dimension::Mass, 1);
+        assert_eq!(atom.composition(), composition);
+
+        let atom = Atom::Kelvin;
+        let composition = Composition::new_from_values(Dimension::Temperature, 1);
+        assert_eq!(atom.composition(), composition);
+
+        let atom = Atom::Meter;
+        let composition = Composition::new_from_values(Dimension::Length, 1);
+        assert_eq!(atom.composition(), composition);
+
+        let atom = Atom::Radian;
+        let composition = Composition::new_from_values(Dimension::PlaneAngle, 1);
+        assert_eq!(atom.composition(), composition);
+
+        let atom = Atom::Second;
+        let composition = Composition::new_from_values(Dimension::Time, 1);
+        assert_eq!(atom.composition(), composition);
+    }
+
     #[test]
     fn validate_scalar_base_atoms() {
         let base_atoms = vec![
