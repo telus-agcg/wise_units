@@ -119,7 +119,7 @@ impl Atom {
             Atom::PrismDiopter => Definition::new(1.0, "100tan(1.0 rad)"),
             Atom::QuartUS => Definition::new(1.0, "[gal_us]/4"),
             Atom::QueenAnnesWineGallon => Definition::new(231.0, "[in_i]3"),
-            Atom::RodUS => Definition::new(16.6, "[ft_us]"),
+            Atom::RodUS => Definition::new(16.5, "[ft_us]"),
             Atom::TheNumberPi => Definition::new(
                 3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3,
                 "1",
@@ -822,7 +822,7 @@ mod tests {
         let atom = Atom::RodUS;
         let term = Term::new(Some(Atom::FootUS), None);
 
-        assert_eq!(atom.definition().value, 16.6);
+        assert_eq!(atom.definition().value, 16.5);
         assert_eq!(atom.definition().unit.terms, vec![term]);
     }
 
