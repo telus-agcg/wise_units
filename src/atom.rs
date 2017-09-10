@@ -4,6 +4,7 @@ use dimension::Dimension;
 use measurable::Measurable;
 use definition::Definition;
 use property::Property;
+use std::fmt;
 use unit_type::UnitType;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -422,6 +423,11 @@ impl Atom {
         }
     }
 }
+
+impl fmt::Display for Atom {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            _ => write!(f, "{}", self.primary_code())
         }
     }
 }
@@ -1043,6 +1049,12 @@ mod tests {
     fn validate_scalar_the_number_pi() {
         let atom = Atom::TheNumberPi;
         assert_floats_eq(atom.scalar(), 3.141_592_653_589_793);
+    }
+
+    #[test]
+    fn validate_display() {
+        let atom = Atom::TheNumberPi;
+        assert_eq!(&atom.to_string(), "[pi]")
     }
 
     // Because the precision of floats can vary, using assert_eq! with float values

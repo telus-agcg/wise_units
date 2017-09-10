@@ -2,6 +2,7 @@ use composition::Composition;
 use classification::Classification;
 use definition::Definition;
 use measurable::Measurable;
+use std::fmt;
 use unit_type::UnitType;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -39,34 +40,34 @@ impl Prefix {
 
     pub fn definition(&self) -> Definition {
         match *self {
-            Prefix::Atto => Definition::new(1e-18, "1"),
-            Prefix::Centi => Definition::new(1e-2, "1"),
-            Prefix::Deci => Definition::new(1e-1, "1"),
-            Prefix::Deka => Definition::new(1e1, "1"),
-            Prefix::Exa => Definition::new(1e18, "1"),
-            Prefix::Femto => Definition::new(1e-15, "1"),
+            Prefix::Atto => Definition::new(1.0e-18, "1"),
+            Prefix::Centi => Definition::new(1.0e-2, "1"),
+            Prefix::Deci => Definition::new(1.0e-1, "1"),
+            Prefix::Deka => Definition::new(1.0e1, "1"),
+            Prefix::Exa => Definition::new(1.0e18, "1"),
+            Prefix::Femto => Definition::new(1.0e-15, "1"),
             Prefix::Gibi => Definition::new(1_073_741_824.0, "1"),
-            Prefix::Giga => Definition::new(1e9, "1"),
-            Prefix::Hecto => Definition::new(1e2, "1"),
+            Prefix::Giga => Definition::new(1.0e9, "1"),
+            Prefix::Hecto => Definition::new(1.0e2, "1"),
             Prefix::Kibi => Definition::new(1024.0, "1"),
-            Prefix::Kilo => Definition::new(1e3, "1"),
+            Prefix::Kilo => Definition::new(1.0e3, "1"),
             Prefix::Mebi => Definition::new(1_048_576.0, "1"),
-            Prefix::Mega => Definition::new(1e6, "1"),
-            Prefix::Micro => Definition::new(1e-6, "1"),
-            Prefix::Milli => Definition::new(1e-3, "1"),
-            Prefix::Nano => Definition::new(1e-9, "1"),
-            Prefix::Peta => Definition::new(1e15, "1"),
-            Prefix::Pico => Definition::new(1e-12, "1"),
+            Prefix::Mega => Definition::new(1.0e6, "1"),
+            Prefix::Micro => Definition::new(1.0e-6, "1"),
+            Prefix::Milli => Definition::new(1.0e-3, "1"),
+            Prefix::Nano => Definition::new(1.0e-9, "1"),
+            Prefix::Peta => Definition::new(1.0e15, "1"),
+            Prefix::Pico => Definition::new(1.0e-12, "1"),
             Prefix::Tebi => Definition::new(1_099_511_627_776.0, "1"),
-            Prefix::Tera => Definition::new(1e12, "1"),
-            Prefix::Yocto => Definition::new(1e-24, "1"),
-            Prefix::Yotta => Definition::new(1e24, "1"),
-            Prefix::Zepto => Definition::new(1e-21, "1"),
-            Prefix::Zetta => Definition::new(1e21, "1"),
+            Prefix::Tera => Definition::new(1.0e12, "1"),
+            Prefix::Yocto => Definition::new(1.0e-24, "1"),
+            Prefix::Yotta => Definition::new(1.0e24, "1"),
+            Prefix::Zepto => Definition::new(1.0e-21, "1"),
+            Prefix::Zetta => Definition::new(1.0e21, "1"),
         }
     }
 
-    pub fn dimension(&self) -> Composition {
+    pub fn composition(&self) -> Composition {
         self.definition().unit.composition()
     }
 
@@ -184,5 +185,67 @@ impl Prefix {
     // TODO: is ok?
     pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
         self.definition().calculate_magnitude(scalar)
+    }
+}
+
+impl fmt::Display for Prefix {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            _ => write!(f, "{}", self.primary_code())
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Prefix;
+    use composition::Composition;
+
+    #[test]
+    fn validate_scalar_atto() {
+        let prefix = Prefix::Atto;
+        assert_floats_eq(prefix.scalar(), 0.000_000_000_000_000_001);
+    }
+
+    #[test]
+    fn validate_scalar_centi() {
+        let prefix = Prefix::Centi;
+        assert_floats_eq(prefix.scalar(), 0.01);
+    }
+
+    #[test]
+    fn validate_scalar_deci() {
+        let prefix = Prefix::Deci;
+        assert_floats_eq(prefix.scalar(), 0.1);
+    }
+
+    #[test]
+    fn validate_scalar_deka() {
+        let prefix = Prefix::Deka;
+        assert_floats_eq(prefix.scalar(), 10.0);
+    }
+
+    #[test]
+    fn validate_composition() {
+        let prefix = Prefix::Kilo;
+        let composition = Composition::new_unity();
+        assert_eq!(prefix.composition(), composition)
+    }
+
+    #[test]
+    fn validate_display() {
+        let prefix = Prefix::Kilo;
+        assert_eq!(&prefix.to_string(), "k")
+    }
+
+    // Because the precision of floats can vary, using assert_eq! with float values
+    // is not recommended; clippy's recommendation is to calculate the absolute
+    // value of the difference and make sure that it's under some acceptable
+    // threshold.
+    fn assert_floats_eq(actual: f64, expected: f64) {
+        let error_threshold = ::std::f32::EPSILON as f64;
+        let difference = actual - expected;
+
+        assert!(difference.abs() < error_threshold, "Actual: {}, Expected: {}, Diff: {}", actual, expected, difference);
     }
 }
