@@ -21,10 +21,6 @@ impl Composition {
         c
     }
 
-    pub fn new_unity() -> Self {
-        Composition::new_from_values(Dimension::None, 0)
-    }
-
     pub fn insert(&mut self, dimension: Dimension, exponent: i32) {
         match self.0.entry(dimension) {
             Entry::Vacant(entry) => {
@@ -35,6 +31,10 @@ impl Composition {
             }
         }
     }
+
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
 }
 
 impl fmt::Display for Composition {
@@ -42,8 +42,6 @@ impl fmt::Display for Composition {
         let mut expressions = Vec::<String>::new();
 
         for (key, value) in self.0.iter() {
-            if *key == Dimension::None { continue; };
-
             expressions.push(format!("{}{}", key, value));
         }
 
@@ -94,7 +92,6 @@ mod tests {
         composition.insert(Dimension::Time, -4);
         composition.insert(Dimension::Length, -5);
         composition.insert(Dimension::PlaneAngle, -6);
-        composition.insert(Dimension::None, 0);
         composition.insert(Dimension::LuminousIntensity, -7);
         assert_eq!(composition.to_string().as_str(), "Q-3.L-5.F-7.M-1.A-6.C-2.T-4");
     }

@@ -1,7 +1,6 @@
 use composition::Composition;
 use classification::Classification;
 use dimension::Dimension;
-use measurable::Measurable;
 use definition::Definition;
 use property::Property;
 use std::fmt;
@@ -129,16 +128,16 @@ impl Atom {
         }
     }
 
-    pub fn composition(&self) -> Composition {
+    pub fn composition(&self) -> Option<Composition> {
         match *self {
-            Atom::TheUnity => Composition::new_unity(),
-            Atom::Candela => Composition::new_from_values(Dimension::LuminousIntensity, 1),
-            Atom::Coulomb => Composition::new_from_values(Dimension::ElectricCharge, 1),
-            Atom::Gram => Composition::new_from_values(Dimension::Mass, 1),
-            Atom::Kelvin => Composition::new_from_values(Dimension::Temperature, 1),
-            Atom::Meter => Composition::new_from_values(Dimension::Length, 1),
-            Atom::Radian => Composition::new_from_values(Dimension::PlaneAngle, 1),
-            Atom::Second => Composition::new_from_values(Dimension::Time, 1),
+            Atom::TheUnity => None,
+            Atom::Candela => Some(Composition::new_from_values(Dimension::LuminousIntensity, 1)),
+            Atom::Coulomb => Some(Composition::new_from_values(Dimension::ElectricCharge, 1)),
+            Atom::Gram => Some(Composition::new_from_values(Dimension::Mass, 1)),
+            Atom::Kelvin => Some(Composition::new_from_values(Dimension::Temperature, 1)),
+            Atom::Meter => Some(Composition::new_from_values(Dimension::Length, 1)),
+            Atom::Radian => Some(Composition::new_from_values(Dimension::PlaneAngle, 1)),
+            Atom::Second => Some(Composition::new_from_values(Dimension::Time, 1)),
             _ => self.definition().unit.composition()
         }
     }
@@ -403,6 +402,7 @@ impl Atom {
 
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         match *self {
+            Atom::TheUnity => 1.0,
             Atom::DegreeCelsius => value + 273.15,
             Atom::DegreeFahrenheit => 5.0 / 9.0 * (value + 459.67),
             Atom::DegreeReaumur => (value / 0.8) + 273.15,
@@ -858,31 +858,31 @@ mod tests {
     fn validate_composition() {
         let atom = Atom::Candela;
         let composition = Composition::new_from_values(Dimension::LuminousIntensity, 1);
-        assert_eq!(atom.composition(), composition);
+        assert_eq!(atom.composition().unwrap(), composition);
 
         let atom = Atom::Coulomb;
         let composition = Composition::new_from_values(Dimension::ElectricCharge, 1);
-        assert_eq!(atom.composition(), composition);
+        assert_eq!(atom.composition().unwrap(), composition);
 
         let atom = Atom::Gram;
         let composition = Composition::new_from_values(Dimension::Mass, 1);
-        assert_eq!(atom.composition(), composition);
+        assert_eq!(atom.composition().unwrap(), composition);
 
         let atom = Atom::Kelvin;
         let composition = Composition::new_from_values(Dimension::Temperature, 1);
-        assert_eq!(atom.composition(), composition);
+        assert_eq!(atom.composition().unwrap(), composition);
 
         let atom = Atom::Meter;
         let composition = Composition::new_from_values(Dimension::Length, 1);
-        assert_eq!(atom.composition(), composition);
+        assert_eq!(atom.composition().unwrap(), composition);
 
         let atom = Atom::Radian;
         let composition = Composition::new_from_values(Dimension::PlaneAngle, 1);
-        assert_eq!(atom.composition(), composition);
+        assert_eq!(atom.composition().unwrap(), composition);
 
         let atom = Atom::Second;
         let composition = Composition::new_from_values(Dimension::Time, 1);
-        assert_eq!(atom.composition(), composition);
+        assert_eq!(atom.composition().unwrap(), composition);
     }
 
     #[test]

@@ -1,4 +1,8 @@
+use atom::Atom;
 use composition::Composition;
+use decomposable::Decomposable;
+use reduction_decomposer::ReductionDecomposer;
+use simple_decomposer::SimpleDecomposer;
 use std::fmt;
 use term::Term;
 
@@ -15,6 +19,14 @@ impl Unit {
                 None => false
             }
         })
+    }
+
+    /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.
+    /// This is helpful for knowing, internally, when to stop recursively
+    /// calling some functions.
+    ///
+    pub fn is_unity(&self) -> bool {
+        self.terms.len() == 1 && self.terms[0].atom.map_or(false, |atom| atom == Atom::TheUnity)
     }
 
     /// Use this when calculating the scalar when *not* part of a Measurable.
@@ -43,21 +55,25 @@ impl Unit {
             })
     }
 
-    pub fn composition(&self) -> Composition {
+    pub fn composition(&self) -> Option<Composition> {
         let mut composition = Composition::new();
 
         for term in &self.terms {
             match term.composition() {
                 Some(term_composition) => {
-                    for (term_dim, term_exponent) in term_composition {
-                        composition.insert(term_dim, term_exponent);
+                    for (term_dimension, term_exponent) in term_composition {
+                        composition.insert(term_dimension, term_exponent);
                     }
                 },
                 None => continue
             }
         }
 
-        composition
+        if composition.is_empty() {
+            None
+        } else {
+            Some(composition)
+        }
     }
 
     pub fn is_compatible_with(&self, other_unit: &Unit) -> bool {
@@ -86,6 +102,23 @@ mod tests {
         let unit = i.interpret("m");
 
         assert!(!unit.is_special());
+    }
+
+    #[test]
+    fn validate_is_unity() {
+        let mut i = Interpreter;
+
+        // The unity
+        let unit = i.interpret("1");
+        assert!(unit.is_unity());
+
+        // Dimless unit
+        let unit = i.interpret("[ppth]");
+        assert!(!unit.is_unity());
+
+        // Regular unit
+        let unit = i.interpret("m");
+        assert!(!unit.is_unity());
     }
 
     #[test]
@@ -176,50 +209,56 @@ mod tests {
     fn validate_composition() {
         let mut i = Interpreter;
 
+        let unit = i.interpret("[pi]");
+        assert_eq!(unit.composition(), None);
+
+        let unit = i.interpret("[ppth]");
+        assert_eq!(unit.composition(), None);
+
         let unit = i.interpret("m");
         let composition = Composition::new_from_values(Dimension::Length, 1);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km");
         let composition = Composition::new_from_values(Dimension::Length, 1);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km/10m");
         let composition = Composition::new_from_values(Dimension::Length, 0);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("m-1");
         let composition = Composition::new_from_values(Dimension::Length, -1);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("10m");
         let composition = Composition::new_from_values(Dimension::Length, 1);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("10km");
         let composition = Composition::new_from_values(Dimension::Length, 1);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("10km-1");
         let composition = Composition::new_from_values(Dimension::Length, -1);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km-1/m2");
         let composition = Composition::new_from_values(Dimension::Length, -3);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km/m2.cm");
         let composition = Composition::new_from_values(Dimension::Length, -2);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km-1/m2.cm");
         let composition = Composition::new_from_values(Dimension::Length, -4);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("m/s2");
         let mut composition = Composition::new_from_values(Dimension::Length, 1);
         composition.insert(Dimension::Time, -2);
-        assert_eq!(unit.composition(), composition);
+        assert_eq!(unit.composition().unwrap(), composition);
 
         // TODO: Interpreter needs to parse using Rule::main_term, not Rule::term
         // let unit = i.interpret("/{tot}");

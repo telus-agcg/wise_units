@@ -69,11 +69,28 @@ impl Term {
     pub fn composition(&self) -> Option<Composition> {
         match self.atom {
             Some(ref atom) => {
-                let atom_composition = atom.composition();
+                match atom.composition() {
+                    Some(atom_composition) => {
+                        if self.exponent == 1 {
+                            return Some(atom_composition);
+                        }
 
-                if self.exponent == 1 {
-                    return Some(atom_composition);
+                        let mut new_composition = Composition::new();
+
+                        for (dim, exp) in atom_composition.into_iter() {
+                            let atom_exp = if exp == 1 { 0 } else { exp };
+                            new_composition.insert(dim, atom_exp + self.exponent);
+                        }
+
+                        Some(new_composition)
+                    },
+                    None => None
                 }
+            },
+            None => None
+        }
+    }
+}
 
                 let mut new_composition = Composition::new();
 

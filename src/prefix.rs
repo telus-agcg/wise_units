@@ -67,8 +67,8 @@ impl Prefix {
         }
     }
 
-    pub fn composition(&self) -> Composition {
-        self.definition().unit.composition()
+    pub fn composition(&self) -> Option<Composition> {
+        None
     }
 
     pub fn names(&self) -> Vec<String> {
@@ -199,7 +199,6 @@ impl fmt::Display for Prefix {
 #[cfg(test)]
 mod tests {
     use super::Prefix;
-    use composition::Composition;
 
     #[test]
     fn validate_scalar_atto() {
@@ -228,8 +227,7 @@ mod tests {
     #[test]
     fn validate_composition() {
         let prefix = Prefix::Kilo;
-        let composition = Composition::new_unity();
-        assert_eq!(prefix.composition(), composition)
+        assert_eq!(prefix.composition(), None)
     }
 
     #[test]

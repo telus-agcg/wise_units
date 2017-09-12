@@ -52,6 +52,7 @@ impl Measurable for Measurement {
     ///
     /// ```
     /// use wise_units::Measurement;
+    /// use wise_units::Measurable;
     ///
     /// let five_meters = Measurement::new(5.0, "m");
     /// assert_eq!(five_meters.scalar(), 5.0);
@@ -81,6 +82,7 @@ impl Measurable for Measurement {
     ///
     /// ```
     /// use wise_units::Measurement;
+    /// use wise_units::Measurable;
     ///
     /// let five_meters = Measurement::new(5.0, "m");
     /// assert_eq!(five_meters.magnitude(), 5.0);
@@ -89,7 +91,7 @@ impl Measurable for Measurement {
     /// assert_eq!(five_meters_squared.magnitude(), 5.0);
     ///
     /// let five_three_meters = Measurement::new(5.0, "[pi].m");
-    /// assert_eq!(five_three_meters.magnitude(), 15.707_963_267_948_966);
+    /// assert_eq!(five_three_meters.magnitude(), 5.0);
     ///
     /// let sixty_five_f = Measurement::new(65.0, "[degF]");
     /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
@@ -268,13 +270,14 @@ mod tests {
         let mut other = meter.convert_to("m").unwrap();
         other.value = 2.0;
         assert_ne!(other, meter);
-        assert_eq!(other.unit.to_string(), "m".to_string());
+        assert_eq!(&other.unit.to_string(), "m");
 
-        // let other = meter.convert_to("km").unwrap();
-        // assert_eq!(other, meter);
+        let other = meter.convert_to("km").unwrap();
+        assert_eq!(other, meter);
 
-        // let mut other = meter.convert_to("m").unwrap();
-        // other.value = 2.0;
+        let mut other = meter.convert_to("m").unwrap();
+        other.value = 2.0;
+        assert_ne!(other, meter);
     }
 
     #[test]
@@ -292,7 +295,7 @@ mod tests {
             );
         assert_eq!(
             Measurement::new(1.1, "km2/s.rad").to_string(),
-            "1.1km2/s.rad".to_string()
+            "1.1km2/rad.s".to_string()
             );
     }
 
