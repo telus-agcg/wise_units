@@ -8,14 +8,8 @@ use std::iter::IntoIterator;
 pub struct Composition(BTreeMap<Dimension, i32>);
 
 impl Composition {
-    pub fn new() -> Self {
-        let map: BTreeMap<Dimension, i32> = BTreeMap::new();
-
-        Composition(map)
-    }
-
-    pub fn new_from_values(dimension: Dimension, exponent: i32) -> Self {
-        let mut c = Composition::new();
+    pub fn new(dimension: Dimension, exponent: i32) -> Self {
+        let mut c = Composition::default();
         c.insert(dimension, exponent);
 
         c
@@ -34,6 +28,14 @@ impl Composition {
 
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
+    }
+}
+
+impl Default for Composition {
+    fn default() -> Self {
+        let map: BTreeMap<Dimension, i32> = BTreeMap::new();
+
+        Composition(map)
     }
 }
 
@@ -65,8 +67,8 @@ mod tests {
     use std::collections::BTreeMap;
 
     #[test]
-    fn validate_new() {
-        let composition = Composition::new();
+    fn validate_default() {
+        let composition = Composition::default();
         let dimension: BTreeMap<Dimension, i32> = BTreeMap::new();
 
         assert_eq!(composition.0, dimension)
@@ -74,7 +76,7 @@ mod tests {
 
     #[test]
     fn validate_insert() {
-        let mut composition = Composition::new();
+        let mut composition = Composition::default();
         composition.insert(Dimension::Mass, 3);
         assert_eq!(composition.to_string().as_str(), "M3");
 
@@ -85,7 +87,7 @@ mod tests {
         // TODO: Is this right?
         assert_eq!(composition.to_string().as_str(), "M0");
 
-        let mut composition = Composition::new();
+        let mut composition = Composition::default();
         composition.insert(Dimension::Mass, -1);
         composition.insert(Dimension::Temperature, -2);
         composition.insert(Dimension::ElectricCharge, -3);
@@ -97,11 +99,11 @@ mod tests {
     }
 
     #[test]
-    fn validate_new_from_values() {
-        let composition = Composition::new_from_values(Dimension::Time, -6);
+    fn validate_new() {
+        let composition = Composition::new(Dimension::Time, -6);
         assert_eq!(composition.to_string().as_str(), "T-6");
 
-        let mut composition = Composition::new_from_values(Dimension::Time, -6);
+        let mut composition = Composition::new(Dimension::Time, -6);
         composition.insert(Dimension::Mass, 3);
         assert_eq!(composition.to_string().as_str(), "M3.T-6");
     }

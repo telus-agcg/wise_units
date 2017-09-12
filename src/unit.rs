@@ -56,7 +56,7 @@ impl Unit {
     }
 
     pub fn composition(&self) -> Option<Composition> {
-        let mut composition = Composition::new();
+        let mut composition = Composition::default();
 
         for term in &self.terms {
             match term.composition() {
@@ -216,47 +216,47 @@ mod tests {
         assert_eq!(unit.composition(), None);
 
         let unit = i.interpret("m");
-        let composition = Composition::new_from_values(Dimension::Length, 1);
+        let composition = Composition::new(Dimension::Length, 1);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km");
-        let composition = Composition::new_from_values(Dimension::Length, 1);
+        let composition = Composition::new(Dimension::Length, 1);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km/10m");
-        let composition = Composition::new_from_values(Dimension::Length, 0);
+        let composition = Composition::new(Dimension::Length, 0);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("m-1");
-        let composition = Composition::new_from_values(Dimension::Length, -1);
+        let composition = Composition::new(Dimension::Length, -1);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("10m");
-        let composition = Composition::new_from_values(Dimension::Length, 1);
+        let composition = Composition::new(Dimension::Length, 1);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("10km");
-        let composition = Composition::new_from_values(Dimension::Length, 1);
+        let composition = Composition::new(Dimension::Length, 1);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("10km-1");
-        let composition = Composition::new_from_values(Dimension::Length, -1);
+        let composition = Composition::new(Dimension::Length, -1);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km-1/m2");
-        let composition = Composition::new_from_values(Dimension::Length, -3);
+        let composition = Composition::new(Dimension::Length, -3);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km/m2.cm");
-        let composition = Composition::new_from_values(Dimension::Length, -2);
+        let composition = Composition::new(Dimension::Length, -2);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("km-1/m2.cm");
-        let composition = Composition::new_from_values(Dimension::Length, -4);
+        let composition = Composition::new(Dimension::Length, -4);
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = i.interpret("m/s2");
-        let mut composition = Composition::new_from_values(Dimension::Length, 1);
+        let mut composition = Composition::new(Dimension::Length, 1);
         composition.insert(Dimension::Time, -2);
         assert_eq!(unit.composition().unwrap(), composition);
 
