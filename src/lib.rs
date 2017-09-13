@@ -14,14 +14,17 @@ pub mod unit;
 mod atom;
 mod composition;
 mod classification;
+mod decomposable;
 mod definition;
 mod dimension;
 mod interpreter;
 mod measurable;
 mod prefix;
 mod property;
-mod unit_parser;
+mod simple_decomposer;
 mod term;
+mod unit_parser;
 mod unit_type;
 
 pub use measurement::Measurement;
+pub use measurable::Measurable;

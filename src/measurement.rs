@@ -262,20 +262,31 @@ mod tests {
     }
 
     #[test]
-    fn validate_convert_to() {
+    fn validate_convert_to_meter_to_meter() {
         let meter = Measurement::new(1.0, "m");
         let other = meter.convert_to("m").unwrap();
         assert_eq!(other, meter);
+    }
 
+    #[test]
+    fn validate_convert_to_meter_to_2meter() {
+        let meter = Measurement::new(1.0, "m");
         let mut other = meter.convert_to("m").unwrap();
         other.value = 2.0;
         assert_ne!(other, meter);
-        assert_eq!(&other.unit.to_string(), "m");
+    }
 
+    #[test]
+    fn validate_convert_to_meter_to_km() {
+        let meter = Measurement::new(1.0, "m");
         let other = meter.convert_to("km").unwrap();
         assert_eq!(other, meter);
+    }
 
-        let mut other = meter.convert_to("m").unwrap();
+    #[test]
+    fn validate_convert_to_meter_to_2km() {
+        let meter = Measurement::new(1.0, "m");
+        let mut other = meter.convert_to("km").unwrap();
         other.value = 2.0;
         assert_ne!(other, meter);
     }
@@ -294,7 +305,7 @@ mod tests {
             "1.1km2/s".to_string()
             );
         assert_eq!(
-            Measurement::new(1.1, "km2/s.rad").to_string(),
+            Measurement::new(1.1, "km2/rad.s").to_string(),
             "1.1km2/rad.s".to_string()
             );
     }
