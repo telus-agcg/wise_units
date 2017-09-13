@@ -180,39 +180,39 @@ impl Atom {
     pub fn names(&self) -> Vec<String> {
         match *self {
             Atom::TheUnity => vec!["the unity".to_string()],
-            Atom::Candela => vec!["candela".to_string()],
-            Atom::Coulomb => vec!["Coulomb".to_string()],
-            Atom::Gram => vec!["gram".to_string()],
-            Atom::Kelvin => vec!["Kelvin".to_string()],
-            Atom::Meter => vec!["meter".to_string()],
-            Atom::Radian => vec!["radian".to_string()],
-            Atom::Second => vec!["second".to_string()],
+            Atom::Candela  => vec!["candela".to_string()],
+            Atom::Coulomb  => vec!["Coulomb".to_string()],
+            Atom::Gram     => vec!["gram".to_string()],
+            Atom::Kelvin   => vec!["Kelvin".to_string()],
+            Atom::Meter    => vec!["meter".to_string()],
+            Atom::Radian   => vec!["radian".to_string()],
+            Atom::Second   => vec!["second".to_string()],
 
             // Derived units
-            Atom::AcreUS => vec!["acre".to_string()],
-            Atom::Are => vec!["are".to_string()],
-            Atom::Degree => vec!["degree".to_string()],
-            Atom::DegreeCelsius => vec!["degree Celsius".to_string()],
+            Atom::AcreUS           => vec!["acre".to_string()],
+            Atom::Are              => vec!["are".to_string()],
+            Atom::Degree           => vec!["degree".to_string()],
+            Atom::DegreeCelsius    => vec!["degree Celsius".to_string()],
             Atom::DegreeFahrenheit => vec!["degree Fahrenheit".to_string()],
-            Atom::DegreeReaumur => vec!["degree Réaumur".to_string()],
-            Atom::FluidOunceUS => vec!["fluid once".to_string()],
+            Atom::DegreeReaumur    => vec!["degree Réaumur".to_string()],
+            Atom::FluidOunceUS     => vec!["fluid once".to_string()],
             Atom::FootInternational |
-                Atom::FootUS => vec!["foot".to_string()],
-            Atom::GillUS => vec!["gill".to_string()],
-            Atom::InchInternational => vec!["inch".to_string()],
-            Atom::Liter => vec!["liter".to_string()],
-            Atom::Mole => vec!["mole".to_string()],
-            Atom::PartsPerBillion => vec!["parts per billion".to_string()],
-            Atom::PartsPerMillion => vec!["parts per million".to_string()],
-            Atom::PartsPerThousand => vec!["parts per thousand".to_string()],
-            Atom::Percent => vec!["percent".to_string()],
-            Atom::PH => vec!["pH".to_string()],
-            Atom::PintUS => vec!["pint".to_string()],
-            Atom::PrismDiopter => vec!["prism diopter".to_string()],
-            Atom::QuartUS => vec!["quart".to_string()],
+                Atom::FootUS           => vec!["foot".to_string()],
+            Atom::GillUS               => vec!["gill".to_string()],
+            Atom::InchInternational    => vec!["inch".to_string()],
+            Atom::Liter                => vec!["liter".to_string()],
+            Atom::Mole                 => vec!["mole".to_string()],
+            Atom::PartsPerBillion      => vec!["parts per billion".to_string()],
+            Atom::PartsPerMillion      => vec!["parts per million".to_string()],
+            Atom::PartsPerThousand     => vec!["parts per thousand".to_string()],
+            Atom::Percent              => vec!["percent".to_string()],
+            Atom::PH                   => vec!["pH".to_string()],
+            Atom::PintUS               => vec!["pint".to_string()],
+            Atom::PrismDiopter         => vec!["prism diopter".to_string()],
+            Atom::QuartUS              => vec!["quart".to_string()],
             Atom::QueenAnnesWineGallon => vec!["Queen Ann's wine gallon".to_string()],
-            Atom::RodUS => vec!["rod".to_string()],
-            Atom::TheNumberPi => vec!["the number pi".to_string()],
+            Atom::RodUS                => vec!["rod".to_string()],
+            Atom::TheNumberPi          => vec!["the number pi".to_string()],
             Atom::TheNumberTenForArbitraryPowersCaret |
             Atom::TheNumberTenForArbitraryPowersStar => {
                 vec!["the number ten for arbitrary powers".to_string()]
@@ -223,41 +223,41 @@ impl Atom {
     pub fn primary_code(&self) -> String {
         match *self {
             Atom::TheUnity => "1".to_string(),
-            Atom::Candela => "cd".to_string(),
-            Atom::Coulomb => "C".to_string(),
-            Atom::Gram => "g".to_string(),
-            Atom::Kelvin => "K".to_string(),
-            Atom::Meter => "m".to_string(),
-            Atom::Radian => "rad".to_string(),
-            Atom::Second => "s".to_string(),
+            Atom::Candela  => "cd".to_string(),
+            Atom::Coulomb  => "C".to_string(),
+            Atom::Gram     => "g".to_string(),
+            Atom::Kelvin   => "K".to_string(),
+            Atom::Meter    => "m".to_string(),
+            Atom::Radian   => "rad".to_string(),
+            Atom::Second   => "s".to_string(),
 
             // Derived units
-            Atom::AcreUS => "[acr_us]".to_string(),
-            Atom::Are => "ar".to_string(),
-            Atom::Degree => "deg".to_string(),
-            Atom::DegreeCelsius => "Cel".to_string(),
-            Atom::DegreeFahrenheit => "[degF]".to_string(),
-            Atom::DegreeReaumur => "[degRe]".to_string(),
-            Atom::FluidOunceUS => "[foz_us]".to_string(),
-            Atom::FootInternational => "[ft_i]".to_string(),
-            Atom::FootUS => "[ft_us]".to_string(),
-            Atom::GillUS => "[gil_us]".to_string(),
-            Atom::InchInternational => "[in_i]".to_string(),
-            Atom::Liter => "l".to_string(),
-            Atom::Mole => "mol".to_string(),
-            Atom::PartsPerBillion => "[ppb]".to_string(),
-            Atom::PartsPerMillion => "[ppm]".to_string(),
-            Atom::PartsPerThousand => "[ppth]".to_string(),
-            Atom::Percent => "%".to_string(),
-            Atom::PH => "[pH]".to_string(),
-            Atom::PintUS => "[pt_us]".to_string(),
-            Atom::PrismDiopter => "[p'diop]".to_string(),
-            Atom::QuartUS => "[qt_us]".to_string(),
-            Atom::QueenAnnesWineGallon => "[gal_us]".to_string(),
-            Atom::RodUS => "[rd_us]".to_string(),
-            Atom::TheNumberPi => "[pi]".to_string(),
+            Atom::AcreUS                              => "[acr_us]".to_string(),
+            Atom::Are                                 => "ar".to_string(),
+            Atom::Degree                              => "deg".to_string(),
+            Atom::DegreeCelsius                       => "Cel".to_string(),
+            Atom::DegreeFahrenheit                    => "[degF]".to_string(),
+            Atom::DegreeReaumur                       => "[degRe]".to_string(),
+            Atom::FluidOunceUS                        => "[foz_us]".to_string(),
+            Atom::FootInternational                   => "[ft_i]".to_string(),
+            Atom::FootUS                              => "[ft_us]".to_string(),
+            Atom::GillUS                              => "[gil_us]".to_string(),
+            Atom::InchInternational                   => "[in_i]".to_string(),
+            Atom::Liter                               => "l".to_string(),
+            Atom::Mole                                => "mol".to_string(),
+            Atom::PartsPerBillion                     => "[ppb]".to_string(),
+            Atom::PartsPerMillion                     => "[ppm]".to_string(),
+            Atom::PartsPerThousand                    => "[ppth]".to_string(),
+            Atom::Percent                             => "%".to_string(),
+            Atom::PH                                  => "[pH]".to_string(),
+            Atom::PintUS                              => "[pt_us]".to_string(),
+            Atom::PrismDiopter                        => "[p'diop]".to_string(),
+            Atom::QuartUS                             => "[qt_us]".to_string(),
+            Atom::QueenAnnesWineGallon                => "[gal_us]".to_string(),
+            Atom::RodUS                               => "[rd_us]".to_string(),
+            Atom::TheNumberPi                         => "[pi]".to_string(),
             Atom::TheNumberTenForArbitraryPowersCaret => "10^".to_string(),
-            Atom::TheNumberTenForArbitraryPowersStar => "10*".to_string(),
+            Atom::TheNumberTenForArbitraryPowersStar  => "10*".to_string(),
         }
     }
 
@@ -272,21 +272,21 @@ impl Atom {
                 Atom::Second  |
                 Atom::Liter   |
                 Atom::Mole    |
-                Atom::Percent => Some(self.primary_code()),
-            Atom::Are => Some("a".to_string()),
-            Atom::Degree => Some("°".to_string()),
-            Atom::DegreeCelsius => Some("°C".to_string()),
-            Atom::DegreeFahrenheit => Some("°F".to_string()),
-            Atom::DegreeReaumur => Some("°R".to_string()),
-            Atom::FluidOunceUS => Some("oz fl".to_string()),
+                Atom::Percent       => Some(self.primary_code()),
+            Atom::Are               => Some("a".to_string()),
+            Atom::Degree            => Some("°".to_string()),
+            Atom::DegreeCelsius     => Some("°C".to_string()),
+            Atom::DegreeFahrenheit  => Some("°F".to_string()),
+            Atom::DegreeReaumur     => Some("°R".to_string()),
+            Atom::FluidOunceUS      => Some("oz fl".to_string()),
             Atom::FootInternational => Some("ft".to_string()),
-            Atom::FootUS => Some("ft (us)".to_string()),
-            Atom::PartsPerBillion => Some("ppb".to_string()),
-            Atom::PartsPerMillion => Some("ppm".to_string()),
-            Atom::PartsPerThousand => Some("ppth".to_string()),
-            Atom::PH => Some("pH".to_string()),
-            Atom::PrismDiopter => Some("PD".to_string()),
-            Atom::TheNumberPi => Some("π".to_string()),
+            Atom::FootUS            => Some("ft (us)".to_string()),
+            Atom::PartsPerBillion   => Some("ppb".to_string()),
+            Atom::PartsPerMillion   => Some("ppm".to_string()),
+            Atom::PartsPerThousand  => Some("ppth".to_string()),
+            Atom::PH                => Some("pH".to_string()),
+            Atom::PrismDiopter      => Some("PD".to_string()),
+            Atom::TheNumberPi       => Some("π".to_string()),
             Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => Some("10".to_string()),
             _ => None,
@@ -296,9 +296,9 @@ impl Atom {
     pub fn property(&self) -> Property {
         match *self {
             Atom::TheUnity => Property::Unclassified,
-            Atom::Candela => Property::LuminousIntensity,
-            Atom::Coulomb => Property::ElectricCharge,
-            Atom::Gram => Property::Mass,
+            Atom::Candela  => Property::LuminousIntensity,
+            Atom::Coulomb  => Property::ElectricCharge,
+            Atom::Gram     => Property::Mass,
             Atom::Kelvin               |
                 Atom::DegreeCelsius    |
                 Atom::DegreeFahrenheit |
@@ -310,7 +310,7 @@ impl Atom {
                 Atom::RodUS => Property::Length,
             Atom::Radian |
                 Atom::Degree => Property::PlaneAngle,
-            Atom::Second => Property::Time,
+            Atom::Second     => Property::Time,
             Atom::AcreUS |
                 Atom::Are => Property::Area,
             Atom::FluidOunceUS |
@@ -318,53 +318,53 @@ impl Atom {
                 Atom::PintUS   |
                 Atom::QuartUS  |
                 Atom::QueenAnnesWineGallon => Property::FluidVolume,
-            Atom::Liter => Property::Volume,
-            Atom::Mole => Property::AmountOfSubstance,
+            Atom::Liter                    => Property::Volume,
+            Atom::Mole                     => Property::AmountOfSubstance,
             Atom::PartsPerBillion     |
                 Atom::PartsPerMillion |
                 Atom::PartsPerThousand => Property::Fraction,
             Atom::Percent                                 |
                 Atom::TheNumberPi                         |
                 Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar=> Property::Number,
-            Atom::PH => Property::Acidity,
-            Atom::PrismDiopter => Property::RefractionOfPrism,
+                Atom::TheNumberTenForArbitraryPowersStar => Property::Number,
+            Atom::PH                                     => Property::Acidity,
+            Atom::PrismDiopter                           => Property::RefractionOfPrism,
         }
     }
 
     pub fn secondary_code(&self) -> String {
         match *self {
             Atom::TheUnity => "1".to_string(),
-            Atom::Candela => "CD".to_string(),
-            Atom::Coulomb => "C".to_string(),
-            Atom::Gram => "G".to_string(),
-            Atom::Meter => "M".to_string(),
-            Atom::Radian => "RAD".to_string(),
-            Atom::Second => "S".to_string(),
+            Atom::Candela  => "CD".to_string(),
+            Atom::Coulomb  => "C".to_string(),
+            Atom::Gram     => "G".to_string(),
+            Atom::Meter    => "M".to_string(),
+            Atom::Radian   => "RAD".to_string(),
+            Atom::Second   => "S".to_string(),
 
             // Derived units
-            Atom::AcreUS => "[ACR_US]".to_string(),
-            Atom::Are => "AR".to_string(),
-            Atom::Degree => "DEG".to_string(),
-            Atom::DegreeCelsius => "CEL".to_string(),
-            Atom::DegreeFahrenheit => "[DEGF]".to_string(),
-            Atom::FluidOunceUS => "[FOZ_US]".to_string(),
-            Atom::FootInternational => "[FT_I]".to_string(),
-            Atom::FootUS => "[FT_US]".to_string(),
-            Atom::GillUS => "[GIL_US]".to_string(),
-            Atom::InchInternational => "[IN_I]".to_string(),
-            Atom::Liter => "L".to_string(),
-            Atom::Mole => "MOL".to_string(),
-            Atom::PartsPerBillion => "[PPB]".to_string(),
-            Atom::PartsPerMillion => "[PPM]".to_string(),
-            Atom::PartsPerThousand => "[PPTH]".to_string(),
-            Atom::PH => "[PH]".to_string(),
-            Atom::PintUS => "[PT_US]".to_string(),
-            Atom::PrismDiopter => "[P'DIOP]".to_string(),
-            Atom::QuartUS => "[QT_US]".to_string(),
+            Atom::AcreUS               => "[ACR_US]".to_string(),
+            Atom::Are                  => "AR".to_string(),
+            Atom::Degree               => "DEG".to_string(),
+            Atom::DegreeCelsius        => "CEL".to_string(),
+            Atom::DegreeFahrenheit     => "[DEGF]".to_string(),
+            Atom::FluidOunceUS         => "[FOZ_US]".to_string(),
+            Atom::FootInternational    => "[FT_I]".to_string(),
+            Atom::FootUS               => "[FT_US]".to_string(),
+            Atom::GillUS               => "[GIL_US]".to_string(),
+            Atom::InchInternational    => "[IN_I]".to_string(),
+            Atom::Liter                => "L".to_string(),
+            Atom::Mole                 => "MOL".to_string(),
+            Atom::PartsPerBillion      => "[PPB]".to_string(),
+            Atom::PartsPerMillion      => "[PPM]".to_string(),
+            Atom::PartsPerThousand     => "[PPTH]".to_string(),
+            Atom::PH                   => "[PH]".to_string(),
+            Atom::PintUS               => "[PT_US]".to_string(),
+            Atom::PrismDiopter         => "[P'DIOP]".to_string(),
+            Atom::QuartUS              => "[QT_US]".to_string(),
             Atom::QueenAnnesWineGallon => "[GAL_US]".to_string(),
-            Atom::RodUS => "[RD_US]".to_string(),
-            Atom::TheNumberPi => "[PI]".to_string(),
+            Atom::RodUS                => "[RD_US]".to_string(),
+            Atom::TheNumberPi          => "[PI]".to_string(),
             Atom::DegreeReaumur                           |
                 Atom::Kelvin                              |
                 Atom::Percent                             |
@@ -404,24 +404,24 @@ impl Atom {
 
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         match *self {
-            Atom::TheUnity => 1.0,
-            Atom::DegreeCelsius => value + 273.15,
+            Atom::TheUnity         => 1.0,
+            Atom::DegreeCelsius    => value + 273.15,
             Atom::DegreeFahrenheit => 5.0 / 9.0 * (value + 459.67),
-            Atom::DegreeReaumur => (value / 0.8) + 273.15,
-            Atom::PH => 10.0_f64.powf(-value),
-            Atom::PrismDiopter => value.tan() * 100.0,
-            _ => self.definition().calculate_scalar(value),
+            Atom::DegreeReaumur    => (value / 0.8) + 273.15,
+            Atom::PH               => 10.0_f64.powf(-value),
+            Atom::PrismDiopter     => value.tan() * 100.0,
+            _                      => self.definition().calculate_scalar(value),
         }
     }
 
     pub fn calculate_magnitude(&self, value: f64) -> f64 {
         match *self {
-            Atom::DegreeCelsius => value - 273.15,
+            Atom::DegreeCelsius    => value - 273.15,
             Atom::DegreeFahrenheit => 9.0 * value / 5.0 - 459.67,
-            Atom::DegreeReaumur => (value - 273.15) * 0.8,
-            Atom::PH => -value.log10(),
-            Atom::PrismDiopter => (value / 100.0).atan(),
-            _ => 1.0,
+            Atom::DegreeReaumur    => (value - 273.15) * 0.8,
+            Atom::PH               => -value.log10(),
+            Atom::PrismDiopter     => (value / 100.0).atan(),
+            _                      => 1.0,
         }
     }
 }
@@ -540,8 +540,7 @@ mod tests {
 
     #[test]
     fn validate_classification_clinical() {
-        let atoms = vec![
-            Atom::PrismDiopter,
+        let atoms = vec![Atom::PrismDiopter];
 
         for atom in atoms {
             assert_eq!(atom.classification(), Classification::Clinical);
