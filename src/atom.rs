@@ -123,8 +123,8 @@ impl Atom {
                 3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3,
                 "1",
              ),
-            Atom::TheNumberTenForArbitraryPowersCaret => Definition::new(10.0, "1"),
-            Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
+            Atom::TheNumberTenForArbitraryPowersCaret |
+                Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
         }
     }
 
@@ -196,8 +196,8 @@ impl Atom {
             Atom::DegreeFahrenheit => vec!["degree Fahrenheit".to_string()],
             Atom::DegreeReaumur => vec!["degree Réaumur".to_string()],
             Atom::FluidOunceUS => vec!["fluid once".to_string()],
-            Atom::FootInternational => vec!["foot".to_string()],
-            Atom::FootUS => vec!["foot".to_string()],
+            Atom::FootInternational |
+                Atom::FootUS => vec!["foot".to_string()],
             Atom::GillUS => vec!["gill".to_string()],
             Atom::InchInternational => vec!["inch".to_string()],
             Atom::Liter => vec!["liter".to_string()],
@@ -213,8 +213,8 @@ impl Atom {
             Atom::QueenAnnesWineGallon => vec!["Queen Ann's wine gallon".to_string()],
             Atom::RodUS => vec!["rod".to_string()],
             Atom::TheNumberPi => vec!["the number pi".to_string()],
-            Atom::TheNumberTenForArbitraryPowersCaret => vec!["the number ten for arbitrary powers".to_string()],
-            Atom::TheNumberTenForArbitraryPowersStar => vec!["the number ten for arbitrary powers".to_string()],
+            Atom::TheNumberTenForArbitraryPowersCaret |
+                Atom::TheNumberTenForArbitraryPowersStar => vec!["the number ten for arbitrary powers".to_string()],
         }
     }
 
@@ -285,8 +285,8 @@ impl Atom {
             Atom::PH => Some("pH".to_string()),
             Atom::PrismDiopter => Some("PD".to_string()),
             Atom::TheNumberPi => Some("π".to_string()),
-            Atom::TheNumberTenForArbitraryPowersCaret => Some("10".to_string()),
-            Atom::TheNumberTenForArbitraryPowersStar => Some("10".to_string()),
+            Atom::TheNumberTenForArbitraryPowersCaret |
+                Atom::TheNumberTenForArbitraryPowersStar => Some("10".to_string()),
             _ => None
         }
     }
@@ -336,7 +336,6 @@ impl Atom {
             Atom::Candela => "CD".to_string(),
             Atom::Coulomb => "C".to_string(),
             Atom::Gram => "G".to_string(),
-            Atom::Kelvin => self.primary_code(),
             Atom::Meter => "M".to_string(),
             Atom::Radian => "RAD".to_string(),
             Atom::Second => "S".to_string(),
@@ -365,6 +364,7 @@ impl Atom {
             Atom::RodUS => "[RD_US]".to_string(),
             Atom::TheNumberPi => "[PI]".to_string(),
             Atom::DegreeReaumur                           |
+                Atom::Kelvin                              |
                 Atom::Percent                             |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => self.primary_code(),

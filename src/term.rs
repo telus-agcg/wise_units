@@ -47,7 +47,7 @@ impl Term {
             None => 1.0
         };
 
-        (atom_scalar * prefix_scalar * self.factor as f64).powi(e)
+        (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(e)
     }
 
     // TODO: does this need to take a value? Can this just be magnitude()?
@@ -64,7 +64,7 @@ impl Term {
             None => 1.0
         };
 
-        (atom_magnitude * prefix_magnitude * self.factor as f64).powi(e)
+        (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(e)
     }
 
     pub fn composition(&self) -> Option<Composition> {
@@ -78,7 +78,7 @@ impl Term {
 
                         let mut new_composition = Composition::default();
 
-                        for (dim, exp) in atom_composition.into_iter() {
+                        for (dim, exp) in atom_composition {
                             let atom_exp = if exp == 1 { 0 } else { exp };
                             new_composition.insert(dim, atom_exp + self.exponent);
                         }
@@ -95,7 +95,7 @@ impl Term {
 
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", extract_term_string(&self))
+        write!(f, "{}", extract_term_string(self))
     }
 }
 

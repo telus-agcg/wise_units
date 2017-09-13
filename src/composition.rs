@@ -43,7 +43,7 @@ impl fmt::Display for Composition {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut expressions = Vec::<String>::new();
 
-        for (key, value) in self.0.iter() {
+        for (key, value) in &self.0 {
             expressions.push(format!("{}{}", key, value));
         }
 

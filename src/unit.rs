@@ -13,7 +13,7 @@ pub struct Unit {
 
 impl Unit {
     pub fn is_special(&self) -> bool {
-        self.terms.iter().any(|ref term| {
+        self.terms.iter().any(|term| {
             match term.atom {
                 Some(ref atom) => atom.is_special(),
                 None => false
@@ -41,16 +41,14 @@ impl Unit {
     /// Use this when calculating the scalar when it's part of a Measurable.
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         self.terms.iter()
-            .fold(1.0, |acc, ref term| {
-                let term = *term;
+            .fold(1.0, |acc, term| {
                 acc * term.calculate_scalar(value)
             })
     }
 
     pub fn calculate_magnitude(&self, value: f64) -> f64 {
         self.terms.iter()
-            .fold(1.0, |acc, ref term| {
-                let term = *term;
+            .fold(1.0, |acc, term| {
                 acc * term.calculate_magnitude(value)
             })
     }

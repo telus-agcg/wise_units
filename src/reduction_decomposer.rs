@@ -8,7 +8,7 @@ type Exponent = i32;
 pub struct ReductionDecomposer(BTreeMap<String, Exponent>);
 
 impl ReductionDecomposer {
-    pub fn new(terms: &Vec<Term>) -> Self {
+    pub fn new(terms: &[Term]) -> Self {
         let set = build_set(terms);
 
         ReductionDecomposer(set)
@@ -68,7 +68,7 @@ impl Decomposable for ReductionDecomposer {
     }
 }
 
-fn build_set(terms: &Vec<Term>) -> BTreeMap<String, Exponent> {
+fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
     let mut set: BTreeMap<String, Exponent> = BTreeMap::new();
 
     for term in terms {

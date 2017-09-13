@@ -108,7 +108,7 @@ impl Measurable for Measurement {
 }
 
 impl Measurement {
-    pub fn new<'a>(value: f64, expression: &'a str) -> Self {
+    pub fn new(value: f64, expression: &str) -> Self {
         // TODO: Decouple parser and interpreter
         let mut interpreter = Interpreter;
         let su = interpreter.interpret(expression);

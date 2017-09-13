@@ -9,7 +9,7 @@ pub struct Definition {
 }
 
 impl Definition {
-    pub fn new<'a>(value: f64, expression: &'a str) -> Self {
+    pub fn new(value: f64, expression: &str) -> Self {
         let mut interpreter = Interpreter;
         let su = interpreter.interpret(expression);
 

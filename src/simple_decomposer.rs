@@ -1,10 +1,10 @@
 use decomposable::Decomposable;
 use term::Term;
 
-pub struct SimpleDecomposer<'a>(&'a Vec<Term>);
+pub struct SimpleDecomposer<'a>(&'a [Term]);
 
 impl<'a> SimpleDecomposer<'a> {
-    pub fn new(terms: &'a Vec<Term>) -> Self {
+    pub fn new(terms: &'a [Term]) -> Self {
         SimpleDecomposer(terms)
     }
 }
