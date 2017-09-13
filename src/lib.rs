@@ -21,6 +21,7 @@ mod interpreter;
 mod measurable;
 mod prefix;
 mod property;
+mod reduction_decomposer;
 mod simple_decomposer;
 mod term;
 mod unit_parser;

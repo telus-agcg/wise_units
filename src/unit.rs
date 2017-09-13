@@ -92,6 +92,15 @@ impl Unit {
     pub fn expression(&self) -> String {
         SimpleDecomposer::new(&self.terms).expression()
     }
+
+    /// If the unit terms are a fraction and can be reduced, this returns those
+    /// as a string. Ex. terms that would normally render
+    /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
+    /// This always returns a String that is parsable back into the same Unit.
+    ///
+    pub fn expression_reduced(&self) -> String {
+        ReductionDecomposer::new(&self.terms).expression()
+    }
 }
 
 impl fmt::Display for Unit {
@@ -312,6 +321,47 @@ mod tests {
 
         let km_cubed_per_nanometer_squared = i.interpret("km3/nm2");
         assert!(meter.is_compatible_with(&km_cubed_per_nanometer_squared));
+    }
+
+    #[test]
+    fn validate_expression_reduced() {
+        let mut i = Interpreter;
+
+        let unit = i.interpret("m");
+        assert_eq!(unit.expression_reduced().as_str(), "m");
+
+        let unit = i.interpret("M");
+        assert_eq!(unit.expression_reduced().as_str(), "m");
+
+        let unit = i.interpret("km/10m");
+        assert_eq!(unit.expression_reduced().as_str(), "km/10m");
+
+        let unit = i.interpret("m-1");
+        assert_eq!(unit.expression_reduced().as_str(), "1/m");
+
+        let unit = i.interpret("10m");
+        assert_eq!(unit.expression_reduced().as_str(), "10m");
+
+        let unit = i.interpret("10km");
+        assert_eq!(unit.expression_reduced().as_str(), "10km");
+
+        let unit = i.interpret("10km-1");
+        assert_eq!(unit.expression_reduced().as_str(), "1/10km");
+
+        let unit = i.interpret("km-1/m2");
+        assert_eq!(unit.expression_reduced().as_str(), "1/km.m2");
+
+        let unit = i.interpret("km/m2.cm");
+        assert_eq!(unit.expression_reduced().as_str(), "km/cm.m2");
+
+        let unit = i.interpret("km-1/m2.cm");
+        assert_eq!(unit.expression_reduced().as_str(), "1/cm.km.m2");
+
+        let unit = i.interpret("m/s2");
+        assert_eq!(unit.expression_reduced().as_str(), "m/s2");
+
+        let unit = i.interpret("km3/nm2");
+        assert_eq!(unit.expression_reduced().as_str(), "km3/nm2");
     }
 
     #[test]
