@@ -8,7 +8,7 @@ use term::Term;
 
 #[derive(Debug, PartialEq)]
 pub struct Unit {
-    pub terms: Vec<Term>,
+    pub terms: Vec<Term>
 }
 
 impl Unit {

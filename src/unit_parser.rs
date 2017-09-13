@@ -118,7 +118,7 @@ mod tests {
             parser: UnitParser,
             input: "a",
             rule: Rule::prefix_symbol,
-            tokens: [prefix_symbol(0, 1, [atto(0, 1)])]
+            tokens: [prefix_symbol(0, 1)]
         }
     }
 
@@ -140,14 +140,14 @@ mod tests {
             parser: UnitParser,
             input: "K",
             rule: Rule::atom_symbol,
-            tokens: [atom_symbol(0, 1, [kelvin(0, 1)])]
+            tokens: [atom_symbol(0, 1)]
         }
 
         parses_to! {
             parser: UnitParser,
             input: "10*",
             rule: Rule::atom_symbol,
-            tokens: [atom_symbol(0, 3, [the_number_ten_for_arbitrary_powers_star(0, 3)])]
+            tokens: [atom_symbol(0, 3)]
         }
     }
 
@@ -167,8 +167,8 @@ mod tests {
             input: "km",
             rule: Rule::prefixed_atom,
             tokens: [prefixed_atom(0, 2, [
-                                   prefix_symbol(0, 1, [kilo(0, 1)]),
-                                   atom_symbol(1, 2, [meter(1, 2)])
+                                   prefix_symbol(0, 1),
+                                   atom_symbol(1, 2)
             ])]
         }
 
@@ -178,8 +178,8 @@ mod tests {
             rule: Rule::prefixed_atom,
             tokens: [
                 prefixed_atom(0, 9, [
-                   prefix_symbol(0, 4, [kilo(0, 4)]),
-                   atom_symbol(4, 9, [meter(4, 9)])
+                   prefix_symbol(0, 4),
+                   atom_symbol(4, 9)
             ])]
         }
     }
@@ -202,8 +202,8 @@ mod tests {
             tokens: [
                 simple_unit(0, 2, [
                             prefixed_atom(0, 2, [
-                                          prefix_symbol(0, 1, [kilo(0, 1)]),
-                                          atom_symbol(1, 2, [meter(1, 2)])
+                                          prefix_symbol(0, 1),
+                                          atom_symbol(1, 2)
                             ])]
                            )
             ]
@@ -229,8 +229,8 @@ mod tests {
                 simple_unit_with_exponent(0, 3, [
                                           simple_unit(0, 2, [
                                                       prefixed_atom(0, 2, [
-                                                                    prefix_symbol(0, 1, [kilo(0, 1)]),
-                                                                    atom_symbol(1, 2, [meter(1, 2)])
+                                                                    prefix_symbol(0, 1),
+                                                                    atom_symbol(1, 2)
                                                       ])
                                           ]),
                                           exponent(2, 3, [digits(2, 3)])
@@ -333,8 +333,8 @@ mod tests {
                               annotatable(1, 3, [
                                       simple_unit(1, 3, [
                                               prefixed_atom(1, 3, [
-                                                        prefix_symbol(1, 2, [kilo(1, 2)]),
-                                                        atom_symbol(2, 3, [meter(2, 3)])
+                                                        prefix_symbol(1, 2),
+                                                        atom_symbol(2, 3)
                                               ])
                                       ])
                               ])
@@ -356,8 +356,8 @@ mod tests {
                                 simple_unit_with_exponent(1, 5, [
                                     simple_unit(1, 3, [
                                         prefixed_atom(1, 3, [
-                                            prefix_symbol(1, 2, [kilo(1, 2)]),
-                                            atom_symbol(2, 3, [meter(2, 3)])
+                                            prefix_symbol(1, 2),
+                                            atom_symbol(2, 3)
                                         ])
                                     ]),
                                     exponent(3, 5, [
@@ -393,8 +393,8 @@ mod tests {
                                         simple_unit_with_exponent(1, 5, [
                                             simple_unit(1, 3, [
                                                 prefixed_atom(1, 3, [
-                                                    prefix_symbol(1, 2, [kilo(1, 2)]),
-                                                    atom_symbol(2, 3, [meter(2, 3)])
+                                                    prefix_symbol(1, 2),
+                                                    atom_symbol(2, 3)
                                                 ])
                                             ]),
                                             exponent(3, 5, [
@@ -436,8 +436,8 @@ mod tests {
                                         simple_unit_with_exponent(1, 5, [
                                             simple_unit(1, 3, [
                                                 prefixed_atom(1, 3, [
-                                                    prefix_symbol(1, 2, [kilo(1, 2)]),
-                                                    atom_symbol(2, 3, [meter(2, 3)])
+                                                    prefix_symbol(1, 2),
+                                                    atom_symbol(2, 3)
                                                 ])
                                             ]),
                                             exponent(3, 5, [
@@ -459,7 +459,7 @@ mod tests {
                                 basic_component(12, 20, [
                                     annotatable(12, 20, [
                                         simple_unit(12, 20, [
-                                            atom_symbol(12, 20, [acre_us(12, 20)])
+                                            atom_symbol(12, 20)
                                         ])
                                     ])
                                 ])
@@ -470,7 +470,7 @@ mod tests {
                                         basic_component(21, 27, [
                                             annotatable(21, 27, [
                                                 simple_unit(21, 27, [
-                                                    atom_symbol(21, 27, [inch_international(21, 27)])
+                                                    atom_symbol(21, 27)
                                                 ])
                                             ])
                                         ])
@@ -497,7 +497,7 @@ mod tests {
                             basic_component(0, 8, [
                                 annotatable(0, 8, [
                                     simple_unit(0, 8, [
-                                        atom_symbol(0, 8, [acre_us(0, 8)])
+                                        atom_symbol(0, 8)
                                     ])
                                ])
                             ])
@@ -508,7 +508,7 @@ mod tests {
                                     basic_component(9, 15, [
                                         annotatable(9, 15, [
                                             simple_unit(9, 15, [
-                                                atom_symbol(9, 15, [inch_international(9, 15)])
+                                                atom_symbol(9, 15)
                                             ])
                                         ])
                                     ])
@@ -519,7 +519,7 @@ mod tests {
                                             basic_component(16, 24, [
                                                 annotatable(16, 24, [
                                                     simple_unit(16, 24, [
-                                                        atom_symbol(16, 24, [acre_us(16, 24)])
+                                                        atom_symbol(16, 24)
                                                     ])
                                                 ])
                                             ])

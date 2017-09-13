@@ -46,97 +46,82 @@ impl Interpreter {
                 },
             };
 
-                terms.append(&mut other_terms);
+            terms.append(&mut other_terms);
         }
 
         terms
     }
 
     fn visit_atom_symbol<I: Input>(&mut self, pair: Pair<Rule, I>) -> Atom {
-        let mut atom = Atom::Meter;
+        match pair.into_span().as_str() {
+            // Base units first.
+            "1"                       => Atom::TheUnity,
+            "Coulomb" | "C"           => Atom::Coulomb,
+            "Kelvin"  | "K"           => Atom::Kelvin,
+            "candela" | "cd"  | "CD"  => Atom::Candela,
+            "gram"    | "g"           => Atom::Gram,
+            "meter"   | "m"   | "M"   => Atom::Meter,
+            "radian"  | "rad" | "RAD" => Atom::Radian,
+            "second"  | "s"   | "S"   => Atom::Second,
 
-        for inner_pair in pair.into_inner() {
-            atom = match inner_pair.as_rule() {
-                // Base units first.
-                Rule::candela => Atom::Candela,
-                Rule::coulomb => Atom::Coulomb,
-                Rule::gram => Atom::Gram,
-                Rule::kelvin => Atom::Kelvin,
-                Rule::meter => Atom::Meter,
-                Rule::radian => Atom::Radian,
-                Rule::second => Atom::Second,
-                Rule::the_unity => Atom::TheUnity,
+            // Derived units last.
+            "%"                        | "percent"                           => Atom::Percent,
+            "10*"                                                            => Atom::TheNumberTenForArbitraryPowersStar,
+            "10^"                                                            => Atom::TheNumberTenForArbitraryPowersCaret,
+            "Queen Anne's wine gallon" | "[gal_us]"   | "[GAL_US]"           => Atom::QueenAnnesWineGallon,
+            "acre"                     | "[acr_us]"   | "[ACR_US]"           => Atom::AcreUS,
+            "are"                      | "ar"         | "AR"       | "a"     => Atom::Are,
+            "degree Celsius"           | "Cel"        | "CEL"      | "°C"    => Atom::DegreeCelsius,
+            "degree Fahrenheit"        | "[degF]"     | "[DEGF]"   | "°F"    => Atom::DegreeFahrenheit,
+            "degree Réaumur"           | "[degRe]"    | "°Ré"                => Atom::DegreeReaumur,
+            "degree"                   | "deg"        | "DEG"      | "°"     => Atom::Degree,
+            "fluid ounce"              | "[foz_us]"   | "[FOZ_US]" | "oz fl" => Atom::FluidOunceUS,
+            "foot"                     | "[ft_i]"     | "[FT_I]"   | "ft"    => Atom::FootInternational,
+            "ft(us)"                   | "[ft_us]"    | "[FT_US]"            => Atom::FootUS,
+            "gill"                     | "[gil_us]"   | "[GIL_US]"           => Atom::GillUS,
+            "inch"                     | "[in_i]"     | "[IN_I]"   | "in"    => Atom::InchInternational,
+            "liter"                    | "l"          | "L"                  => Atom::Liter,
+            "mole"                     | "mol"        | "MOL"                => Atom::Mole,
+            "pH"                       | "[pH]"       | "[PH]"               => Atom::PH,
+            "parts per billion"        | "[ppb]"      | "[PPB]"    | "ppb"   => Atom::PartsPerBillion,
+            "parts per million"        | "[ppm]"      | "[PPM]"    | "ppm"   => Atom::PartsPerMillion,
+            "parts per thousand"       | "[ppth]"     | "[PPTH]"   | "ppt"   => Atom::PartsPerThousand,
+            "pint"                     | "[pt_us]"    | "[PT_US]"            => Atom::PintUS,
+            "prism diopter"            | "[p'diop]"   | "[P'DIOP]" | "PD"    => Atom::PrismDiopter,
+            "quart"                    | "[qt_us]"    | "[QT_US]"            => Atom::QuartUS,
+            "rod"                      | "[rd_us]"    | "[RD_US]"            => Atom::RodUS,
+            "the number pi"            | "[pi]"       | "[PI]"     | "π"     => Atom::TheNumberPi,
 
-                // Derived units last.
-                Rule::acre_us => Atom::AcreUS,
-                Rule::are => Atom::Are,
-                Rule::degree_celsius => Atom::DegreeCelsius,
-                Rule::degree_fahrenheit => Atom::DegreeFahrenheit,
-                Rule::degree_reaumur => Atom::DegreeReaumur,
-                Rule::degree => Atom::Degree,
-                Rule::fluid_ounce_us => Atom::FluidOunceUS,
-                Rule::foot_international => Atom::FootInternational,
-                Rule::foot_us => Atom::FootUS,
-                Rule::gill_us => Atom::GillUS,
-                Rule::inch_international => Atom::InchInternational,
-                Rule::liter => Atom::Liter,
-                Rule::mole => Atom::Mole,
-                Rule::parts_per_billion => Atom::PartsPerBillion,
-                Rule::parts_per_million => Atom::PartsPerMillion,
-                Rule::parts_per_thousand => Atom::PartsPerThousand,
-                Rule::percent => Atom::Percent,
-                Rule::ph => Atom::PH,
-                Rule::pint_us => Atom::PintUS,
-                Rule::prism_diopter => Atom::PrismDiopter,
-                Rule::quart_us => Atom::QuartUS,
-                Rule::queen_annes_wine_gallon => Atom::QueenAnnesWineGallon,
-                Rule::rod_us => Atom::RodUS,
-                Rule::the_number_pi => Atom::TheNumberPi,
-                Rule::the_number_ten_for_arbitrary_powers_caret => Atom::TheNumberTenForArbitraryPowersCaret,
-                Rule::the_number_ten_for_arbitrary_powers_star => Atom::TheNumberTenForArbitraryPowersStar,
-
-                _ => {
-                    println!("visit_atom_symbol: unreachable rule: {:?}", inner_pair);
-                    unreachable!()
-                },
-            };
+            _ => unreachable!(),
         }
-
-        atom
     }
 
     fn visit_prefix_symbol<I: Input>(&mut self, pair: Pair<Rule, I>) -> Prefix {
-        let mut prefix = Prefix::Mega;
-
-        for inner_pair in pair.into_inner() {
-            prefix = match inner_pair.as_rule() {
-                Rule::atto => Prefix::Atto,
-                Rule::centi => Prefix::Centi,
-                Rule::deci => Prefix::Deci,
-                Rule::deka => Prefix::Deka,
-                Rule::exa => Prefix::Exa,
-                Rule::femto => Prefix::Femto,
-                Rule::gibi => Prefix::Gibi,
-                Rule::giga => Prefix::Giga,
-                Rule::hecto => Prefix::Hecto,
-                Rule::kilo => Prefix::Kilo,
-                Rule::mebi => Prefix::Mebi,
-                Rule::mega => Prefix::Mega,
-                Rule::micro => Prefix::Micro,
-                Rule::milli => Prefix::Milli,
-                Rule::nano => Prefix::Nano,
-                Rule::peta => Prefix::Peta,
-                Rule::tebi => Prefix::Tebi,
-                Rule::tera => Prefix::Tera,
-                Rule::yocto => Prefix::Yocto,
-                Rule::yotta => Prefix::Yotta,
-                Rule::zepto => Prefix::Zepto,
-                Rule::zetta => Prefix::Zetta,
-                _ => unreachable!(),
-            };
+        match pair.into_span().as_str() {
+            "atto"  | "a"   | "A"         => Prefix::Atto,
+            "centi" | "c"   | "C"         => Prefix::Centi,
+            "deci"  | "d"   | "D"         => Prefix::Deci,
+            "deka"  | "da"  | "DA"        => Prefix::Deka,
+            "exa"   | "E"   | "EX"        => Prefix::Exa,
+            "femto" | "f"   | "F"         => Prefix::Femto,
+            "gibi"  | "Gi"  | "GIB"       => Prefix::Gibi,
+            "giga"  | "G"   | "GA"        => Prefix::Giga,
+            "hecto" | "h"   | "H"         => Prefix::Hecto,
+            "kilo"  | "k"   | "K"         => Prefix::Kilo,
+            "mebi"  | "Mi"  | "MIB"       => Prefix::Mebi,
+            "mega"  | "M"   | "MA"        => Prefix::Mega,
+            "micro" | "u"   | "U"   | "µ" => Prefix::Micro,
+            "milli" | "m"                 => Prefix::Milli,
+            "nano"  | "n"   | "N"         => Prefix::Nano,
+            "peta"  | "P"   | "PT"        => Prefix::Peta,
+            "tebi"  | "Ti"  | "TIB"       => Prefix::Tebi,
+            "tera"  | "T"   | "TR"        => Prefix::Tera,
+            "yocto" | "y"   | "YO"        => Prefix::Yocto,
+            "yotta" | "Y"   | "YA"        => Prefix::Yotta,
+            "zepto" | "z"   | "ZO"        => Prefix::Zepto,
+            "zetta" | "Z"   | "ZA"        => Prefix::Zetta,
+            _                             => unreachable!(),
         }
-
-        prefix
     }
 
     fn visit_prefixed_atom<I: Input>(&mut self, pair: Pair<Rule, I>) -> (Option<Prefix>, Option<Atom>) {
