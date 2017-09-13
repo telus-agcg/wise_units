@@ -11,7 +11,7 @@ pub struct Term {
     pub prefix: Option<Prefix>,
     pub factor: u32,
     pub exponent: i32,
-    pub annotation: Option<String>
+    pub annotation: Option<String>,
 }
 
 impl Term {
@@ -21,17 +21,13 @@ impl Term {
             prefix: prefix,
             factor: 1,
             exponent: 1,
-            annotation: None
+            annotation: None,
         }
     }
 
-    pub fn scalar(&self) -> f64 {
-        self.calculate_scalar(1.0)
-    }
+    pub fn scalar(&self) -> f64 { self.calculate_scalar(1.0) }
 
-    pub fn magnitude(&self) -> f64 {
-        self.calculate_magnitude(self.scalar())
-    }
+    pub fn magnitude(&self) -> f64 { self.calculate_magnitude(self.scalar()) }
 
     // TODO: does this need to take a value? Can this just be scalar()?
     pub fn calculate_scalar(&self, value: f64) -> f64 {
@@ -39,12 +35,12 @@ impl Term {
 
         let atom_scalar = match self.atom {
             Some(ref atom) => atom.calculate_scalar(value),
-            None => 1.0
+            None => 1.0,
         };
 
         let prefix_scalar = match self.prefix {
             Some(ref prefix) => prefix.magnitude(),
-            None => 1.0
+            None => 1.0,
         };
 
         (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(e)
@@ -56,12 +52,12 @@ impl Term {
 
         let atom_magnitude = match self.atom {
             Some(ref atom) => atom.calculate_magnitude(value),
-            None => 1.0
+            None => 1.0,
         };
 
         let prefix_magnitude = match self.prefix {
             Some(ref prefix) => atom_magnitude * prefix.scalar(),
-            None => 1.0
+            None => 1.0,
         };
 
         (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(e)
@@ -69,26 +65,24 @@ impl Term {
 
     pub fn composition(&self) -> Option<Composition> {
         match self.atom {
-            Some(ref atom) => {
-                match atom.composition() {
-                    Some(atom_composition) => {
-                        if self.exponent == 1 {
-                            return Some(atom_composition);
-                        }
+            Some(ref atom) => match atom.composition() {
+                Some(atom_composition) => {
+                    if self.exponent == 1 {
+                        return Some(atom_composition);
+                    }
 
-                        let mut new_composition = Composition::default();
+                    let mut new_composition = Composition::default();
 
-                        for (dim, exp) in atom_composition {
-                            let atom_exp = if exp == 1 { 0 } else { exp };
-                            new_composition.insert(dim, atom_exp + self.exponent);
-                        }
+                    for (dim, exp) in atom_composition {
+                        let atom_exp = if exp == 1 { 0 } else { exp };
+                        new_composition.insert(dim, atom_exp + self.exponent);
+                    }
 
-                        Some(new_composition)
-                    },
-                    None => None
+                    Some(new_composition)
                 }
+                None => None,
             },
-            None => None
+            None => None,
         }
     }
 }
@@ -101,7 +95,9 @@ impl fmt::Display for Term {
 
 fn extract_term_string(term: &Term) -> String {
     let mut term_string = String::new();
-    if term.factor != 1 { term_string.push_str(&term.factor.to_string()) };
+    if term.factor != 1 {
+        term_string.push_str(&term.factor.to_string())
+    };
 
     if let Some(prefix) = term.prefix {
         term_string.push_str(&prefix.to_string());

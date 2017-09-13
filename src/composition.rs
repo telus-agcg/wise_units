@@ -19,16 +19,14 @@ impl Composition {
         match self.0.entry(dimension) {
             Entry::Vacant(entry) => {
                 entry.insert(exponent);
-            },
+            }
             Entry::Occupied(mut entry) => {
                 *entry.get_mut() += exponent;
             }
         }
     }
 
-    pub fn is_empty(&self) -> bool {
-        self.0.is_empty()
-    }
+    pub fn is_empty(&self) -> bool { self.0.is_empty() }
 }
 
 impl Default for Composition {
@@ -55,9 +53,7 @@ impl IntoIterator for Composition {
     type Item = (Dimension, i32);
     type IntoIter = ::std::collections::btree_map::IntoIter<Dimension, i32>;
 
-    fn into_iter(self) -> Self::IntoIter {
-        self.0.into_iter()
-    }
+    fn into_iter(self) -> Self::IntoIter { self.0.into_iter() }
 }
 
 #[cfg(test)]
@@ -95,7 +91,10 @@ mod tests {
         composition.insert(Dimension::Length, -5);
         composition.insert(Dimension::PlaneAngle, -6);
         composition.insert(Dimension::LuminousIntensity, -7);
-        assert_eq!(composition.to_string().as_str(), "Q-3.L-5.F-7.M-1.A-6.C-2.T-4");
+        assert_eq!(
+            composition.to_string().as_str(),
+            "Q-3.L-5.F-7.M-1.A-6.C-2.T-4"
+        );
     }
 
     #[test]

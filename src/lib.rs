@@ -27,5 +27,5 @@ mod term;
 mod unit_parser;
 mod unit_type;
 
-pub use measurement::Measurement;
 pub use measurable::Measurable;
+pub use measurement::Measurement;

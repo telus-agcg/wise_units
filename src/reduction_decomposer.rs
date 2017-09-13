@@ -17,14 +17,13 @@ impl ReductionDecomposer {
 
 impl Decomposable for ReductionDecomposer {
     fn numerator(&self) -> String {
-        let result = self.0.iter()
-            .filter(|&(_, v)| v.is_positive() )
-            .map(|(k, v)| {
-                if *v == 1 {
-                    k.to_string()
-                } else {
-                    format!("{}{}", k, v)
-                }
+        let result = self.0
+            .iter()
+            .filter(|&(_, v)| v.is_positive())
+            .map(|(k, v)| if *v == 1 {
+                k.to_string()
+            } else {
+                format!("{}{}", k, v)
             })
             .filter(|s| !s.is_empty())
             .fold(String::new(), |mut acc, num_string| {
@@ -44,16 +43,15 @@ impl Decomposable for ReductionDecomposer {
         }
     }
 
-    fn denominator (&self)-> String {
-        self.0.iter()
+    fn denominator(&self) -> String {
+        self.0
+            .iter()
             .filter(|&(_, v)| v.is_negative())
-            .map(|(k, v)| {
-                if v.abs() == 1 {
-                    k.to_string()
-                } else {
-                    let v = -v;
-                    format!("{}{}", k, v)
-                }
+            .map(|(k, v)| if v.abs() == 1 {
+                k.to_string()
+            } else {
+                let v = -v;
+                format!("{}{}", k, v)
             })
             .filter(|s| !s.is_empty())
             .fold(String::new(), |mut acc, num_string| {
@@ -74,7 +72,9 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
     for term in terms {
         let mut key = String::new();
 
-        if term.factor != 1 { key.push_str(&term.factor.to_string()) };
+        if term.factor != 1 {
+            key.push_str(&term.factor.to_string())
+        };
 
         if let Some(prefix) = term.prefix {
             key.push_str(&prefix.to_string());
@@ -88,7 +88,7 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
             match set.entry(key) {
                 Entry::Vacant(entry) => {
                     entry.insert(term.exponent);
-                },
+                }
                 Entry::Occupied(mut entry) => {
                     *entry.get_mut() += term.exponent;
                 }

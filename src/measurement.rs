@@ -1,7 +1,7 @@
+use interpreter::Interpreter;
 use measurable::Measurable;
 use std::fmt;
 use std::ops::{Add, Div, Mul};
-use interpreter::Interpreter;
 use unit::Unit;
 
 /// A Measurement is the prime interface for consumers of the library. It
@@ -37,13 +37,9 @@ pub enum ConversionError {
 }
 
 impl Measurable for Measurement {
-    fn get_unit(&self) -> &Unit {
-        &self.unit
-    }
+    fn get_unit(&self) -> &Unit { &self.unit }
 
-    fn get_value(&self) -> f64 {
-        self.value
-    }
+    fn get_value(&self) -> f64 { self.value }
 
     /// This scalar is the Measurement's value combined with any scalars that
     /// are part of the Unit's designation.
@@ -195,7 +191,7 @@ impl Add for Measurement {
 
         Measurement {
             value: new_value,
-            unit: self.unit
+            unit: self.unit,
         }
     }
 }
@@ -222,7 +218,7 @@ impl Div for Measurement {
 
         Measurement {
             value: new_value,
-            unit: self.unit
+            unit: self.unit,
         }
     }
 }
@@ -237,7 +233,7 @@ impl Mul for Measurement {
 
         Measurement {
             value: new_value,
-            unit: self.unit
+            unit: self.unit,
         }
     }
 }
@@ -299,15 +295,15 @@ mod tests {
         assert_eq!(
             Measurement::new(1.1, "km2").to_string(),
             "1.1km2".to_string()
-            );
+        );
         assert_eq!(
             Measurement::new(1.1, "km2/s").to_string(),
             "1.1km2/s".to_string()
-            );
+        );
         assert_eq!(
             Measurement::new(1.1, "km2/rad.s").to_string(),
             "1.1km2/rad.s".to_string()
-            );
+        );
     }
 
     #[test]

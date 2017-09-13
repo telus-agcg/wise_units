@@ -1,7 +1,7 @@
-use composition::Composition;
 use classification::Classification;
-use dimension::Dimension;
+use composition::Composition;
 use definition::Definition;
+use dimension::Dimension;
 use property::Property;
 use std::fmt;
 use unit_type::UnitType;
@@ -138,13 +138,13 @@ impl Atom {
             Atom::Meter => Some(Composition::new(Dimension::Length, 1)),
             Atom::Radian => Some(Composition::new(Dimension::PlaneAngle, 1)),
             Atom::Second => Some(Composition::new(Dimension::Time, 1)),
-            _ => self.definition().unit.composition()
+            _ => self.definition().unit.composition(),
         }
     }
 
     pub fn is_arbitrary(&self) -> bool {
         match *self {
-            _ => false
+            _ => false,
         }
     }
 
@@ -162,7 +162,7 @@ impl Atom {
                 Atom::Are           |
                 Atom::Liter         |
                 Atom::Mole => true,
-            _ => false
+            _ => false,
         }
     }
 
@@ -173,7 +173,7 @@ impl Atom {
                 Atom::DegreeReaumur    |
                 Atom::PH               |
                 Atom::PrismDiopter => true,
-            _ => false
+            _ => false,
         }
     }
 
@@ -214,7 +214,9 @@ impl Atom {
             Atom::RodUS => vec!["rod".to_string()],
             Atom::TheNumberPi => vec!["the number pi".to_string()],
             Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar => vec!["the number ten for arbitrary powers".to_string()],
+            Atom::TheNumberTenForArbitraryPowersStar => {
+                vec!["the number ten for arbitrary powers".to_string()]
+            }
         }
     }
 
@@ -287,7 +289,7 @@ impl Atom {
             Atom::TheNumberPi => Some("π".to_string()),
             Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => Some("10".to_string()),
-            _ => None
+            _ => None,
         }
     }
 
@@ -396,7 +398,7 @@ impl Atom {
     pub fn magnitude(&self) -> f64 {
         match *self {
             Atom::TheUnity => 1.0,
-            _ => self.calculate_magnitude(self.scalar())
+            _ => self.calculate_magnitude(self.scalar()),
         }
     }
 
@@ -408,7 +410,7 @@ impl Atom {
             Atom::DegreeReaumur => (value / 0.8) + 273.15,
             Atom::PH => 10.0_f64.powf(-value),
             Atom::PrismDiopter => value.tan() * 100.0,
-            _ => self.definition().calculate_scalar(value)
+            _ => self.definition().calculate_scalar(value),
         }
     }
 
@@ -427,7 +429,7 @@ impl Atom {
 impl fmt::Display for Atom {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            _ => write!(f, "{}", self.primary_code())
+            _ => write!(f, "{}", self.primary_code()),
         }
     }
 }
@@ -452,7 +454,7 @@ mod tests {
             Atom::Meter,
             Atom::Radian,
             Atom::Second,
-            Atom::Mole
+            Atom::Mole,
         ];
 
         for atom in atoms {
@@ -462,11 +464,7 @@ mod tests {
 
     #[test]
     fn validate_classification_us_lengths() {
-        let atoms = vec![
-            Atom::AcreUS,
-            Atom::FootUS,
-            Atom::RodUS,
-        ];
+        let atoms = vec![Atom::AcreUS, Atom::FootUS, Atom::RodUS];
 
         for atom in atoms {
             assert_eq!(atom.classification(), Classification::USLengths);
@@ -475,11 +473,7 @@ mod tests {
 
     #[test]
     fn validate_classification_iso1000() {
-        let atoms = vec![
-            Atom::Are,
-            Atom::Degree,
-            Atom::Liter,
-        ];
+        let atoms = vec![Atom::Are, Atom::Degree, Atom::Liter];
 
         for atom in atoms {
             assert_eq!(atom.classification(), Classification::ISO1000);
@@ -488,10 +482,7 @@ mod tests {
 
     #[test]
     fn validate_classification_heat() {
-        let atoms = vec![
-            Atom::DegreeFahrenheit,
-            Atom::DegreeReaumur,
-        ];
+        let atoms = vec![Atom::DegreeFahrenheit, Atom::DegreeReaumur];
 
         for atom in atoms {
             assert_eq!(atom.classification(), Classification::Heat);
@@ -514,10 +505,7 @@ mod tests {
 
     #[test]
     fn validate_classification_intcust() {
-        let atoms = vec![
-            Atom::InchInternational,
-            Atom::FootInternational,
-        ];
+        let atoms = vec![Atom::InchInternational, Atom::FootInternational];
 
         for atom in atoms {
             assert_eq!(atom.classification(), Classification::Intcust);
@@ -543,9 +531,7 @@ mod tests {
 
     #[test]
     fn validate_classification_chemical() {
-        let atoms = vec![
-            Atom::PH,
-        ];
+        let atoms = vec![Atom::PH];
 
         for atom in atoms {
             assert_eq!(atom.classification(), Classification::Chemical);
@@ -556,7 +542,6 @@ mod tests {
     fn validate_classification_clinical() {
         let atoms = vec![
             Atom::PrismDiopter,
-        ];
 
         for atom in atoms {
             assert_eq!(atom.classification(), Classification::Clinical);
@@ -572,7 +557,7 @@ mod tests {
             Atom::Kelvin,
             Atom::Meter,
             Atom::Radian,
-            Atom::Second
+            Atom::Second,
         ];
         let terms = vec![Term::new(Some(Atom::TheUnity), None)];
 
@@ -831,8 +816,10 @@ mod tests {
         let atom = Atom::TheNumberPi;
         let term = Term::new(Some(Atom::TheUnity), None);
 
-        assert_eq!(atom.definition().value,
-            3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3);
+        assert_eq!(
+            atom.definition().value,
+            3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3
+        );
         assert_eq!(atom.definition().unit.terms, vec![term]);
     }
 
@@ -1231,6 +1218,12 @@ mod tests {
         let error_threshold = ::std::f32::EPSILON as f64;
         let difference = actual - expected;
 
-        assert!(difference.abs() < error_threshold, "Actual: {}, Expected: {}, Diff: {}", actual, expected, difference);
+        assert!(
+            difference.abs() < error_threshold,
+            "Actual: {}, Expected: {}, Diff: {}",
+            actual,
+            expected,
+            difference
+        );
     }
 }

@@ -7,13 +7,13 @@ use std::fmt;
 ///
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum Dimension {
-    ElectricCharge,     // Q
-    Length,             // L
-    LuminousIntensity,  // F
-    Mass,               // M
-    PlaneAngle,         // A
-    Temperature,        // C
-    Time,               // T
+    ElectricCharge,    // Q
+    Length,            // L
+    LuminousIntensity, // F
+    Mass,              // M
+    PlaneAngle,        // A
+    Temperature,       // C
+    Time,              // T
 }
 
 impl fmt::Display for Dimension {

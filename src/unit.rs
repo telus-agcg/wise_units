@@ -8,16 +8,14 @@ use term::Term;
 
 #[derive(Debug, PartialEq)]
 pub struct Unit {
-    pub terms: Vec<Term>
+    pub terms: Vec<Term>,
 }
 
 impl Unit {
     pub fn is_special(&self) -> bool {
-        self.terms.iter().any(|term| {
-            match term.atom {
-                Some(ref atom) => atom.is_special(),
-                None => false
-            }
+        self.terms.iter().any(|term| match term.atom {
+            Some(ref atom) => atom.is_special(),
+            None => false,
         })
     }
 
@@ -26,31 +24,28 @@ impl Unit {
     /// calling some functions.
     ///
     pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1 && self.terms[0].atom.map_or(false, |atom| atom == Atom::TheUnity)
+        self.terms.len() == 1 &&
+            self.terms[0]
+                .atom
+                .map_or(false, |atom| atom == Atom::TheUnity)
     }
 
     /// Use this when calculating the scalar when *not* part of a Measurable.
-    pub fn scalar(&self) -> f64 {
-        self.calculate_scalar(1.0)
-    }
+    pub fn scalar(&self) -> f64 { self.calculate_scalar(1.0) }
 
-    pub fn magnitude(&self) -> f64 {
-        self.calculate_magnitude(self.scalar())
-    }
+    pub fn magnitude(&self) -> f64 { self.calculate_magnitude(self.scalar()) }
 
     /// Use this when calculating the scalar when it's part of a Measurable.
     pub fn calculate_scalar(&self, value: f64) -> f64 {
-        self.terms.iter()
-            .fold(1.0, |acc, term| {
-                acc * term.calculate_scalar(value)
-            })
+        self.terms
+            .iter()
+            .fold(1.0, |acc, term| acc * term.calculate_scalar(value))
     }
 
     pub fn calculate_magnitude(&self, value: f64) -> f64 {
-        self.terms.iter()
-            .fold(1.0, |acc, term| {
-                acc * term.calculate_magnitude(value)
-            })
+        self.terms
+            .iter()
+            .fold(1.0, |acc, term| acc * term.calculate_magnitude(value))
     }
 
     pub fn composition(&self) -> Option<Composition> {
@@ -58,12 +53,10 @@ impl Unit {
 
         for term in &self.terms {
             match term.composition() {
-                Some(term_composition) => {
-                    for (term_dimension, term_exponent) in term_composition {
-                        composition.insert(term_dimension, term_exponent);
-                    }
+                Some(term_composition) => for (term_dimension, term_exponent) in term_composition {
+                    composition.insert(term_dimension, term_exponent);
                 },
-                None => continue
+                None => continue,
             }
         }
 
@@ -87,9 +80,7 @@ impl Unit {
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
     ///
-    pub fn expression(&self) -> String {
-        SimpleDecomposer::new(&self.terms).expression()
-    }
+    pub fn expression(&self) -> String { SimpleDecomposer::new(&self.terms).expression() }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
@@ -102,16 +93,14 @@ impl Unit {
 }
 
 impl fmt::Display for Unit {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.expression())
-    }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.expression()) }
 }
 
 #[cfg(test)]
 mod tests {
     use composition::Composition;
-    use interpreter::Interpreter;
     use dimension::Dimension;
+    use interpreter::Interpreter;
 
     #[test]
     fn validate_is_special() {

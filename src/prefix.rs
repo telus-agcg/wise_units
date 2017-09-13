@@ -1,5 +1,5 @@
-use composition::Composition;
 use classification::Classification;
+use composition::Composition;
 use definition::Definition;
 use measurable::Measurable;
 use std::fmt;
@@ -34,9 +34,7 @@ pub enum Prefix {
 }
 
 impl Prefix {
-    pub fn classification(&self) -> Classification {
-        Classification::SI
-    }
+    pub fn classification(&self) -> Classification { Classification::SI }
 
     pub fn definition(&self) -> Definition {
         match *self {
@@ -67,9 +65,7 @@ impl Prefix {
         }
     }
 
-    pub fn composition(&self) -> Option<Composition> {
-        None
-    }
+    pub fn composition(&self) -> Option<Composition> { None }
 
     pub fn names(&self) -> Vec<String> {
         match *self {
@@ -132,7 +128,7 @@ impl Prefix {
     pub fn print_symbol(&self) -> Option<String> {
         match *self {
             Prefix::Micro => Some("μ".to_string()),
-            _ => Some(self.primary_code())
+            _ => Some(self.primary_code()),
         }
     }
 
@@ -165,17 +161,11 @@ impl Prefix {
         }
     }
 
-    pub fn unit_type(&self) -> UnitType {
-        UnitType::Prefix
-    }
+    pub fn unit_type(&self) -> UnitType { UnitType::Prefix }
 
-    pub fn scalar(&self) -> f64 {
-        self.definition().scalar()
-    }
+    pub fn scalar(&self) -> f64 { self.definition().scalar() }
 
-    pub fn magnitude(&self) -> f64 {
-        self.definition().magnitude()
-    }
+    pub fn magnitude(&self) -> f64 { self.definition().magnitude() }
 
     // TODO: is ok?
     pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
@@ -191,7 +181,7 @@ impl Prefix {
 impl fmt::Display for Prefix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            _ => write!(f, "{}", self.primary_code())
+            _ => write!(f, "{}", self.primary_code()),
         }
     }
 }
@@ -244,6 +234,12 @@ mod tests {
         let error_threshold = ::std::f32::EPSILON as f64;
         let difference = actual - expected;
 
-        assert!(difference.abs() < error_threshold, "Actual: {}, Expected: {}, Diff: {}", actual, expected, difference);
+        assert!(
+            difference.abs() < error_threshold,
+            "Actual: {}, Expected: {}, Diff: {}",
+            actual,
+            expected,
+            difference
+        );
     }
 }
