@@ -148,6 +148,14 @@ impl Measurement {
     ///
     pub fn unit_string(&self) -> String { self.unit.to_string() }
 
+
+    /// Really this is just to comply with Unitwise's API; not really sure how
+    /// useful it is.
+    ///
+    pub fn to_f64(&self) -> f64 {
+        self.value
+    }
+
     fn converted_scalar(&self, other_unit: &Unit) -> f64 {
         if self.is_special() && other_unit.is_special() {
             let ts = self.unit.calculate_scalar(self.value);
