@@ -29,3 +29,4 @@ mod unit_type;
 
 pub use measurable::Measurable;
 pub use measurement::Measurement;
+pub use unit::Unit;
