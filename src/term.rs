@@ -3,7 +3,7 @@ use composition::Composition;
 use prefix::Prefix;
 use std::fmt;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Term {
     // TODO: atom probably shouldn't be an Option since a Term is kinda pointless
     // without an atom.

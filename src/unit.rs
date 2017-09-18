@@ -98,6 +98,36 @@ impl Unit {
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
+
+    /// Allows for dividing a Unit by a factor; results in dividing this Unit's
+    /// associated Terms' factors by `other_factor`.
+    ///
+    pub fn div_u32(&self, other_factor: u32) -> Unit {
+        let mut new_terms = Vec::with_capacity(self.terms.len());
+
+        for term in &self.terms {
+            let mut new_term = term.clone();
+            new_term.factor = new_term.factor / other_factor;
+            new_terms.push(new_term);
+        }
+
+        Unit { terms: new_terms }
+    }
+
+    /// Allows for multiplying a Unit by a factor; results in multiplying this
+    /// Unit's associated Terms' factors by `other_factor`.
+    ///
+    pub fn mul_u32(&self, other_factor: u32) -> Unit {
+        let mut new_terms = Vec::with_capacity(self.terms.len());
+
+        for term in &self.terms {
+            let mut new_term = term.clone();
+            new_term.factor = new_term.factor * other_factor;
+            new_terms.push(new_term);
+        }
+
+        Unit { terms: new_terms }
+    }
 }
 
 impl fmt::Display for Unit {
@@ -111,6 +141,60 @@ impl FromStr for Unit {
         // TODO: Decouple parser and interpreter
         let mut interpreter = Interpreter;
         Ok(interpreter.interpret(expression))
+    }
+}
+
+impl<'pointer> Div for &'pointer Unit {
+    type Output = Unit;
+
+    fn div(self, other: &'pointer Unit) -> Unit {
+        let mut new_terms = self.terms.clone();
+
+        for other_term in &other.terms {
+            let mut new_other_term = other_term.clone();
+            new_other_term.exponent = -new_other_term.exponent;
+            new_terms.push(new_other_term);
+        }
+
+        Unit { terms: new_terms }
+    }
+}
+
+impl<'pointer> Div for &'pointer mut Unit {
+    type Output = Unit;
+
+    fn div(self, other: &'pointer mut Unit) -> Unit {
+        let mut new_terms = self.terms.clone();
+
+        for other_term in &other.terms {
+            let mut new_other_term = other_term.clone();
+            new_other_term.exponent = -new_other_term.exponent;
+            new_terms.push(new_other_term);
+        }
+
+        Unit { terms: new_terms }
+    }
+}
+
+impl<'pointer> Mul for &'pointer Unit {
+    type Output = Unit;
+
+    fn mul(self, other: &'pointer Unit) -> Unit {
+        let mut new_terms = self.terms.clone();
+        new_terms.extend(other.terms.clone());
+
+        Unit { terms: new_terms }
+    }
+}
+
+impl<'pointer> Mul for &'pointer mut Unit {
+    type Output = Unit;
+
+    fn mul(self, other: &'pointer mut Unit) -> Unit {
+        let mut new_terms = self.terms.clone();
+        new_terms.extend(other.terms.clone());
+
+        Unit { terms: new_terms }
     }
 }
 
@@ -392,5 +476,42 @@ mod tests {
 
         let unit = Unit::from_str("km3/nm2").unwrap();
         assert_eq!(unit.to_string().as_str(), "km3/nm2");
+    }
+
+    #[test]
+    fn validate_div_u32() {
+        let unit = Unit::from_str("2m").unwrap();
+        assert_eq!(unit.div_u32(2).to_string().as_str(), "m");
+
+        let unit = Unit::from_str("2m").unwrap();
+        assert_eq!(unit.div_u32(4).to_string().as_str(), "m");
+    }
+
+    #[test]
+    fn validate_div() {
+        let unit = Unit::from_str("m").unwrap();
+        let other = Unit::from_str("km").unwrap();
+        assert_eq!(unit.div(&other).to_string().as_str(), "m/km");
+
+        let unit = Unit::from_str("10m").unwrap();
+        let other = Unit::from_str("20m").unwrap();
+        assert_eq!(unit.div(&other).to_string().as_str(), "10m/20m");
+    }
+
+    #[test]
+    fn validate_mul_u32() {
+        let unit = Unit::from_str("2m").unwrap();
+        assert_eq!(unit.mul_u32(2).to_string().as_str(), "4m");
+    }
+
+    #[test]
+    fn validate_mul() {
+        let unit = Unit::from_str("m").unwrap();
+        let other = Unit::from_str("km").unwrap();
+        assert_eq!(unit.mul(&other).to_string().as_str(), "m.km");
+
+        let unit = Unit::from_str("10m").unwrap();
+        let other = Unit::from_str("20m").unwrap();
+        assert_eq!(unit.mul(&other).to_string().as_str(), "10m.20m");
     }
 }
