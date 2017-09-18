@@ -1,7 +1,8 @@
 use interpreter::Interpreter;
 use measurable::Measurable;
 use std::fmt;
-use std::ops::{Add, Div, Mul};
+use std::ops::{Add, Sub, Div, Mul};
+use std::str::FromStr;
 use unit::Unit;
 
 /// A Measurement is the prime interface for consumers of the library. It
@@ -32,7 +33,7 @@ pub struct Measurement {
 /// Errors when trying to convert between types that aren't commensurable.
 ///
 #[derive(Debug)]
-pub enum ConversionError {
+pub enum MeasurementError {
     IncompatibleUnitTypes,
 }
 
@@ -105,13 +106,11 @@ impl Measurable for Measurement {
 
 impl Measurement {
     pub fn new(value: f64, expression: &str) -> Self {
-        // TODO: Decouple parser and interpreter
-        let mut interpreter = Interpreter;
-        let su = interpreter.interpret(expression);
+        let unit = Unit::from_str(expression).unwrap();
 
         Measurement {
             value: value,
-            unit: su,
+            unit: unit,
         }
     }
 
@@ -119,14 +118,14 @@ impl Measurement {
     /// using a str of characters that represents the other unit type: ex.
     /// `"m2/s"`.
     ///
-    pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, ConversionError> {
+    pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, MeasurementError> {
         let my_unit = &self.unit;
 
         let mut interpreter = Interpreter;
         let other_unit = interpreter.interpret(expression);
 
         if !my_unit.is_compatible_with(&other_unit) {
-            return Err(ConversionError::IncompatibleUnitTypes);
+            return Err(MeasurementError::IncompatibleUnitTypes);
         }
 
         let new_measurement = Measurement {
@@ -189,20 +188,101 @@ impl Add for Measurement {
         let other_converted = other.convert_to(&unit).unwrap();
         let new_value = self.value + other_converted.value;
 
-        Measurement {
-            value: new_value,
-            unit: self.unit,
-        }
+        Measurement::new(new_value, &unit)
     }
 }
 
-impl<'pointer> Add for &'pointer Measurement {
+impl<'a> Add for &'a Measurement {
     type Output = Measurement;
 
-    fn add(self, other: &'pointer Measurement) -> Measurement {
+    fn add(self, other: &'a Measurement) -> Measurement {
         let unit = self.unit_string();
         let other_converted = other.convert_to(&unit).unwrap();
         let new_value = self.value + other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl<'a> Add for &'a mut Measurement {
+    type Output = Measurement;
+
+    fn add(self, other: &'a mut Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value + other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl Sub for Measurement {
+    type Output = Measurement;
+
+    fn sub(self, other: Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value - other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl<'a> Sub for &'a Measurement {
+    type Output = Measurement;
+
+    fn sub(self, other: &'a Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value - other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl<'a> Sub for &'a mut Measurement {
+    type Output = Measurement;
+
+    fn sub(self, other: &'a mut Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value +-other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl Mul for Measurement {
+    type Output = Measurement;
+
+    fn mul(self, other: Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value * other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl<'a> Mul for &'a Measurement {
+    type Output = Measurement;
+
+    fn mul(self, other: &'a Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value * other_converted.value;
+
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl<'a> Mul for &'a mut Measurement {
+    type Output = Measurement;
+
+    fn mul(self, other: &'a mut Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value * other_converted.value;
 
         Measurement::new(new_value, &unit)
     }
@@ -216,25 +296,31 @@ impl Div for Measurement {
         let other_converted = other.convert_to(&unit).unwrap();
         let new_value = self.value / other_converted.value;
 
-        Measurement {
-            value: new_value,
-            unit: self.unit,
-        }
+        Measurement::new(new_value, &unit)
     }
 }
 
-impl Mul for Measurement {
+impl<'a> Div for &'a Measurement {
     type Output = Measurement;
 
-    fn mul(self, other: Measurement) -> Measurement {
+    fn div(self, other: &'a Measurement) -> Measurement {
         let unit = self.unit_string();
         let other_converted = other.convert_to(&unit).unwrap();
-        let new_value = self.value * other_converted.value;
+        let new_value = self.value / other_converted.value;
 
-        Measurement {
-            value: new_value,
-            unit: self.unit,
-        }
+        Measurement::new(new_value, &unit)
+    }
+}
+
+impl<'a> Div for &'a mut Measurement {
+    type Output = Measurement;
+
+    fn div(self, other: &'a mut Measurement) -> Measurement {
+        let unit = self.unit_string();
+        let other_converted = other.convert_to(&unit).unwrap();
+        let new_value = self.value / other_converted.value;
+
+        Measurement::new(new_value, &unit)
     }
 }
 
@@ -331,5 +417,41 @@ mod tests {
         let m = Measurement::new(1.0, "m");
         let s = Measurement::new(1.0, "s");
         assert_ne!(&m, &s);
+    }
+
+    #[test]
+    fn validate_add() {
+        let m1 = Measurement::new(1.0, "m");
+        let m2 = Measurement::new(2.0, "m");
+        let m3 = Measurement::new(3.0, "m");
+        assert_eq!(&m1 + &m2, m3);
+        assert_eq!(m1 + m2, m3);
+    }
+
+    #[test]
+    fn validate_sub() {
+        let m1 = Measurement::new(1.0, "m");
+        let m2 = Measurement::new(2.0, "m");
+        let m3 = Measurement::new(-1.0, "m");
+        assert_eq!(&m1 - &m2, m3);
+        assert_eq!(m1 - m2, m3);
+    }
+
+    #[test]
+    fn validate_mul() {
+        let m1 = Measurement::new(2.0, "m");
+        let m2 = Measurement::new(3.0, "m");
+        let m3 = Measurement::new(6.0, "m");
+        assert_eq!(&m1 * &m2, m3);
+        assert_eq!(m1 * m2, m3);
+    }
+
+    #[test]
+    fn validate_div() {
+        let m1 = Measurement::new(10.0, "m");
+        let m2 = Measurement::new(2.0, "m");
+        let m3 = Measurement::new(5.0, "m");
+        assert_eq!(&m1 / &m2, m3);
+        assert_eq!(m1 / m2, m3);
     }
 }
