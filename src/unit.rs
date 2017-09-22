@@ -4,6 +4,7 @@ use decomposable::Decomposable;
 use interpreter::Interpreter;
 use reduction_decomposer::ReductionDecomposer;
 use simple_decomposer::SimpleDecomposer;
+use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
@@ -195,6 +196,19 @@ impl<'pointer> Mul for &'pointer mut Unit {
         new_terms.extend(other.terms.clone());
 
         Unit { terms: new_terms }
+    }
+}
+
+impl PartialOrd for Unit {
+    fn partial_cmp(&self, other: &Unit) -> Option<Ordering> {
+        if self.is_compatible_with(other) {
+            let other_scalar = other.scalar();
+            let my_scalar = self.scalar();
+
+            my_scalar.partial_cmp(&other_scalar)
+        } else {
+            None
+        }
     }
 }
 
