@@ -3,10 +3,11 @@ use composition::Composition;
 use prefix::Prefix;
 use std::fmt;
 
+/// A Term makes up an Atom (at its core) along with any Atom modifiers (anything that can change
+/// its scalar). It is, however, possible to have an Atom-less Term, which would simple be a Factor
+/// (with or without an annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
 #[derive(Clone, Debug, PartialEq)]
 pub struct Term {
-    // TODO: atom probably shouldn't be an Option since a Term is kinda pointless
-    // without an atom.
     pub atom: Option<Atom>,
     pub prefix: Option<Prefix>,
     pub factor: u32,
@@ -29,61 +30,41 @@ impl Term {
 
     pub fn magnitude(&self) -> f64 { self.calculate_magnitude(self.scalar()) }
 
-    // TODO: does this need to take a value? Can this just be scalar()?
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         let e = self.exponent;
 
-        let atom_scalar = match self.atom {
-            Some(ref atom) => atom.calculate_scalar(value),
-            None => 1.0,
-        };
-
-        let prefix_scalar = match self.prefix {
-            Some(ref prefix) => prefix.magnitude(),
-            None => 1.0,
-        };
+        let atom_scalar = self.atom.map_or(1.0, |a| a.calculate_scalar(value));
+        let prefix_scalar = self.prefix.map_or(1.0, |p| p.magnitude());
 
         (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(e)
     }
 
-    // TODO: does this need to take a value? Can this just be magnitude()?
     pub fn calculate_magnitude(&self, value: f64) -> f64 {
         let e = self.exponent;
 
-        let atom_magnitude = match self.atom {
-            Some(ref atom) => atom.calculate_magnitude(value),
-            None => 1.0,
-        };
-
-        let prefix_magnitude = match self.prefix {
-            Some(ref prefix) => atom_magnitude * prefix.scalar(),
-            None => 1.0,
-        };
+        let atom_magnitude = self.atom.map_or(1.0, |a| a.calculate_magnitude(value));
+        let prefix_magnitude = self.prefix.map_or(1.0, |p| atom_magnitude * p.scalar());
 
         (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(e)
     }
 
     pub fn composition(&self) -> Option<Composition> {
-        match self.atom {
-            Some(ref atom) => match atom.composition() {
-                Some(atom_composition) => {
-                    if self.exponent == 1 {
-                        return Some(atom_composition);
-                    }
-
-                    let mut new_composition = Composition::default();
-
-                    for (dim, exp) in atom_composition {
-                        let atom_exp = if exp == 1 { 0 } else { exp };
-                        new_composition.insert(dim, atom_exp + self.exponent);
-                    }
-
-                    Some(new_composition)
+        self.atom.and_then(|ref atom| {
+            atom.composition().and_then(|composition| {
+                if self.exponent == 1 {
+                    return Some(composition);
                 }
-                None => None,
-            },
-            None => None,
-        }
+
+                let mut new_composition = Composition::default();
+
+                for (dim, exp) in composition {
+                    let atom_exp = if exp == 1 { 0 } else { exp };
+                    new_composition.insert(dim, atom_exp + self.exponent);
+                }
+
+                Some(new_composition)
+            })
+        })
     }
 }
 
@@ -95,6 +76,7 @@ impl fmt::Display for Term {
 
 fn extract_term_string(term: &Term) -> String {
     let mut term_string = String::new();
+
     if term.factor != 1 {
         term_string.push_str(&term.factor.to_string())
     };
