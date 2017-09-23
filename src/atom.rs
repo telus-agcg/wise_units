@@ -4,7 +4,6 @@ use definition::Definition;
 use dimension::Dimension;
 use property::Property;
 use std::fmt;
-use unit_type::UnitType;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Atom {
@@ -370,21 +369,6 @@ impl Atom {
                 Atom::Percent                             |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => self.primary_code(),
-        }
-    }
-
-    // TODO: is this necessary?
-    pub fn unit_type(&self) -> UnitType {
-        match *self {
-            Atom::TheUnity    |
-                Atom::Candela |
-                Atom::Coulomb |
-                Atom::Gram    |
-                Atom::Kelvin  |
-                Atom::Meter   |
-                Atom::Radian  |
-                Atom::Second => UnitType::Base,
-            _ => UnitType::Derived,
         }
     }
 

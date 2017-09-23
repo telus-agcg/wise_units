@@ -3,7 +3,6 @@ use composition::Composition;
 use definition::Definition;
 use measurable::Measurable;
 use std::fmt;
-use unit_type::UnitType;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Prefix {
@@ -160,8 +159,6 @@ impl Prefix {
             Prefix::Zetta => "ZA".to_string(),
         }
     }
-
-    pub fn unit_type(&self) -> UnitType { UnitType::Prefix }
 
     pub fn scalar(&self) -> f64 { self.definition().scalar() }
 

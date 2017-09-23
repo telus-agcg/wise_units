@@ -25,7 +25,6 @@ mod reduction_decomposer;
 mod simple_decomposer;
 mod term;
 mod unit_parser;
-mod unit_type;
 
 pub use measurable::Measurable;
 pub use measurement::Measurement;
