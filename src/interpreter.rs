@@ -1,20 +1,15 @@
 use atom::Atom;
-use pest::Parser;
 use pest::inputs::Input;
 use pest::iterators::{Pair, Pairs};
 use prefix::Prefix;
 use term::Term;
 use unit::Unit;
-use unit_parser::{Rule, UnitParser};
+use unit_parser::{Rule};
 
 pub struct Interpreter;
 
 impl Interpreter {
-    pub fn interpret<'a>(&mut self, expression: &'a str) -> Unit {
-        let pairs = UnitParser::parse_str(Rule::term, expression).unwrap_or_else(|e| {
-            println!("Parsing error: {}", e);
-            panic!("Unable to parse \"{}\"", expression);
-        });
+    pub fn interpret<I: Input>(&mut self, pairs: Pairs<Rule, I>) -> Unit {
         let terms = self.visit_with_pairs(pairs);
 
         Unit { terms: terms }
@@ -484,12 +479,15 @@ impl Interpreter {
 mod tests {
     use super::*;
     use atom::Atom;
+    use pest::Parser;
     use unit::Unit;
+    use unit_parser::{Rule, UnitParser};
 
     #[test]
     fn validate_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m-3").unwrap();
         let mut i = Interpreter;
-        let actual = i.interpret("m-3");
+        let actual = i.interpret(pairs);
 
         let mut expected_term = Term::new(Some(Atom::Meter), None);
         expected_term.exponent = -3;
@@ -500,7 +498,8 @@ mod tests {
 
         assert_eq!(actual, expected);
 
-        let actual = i.interpret("km2/m-3");
+        let pairs = UnitParser::parse_str(Rule::term, "km2/m-3").unwrap();
+        let actual = i.interpret(pairs);
 
         let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
         term1.exponent = 2;
@@ -517,8 +516,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term() {
+        let pairs = UnitParser::parse_str(Rule::term, "m").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m");
+        let actual = i.interpret(pairs);
         let expected = Unit {
             terms: vec![Term::new(Some(Atom::Meter), None)],
         };
@@ -528,8 +529,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term_with_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m2").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m2");
+        let actual = i.interpret(pairs);
         let mut expected_term = Term::new(Some(Atom::Meter), None);
         expected_term.exponent = 2;
 
@@ -542,8 +545,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term_with_prefix() {
+        let pairs = UnitParser::parse_str(Rule::term, "km").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("km");
+        let actual = i.interpret(pairs);
 
         let expected = Unit {
             terms: vec![Term::new(Some(Atom::Meter), Some(Prefix::Kilo))],
@@ -554,8 +559,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term_with_factor() {
+        let pairs = UnitParser::parse_str(Rule::term, "2m").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("2m");
+        let actual = i.interpret(pairs);
 
         let mut expected_term = Term::new(Some(Atom::Meter), None);
         expected_term.factor = 2;
@@ -569,8 +576,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term() {
+        let pairs = UnitParser::parse_str(Rule::term, "m/s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m/s");
+        let actual = i.interpret(pairs);
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -1;
@@ -585,8 +594,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_prefix() {
+        let pairs = UnitParser::parse_str(Rule::term, "km/s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("km/s");
+        let actual = i.interpret(pairs);
         let expected_numerator_term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
         let mut expected_denominator_term = Term::new(Some(Atom::Second), None);
         expected_denominator_term.exponent = -1;
@@ -600,8 +611,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_denominator_prefix() {
+        let pairs = UnitParser::parse_str(Rule::term, "m/ks").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m/ks");
+        let actual = i.interpret(pairs);
         let expected_numerator_term = Term::new(Some(Atom::Meter), None);
         let mut expected_denominator_term = Term::new(Some(Atom::Second), Some(Prefix::Kilo));
         expected_denominator_term.exponent = -1;
@@ -615,8 +628,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m2/s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m2/s");
+        let actual = i.interpret(pairs);
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -631,8 +646,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_denominator_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m/s2").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m/s2");
+        let actual = i.interpret(pairs);
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -2;
@@ -646,8 +663,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_and_denominator_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m2/s2").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m2/s2");
+        let actual = i.interpret(pairs);
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -662,8 +681,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_numerator() {
+        let pairs = UnitParser::parse_str(Rule::term, "2m/s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("2m/s");
+        let actual = i.interpret(pairs);
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.factor = 2;
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -678,8 +699,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_denominator() {
+        let pairs = UnitParser::parse_str(Rule::term, "m/2s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m/2s");
+        let actual = i.interpret(pairs);
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -1;
@@ -694,8 +717,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term() {
+        let pairs = UnitParser::parse_str(Rule::term, "m.s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m.s");
+        let actual = i.interpret(pairs);
         let meter_term = Term::new(Some(Atom::Meter), None);
         let second_term = Term::new(Some(Atom::Second), None);
 
@@ -708,8 +733,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_left_side_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m2.s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m2.s");
+        let actual = i.interpret(pairs);
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
         let second_term = Term::new(Some(Atom::Second), None);
@@ -723,8 +750,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_right_side_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m.s2").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m.s2");
+        let actual = i.interpret(pairs);
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = 2;
@@ -738,8 +767,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_left_and_right_side_exponent() {
+        let pairs = UnitParser::parse_str(Rule::term, "m2.s2").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m2.s2");
+        let actual = i.interpret(pairs);
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -755,8 +786,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_factor_in_left_side() {
+        let pairs = UnitParser::parse_str(Rule::term, "2m.s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("2m.s");
+        let actual = i.interpret(pairs);
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.factor = 2;
         let second_term = Term::new(Some(Atom::Second), None);
@@ -770,8 +803,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_right_side() {
+        let pairs = UnitParser::parse_str(Rule::term, "m.2s").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("m.2s");
+        let actual = i.interpret(pairs);
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.factor = 2;
@@ -785,8 +820,10 @@ mod tests {
 
     #[test]
     fn validate_interpret_term_with_dot_term_then_slash_component() {
+        let pairs = UnitParser::parse_str(Rule::term, "[acr_us].[in_i]/[acr_us]").unwrap();
+
         let mut i = Interpreter;
-        let actual = i.interpret("[acr_us].[in_i]/[acr_us]");
+        let actual = i.interpret(pairs);
         let acre_term = Term::new(Some(Atom::AcreUS), None);
         let inch_term = Term::new(Some(Atom::InchInternational), None);
         let mut acre2_term = Term::new(Some(Atom::AcreUS), None);

@@ -2,6 +2,7 @@ use atom::Atom;
 use composition::Composition;
 use decomposable::Decomposable;
 use interpreter::Interpreter;
+use pest::Parser;
 use reduction_decomposer::ReductionDecomposer;
 use simple_decomposer::SimpleDecomposer;
 use std::cmp::Ordering;
@@ -9,6 +10,7 @@ use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
 use term::Term;
+use unit_parser::{Rule, UnitParser};
 
 #[derive(Debug, PartialEq)]
 pub struct Unit {
@@ -139,9 +141,13 @@ impl FromStr for Unit {
     type Err = UnitError;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        // TODO: Decouple parser and interpreter
+        let pairs = UnitParser::parse_str(Rule::term, expression).unwrap_or_else(|e| {
+            println!("Parsing error: {}", e);
+            panic!("Unable to parse \"{}\"", expression);
+        });
+
         let mut interpreter = Interpreter;
-        Ok(interpreter.interpret(expression))
+        Ok(interpreter.interpret(pairs))
     }
 }
 

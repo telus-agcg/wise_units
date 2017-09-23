@@ -1,6 +1,8 @@
 use interpreter::Interpreter;
 use measurable::Measurable;
+use pest::Parser;
 use unit::Unit;
+use unit_parser::{Rule, UnitParser};
 
 #[derive(Debug)]
 pub struct Definition {
@@ -10,8 +12,13 @@ pub struct Definition {
 
 impl Definition {
     pub fn new(value: f64, expression: &str) -> Self {
+        let pairs = UnitParser::parse_str(Rule::term, expression).unwrap_or_else(|e| {
+            println!("Parsing error: {}", e);
+            panic!("Unable to parse \"{}\"", expression);
+        });
+
         let mut interpreter = Interpreter;
-        let su = interpreter.interpret(expression);
+        let su = interpreter.interpret(pairs);
 
         Definition {
             value: value,

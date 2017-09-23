@@ -1,9 +1,11 @@
 use interpreter::Interpreter;
 use measurable::Measurable;
+use pest::Parser;
 use std::fmt;
 use std::ops::{Add, Sub, Div, Mul};
 use std::str::FromStr;
 use unit::Unit;
+use unit_parser::{Rule, UnitParser};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -121,8 +123,13 @@ impl Measurement {
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, MeasurementError> {
         let my_unit = &self.unit;
 
+        let pairs = UnitParser::parse_str(Rule::term, expression).unwrap_or_else(|e| {
+            println!("Parsing error: {}", e);
+            panic!("Unable to parse \"{}\"", expression);
+        });
+
         let mut interpreter = Interpreter;
-        let other_unit = interpreter.interpret(expression);
+        let other_unit = interpreter.interpret(pairs);
 
         if !my_unit.is_compatible_with(&other_unit) {
             return Err(MeasurementError::IncompatibleUnitTypes);
