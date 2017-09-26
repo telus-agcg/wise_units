@@ -123,7 +123,7 @@ impl Measurement {
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, MeasurementError> {
         let my_unit = &self.unit;
 
-        let pairs = UnitParser::parse_str(Rule::term, expression).unwrap_or_else(|e| {
+        let pairs = UnitParser::parse_str(Rule::main_term, expression).unwrap_or_else(|e| {
             println!("Parsing error: {}", e);
             panic!("Unable to parse \"{}\"", expression);
         });

@@ -1,4 +1,6 @@
-main_term = { "/" ~ term | term }
+main_term = { slash_main_term | term }
+
+slash_main_term =  { "/" ~ term }
 
 term = {
     dot_term |

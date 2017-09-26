@@ -141,7 +141,7 @@ impl FromStr for Unit {
     type Err = UnitError;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let pairs = UnitParser::parse_str(Rule::term, expression).unwrap_or_else(|e| {
+        let pairs = UnitParser::parse_str(Rule::main_term, expression).unwrap_or_else(|e| {
             println!("Parsing error: {}", e);
             panic!("Unable to parse \"{}\"", expression);
         });
@@ -280,9 +280,14 @@ mod tests {
         let unit = Unit::from_str("m/s2").unwrap();
         assert_eq!(unit.scalar(), 1.0);
 
-        // TODO: Interpreter needs to parse using Rule::main_term, not Rule::term
-        // let unit = Unit::from_str("/{tot}").unwrap();
-        // assert_eq!(unit.scalar(), 1.0);
+        let unit = Unit::from_str("/1").unwrap();
+        assert_eq!(unit.scalar(), 1.0);
+
+        let unit = Unit::from_str("/m").unwrap();
+        assert_eq!(unit.scalar(), 1.0);
+
+        let unit = Unit::from_str("/{tot}").unwrap();
+        assert_eq!(unit.scalar(), 1.0);
     }
 
     #[test]
@@ -320,9 +325,14 @@ mod tests {
         let unit = Unit::from_str("m/s2").unwrap();
         assert_eq!(unit.magnitude(), 1.0);
 
-        // TODO: Interpreter needs to parse using Rule::main_term, not Rule::term
-        // let unit = Unit::from_str("/{tot}").unwrap();
-        // assert_eq!(unit.magnitude(), 1.0);
+        let unit = Unit::from_str("/1").unwrap();
+        assert_eq!(unit.magnitude(), 1.0);
+
+        let unit = Unit::from_str("/m").unwrap();
+        assert_eq!(unit.magnitude(), 1.0);
+
+        let unit = Unit::from_str("/{tot}").unwrap();
+        assert_eq!(unit.magnitude(), 1.0);
     }
 
     #[test]
@@ -378,9 +388,15 @@ mod tests {
         composition.insert(Dimension::Time, -2);
         assert_eq!(unit.composition().unwrap(), composition);
 
-        // TODO: Interpreter needs to parse using Rule::main_term, not Rule::term
-        // let unit = Unit::from_str("/{tot}").unwrap();
-        // assert_eq!(unit.magnitude(), 1.0);
+        let unit = Unit::from_str("/1").unwrap();
+        assert_eq!(unit.composition(), None);
+
+        let unit = Unit::from_str("/m").unwrap();
+        let composition = Composition::new(Dimension::Length, -1);
+        assert_eq!(unit.composition().unwrap(), composition);
+
+        let unit = Unit::from_str("/{tot}").unwrap();
+        assert_eq!(unit.composition().unwrap(), Composition::default());
     }
 
     #[test]

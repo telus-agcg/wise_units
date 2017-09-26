@@ -12,7 +12,7 @@ pub struct Definition {
 
 impl Definition {
     pub fn new(value: f64, expression: &str) -> Self {
-        let pairs = UnitParser::parse_str(Rule::term, expression).unwrap_or_else(|e| {
+        let pairs = UnitParser::parse_str(Rule::main_term, expression).unwrap_or_else(|e| {
             println!("Parsing error: {}", e);
             panic!("Unable to parse \"{}\"", expression);
         });
