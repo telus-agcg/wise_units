@@ -103,8 +103,8 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
 mod tests {
     use super::ReductionDecomposer;
     use decomposable::Decomposable;
-    use unit::Unit;
     use std::str::FromStr;
+    use unit::Unit;
 
     #[test]
     fn validate_expression() {

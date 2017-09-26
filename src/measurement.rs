@@ -2,7 +2,7 @@ use interpreter::Interpreter;
 use measurable::Measurable;
 use pest::Parser;
 use std::fmt;
-use std::ops::{Add, Sub, Div, Mul};
+use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 use unit::Unit;
 use unit_parser::{Rule, UnitParser};
@@ -159,9 +159,7 @@ impl Measurement {
     /// Really this is just to comply with Unitwise's API; not really sure how
     /// useful it is.
     ///
-    pub fn to_f64(&self) -> f64 {
-        self.value
-    }
+    pub fn to_f64(&self) -> f64 { self.value }
 
     fn converted_scalar(&self, other_unit: &Unit) -> f64 {
         if self.is_special() && other_unit.is_special() {
@@ -261,7 +259,7 @@ impl<'a> Sub for &'a mut Measurement {
     fn sub(self, other: &'a mut Measurement) -> Measurement {
         let unit = self.unit_string();
         let other_converted = other.convert_to(&unit).unwrap();
-        let new_value = self.value +-other_converted.value;
+        let new_value = self.value + -other_converted.value;
 
         Measurement::new(new_value, &unit)
     }

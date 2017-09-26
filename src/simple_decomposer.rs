@@ -75,8 +75,8 @@ impl<'a> Decomposable for SimpleDecomposer<'a> {
 mod tests {
     use super::SimpleDecomposer;
     use decomposable::Decomposable;
-    use unit::Unit;
     use std::str::FromStr;
+    use unit::Unit;
 
     #[test]
     fn validate_expression() {

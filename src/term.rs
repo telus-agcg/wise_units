@@ -3,9 +3,11 @@ use composition::Composition;
 use prefix::Prefix;
 use std::fmt;
 
-/// A Term makes up an Atom (at its core) along with any Atom modifiers (anything that can change
-/// its scalar). It is, however, possible to have an Atom-less Term, which would simple be a Factor
-/// (with or without an annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
+/// A Term makes up an Atom (at its core) along with any Atom modifiers
+/// (anything that can change its scalar). It is, however, possible to have an
+/// Atom-less Term, which would simple be a Factor (with or without an
+/// annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
+///
 #[derive(Clone, Debug, PartialEq)]
 pub struct Term {
     pub atom: Option<Atom>,

@@ -4,7 +4,7 @@ use pest::iterators::{Pair, Pairs};
 use prefix::Prefix;
 use term::Term;
 use unit::Unit;
-use unit_parser::{Rule};
+use unit_parser::Rule;
 
 pub struct Interpreter;
 
@@ -20,9 +20,9 @@ impl Interpreter {
     fn visit_with_pairs<I: Input>(&mut self, pairs: Pairs<Rule, I>, terms: &mut Vec<Term>) {
         for pair in pairs {
             match pair.as_rule() {
-                Rule::main_term |
-                    Rule::slash_main_term |
-                    Rule::term => self.visit_with_pairs(pair.into_inner(), terms),
+                Rule::main_term | Rule::slash_main_term | Rule::term => {
+                    self.visit_with_pairs(pair.into_inner(), terms)
+                }
                 Rule::dot_term => self.visit_dot_term(pair, terms),
                 Rule::slash_term => self.visit_slash_term(pair, terms),
                 Rule::basic_term => self.visit_basic_term(pair, terms),
@@ -117,7 +117,7 @@ impl Interpreter {
     fn visit_prefixed_atom<I: Input>(
         &mut self,
         pair: Pair<Rule, I>,
-        ) -> (Option<Prefix>, Option<Atom>) {
+    ) -> (Option<Prefix>, Option<Atom>) {
         let mut prefixed_atom = (None, None);
 
         for inner_pair in pair.into_inner() {
@@ -172,7 +172,7 @@ impl Interpreter {
     fn visit_simple_unit<I: Input>(
         &mut self,
         pair: Pair<Rule, I>,
-        ) -> (Option<Prefix>, Option<Atom>) {
+    ) -> (Option<Prefix>, Option<Atom>) {
         let mut simple_unit = (None, None);
 
         for inner_pair in pair.into_inner() {
@@ -193,7 +193,7 @@ impl Interpreter {
     fn visit_simple_unit_with_exponent<I: Input>(
         &mut self,
         pair: Pair<Rule, I>,
-        ) -> (Option<Prefix>, Option<Atom>, i32) {
+    ) -> (Option<Prefix>, Option<Atom>, i32) {
         let mut simple_unit_with_exponent = (None, None, 1);
 
         for inner_pair in pair.into_inner() {
@@ -222,7 +222,7 @@ impl Interpreter {
     fn visit_annotatable<I: Input>(
         &mut self,
         pair: Pair<Rule, I>,
-        ) -> (Option<Prefix>, Option<Atom>, i32) {
+    ) -> (Option<Prefix>, Option<Atom>, i32) {
         let mut annotatable = (None, None, 1);
 
         for inner_pair in pair.into_inner() {
@@ -279,7 +279,7 @@ impl Interpreter {
     fn visit_annotated_annotatable<I: Input>(
         &mut self,
         pair: Pair<Rule, I>,
-        ) -> (Option<Prefix>, Option<Atom>, i32, Option<String>) {
+    ) -> (Option<Prefix>, Option<Atom>, i32, Option<String>) {
         let mut annotated_annotatable = (None, None, 1, None);
 
         for inner_pair in pair.into_inner() {
@@ -354,7 +354,11 @@ impl Interpreter {
         }
     }
 
-    fn visit_component_with_factor<I: Input>(&mut self, pair: Pair<Rule, I>, terms: &mut Vec<Term>) {
+    fn visit_component_with_factor<I: Input>(
+        &mut self,
+        pair: Pair<Rule, I>,
+        terms: &mut Vec<Term>,
+    ) {
         let mut factor = 1;
 
         for inner_pair in pair.into_inner() {
@@ -377,7 +381,9 @@ impl Interpreter {
     fn visit_component<I: Input>(&mut self, pair: Pair<Rule, I>, mut terms: &mut Vec<Term>) {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::component_with_factor => self.visit_component_with_factor(inner_pair, &mut terms),
+                Rule::component_with_factor => {
+                    self.visit_component_with_factor(inner_pair, &mut terms)
+                }
                 Rule::basic_component => self.visit_basic_component(inner_pair, &mut terms),
                 _ => unreachable!(),
             }
@@ -435,9 +441,9 @@ impl Interpreter {
 
     fn visit_term<I: Input>(&mut self, pair: Pair<Rule, I>, mut terms: &mut Vec<Term>) {
         match pair.as_rule() {
-            Rule::dot_term => self.visit_dot_term(pair, &mut terms,),
-            Rule::slash_term => self.visit_slash_term(pair, &mut terms,),
-            Rule::basic_term => self.visit_basic_term(pair, &mut terms,),
+            Rule::dot_term => self.visit_dot_term(pair, &mut terms),
+            Rule::slash_term => self.visit_slash_term(pair, &mut terms),
+            Rule::basic_term => self.visit_basic_term(pair, &mut terms),
             _ => {
                 println!("visit_term: unreachable rule: {:?}", pair);
                 unreachable!()
