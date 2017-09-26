@@ -20,9 +20,9 @@ impl Interpreter {
     fn visit_with_pairs<I: Input>(&mut self, pairs: Pairs<Rule, I>, terms: &mut Vec<Term>) {
         for pair in pairs {
             match pair.as_rule() {
-                Rule::main_term => self.visit_with_pairs(pair.into_inner(), terms),
-                Rule::slash_main_term => self.visit_with_pairs(pair.into_inner(), terms),
-                Rule::term => self.visit_with_pairs(pair.into_inner(), terms),
+                Rule::main_term |
+                    Rule::slash_main_term |
+                    Rule::term => self.visit_with_pairs(pair.into_inner(), terms),
                 Rule::dot_term => self.visit_dot_term(pair, terms),
                 Rule::slash_term => self.visit_slash_term(pair, terms),
                 Rule::basic_term => self.visit_basic_term(pair, terms),

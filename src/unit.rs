@@ -110,7 +110,7 @@ impl Unit {
 
         for term in &self.terms {
             let mut new_term = term.clone();
-            new_term.factor = new_term.factor / other_factor;
+            new_term.factor /= other_factor;
             new_terms.push(new_term);
         }
 
@@ -125,7 +125,7 @@ impl Unit {
 
         for term in &self.terms {
             let mut new_term = term.clone();
-            new_term.factor = new_term.factor * other_factor;
+            new_term.factor *= other_factor;
             new_terms.push(new_term);
         }
 
