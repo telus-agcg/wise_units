@@ -3,6 +3,7 @@ use composition::Composition;
 use definition::Definition;
 use dimension::Dimension;
 use property::Property;
+use std::f64::consts::PI;
 use std::fmt;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -118,10 +119,7 @@ impl Atom {
             Atom::QuartUS => Definition::new(1.0, "[gal_us]/4"),
             Atom::QueenAnnesWineGallon => Definition::new(231.0, "[in_i]3"),
             Atom::RodUS => Definition::new(16.5, "[ft_us]"),
-            Atom::TheNumberPi => Definition::new(
-                3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3,
-                "1",
-             ),
+            Atom::TheNumberPi => Definition::new(PI, "1"),
             Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
         }
