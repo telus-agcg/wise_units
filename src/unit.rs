@@ -396,7 +396,7 @@ mod tests {
         assert_eq!(unit.composition().unwrap(), composition);
 
         let unit = Unit::from_str("/{tot}").unwrap();
-        assert_eq!(unit.composition().unwrap(), Composition::default());
+        assert_eq!(unit.composition(), None);
     }
 
     #[test]
@@ -520,7 +520,7 @@ mod tests {
         assert_eq!(unit.div_u32(2).to_string().as_str(), "m");
 
         let unit = Unit::from_str("2m").unwrap();
-        assert_eq!(unit.div_u32(4).to_string().as_str(), "m");
+        assert_eq!(unit.div_u32(4).to_string().as_str(), "0m");
     }
 
     #[test]
