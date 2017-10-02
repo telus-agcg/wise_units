@@ -48,17 +48,28 @@ atom_symbol = {
 
         "acre"                     | "[acr_us]" | "[ACR_US]" |
         "are"                      | "ar"       | "AR"       | "a"     |
+        "ampère"                   | "A"        |
+        "becquerel"                | "Bq"       | "BQ"       |
         "degree Celsius"           | "Cel"      | "CEL"      | "°C"    |
         "degree Fahrenheit"        | "[degF]"   | "[DEGF]"   | "°F"    |
         "degree Réaumur"           | "[degRe]"  | "°Ré"      |
         "degree"                   | "deg"      | "DEG"      | "°"     |
+        "farad"                    | "F"        |
         "fluid ounce"              | "[foz_us]" | "[FOZ_US]" | "oz fl" |
         "foot"                     | "[ft_i]"   | "[FT_I]"   | "ft"    |
         "ft(us)"                   | "[ft_us]"  | "[FT_US]"  |
         "gill"                     | "[gil_us]" | "[GIL_US]" |
+        "gray"                     | "Gy"       | "GY"       |
+        "hertz"                    | "Hz"       | "HZ"       |
+        "henry"                    | "H"        |
         "inch"                     | "[in_i]"   | "[IN_I]"   | "in"    |
+        "joule"                    | "J"        |
+        "lumen"                    | "lm"       | "LM"       |
+        "lux"                      | "lx"       | "LX"       |
         "liter"                    | "l"        | "L"        |
         "mole"                     | "mol"      | "MOL"      |
+        "newton"                   | "N"        |
+        "ohm"                      | "Ohm"      | "OHM"      | "Ω"     |
         "parts per billion"        | "[ppb]"    | "[PPB]"    | "ppb"   |
         "parts per million"        | "[ppm]"    | "[PPM]"    | "ppm"   |
         "parts per thousand"       | "[ppth]"   | "[PPTH]"   | "ppt"   |
@@ -69,7 +80,14 @@ atom_symbol = {
         "quart"                    | "[qt_us]"  | "[QT_US]"  |
         "Queen Anne's wine gallon" | "[gal_us]" | "[GAL_US]" |
         "rod"                      | "[rd_us]"  | "[RD_US]"  |
+        "sievert"                  | "Sv"       | "SV"       |
+        "steradian"                | "sr"       | "SR"       |
+        "siemens"                  | "S"        | "SIE"      |
         "the number pi"            | "[pi]"     | "[PI]"     | "π"     |
+        "tesla"                    | "T"        |
+        "volt"                     | "V"        |
+        "weber"                    | "Wb"       | "WB"       |
+        "watt"                     | "W"        |
         "10^"                      |
         "10*"                      |
         "1"

@@ -19,18 +19,30 @@ pub enum Atom {
     Second,
 
     AcreUS,
+    Ampere,
     Are,
+    Becquerel,
     Degree,
     DegreeCelsius,
     DegreeFahrenheit,
     DegreeReaumur,
+    Farad,
     FluidOunceUS,
     FootInternational,
     FootUS,
     GillUS,
+    Gray,
+    Hertz,
+    Henry,
     InchInternational,
+    Joule,
     Liter,
+    Lumen,
+    Lux,
     Mole,
+    Newton,
+    Ohm,
+    Pascal,
     PartsPerBillion,
     PartsPerMillion,
     PartsPerThousand,
@@ -41,9 +53,16 @@ pub enum Atom {
     QuartUS,
     QueenAnnesWineGallon,
     RodUS,
+    Siemens,
+    Sievert,
+    Steradian,
+    Tesla,
     TheNumberPi,
     TheNumberTenForArbitraryPowersCaret,
     TheNumberTenForArbitraryPowersStar,
+    Volt,
+    Watt,
+    Weber,
 }
 
 impl Atom {
@@ -54,11 +73,31 @@ impl Atom {
                 Atom::Coulomb       |
                 Atom::DegreeCelsius |
                 Atom::Gram          |
+
+                Atom::Ampere        |
+                Atom::Becquerel     |
+                Atom::Farad         |
+                Atom::Gray          |
+                Atom::Henry         |
+                Atom::Hertz         |
+                Atom::Joule         |
                 Atom::Kelvin        |
+                Atom::Lumen         |
+                Atom::Lux           |
                 Atom::Meter         |
+                Atom::Mole          |
+                Atom::Newton        |
+                Atom::Ohm           |
+                Atom::Pascal        |
                 Atom::Radian        |
                 Atom::Second        |
-                Atom::Mole => Classification::SI,
+                Atom::Siemens       |
+                Atom::Sievert       |
+                Atom::Steradian     |
+                Atom::Tesla         |
+                Atom::Volt          |
+                Atom::Watt          |
+                Atom::Weber => Classification::SI,
             Atom::AcreUS     |
                 Atom::FootUS |
                 Atom::RodUS => Classification::USLengths,
@@ -95,33 +134,52 @@ impl Atom {
                 Atom::Kelvin  |
                 Atom::Meter   |
                 Atom::Radian  |
-                Atom::Second => Definition::new(1.0, "1"),
-            Atom::AcreUS => Definition::new(160.0, "[rd_us]2"),
-            Atom::Are => Definition::new(100.0, "m2"),
-            Atom::Degree => Definition::new(2.0, "[pi].rad/360"),
-            Atom::DegreeCelsius => Definition::new(1.0, "cel(1.0 K)"),
-            Atom::DegreeFahrenheit => Definition::new(1.0, "degf(5.0 K/9)"),
-            Atom::DegreeReaumur => Definition::new(1.0, "degre(5.0 K/4)"),
-            Atom::FluidOunceUS => Definition::new(1.0, "[gil_us]/4"),
-            Atom::FootInternational => Definition::new(12.0, "[in_i]"),
-            Atom::FootUS => Definition::new(1200.0, "m/3937"),
-            Atom::GillUS => Definition::new(1.0, "[pt_us]/4"),
-            Atom::InchInternational => Definition::new(254.0e-2, "cm"),
-            Atom::Liter => Definition::new(1.0, "dm3"),
-            Atom::Mole => Definition::new(6.0221367, "10*23"),
-            Atom::PartsPerBillion => Definition::new(1.0, "10*-9"),
-            Atom::PartsPerMillion => Definition::new(1.0, "10*-6"),
-            Atom::PartsPerThousand => Definition::new(1.0, "10*-3"),
-            Atom::Percent => Definition::new(1.0, "10*-2"),
-            Atom::PH => Definition::new(1.0, "ph(1.0 mol/l)"),
-            Atom::PintUS => Definition::new(1.0, "[qt_us]/2"),
-            Atom::PrismDiopter => Definition::new(1.0, "100tan(1.0 rad)"),
-            Atom::QuartUS => Definition::new(1.0, "[gal_us]/4"),
+                Atom::Second           => Definition::new(1.0, "1"),
+            Atom::AcreUS               => Definition::new(160.0, "[rd_us]2"),
+            Atom::Ampere               => Definition::new(1.0, "C/s"),
+            Atom::Are                  => Definition::new(100.0, "m2"),
+            Atom::Becquerel            => Definition::new(1.0, "s-1"),
+            Atom::Degree               => Definition::new(2.0, "[pi].rad/360"),
+            Atom::DegreeCelsius        => Definition::new(1.0, "cel(1.0 K)"),
+            Atom::DegreeFahrenheit     => Definition::new(1.0, "degf(5.0 K/9)"),
+            Atom::DegreeReaumur        => Definition::new(1.0, "degre(5.0 K/4)"),
+            Atom::Farad                => Definition::new(1.0, "C/V"),
+            Atom::FluidOunceUS         => Definition::new(1.0, "[gil_us]/4"),
+            Atom::FootInternational    => Definition::new(12.0, "[in_i]"),
+            Atom::FootUS               => Definition::new(1200.0, "m/3937"),
+            Atom::GillUS               => Definition::new(1.0, "[pt_us]/4"),
+            Atom::Gray                 => Definition::new(1.0, "J/kg"),
+            Atom::Henry                => Definition::new(1.0, "Wb/A"),
+            Atom::Hertz                => Definition::new(1.0, "s-1"),
+            Atom::InchInternational    => Definition::new(254.0e-2, "cm"),
+            Atom::Joule                => Definition::new(1.0, "N.m"),
+            Atom::Liter                => Definition::new(1.0, "dm3"),
+            Atom::Lumen                => Definition::new(1.0, "cd.sr"),
+            Atom::Lux                  => Definition::new(1.0, "lm/m2"),
+            Atom::Mole                 => Definition::new(6.0221367, "10*23"),
+            Atom::Newton               => Definition::new(1.0, "kg.m/s2"),
+            Atom::Ohm                  => Definition::new(1.0, "V/A"),
+            Atom::Pascal               => Definition::new(1.0, "N/m2"),
+            Atom::PartsPerBillion      => Definition::new(1.0, "10*-9"),
+            Atom::PartsPerMillion      => Definition::new(1.0, "10*-6"),
+            Atom::PartsPerThousand     => Definition::new(1.0, "10*-3"),
+            Atom::Percent              => Definition::new(1.0, "10*-2"),
+            Atom::PH                   => Definition::new(1.0, "ph(1.0 mol/l)"),
+            Atom::PintUS               => Definition::new(1.0, "[qt_us]/2"),
+            Atom::PrismDiopter         => Definition::new(1.0, "100tan(1.0 rad)"),
+            Atom::QuartUS              => Definition::new(1.0, "[gal_us]/4"),
             Atom::QueenAnnesWineGallon => Definition::new(231.0, "[in_i]3"),
-            Atom::RodUS => Definition::new(16.5, "[ft_us]"),
-            Atom::TheNumberPi => Definition::new(PI, "1"),
+            Atom::RodUS                => Definition::new(16.5, "[ft_us]"),
+            Atom::Siemens              => Definition::new(1.0, "Ohm-1"),
+            Atom::Sievert              => Definition::new(1.0, "J/kg"),
+            Atom::Steradian            => Definition::new(1.0, "rad2"),
+            Atom::Tesla                => Definition::new(1.0, "Wb/m2"),
+            Atom::TheNumberPi          => Definition::new(PI, "1"),
             Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
+            Atom::Volt => Definition::new(1.0, "J/C"),
+            Atom::Watt => Definition::new(1.0, "J/s"),
+            Atom::Weber => Definition::new(1.0, "V.s"),
         }
     }
 
@@ -156,9 +214,29 @@ impl Atom {
                 Atom::Meter         |
                 Atom::Radian        |
                 Atom::Second        |
+
+                Atom::Ampere        |
                 Atom::Are           |
+                Atom::Becquerel     |
+                Atom::Farad         |
+                Atom::Gray          |
+                Atom::Henry         |
+                Atom::Hertz         |
+                Atom::Joule         |
                 Atom::Liter         |
-                Atom::Mole => true,
+                Atom::Lumen         |
+                Atom::Lux           |
+                Atom::Mole          |
+                Atom::Newton        |
+                Atom::Ohm           |
+                Atom::Pascal        |
+                Atom::Steradian     |
+                Atom::Siemens       |
+                Atom::Sievert       |
+                Atom::Tesla         |
+                Atom::Volt          |
+                Atom::Watt          |
+                Atom::Weber => true,
             _ => false,
         }
     }
@@ -187,18 +265,30 @@ impl Atom {
 
             // Derived units
             Atom::AcreUS           => vec!["acre"],
+            Atom::Ampere           => vec!["ampère"],
             Atom::Are              => vec!["are"],
+            Atom::Becquerel        => vec!["becquerel"],
             Atom::Degree           => vec!["degree"],
             Atom::DegreeCelsius    => vec!["degree Celsius"],
             Atom::DegreeFahrenheit => vec!["degree Fahrenheit"],
             Atom::DegreeReaumur    => vec!["degree Réaumur"],
+            Atom::Farad            => vec!["farad"],
             Atom::FluidOunceUS     => vec!["fluid once"],
             Atom::FootInternational |
                 Atom::FootUS           => vec!["foot"],
             Atom::GillUS               => vec!["gill"],
+            Atom::Gray                 => vec!["gray"],
+            Atom::Henry                => vec!["henry"],
+            Atom::Hertz                => vec!["hertz"],
             Atom::InchInternational    => vec!["inch"],
+            Atom::Joule                => vec!["joule"],
             Atom::Liter                => vec!["liter"],
+            Atom::Lumen                => vec!["lumen"],
+            Atom::Lux                  => vec!["lux"],
             Atom::Mole                 => vec!["mole"],
+            Atom::Newton               => vec!["newton"],
+            Atom::Ohm                  => vec!["ohm"],
+            Atom::Pascal               => vec!["pascal"],
             Atom::PartsPerBillion      => vec!["parts per billion"],
             Atom::PartsPerMillion      => vec!["parts per million"],
             Atom::PartsPerThousand     => vec!["parts per thousand"],
@@ -209,11 +299,18 @@ impl Atom {
             Atom::QuartUS              => vec!["quart"],
             Atom::QueenAnnesWineGallon => vec!["Queen Ann's wine gallon"],
             Atom::RodUS                => vec!["rod"],
+            Atom::Steradian            => vec!["steradian"],
+            Atom::Siemens              => vec!["siemens"],
+            Atom::Sievert              => vec!["sievert"],
+            Atom::Tesla                => vec!["tesla"],
             Atom::TheNumberPi          => vec!["the number pi"],
             Atom::TheNumberTenForArbitraryPowersCaret |
-            Atom::TheNumberTenForArbitraryPowersStar => {
+                Atom::TheNumberTenForArbitraryPowersStar => {
                 vec!["the number ten for arbitrary powers"]
-            }
+            },
+            Atom::Volt => vec!["volt"],
+            Atom::Watt => vec!["watt"],
+            Atom::Weber => vec!["weber"],
         }
     }
 
@@ -230,18 +327,30 @@ impl Atom {
 
             // Derived units
             Atom::AcreUS                              => "[acr_us]",
+            Atom::Ampere                              => "A",
             Atom::Are                                 => "ar",
+            Atom::Becquerel                           => "Bq",
             Atom::Degree                              => "deg",
             Atom::DegreeCelsius                       => "Cel",
             Atom::DegreeFahrenheit                    => "[degF]",
             Atom::DegreeReaumur                       => "[degRe]",
             Atom::FluidOunceUS                        => "[foz_us]",
+            Atom::Farad                               => "F",
             Atom::FootInternational                   => "[ft_i]",
             Atom::FootUS                              => "[ft_us]",
             Atom::GillUS                              => "[gil_us]",
+            Atom::Gray                                => "Gy",
+            Atom::Henry                               => "H",
+            Atom::Hertz                               => "Hz",
             Atom::InchInternational                   => "[in_i]",
+            Atom::Joule                               => "J",
             Atom::Liter                               => "l",
+            Atom::Lumen                               => "lm",
+            Atom::Lux                                 => "lx",
             Atom::Mole                                => "mol",
+            Atom::Newton                              => "N",
+            Atom::Ohm                                 => "Ohm",
+            Atom::Pascal                              => "Pa",
             Atom::PartsPerBillion                     => "[ppb]",
             Atom::PartsPerMillion                     => "[ppm]",
             Atom::PartsPerThousand                    => "[ppth]",
@@ -252,24 +361,49 @@ impl Atom {
             Atom::QuartUS                             => "[qt_us]",
             Atom::QueenAnnesWineGallon                => "[gal_us]",
             Atom::RodUS                               => "[rd_us]",
+            Atom::Steradian                           => "sr",
+            Atom::Siemens                             => "S",
+            Atom::Sievert                             => "Sv",
+            Atom::Tesla                               => "T",
             Atom::TheNumberPi                         => "[pi]",
             Atom::TheNumberTenForArbitraryPowersCaret => "10^",
             Atom::TheNumberTenForArbitraryPowersStar  => "10*",
+            Atom::Volt                                => "V",
+            Atom::Watt                                => "W",
+            Atom::Weber                               => "Wb",
         }
     }
 
     pub fn print_symbol(&self) -> Option<&'static str> {
         match *self {
-            Atom::Candela     |
-                Atom::Coulomb |
-                Atom::Gram    |
-                Atom::Kelvin  |
-                Atom::Meter   |
-                Atom::Radian  |
-                Atom::Second  |
-                Atom::Liter   |
-                Atom::Mole    |
-                Atom::Percent       => Some(self.primary_code()),
+            Atom::Candela       |
+                Atom::Coulomb   |
+                Atom::Gram      |
+                Atom::Kelvin    |
+                Atom::Meter     |
+                Atom::Radian    |
+                Atom::Second    |
+
+                Atom::Ampere    |
+                Atom::Becquerel |
+                Atom::Farad     |
+                Atom::Gray      |
+                Atom::Hertz     |
+                Atom::Henry     |
+                Atom::Joule     |
+                Atom::Liter     |
+                Atom::Lumen     |
+                Atom::Lux       |
+                Atom::Mole      |
+                Atom::Pascal    |
+                Atom::Percent   |
+                Atom::Siemens   |
+                Atom::Sievert   |
+                Atom::Steradian |
+                Atom::Tesla     |
+                Atom::Volt      |
+                Atom::Watt      |
+                Atom::Weber => Some(self.primary_code()),
             Atom::Are               => Some("a"),
             Atom::Degree            => Some("°"),
             Atom::DegreeCelsius     => Some("°C"),
@@ -278,6 +412,7 @@ impl Atom {
             Atom::FluidOunceUS      => Some("oz fl"),
             Atom::FootInternational => Some("ft"),
             Atom::FootUS            => Some("ft (us)"),
+            Atom::Ohm               => Some("Ω"),
             Atom::PartsPerBillion   => Some("ppb"),
             Atom::PartsPerMillion   => Some("ppm"),
             Atom::PartsPerThousand  => Some("ppth"),
@@ -326,6 +461,25 @@ impl Atom {
                 Atom::TheNumberTenForArbitraryPowersStar => Property::Number,
             Atom::PH                                     => Property::Acidity,
             Atom::PrismDiopter                           => Property::RefractionOfPrism,
+            Atom::Steradian                              => Property::SolidAngle,
+            Atom::Hertz                                  => Property::Frequency,
+            Atom::Newton                                 => Property::Force,
+            Atom::Pascal                                 => Property::Pressure,
+            Atom::Joule                                  => Property::Energy,
+            Atom::Watt                                   => Property::Power,
+            Atom::Ampere                                 => Property::ElectricCurrent,
+            Atom::Volt                                   => Property::ElectricPotential,
+            Atom::Farad                                  => Property::ElectricCapacitance,
+            Atom::Ohm                                    => Property::ElectricResistance,
+            Atom::Siemens                                => Property::ElectricConductance,
+            Atom::Weber                                  => Property::MagneticFlux,
+            Atom::Tesla                                  => Property::MagneticFluxDensity,
+            Atom::Henry                                  => Property::Inductance,
+            Atom::Lumen                                  => Property::LuminousFlux,
+            Atom::Lux                                    => Property::Illuminance,
+            Atom::Becquerel                              => Property::Radioactivity,
+            Atom::Gray                                   => Property::EnergyDose,
+            Atom::Sievert                                => Property::DoseEquivalent,
         }
     }
 
@@ -342,6 +496,7 @@ impl Atom {
             // Derived units
             Atom::AcreUS               => "[ACR_US]",
             Atom::Are                  => "AR",
+            Atom::Becquerel            => "BQ",
             Atom::Degree               => "DEG",
             Atom::DegreeCelsius        => "CEL",
             Atom::DegreeFahrenheit     => "[DEGF]",
@@ -349,9 +504,15 @@ impl Atom {
             Atom::FootInternational    => "[FT_I]",
             Atom::FootUS               => "[FT_US]",
             Atom::GillUS               => "[GIL_US]",
+            Atom::Gray                 => "GY",
+            Atom::Hertz                => "HZ",
             Atom::InchInternational    => "[IN_I]",
             Atom::Liter                => "L",
+            Atom::Lumen                => "LM",
+            Atom::Lux                  => "LX",
             Atom::Mole                 => "MOL",
+            Atom::Ohm                  => "OHM",
+            Atom::Pascal               => "PAL",
             Atom::PartsPerBillion      => "[PPB]",
             Atom::PartsPerMillion      => "[PPM]",
             Atom::PartsPerThousand     => "[PPTH]",
@@ -361,12 +522,24 @@ impl Atom {
             Atom::QuartUS              => "[QT_US]",
             Atom::QueenAnnesWineGallon => "[GAL_US]",
             Atom::RodUS                => "[RD_US]",
+            Atom::Siemens              => "SIE",
+            Atom::Sievert              => "SV",
+            Atom::Steradian            => "SR",
             Atom::TheNumberPi          => "[PI]",
-            Atom::DegreeReaumur                           |
+            Atom::Weber                => "WB",
+            Atom::Ampere                                  |
+                Atom::DegreeReaumur                       |
+                Atom::Farad                               |
+                Atom::Henry                               |
+                Atom::Joule                               |
                 Atom::Kelvin                              |
+                Atom::Newton                              |
                 Atom::Percent                             |
+                Atom::Tesla                               |
                 Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar => self.primary_code(),
+                Atom::TheNumberTenForArbitraryPowersStar  |
+                Atom::Volt                                |
+                Atom::Watt => self.primary_code(),
         }
     }
 
