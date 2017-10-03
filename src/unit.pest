@@ -55,7 +55,7 @@ atom_symbol = {
                                      "u"        | "AMU"      |
                                      "AU"       | "ASU"      |
                                      "A"        |
-        "bar"                      | "bar"      | "BAR"      |
+                                     "bar"      | "BAR"      |
         "becquerel"                | "Bq"       | "BQ"       |
                                      "Cel"      | "CEL"      | "°C"    |
                                      "[degF]"   | "[DEGF]"   | "°F"    |
