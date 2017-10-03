@@ -38,13 +38,13 @@ prefixed_atom = { prefix_symbol ~ atom_symbol }
 
 // Atoms
 atom_symbol = {
-    "candela"     | "cd"  | "CD"  |
-        "Coulomb" | "C"   |
+    "cd"  | "CD"  |
+                    "C"   |
         "gram"    | "g"   | "G"   |
-        "Kelvin"  | "K"   |
+                    "K"   |
         "meter"   | "m"   | "M"   |
-        "radian"  | "rad" | "RAD" |
-        "second"  | "s"   | "S"   |
+                    "rad" | "RAD" |
+        "second"  | "s"   |
 
         "acre"                     | "[acr_us]" | "[ACR_US]" |
         "are"                      | "ar"       | "AR"       | "a"     |
@@ -54,7 +54,7 @@ atom_symbol = {
         "year"                     | "a"        | "ANN"      |
                                      "u"        | "AMU"      |
                                      "AU"       | "ASU"      |
-        "ampère"                   | "A"        |
+                                     "A"        |
         "bar"                      | "bar"      | "BAR"      |
         "becquerel"                | "Bq"       | "BQ"       |
                                      "Cel"      | "CEL"      | "°C"    |
@@ -63,55 +63,56 @@ atom_symbol = {
         "degree"                   | "deg"      | "DEG"      | "°"     |
         "day"                      | "d"        | "D"        |
                                      "eV"       | "EV"       |
-        "farad"                    | "F"        |
-        "fluid ounce"              | "[foz_us]" | "[FOZ_US]" | "oz fl" |
-        "ft(us)"                   | "[ft_us]"  | "[FT_US]"  |
+                                     "F"        |
+                                     "[foz_us]" | "[FOZ_US]" | "oz fl" |
+                                     "[ft_us]"  | "[FT_US]"  |
         "foot"                     | "[ft_i]"   | "[FT_I]"   | "ft"    |
-        "gill"                     | "[gil_us]" | "[GIL_US]" |
-        "gon"                      | "gon"      | "GON"      | "grade" |
-        "gray"                     | "Gy"       | "GY"       |
-        "hertz"                    | "Hz"       | "HZ"       |
-        "henry"                    | "H"        |
+                                     "[gil_us]" | "[GIL_US]" |
+                                     "gon"      | "GON"      | "grade" |
+                                     "Gy"       | "GY"       |
+                                     "Hz"       | "HZ"       |
+                                     "H"        |
         "hour"                     | "h"        | "HR"       |
         "inch"                     | "[in_i]"   | "[IN_I]"   | "in"    |
-        "joule"                    | "J"        |
-        "lumen"                    | "lm"       | "LM"       |
-        "lux"                      | "lx"       | "LX"       |
+                                     "J"        |
+                                     "lm"       | "LM"       |
+                                     "lx"       | "LX"       |
         "liter"                    | "l"        | "L"        |
         "minute"                   | "min"      | "MIN"      |
-        "mole"                     | "mol"      | "MOL"      |
+                                     "mol"      | "MOL"      |
                                      "mo_g"     | "MO_G"     |
                                      "mo_j"     | "MO_J"     | "moⱼ"   |
                                      "mo_s"     | "MO_S"     | "moₛ"   |
         "month"                    | "mo"       | "MO"       |
-        "newton"                   | "N"        |
-        "ohm"                      | "Ohm"      | "OHM"      | "Ω"     |
-        "parsec"                   | "pc"       | "PRS"      |
+                                     "N"        |
+                                     "Ohm"      | "OHM"      | "Ω"     |
+                                     "pc"       | "PRS"      |
+                                     "Pa"       | "PAL"      |
                                      "[ppb]"    | "[PPB]"    | "ppb"   |
                                      "[ppm]"    | "[PPM]"    | "ppm"   |
                                      "[ppth]"   | "[PPTH]"   | "ppt"   |
-        "%"                        | "percent"  |
         "pH"                       | "[pH]"     | "[PH]"     |
         "pint"                     | "[pt_us]"  | "[PT_US]"  |
                                      "[p'diop]" | "[P'DIOP]" | "PD"    |
         "quart"                    | "[qt_us]"  | "[QT_US]"  |
                                      "[gal_us]" | "[GAL_US]" |
-        "rod"                      | "[rd_us]"  | "[RD_US]"  |
-        "sievert"                  | "Sv"       | "SV"       |
-        "steradian"                | "sr"       | "SR"       |
-        "siemens"                  | "S"        | "SIE"      |
+                                     "[rd_us]"  | "[RD_US]"  |
+                                     "Sv"       | "SV"       |
+                                     "sr"       | "SR"       |
+                                     "S"        | "SIE"      |
                                      "[pi]"     | "[PI]"     | "π"     |
         "tonne"                    | "t"        | "TNE"      |
-        "tesla"                    | "T"        |
+                                     "T"        |
         "volt"                     | "V"        |
-        "weber"                    | "Wb"       | "WB"       |
+                                     "Wb"       | "WB"       |
         "watt"                     | "W"        |
         "week"                     | "wk"       | "WK"       |
-        "'"                        |
-        "''"                       |
-        "10^"                      |
-        "10*"                      |
-        "1"
+                                     "%"        |
+                                     "'"        |
+                                     "''"       |
+                                     "10^"      |
+                                     "10*"      |
+                                     "1"
 }
 
 // Prefixes
