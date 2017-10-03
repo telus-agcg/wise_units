@@ -47,7 +47,7 @@ atom_symbol = {
         "second"  | "s"   |
 
         "acre"                     | "[acr_us]" | "[ACR_US]" |
-        "are"                      | "ar"       | "AR"       | "a"     |
+        "are"                      | "ar"       | "AR"       |
                                      "a_t"      | "ANN_T"    | "aₜ"    |
                                      "a_j"      | "ANN_J"    | "aⱼ"    |
                                      "a_g"      | "ANN_G"    |
