@@ -51,24 +51,29 @@ atom_symbol = {
                                      "a_t"      | "ANN_T"    | "aₜ"    |
                                      "a_j"      | "ANN_J"    | "aⱼ"    |
                                      "a_g"      | "ANN_G"    |
+                                     "atm"      | "ATM"      |
         "year"                     | "a"        | "ANN"      |
                                      "u"        | "AMU"      |
                                      "AU"       | "ASU"      |
                                      "A"        |
                                      "bar"      | "BAR"      |
         "becquerel"                | "Bq"       | "BQ"       |
+                                     "[k]"      | "[K]"      | "𝑘"     |
                                      "Cel"      | "CEL"      | "°C"    |
                                      "[degF]"   | "[DEGF]"   | "°F"    |
                                      "[degRe]"  | "°Ré"      |
         "degree"                   | "deg"      | "DEG"      | "°"     |
         "day"                      | "d"        | "D"        |
+                                     "[e]"      | "[E]"      | "𝑒"     |
                                      "eV"       | "EV"       |
+                                     "[m_e]"    | "[M_E]"    | "𝑚ₑ"    |
                                      "F"        |
                                      "[foz_us]" | "[FOZ_US]" | "oz fl" |
                                      "[ft_us]"  | "[FT_US]"  |
         "foot"                     | "[ft_i]"   | "[FT_I]"   | "ft"    |
                                      "[gil_us]" | "[GIL_US]" |
                                      "gon"      | "GON"      | "grade" |
+                                     "gf"       | "GF"       |
                                      "Gy"       | "GY"       |
                                      "Hz"       | "HZ"       |
                                      "H"        |
@@ -78,6 +83,8 @@ atom_symbol = {
                                      "lm"       | "LM"       |
                                      "lx"       | "LX"       |
         "liter"                    | "l"        | "L"        |
+                                     "[ly]"     | "[LY]"     | "l.y."  |
+                                     "[lbf_av]" | "[LBF_AV]" | "lbf"   |
         "minute"                   | "min"      | "MIN"      |
                                      "mol"      | "MOL"      |
                                      "mo_g"     | "MO_G"     |
@@ -85,6 +92,8 @@ atom_symbol = {
                                      "mo_s"     | "MO_S"     | "moₛ"   |
         "month"                    | "mo"       | "MO"       |
                                      "N"        |
+                                     "[G]"      | "[GC]"     | "𝐺"     |
+                                     "[g]"      |              "𝑔"     |
                                      "Ohm"      | "OHM"      | "Ω"     |
                                      "pc"       | "PRS"      |
                                      "Pa"       | "PAL"      |
@@ -92,8 +101,12 @@ atom_symbol = {
                                      "[ppm]"    | "[PPM]"    | "ppm"   |
                                      "[ppth]"   | "[PPTH]"   | "ppt"   |
         "pH"                       | "[pH]"     | "[PH]"     |
+                                     "[mu_0]"   | "[MU_0]"   | "μ₀"    |
+                                     "[eps_0]"  | "[EPS_0]"  | "ε₀"    |
         "pint"                     | "[pt_us]"  | "[PT_US]"  |
+                                     "[h]"      | "[H]"      | "ℎ"     |
                                      "[p'diop]" | "[P'DIOP]" | "PD"    |
+                                     "[m_p]"    | "[M_P]"    | "𝑚ₚ"    |
         "quart"                    | "[qt_us]"  | "[QT_US]"  |
                                      "[gal_us]" | "[GAL_US]" |
                                      "[rd_us]"  | "[RD_US]"  |
@@ -103,6 +116,7 @@ atom_symbol = {
                                      "[pi]"     | "[PI]"     | "π"     |
         "tonne"                    | "t"        | "TNE"      |
                                      "T"        |
+                                     "[c]"      | "[C]"      | "𝑐"      |
         "volt"                     | "V"        |
                                      "Wb"       | "WB"       |
         "watt"                     | "W"        |
