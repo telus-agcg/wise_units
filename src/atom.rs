@@ -25,7 +25,10 @@ pub enum Atom {
     AtomicMassUnit,
     Bar,
     Becquerel,
+    Biot,
     BoltzmannConstant,
+    Curie,
+
     Day,
     Degree,
     DegreeCelsius,
@@ -33,26 +36,37 @@ pub enum Atom {
     DegreeReaumur,
     DegreeMinute,
     DegreeSecond,
+    Dyne,
     ElectronMass,
     ElectronVolt,
     ElementaryCharge,
+    Erg,
     Farad,
     FluidOunceUS,
     FootInternational,
     FootUS,
+
+    Gal,
+    Gilbert,
     GillUS,
     Gon,
     GramForce,
     Gray,
+    Gauss,
     Hertz,
     Henry,
     Hour,
     InchInternational,
+
     Joule,
+    Kayser,
+    Lambert,
     LightYear,
     Liter,
     Lumen,
     Lux,
+
+    Maxwell,
     MeanGregorianMonth,
     MeanGregorianYear,
     MeanJulianMonth,
@@ -63,6 +77,8 @@ pub enum Atom {
     Newton,
     NewtonianConstantOfGravitation,
     Ohm,
+    Oersted,
+
     Parsec,
     Pascal,
     PartsPerBillion,
@@ -72,19 +88,27 @@ pub enum Atom {
     PermeabilityOfVacuum,
     PermittivityOfVacuum,
     PH,
+    Phot,
     PintUS,
+    Poise,
     PoundForce,
     PlanckConstant,
     PrismDiopter,
     ProtonMass,
     QuartUS,
     QueenAnnesWineGallon,
+    RadiationAbsorbedDose,
+    RadiationEquivalentMan,
     RodUS,
+    Roentgen,
+
     Siemens,
     Sievert,
     StandardAccelerationOfFreeFall,
     StandardAtmosphere,
     Steradian,
+    Stilb,
+    Stokes,
     SynodalMonth,
     Tesla,
     TheNumberPi,
@@ -92,6 +116,7 @@ pub enum Atom {
     TheNumberTenForArbitraryPowersStar,
     Tonne,
     TropicalYear,
+
     VelocityOfLight,
     Volt,
     Watt,
@@ -192,6 +217,24 @@ impl Atom {
                 Atom::StandardAccelerationOfFreeFall |
                 Atom::StandardAtmosphere             |
                 Atom::VelocityOfLight => Classification::Const,
+            Atom::Biot                       |
+                Atom::Curie                  |
+                Atom::Dyne                   |
+                Atom::Erg                    |
+                Atom::Gal                    |
+                Atom::Gauss                  |
+                Atom::Gilbert                |
+                Atom::Kayser                 |
+                Atom::Lambert                |
+                Atom::Maxwell                |
+                Atom::Oersted                |
+                Atom::Phot                   |
+                Atom::Poise                  |
+                Atom::RadiationAbsorbedDose  |
+                Atom::RadiationEquivalentMan |
+                Atom::Roentgen               |
+                Atom::Stilb                  |
+                Atom::Stokes => Classification::CGS,
         }
     }
 
@@ -212,21 +255,30 @@ impl Atom {
             Atom::AtomicMassUnit                 => Definition::new(1.660_540_2e-24, "g"),
             Atom::Bar                            => Definition::new(1.0e5, "Pa"),
             Atom::Becquerel                      => Definition::new(1.0, "s-1"),
+            Atom::Biot                           => Definition::new(10.0, "A"),
             Atom::BoltzmannConstant              => Definition::new(1.380_658e-23, "J/K"),
+            Atom::Curie                          => Definition::new(37e9, "Bq"),
+
             Atom::Day                            => Definition::new(24.0, "h"),
             Atom::Degree                         => Definition::new(2.0, "[pi].rad/360"),
             Atom::DegreeCelsius                  => Definition::new(1.0, "cel(1.0 K)"),
             Atom::DegreeFahrenheit               => Definition::new(1.0, "degf(5.0 K/9)"),
-            Atom::DegreeReaumur                  => Definition::new(1.0, "degre(5.0 K/4)"),
             Atom::DegreeMinute                   => Definition::new(1.0, "deg/60"),
+            Atom::DegreeReaumur                  => Definition::new(1.0, "degre(5.0 K/4)"),
             Atom::DegreeSecond                   => Definition::new(1.0, "/60"),
+            Atom::Dyne                           => Definition::new(1.0, "g.cm/s2"),
             Atom::ElectronMass                   => Definition::new(9.109_389_7e-28, "g"),
             Atom::ElectronVolt                   => Definition::new(1.0, "[e].V"),
             Atom::ElementaryCharge               => Definition::new(1.602_177_33e-19, "C"),
+            Atom::Erg                            => Definition::new(1.0, "dyn.cm"),
             Atom::Farad                          => Definition::new(1.0, "C/V"),
             Atom::FluidOunceUS                   => Definition::new(1.0, "[gil_us]/4"),
             Atom::FootInternational              => Definition::new(12.0, "[in_i]"),
             Atom::FootUS                         => Definition::new(1200.0, "m/3937"),
+
+            Atom::Gal                            => Definition::new(1.0, "cm/s2"),
+            Atom::Gauss                          => Definition::new(1.0e-4, "T"),
+            Atom::Gilbert                        => Definition::new(1.0, "Oe.cm"),
             Atom::GillUS                         => Definition::new(1.0, "[pt_us]/4"),
             Atom::Gon                            => Definition::new(0.9, "deg"),
             Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
@@ -235,11 +287,16 @@ impl Atom {
             Atom::Hertz                          => Definition::new(1.0, "s-1"),
             Atom::Hour                           => Definition::new(60.0, "min"),
             Atom::InchInternational              => Definition::new(254.0e-2, "cm"),
+
             Atom::Joule                          => Definition::new(1.0, "N.m"),
+            Atom::Kayser                         => Definition::new(1.0, "cm-1"),
+            Atom::Lambert                        => Definition::new(1.0, "cd/cm2/[pi]"),
             Atom::LightYear                      => Definition::new(1.0, "[c].a_j"),
             Atom::Liter                          => Definition::new(1.0, "dm3"),
             Atom::Lumen                          => Definition::new(1.0, "cd.sr"),
             Atom::Lux                            => Definition::new(1.0, "lm/m2"),
+
+            Atom::Maxwell                        => Definition::new(1.0e-8, "Wb"),
             Atom::MeanGregorianMonth             => Definition::new(1.0, "a_g/12"),
             Atom::MeanGregorianYear              => Definition::new(365.2425, "d"),
             Atom::MeanJulianMonth                => Definition::new(1.0, "a_j/12"),
@@ -250,28 +307,38 @@ impl Atom {
             Atom::Newton                         => Definition::new(1.0, "kg.m/s2"),
             Atom::NewtonianConstantOfGravitation => Definition::new(1.0, "kg.m/s2"),
             Atom::Ohm                            => Definition::new(1.0, "V/A"),
-            Atom::Pascal                         => Definition::new(1.0, "N/m2"),
+            Atom::Oersted                        => Definition::new(250.0, "/[pi].A/m"),
+
+            Atom::PH                             => Definition::new(1.0, "ph(1.0 mol/l)"),
             Atom::Parsec                         => Definition::new(3.085_678e16, "m"),
             Atom::PartsPerBillion                => Definition::new(1.0, "10*-9"),
             Atom::PartsPerMillion                => Definition::new(1.0, "10*-6"),
             Atom::PartsPerThousand               => Definition::new(1.0, "10*-3"),
+            Atom::Pascal                         => Definition::new(1.0, "N/m2"),
             Atom::Percent                        => Definition::new(1.0, "10*-2"),
             Atom::PermeabilityOfVacuum           => Definition::new(1.0, "4.[PI].10*-7.N/A2"),
             Atom::PermittivityOfVacuum           => Definition::new(8.854_187_817e-12, "F/m"),
-            Atom::PH                             => Definition::new(1.0, "ph(1.0 mol/l)"),
+            Atom::Phot                           => Definition::new(1.0e-4, "lx"),
             Atom::PintUS                         => Definition::new(1.0, "[qt_us]/2"),
             Atom::PlanckConstant                 => Definition::new(6.626_075_5e-34, "J.s"),
+            Atom::Poise                          => Definition::new(1.0, "dyn.s/cm2"),
             Atom::PoundForce                     => Definition::new(1.0, "[lb_av].[g]"),
             Atom::PrismDiopter                   => Definition::new(1.0, "100tan(1.0 rad)"),
             Atom::ProtonMass                     => Definition::new(1.672_623_1e-24, "g"),
             Atom::QuartUS                        => Definition::new(1.0, "[gal_us]/4"),
             Atom::QueenAnnesWineGallon           => Definition::new(231.0, "[in_i]3"),
+            Atom::RadiationAbsorbedDose          => Definition::new(100.0, "erg/g"),
+            Atom::RadiationEquivalentMan         => Definition::new(1.0, "RAD"),
             Atom::RodUS                          => Definition::new(16.5, "[ft_us]"),
+            Atom::Roentgen                       => Definition::new(2.58e-4, "C/kg"),
+
             Atom::Siemens                        => Definition::new(1.0, "Ohm-1"),
             Atom::Sievert                        => Definition::new(1.0, "J/kg"),
             Atom::StandardAccelerationOfFreeFall => Definition::new(980_665e-5, "m/s2"),
             Atom::StandardAtmosphere             => Definition::new(101_325.0, "Pa"),
             Atom::Steradian                      => Definition::new(1.0, "rad2"),
+            Atom::Stokes                         => Definition::new(1.0, "cm2/s"),
+            Atom::Stilb                          => Definition::new(1.0, "cd/cm2"),
             Atom::SynodalMonth                   => Definition::new(29.530_59, "d"),
             Atom::Tesla                          => Definition::new(1.0, "Wb/m2"),
             Atom::TheNumberPi                    => Definition::new(PI, "1"),
@@ -279,6 +346,7 @@ impl Atom {
                 Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
             Atom::TropicalYear                           => Definition::new(365.242_19, "d"),
             Atom::Tonne                                  => Definition::new(1.0e3, "kg"),
+
             Atom::VelocityOfLight                        => Definition::new(299_792_458.0, "m/s"),
             Atom::Volt                                   => Definition::new(1.0, "J/C"),
             Atom::Watt                                   => Definition::new(1.0, "J/s"),
@@ -325,36 +393,61 @@ impl Atom {
                 Atom::AtomicMassUnit                 |
                 Atom::Bar                            |
                 Atom::Becquerel                      |
+                Atom::Biot                           |
                 Atom::BoltzmannConstant              |
+                Atom::Curie                          |
+
+                Atom::Dyne                           |
                 Atom::ElectronMass                   |
                 Atom::ElectronVolt                   |
                 Atom::ElementaryCharge               |
+                Atom::Erg                            |
                 Atom::Farad                          |
+
+                Atom::Gal                            |
+                Atom::Gauss                          |
+                Atom::Gilbert                        |
                 Atom::GramForce                      |
                 Atom::Gray                           |
                 Atom::Henry                          |
                 Atom::Hertz                          |
+
                 Atom::Joule                          |
+                Atom::Kayser                         |
+                Atom::Lambert                        |
                 Atom::LightYear                      |
                 Atom::Liter                          |
                 Atom::Lumen                          |
                 Atom::Lux                            |
+
+                Atom::Maxwell                        |
                 Atom::Mole                           |
                 Atom::Newton                         |
                 Atom::NewtonianConstantOfGravitation |
                 Atom::Ohm                            |
+                Atom::Oersted                        |
+
                 Atom::Parsec                         |
                 Atom::Pascal                         |
                 Atom::PermeabilityOfVacuum           |
                 Atom::PermittivityOfVacuum           |
+                Atom::Phot                           |
                 Atom::PlanckConstant                 |
+                Atom::Poise                          |
                 Atom::ProtonMass                     |
+                Atom::RadiationAbsorbedDose          |
+                Atom::RadiationEquivalentMan         |
+                Atom::Roentgen                       |
+
                 Atom::StandardAccelerationOfFreeFall |
                 Atom::Steradian                      |
+                Atom::Stokes                         |
+                Atom::Stilb                          |
                 Atom::Siemens                        |
                 Atom::Sievert                        |
                 Atom::Tesla                          |
                 Atom::Tonne                          |
+
                 Atom::VelocityOfLight                |
                 Atom::Volt                           |
                 Atom::Watt                           |
@@ -394,21 +487,30 @@ impl Atom {
             Atom::AtomicMassUnit    => vec!["unified atomic mass unit"],
             Atom::Bar               => vec!["bar"],
             Atom::Becquerel         => vec!["becquerel"],
+            Atom::Biot              => vec!["Biot"],
             Atom::BoltzmannConstant => vec!["Boltzmann constant"],
+            Atom::Curie             => vec!["Curie"],
+
             Atom::Day               => vec!["day"],
             Atom::Degree            => vec!["degree"],
             Atom::DegreeCelsius     => vec!["degree Celsius"],
             Atom::DegreeFahrenheit  => vec!["degree Fahrenheit"],
-            Atom::DegreeReaumur     => vec!["degree Réaumur"],
             Atom::DegreeMinute      => vec!["minute"],
+            Atom::DegreeReaumur     => vec!["degree Réaumur"],
             Atom::DegreeSecond      => vec!["second"],
+            Atom::Dyne              => vec!["dyne"],
             Atom::ElectronMass      => vec!["electron mass"],
             Atom::ElectronVolt      => vec!["electronvolt"],
             Atom::ElementaryCharge  => vec!["elementary charge"],
+            Atom::Erg               => vec!["erg"],
             Atom::Farad             => vec!["farad"],
             Atom::FluidOunceUS      => vec!["fluid once"],
             Atom::FootInternational |
                 Atom::FootUS                     => vec!["foot"],
+
+            Atom::Gal                            => vec!["Gal"],
+            Atom::Gauss                          => vec!["Gauss"],
+            Atom::Gilbert                        => vec!["Gilbert"],
             Atom::GillUS                         => vec!["gill"],
             Atom::Gon                            => vec!["gon", "grade"],
             Atom::GramForce                      => vec!["gram-force"],
@@ -417,11 +519,16 @@ impl Atom {
             Atom::Hertz                          => vec!["hertz"],
             Atom::Hour                           => vec!["hour"],
             Atom::InchInternational              => vec!["inch"],
+
             Atom::Joule                          => vec!["joule"],
+            Atom::Lambert                        => vec!["Lambert"],
+            Atom::Kayser                         => vec!["Kayser"],
             Atom::LightYear                      => vec!["light-year"],
             Atom::Liter                          => vec!["liter"],
             Atom::Lumen                          => vec!["lumen"],
             Atom::Lux                            => vec!["lux"],
+
+            Atom::Maxwell                        => vec!["Maxwell"],
             Atom::MeanGregorianMonth             => vec!["mean Gregorian month"],
             Atom::MeanGregorianYear              => vec!["mean Gregorian year"],
             Atom::MeanJulianMonth                => vec!["mean Julian month"],
@@ -432,28 +539,38 @@ impl Atom {
             Atom::Newton                         => vec!["newton"],
             Atom::NewtonianConstantOfGravitation => vec!["Newtonian constant of gravitation"],
             Atom::Ohm                            => vec!["ohm"],
+            Atom::Oersted                        => vec!["Oersted"],
+
+            Atom::PH                             => vec!["pH"],
             Atom::Parsec                         => vec!["parsec"],
-            Atom::Pascal                         => vec!["pascal"],
             Atom::PartsPerBillion                => vec!["parts per billion"],
             Atom::PartsPerMillion                => vec!["parts per million"],
             Atom::PartsPerThousand               => vec!["parts per thousand"],
+            Atom::Pascal                         => vec!["pascal"],
             Atom::Percent                        => vec!["percent"],
             Atom::PermeabilityOfVacuum           => vec!["permeability of vacuum"],
             Atom::PermittivityOfVacuum           => vec!["permittivity of vacuum"],
-            Atom::PH                             => vec!["pH"],
+            Atom::Phot                           => vec!["phot"],
             Atom::PintUS                         => vec!["pint"],
             Atom::PlanckConstant                 => vec!["Planck constant"],
+            Atom::Poise                          => vec!["Poise"],
             Atom::PoundForce                     => vec!["pound force"],
             Atom::PrismDiopter                   => vec!["prism diopter"],
             Atom::ProtonMass                     => vec!["proton mass"],
             Atom::QuartUS                        => vec!["quart"],
             Atom::QueenAnnesWineGallon           => vec!["Queen Ann's wine gallon"],
+            Atom::RadiationAbsorbedDose          => vec!["radiation absorbed dose"],
+            Atom::RadiationEquivalentMan         => vec!["radiation equivalent man"],
             Atom::RodUS                          => vec!["rod"],
+            Atom::Roentgen                       => vec!["Roentgen"],
+
+            Atom::Siemens                        => vec!["siemens"],
+            Atom::Sievert                        => vec!["sievert"],
             Atom::StandardAccelerationOfFreeFall => vec!["standard acceleration of free fall"],
             Atom::StandardAtmosphere             => vec!["standard atmosphere"],
             Atom::Steradian                      => vec!["steradian"],
-            Atom::Siemens                        => vec!["siemens"],
-            Atom::Sievert                        => vec!["sievert"],
+            Atom::Stilb                          => vec!["stilb"],
+            Atom::Stokes                         => vec!["Stokes"],
             Atom::SynodalMonth                   => vec!["synodal month"],
             Atom::Tesla                          => vec!["tesla"],
             Atom::TheNumberPi                    => vec!["the number pi"],
@@ -463,6 +580,7 @@ impl Atom {
             },
             Atom::Tonne           => vec!["tonne"],
             Atom::TropicalYear    => vec!["tropical year"],
+
             Atom::VelocityOfLight => vec!["velocity of light"],
             Atom::Volt            => vec!["volt"],
             Atom::Watt            => vec!["watt"],
@@ -491,21 +609,30 @@ impl Atom {
             Atom::AtomicMassUnit                      => "u",
             Atom::Bar                                 => "bar",
             Atom::Becquerel                           => "Bq",
+            Atom::Biot                                => "Bi",
             Atom::BoltzmannConstant                   => "[k]",
+            Atom::Curie                               => "Ci",
+
             Atom::Day                                 => "d",
             Atom::Degree                              => "deg",
             Atom::DegreeCelsius                       => "Cel",
             Atom::DegreeFahrenheit                    => "[degF]",
-            Atom::DegreeReaumur                       => "[degRe]",
             Atom::DegreeMinute                        => "'",
+            Atom::DegreeReaumur                       => "[degRe]",
             Atom::DegreeSecond                        => "''",
+            Atom::Dyne                                => "dyn",
             Atom::ElectronMass                        => "[m_e]",
             Atom::ElectronVolt                        => "eV",
             Atom::ElementaryCharge                    => "[e]",
-            Atom::FluidOunceUS                        => "[foz_us]",
+            Atom::Erg                                 => "erg",
             Atom::Farad                               => "F",
+            Atom::FluidOunceUS                        => "[foz_us]",
             Atom::FootInternational                   => "[ft_i]",
             Atom::FootUS                              => "[ft_us]",
+
+            Atom::Gal                                 => "Gal",
+            Atom::Gauss                               => "G",
+            Atom::Gilbert                             => "Gb",
             Atom::GillUS                              => "[gil_us]",
             Atom::Gon                                 => "gon",
             Atom::GramForce                           => "gf",
@@ -514,11 +641,16 @@ impl Atom {
             Atom::Hertz                               => "Hz",
             Atom::Hour                                => "h",
             Atom::InchInternational                   => "[in_i]",
+
             Atom::Joule                               => "J",
+            Atom::Kayser                              => "Ky",
+            Atom::Lambert                             => "Lmb",
             Atom::LightYear                           => "[ly]",
             Atom::Liter                               => "l",
             Atom::Lumen                               => "lm",
             Atom::Lux                                 => "lx",
+
+            Atom::Maxwell                             => "Mx",
             Atom::MeanGregorianMonth                  => "mo_g",
             Atom::MeanGregorianYear                   => "a_g",
             Atom::MeanJulianMonth                     => "mo_j",
@@ -529,28 +661,38 @@ impl Atom {
             Atom::Newton                              => "N",
             Atom::NewtonianConstantOfGravitation      => "[G]",
             Atom::Ohm                                 => "Ohm",
+            Atom::Oersted                             => "Oe",
+
+            Atom::PH                                  => "[pH]",
             Atom::Parsec                              => "pc",
-            Atom::Pascal                              => "Pa",
             Atom::PartsPerBillion                     => "[ppb]",
             Atom::PartsPerMillion                     => "[ppm]",
             Atom::PartsPerThousand                    => "[ppth]",
+            Atom::Pascal                              => "Pa",
             Atom::Percent                             => "%",
             Atom::PermeabilityOfVacuum                => "[mu_0]",
             Atom::PermittivityOfVacuum                => "[eps_0]",
-            Atom::PH                                  => "[pH]",
+            Atom::Phot                                => "ph",
             Atom::PintUS                              => "[pt_us]",
             Atom::PlanckConstant                      => "[h]",
+            Atom::Poise                               => "P",
             Atom::PoundForce                          => "[lbf_av]",
             Atom::PrismDiopter                        => "[p'diop]",
             Atom::ProtonMass                          => "[m_p]",
             Atom::QuartUS                             => "[qt_us]",
             Atom::QueenAnnesWineGallon                => "[gal_us]",
+            Atom::RadiationAbsorbedDose               => "RAD",
+            Atom::RadiationEquivalentMan              => "REM",
             Atom::RodUS                               => "[rd_us]",
+            Atom::Roentgen                            => "R",
+
             Atom::Siemens                             => "S",
             Atom::Sievert                             => "Sv",
             Atom::StandardAccelerationOfFreeFall      => "[g]",
             Atom::StandardAtmosphere                  => "atm",
             Atom::Steradian                           => "sr",
+            Atom::Stilb                               => "sb",
+            Atom::Stokes                              => "St",
             Atom::SynodalMonth                        => "mo_s",
             Atom::Tesla                               => "T",
             Atom::TheNumberPi                         => "[pi]",
@@ -558,6 +700,7 @@ impl Atom {
             Atom::TheNumberTenForArbitraryPowersStar  => "10*",
             Atom::Tonne                               => "t",
             Atom::TropicalYear                        => "a_t",
+
             Atom::VelocityOfLight                     => "[c]",
             Atom::Volt                                => "V",
             Atom::Watt                                => "W",
@@ -582,34 +725,56 @@ impl Atom {
                 Atom::AtomicMassUnit     |
                 Atom::Bar                |
                 Atom::Becquerel          |
+                Atom::Biot               |
+                Atom::Curie              |
+
                 Atom::Day                |
                 Atom::DegreeMinute       |
                 Atom::DegreeSecond       |
+                Atom::Dyne               |
                 Atom::ElectronVolt       |
+                Atom::Erg                |
                 Atom::Farad              |
+
+                Atom::Gal                |
+                Atom::Gilbert            |
                 Atom::GramForce          |
                 Atom::Gray               |
-                Atom::Hertz              |
                 Atom::Henry              |
+                Atom::Hertz              |
                 Atom::Hour               |
+
                 Atom::Joule              |
                 Atom::Liter              |
                 Atom::Lumen              |
                 Atom::Lux                |
+
+                Atom::Maxwell            |
                 Atom::MeanGregorianMonth |
                 Atom::MeanGregorianYear  |
                 Atom::Minute             |
                 Atom::Mole               |
                 Atom::Month              |
-                Atom::Parsec             |
-                Atom::Pascal             |
-                Atom::Percent            |
+                Atom::Oersted            |
+
+                Atom::Parsec                 |
+                Atom::Pascal                 |
+                Atom::Percent                |
+                Atom::Phot                   |
+                Atom::Poise                  |
+                Atom::RadiationAbsorbedDose  |
+                Atom::RadiationEquivalentMan |
+                Atom::Roentgen               |
+
                 Atom::Siemens            |
                 Atom::Sievert            |
                 Atom::StandardAtmosphere |
                 Atom::Steradian          |
+                Atom::Stilb              |
+                Atom::Stokes             |
                 Atom::Tesla              |
                 Atom::Tonne              |
+
                 Atom::Volt               |
                 Atom::Watt               |
                 Atom::Weber              |
@@ -617,6 +782,7 @@ impl Atom {
                 Atom::Year                       => Some(self.primary_code()),
             Atom::Are                            => Some("a"),
             Atom::BoltzmannConstant              => Some("𝑘"),
+
             Atom::Degree                         => Some("°"),
             Atom::DegreeCelsius                  => Some("°C"),
             Atom::DegreeFahrenheit               => Some("°F"),
@@ -626,11 +792,18 @@ impl Atom {
             Atom::FluidOunceUS                   => Some("oz fl"),
             Atom::FootInternational              => Some("ft"),
             Atom::FootUS                         => Some("ft (us)"),
+
+            Atom::Gauss                          => Some("Gs"),
             Atom::Gon                            => Some("□"),
+
+            Atom::Kayser                         => Some("K"),
+            Atom::Lambert                        => Some("L"),
             Atom::LightYear                      => Some("l.y."),
+
             Atom::MeanJulianMonth                => Some("moⱼ"),
             Atom::MeanJulianYear                 => Some("aⱼ"),
             Atom::Ohm                            => Some("Ω"),
+
             Atom::PartsPerBillion                => Some("ppb"),
             Atom::PartsPerMillion                => Some("ppm"),
             Atom::PartsPerThousand               => Some("ppth"),
@@ -641,12 +814,14 @@ impl Atom {
             Atom::PoundForce                     => Some("lbf"),
             Atom::PrismDiopter                   => Some("PD"),
             Atom::ProtonMass                     => Some("𝑚ₚ"),
+
             Atom::StandardAccelerationOfFreeFall => Some("𝑔"),
             Atom::SynodalMonth                   => Some("moₛ"),
             Atom::TheNumberPi                    => Some("π"),
             Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar => Some("10"),
             Atom::TropicalYear      => Some("aₜ"),
+
             Atom::VelocityOfLight   => Some("𝑐"),
             _ => None,
         }
@@ -656,19 +831,19 @@ impl Atom {
         match *self {
             Atom::TheUnity              |
                 Atom::BoltzmannConstant |
-                Atom::NewtonianConstantOfGravitation => Property::Unclassified,
-            Atom::Candela  => Property::LuminousIntensity,
+                Atom::NewtonianConstantOfGravitation        => Property::Unclassified,
+            Atom::Candela                                   => Property::LuminousIntensity,
             Atom::Coulomb  |
-                Atom::ElementaryCharge => Property::ElectricCharge,
+                Atom::ElementaryCharge                      => Property::ElectricCharge,
             Atom::Gram               |
                 Atom::AtomicMassUnit |
                 Atom::ElectronMass   |
                 Atom::ProtonMass     |
-                Atom::Tonne => Property::Mass,
+                Atom::Tonne                                 => Property::Mass,
             Atom::Kelvin               |
                 Atom::DegreeCelsius    |
                 Atom::DegreeFahrenheit |
-                Atom::DegreeReaumur => Property::Temperature,
+                Atom::DegreeReaumur                         => Property::Temperature,
             Atom::Meter                 |
                 Atom::AstronomicUnit    |
                 Atom::FootInternational |
@@ -676,12 +851,12 @@ impl Atom {
                 Atom::InchInternational |
                 Atom::LightYear         |
                 Atom::Parsec            |
-                Atom::RodUS => Property::Length,
+                Atom::RodUS                                 => Property::Length,
             Atom::Radian           |
                 Atom::Degree       |
                 Atom::DegreeMinute |
                 Atom::DegreeSecond |
-                Atom::Gon => Property::PlaneAngle,
+                Atom::Gon                                   => Property::PlaneAngle,
             Atom::Second                 |
                 Atom::Day                |
                 Atom::Hour               |
@@ -694,54 +869,72 @@ impl Atom {
                 Atom::SynodalMonth       |
                 Atom::TropicalYear       |
                 Atom::Week               |
-                Atom::Year => Property::Time,
+                Atom::Year                                  => Property::Time,
             Atom::AcreUS |
-                Atom::Are => Property::Area,
+                Atom::Are                                   => Property::Area,
             Atom::FluidOunceUS |
                 Atom::GillUS   |
                 Atom::PintUS   |
                 Atom::QuartUS  |
-                Atom::QueenAnnesWineGallon => Property::FluidVolume,
-            Atom::Liter                    => Property::Volume,
-            Atom::Mole                     => Property::AmountOfSubstance,
+                Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
+            Atom::Liter                                     => Property::Volume,
+            Atom::Mole                                      => Property::AmountOfSubstance,
             Atom::PartsPerBillion     |
                 Atom::PartsPerMillion |
-                Atom::PartsPerThousand => Property::Fraction,
+                Atom::PartsPerThousand                      => Property::Fraction,
             Atom::Percent                                 |
                 Atom::TheNumberPi                         |
                 Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar => Property::Number,
-            Atom::PH                                     => Property::Acidity,
-            Atom::PrismDiopter                           => Property::RefractionOfPrism,
-            Atom::Steradian                              => Property::SolidAngle,
-            Atom::Hertz                                  => Property::Frequency,
+                Atom::TheNumberTenForArbitraryPowersStar    => Property::Number,
+            Atom::Hertz                                     => Property::Frequency,
+            Atom::PH                                        => Property::Acidity,
+            Atom::PrismDiopter                              => Property::RefractionOfPrism,
+            Atom::Steradian                                 => Property::SolidAngle,
             Atom::Newton        |
+                Atom::Dyne      |
                 Atom::GramForce |
-                Atom::PoundForce => Property::Force,
+                Atom::PoundForce                            => Property::Force,
             Atom::Pascal  |
                 Atom::Bar |
-                Atom::StandardAtmosphere => Property::Pressure,
-            Atom::Joule   |
-                Atom::ElectronVolt               => Property::Energy,
-            Atom::Watt                           => Property::Power,
-            Atom::Ampere                         => Property::ElectricCurrent,
-            Atom::Volt                           => Property::ElectricPotential,
-            Atom::Farad                          => Property::ElectricCapacitance,
-            Atom::Ohm                            => Property::ElectricResistance,
-            Atom::Siemens                        => Property::ElectricConductance,
-            Atom::Weber                          => Property::MagneticFlux,
-            Atom::Tesla                          => Property::MagneticFluxDensity,
-            Atom::Henry                          => Property::Inductance,
-            Atom::Lumen                          => Property::LuminousFlux,
-            Atom::Lux                            => Property::Illuminance,
-            Atom::Becquerel                      => Property::Radioactivity,
-            Atom::Gray                           => Property::EnergyDose,
-            Atom::Sievert                        => Property::DoseEquivalent,
-            Atom::VelocityOfLight                => Property::Velocity,
-            Atom::PlanckConstant                 => Property::Action,
-            Atom::PermittivityOfVacuum           => Property::ElectricPermittivity,
-            Atom::PermeabilityOfVacuum           => Property::MagneticPermeability,
-            Atom::StandardAccelerationOfFreeFall => Property::Acceleration,
+                Atom::StandardAtmosphere                    => Property::Pressure,
+            Atom::Joule            |
+                Atom::ElectronVolt |
+                Atom::Erg                                   => Property::Energy,
+            Atom::Watt                                      => Property::Power,
+            Atom::Ampere |
+                Atom::Biot                                  => Property::ElectricCurrent,
+            Atom::Farad                                     => Property::ElectricCapacitance,
+            Atom::Ohm                                       => Property::ElectricResistance,
+            Atom::Siemens                                   => Property::ElectricConductance,
+            Atom::Volt                                      => Property::ElectricPotential,
+            Atom::Weber                                     => Property::MagneticFlux,
+            Atom::Gauss |
+                Atom::Tesla                                 => Property::MagneticFluxDensity,
+            Atom::Henry                                     => Property::Inductance,
+            Atom::Lumen                                     => Property::LuminousFlux,
+            Atom::Lux |
+                Atom::Phot                                  => Property::Illuminance,
+            Atom::Becquerel |
+                Atom::Curie                                 => Property::Radioactivity,
+            Atom::Gray |
+                Atom::RadiationAbsorbedDose                 => Property::EnergyDose,
+            Atom::PermeabilityOfVacuum                      => Property::MagneticPermeability,
+            Atom::PermittivityOfVacuum                      => Property::ElectricPermittivity,
+            Atom::PlanckConstant                            => Property::Action,
+            Atom::RadiationEquivalentMan |
+                Atom::Sievert                               => Property::DoseEquivalent,
+            Atom::VelocityOfLight                           => Property::Velocity,
+            Atom::Gal |
+                Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
+            Atom::Gilbert                                   => Property::MagneticTension,
+            Atom::Kayser                                    => Property::LineicNumber,
+            Atom::Lambert                                   => Property::Brightness,
+            Atom::Maxwell                                   => Property::FluxOfMagneticInduction,
+            Atom::Oersted                                   => Property::MagneticFieldIntensity,
+            Atom::Poise                                     => Property::DynamicViscosity,
+            Atom::Roentgen                                  => Property::IonDose,
+            Atom::Stilb                                     => Property::LuminousIntensityDensity,
+            Atom::Stokes                                    => Property::KinematicViscosity,
         }
     }
 
@@ -762,17 +955,26 @@ impl Atom {
             Atom::AtomicMassUnit                 => "AMU",
             Atom::Bar                            => "BAR",
             Atom::Becquerel                      => "BQ",
+            Atom::Biot                           => "BI",
             Atom::BoltzmannConstant              => "[K]",
+            Atom::Curie                          => "CI",
+
             Atom::Day                            => "D",
             Atom::Degree                         => "DEG",
             Atom::DegreeCelsius                  => "CEL",
             Atom::DegreeFahrenheit               => "[DEGF]",
+            Atom::Dyne                           => "DYN",
             Atom::ElectronMass                   => "[M_E]",
             Atom::ElectronVolt                   => "EV",
             Atom::ElementaryCharge               => "[E]",
+            Atom::Erg                            => "ERG",
             Atom::FluidOunceUS                   => "[FOZ_US]",
             Atom::FootInternational              => "[FT_I]",
             Atom::FootUS                         => "[FT_US]",
+
+            Atom::Gal                            => "GL",
+            Atom::Gauss                          => "GS",
+            Atom::Gilbert                        => "GB",
             Atom::GillUS                         => "[GIL_US]",
             Atom::Gon                            => "GON",
             Atom::GramForce                      => "GF",
@@ -780,10 +982,15 @@ impl Atom {
             Atom::Hertz                          => "HZ",
             Atom::Hour                           => "HR",
             Atom::InchInternational              => "[IN_I]",
+
+            Atom::Kayser                         => "KY",
+            Atom::Lambert                        => "LMB",
             Atom::LightYear                      => "[LY]",
             Atom::Liter                          => "L",
             Atom::Lumen                          => "LM",
             Atom::Lux                            => "LX",
+
+            Atom::Maxwell                        => "Mx",
             Atom::MeanGregorianMonth             => "MO_G",
             Atom::MeanGregorianYear              => "ANN_G",
             Atom::MeanJulianMonth                => "MO_J",
@@ -793,14 +1000,17 @@ impl Atom {
             Atom::Month                          => "MO",
             Atom::NewtonianConstantOfGravitation => "[GC]",
             Atom::Ohm                            => "OHM",
+            Atom::Oersted                        => "OE",
+
+            Atom::PH                             => "[PH]",
             Atom::Parsec                         => "PRS",
-            Atom::Pascal                         => "PAL",
             Atom::PartsPerBillion                => "[PPB]",
             Atom::PartsPerMillion                => "[PPM]",
             Atom::PartsPerThousand               => "[PPTH]",
+            Atom::Pascal                         => "PAL",
             Atom::PermeabilityOfVacuum           => "[MU_0]",
             Atom::PermittivityOfVacuum           => "[EPS_0]",
-            Atom::PH                             => "[PH]",
+            Atom::Phot                           => "PHT",
             Atom::PintUS                         => "[PT_US]",
             Atom::PlanckConstant                 => "[C]",
             Atom::PoundForce                     => "[LBF_AV]",
@@ -808,7 +1018,11 @@ impl Atom {
             Atom::ProtonMass                     => "[M_P]",
             Atom::QuartUS                        => "[QT_US]",
             Atom::QueenAnnesWineGallon           => "[GAL_US]",
+            Atom::RadiationAbsorbedDose          => "[RAD]",
+            Atom::RadiationEquivalentMan         => "[REM]",
             Atom::RodUS                          => "[RD_US]",
+            Atom::Roentgen                       => "ROE",
+
             Atom::Siemens                        => "SIE",
             Atom::Sievert                        => "SV",
             // NOTE: Primary code of NewtonianConstantOfGravitation is [G] so this will never
@@ -816,6 +1030,8 @@ impl Atom {
             Atom::StandardAccelerationOfFreeFall => "[G]",
             Atom::StandardAtmosphere             => "ATM",
             Atom::Steradian                      => "SR",
+            Atom::Stilb                          => "SB",
+            Atom::Stokes                         => "ST",
             Atom::SynodalMonth                   => "MO_S",
             Atom::TheNumberPi                    => "[PI]",
             Atom::Tonne                          => "TNE",
@@ -834,6 +1050,7 @@ impl Atom {
                 Atom::Kelvin                              |
                 Atom::Newton                              |
                 Atom::Percent                             |
+                Atom::Poise                               |
                 Atom::Tesla                               |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar  |
