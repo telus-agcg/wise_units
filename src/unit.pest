@@ -38,95 +38,96 @@ prefixed_atom = { prefix_symbol ~ atom_symbol }
 
 // Atoms
 atom_symbol = {
-    "cd"  | "CD"  |
-                    "C"   |
-        "gram"    | "g"   | "G"   |
-                    "K"   |
-        "meter"   | "m"   | "M"   |
-                    "rad" | "RAD" |
-        "second"  | "s"   |
+    "acre"          |
+        "are"       | "atm"    | "a_g"    | "a_j" | "a_t" |
+        "ar"        | "aₜ"     | "aⱼ"     |
+        "a"         |
+        "ANN_G"     | "ANN_J"  | "ANN_T"  |
+        "AMU"       | "ANN"    | "ASU"    | "ATM" |
+        "AR"        | "AU"     | "A"      |
+        "becquerel" | "bar"    |
+        "BAR"       | "Bq"     | "BQ"     |
+        "cd"        |
+        "Cel"       | "CEL"    | "CD"     | "C"   |
+        "degree"    | "day"    | "deg"    | "d"   |
+        "DEG"       | "D"      |
+        "eV"        | "EV"     |
+        "foot"      | "ft"     |
+        "F"         |
+        "grade"     | "gram"   | "gon"    | "gf"  | "g"   |
+        "GON"       | "Gy"     | "GF"     | "GY"  | "G"   |
+        "hour"      | "h"      |
+        "Hz"        | "HR"     | "HZ"     | "H"   |
+        "inch"      | "in"     |
+        "J"         |
+        "K"         |
+        "liter"     | "l.y."   | "lbf"    | "lm"  | "lx"  | "l"  |
+        "LM"        | "LX"     | "L"      |
+        "minute"    | "meter"  | "month"  |
+        "mo_g"      | "mo_j"   | "mo_s"   |
+        "min"       | "mol"    | "moⱼ"    | "moₛ" |
+        "mo"        | "m"      |
+        "MO_G"      | "MO_J"   | "MO_S"   |
+        "MIN"       | "MOL"    | "MO"     | "M"   |
+        "N"         |
+        "oz fl"     |
+        "Ohm"       | "OHM"    |
+        "pint"      | "ppb"    | "ppm"    | "ppt" | "pc"  | "pH" |
+        "PAL"       | "PRS"    | "Pa"     | "PD"  |
+        "quart"     |
+        "rad"       | "RAD"    |
+        "second"    | "sr"     | "s"      |
+        "SIE"       | "Sv"     | "SV"     | "SR"  | "S"   |
+        "tonne"     | "t"      |
+        "TNE"       | "T"      |
+        "u"         |
+        "volt"      | "V"      |
+        "watt"      | "week"   | "wk"     |
+        "Wb"        | "WB"     | "WK"     | "W"   |
+        "year"      |
 
-        "acre"                     | "[acr_us]" | "[ACR_US]" |
-        "are"                      | "ar"       | "AR"       |
-                                     "a_t"      | "ANN_T"    | "aₜ"    |
-                                     "a_j"      | "ANN_J"    | "aⱼ"    |
-                                     "a_g"      | "ANN_G"    |
-                                     "atm"      | "ATM"      |
-        "year"                     | "a"        | "ANN"      |
-                                     "u"        | "AMU"      |
-                                     "AU"       | "ASU"      |
-                                     "A"        |
-                                     "bar"      | "BAR"      |
-        "becquerel"                | "Bq"       | "BQ"       |
-                                     "[k]"      | "[K]"      | "𝑘"     |
-                                     "Cel"      | "CEL"      | "°C"    |
-                                     "[degF]"   | "[DEGF]"   | "°F"    |
-                                     "[degRe]"  | "°Ré"      |
-        "degree"                   | "deg"      | "DEG"      | "°"     |
-        "day"                      | "d"        | "D"        |
-                                     "[e]"      | "[E]"      | "𝑒"     |
-                                     "eV"       | "EV"       |
-                                     "[m_e]"    | "[M_E]"    | "𝑚ₑ"    |
-                                     "F"        |
-                                     "[foz_us]" | "[FOZ_US]" | "oz fl" |
-                                     "[ft_us]"  | "[FT_US]"  |
-        "foot"                     | "[ft_i]"   | "[FT_I]"   | "ft"    |
-                                     "[gil_us]" | "[GIL_US]" |
-                                     "gon"      | "GON"      | "grade" |
-                                     "gf"       | "GF"       |
-                                     "Gy"       | "GY"       |
-                                     "Hz"       | "HZ"       |
-                                     "H"        |
-        "hour"                     | "h"        | "HR"       |
-        "inch"                     | "[in_i]"   | "[IN_I]"   | "in"    |
-                                     "J"        |
-                                     "lm"       | "LM"       |
-                                     "lx"       | "LX"       |
-        "liter"                    | "l"        | "L"        |
-                                     "[ly]"     | "[LY]"     | "l.y."  |
-                                     "[lbf_av]" | "[LBF_AV]" | "lbf"   |
-        "minute"                   | "min"      | "MIN"      |
-                                     "mol"      | "MOL"      |
-                                     "mo_g"     | "MO_G"     |
-                                     "mo_j"     | "MO_J"     | "moⱼ"   |
-                                     "mo_s"     | "MO_S"     | "moₛ"   |
-        "month"                    | "mo"       | "MO"       |
-                                     "N"        |
-                                     "[G]"      | "[GC]"     | "𝐺"     |
-                                     "[g]"      |              "𝑔"     |
-                                     "Ohm"      | "OHM"      | "Ω"     |
-                                     "pc"       | "PRS"      |
-                                     "Pa"       | "PAL"      |
-                                     "[ppb]"    | "[PPB]"    | "ppb"   |
-                                     "[ppm]"    | "[PPM]"    | "ppm"   |
-                                     "[ppth]"   | "[PPTH]"   | "ppt"   |
-        "pH"                       | "[pH]"     | "[PH]"     |
-                                     "[mu_0]"   | "[MU_0]"   | "μ₀"    |
-                                     "[eps_0]"  | "[EPS_0]"  | "ε₀"    |
-        "pint"                     | "[pt_us]"  | "[PT_US]"  |
-                                     "[h]"      | "[H]"      | "ℎ"     |
-                                     "[p'diop]" | "[P'DIOP]" | "PD"    |
-                                     "[m_p]"    | "[M_P]"    | "𝑚ₚ"    |
-        "quart"                    | "[qt_us]"  | "[QT_US]"  |
-                                     "[gal_us]" | "[GAL_US]" |
-                                     "[rd_us]"  | "[RD_US]"  |
-                                     "Sv"       | "SV"       |
-                                     "sr"       | "SR"       |
-                                     "S"        | "SIE"      |
-                                     "[pi]"     | "[PI]"     | "π"     |
-        "tonne"                    | "t"        | "TNE"      |
-                                     "T"        |
-                                     "[c]"      | "[C]"      | "𝑐"      |
-        "volt"                     | "V"        |
-                                     "Wb"       | "WB"       |
-        "watt"                     | "W"        |
-        "week"                     | "wk"       | "WK"       |
-                                     "%"        |
-                                     "'"        |
-                                     "''"       |
-                                     "10^"      |
-                                     "10*"      |
-                                     "1"
+        "[acr_us]" | "[ACR_US]" |
+        "[c]"      | "[C]"      |
+        "[degF]"   | "[degRe]"  | "[DEGF]" |
+        "[eps_0]"  | "[e]"      |
+        "[EPS_0]"  | "[E]"      |
+        "[foz_us]" | "[ft_us]"  | "[ft_i]" |
+        "[FOZ_US]" | "[FT_US]"  | "[FT_I]" |
+        "[gal_us]" | "[gil_us]" | "[g]"    |
+        "[GAL_US]" | "[GIL_US]" | "[GC]"   | "[G]"   |
+        "[h]"      | "[H]"      |
+        "[in_i]"   | "[IN_I]"   |
+        "[k]"      | "[K]"      |
+        "[ly]"     | "[LY]"     |
+        "[lbf_av]" | "[LBF_AV]" |
+        "[mu_0]"   | "[m_e]"    | "[m_p]"  |
+        "[MU_0]"   | "[M_E]"    | "[M_P]"  |
+        "[p'diop]" | "[pt_us]"  | "[ppth]" | "[ppb]" | "[ppm]" | "[pH]" | "[pi]" |
+        "[P'DIOP]" | "[PT_US]"  | "[PPTH]" | "[PPB]" | "[PPM]" | "[PH]" | "[PI]" |
+        "[qt_us]"  | "[QT_US]"  |
+        "[rd_us]"  | "[RD_US]"  |
+        "10^"      |
+        "10*"      |
+        "1"        |
+        "π"        |
+        "μ₀"       |
+        "𝑚ₚ"       |
+        "𝑚ₑ"       |
+        "𝑘"        |
+        "ℎ"        |
+        "𝑒"        |
+        "ε₀"       |
+        "𝑐"        |
+        "𝐺"        |
+        "𝑔"        |
+        "Ω"        |
+        "°"        |
+        "°C"       |
+        "°F"       |
+        "°Ré"      |
+        "%"        |
+        "'"        |
+        "''"
 }
 
 // Prefixes
