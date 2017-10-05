@@ -96,38 +96,40 @@ atom_symbol = {
 
         "[acr_us]" | "[ACR_US]" |
         "[bf_i]"   | "[BF_I]"   |
-        "[cft_i]"  | "[cin_i]"  | "[cml_i]"  | "[cyd_i]"  | "[cr_i]"   |"[c]"      |
-        "[CFT_I]"  | "[CIN_I]"  | "[CML_I]"  | "[CYD_I]"  | "[CR_I]"   |"[C]"      |
+        "[cft_i]"  | "[cin_i]"  | "[cml_i]"  | "[cyd_i]"  | "[ch_us]"  | "[cr_i]"   |"[c]"      |
+        "[CFT_I]"  | "[CIN_I]"  | "[CML_I]"  | "[CYD_I]"  | "[CH_US]"  | "[CR_I]"   |"[C]"      |
 
-        "[degF]"   | "[degRe]"  | "[DEGF]" |
+        "[degF]"   | "[degRe]"  | "[DEGF]"  |
         "[eps_0]"  | "[e]"      |
         "[EPS_0]"  | "[E]"      |
-        "[foz_us]" | "[fth_i]"  | "[ft_us]"  | "[ft_i]" |
-        "[FOZ_US]" | "[FTH_I]"  | "[FT_US]"  | "[FT_I]" |
+        "[foz_us]" | "[fth_us]" | "[fth_i]" | "[fur_us]" | "[ft_us]" | "[ft_i]" |
+        "[FOZ_US]" | "[FTH_US]" | "[FTH_I]" | "[FUR_US]" | "[FT_US]" | "[FT_I]" |
 
         "[gal_us]" | "[gil_us]" | "[g]"  |
         "[GAL_US]" | "[GIL_US]" | "[GC]" | "[G]" |
         "[hd_i]"   | "[h]"      |
         "[HD_I]"   | "[H]"      |
-        "[in_i]"   | "[IN_I]"   |
+        "[in_us]"  | "[in_i]"   | "[IN_US]"  | "[IN_I]"   |
 
         "[kn_i]"   | "[k]"      |
         "[KN_I]"   | "[K]"      |
-        "[ly]"     | "[LY]"     |
+        "[lk_us]"  | "[ly]"     | "[LK_US]"  | "[LY]"     |
         "[lbf_av]" | "[LBF_AV]" |
 
-        "[mil_i]"  | "[mi_i]"   | "[mu_0]"   | "[m_e]"    | "[m_p]"  |
-        "[MIL_I]"  | "[MI_I]"   | "[MU_0]"   | "[M_E]"    | "[M_P]"  |
-        "[nmi_i]"  | "[NMI_I]"  |
+        "[mil_us]" | "[mil_i]" | "[mi_us]" | "[mi_i]" | "[mu_0]" | "[m_e]" | "[m_p]" |
+        "[MIL_US]" | "[MIL_I]" | "[MI_US]" | "[MI_I]" | "[MU_0]" | "[M_E]" | "[M_P]" |
+        "[nmi_i]"  | "[NMI_I]" |
 
-        "[p'diop]" | "[pt_us]"  | "[ppth]" | "[ppb]" | "[ppm]" | "[pH]" | "[pi]" |
-        "[P'DIOP]" | "[PT_US]"  | "[PPTH]" | "[PPB]" | "[PPM]" | "[PH]" | "[PI]" |
+        "[p'diop]" | "[pt_us]"  | "[ppth]"  | "[ppb]" | "[ppm]" | "[pH]" | "[pi]" |
+        "[P'DIOP]" | "[PT_US]"  | "[PPTH]"  | "[PPB]" | "[PPM]" | "[PH]" | "[PI]" |
         "[qt_us]"  | "[QT_US]"  |
-        "[rd_us]"  | "[RAD]"    | "[REM]"  | "[RD_US]"  |
+        "[rch_us]" | "[rlk_us]" | "[rd_us]" |
+        "[RCH_US]" | "[RLK_US]" | "[RD_US]" | "[RAD]" | "[REM]" |
 
-        "[sft_i]"  | "[sin_i]"  | "[syd_i]" |
-        "[SFT_I]"  | "[SIN_I]"  | "[SYD_I]" |
-        "[yd_i]"   | "[YD_I]"   |
+        "[sft_i]" | "[sin_i]" | "[smi_us]" | "[srd_us]" | "[syd_i]" | "[sct]" |
+        "[SFT_I]" | "[SIN_I]" | "[SMI_US]" | "[SRD_US]" | "[SYD_I]" | "[SCT]" |
+        "[twp]"   | "[TWP]"   |
+        "[yd_us]" | "[yd_i]"  | "[YD_US]" | "[YD_I]" |
 
         "10^"      |
         "10*"      |
