@@ -195,6 +195,13 @@ pub enum Atom {
 impl Atom {
     pub fn classification(&self) -> Classification {
         match *self {
+            Atom::PartsPerBillion                         |
+                Atom::PartsPerMillion                     |
+                Atom::PartsPerThousand                    |
+                Atom::Percent                             |
+                Atom::TheNumberPi                         |
+                Atom::TheNumberTenForArbitraryPowersCaret |
+                Atom::TheNumberTenForArbitraryPowersStar    => Classification::Dimless,
             Atom::TheUnity          |
                 Atom::Candela       |
                 Atom::Coulomb       |
@@ -225,35 +232,6 @@ impl Atom {
                 Atom::Volt          |
                 Atom::Watt          |
                 Atom::Weber                                 => Classification::SI,
-            Atom::AcreUS                    |
-                Atom::FathomUS              |
-                Atom::FootUS                |
-                Atom::FurlongUS             |
-                Atom::GuntersChainUS        |
-                Atom::InchUS                |
-                Atom::LinkForGuntersChainUS |
-                Atom::LinkForRamdensChainUS |
-                Atom::MilUS                 |
-                Atom::MileUS                |
-                Atom::RamdensChainUS        |
-                Atom::RodUS                 |
-                Atom::Section               |
-                Atom::SquareMileUS          |
-                Atom::SquareRodUS           |
-                Atom::Township              |
-                Atom::YardUS                                => Classification::USLengths,
-            Atom::AcreBR                    |
-                Atom::FathomBR              |
-                Atom::FootBR                |
-                Atom::GuntersChainBR        |
-                Atom::InchBR                |
-                Atom::KnotBR                |
-                Atom::LinkForGuntersChainBR |
-                Atom::MileBR                |
-                Atom::NauticalMileBR        |
-                Atom::PaceBR                |
-                Atom::RodBR                 |
-                Atom::YardBR                                => Classification::BritLength,
             Atom::Are                    |
                 Atom::AstronomicUnit     |
                 Atom::AtomicMassUnit     |
@@ -279,73 +257,6 @@ impl Atom {
                 Atom::TropicalYear       |
                 Atom::Week               |
                 Atom::Year                                  => Classification::ISO1000,
-            Atom::DegreeFahrenheit |
-                Atom::DegreeReaumur                         => Classification::Heat,
-            Atom::BarrelUS                       |
-                Atom::BushelUS                   |
-                Atom::CordUS                     |
-                Atom::CupUS                      |
-                Atom::DryPintUS                  |
-                Atom::DryQuartUS                 |
-                Atom::FluidDramUS                |
-                Atom::FluidOunceUS               |
-                Atom::GillUS                     |
-                Atom::HistoricalWinchesterGallon |
-                Atom::MetricCup                  |
-                Atom::MetricFluidOunce           |
-                Atom::MetricTablespoon           |
-                Atom::MetricTeaspoon             |
-                Atom::MinimUS                    |
-                Atom::PeckUS                     |
-                Atom::PintUS                     |
-                Atom::QuartUS                    |
-                Atom::QueenAnnesWineGallon       |
-                Atom::TablespoonUS               |
-                Atom::TeaspoonUS                            => Classification::USVolumes,
-            // Atom::BarrelBR                       |
-                Atom::BushelBR                   |
-                // Atom::CordBR                     |
-                // Atom::CupBR                      |
-                // Atom::DryPintBR                  |
-                // Atom::DryQuartBR                 |
-                Atom::FluidDramBR                |
-                Atom::FluidOunceBR               |
-                Atom::GallonBR                   |
-                Atom::GillBR                     |
-                Atom::MinimBR                    |
-                Atom::PeckBR                     |
-                Atom::PintBR                     |
-                Atom::QuartBR                    
-                // Atom::TablespoonBR               |
-                // Atom::TeaspoonBR                            => Classification::BRVolumes,
-                                                            => Classification::BritVolumes,
-            Atom::BoardFootInternational        |
-                Atom::CircularMilInternational  |
-                Atom::CordInternational         |
-                Atom::CubicFootInternational    |
-                Atom::CubicInchInternational    |
-                Atom::CubicYardInternational    |
-                Atom::HandInternational         |
-                Atom::InchInternational         |
-                Atom::FathomInternational       |
-                Atom::FootInternational         |
-                Atom::KnotInternational         |
-                Atom::MilInternational          |
-                Atom::MileInternational         |
-                Atom::NauticalMileInternational |
-                Atom::SquareFootInternational   |
-                Atom::SquareInchInternational   |
-                Atom::SquareYardInternational   |
-                Atom::YardInternational                     => Classification::Intcust,
-            Atom::PartsPerBillion                         |
-                Atom::PartsPerMillion                     |
-                Atom::PartsPerThousand                    |
-                Atom::Percent                             |
-                Atom::TheNumberPi                         |
-                Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar    => Classification::Dimless,
-            Atom::PH                                        => Classification::Chemical,
-            Atom::PrismDiopter                              => Classification::Clinical,
             Atom::BoltzmannConstant                  |
                 Atom::ElementaryCharge               |
                 Atom::GramForce                      |
@@ -377,6 +288,87 @@ impl Atom {
                 Atom::Roentgen               |
                 Atom::Stilb                  |
                 Atom::Stokes                                => Classification::CGS,
+            Atom::BoardFootInternational        |
+                Atom::CircularMilInternational  |
+                Atom::CordInternational         |
+                Atom::CubicFootInternational    |
+                Atom::CubicInchInternational    |
+                Atom::CubicYardInternational    |
+                Atom::HandInternational         |
+                Atom::InchInternational         |
+                Atom::FathomInternational       |
+                Atom::FootInternational         |
+                Atom::KnotInternational         |
+                Atom::MilInternational          |
+                Atom::MileInternational         |
+                Atom::NauticalMileInternational |
+                Atom::SquareFootInternational   |
+                Atom::SquareInchInternational   |
+                Atom::SquareYardInternational   |
+                Atom::YardInternational                     => Classification::Intcust,
+            Atom::AcreUS                    |
+                Atom::FathomUS              |
+                Atom::FootUS                |
+                Atom::FurlongUS             |
+                Atom::GuntersChainUS        |
+                Atom::InchUS                |
+                Atom::LinkForGuntersChainUS |
+                Atom::LinkForRamdensChainUS |
+                Atom::MilUS                 |
+                Atom::MileUS                |
+                Atom::RamdensChainUS        |
+                Atom::RodUS                 |
+                Atom::Section               |
+                Atom::SquareMileUS          |
+                Atom::SquareRodUS           |
+                Atom::Township              |
+                Atom::YardUS                                => Classification::USLengths,
+            Atom::AcreBR                    |
+                Atom::FathomBR              |
+                Atom::FootBR                |
+                Atom::GuntersChainBR        |
+                Atom::InchBR                |
+                Atom::KnotBR                |
+                Atom::LinkForGuntersChainBR |
+                Atom::MileBR                |
+                Atom::NauticalMileBR        |
+                Atom::PaceBR                |
+                Atom::RodBR                 |
+                Atom::YardBR                                => Classification::BritLength,
+            Atom::BarrelUS                       |
+                Atom::BushelUS                   |
+                Atom::CordUS                     |
+                Atom::CupUS                      |
+                Atom::DryPintUS                  |
+                Atom::DryQuartUS                 |
+                Atom::FluidDramUS                |
+                Atom::FluidOunceUS               |
+                Atom::GillUS                     |
+                Atom::HistoricalWinchesterGallon |
+                Atom::MetricCup                  |
+                Atom::MetricFluidOunce           |
+                Atom::MetricTablespoon           |
+                Atom::MetricTeaspoon             |
+                Atom::MinimUS                    |
+                Atom::PeckUS                     |
+                Atom::PintUS                     |
+                Atom::QuartUS                    |
+                Atom::QueenAnnesWineGallon       |
+                Atom::TablespoonUS               |
+                Atom::TeaspoonUS                            => Classification::USVolumes,
+                Atom::BushelBR                   |
+                Atom::FluidDramBR                |
+                Atom::FluidOunceBR               |
+                Atom::GallonBR                   |
+                Atom::GillBR                     |
+                Atom::MinimBR                    |
+                Atom::PeckBR                     |
+                Atom::PintBR                     |
+                Atom::QuartBR                               => Classification::BritVolumes,
+            Atom::DegreeFahrenheit |
+                Atom::DegreeReaumur                         => Classification::Heat,
+            Atom::PrismDiopter                              => Classification::Clinical,
+            Atom::PH                                        => Classification::Chemical,
         }
     }
 
