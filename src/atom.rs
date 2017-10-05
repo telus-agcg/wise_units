@@ -30,6 +30,7 @@ pub enum Atom {
     Biot,
     BoardFootInternational,
     BoltzmannConstant,
+    BushelBR,
     BushelUS,
     CircularMilInternational,
     CordInternational,
@@ -58,7 +59,9 @@ pub enum Atom {
     FathomInternational,
     FathomBR,
     FathomUS,
+    FluidDramBR,
     FluidDramUS,
+    FluidOunceBR,
     FluidOunceUS,
     FootInternational,
     FootBR,
@@ -66,9 +69,11 @@ pub enum Atom {
     FurlongUS,
 
     Gal,
+    GallonBR,
     GuntersChainBR,
     GuntersChainUS,
     Gilbert,
+    GillBR,
     GillUS,
     Gon,
     GramForce,
@@ -110,6 +115,7 @@ pub enum Atom {
     MileInternational,
     MileBR,
     MileUS,
+    MinimBR,
     MinimUS,
     Minute,
     Mole,
@@ -132,13 +138,16 @@ pub enum Atom {
     PermittivityOfVacuum,
     PH,
     Phot,
+    PeckBR,
     PeckUS,
+    PintBR,
     PintUS,
     Poise,
     PoundForce,
     PlanckConstant,
     PrismDiopter,
     ProtonMass,
+    QuartBR,
     QuartUS,
     QueenAnnesWineGallon,
     RadiationAbsorbedDose,
@@ -293,6 +302,23 @@ impl Atom {
                 Atom::QueenAnnesWineGallon       |
                 Atom::TablespoonUS               |
                 Atom::TeaspoonUS                            => Classification::USVolumes,
+            // Atom::BarrelBR                       |
+                Atom::BushelBR                   |
+                // Atom::CordBR                     |
+                // Atom::CupBR                      |
+                // Atom::DryPintBR                  |
+                // Atom::DryQuartBR                 |
+                Atom::FluidDramBR                |
+                Atom::FluidOunceBR               |
+                Atom::GallonBR                   |
+                Atom::GillBR                     |
+                Atom::MinimBR                    |
+                Atom::PeckBR                     |
+                Atom::PintBR                     |
+                Atom::QuartBR                    
+                // Atom::TablespoonBR               |
+                // Atom::TeaspoonBR                            => Classification::BRVolumes,
+                                                            => Classification::BritVolumes,
             Atom::BoardFootInternational        |
                 Atom::CircularMilInternational  |
                 Atom::CordInternational         |
@@ -376,6 +402,7 @@ impl Atom {
             Atom::Biot                           => Definition::new(10.0, "A"),
             Atom::BoardFootInternational         => Definition::new(144.0, "[in_i]3"),
             Atom::BoltzmannConstant              => Definition::new(1.380_658e-23, "J/K"),
+            Atom::BushelBR                       => Definition::new(4.0, "[pk_br]"),
             Atom::BushelUS                       => Definition::new(2150.42, "[in_i]3"),
             Atom::CircularMilInternational       => Definition::new(1.0, "[pi]/4.[mil_i]2"),
             Atom::CordInternational              => Definition::new(128.0, "[ft_i]3"),
@@ -404,7 +431,9 @@ impl Atom {
             Atom::FathomInternational            => Definition::new(6.0, "[ft_i]"),
             Atom::FathomBR                       => Definition::new(6.0, "[ft_br]"),
             Atom::FathomUS                       => Definition::new(6.0, "[ft_us]"),
+            Atom::FluidDramBR                    => Definition::new(1.0, "[foz_br]/8"),
             Atom::FluidDramUS                    => Definition::new(1.0, "[foz_us]/8"),
+            Atom::FluidOunceBR                   => Definition::new(1.0, "[gil_br]/5"),
             Atom::FluidOunceUS                   => Definition::new(1.0, "[gil_us]/4"),
             Atom::FootInternational              => Definition::new(12.0, "[in_i]"),
             Atom::FootBR                         => Definition::new(12.0, "[in_br]"),
@@ -412,8 +441,10 @@ impl Atom {
             Atom::FurlongUS                      => Definition::new(40.0, "[rd_us]"),
 
             Atom::Gal                            => Definition::new(1.0, "cm/s2"),
+            Atom::GallonBR                       => Definition::new(4.546_09, "l"),
             Atom::Gauss                          => Definition::new(1.0e-4, "T"),
             Atom::Gilbert                        => Definition::new(1.0, "Oe.cm"),
+            Atom::GillBR                         => Definition::new(1.0, "[pt_br]/4"),
             Atom::GillUS                         => Definition::new(1.0, "[pt_us]/4"),
             Atom::Gon                            => Definition::new(0.9, "deg"),
             Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
@@ -456,6 +487,7 @@ impl Atom {
             Atom::MileInternational              => Definition::new(5280.0, "[ft_i]"),
             Atom::MileBR                         => Definition::new(5280.0, "[ft_br]"),
             Atom::MileUS                         => Definition::new(8.0, "[fur_us]"),
+            Atom::MinimBR                        => Definition::new(1.0, "[fdr_br]/60"),
             Atom::MinimUS                        => Definition::new(1.0, "[fdr_us]/60"),
             Atom::Minute                         => Definition::new(60.0, "s"),
             Atom::Mole                           => Definition::new(6.022_136_7, "10*23"),
@@ -478,13 +510,16 @@ impl Atom {
             Atom::PermeabilityOfVacuum           => Definition::new(1.0, "4.[PI].10*-7.N/A2"),
             Atom::PermittivityOfVacuum           => Definition::new(8.854_187_817e-12, "F/m"),
             Atom::Phot                           => Definition::new(1.0e-4, "lx"),
+            Atom::PeckBR                         => Definition::new(2.0, "[gal_br]"),
             Atom::PeckUS                         => Definition::new(1.0, "[bu_us]/4"),
+            Atom::PintBR                         => Definition::new(1.0, "[qt_br]/2"),
             Atom::PintUS                         => Definition::new(1.0, "[qt_us]/2"),
             Atom::PlanckConstant                 => Definition::new(6.626_075_5e-34, "J.s"),
             Atom::Poise                          => Definition::new(1.0, "dyn.s/cm2"),
             Atom::PoundForce                     => Definition::new(1.0, "[lb_av].[g]"),
             Atom::PrismDiopter                   => Definition::new(1.0, "100tan(1.0 rad)"),
             Atom::ProtonMass                     => Definition::new(1.672_623_1e-24, "g"),
+            Atom::QuartBR                        => Definition::new(1.0, "[gal_br]/4"),
             Atom::QuartUS                        => Definition::new(1.0, "[gal_us]/4"),
             Atom::QueenAnnesWineGallon           => Definition::new(231.0, "[in_i]3"),
             Atom::RadiationAbsorbedDose          => Definition::new(100.0, "erg/g"),
@@ -665,7 +700,8 @@ impl Atom {
             Atom::Biot                     => vec!["Biot"],
             Atom::BoardFootInternational   => vec!["board foot"],
             Atom::BoltzmannConstant        => vec!["Boltzmann constant"],
-            Atom::BushelUS                 => vec!["bushel"],
+            Atom::BushelBR |
+                Atom::BushelUS             => vec!["bushel"],
             Atom::CircularMilInternational => vec!["circular mil"],
             Atom::CordInternational |
                 Atom::CordUS               => vec!["cord"],
@@ -693,17 +729,21 @@ impl Atom {
             Atom::FathomInternational |
                 Atom::FathomBR        |
                 Atom::FathomUS => vec!["fathom"],
-            Atom::FluidDramUS  => vec!["fluid dram"],
-            Atom::FluidOunceUS => vec!["fluid once"],
+            Atom::FluidDramBR  |
+                Atom::FluidDramUS  => vec!["fluid dram"],
+            Atom::FluidOunceBR |
+                Atom::FluidOunceUS => vec!["fluid ounce"],
             Atom::FootInternational |
                 Atom::FootBR        |
                 Atom::FootUS                     => vec!["foot"],
             Atom::FurlongUS                      => vec!["furlong"],
 
             Atom::Gal                            => vec!["Gal"],
+            Atom::GallonBR                       => vec!["gallon"],
             Atom::Gauss                          => vec!["Gauss"],
             Atom::Gilbert                        => vec!["Gilbert"],
-            Atom::GillUS                         => vec!["gill"],
+            Atom::GillBR |
+                Atom::GillUS                     => vec!["gill"],
             Atom::Gon                            => vec!["gon", "grade"],
             Atom::GramForce                      => vec!["gram-force"],
             Atom::Gray                           => vec!["gray"],
@@ -745,7 +785,8 @@ impl Atom {
             Atom::MileInternational |
                 Atom::MileBR        |
                 Atom::MileUS                     => vec!["mile"],
-            Atom::MinimUS                        => vec!["minim"],
+            Atom::MinimBR |
+                Atom::MinimUS                    => vec!["minim"],
             Atom::Minute                         => vec!["minute"],
             Atom::Mole                           => vec!["mole"],
             Atom::Month                          => vec!["month"],
@@ -767,14 +808,17 @@ impl Atom {
             Atom::PermeabilityOfVacuum           => vec!["permeability of vacuum"],
             Atom::PermittivityOfVacuum           => vec!["permittivity of vacuum"],
             Atom::Phot                           => vec!["phot"],
-            Atom::PeckUS                         => vec!["peck"],
-            Atom::PintUS                         => vec!["pint"],
+            Atom::PeckBR |
+                Atom::PeckUS                     => vec!["peck"],
+            Atom::PintBR |
+                Atom::PintUS                     => vec!["pint"],
             Atom::PlanckConstant                 => vec!["Planck constant"],
             Atom::Poise                          => vec!["Poise"],
             Atom::PoundForce                     => vec!["pound force"],
             Atom::PrismDiopter                   => vec!["prism diopter"],
             Atom::ProtonMass                     => vec!["proton mass"],
-            Atom::QuartUS                        => vec!["quart"],
+            Atom::QuartBR |
+                Atom::QuartUS                    => vec!["quart"],
             Atom::QueenAnnesWineGallon           => vec!["Queen Ann's wine gallon"],
             Atom::RadiationAbsorbedDose          => vec!["radiation absorbed dose"],
             Atom::RadiationEquivalentMan         => vec!["radiation equivalent man"],
@@ -845,6 +889,7 @@ impl Atom {
             Atom::Biot                                => "Bi",
             Atom::BoardFootInternational              => "[bf_i]",
             Atom::BoltzmannConstant                   => "[k]",
+            Atom::BushelBR                            => "[bu_br]",
             Atom::BushelUS                            => "[bu_us]",
             Atom::CircularMilInternational            => "[cml_i]",
             Atom::CordInternational                   => "[cr_i]",
@@ -873,7 +918,9 @@ impl Atom {
             Atom::FathomInternational                 => "[fth_i]",
             Atom::FathomBR                            => "[fth_br]",
             Atom::FathomUS                            => "[fth_us]",
+            Atom::FluidDramBR                         => "[fdr_br]",
             Atom::FluidDramUS                         => "[fdr_us]",
+            Atom::FluidOunceBR                        => "[foz_br]",
             Atom::FluidOunceUS                        => "[foz_us]",
             Atom::FootInternational                   => "[ft_i]",
             Atom::FootBR                              => "[ft_br]",
@@ -881,8 +928,10 @@ impl Atom {
             Atom::FurlongUS                           => "[fur_us]",
 
             Atom::Gal                                 => "Gal",
+            Atom::GallonBR                            => "[gal_br]",
             Atom::Gauss                               => "G",
             Atom::Gilbert                             => "Gb",
+            Atom::GillBR                              => "[gil_br]",
             Atom::GillUS                              => "[gil_us]",
             Atom::Gon                                 => "gon",
             Atom::GramForce                           => "gf",
@@ -925,6 +974,7 @@ impl Atom {
             Atom::MileInternational                   => "[mi_i]",
             Atom::MileBR                              => "[mi_br]",
             Atom::MileUS                              => "[mi_us]",
+            Atom::MinimBR                             => "[min_br]",
             Atom::MinimUS                             => "[min_us]",
             Atom::Minute                              => "min",
             Atom::Mole                                => "mol",
@@ -947,13 +997,16 @@ impl Atom {
             Atom::PermeabilityOfVacuum                => "[mu_0]",
             Atom::PermittivityOfVacuum                => "[eps_0]",
             Atom::Phot                                => "ph",
+            Atom::PeckBR                              => "[pk_br]",
             Atom::PeckUS                              => "[pk_us]",
+            Atom::PintBR                              => "[pt_br]",
             Atom::PintUS                              => "[pt_us]",
             Atom::PlanckConstant                      => "[h]",
             Atom::Poise                               => "P",
             Atom::PoundForce                          => "[lbf_av]",
             Atom::PrismDiopter                        => "[p'diop]",
             Atom::ProtonMass                          => "[m_p]",
+            Atom::QuartBR                             => "[qt_br]",
             Atom::QuartUS                             => "[qt_us]",
             Atom::QueenAnnesWineGallon                => "[gal_us]",
             Atom::RadiationAbsorbedDose               => "RAD",
@@ -1220,15 +1273,24 @@ impl Atom {
                 Atom::DryQuartUS |
                 Atom::HistoricalWinchesterGallon            => Property::DryVolume,
             Atom::BoardFootInternational     |
+                Atom::BushelBR               |
                 Atom::CordInternational      |
                 Atom::CubicFootInternational |
                 Atom::CubicInchInternational |
                 Atom::CubicYardInternational |
                 Atom::CupUS                  |
+                Atom::FluidDramBR            |
+                Atom::FluidOunceBR           |
+                Atom::GallonBR               |
+                Atom::GillBR                 |
                 Atom::Liter                  |
                 Atom::MetricCup              |
                 Atom::MetricTablespoon       |
                 Atom::MetricTeaspoon         |
+                Atom::MinimBR                |
+                Atom::PeckBR                 |
+                Atom::PintBR                 |
+                Atom::QuartBR                |
                 Atom::TablespoonUS           |
                 Atom::TeaspoonUS                            => Property::Volume,
             Atom::Mole                                      => Property::AmountOfSubstance,
@@ -1317,6 +1379,7 @@ impl Atom {
             Atom::Biot                           => "BI",
             Atom::BoardFootInternational         => "[BF_I]",
             Atom::BoltzmannConstant              => "[K]",
+            Atom::BushelBR                       => "[BU_BR]",
             Atom::BushelUS                       => "[BU_US]",
             Atom::CircularMilInternational       => "[CML_I]",
             Atom::CordInternational              => "[CR_I]",
@@ -1341,7 +1404,9 @@ impl Atom {
             Atom::FathomInternational            => "[FTH_I]",
             Atom::FathomBR                       => "[FTH_BR]",
             Atom::FathomUS                       => "[FTH_US]",
+            Atom::FluidDramBR                    => "[FDR_BR]",
             Atom::FluidDramUS                    => "[FDR_US]",
+            Atom::FluidOunceBR                   => "[FOZ_BR]",
             Atom::FluidOunceUS                   => "[FOZ_US]",
             Atom::FootInternational              => "[FT_I]",
             Atom::FootBR                         => "[FT_BR]",
@@ -1349,8 +1414,10 @@ impl Atom {
             Atom::FurlongUS                      => "[FUR_US]",
 
             Atom::Gal                            => "GL",
+            Atom::GallonBR                       => "[GAL_BR]",
             Atom::Gauss                          => "GS",
             Atom::Gilbert                        => "GB",
+            Atom::GillBR                         => "[GIL_BR]",
             Atom::GillUS                         => "[GIL_US]",
             Atom::Gon                            => "GON",
             Atom::GramForce                      => "GF",
@@ -1391,6 +1458,7 @@ impl Atom {
             Atom::MileInternational              => "[MI_I]",
             Atom::MileBR                         => "[MI_BR]",
             Atom::MileUS                         => "[MI_US]",
+            Atom::MinimBR                        => "[MIN_BR]",
             Atom::MinimUS                        => "[MIN_US]",
             Atom::Minute                         => "MIN",
             Atom::Mole                           => "MOL",
@@ -1411,12 +1479,15 @@ impl Atom {
             Atom::PermeabilityOfVacuum           => "[MU_0]",
             Atom::PermittivityOfVacuum           => "[EPS_0]",
             Atom::Phot                           => "PHT",
+            Atom::PeckBR                         => "[PK_BR]",
             Atom::PeckUS                         => "[PK_US]",
+            Atom::PintBR                         => "[PT_BR]",
             Atom::PintUS                         => "[PT_US]",
             Atom::PlanckConstant                 => "[C]",
             Atom::PoundForce                     => "[LBF_AV]",
             Atom::PrismDiopter                   => "[P'DIOP]",
             Atom::ProtonMass                     => "[M_P]",
+            Atom::QuartBR                        => "[QT_BR]",
             Atom::QuartUS                        => "[QT_US]",
             Atom::QueenAnnesWineGallon           => "[GAL_US]",
             Atom::RadiationAbsorbedDose          => "[RAD]",
