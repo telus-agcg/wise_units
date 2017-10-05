@@ -26,7 +26,13 @@ pub enum Atom {
     Bar,
     Becquerel,
     Biot,
+    BoardFoot,
     BoltzmannConstant,
+    CircularMil,
+    CordInternational,
+    CubicFootInternational,
+    CubicInchInternational,
+    CubicYardInternational,
     Curie,
 
     Day,
@@ -42,6 +48,7 @@ pub enum Atom {
     ElementaryCharge,
     Erg,
     Farad,
+    FathomInternational,
     FluidOunceUS,
     FootInternational,
     FootUS,
@@ -53,6 +60,7 @@ pub enum Atom {
     GramForce,
     Gray,
     Gauss,
+    Hand,
     Hertz,
     Henry,
     Hour,
@@ -60,6 +68,7 @@ pub enum Atom {
 
     Joule,
     Kayser,
+    KnotInternational,
     Lambert,
     LightYear,
     Liter,
@@ -71,9 +80,12 @@ pub enum Atom {
     MeanGregorianYear,
     MeanJulianMonth,
     MeanJulianYear,
+    MilInternational,
+    MileInternational,
     Minute,
     Mole,
     Month,
+    NauticalMileInternational,
     Newton,
     NewtonianConstantOfGravitation,
     Ohm,
@@ -104,6 +116,9 @@ pub enum Atom {
 
     Siemens,
     Sievert,
+    SquareInchInternational,
+    SquareFootInternational,
+    SquareYardInternational,
     StandardAccelerationOfFreeFall,
     StandardAtmosphere,
     Steradian,
@@ -122,6 +137,7 @@ pub enum Atom {
     Watt,
     Weber,
     Week,
+    YardInternational,
     Year,
 }
 
@@ -193,8 +209,24 @@ impl Atom {
                 Atom::PintUS   |
                 Atom::QuartUS  |
                 Atom::QueenAnnesWineGallon => Classification::USVolumes,
-            Atom::InchInternational |
-                Atom::FootInternational => Classification::Intcust,
+            Atom::BoardFoot                     |
+                Atom::CircularMil               |
+                Atom::CordInternational         |
+                Atom::CubicFootInternational    |
+                Atom::CubicInchInternational    |
+                Atom::CubicYardInternational    |
+                Atom::Hand                      |
+                Atom::InchInternational         |
+                Atom::FathomInternational       |
+                Atom::FootInternational         |
+                Atom::KnotInternational         |
+                Atom::MilInternational          |
+                Atom::MileInternational         |
+                Atom::NauticalMileInternational |
+                Atom::SquareFootInternational   |
+                Atom::SquareInchInternational   |
+                Atom::SquareYardInternational   |
+                Atom::YardInternational => Classification::Intcust,
             Atom::PartsPerBillion                         |
                 Atom::PartsPerMillion                     |
                 Atom::PartsPerThousand                    |
@@ -256,7 +288,13 @@ impl Atom {
             Atom::Bar                            => Definition::new(1.0e5, "Pa"),
             Atom::Becquerel                      => Definition::new(1.0, "s-1"),
             Atom::Biot                           => Definition::new(10.0, "A"),
+            Atom::BoardFoot                      => Definition::new(144.0, "[in_i]3"),
             Atom::BoltzmannConstant              => Definition::new(1.380_658e-23, "J/K"),
+            Atom::CircularMil                    => Definition::new(1.0, "[pi]/4.[mil_i]2"),
+            Atom::CordInternational              => Definition::new(128.0, "[ft_i]3"),
+            Atom::CubicFootInternational         => Definition::new(1.0, "[ft_i]3"),
+            Atom::CubicInchInternational         => Definition::new(1.0, "[in_i]3"),
+            Atom::CubicYardInternational         => Definition::new(1.0, "[yd_i]3"),
             Atom::Curie                          => Definition::new(37e9, "Bq"),
 
             Atom::Day                            => Definition::new(24.0, "h"),
@@ -272,6 +310,7 @@ impl Atom {
             Atom::ElementaryCharge               => Definition::new(1.602_177_33e-19, "C"),
             Atom::Erg                            => Definition::new(1.0, "dyn.cm"),
             Atom::Farad                          => Definition::new(1.0, "C/V"),
+            Atom::FathomInternational            => Definition::new(6.0, "[ft_i]"),
             Atom::FluidOunceUS                   => Definition::new(1.0, "[gil_us]/4"),
             Atom::FootInternational              => Definition::new(12.0, "[in_i]"),
             Atom::FootUS                         => Definition::new(1200.0, "m/3937"),
@@ -283,6 +322,7 @@ impl Atom {
             Atom::Gon                            => Definition::new(0.9, "deg"),
             Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
             Atom::Gray                           => Definition::new(1.0, "J/kg"),
+            Atom::Hand                           => Definition::new(4.0, "[in_i]"),
             Atom::Henry                          => Definition::new(1.0, "Wb/A"),
             Atom::Hertz                          => Definition::new(1.0, "s-1"),
             Atom::Hour                           => Definition::new(60.0, "min"),
@@ -290,6 +330,7 @@ impl Atom {
 
             Atom::Joule                          => Definition::new(1.0, "N.m"),
             Atom::Kayser                         => Definition::new(1.0, "cm-1"),
+            Atom::KnotInternational              => Definition::new(1.0, "[nmi_i]/h"),
             Atom::Lambert                        => Definition::new(1.0, "cd/cm2/[pi]"),
             Atom::LightYear                      => Definition::new(1.0, "[c].a_j"),
             Atom::Liter                          => Definition::new(1.0, "dm3"),
@@ -301,9 +342,12 @@ impl Atom {
             Atom::MeanGregorianYear              => Definition::new(365.2425, "d"),
             Atom::MeanJulianMonth                => Definition::new(1.0, "a_j/12"),
             Atom::MeanJulianYear                 => Definition::new(365.25, "d"),
+            Atom::MilInternational               => Definition::new(1.0e-3, "[in_i]"),
+            Atom::MileInternational              => Definition::new(5280.0, "[ft_i]"),
             Atom::Minute                         => Definition::new(60.0, "s"),
             Atom::Mole                           => Definition::new(6.022_136_7, "10*23"),
             Atom::Month                          => Definition::new(1.0, "mo_j"),
+            Atom::NauticalMileInternational      => Definition::new(1852.0, "m"),
             Atom::Newton                         => Definition::new(1.0, "kg.m/s2"),
             Atom::NewtonianConstantOfGravitation => Definition::new(1.0, "kg.m/s2"),
             Atom::Ohm                            => Definition::new(1.0, "V/A"),
@@ -334,6 +378,9 @@ impl Atom {
 
             Atom::Siemens                        => Definition::new(1.0, "Ohm-1"),
             Atom::Sievert                        => Definition::new(1.0, "J/kg"),
+            Atom::SquareFootInternational        => Definition::new(1.0, "[ft_i]2"),
+            Atom::SquareInchInternational        => Definition::new(1.0, "[in_i]2"),
+            Atom::SquareYardInternational        => Definition::new(1.0, "[yd_i]2"),
             Atom::StandardAccelerationOfFreeFall => Definition::new(980_665e-5, "m/s2"),
             Atom::StandardAtmosphere             => Definition::new(101_325.0, "Pa"),
             Atom::Steradian                      => Definition::new(1.0, "rad2"),
@@ -352,6 +399,7 @@ impl Atom {
             Atom::Watt                                   => Definition::new(1.0, "J/s"),
             Atom::Weber                                  => Definition::new(1.0, "V.s"),
             Atom::Week                                   => Definition::new(7.0, "d"),
+            Atom::YardInternational                      => Definition::new(3.0, "[ft_i]"),
             Atom::Year                                   => Definition::new(1.0, "a_j"),
         }
     }
@@ -480,31 +528,38 @@ impl Atom {
             Atom::Second   => vec!["second"],
 
             // Derived units
-            Atom::AcreUS            => vec!["acre"],
-            Atom::Ampere            => vec!["ampère"],
-            Atom::Are               => vec!["are"],
-            Atom::AstronomicUnit    => vec!["astronomic unit"],
-            Atom::AtomicMassUnit    => vec!["unified atomic mass unit"],
-            Atom::Bar               => vec!["bar"],
-            Atom::Becquerel         => vec!["becquerel"],
-            Atom::Biot              => vec!["Biot"],
-            Atom::BoltzmannConstant => vec!["Boltzmann constant"],
-            Atom::Curie             => vec!["Curie"],
+            Atom::AcreUS                 => vec!["acre"],
+            Atom::Ampere                 => vec!["ampère"],
+            Atom::Are                    => vec!["are"],
+            Atom::AstronomicUnit         => vec!["astronomic unit"],
+            Atom::AtomicMassUnit         => vec!["unified atomic mass unit"],
+            Atom::Bar                    => vec!["bar"],
+            Atom::Becquerel              => vec!["becquerel"],
+            Atom::Biot                   => vec!["Biot"],
+            Atom::BoardFoot              => vec!["board foot"],
+            Atom::BoltzmannConstant      => vec!["Boltzmann constant"],
+            Atom::CircularMil            => vec!["circular mil"],
+            Atom::CordInternational      => vec!["cord"],
+            Atom::CubicFootInternational => vec!["cubic foot"],
+            Atom::CubicInchInternational => vec!["cubic inch"],
+            Atom::CubicYardInternational => vec!["cubic yard"],
+            Atom::Curie                  => vec!["Curie"],
 
-            Atom::Day               => vec!["day"],
-            Atom::Degree            => vec!["degree"],
-            Atom::DegreeCelsius     => vec!["degree Celsius"],
-            Atom::DegreeFahrenheit  => vec!["degree Fahrenheit"],
-            Atom::DegreeMinute      => vec!["minute"],
-            Atom::DegreeReaumur     => vec!["degree Réaumur"],
-            Atom::DegreeSecond      => vec!["second"],
-            Atom::Dyne              => vec!["dyne"],
-            Atom::ElectronMass      => vec!["electron mass"],
-            Atom::ElectronVolt      => vec!["electronvolt"],
-            Atom::ElementaryCharge  => vec!["elementary charge"],
-            Atom::Erg               => vec!["erg"],
-            Atom::Farad             => vec!["farad"],
-            Atom::FluidOunceUS      => vec!["fluid once"],
+            Atom::Day                 => vec!["day"],
+            Atom::Degree              => vec!["degree"],
+            Atom::DegreeCelsius       => vec!["degree Celsius"],
+            Atom::DegreeFahrenheit    => vec!["degree Fahrenheit"],
+            Atom::DegreeMinute        => vec!["minute"],
+            Atom::DegreeReaumur       => vec!["degree Réaumur"],
+            Atom::DegreeSecond        => vec!["second"],
+            Atom::Dyne                => vec!["dyne"],
+            Atom::ElectronMass        => vec!["electron mass"],
+            Atom::ElectronVolt        => vec!["electronvolt"],
+            Atom::ElementaryCharge    => vec!["elementary charge"],
+            Atom::Erg                 => vec!["erg"],
+            Atom::Farad               => vec!["farad"],
+            Atom::FathomInternational => vec!["farad"],
+            Atom::FluidOunceUS        => vec!["fluid once"],
             Atom::FootInternational |
                 Atom::FootUS                     => vec!["foot"],
 
@@ -515,6 +570,7 @@ impl Atom {
             Atom::Gon                            => vec!["gon", "grade"],
             Atom::GramForce                      => vec!["gram-force"],
             Atom::Gray                           => vec!["gray"],
+            Atom::Hand                           => vec!["hand"],
             Atom::Henry                          => vec!["henry"],
             Atom::Hertz                          => vec!["hertz"],
             Atom::Hour                           => vec!["hour"],
@@ -523,6 +579,7 @@ impl Atom {
             Atom::Joule                          => vec!["joule"],
             Atom::Lambert                        => vec!["Lambert"],
             Atom::Kayser                         => vec!["Kayser"],
+            Atom::KnotInternational              => vec!["knot"],
             Atom::LightYear                      => vec!["light-year"],
             Atom::Liter                          => vec!["liter"],
             Atom::Lumen                          => vec!["lumen"],
@@ -533,10 +590,13 @@ impl Atom {
             Atom::MeanGregorianYear              => vec!["mean Gregorian year"],
             Atom::MeanJulianMonth                => vec!["mean Julian month"],
             Atom::MeanJulianYear                 => vec!["mean Julian year"],
+            Atom::MilInternational               => vec!["mil"],
+            Atom::MileInternational              => vec!["mile"],
             Atom::Minute                         => vec!["minute"],
             Atom::Mole                           => vec!["mole"],
             Atom::Month                          => vec!["month"],
             Atom::Newton                         => vec!["newton"],
+            Atom::NauticalMileInternational      => vec!["nautical mile"],
             Atom::NewtonianConstantOfGravitation => vec!["Newtonian constant of gravitation"],
             Atom::Ohm                            => vec!["ohm"],
             Atom::Oersted                        => vec!["Oersted"],
@@ -566,6 +626,9 @@ impl Atom {
 
             Atom::Siemens                        => vec!["siemens"],
             Atom::Sievert                        => vec!["sievert"],
+            Atom::SquareFootInternational        => vec!["square foot"],
+            Atom::SquareInchInternational        => vec!["square inch"],
+            Atom::SquareYardInternational        => vec!["square yard"],
             Atom::StandardAccelerationOfFreeFall => vec!["standard acceleration of free fall"],
             Atom::StandardAtmosphere             => vec!["standard atmosphere"],
             Atom::Steradian                      => vec!["steradian"],
@@ -581,12 +644,13 @@ impl Atom {
             Atom::Tonne           => vec!["tonne"],
             Atom::TropicalYear    => vec!["tropical year"],
 
-            Atom::VelocityOfLight => vec!["velocity of light"],
-            Atom::Volt            => vec!["volt"],
-            Atom::Watt            => vec!["watt"],
-            Atom::Weber           => vec!["weber"],
-            Atom::Week            => vec!["week"],
-            Atom::Year            => vec!["year"],
+            Atom::VelocityOfLight   => vec!["velocity of light"],
+            Atom::Volt              => vec!["volt"],
+            Atom::Watt              => vec!["watt"],
+            Atom::Weber             => vec!["weber"],
+            Atom::Week              => vec!["week"],
+            Atom::YardInternational => vec!["year"],
+            Atom::Year              => vec!["year"],
         }
     }
 
@@ -610,7 +674,13 @@ impl Atom {
             Atom::Bar                                 => "bar",
             Atom::Becquerel                           => "Bq",
             Atom::Biot                                => "Bi",
+            Atom::BoardFoot                           => "[bf_i]",
             Atom::BoltzmannConstant                   => "[k]",
+            Atom::CircularMil                         => "[cml_i]",
+            Atom::CordInternational                   => "[cr_i]",
+            Atom::CubicFootInternational              => "[cft_i]",
+            Atom::CubicInchInternational              => "[cin_i]",
+            Atom::CubicYardInternational              => "[cyd_i]",
             Atom::Curie                               => "Ci",
 
             Atom::Day                                 => "d",
@@ -626,6 +696,7 @@ impl Atom {
             Atom::ElementaryCharge                    => "[e]",
             Atom::Erg                                 => "erg",
             Atom::Farad                               => "F",
+            Atom::FathomInternational                 => "[fth_i]",
             Atom::FluidOunceUS                        => "[foz_us]",
             Atom::FootInternational                   => "[ft_i]",
             Atom::FootUS                              => "[ft_us]",
@@ -637,6 +708,7 @@ impl Atom {
             Atom::Gon                                 => "gon",
             Atom::GramForce                           => "gf",
             Atom::Gray                                => "Gy",
+            Atom::Hand                                => "[hd_i]",
             Atom::Henry                               => "H",
             Atom::Hertz                               => "Hz",
             Atom::Hour                                => "h",
@@ -644,6 +716,7 @@ impl Atom {
 
             Atom::Joule                               => "J",
             Atom::Kayser                              => "Ky",
+            Atom::KnotInternational                   => "[kn_i]",
             Atom::Lambert                             => "Lmb",
             Atom::LightYear                           => "[ly]",
             Atom::Liter                               => "l",
@@ -655,9 +728,12 @@ impl Atom {
             Atom::MeanGregorianYear                   => "a_g",
             Atom::MeanJulianMonth                     => "mo_j",
             Atom::MeanJulianYear                      => "a_j",
+            Atom::MilInternational                    => "[mil_i]",
+            Atom::MileInternational                   => "[mi_i]",
             Atom::Minute                              => "min",
             Atom::Mole                                => "mol",
             Atom::Month                               => "mo",
+            Atom::NauticalMileInternational           => "[nmi_i]",
             Atom::Newton                              => "N",
             Atom::NewtonianConstantOfGravitation      => "[G]",
             Atom::Ohm                                 => "Ohm",
@@ -688,6 +764,9 @@ impl Atom {
 
             Atom::Siemens                             => "S",
             Atom::Sievert                             => "Sv",
+            Atom::SquareFootInternational             => "[sft_i]",
+            Atom::SquareInchInternational             => "[sin_i]",
+            Atom::SquareYardInternational             => "[syd_i]",
             Atom::StandardAccelerationOfFreeFall      => "[g]",
             Atom::StandardAtmosphere                  => "atm",
             Atom::Steradian                           => "sr",
@@ -706,6 +785,7 @@ impl Atom {
             Atom::Watt                                => "W",
             Atom::Weber                               => "Wb",
             Atom::Week                                => "wk",
+            Atom::YardInternational                   => "[yd_i]",
             Atom::Year                                => "a",
         }
     }
@@ -782,6 +862,8 @@ impl Atom {
                 Atom::Year                       => Some(self.primary_code()),
             Atom::Are                            => Some("a"),
             Atom::BoltzmannConstant              => Some("𝑘"),
+            Atom::CircularMil                    => Some("circ.mil"),
+            Atom::CubicYardInternational         => Some("cu.yd"),
 
             Atom::Degree                         => Some("°"),
             Atom::DegreeCelsius                  => Some("°C"),
@@ -789,19 +871,25 @@ impl Atom {
             Atom::DegreeReaumur                  => Some("°R"),
             Atom::ElectronMass                   => Some("𝑚ₑ"),
             Atom::ElementaryCharge               => Some("𝑒"),
+            Atom::FathomInternational            => Some("fth"),
             Atom::FluidOunceUS                   => Some("oz fl"),
             Atom::FootInternational              => Some("ft"),
             Atom::FootUS                         => Some("ft (us)"),
 
             Atom::Gauss                          => Some("Gs"),
             Atom::Gon                            => Some("□"),
+            Atom::Hand                           => Some("hd"),
 
             Atom::Kayser                         => Some("K"),
+            Atom::KnotInternational              => Some("knot"),
             Atom::Lambert                        => Some("L"),
             Atom::LightYear                      => Some("l.y."),
 
             Atom::MeanJulianMonth                => Some("moⱼ"),
             Atom::MeanJulianYear                 => Some("aⱼ"),
+            Atom::MilInternational               => Some("mil"),
+            Atom::MileInternational              => Some("mi"),
+            Atom::NauticalMileInternational      => Some("n.mi"),
             Atom::Ohm                            => Some("Ω"),
 
             Atom::PartsPerBillion                => Some("ppb"),
@@ -823,6 +911,7 @@ impl Atom {
             Atom::TropicalYear      => Some("aₜ"),
 
             Atom::VelocityOfLight   => Some("𝑐"),
+            Atom::YardInternational => Some("yd"),
             _ => None,
         }
     }
@@ -844,14 +933,18 @@ impl Atom {
                 Atom::DegreeCelsius    |
                 Atom::DegreeFahrenheit |
                 Atom::DegreeReaumur                         => Property::Temperature,
-            Atom::Meter                 |
-                Atom::AstronomicUnit    |
-                Atom::FootInternational |
-                Atom::FootUS            |
-                Atom::InchInternational |
-                Atom::LightYear         |
-                Atom::Parsec            |
-                Atom::RodUS                                 => Property::Length,
+            Atom::Meter                         |
+                Atom::AstronomicUnit            |
+                Atom::FootInternational         |
+                Atom::FootUS                    |
+                Atom::InchInternational         |
+                Atom::LightYear                 |
+                Atom::MilInternational          |
+                Atom::MileInternational         |
+                Atom::NauticalMileInternational |
+                Atom::Parsec                    |
+                Atom::RodUS                     |
+                Atom::YardInternational                     => Property::Length,
             Atom::Radian           |
                 Atom::Degree       |
                 Atom::DegreeMinute |
@@ -870,14 +963,23 @@ impl Atom {
                 Atom::TropicalYear       |
                 Atom::Week               |
                 Atom::Year                                  => Property::Time,
-            Atom::AcreUS |
-                Atom::Are                                   => Property::Area,
+            Atom::AcreUS                      |
+                Atom::Are                     |
+                Atom::CircularMil             |
+                Atom::SquareFootInternational |
+                Atom::SquareInchInternational |
+                Atom::SquareYardInternational               => Property::Area,
             Atom::FluidOunceUS |
                 Atom::GillUS   |
                 Atom::PintUS   |
                 Atom::QuartUS  |
                 Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
-            Atom::Liter                                     => Property::Volume,
+            Atom::BoardFoot                  |
+                Atom::CordInternational      |
+                Atom::CubicFootInternational |
+                Atom::CubicInchInternational |
+                Atom::CubicYardInternational |
+                Atom::Liter                                 => Property::Volume,
             Atom::Mole                                      => Property::AmountOfSubstance,
             Atom::PartsPerBillion     |
                 Atom::PartsPerMillion |
@@ -923,7 +1025,8 @@ impl Atom {
             Atom::PlanckConstant                            => Property::Action,
             Atom::RadiationEquivalentMan |
                 Atom::Sievert                               => Property::DoseEquivalent,
-            Atom::VelocityOfLight                           => Property::Velocity,
+            Atom::KnotInternational |
+                Atom::VelocityOfLight                       => Property::Velocity,
             Atom::Gal |
                 Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
             Atom::Gilbert                                   => Property::MagneticTension,
@@ -935,6 +1038,8 @@ impl Atom {
             Atom::Roentgen                                  => Property::IonDose,
             Atom::Stilb                                     => Property::LuminousIntensityDensity,
             Atom::Stokes                                    => Property::KinematicViscosity,
+            Atom::FathomInternational                       => Property::DepthOfWater,
+            Atom::Hand                                      => Property::HeightOfHorses,
         }
     }
 
@@ -956,7 +1061,13 @@ impl Atom {
             Atom::Bar                            => "BAR",
             Atom::Becquerel                      => "BQ",
             Atom::Biot                           => "BI",
+            Atom::BoardFoot                      => "[BF_I]",
             Atom::BoltzmannConstant              => "[K]",
+            Atom::CircularMil                    => "[CML_I]",
+            Atom::CordInternational              => "[CR_I]",
+            Atom::CubicFootInternational         => "[CFT_I]",
+            Atom::CubicInchInternational         => "[CIN_I]",
+            Atom::CubicYardInternational         => "[CYD_I]",
             Atom::Curie                          => "CI",
 
             Atom::Day                            => "D",
@@ -968,6 +1079,7 @@ impl Atom {
             Atom::ElectronVolt                   => "EV",
             Atom::ElementaryCharge               => "[E]",
             Atom::Erg                            => "ERG",
+            Atom::FathomInternational            => "[FTH_I]",
             Atom::FluidOunceUS                   => "[FOZ_US]",
             Atom::FootInternational              => "[FT_I]",
             Atom::FootUS                         => "[FT_US]",
@@ -979,11 +1091,13 @@ impl Atom {
             Atom::Gon                            => "GON",
             Atom::GramForce                      => "GF",
             Atom::Gray                           => "GY",
+            Atom::Hand                           => "[HD_I]",
             Atom::Hertz                          => "HZ",
             Atom::Hour                           => "HR",
             Atom::InchInternational              => "[IN_I]",
 
             Atom::Kayser                         => "KY",
+            Atom::KnotInternational              => "[KN_I]",
             Atom::Lambert                        => "LMB",
             Atom::LightYear                      => "[LY]",
             Atom::Liter                          => "L",
@@ -995,9 +1109,12 @@ impl Atom {
             Atom::MeanGregorianYear              => "ANN_G",
             Atom::MeanJulianMonth                => "MO_J",
             Atom::MeanJulianYear                 => "ANN_J",
+            Atom::MilInternational               => "[MIL_I]",
+            Atom::MileInternational              => "[MI_I]",
             Atom::Minute                         => "MIN",
             Atom::Mole                           => "MOL",
             Atom::Month                          => "MO",
+            Atom::NauticalMileInternational      => "[NMI_I]",
             Atom::NewtonianConstantOfGravitation => "[GC]",
             Atom::Ohm                            => "OHM",
             Atom::Oersted                        => "OE",
@@ -1025,6 +1142,9 @@ impl Atom {
 
             Atom::Siemens                        => "SIE",
             Atom::Sievert                        => "SV",
+            Atom::SquareFootInternational        => "[SFT_I]",
+            Atom::SquareInchInternational        => "[SIN_I]",
+            Atom::SquareYardInternational        => "[SYD_I]",
             // NOTE: Primary code of NewtonianConstantOfGravitation is [G] so this will never
             // parse:
             Atom::StandardAccelerationOfFreeFall => "[G]",
@@ -1039,6 +1159,7 @@ impl Atom {
             Atom::VelocityOfLight                => "[C]",
             Atom::Weber                          => "WB",
             Atom::Week                           => "WK",
+            Atom::YardInternational              => "[YD_I]",
             Atom::Year                           => "ANN",
             Atom::Ampere                                  |
                 Atom::DegreeReaumur                       |
