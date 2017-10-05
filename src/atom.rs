@@ -25,15 +25,19 @@ pub enum Atom {
     AstronomicUnit,
     AtomicMassUnit,
     Bar,
+    BarrelUS,
     Becquerel,
     Biot,
     BoardFootInternational,
     BoltzmannConstant,
+    BushelUS,
     CircularMilInternational,
     CordInternational,
+    CordUS,
     CubicFootInternational,
     CubicInchInternational,
     CubicYardInternational,
+    CupUS,
     Curie,
 
     Day,
@@ -43,6 +47,8 @@ pub enum Atom {
     DegreeReaumur,
     DegreeMinute,
     DegreeSecond,
+    DryPintUS,
+    DryQuartUS,
     Dyne,
     ElectronMass,
     ElectronVolt,
@@ -52,6 +58,7 @@ pub enum Atom {
     FathomInternational,
     FathomBR,
     FathomUS,
+    FluidDramUS,
     FluidOunceUS,
     FootInternational,
     FootBR,
@@ -70,6 +77,7 @@ pub enum Atom {
     HandInternational,
     Hertz,
     Henry,
+    HistoricalWinchesterGallon,
     Hour,
     InchInternational,
     InchBR,
@@ -93,11 +101,16 @@ pub enum Atom {
     MeanGregorianYear,
     MeanJulianMonth,
     MeanJulianYear,
+    MetricCup,
+    MetricFluidOunce,
+    MetricTablespoon,
+    MetricTeaspoon,
     MilInternational,
     MilUS,
     MileInternational,
     MileBR,
     MileUS,
+    MinimUS,
     Minute,
     Mole,
     Month,
@@ -119,6 +132,7 @@ pub enum Atom {
     PermittivityOfVacuum,
     PH,
     Phot,
+    PeckUS,
     PintUS,
     Poise,
     PoundForce,
@@ -148,6 +162,8 @@ pub enum Atom {
     Stilb,
     Stokes,
     SynodalMonth,
+    TablespoonUS,
+    TeaspoonUS,
     Tesla,
     TheNumberPi,
     TheNumberTenForArbitraryPowersCaret,
@@ -256,11 +272,27 @@ impl Atom {
                 Atom::Year                                  => Classification::ISO1000,
             Atom::DegreeFahrenheit |
                 Atom::DegreeReaumur                         => Classification::Heat,
-            Atom::FluidOunceUS |
-                Atom::GillUS   |
-                Atom::PintUS   |
-                Atom::QuartUS  |
-                Atom::QueenAnnesWineGallon                  => Classification::USVolumes,
+            Atom::BarrelUS                       |
+                Atom::BushelUS                   |
+                Atom::CordUS                     |
+                Atom::CupUS                      |
+                Atom::DryPintUS                  |
+                Atom::DryQuartUS                 |
+                Atom::FluidDramUS                |
+                Atom::FluidOunceUS               |
+                Atom::GillUS                     |
+                Atom::HistoricalWinchesterGallon |
+                Atom::MetricCup                  |
+                Atom::MetricFluidOunce           |
+                Atom::MetricTablespoon           |
+                Atom::MetricTeaspoon             |
+                Atom::MinimUS                    |
+                Atom::PeckUS                     |
+                Atom::PintUS                     |
+                Atom::QuartUS                    |
+                Atom::QueenAnnesWineGallon       |
+                Atom::TablespoonUS               |
+                Atom::TeaspoonUS                            => Classification::USVolumes,
             Atom::BoardFootInternational        |
                 Atom::CircularMilInternational  |
                 Atom::CordInternational         |
@@ -339,15 +371,19 @@ impl Atom {
             Atom::AstronomicUnit                 => Definition::new(149_597.870_691, "Mm"),
             Atom::AtomicMassUnit                 => Definition::new(1.660_540_2e-24, "g"),
             Atom::Bar                            => Definition::new(1.0e5, "Pa"),
+            Atom::BarrelUS                       => Definition::new(42.0, "[gal_us]"),
             Atom::Becquerel                      => Definition::new(1.0, "s-1"),
             Atom::Biot                           => Definition::new(10.0, "A"),
             Atom::BoardFootInternational         => Definition::new(144.0, "[in_i]3"),
             Atom::BoltzmannConstant              => Definition::new(1.380_658e-23, "J/K"),
+            Atom::BushelUS                       => Definition::new(2150.42, "[in_i]3"),
             Atom::CircularMilInternational       => Definition::new(1.0, "[pi]/4.[mil_i]2"),
             Atom::CordInternational              => Definition::new(128.0, "[ft_i]3"),
+            Atom::CordUS                         => Definition::new(128.0, "[ft_i]3"),
             Atom::CubicFootInternational         => Definition::new(1.0, "[ft_i]3"),
             Atom::CubicInchInternational         => Definition::new(1.0, "[in_i]3"),
             Atom::CubicYardInternational         => Definition::new(1.0, "[yd_i]3"),
+            Atom::CupUS                          => Definition::new(16.0, "[tbs_us]"),
             Atom::Curie                          => Definition::new(37e9, "Bq"),
 
             Atom::Day                            => Definition::new(24.0, "h"),
@@ -357,6 +393,8 @@ impl Atom {
             Atom::DegreeMinute                   => Definition::new(1.0, "deg/60"),
             Atom::DegreeReaumur                  => Definition::new(1.0, "degre(5.0 K/4)"),
             Atom::DegreeSecond                   => Definition::new(1.0, "/60"),
+            Atom::DryPintUS                      => Definition::new(1.0, "[dqt_us]/2"),
+            Atom::DryQuartUS                     => Definition::new(1.0, "[pk_us]/8"),
             Atom::Dyne                           => Definition::new(1.0, "g.cm/s2"),
             Atom::ElectronMass                   => Definition::new(9.109_389_7e-28, "g"),
             Atom::ElectronVolt                   => Definition::new(1.0, "[e].V"),
@@ -366,6 +404,7 @@ impl Atom {
             Atom::FathomInternational            => Definition::new(6.0, "[ft_i]"),
             Atom::FathomBR                       => Definition::new(6.0, "[ft_br]"),
             Atom::FathomUS                       => Definition::new(6.0, "[ft_us]"),
+            Atom::FluidDramUS                    => Definition::new(1.0, "[foz_us]/8"),
             Atom::FluidOunceUS                   => Definition::new(1.0, "[gil_us]/4"),
             Atom::FootInternational              => Definition::new(12.0, "[in_i]"),
             Atom::FootBR                         => Definition::new(12.0, "[in_br]"),
@@ -384,6 +423,7 @@ impl Atom {
             Atom::HandInternational              => Definition::new(4.0, "[in_i]"),
             Atom::Henry                          => Definition::new(1.0, "Wb/A"),
             Atom::Hertz                          => Definition::new(1.0, "s-1"),
+            Atom::HistoricalWinchesterGallon     => Definition::new(1.0, "[bu_us]"),
             Atom::Hour                           => Definition::new(60.0, "min"),
             Atom::InchInternational              => Definition::new(254.0e-2, "cm"),
             Atom::InchBR                         => Definition::new(2.539_998, "cm"),
@@ -407,11 +447,16 @@ impl Atom {
             Atom::MeanGregorianYear              => Definition::new(365.2425, "d"),
             Atom::MeanJulianMonth                => Definition::new(1.0, "a_j/12"),
             Atom::MeanJulianYear                 => Definition::new(365.25, "d"),
+            Atom::MetricCup                      => Definition::new(240.0, "mL"),
+            Atom::MetricFluidOunce               => Definition::new(30.0, "mL"),
+            Atom::MetricTablespoon               => Definition::new(15.0, "mL"),
+            Atom::MetricTeaspoon                 => Definition::new(5.0, "mL"),
             Atom::MilInternational               => Definition::new(1.0e-3, "[in_i]"),
             Atom::MilUS                          => Definition::new(1.0e-3, "[in_us]"),
             Atom::MileInternational              => Definition::new(5280.0, "[ft_i]"),
             Atom::MileBR                         => Definition::new(5280.0, "[ft_br]"),
             Atom::MileUS                         => Definition::new(8.0, "[fur_us]"),
+            Atom::MinimUS                        => Definition::new(1.0, "[fdr_us]/60"),
             Atom::Minute                         => Definition::new(60.0, "s"),
             Atom::Mole                           => Definition::new(6.022_136_7, "10*23"),
             Atom::Month                          => Definition::new(1.0, "mo_j"),
@@ -433,6 +478,7 @@ impl Atom {
             Atom::PermeabilityOfVacuum           => Definition::new(1.0, "4.[PI].10*-7.N/A2"),
             Atom::PermittivityOfVacuum           => Definition::new(8.854_187_817e-12, "F/m"),
             Atom::Phot                           => Definition::new(1.0e-4, "lx"),
+            Atom::PeckUS                         => Definition::new(1.0, "[bu_us]/4"),
             Atom::PintUS                         => Definition::new(1.0, "[qt_us]/2"),
             Atom::PlanckConstant                 => Definition::new(6.626_075_5e-34, "J.s"),
             Atom::Poise                          => Definition::new(1.0, "dyn.s/cm2"),
@@ -462,6 +508,8 @@ impl Atom {
             Atom::Stokes                         => Definition::new(1.0, "cm2/s"),
             Atom::Stilb                          => Definition::new(1.0, "cd/cm2"),
             Atom::SynodalMonth                   => Definition::new(29.530_59, "d"),
+            Atom::TablespoonUS                   => Definition::new(1.0, "[foz_us]/2"),
+            Atom::TeaspoonUS                     => Definition::new(1.0, "[tbs_us]/3"),
             Atom::Tesla                          => Definition::new(1.0, "Wb/m2"),
             Atom::TheNumberPi                    => Definition::new(PI, "1"),
             Atom::TheNumberTenForArbitraryPowersCaret |
@@ -612,15 +660,19 @@ impl Atom {
             Atom::AstronomicUnit           => vec!["astronomic unit"],
             Atom::AtomicMassUnit           => vec!["unified atomic mass unit"],
             Atom::Bar                      => vec!["bar"],
+            Atom::BarrelUS                 => vec!["barrel"],
             Atom::Becquerel                => vec!["becquerel"],
             Atom::Biot                     => vec!["Biot"],
             Atom::BoardFootInternational   => vec!["board foot"],
             Atom::BoltzmannConstant        => vec!["Boltzmann constant"],
+            Atom::BushelUS                 => vec!["bushel"],
             Atom::CircularMilInternational => vec!["circular mil"],
-            Atom::CordInternational        => vec!["cord"],
+            Atom::CordInternational |
+                Atom::CordUS               => vec!["cord"],
             Atom::CubicFootInternational   => vec!["cubic foot"],
             Atom::CubicInchInternational   => vec!["cubic inch"],
             Atom::CubicYardInternational   => vec!["cubic yard"],
+            Atom::CupUS                    => vec!["cup"],
             Atom::Curie                    => vec!["Curie"],
 
             Atom::Day                 => vec!["day"],
@@ -630,6 +682,8 @@ impl Atom {
             Atom::DegreeMinute        => vec!["minute"],
             Atom::DegreeReaumur       => vec!["degree Réaumur"],
             Atom::DegreeSecond        => vec!["second"],
+            Atom::DryPintUS           => vec!["dry pint"],
+            Atom::DryQuartUS          => vec!["dry quart"],
             Atom::Dyne                => vec!["dyne"],
             Atom::ElectronMass        => vec!["electron mass"],
             Atom::ElectronVolt        => vec!["electronvolt"],
@@ -639,6 +693,7 @@ impl Atom {
             Atom::FathomInternational |
                 Atom::FathomBR        |
                 Atom::FathomUS => vec!["fathom"],
+            Atom::FluidDramUS  => vec!["fluid dram"],
             Atom::FluidOunceUS => vec!["fluid once"],
             Atom::FootInternational |
                 Atom::FootBR        |
@@ -657,6 +712,7 @@ impl Atom {
             Atom::HandInternational              => vec!["hand"],
             Atom::Henry                          => vec!["henry"],
             Atom::Hertz                          => vec!["hertz"],
+            Atom::HistoricalWinchesterGallon     => vec!["historical winchester gallon"],
             Atom::Hour                           => vec!["hour"],
             Atom::InchInternational |
                 Atom::InchBR        |
@@ -680,11 +736,16 @@ impl Atom {
             Atom::MeanGregorianYear              => vec!["mean Gregorian year"],
             Atom::MeanJulianMonth                => vec!["mean Julian month"],
             Atom::MeanJulianYear                 => vec!["mean Julian year"],
+            Atom::MetricCup                      => vec!["metric cup"],
+            Atom::MetricFluidOunce               => vec!["metric fluid ounce"],
+            Atom::MetricTablespoon               => vec!["metric tablespoon"],
+            Atom::MetricTeaspoon                 => vec!["metric teaspoon"],
             Atom::MilInternational |
                 Atom::MilUS                      => vec!["mil"],
             Atom::MileInternational |
                 Atom::MileBR        |
                 Atom::MileUS                     => vec!["mile"],
+            Atom::MinimUS                        => vec!["minim"],
             Atom::Minute                         => vec!["minute"],
             Atom::Mole                           => vec!["mole"],
             Atom::Month                          => vec!["month"],
@@ -706,6 +767,7 @@ impl Atom {
             Atom::PermeabilityOfVacuum           => vec!["permeability of vacuum"],
             Atom::PermittivityOfVacuum           => vec!["permittivity of vacuum"],
             Atom::Phot                           => vec!["phot"],
+            Atom::PeckUS                         => vec!["peck"],
             Atom::PintUS                         => vec!["pint"],
             Atom::PlanckConstant                 => vec!["Planck constant"],
             Atom::Poise                          => vec!["Poise"],
@@ -735,6 +797,8 @@ impl Atom {
             Atom::Stilb                          => vec!["stilb"],
             Atom::Stokes                         => vec!["Stokes"],
             Atom::SynodalMonth                   => vec!["synodal month"],
+            Atom::TablespoonUS                   => vec!["tablespoon"],
+            Atom::TeaspoonUS                     => vec!["teaspoon"],
             Atom::Tesla                          => vec!["tesla"],
             Atom::TheNumberPi                    => vec!["the number pi"],
             Atom::TheNumberTenForArbitraryPowersCaret |
@@ -776,15 +840,19 @@ impl Atom {
             Atom::AstronomicUnit                      => "AU",
             Atom::AtomicMassUnit                      => "u",
             Atom::Bar                                 => "bar",
+            Atom::BarrelUS                            => "[bbl_us]",
             Atom::Becquerel                           => "Bq",
             Atom::Biot                                => "Bi",
             Atom::BoardFootInternational              => "[bf_i]",
             Atom::BoltzmannConstant                   => "[k]",
+            Atom::BushelUS                            => "[bu_us]",
             Atom::CircularMilInternational            => "[cml_i]",
             Atom::CordInternational                   => "[cr_i]",
+            Atom::CordUS                              => "[crd_us]",
             Atom::CubicFootInternational              => "[cft_i]",
             Atom::CubicInchInternational              => "[cin_i]",
             Atom::CubicYardInternational              => "[cyd_i]",
+            Atom::CupUS                               => "[cup_us]",
             Atom::Curie                               => "Ci",
 
             Atom::Day                                 => "d",
@@ -794,6 +862,8 @@ impl Atom {
             Atom::DegreeMinute                        => "'",
             Atom::DegreeReaumur                       => "[degRe]",
             Atom::DegreeSecond                        => "''",
+            Atom::DryPintUS                           => "[dpt_us]",
+            Atom::DryQuartUS                          => "[dqt_us]",
             Atom::Dyne                                => "dyn",
             Atom::ElectronMass                        => "[m_e]",
             Atom::ElectronVolt                        => "eV",
@@ -803,6 +873,7 @@ impl Atom {
             Atom::FathomInternational                 => "[fth_i]",
             Atom::FathomBR                            => "[fth_br]",
             Atom::FathomUS                            => "[fth_us]",
+            Atom::FluidDramUS                         => "[fdr_us]",
             Atom::FluidOunceUS                        => "[foz_us]",
             Atom::FootInternational                   => "[ft_i]",
             Atom::FootBR                              => "[ft_br]",
@@ -821,6 +892,7 @@ impl Atom {
             Atom::HandInternational                   => "[hd_i]",
             Atom::Henry                               => "H",
             Atom::Hertz                               => "Hz",
+            Atom::HistoricalWinchesterGallon          => "[gal_wi]",
             Atom::Hour                                => "h",
             Atom::InchInternational                   => "[in_i]",
             Atom::InchBR                              => "[in_br]",
@@ -844,11 +916,16 @@ impl Atom {
             Atom::MeanGregorianYear                   => "a_g",
             Atom::MeanJulianMonth                     => "mo_j",
             Atom::MeanJulianYear                      => "a_j",
+            Atom::MetricCup                           => "[cup_m]",
+            Atom::MetricFluidOunce                    => "[foz_m]",
+            Atom::MetricTablespoon                    => "[tbs_m]",
+            Atom::MetricTeaspoon                      => "[tsp_m]",
             Atom::MilInternational                    => "[mil_i]",
             Atom::MilUS                               => "[mil_us]",
             Atom::MileInternational                   => "[mi_i]",
             Atom::MileBR                              => "[mi_br]",
             Atom::MileUS                              => "[mi_us]",
+            Atom::MinimUS                             => "[min_us]",
             Atom::Minute                              => "min",
             Atom::Mole                                => "mol",
             Atom::Month                               => "mo",
@@ -870,6 +947,7 @@ impl Atom {
             Atom::PermeabilityOfVacuum                => "[mu_0]",
             Atom::PermittivityOfVacuum                => "[eps_0]",
             Atom::Phot                                => "ph",
+            Atom::PeckUS                              => "[pk_us]",
             Atom::PintUS                              => "[pt_us]",
             Atom::PlanckConstant                      => "[h]",
             Atom::Poise                               => "P",
@@ -899,6 +977,8 @@ impl Atom {
             Atom::Stilb                               => "sb",
             Atom::Stokes                              => "St",
             Atom::SynodalMonth                        => "mo_s",
+            Atom::TablespoonUS                        => "[tbs_us]",
+            Atom::TeaspoonUS                          => "[tsp_us]",
             Atom::Tesla                               => "T",
             Atom::TheNumberPi                         => "[pi]",
             Atom::TheNumberTenForArbitraryPowersCaret => "10^",
@@ -1001,7 +1081,8 @@ impl Atom {
             Atom::ElectronMass                   => Some("𝑚ₑ"),
             Atom::ElementaryCharge               => Some("𝑒"),
             Atom::FathomInternational            => Some("fth"),
-            Atom::FluidOunceUS                   => Some("oz fl"),
+            Atom::FluidOunceUS |
+                Atom::MetricFluidOunce           => Some("oz fl"),
             Atom::FootInternational              => Some("ft"),
             Atom::FootUS                         => Some("ft (us)"),
 
@@ -1123,17 +1204,33 @@ impl Atom {
                 Atom::SquareRodUS              |
                 Atom::SquareYardInternational  |
                 Atom::Township                              => Property::Area,
-            Atom::FluidOunceUS |
-                Atom::GillUS   |
-                Atom::PintUS   |
-                Atom::QuartUS  |
+            Atom::BarrelUS             |
+                Atom::CordUS           |
+                Atom::FluidDramUS      |
+                Atom::FluidOunceUS     |
+                Atom::GillUS           |
+                Atom::MetricFluidOunce |
+                Atom::MinimUS          |
+                Atom::PintUS           |
+                Atom::QuartUS          |
                 Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
+            Atom::BushelUS       |
+                Atom::PeckUS     |
+                Atom::DryPintUS  |
+                Atom::DryQuartUS |
+                Atom::HistoricalWinchesterGallon            => Property::DryVolume,
             Atom::BoardFootInternational     |
                 Atom::CordInternational      |
                 Atom::CubicFootInternational |
                 Atom::CubicInchInternational |
                 Atom::CubicYardInternational |
-                Atom::Liter                                 => Property::Volume,
+                Atom::CupUS                  |
+                Atom::Liter                  |
+                Atom::MetricCup              |
+                Atom::MetricTablespoon       |
+                Atom::MetricTeaspoon         |
+                Atom::TablespoonUS           |
+                Atom::TeaspoonUS                            => Property::Volume,
             Atom::Mole                                      => Property::AmountOfSubstance,
             Atom::PartsPerBillion     |
                 Atom::PartsPerMillion |
@@ -1215,21 +1312,27 @@ impl Atom {
             Atom::AstronomicUnit                 => "AMU",
             Atom::AtomicMassUnit                 => "AMU",
             Atom::Bar                            => "BAR",
+            Atom::BarrelUS                       => "[BBL_US]",
             Atom::Becquerel                      => "BQ",
             Atom::Biot                           => "BI",
             Atom::BoardFootInternational         => "[BF_I]",
             Atom::BoltzmannConstant              => "[K]",
+            Atom::BushelUS                       => "[BU_US]",
             Atom::CircularMilInternational       => "[CML_I]",
             Atom::CordInternational              => "[CR_I]",
+            Atom::CordUS                         => "[CRD_US]",
             Atom::CubicFootInternational         => "[CFT_I]",
             Atom::CubicInchInternational         => "[CIN_I]",
             Atom::CubicYardInternational         => "[CYD_I]",
+            Atom::CupUS                          => "[CUP_US]",
             Atom::Curie                          => "CI",
 
             Atom::Day                            => "D",
             Atom::Degree                         => "DEG",
             Atom::DegreeCelsius                  => "CEL",
             Atom::DegreeFahrenheit               => "[DEGF]",
+            Atom::DryPintUS                      => "[DPT_US]",
+            Atom::DryQuartUS                     => "[DQT_US]",
             Atom::Dyne                           => "DYN",
             Atom::ElectronMass                   => "[M_E]",
             Atom::ElectronVolt                   => "EV",
@@ -1238,6 +1341,7 @@ impl Atom {
             Atom::FathomInternational            => "[FTH_I]",
             Atom::FathomBR                       => "[FTH_BR]",
             Atom::FathomUS                       => "[FTH_US]",
+            Atom::FluidDramUS                    => "[FDR_US]",
             Atom::FluidOunceUS                   => "[FOZ_US]",
             Atom::FootInternational              => "[FT_I]",
             Atom::FootBR                         => "[FT_BR]",
@@ -1255,6 +1359,7 @@ impl Atom {
             Atom::GuntersChainUS                 => "[CH_US]",
             Atom::HandInternational              => "[HD_I]",
             Atom::Hertz                          => "HZ",
+            Atom::HistoricalWinchesterGallon     => "[GAL_WI]",
             Atom::Hour                           => "HR",
             Atom::InchInternational              => "[IN_I]",
             Atom::InchBR                         => "[IN_BR]",
@@ -1277,11 +1382,16 @@ impl Atom {
             Atom::MeanGregorianYear              => "ANN_G",
             Atom::MeanJulianMonth                => "MO_J",
             Atom::MeanJulianYear                 => "ANN_J",
+            Atom::MetricCup                      => "[CUP_M]",
+            Atom::MetricFluidOunce               => "[FOZ_M]",
+            Atom::MetricTablespoon               => "[TBS_M]",
+            Atom::MetricTeaspoon                 => "[TSP_M]",
             Atom::MilInternational               => "[MIL_I]",
             Atom::MilUS                          => "[MIL_US]",
             Atom::MileInternational              => "[MI_I]",
             Atom::MileBR                         => "[MI_BR]",
             Atom::MileUS                         => "[MI_US]",
+            Atom::MinimUS                        => "[MIN_US]",
             Atom::Minute                         => "MIN",
             Atom::Mole                           => "MOL",
             Atom::Month                          => "MO",
@@ -1301,6 +1411,7 @@ impl Atom {
             Atom::PermeabilityOfVacuum           => "[MU_0]",
             Atom::PermittivityOfVacuum           => "[EPS_0]",
             Atom::Phot                           => "PHT",
+            Atom::PeckUS                         => "[PK_US]",
             Atom::PintUS                         => "[PT_US]",
             Atom::PlanckConstant                 => "[C]",
             Atom::PoundForce                     => "[LBF_AV]",
@@ -1331,6 +1442,8 @@ impl Atom {
             Atom::Stilb                          => "SB",
             Atom::Stokes                         => "ST",
             Atom::SynodalMonth                   => "MO_S",
+            Atom::TablespoonUS                   => "[TBS_US]",
+            Atom::TeaspoonUS                     => "[TSP_US]",
             Atom::TheNumberPi                    => "[PI]",
             Atom::Tonne                          => "TNE",
             Atom::Township                       => "[TWP]",
