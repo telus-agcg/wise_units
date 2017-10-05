@@ -18,6 +18,7 @@ pub enum Atom {
     Radian,
     Second,
 
+    AcreBR,
     AcreUS,
     Ampere,
     Are,
@@ -49,13 +50,16 @@ pub enum Atom {
     Erg,
     Farad,
     FathomInternational,
+    FathomBR,
     FathomUS,
     FluidOunceUS,
     FootInternational,
+    FootBR,
     FootUS,
     FurlongUS,
 
     Gal,
+    GuntersChainBR,
     GuntersChainUS,
     Gilbert,
     GillUS,
@@ -68,13 +72,16 @@ pub enum Atom {
     Henry,
     Hour,
     InchInternational,
+    InchBR,
     InchUS,
 
     Joule,
     Kayser,
+    KnotBR,
     KnotInternational,
     Lambert,
     LightYear,
+    LinkForGuntersChainBR,
     LinkForGuntersChainUS,
     LinkForRamdensChainUS,
     Liter,
@@ -89,16 +96,19 @@ pub enum Atom {
     MilInternational,
     MilUS,
     MileInternational,
+    MileBR,
     MileUS,
     Minute,
     Mole,
     Month,
+    NauticalMileBR,
     NauticalMileInternational,
     Newton,
     NewtonianConstantOfGravitation,
     Ohm,
     Oersted,
 
+    PaceBR,
     Parsec,
     Pascal,
     PartsPerBillion,
@@ -120,6 +130,7 @@ pub enum Atom {
     RadiationAbsorbedDose,
     RadiationEquivalentMan,
     RamdensChainUS,
+    RodBR,
     RodUS,
     Roentgen,
 
@@ -151,6 +162,7 @@ pub enum Atom {
     Weber,
     Week,
     YardInternational,
+    YardBR,
     YardUS,
     Year,
 }
@@ -205,6 +217,18 @@ impl Atom {
                 Atom::SquareRodUS           |
                 Atom::Township              |
                 Atom::YardUS                                => Classification::USLengths,
+            Atom::AcreBR                    |
+                Atom::FathomBR              |
+                Atom::FootBR                |
+                Atom::GuntersChainBR        |
+                Atom::InchBR                |
+                Atom::KnotBR                |
+                Atom::LinkForGuntersChainBR |
+                Atom::MileBR                |
+                Atom::NauticalMileBR        |
+                Atom::PaceBR                |
+                Atom::RodBR                 |
+                Atom::YardBR                                => Classification::BritLength,
             Atom::Are                    |
                 Atom::AstronomicUnit     |
                 Atom::AtomicMassUnit     |
@@ -308,6 +332,7 @@ impl Atom {
                 Atom::Meter   |
                 Atom::Radian  |
                 Atom::Second                     => Definition::new(1.0, "1"),
+            Atom::AcreBR                         => Definition::new(4840.0, "[yd_br]2"),
             Atom::AcreUS                         => Definition::new(160.0, "[rd_us]2"),
             Atom::Ampere                         => Definition::new(1.0, "C/s"),
             Atom::Are                            => Definition::new(100.0, "m2"),
@@ -339,9 +364,11 @@ impl Atom {
             Atom::Erg                            => Definition::new(1.0, "dyn.cm"),
             Atom::Farad                          => Definition::new(1.0, "C/V"),
             Atom::FathomInternational            => Definition::new(6.0, "[ft_i]"),
+            Atom::FathomBR                       => Definition::new(6.0, "[ft_br]"),
             Atom::FathomUS                       => Definition::new(6.0, "[ft_us]"),
             Atom::FluidOunceUS                   => Definition::new(1.0, "[gil_us]/4"),
             Atom::FootInternational              => Definition::new(12.0, "[in_i]"),
+            Atom::FootBR                         => Definition::new(12.0, "[in_br]"),
             Atom::FootUS                         => Definition::new(1200.0, "m/3937"),
             Atom::FurlongUS                      => Definition::new(40.0, "[rd_us]"),
 
@@ -352,19 +379,23 @@ impl Atom {
             Atom::Gon                            => Definition::new(0.9, "deg"),
             Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
             Atom::Gray                           => Definition::new(1.0, "J/kg"),
+            Atom::GuntersChainBR                 => Definition::new(4.0, "[rd_br]"),
             Atom::GuntersChainUS                 => Definition::new(4.0, "[rd_us]"),
             Atom::HandInternational              => Definition::new(4.0, "[in_i]"),
             Atom::Henry                          => Definition::new(1.0, "Wb/A"),
             Atom::Hertz                          => Definition::new(1.0, "s-1"),
             Atom::Hour                           => Definition::new(60.0, "min"),
             Atom::InchInternational              => Definition::new(254.0e-2, "cm"),
+            Atom::InchBR                         => Definition::new(2.539_998, "cm"),
             Atom::InchUS                         => Definition::new(1.0, "[ft_us]/12"),
 
             Atom::Joule                          => Definition::new(1.0, "N.m"),
             Atom::Kayser                         => Definition::new(1.0, "cm-1"),
+            Atom::KnotBR                         => Definition::new(1.0, "[nmi_br]/h"),
             Atom::KnotInternational              => Definition::new(1.0, "[nmi_i]/h"),
             Atom::Lambert                        => Definition::new(1.0, "cd/cm2/[pi]"),
             Atom::LightYear                      => Definition::new(1.0, "[c].a_j"),
+            Atom::LinkForGuntersChainBR          => Definition::new(1.0, "[ch_br]/100"),
             Atom::LinkForGuntersChainUS          => Definition::new(1.0, "[ch_us]/100"),
             Atom::LinkForRamdensChainUS          => Definition::new(1.0, "[rch_us]/100"),
             Atom::Liter                          => Definition::new(1.0, "dm3"),
@@ -379,10 +410,12 @@ impl Atom {
             Atom::MilInternational               => Definition::new(1.0e-3, "[in_i]"),
             Atom::MilUS                          => Definition::new(1.0e-3, "[in_us]"),
             Atom::MileInternational              => Definition::new(5280.0, "[ft_i]"),
+            Atom::MileBR                         => Definition::new(5280.0, "[ft_br]"),
             Atom::MileUS                         => Definition::new(8.0, "[fur_us]"),
             Atom::Minute                         => Definition::new(60.0, "s"),
             Atom::Mole                           => Definition::new(6.022_136_7, "10*23"),
             Atom::Month                          => Definition::new(1.0, "mo_j"),
+            Atom::NauticalMileBR                 => Definition::new(6080.0, "[ft_br]"),
             Atom::NauticalMileInternational      => Definition::new(1852.0, "m"),
             Atom::Newton                         => Definition::new(1.0, "kg.m/s2"),
             Atom::NewtonianConstantOfGravitation => Definition::new(1.0, "kg.m/s2"),
@@ -390,6 +423,7 @@ impl Atom {
             Atom::Oersted                        => Definition::new(250.0, "/[pi].A/m"),
 
             Atom::PH                             => Definition::new(1.0, "ph(1.0 mol/l)"),
+            Atom::PaceBR                         => Definition::new(2.5, "[ft_br]"),
             Atom::Parsec                         => Definition::new(3.085_678e16, "m"),
             Atom::PartsPerBillion                => Definition::new(1.0, "10*-9"),
             Atom::PartsPerMillion                => Definition::new(1.0, "10*-6"),
@@ -410,6 +444,7 @@ impl Atom {
             Atom::RadiationAbsorbedDose          => Definition::new(100.0, "erg/g"),
             Atom::RadiationEquivalentMan         => Definition::new(1.0, "RAD"),
             Atom::RamdensChainUS                 => Definition::new(100.0, "[ft_us]"),
+            Atom::RodBR                          => Definition::new(16.5, "[ft_br]"),
             Atom::RodUS                          => Definition::new(16.5, "[ft_us]"),
             Atom::Roentgen                       => Definition::new(2.58e-4, "C/kg"),
 
@@ -441,6 +476,7 @@ impl Atom {
             Atom::Weber                                  => Definition::new(1.0, "V.s"),
             Atom::Week                                   => Definition::new(7.0, "d"),
             Atom::YardInternational                      => Definition::new(3.0, "[ft_i]"),
+            Atom::YardBR                                 => Definition::new(3.0, "[ft_br]"),
             Atom::YardUS                                 => Definition::new(3.0, "[ft_us]"),
             Atom::Year                                   => Definition::new(1.0, "a_j"),
         }
@@ -569,7 +605,8 @@ impl Atom {
             Atom::Second   => vec!["second"],
 
             // Derived units
-            Atom::AcreUS                   => vec!["acre"],
+            Atom::AcreBR |
+                Atom::AcreUS               => vec!["acre"],
             Atom::Ampere                   => vec!["ampère"],
             Atom::Are                      => vec!["are"],
             Atom::AstronomicUnit           => vec!["astronomic unit"],
@@ -600,9 +637,11 @@ impl Atom {
             Atom::Erg                 => vec!["erg"],
             Atom::Farad               => vec!["farad"],
             Atom::FathomInternational |
+                Atom::FathomBR        |
                 Atom::FathomUS => vec!["fathom"],
             Atom::FluidOunceUS => vec!["fluid once"],
             Atom::FootInternational |
+                Atom::FootBR        |
                 Atom::FootUS                     => vec!["foot"],
             Atom::FurlongUS                      => vec!["furlong"],
 
@@ -613,19 +652,23 @@ impl Atom {
             Atom::Gon                            => vec!["gon", "grade"],
             Atom::GramForce                      => vec!["gram-force"],
             Atom::Gray                           => vec!["gray"],
+            Atom::GuntersChainBR                 => vec!["Gunter's chain"],
             Atom::GuntersChainUS                 => vec!["Gunter's chain", "Surveyor's chain"],
             Atom::HandInternational              => vec!["hand"],
             Atom::Henry                          => vec!["henry"],
             Atom::Hertz                          => vec!["hertz"],
             Atom::Hour                           => vec!["hour"],
             Atom::InchInternational |
+                Atom::InchBR        |
                 Atom::InchUS                     => vec!["inch"],
 
             Atom::Joule                          => vec!["joule"],
             Atom::Lambert                        => vec!["Lambert"],
             Atom::Kayser                         => vec!["Kayser"],
-            Atom::KnotInternational              => vec!["knot"],
-            Atom::LinkForGuntersChainUS          => vec!["link for Gunter's chain"],
+            Atom::KnotBR |
+                Atom::KnotInternational          => vec!["knot"],
+            Atom::LinkForGuntersChainBR |
+                Atom::LinkForGuntersChainUS      => vec!["link for Gunter's chain"],
             Atom::LinkForRamdensChainUS          => vec!["link for Ramden's chain"],
             Atom::LightYear                      => vec!["light-year"],
             Atom::Liter                          => vec!["liter"],
@@ -640,17 +683,20 @@ impl Atom {
             Atom::MilInternational |
                 Atom::MilUS                      => vec!["mil"],
             Atom::MileInternational |
+                Atom::MileBR        |
                 Atom::MileUS                     => vec!["mile"],
             Atom::Minute                         => vec!["minute"],
             Atom::Mole                           => vec!["mole"],
             Atom::Month                          => vec!["month"],
             Atom::Newton                         => vec!["newton"],
-            Atom::NauticalMileInternational      => vec!["nautical mile"],
+            Atom::NauticalMileBR |
+                Atom::NauticalMileInternational  => vec!["nautical mile"],
             Atom::NewtonianConstantOfGravitation => vec!["Newtonian constant of gravitation"],
             Atom::Ohm                            => vec!["ohm"],
             Atom::Oersted                        => vec!["Oersted"],
 
             Atom::PH                             => vec!["pH"],
+            Atom::PaceBR                         => vec!["pace"],
             Atom::Parsec                         => vec!["parsec"],
             Atom::PartsPerBillion                => vec!["parts per billion"],
             Atom::PartsPerMillion                => vec!["parts per million"],
@@ -671,7 +717,8 @@ impl Atom {
             Atom::RadiationAbsorbedDose          => vec!["radiation absorbed dose"],
             Atom::RadiationEquivalentMan         => vec!["radiation equivalent man"],
             Atom::RamdensChainUS                 => vec!["Ramden's chain", "Engineer's chain"],
-            Atom::RodUS                          => vec!["rod"],
+            Atom::RodBR |
+                Atom::RodUS                      => vec!["rod"],
             Atom::Roentgen                       => vec!["Roentgen"],
 
             Atom::Section                        => vec!["section"],
@@ -704,7 +751,8 @@ impl Atom {
             Atom::Weber             => vec!["weber"],
             Atom::Week              => vec!["week"],
             Atom::YardInternational => vec!["yard"],
-            Atom::YardUS            => vec!["yard"],
+            Atom::YardBR |
+                Atom::YardUS        => vec!["yard"],
             Atom::Year              => vec!["year"],
         }
     }
@@ -721,6 +769,7 @@ impl Atom {
             Atom::Second   => "s",
 
             // Derived units
+            Atom::AcreBR                              => "[acr_br]",
             Atom::AcreUS                              => "[acr_us]",
             Atom::Ampere                              => "A",
             Atom::Are                                 => "ar",
@@ -752,9 +801,11 @@ impl Atom {
             Atom::Erg                                 => "erg",
             Atom::Farad                               => "F",
             Atom::FathomInternational                 => "[fth_i]",
+            Atom::FathomBR                            => "[fth_br]",
             Atom::FathomUS                            => "[fth_us]",
             Atom::FluidOunceUS                        => "[foz_us]",
             Atom::FootInternational                   => "[ft_i]",
+            Atom::FootBR                              => "[ft_br]",
             Atom::FootUS                              => "[ft_us]",
             Atom::FurlongUS                           => "[fur_us]",
 
@@ -765,19 +816,23 @@ impl Atom {
             Atom::Gon                                 => "gon",
             Atom::GramForce                           => "gf",
             Atom::Gray                                => "Gy",
+            Atom::GuntersChainBR                      => "[ch_br]",
             Atom::GuntersChainUS                      => "[ch_us]",
             Atom::HandInternational                   => "[hd_i]",
             Atom::Henry                               => "H",
             Atom::Hertz                               => "Hz",
             Atom::Hour                                => "h",
             Atom::InchInternational                   => "[in_i]",
+            Atom::InchBR                              => "[in_br]",
             Atom::InchUS                              => "[in_us]",
 
             Atom::Joule                               => "J",
             Atom::Kayser                              => "Ky",
+            Atom::KnotBR                              => "[kn_br]",
             Atom::KnotInternational                   => "[kn_i]",
             Atom::Lambert                             => "Lmb",
             Atom::LightYear                           => "[ly]",
+            Atom::LinkForGuntersChainBR               => "[lk_br]",
             Atom::LinkForGuntersChainUS               => "[lk_us]",
             Atom::LinkForRamdensChainUS               => "[rlk_us]",
             Atom::Liter                               => "l",
@@ -792,10 +847,12 @@ impl Atom {
             Atom::MilInternational                    => "[mil_i]",
             Atom::MilUS                               => "[mil_us]",
             Atom::MileInternational                   => "[mi_i]",
+            Atom::MileBR                              => "[mi_br]",
             Atom::MileUS                              => "[mi_us]",
             Atom::Minute                              => "min",
             Atom::Mole                                => "mol",
             Atom::Month                               => "mo",
+            Atom::NauticalMileBR                      => "[nmi_br]",
             Atom::NauticalMileInternational           => "[nmi_i]",
             Atom::Newton                              => "N",
             Atom::NewtonianConstantOfGravitation      => "[G]",
@@ -803,6 +860,7 @@ impl Atom {
             Atom::Oersted                             => "Oe",
 
             Atom::PH                                  => "[pH]",
+            Atom::PaceBR                              => "[pc_br]",
             Atom::Parsec                              => "pc",
             Atom::PartsPerBillion                     => "[ppb]",
             Atom::PartsPerMillion                     => "[ppm]",
@@ -823,6 +881,7 @@ impl Atom {
             Atom::RadiationAbsorbedDose               => "RAD",
             Atom::RadiationEquivalentMan              => "REM",
             Atom::RamdensChainUS                      => "[rch_us]",
+            Atom::RodBR                               => "[rd_br]",
             Atom::RodUS                               => "[rd_us]",
             Atom::Roentgen                            => "R",
 
@@ -854,6 +913,7 @@ impl Atom {
             Atom::Weber                               => "Wb",
             Atom::Week                                => "wk",
             Atom::YardInternational                   => "[yd_i]",
+            Atom::YardBR                              => "[yd_br]",
             Atom::YardUS                              => "[yd_us]",
             Atom::Year                                => "a",
         }
@@ -1004,25 +1064,35 @@ impl Atom {
                 Atom::DegreeReaumur                         => Property::Temperature,
             Atom::Meter                         |
                 Atom::AstronomicUnit            |
+                Atom::FathomBR                  |
                 Atom::FathomUS                  |
                 Atom::FootInternational         |
+                Atom::FootBR                    |
                 Atom::FootUS                    |
                 Atom::FurlongUS                 |
+                Atom::GuntersChainBR            |
                 Atom::GuntersChainUS            |
                 Atom::InchInternational         |
+                Atom::InchBR                    |
                 Atom::InchUS                    |
                 Atom::LightYear                 |
+                Atom::LinkForGuntersChainBR     |
                 Atom::LinkForGuntersChainUS     |
                 Atom::LinkForRamdensChainUS     |
                 Atom::MilInternational          |
                 Atom::MilUS                     |
                 Atom::MileInternational         |
+                Atom::MileBR                    |
                 Atom::MileUS                    |
+                Atom::NauticalMileBR            |
                 Atom::NauticalMileInternational |
+                Atom::PaceBR                    |
                 Atom::Parsec                    |
                 Atom::RamdensChainUS            |
+                Atom::RodBR                     |
                 Atom::RodUS                     |
                 Atom::YardInternational         |
+                Atom::YardBR                    |
                 Atom::YardUS                                => Property::Length,
             Atom::Radian           |
                 Atom::Degree       |
@@ -1042,7 +1112,8 @@ impl Atom {
                 Atom::TropicalYear       |
                 Atom::Week               |
                 Atom::Year                                  => Property::Time,
-            Atom::AcreUS                       |
+            Atom::AcreBR                       |
+                Atom::AcreUS                   |
                 Atom::Are                      |
                 Atom::CircularMilInternational |
                 Atom::Section                  |
@@ -1108,7 +1179,8 @@ impl Atom {
             Atom::PlanckConstant                            => Property::Action,
             Atom::RadiationEquivalentMan |
                 Atom::Sievert                               => Property::DoseEquivalent,
-            Atom::KnotInternational |
+            Atom::KnotBR                |
+                Atom::KnotInternational |
                 Atom::VelocityOfLight                       => Property::Velocity,
             Atom::Gal |
                 Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
@@ -1137,6 +1209,7 @@ impl Atom {
             Atom::Second   => "S",
 
             // Derived units
+            Atom::AcreBR                         => "[ACR_BR]",
             Atom::AcreUS                         => "[ACR_US]",
             Atom::Are                            => "AR",
             Atom::AstronomicUnit                 => "AMU",
@@ -1163,9 +1236,11 @@ impl Atom {
             Atom::ElementaryCharge               => "[E]",
             Atom::Erg                            => "ERG",
             Atom::FathomInternational            => "[FTH_I]",
+            Atom::FathomBR                       => "[FTH_BR]",
             Atom::FathomUS                       => "[FTH_US]",
             Atom::FluidOunceUS                   => "[FOZ_US]",
             Atom::FootInternational              => "[FT_I]",
+            Atom::FootBR                         => "[FT_BR]",
             Atom::FootUS                         => "[FT_US]",
             Atom::FurlongUS                      => "[FUR_US]",
 
@@ -1176,17 +1251,21 @@ impl Atom {
             Atom::Gon                            => "GON",
             Atom::GramForce                      => "GF",
             Atom::Gray                           => "GY",
+            Atom::GuntersChainBR                 => "[CH_BR]",
             Atom::GuntersChainUS                 => "[CH_US]",
             Atom::HandInternational              => "[HD_I]",
             Atom::Hertz                          => "HZ",
             Atom::Hour                           => "HR",
             Atom::InchInternational              => "[IN_I]",
+            Atom::InchBR                         => "[IN_BR]",
             Atom::InchUS                         => "[IN_US]",
 
             Atom::Kayser                         => "KY",
+            Atom::KnotBR                         => "[KN_BR]",
             Atom::KnotInternational              => "[KN_I]",
             Atom::Lambert                        => "LMB",
             Atom::LightYear                      => "[LY]",
+            Atom::LinkForGuntersChainBR          => "[LK_BR]",
             Atom::LinkForGuntersChainUS          => "[LK_US]",
             Atom::LinkForRamdensChainUS          => "[RLK_US]",
             Atom::Liter                          => "L",
@@ -1201,16 +1280,19 @@ impl Atom {
             Atom::MilInternational               => "[MIL_I]",
             Atom::MilUS                          => "[MIL_US]",
             Atom::MileInternational              => "[MI_I]",
+            Atom::MileBR                         => "[MI_BR]",
             Atom::MileUS                         => "[MI_US]",
             Atom::Minute                         => "MIN",
             Atom::Mole                           => "MOL",
             Atom::Month                          => "MO",
+            Atom::NauticalMileBR                 => "[NMI_BR]",
             Atom::NauticalMileInternational      => "[NMI_I]",
             Atom::NewtonianConstantOfGravitation => "[GC]",
             Atom::Ohm                            => "OHM",
             Atom::Oersted                        => "OE",
 
             Atom::PH                             => "[PH]",
+            Atom::PaceBR                         => "[PC_BR]",
             Atom::Parsec                         => "PRS",
             Atom::PartsPerBillion                => "[PPB]",
             Atom::PartsPerMillion                => "[PPM]",
@@ -1229,6 +1311,7 @@ impl Atom {
             Atom::RadiationAbsorbedDose          => "[RAD]",
             Atom::RadiationEquivalentMan         => "[REM]",
             Atom::RamdensChainUS                 => "[RCH_US]",
+            Atom::RodBR                          => "[RD_BR]",
             Atom::RodUS                          => "[RD_US]",
             Atom::Roentgen                       => "ROE",
 
@@ -1256,6 +1339,7 @@ impl Atom {
             Atom::Weber                          => "WB",
             Atom::Week                           => "WK",
             Atom::YardInternational              => "[YD_I]",
+            Atom::YardBR                         => "[YD_BR]",
             Atom::YardUS                         => "[YD_US]",
             Atom::Year                           => "ANN",
             Atom::Ampere                                  |
