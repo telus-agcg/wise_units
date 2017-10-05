@@ -1173,21 +1173,34 @@ impl Atom {
 
     pub fn property(&self) -> Property {
         match *self {
-            Atom::TheUnity              |
-                Atom::BoltzmannConstant |
-                Atom::NewtonianConstantOfGravitation        => Property::Unclassified,
-            Atom::Candela                                   => Property::LuminousIntensity,
+            Atom::Gal |
+                Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
+            Atom::PH                                        => Property::Acidity,
+            Atom::PlanckConstant                            => Property::Action,
+            Atom::Mole                                      => Property::AmountOfSubstance,
+            Atom::AcreBR                       |
+                Atom::AcreUS                   |
+                Atom::Are                      |
+                Atom::CircularMilInternational |
+                Atom::Section                  |
+                Atom::SquareFootInternational  |
+                Atom::SquareInchInternational  |
+                Atom::SquareMileUS             |
+                Atom::SquareRodUS              |
+                Atom::SquareYardInternational  |
+                Atom::Township                              => Property::Area,
+            Atom::Lambert                                   => Property::Brightness,
+            Atom::FathomInternational                       => Property::DepthOfWater,
+            Atom::RadiationEquivalentMan |
+                Atom::Sievert                               => Property::DoseEquivalent,
+            Atom::BushelUS       |
+                Atom::PeckUS     |
+                Atom::DryPintUS  |
+                Atom::DryQuartUS |
+                Atom::HistoricalWinchesterGallon            => Property::DryVolume,
+            Atom::Poise                                     => Property::DynamicViscosity,
             Atom::Coulomb  |
                 Atom::ElementaryCharge                      => Property::ElectricCharge,
-            Atom::Gram               |
-                Atom::AtomicMassUnit |
-                Atom::ElectronMass   |
-                Atom::ProtonMass     |
-                Atom::Tonne                                 => Property::Mass,
-            Atom::Kelvin               |
-                Atom::DegreeCelsius    |
-                Atom::DegreeFahrenheit |
-                Atom::DegreeReaumur                         => Property::Temperature,
             Atom::Meter                         |
                 Atom::AstronomicUnit            |
                 Atom::FathomBR                  |
@@ -1220,11 +1233,79 @@ impl Atom {
                 Atom::YardInternational         |
                 Atom::YardBR                    |
                 Atom::YardUS                                => Property::Length,
+            Atom::Farad                                     => Property::ElectricCapacitance,
+            Atom::Siemens                                   => Property::ElectricConductance,
+            Atom::Ampere |
+                Atom::Biot                                  => Property::ElectricCurrent,
+            Atom::PermittivityOfVacuum                      => Property::ElectricPermittivity,
+            Atom::Volt                                      => Property::ElectricPotential,
+            Atom::Ohm                                       => Property::ElectricResistance,
+            Atom::Joule            |
+                Atom::ElectronVolt |
+                Atom::Erg                                   => Property::Energy,
+            Atom::Gray |
+                Atom::RadiationAbsorbedDose                 => Property::EnergyDose,
+            Atom::BarrelUS             |
+                Atom::CordUS           |
+                Atom::FluidDramUS      |
+                Atom::FluidOunceUS     |
+                Atom::GillUS           |
+                Atom::MetricFluidOunce |
+                Atom::MinimUS          |
+                Atom::PintUS           |
+                Atom::QuartUS          |
+                Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
+            Atom::Maxwell                                   => Property::FluxOfMagneticInduction,
+            Atom::Newton        |
+                Atom::Dyne      |
+                Atom::GramForce |
+                Atom::PoundForce                            => Property::Force,
+            Atom::PartsPerBillion     |
+                Atom::PartsPerMillion |
+                Atom::PartsPerThousand                      => Property::Fraction,
+            Atom::Hertz                                     => Property::Frequency,
+            Atom::HandInternational                         => Property::HeightOfHorses,
+            Atom::Lux |
+                Atom::Phot                                  => Property::Illuminance,
+            Atom::Henry                                     => Property::Inductance,
+            Atom::Roentgen                                  => Property::IonDose,
+            Atom::Stokes                                    => Property::KinematicViscosity,
+            Atom::Kayser                                    => Property::LineicNumber,
+            Atom::Lumen                                     => Property::LuminousFlux,
+            Atom::Candela                                   => Property::LuminousIntensity,
+            Atom::Stilb                                     => Property::LuminousIntensityDensity,
+            Atom::Oersted                                   => Property::MagneticFieldIntensity,
+            Atom::Weber                                     => Property::MagneticFlux,
+            Atom::Gauss |
+                Atom::Tesla                                 => Property::MagneticFluxDensity,
+            Atom::PermeabilityOfVacuum                      => Property::MagneticPermeability,
+            Atom::Gilbert                                   => Property::MagneticTension,
+            Atom::Gram               |
+                Atom::AtomicMassUnit |
+                Atom::ElectronMass   |
+                Atom::ProtonMass     |
+                Atom::Tonne                                 => Property::Mass,
+            Atom::Percent                                 |
+                Atom::TheNumberPi                         |
+                Atom::TheNumberTenForArbitraryPowersCaret |
+                Atom::TheNumberTenForArbitraryPowersStar    => Property::Number,
             Atom::Radian           |
                 Atom::Degree       |
                 Atom::DegreeMinute |
                 Atom::DegreeSecond |
                 Atom::Gon                                   => Property::PlaneAngle,
+            Atom::Watt                                      => Property::Power,
+            Atom::Pascal  |
+                Atom::Bar |
+                Atom::StandardAtmosphere                    => Property::Pressure,
+            Atom::PrismDiopter                              => Property::RefractionOfPrism,
+            Atom::Becquerel |
+                Atom::Curie                                 => Property::Radioactivity,
+            Atom::Steradian                                 => Property::SolidAngle,
+            Atom::Kelvin               |
+                Atom::DegreeCelsius    |
+                Atom::DegreeFahrenheit |
+                Atom::DegreeReaumur                         => Property::Temperature,
             Atom::Second                 |
                 Atom::Day                |
                 Atom::Hour               |
@@ -1238,32 +1319,12 @@ impl Atom {
                 Atom::TropicalYear       |
                 Atom::Week               |
                 Atom::Year                                  => Property::Time,
-            Atom::AcreBR                       |
-                Atom::AcreUS                   |
-                Atom::Are                      |
-                Atom::CircularMilInternational |
-                Atom::Section                  |
-                Atom::SquareFootInternational  |
-                Atom::SquareInchInternational  |
-                Atom::SquareMileUS             |
-                Atom::SquareRodUS              |
-                Atom::SquareYardInternational  |
-                Atom::Township                              => Property::Area,
-            Atom::BarrelUS             |
-                Atom::CordUS           |
-                Atom::FluidDramUS      |
-                Atom::FluidOunceUS     |
-                Atom::GillUS           |
-                Atom::MetricFluidOunce |
-                Atom::MinimUS          |
-                Atom::PintUS           |
-                Atom::QuartUS          |
-                Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
-            Atom::BushelUS       |
-                Atom::PeckUS     |
-                Atom::DryPintUS  |
-                Atom::DryQuartUS |
-                Atom::HistoricalWinchesterGallon            => Property::DryVolume,
+            Atom::TheUnity              |
+                Atom::BoltzmannConstant |
+                Atom::NewtonianConstantOfGravitation        => Property::Unclassified,
+            Atom::KnotBR                |
+                Atom::KnotInternational |
+                Atom::VelocityOfLight                       => Property::Velocity,
             Atom::BoardFootInternational     |
                 Atom::BushelBR               |
                 Atom::CordInternational      |
@@ -1285,67 +1346,6 @@ impl Atom {
                 Atom::QuartBR                |
                 Atom::TablespoonUS           |
                 Atom::TeaspoonUS                            => Property::Volume,
-            Atom::Mole                                      => Property::AmountOfSubstance,
-            Atom::PartsPerBillion     |
-                Atom::PartsPerMillion |
-                Atom::PartsPerThousand                      => Property::Fraction,
-            Atom::Percent                                 |
-                Atom::TheNumberPi                         |
-                Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar    => Property::Number,
-            Atom::Hertz                                     => Property::Frequency,
-            Atom::PH                                        => Property::Acidity,
-            Atom::PrismDiopter                              => Property::RefractionOfPrism,
-            Atom::Steradian                                 => Property::SolidAngle,
-            Atom::Newton        |
-                Atom::Dyne      |
-                Atom::GramForce |
-                Atom::PoundForce                            => Property::Force,
-            Atom::Pascal  |
-                Atom::Bar |
-                Atom::StandardAtmosphere                    => Property::Pressure,
-            Atom::Joule            |
-                Atom::ElectronVolt |
-                Atom::Erg                                   => Property::Energy,
-            Atom::Watt                                      => Property::Power,
-            Atom::Ampere |
-                Atom::Biot                                  => Property::ElectricCurrent,
-            Atom::Farad                                     => Property::ElectricCapacitance,
-            Atom::Ohm                                       => Property::ElectricResistance,
-            Atom::Siemens                                   => Property::ElectricConductance,
-            Atom::Volt                                      => Property::ElectricPotential,
-            Atom::Weber                                     => Property::MagneticFlux,
-            Atom::Gauss |
-                Atom::Tesla                                 => Property::MagneticFluxDensity,
-            Atom::Henry                                     => Property::Inductance,
-            Atom::Lumen                                     => Property::LuminousFlux,
-            Atom::Lux |
-                Atom::Phot                                  => Property::Illuminance,
-            Atom::Becquerel |
-                Atom::Curie                                 => Property::Radioactivity,
-            Atom::Gray |
-                Atom::RadiationAbsorbedDose                 => Property::EnergyDose,
-            Atom::PermeabilityOfVacuum                      => Property::MagneticPermeability,
-            Atom::PermittivityOfVacuum                      => Property::ElectricPermittivity,
-            Atom::PlanckConstant                            => Property::Action,
-            Atom::RadiationEquivalentMan |
-                Atom::Sievert                               => Property::DoseEquivalent,
-            Atom::KnotBR                |
-                Atom::KnotInternational |
-                Atom::VelocityOfLight                       => Property::Velocity,
-            Atom::Gal |
-                Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
-            Atom::Gilbert                                   => Property::MagneticTension,
-            Atom::Kayser                                    => Property::LineicNumber,
-            Atom::Lambert                                   => Property::Brightness,
-            Atom::Maxwell                                   => Property::FluxOfMagneticInduction,
-            Atom::Oersted                                   => Property::MagneticFieldIntensity,
-            Atom::Poise                                     => Property::DynamicViscosity,
-            Atom::Roentgen                                  => Property::IonDose,
-            Atom::Stilb                                     => Property::LuminousIntensityDensity,
-            Atom::Stokes                                    => Property::KinematicViscosity,
-            Atom::FathomInternational                       => Property::DepthOfWater,
-            Atom::HandInternational                         => Property::HeightOfHorses,
         }
     }
 
