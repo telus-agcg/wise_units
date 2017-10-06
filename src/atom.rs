@@ -131,6 +131,7 @@ pub enum Atom {
     Ohm,
     Oersted,
     OunceAV,
+    OunceTR,
 
     PaceBR,
     Parsec,
@@ -145,10 +146,12 @@ pub enum Atom {
     Phot,
     PeckBR,
     PeckUS,
+    PennyweightTR,
     PintBR,
     PintUS,
     Poise,
     PoundAV,
+    PoundTR,
     PoundForce,
     PlanckConstant,
     PrismDiopter,
@@ -383,6 +386,9 @@ impl Atom {
                 Atom::ShortHundredweightAV       |
                 Atom::ShortTonAV                 |
                 Atom::StoneAV                               => Classification::Avoirdupois,
+            Atom::OunceTR                        |
+                Atom::PennyweightTR              |
+                Atom::PoundTR                               => Classification::Troy,
             Atom::DegreeFahrenheit               |
                 Atom::DegreeReaumur                         => Classification::Heat,
             Atom::PrismDiopter                              => Classification::Clinical,
@@ -513,6 +519,7 @@ impl Atom {
             Atom::Ohm                            => Definition::new(1.0, "V/A"),
             Atom::Oersted                        => Definition::new(250.0, "/[pi].A/m"),
             Atom::OunceAV                        => Definition::new(1.0, "[lb_av]/16"),
+            Atom::OunceTR                        => Definition::new(20.0, "[pwt_tr]"),
 
             Atom::PH                             => Definition::new(1.0, "ph(1.0 mol/l)"),
             Atom::PaceBR                         => Definition::new(2.5, "[ft_br]"),
@@ -527,11 +534,13 @@ impl Atom {
             Atom::Phot                           => Definition::new(1.0e-4, "lx"),
             Atom::PeckBR                         => Definition::new(2.0, "[gal_br]"),
             Atom::PeckUS                         => Definition::new(1.0, "[bu_us]/4"),
+            Atom::PennyweightTR                  => Definition::new(24.0, "[gr]"),
             Atom::PintBR                         => Definition::new(1.0, "[qt_br]/2"),
             Atom::PintUS                         => Definition::new(1.0, "[qt_us]/2"),
             Atom::PlanckConstant                 => Definition::new(6.626_075_5e-34, "J.s"),
             Atom::Poise                          => Definition::new(1.0, "dyn.s/cm2"),
             Atom::PoundAV                        => Definition::new(7000.0, "[gr]"),
+            Atom::PoundTR                        => Definition::new(12.0, "[oz_tr]"),
             Atom::PoundForce                     => Definition::new(1.0, "[lb_av].[g]"),
             Atom::PrismDiopter                   => Definition::new(1.0, "100tan(1.0 rad)"),
             Atom::ProtonMass                     => Definition::new(1.672_623_1e-24, "g"),
@@ -819,7 +828,8 @@ impl Atom {
             Atom::NewtonianConstantOfGravitation => vec!["Newtonian constant of gravitation"],
             Atom::Ohm                            => vec!["ohm"],
             Atom::Oersted                        => vec!["Oersted"],
-            Atom::OunceAV                        => vec!["ounce"],
+            Atom::OunceAV |
+                Atom::OunceTR                    => vec!["ounce"],
 
             Atom::PH                             => vec!["pH"],
             Atom::PaceBR                         => vec!["pace"],
@@ -834,11 +844,13 @@ impl Atom {
             Atom::Phot                           => vec!["phot"],
             Atom::PeckBR |
                 Atom::PeckUS                     => vec!["peck"],
+            Atom::PennyweightTR                  => vec!["pennyweight"],
             Atom::PintBR |
                 Atom::PintUS                     => vec!["pint"],
             Atom::PlanckConstant                 => vec!["Planck constant"],
             Atom::Poise                          => vec!["Poise"],
-            Atom::PoundAV                        => vec!["pound"],
+            Atom::PoundAV |
+                Atom::PoundTR                    => vec!["pound"],
             Atom::PoundForce                     => vec!["pound force"],
             Atom::PrismDiopter                   => vec!["prism diopter"],
             Atom::ProtonMass                     => vec!["proton mass"],
@@ -1018,6 +1030,7 @@ impl Atom {
             Atom::Ohm                                 => "Ohm",
             Atom::Oersted                             => "Oe",
             Atom::OunceAV                             => "[oz_av]",
+            Atom::OunceTR                             => "[oz_tr]",
 
             Atom::PH                                  => "[pH]",
             Atom::PaceBR                              => "[pc_br]",
@@ -1032,11 +1045,13 @@ impl Atom {
             Atom::Phot                                => "ph",
             Atom::PeckBR                              => "[pk_br]",
             Atom::PeckUS                              => "[pk_us]",
+            Atom::PennyweightTR                       => "[pwt_tr]",
             Atom::PintBR                              => "[pt_br]",
             Atom::PintUS                              => "[pt_us]",
             Atom::PlanckConstant                      => "[h]",
             Atom::Poise                               => "P",
             Atom::PoundAV                             => "[lb_av]",
+            Atom::PoundTR                             => "[lb_tr]",
             Atom::PoundForce                          => "[lbf_av]",
             Atom::PrismDiopter                        => "[p'diop]",
             Atom::ProtonMass                          => "[m_p]",
@@ -1335,7 +1350,10 @@ impl Atom {
                 Atom::LongHundredweightAV  |
                 Atom::LongTonAV            |
                 Atom::OunceAV              |
+                Atom::OunceTR              |
+                Atom::PennyweightTR        |
                 Atom::PoundAV              |
+                Atom::PoundTR              |
                 Atom::ProtonMass           |
                 Atom::ShortHundredweightAV |
                 Atom::ShortTonAV           |
@@ -1521,6 +1539,7 @@ impl Atom {
             Atom::Ohm                            => "OHM",
             Atom::Oersted                        => "OE",
             Atom::OunceAV                        => "[OZ_AV]",
+            Atom::OunceTR                        => "[OZ_TR]",
 
             Atom::PH                             => "[PH]",
             Atom::PaceBR                         => "[PC_BR]",
@@ -1534,10 +1553,12 @@ impl Atom {
             Atom::Phot                           => "PHT",
             Atom::PeckBR                         => "[PK_BR]",
             Atom::PeckUS                         => "[PK_US]",
+            Atom::PennyweightTR                  => "[PWT_TR]",
             Atom::PintBR                         => "[PT_BR]",
             Atom::PintUS                         => "[PT_US]",
             Atom::PlanckConstant                 => "[C]",
             Atom::PoundAV                        => "[LB_AV]",
+            Atom::PoundTR                        => "[LB_TR]",
             Atom::PoundForce                     => "[LBF_AV]",
             Atom::PrismDiopter                   => "[P'DIOP]",
             Atom::ProtonMass                     => "[M_P]",

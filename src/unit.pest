@@ -118,18 +118,20 @@ atom_symbol = {
 
         "[kn_br]"   | "[kn_i]"    | "[k]"      |
         "[KN_BR]"   | "[KN_I]"    | "[K]"      |
-        "[lcwt_av]" | "[lton_av]" | "[lbf_av]" | "[lb_av]" | "[lk_br]" | "[lk_us]" | "[ly]" |
-        "[LCWT_AV]" | "[LTON_AV]" | "[LBF_AV]" | "[LB_AV]" | "[LK_BR]" | "[LK_US]" | "[LY]" |
+        "[lcwt_av]" | "[lton_av]" | "[lbf_av]" |
+        "[LCWT_AV]" | "[LTON_AV]" | "[LBF_AV]" |
+        "[lb_av]"   | "[lb_tr]"   | "[lk_br]"  | "[lk_us]" | "[ly]" |
+        "[LB_AV]"   | "[LB_TR]"   | "[LK_BR]"  | "[LK_US]" | "[LY]" |
 
         "[mil_us]" | "[min_br]" | "[min_us]" | "[mil_i]" | "[mi_br]" | "[mi_us]" |
-        "[mi_i]"   | "[mu_0]"   | "[m_e]"   | "[m_p]"   |
+        "[mi_i]"   | "[mu_0]"   | "[m_e]"    | "[m_p]"   |
         "[MIL_US]" | "[MIN_BR]" | "[MIN_US]" | "[MIL_I]" | "[MI_BR]" | "[MI_US]" |
-        "[MI_I]"   | "[MU_0]"   | "[M_E]"   | "[M_P]"   |
-        "[nmi_br]" | "[NMI_BR]" | "[nmi_i]" | "[NMI_I]" |
-        "[oz_av]"  | "[OZ_AV]"  |
+        "[MI_I]"   | "[MU_0]"   | "[M_E]"    | "[M_P]"   |
+        "[nmi_br]" | "[NMI_BR]" | "[nmi_i]"  | "[NMI_I]" |
+        "[oz_av]"  | "[oz_tr]"  | "[OZ_AV]"  | "[OZ_TR]" |
 
-        "[p'diop]" | "[pc_br]"  | "[pk_br]" | "[pk_us]" | "[pt_br]" | "[pt_us]" |
-        "[P'DIOP]" | "[PC_BR]"  | "[PK_BR]" | "[PK_US]" | "[PT_BR]" | "[PT_US]" |
+        "[p'diop]" | "[pwt_tr]" | "[pc_br]"  | "[pk_br]" | "[pk_us]" | "[pt_br]" | "[pt_us]" |
+        "[P'DIOP]" | "[PWT_TR]" | "[PC_BR]"  | "[PK_BR]" | "[PK_US]" | "[PT_BR]" | "[PT_US]" |
         "[ppth]"   | "[ppb]"    | "[ppm]"   | "[pH]"    | "[pi]"    |
         "[PPTH]"   | "[PPB]"    | "[PPM]"   | "[PH]"    | "[PI]"    |
         "[qt_br]"  | "[QT_BR]"  | "[qt_us]" | "[QT_US]" |
