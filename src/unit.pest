@@ -48,13 +48,13 @@ atom_symbol = {
         "cd"        |
         "Cel"       | "CEL"   | "Ci"    | "CD"  | "CI"  | "C"   |
 
-        "degree"    | "day"   | "deg"   | "dyn" | "d"   |
-        "DEG"       | "DYN"   | "D"     |
-        "erg"       | "eV"    | "ERG"   | "EV"  |
-        "foot"      | "ft"    |
-        "F"         |
+        "degree" | "day" | "deg" | "dyn" | "d"  |
+        "DEG"    | "DYN" | "D"   |
+        "erg"    | "eV"  | "eq"  | "ERG" | "EV" | "EQ" |
+        "foot"   | "ft"  |
+        "F"      |
 
-        "grade"     | "gram"  | "gon"   | "gf"  | "g"   |
+        "grade"     | "gram"  | "gon"   | "gf"  | "g%"  | "g"   |
         "GAL"       | "GON"   |
         "Gb"        | "Gy"    | "GB"    | "GF"  | "GL"  | "GS"  | "GY" |
         "G"         |
@@ -113,7 +113,7 @@ atom_symbol = {
         "[gal_br]" | "[gal_us]" | "[gal_wi]" | "[gil_br]" | "[gil_us]" | "[gr]"   | "[g]"  |
         "[GAL_BR]" | "[GAL_US]" | "[GAL_WI]" | "[GIL_BR]" | "[GIL_US]" | "[GC]"   | "[GR]" | "[G]" |
         "[hd_i]"   | "[h]"      |
-        "[HD_I]"   | "[H]"      |
+        "[HD_I]"   | "[HP]"     | "[H]"      |
         "[in_br]"  | "[in_us]"  | "[in_i]"   | "[IN_BR]"  | "[IN_US]"  | "[IN_I]" |
 
         "[kn_br]"   | "[kn_i]"    | "[k]"      |
@@ -133,7 +133,7 @@ atom_symbol = {
         "[p'diop]" | "[pwt_tr]" | "[pc_br]"  | "[pk_br]" | "[pk_us]" | "[pt_br]" | "[pt_us]" |
         "[P'DIOP]" | "[PWT_TR]" | "[PC_BR]"  | "[PK_BR]" | "[PK_US]" | "[PT_BR]" | "[PT_US]" |
         "[ppth]"   | "[ppb]"    | "[ppm]"   | "[pH]"    | "[pi]"    |
-        "[PPTH]"   | "[PPB]"    | "[PPM]"   | "[PH]"    | "[PI]"    |
+        "[PPTH]"   | "[PNU]"    | "[PPB]"    | "[PPM]"   | "[PH]"    | "[PI]"    |
         "[qt_br]"  | "[QT_BR]"  | "[qt_us]" | "[QT_US]" |
         "[rch_us]" | "[rlk_us]" | "[rd_br]" | "[rd_us]" |
         "[RCH_US]" | "[RLK_US]" | "[RD_BR]" | "[RD_US]" | "[RAD]"   | "[REM]" |

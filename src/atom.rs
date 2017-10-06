@@ -55,6 +55,7 @@ pub enum Atom {
     ElectronMass,
     ElectronVolt,
     ElementaryCharge,
+    Equivalents,
     Erg,
     Farad,
     FathomInternational,
@@ -78,6 +79,7 @@ pub enum Atom {
     GillUS,
     Gon,
     GramForce,
+    GramPercent,
     Grain,
     Gray,
     Gauss,
@@ -85,6 +87,7 @@ pub enum Atom {
     Hertz,
     Henry,
     HistoricalWinchesterGallon,
+    Horsepower,
     Hour,
     InchInternational,
     InchBR,
@@ -155,6 +158,7 @@ pub enum Atom {
     PoundForce,
     PlanckConstant,
     PrismDiopter,
+    ProteinNitrogenUnit,
     ProtonMass,
     QuartBR,
     QuartUS,
@@ -390,21 +394,26 @@ impl Atom {
                 Atom::PennyweightTR              |
                 Atom::PoundTR                               => Classification::Troy,
             Atom::DegreeFahrenheit               |
-                Atom::DegreeReaumur                         => Classification::Heat,
+                Atom::DegreeReaumur              |
+                Atom::Horsepower                            => Classification::Heat,
             Atom::PrismDiopter                              => Classification::Clinical,
-            Atom::PH                                        => Classification::Chemical,
+            Atom::Equivalents                    |
+                Atom::GramPercent                |
+                Atom::PH                         |
+                Atom::ProteinNitrogenUnit                   => Classification::Chemical,
         }
     }
 
     pub fn definition(&self) -> Definition {
         match *self {
-            Atom::TheUnity    |
-                Atom::Candela |
-                Atom::Coulomb |
-                Atom::Gram    |
-                Atom::Kelvin  |
-                Atom::Meter   |
-                Atom::Radian  |
+            Atom::TheUnity                |
+                Atom::Candela             |
+                Atom::Coulomb             |
+                Atom::Gram                |
+                Atom::Kelvin              |
+                Atom::Meter               |
+                Atom::ProteinNitrogenUnit |
+                Atom::Radian              |
                 Atom::Second                     => Definition::new(1.0, "1"),
             Atom::AcreBR                         => Definition::new(4840.0, "[yd_br]2"),
             Atom::AcreUS                         => Definition::new(160.0, "[rd_us]2"),
@@ -443,6 +452,7 @@ impl Atom {
             Atom::ElectronMass                   => Definition::new(9.109_389_7e-28, "g"),
             Atom::ElectronVolt                   => Definition::new(1.0, "[e].V"),
             Atom::ElementaryCharge               => Definition::new(1.602_177_33e-19, "C"),
+            Atom::Equivalents                    => Definition::new(1.0, "mol"),
             Atom::Erg                            => Definition::new(1.0, "dyn.cm"),
             Atom::Farad                          => Definition::new(1.0, "C/V"),
             Atom::FathomInternational            => Definition::new(6.0, "[ft_i]"),
@@ -465,6 +475,7 @@ impl Atom {
             Atom::GillUS                         => Definition::new(1.0, "[pt_us]/4"),
             Atom::Gon                            => Definition::new(0.9, "deg"),
             Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
+            Atom::GramPercent                    => Definition::new(1.0, "g/dl"),
             Atom::Grain                          => Definition::new(64.798_91, "mg"),
             Atom::Gray                           => Definition::new(1.0, "J/kg"),
             Atom::GuntersChainBR                 => Definition::new(4.0, "[rd_br]"),
@@ -474,6 +485,7 @@ impl Atom {
             Atom::Hertz                          => Definition::new(1.0, "s-1"),
             Atom::HistoricalWinchesterGallon     => Definition::new(1.0, "[bu_us]"),
             Atom::Hour                           => Definition::new(60.0, "min"),
+            Atom::Horsepower                     => Definition::new(550.0, "[ft_i].[lbf_av]/s"),
             Atom::InchInternational              => Definition::new(254.0e-2, "cm"),
             Atom::InchBR                         => Definition::new(2.539_998, "cm"),
             Atom::InchUS                         => Definition::new(1.0, "[ft_us]/12"),
@@ -609,6 +621,7 @@ impl Atom {
 
     pub fn is_arbitrary(&self) -> bool {
         match *self {
+            Atom::ProteinNitrogenUnit => true,
             _ => false,
         }
     }
@@ -638,6 +651,7 @@ impl Atom {
                 Atom::ElectronMass                   |
                 Atom::ElectronVolt                   |
                 Atom::ElementaryCharge               |
+                Atom::Equivalents                    |
                 Atom::Erg                            |
                 Atom::Farad                          |
 
@@ -645,6 +659,7 @@ impl Atom {
                 Atom::Gauss                          |
                 Atom::Gilbert                        |
                 Atom::GramForce                      |
+                Atom::GramPercent                    |
                 Atom::Gray                           |
                 Atom::Henry                          |
                 Atom::Hertz                          |
@@ -753,6 +768,7 @@ impl Atom {
             Atom::ElectronMass        => vec!["electron mass"],
             Atom::ElectronVolt        => vec!["electronvolt"],
             Atom::ElementaryCharge    => vec!["elementary charge"],
+            Atom::Equivalents         => vec!["equivalents"],
             Atom::Erg                 => vec!["erg"],
             Atom::Farad               => vec!["farad"],
             Atom::FathomInternational |
@@ -775,6 +791,7 @@ impl Atom {
                 Atom::GillUS                     => vec!["gill"],
             Atom::Gon                            => vec!["gon", "grade"],
             Atom::GramForce                      => vec!["gram-force"],
+            Atom::GramPercent                    => vec!["gram percent"],
             Atom::Grain                          => vec!["grain"],
             Atom::Gray                           => vec!["gray"],
             Atom::GuntersChainBR                 => vec!["Gunter's chain"],
@@ -783,6 +800,7 @@ impl Atom {
             Atom::Henry                          => vec!["henry"],
             Atom::Hertz                          => vec!["hertz"],
             Atom::HistoricalWinchesterGallon     => vec!["historical winchester gallon"],
+            Atom::Horsepower                     => vec!["horsepower"],
             Atom::Hour                           => vec!["hour"],
             Atom::InchInternational |
                 Atom::InchBR        |
@@ -853,6 +871,7 @@ impl Atom {
                 Atom::PoundTR                    => vec!["pound"],
             Atom::PoundForce                     => vec!["pound force"],
             Atom::PrismDiopter                   => vec!["prism diopter"],
+            Atom::ProteinNitrogenUnit            => vec!["protein nitrogen unit"],
             Atom::ProtonMass                     => vec!["proton mass"],
             Atom::QuartBR |
                 Atom::QuartUS                    => vec!["quart"],
@@ -954,6 +973,7 @@ impl Atom {
             Atom::ElectronMass                        => "[m_e]",
             Atom::ElectronVolt                        => "eV",
             Atom::ElementaryCharge                    => "[e]",
+            Atom::Equivalents                         => "eq",
             Atom::Erg                                 => "erg",
             Atom::Farad                               => "F",
             Atom::FathomInternational                 => "[fth_i]",
@@ -976,6 +996,7 @@ impl Atom {
             Atom::GillUS                              => "[gil_us]",
             Atom::Gon                                 => "gon",
             Atom::GramForce                           => "gf",
+            Atom::GramPercent                         => "g%",
             Atom::Grain                               => "[gr]",
             Atom::Gray                                => "Gy",
             Atom::GuntersChainBR                      => "[ch_br]",
@@ -984,6 +1005,7 @@ impl Atom {
             Atom::Henry                               => "H",
             Atom::Hertz                               => "Hz",
             Atom::HistoricalWinchesterGallon          => "[gal_wi]",
+            Atom::Horsepower                          => "[HP]",
             Atom::Hour                                => "h",
             Atom::InchInternational                   => "[in_i]",
             Atom::InchBR                              => "[in_br]",
@@ -1054,6 +1076,7 @@ impl Atom {
             Atom::PoundTR                             => "[lb_tr]",
             Atom::PoundForce                          => "[lbf_av]",
             Atom::PrismDiopter                        => "[p'diop]",
+            Atom::ProteinNitrogenUnit                 => "[PNU]",
             Atom::ProtonMass                          => "[m_p]",
             Atom::QuartBR                             => "[qt_br]",
             Atom::QuartUS                             => "[qt_us]",
@@ -1133,6 +1156,7 @@ impl Atom {
                 Atom::Gal                |
                 Atom::Gilbert            |
                 Atom::GramForce          |
+                Atom::GramPercent        |
                 Atom::Gray               |
                 Atom::Henry              |
                 Atom::Hertz              |
@@ -1185,6 +1209,7 @@ impl Atom {
             Atom::DegreeReaumur                  => Some("°R"),
             Atom::ElectronMass                   => Some("𝑚ₑ"),
             Atom::ElementaryCharge               => Some("𝑒"),
+            Atom::Equivalents                    => Some("eq"),
             Atom::FathomInternational            => Some("fth"),
             Atom::FluidOunceUS |
                 Atom::MetricFluidOunce           => Some("oz fl"),
@@ -1218,6 +1243,7 @@ impl Atom {
             Atom::PoundAV                        => Some("lb"),
             Atom::PoundForce                     => Some("lbf"),
             Atom::PrismDiopter                   => Some("PD"),
+            Atom::ProteinNitrogenUnit            => Some("PNU"),
             Atom::ProtonMass                     => Some("𝑚ₚ"),
 
             Atom::StandardAccelerationOfFreeFall => Some("𝑔"),
@@ -1239,7 +1265,8 @@ impl Atom {
                 Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
             Atom::PH                                        => Property::Acidity,
             Atom::PlanckConstant                            => Property::Action,
-            Atom::Mole                                      => Property::AmountOfSubstance,
+            Atom::Equivalents |
+                Atom::Mole                                  => Property::AmountOfSubstance,
             Atom::AcreBR                       |
                 Atom::AcreUS                   |
                 Atom::Are                      |
@@ -1359,6 +1386,7 @@ impl Atom {
                 Atom::ShortTonAV           |
                 Atom::StoneAV              |
                 Atom::Tonne                                 => Property::Mass,
+            Atom::GramPercent                               => Property::MassConcentration,
             Atom::Percent                                 |
                 Atom::TheNumberPi                         |
                 Atom::TheNumberTenForArbitraryPowersCaret |
@@ -1368,10 +1396,12 @@ impl Atom {
                 Atom::DegreeMinute |
                 Atom::DegreeSecond |
                 Atom::Gon                                   => Property::PlaneAngle,
-            Atom::Watt                                      => Property::Power,
+            Atom::Horsepower |
+                Atom::Watt                                  => Property::Power,
             Atom::Pascal  |
                 Atom::Bar |
                 Atom::StandardAtmosphere                    => Property::Pressure,
+            Atom::ProteinNitrogenUnit                       => Property::ProcedureDefinedProtein,
             Atom::PrismDiopter                              => Property::RefractionOfPrism,
             Atom::Becquerel |
                 Atom::Curie                                 => Property::Radioactivity,
@@ -1467,6 +1497,7 @@ impl Atom {
             Atom::ElectronMass                   => "[M_E]",
             Atom::ElectronVolt                   => "EV",
             Atom::ElementaryCharge               => "[E]",
+            Atom::Equivalents                    => "EQ",
             Atom::Erg                            => "ERG",
             Atom::FathomInternational            => "[FTH_I]",
             Atom::FathomBR                       => "[FTH_BR]",
@@ -1488,6 +1519,7 @@ impl Atom {
             Atom::GillUS                         => "[GIL_US]",
             Atom::Gon                            => "GON",
             Atom::GramForce                      => "GF",
+            Atom::GramPercent                    => "G%",
             Atom::Grain                          => "[GR]",
             Atom::Gray                           => "GY",
             Atom::GuntersChainBR                 => "[CH_BR]",
@@ -1610,11 +1642,13 @@ impl Atom {
                 Atom::DegreeSecond                        |
                 Atom::Farad                               |
                 Atom::Henry                               |
+                Atom::Horsepower                          |
                 Atom::Joule                               |
                 Atom::Kelvin                              |
                 Atom::Newton                              |
                 Atom::Percent                             |
                 Atom::Poise                               |
+                Atom::ProteinNitrogenUnit                 |
                 Atom::Tesla                               |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar  |
