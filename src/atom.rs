@@ -48,6 +48,7 @@ pub enum Atom {
     DegreeReaumur,
     DegreeMinute,
     DegreeSecond,
+    DramAV,
     DryPintUS,
     DryQuartUS,
     Dyne,
@@ -77,6 +78,7 @@ pub enum Atom {
     GillUS,
     Gon,
     GramForce,
+    Grain,
     Gray,
     Gauss,
     HandInternational,
@@ -93,6 +95,8 @@ pub enum Atom {
     KnotBR,
     KnotInternational,
     Lambert,
+    LongHundredweightAV,
+    LongTonAV,
     LightYear,
     LinkForGuntersChainBR,
     LinkForGuntersChainUS,
@@ -126,6 +130,7 @@ pub enum Atom {
     NewtonianConstantOfGravitation,
     Ohm,
     Oersted,
+    OunceAV,
 
     PaceBR,
     Parsec,
@@ -143,6 +148,7 @@ pub enum Atom {
     PintBR,
     PintUS,
     Poise,
+    PoundAV,
     PoundForce,
     PlanckConstant,
     PrismDiopter,
@@ -158,6 +164,8 @@ pub enum Atom {
     Roentgen,
 
     Section,
+    ShortHundredweightAV,
+    ShortTonAV,
     Siemens,
     Sievert,
     SquareInchInternational,
@@ -169,6 +177,7 @@ pub enum Atom {
     StandardAtmosphere,
     Steradian,
     Stilb,
+    StoneAV,
     Stokes,
     SynodalMonth,
     TablespoonUS,
@@ -365,7 +374,16 @@ impl Atom {
                 Atom::PeckBR                     |
                 Atom::PintBR                     |
                 Atom::QuartBR                               => Classification::BritVolumes,
-            Atom::DegreeFahrenheit |
+            Atom::DramAV                         |
+                Atom::Grain                      |
+                Atom::OunceAV                    |
+                Atom::LongHundredweightAV        |
+                Atom::LongTonAV                  |
+                Atom::PoundAV                    |
+                Atom::ShortHundredweightAV       |
+                Atom::ShortTonAV                 |
+                Atom::StoneAV                               => Classification::Avoirdupois,
+            Atom::DegreeFahrenheit               |
                 Atom::DegreeReaumur                         => Classification::Heat,
             Atom::PrismDiopter                              => Classification::Clinical,
             Atom::PH                                        => Classification::Chemical,
@@ -412,6 +430,7 @@ impl Atom {
             Atom::DegreeMinute                   => Definition::new(1.0, "deg/60"),
             Atom::DegreeReaumur                  => Definition::new(1.0, "degre(5.0 K/4)"),
             Atom::DegreeSecond                   => Definition::new(1.0, "/60"),
+            Atom::DramAV                         => Definition::new(1.0, "[oz_av]/16"),
             Atom::DryPintUS                      => Definition::new(1.0, "[dqt_us]/2"),
             Atom::DryQuartUS                     => Definition::new(1.0, "[pk_us]/8"),
             Atom::Dyne                           => Definition::new(1.0, "g.cm/s2"),
@@ -440,6 +459,7 @@ impl Atom {
             Atom::GillUS                         => Definition::new(1.0, "[pt_us]/4"),
             Atom::Gon                            => Definition::new(0.9, "deg"),
             Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
+            Atom::Grain                          => Definition::new(64.798_91, "mg"),
             Atom::Gray                           => Definition::new(1.0, "J/kg"),
             Atom::GuntersChainBR                 => Definition::new(4.0, "[rd_br]"),
             Atom::GuntersChainUS                 => Definition::new(4.0, "[rd_us]"),
@@ -457,6 +477,8 @@ impl Atom {
             Atom::KnotBR                         => Definition::new(1.0, "[nmi_br]/h"),
             Atom::KnotInternational              => Definition::new(1.0, "[nmi_i]/h"),
             Atom::Lambert                        => Definition::new(1.0, "cd/cm2/[pi]"),
+            Atom::LongHundredweightAV            => Definition::new(112.0, "[lb_av]"),
+            Atom::LongTonAV                      => Definition::new(20.0, "[lcwt_av]"),
             Atom::LightYear                      => Definition::new(1.0, "[c].a_j"),
             Atom::LinkForGuntersChainBR          => Definition::new(1.0, "[ch_br]/100"),
             Atom::LinkForGuntersChainUS          => Definition::new(1.0, "[ch_us]/100"),
@@ -490,6 +512,7 @@ impl Atom {
             Atom::NewtonianConstantOfGravitation => Definition::new(1.0, "kg.m/s2"),
             Atom::Ohm                            => Definition::new(1.0, "V/A"),
             Atom::Oersted                        => Definition::new(250.0, "/[pi].A/m"),
+            Atom::OunceAV                        => Definition::new(1.0, "[lb_av]/16"),
 
             Atom::PH                             => Definition::new(1.0, "ph(1.0 mol/l)"),
             Atom::PaceBR                         => Definition::new(2.5, "[ft_br]"),
@@ -508,6 +531,7 @@ impl Atom {
             Atom::PintUS                         => Definition::new(1.0, "[qt_us]/2"),
             Atom::PlanckConstant                 => Definition::new(6.626_075_5e-34, "J.s"),
             Atom::Poise                          => Definition::new(1.0, "dyn.s/cm2"),
+            Atom::PoundAV                        => Definition::new(7000.0, "[gr]"),
             Atom::PoundForce                     => Definition::new(1.0, "[lb_av].[g]"),
             Atom::PrismDiopter                   => Definition::new(1.0, "100tan(1.0 rad)"),
             Atom::ProtonMass                     => Definition::new(1.672_623_1e-24, "g"),
@@ -522,6 +546,8 @@ impl Atom {
             Atom::Roentgen                       => Definition::new(2.58e-4, "C/kg"),
 
             Atom::Section                        => Definition::new(1.0, "[mi_us]2"),
+            Atom::ShortHundredweightAV           => Definition::new(100.0, "[lb_av]"),
+            Atom::ShortTonAV                     => Definition::new(20.0, "[scwt_at]"),
             Atom::Siemens                        => Definition::new(1.0, "Ohm-1"),
             Atom::Sievert                        => Definition::new(1.0, "J/kg"),
             Atom::SquareFootInternational        => Definition::new(1.0, "[ft_i]2"),
@@ -534,6 +560,7 @@ impl Atom {
             Atom::Steradian                      => Definition::new(1.0, "rad2"),
             Atom::Stokes                         => Definition::new(1.0, "cm2/s"),
             Atom::Stilb                          => Definition::new(1.0, "cd/cm2"),
+            Atom::StoneAV                        => Definition::new(14.0, "[lb_av]"),
             Atom::SynodalMonth                   => Definition::new(29.530_59, "d"),
             Atom::TablespoonUS                   => Definition::new(1.0, "[foz_us]/2"),
             Atom::TeaspoonUS                     => Definition::new(1.0, "[tbs_us]/3"),
@@ -710,6 +737,7 @@ impl Atom {
             Atom::DegreeMinute        => vec!["minute"],
             Atom::DegreeReaumur       => vec!["degree Réaumur"],
             Atom::DegreeSecond        => vec!["second"],
+            Atom::DramAV              => vec!["dram"],
             Atom::DryPintUS           => vec!["dry pint"],
             Atom::DryQuartUS          => vec!["dry quart"],
             Atom::Dyne                => vec!["dyne"],
@@ -738,6 +766,7 @@ impl Atom {
                 Atom::GillUS                     => vec!["gill"],
             Atom::Gon                            => vec!["gon", "grade"],
             Atom::GramForce                      => vec!["gram-force"],
+            Atom::Grain                          => vec!["grain"],
             Atom::Gray                           => vec!["gray"],
             Atom::GuntersChainBR                 => vec!["Gunter's chain"],
             Atom::GuntersChainUS                 => vec!["Gunter's chain", "Surveyor's chain"],
@@ -752,6 +781,8 @@ impl Atom {
 
             Atom::Joule                          => vec!["joule"],
             Atom::Lambert                        => vec!["Lambert"],
+            Atom::LongHundredweightAV            => vec!["long hundredweight", "British hundredweight"],
+            Atom::LongTonAV                      => vec!["long ton", "British ton"],
             Atom::Kayser                         => vec!["Kayser"],
             Atom::KnotBR |
                 Atom::KnotInternational          => vec!["knot"],
@@ -788,6 +819,7 @@ impl Atom {
             Atom::NewtonianConstantOfGravitation => vec!["Newtonian constant of gravitation"],
             Atom::Ohm                            => vec!["ohm"],
             Atom::Oersted                        => vec!["Oersted"],
+            Atom::OunceAV                        => vec!["ounce"],
 
             Atom::PH                             => vec!["pH"],
             Atom::PaceBR                         => vec!["pace"],
@@ -806,6 +838,7 @@ impl Atom {
                 Atom::PintUS                     => vec!["pint"],
             Atom::PlanckConstant                 => vec!["Planck constant"],
             Atom::Poise                          => vec!["Poise"],
+            Atom::PoundAV                        => vec!["pound"],
             Atom::PoundForce                     => vec!["pound force"],
             Atom::PrismDiopter                   => vec!["prism diopter"],
             Atom::ProtonMass                     => vec!["proton mass"],
@@ -820,6 +853,8 @@ impl Atom {
             Atom::Roentgen                       => vec!["Roentgen"],
 
             Atom::Section                        => vec!["section"],
+            Atom::ShortHundredweightAV           => vec!["short hundredweight", "U.S. hundredweight"],
+            Atom::ShortTonAV                     => vec!["short ton", "U.S. ton"],
             Atom::Siemens                        => vec!["siemens"],
             Atom::Sievert                        => vec!["sievert"],
             Atom::SquareFootInternational        => vec!["square foot"],
@@ -831,6 +866,7 @@ impl Atom {
             Atom::StandardAtmosphere             => vec!["standard atmosphere"],
             Atom::Steradian                      => vec!["steradian"],
             Atom::Stilb                          => vec!["stilb"],
+            Atom::StoneAV                        => vec!["stone", "British stone"],
             Atom::Stokes                         => vec!["Stokes"],
             Atom::SynodalMonth                   => vec!["synodal month"],
             Atom::TablespoonUS                   => vec!["tablespoon"],
@@ -899,6 +935,7 @@ impl Atom {
             Atom::DegreeMinute                        => "'",
             Atom::DegreeReaumur                       => "[degRe]",
             Atom::DegreeSecond                        => "''",
+            Atom::DramAV                              => "[dr_av]",
             Atom::DryPintUS                           => "[dpt_us]",
             Atom::DryQuartUS                          => "[dqt_us]",
             Atom::Dyne                                => "dyn",
@@ -927,6 +964,7 @@ impl Atom {
             Atom::GillUS                              => "[gil_us]",
             Atom::Gon                                 => "gon",
             Atom::GramForce                           => "gf",
+            Atom::Grain                               => "[gr]",
             Atom::Gray                                => "Gy",
             Atom::GuntersChainBR                      => "[ch_br]",
             Atom::GuntersChainUS                      => "[ch_us]",
@@ -944,6 +982,8 @@ impl Atom {
             Atom::KnotBR                              => "[kn_br]",
             Atom::KnotInternational                   => "[kn_i]",
             Atom::Lambert                             => "Lmb",
+            Atom::LongHundredweightAV                 => "[lcwt_av]",
+            Atom::LongTonAV                           => "[lton_av]",
             Atom::LightYear                           => "[ly]",
             Atom::LinkForGuntersChainBR               => "[lk_br]",
             Atom::LinkForGuntersChainUS               => "[lk_us]",
@@ -977,6 +1017,7 @@ impl Atom {
             Atom::NewtonianConstantOfGravitation      => "[G]",
             Atom::Ohm                                 => "Ohm",
             Atom::Oersted                             => "Oe",
+            Atom::OunceAV                             => "[oz_av]",
 
             Atom::PH                                  => "[pH]",
             Atom::PaceBR                              => "[pc_br]",
@@ -995,6 +1036,7 @@ impl Atom {
             Atom::PintUS                              => "[pt_us]",
             Atom::PlanckConstant                      => "[h]",
             Atom::Poise                               => "P",
+            Atom::PoundAV                             => "[lb_av]",
             Atom::PoundForce                          => "[lbf_av]",
             Atom::PrismDiopter                        => "[p'diop]",
             Atom::ProtonMass                          => "[m_p]",
@@ -1009,6 +1051,8 @@ impl Atom {
             Atom::Roentgen                            => "R",
 
             Atom::Section                             => "[sct]",
+            Atom::ShortHundredweightAV                => "[scwt_av]",
+            Atom::ShortTonAV                          => "[ston_av]",
             Atom::Siemens                             => "S",
             Atom::Sievert                             => "Sv",
             Atom::SquareFootInternational             => "[sft_i]",
@@ -1020,6 +1064,7 @@ impl Atom {
             Atom::StandardAtmosphere                  => "atm",
             Atom::Steradian                           => "sr",
             Atom::Stilb                               => "sb",
+            Atom::StoneAV                             => "[stone_av]",
             Atom::Stokes                              => "St",
             Atom::SynodalMonth                        => "mo_s",
             Atom::TablespoonUS                        => "[tbs_us]",
@@ -1146,6 +1191,7 @@ impl Atom {
             Atom::MileInternational              => Some("mi"),
             Atom::NauticalMileInternational      => Some("n.mi"),
             Atom::Ohm                            => Some("Ω"),
+            Atom::OunceAV                        => Some("oz"),
 
             Atom::PartsPerBillion                => Some("ppb"),
             Atom::PartsPerMillion                => Some("ppm"),
@@ -1154,6 +1200,7 @@ impl Atom {
             Atom::PermeabilityOfVacuum           => Some("μ₀"),
             Atom::PermittivityOfVacuum           => Some("ε₀"),
             Atom::PlanckConstant                 => Some("𝑐"),
+            Atom::PoundAV                        => Some("lb"),
             Atom::PoundForce                     => Some("lbf"),
             Atom::PrismDiopter                   => Some("PD"),
             Atom::ProtonMass                     => Some("𝑚ₚ"),
@@ -1280,10 +1327,19 @@ impl Atom {
                 Atom::Tesla                                 => Property::MagneticFluxDensity,
             Atom::PermeabilityOfVacuum                      => Property::MagneticPermeability,
             Atom::Gilbert                                   => Property::MagneticTension,
-            Atom::Gram               |
-                Atom::AtomicMassUnit |
-                Atom::ElectronMass   |
-                Atom::ProtonMass     |
+            Atom::AtomicMassUnit           |
+                Atom::DramAV               |
+                Atom::Grain                |
+                Atom::Gram                 |
+                Atom::ElectronMass         |
+                Atom::LongHundredweightAV  |
+                Atom::LongTonAV            |
+                Atom::OunceAV              |
+                Atom::PoundAV              |
+                Atom::ProtonMass           |
+                Atom::ShortHundredweightAV |
+                Atom::ShortTonAV           |
+                Atom::StoneAV              |
                 Atom::Tonne                                 => Property::Mass,
             Atom::Percent                                 |
                 Atom::TheNumberPi                         |
@@ -1386,6 +1442,7 @@ impl Atom {
             Atom::Degree                         => "DEG",
             Atom::DegreeCelsius                  => "CEL",
             Atom::DegreeFahrenheit               => "[DEGF]",
+            Atom::DramAV                         => "[DR_AV]",
             Atom::DryPintUS                      => "[DPT_US]",
             Atom::DryQuartUS                     => "[DQT_US]",
             Atom::Dyne                           => "DYN",
@@ -1413,6 +1470,7 @@ impl Atom {
             Atom::GillUS                         => "[GIL_US]",
             Atom::Gon                            => "GON",
             Atom::GramForce                      => "GF",
+            Atom::Grain                          => "[GR]",
             Atom::Gray                           => "GY",
             Atom::GuntersChainBR                 => "[CH_BR]",
             Atom::GuntersChainUS                 => "[CH_US]",
@@ -1428,6 +1486,8 @@ impl Atom {
             Atom::KnotBR                         => "[KN_BR]",
             Atom::KnotInternational              => "[KN_I]",
             Atom::Lambert                        => "LMB",
+            Atom::LongHundredweightAV            => "[LCWT_AV]",
+            Atom::LongTonAV                      => "[LTON_AV]",
             Atom::LightYear                      => "[LY]",
             Atom::LinkForGuntersChainBR          => "[LK_BR]",
             Atom::LinkForGuntersChainUS          => "[LK_US]",
@@ -1460,6 +1520,7 @@ impl Atom {
             Atom::NewtonianConstantOfGravitation => "[GC]",
             Atom::Ohm                            => "OHM",
             Atom::Oersted                        => "OE",
+            Atom::OunceAV                        => "[OZ_AV]",
 
             Atom::PH                             => "[PH]",
             Atom::PaceBR                         => "[PC_BR]",
@@ -1476,6 +1537,7 @@ impl Atom {
             Atom::PintBR                         => "[PT_BR]",
             Atom::PintUS                         => "[PT_US]",
             Atom::PlanckConstant                 => "[C]",
+            Atom::PoundAV                        => "[LB_AV]",
             Atom::PoundForce                     => "[LBF_AV]",
             Atom::PrismDiopter                   => "[P'DIOP]",
             Atom::ProtonMass                     => "[M_P]",
@@ -1490,6 +1552,8 @@ impl Atom {
             Atom::Roentgen                       => "ROE",
 
             Atom::Section                        => "[SCT]",
+            Atom::ShortHundredweightAV           => "[SCWT_AV]",
+            Atom::ShortTonAV                     => "[STON_AV]",
             Atom::Siemens                        => "SIE",
             Atom::Sievert                        => "SV",
             Atom::SquareFootInternational        => "[SFT_I]",
@@ -1503,6 +1567,7 @@ impl Atom {
             Atom::StandardAtmosphere             => "ATM",
             Atom::Steradian                      => "SR",
             Atom::Stilb                          => "SB",
+            Atom::StoneAV                        => "[STONE_AV]",
             Atom::Stokes                         => "ST",
             Atom::SynodalMonth                   => "MO_S",
             Atom::TablespoonUS                   => "[TBS_US]",
