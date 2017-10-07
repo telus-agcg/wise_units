@@ -5,6 +5,8 @@ use dimension::Dimension;
 use property::Property;
 use std::f64::consts::PI;
 use std::fmt;
+use term::Term;
+use unit::Unit;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Atom {
@@ -414,7 +416,13 @@ impl Atom {
                 Atom::Meter               |
                 Atom::ProteinNitrogenUnit |
                 Atom::Radian              |
-                Atom::Second                     => Definition::new(1.0, "1"),
+                Atom::Second                     => {
+                    // Manually build the Definition here for speed.
+                    let term = Term::new(Some(Atom::TheUnity), None);
+                    let unit = Unit { terms: vec![term] };
+
+                    Definition { value: 1.0, unit: unit }
+                },
             Atom::AcreBR                         => Definition::new(4840.0, "[yd_br]2"),
             Atom::AcreUS                         => Definition::new(160.0, "[rd_us]2"),
             Atom::Ampere                         => Definition::new(1.0, "C/s"),
