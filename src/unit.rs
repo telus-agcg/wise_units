@@ -35,8 +35,8 @@ impl Unit {
     /// calling some functions.
     ///
     pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1 &&
-            self.terms[0]
+        self.terms.len() == 1
+            && self.terms[0]
                 .atom
                 .map_or(false, |atom| atom == Atom::TheUnity)
     }

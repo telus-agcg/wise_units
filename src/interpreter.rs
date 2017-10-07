@@ -263,11 +263,7 @@ impl Interpreter {
         term.prefix = Some(prefix);
     }
 
-    fn visit_prefixed_atom<I: Input>(
-        &mut self,
-        pair: Pair<Rule, I>,
-        term: &mut Term
-    ) {
+    fn visit_prefixed_atom<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::prefix_symbol => {
@@ -315,11 +311,7 @@ impl Interpreter {
         term.exponent = e;
     }
 
-    fn visit_simple_unit<I: Input>(
-        &mut self,
-        pair: Pair<Rule, I>,
-        term: &mut Term
-    ) {
+    fn visit_simple_unit<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::prefixed_atom => {
@@ -333,11 +325,7 @@ impl Interpreter {
         }
     }
 
-    fn visit_simple_unit_with_exponent<I: Input>(
-        &mut self,
-        pair: Pair<Rule, I>,
-        term: &mut Term
-    ) {
+    fn visit_simple_unit_with_exponent<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::simple_unit => {
@@ -357,11 +345,7 @@ impl Interpreter {
     //     unimplemented!()
     // }
 
-    fn visit_annotatable<I: Input>(
-        &mut self,
-        pair: Pair<Rule, I>,
-        term: &mut Term
-    ) {
+    fn visit_annotatable<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::simple_unit_with_exponent => {
@@ -398,11 +382,7 @@ impl Interpreter {
         }
     }
 
-    fn visit_annotated_annotatable<I: Input>(
-        &mut self,
-        pair: Pair<Rule, I>,
-        term: &mut Term
-    ) {
+    fn visit_annotated_annotatable<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::annotatable => {
@@ -584,7 +564,7 @@ impl Interpreter {
             match inner_pair.as_rule() {
                 Rule::slash_main_term => {
                     self.visit_slash_main_term(inner_pair, terms);
-                },
+                }
                 Rule::term => {
                     self.visit_term(inner_pair, terms);
                 }
