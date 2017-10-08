@@ -1,8 +1,11 @@
+use atom::Atom;
 use classification::Classification;
 use composition::Composition;
 use definition::Definition;
 use measurable::Measurable;
 use std::fmt;
+use term::Term;
+use unit::Unit;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Prefix {
@@ -36,32 +39,37 @@ impl Prefix {
     pub fn classification(&self) -> Classification { Classification::SI }
 
     pub fn definition(&self) -> Definition {
-        match *self {
-            Prefix::Atto  => Definition::new(1.0e-18, "1"),
-            Prefix::Centi => Definition::new(1.0e-2, "1"),
-            Prefix::Deci  => Definition::new(1.0e-1, "1"),
-            Prefix::Deka  => Definition::new(1.0e1, "1"),
-            Prefix::Exa   => Definition::new(1.0e18, "1"),
-            Prefix::Femto => Definition::new(1.0e-15, "1"),
-            Prefix::Gibi  => Definition::new(1_073_741_824.0, "1"),
-            Prefix::Giga  => Definition::new(1.0e9, "1"),
-            Prefix::Hecto => Definition::new(1.0e2, "1"),
-            Prefix::Kibi  => Definition::new(1024.0, "1"),
-            Prefix::Kilo  => Definition::new(1.0e3, "1"),
-            Prefix::Mebi  => Definition::new(1_048_576.0, "1"),
-            Prefix::Mega  => Definition::new(1.0e6, "1"),
-            Prefix::Micro => Definition::new(1.0e-6, "1"),
-            Prefix::Milli => Definition::new(1.0e-3, "1"),
-            Prefix::Nano  => Definition::new(1.0e-9, "1"),
-            Prefix::Peta  => Definition::new(1.0e15, "1"),
-            Prefix::Pico  => Definition::new(1.0e-12, "1"),
-            Prefix::Tebi  => Definition::new(1_099_511_627_776.0, "1"),
-            Prefix::Tera  => Definition::new(1.0e12, "1"),
-            Prefix::Yocto => Definition::new(1.0e-24, "1"),
-            Prefix::Yotta => Definition::new(1.0e24, "1"),
-            Prefix::Zepto => Definition::new(1.0e-21, "1"),
-            Prefix::Zetta => Definition::new(1.0e21, "1"),
-        }
+        let term = Term::new(Some(Atom::TheUnity), None);
+        let unit = Unit { terms: vec![term] };
+
+        let value = match *self {
+            Prefix::Atto  => 1.0e-18,
+            Prefix::Centi => 1.0e-2,
+            Prefix::Deci  => 1.0e-1,
+            Prefix::Deka  => 1.0e1,
+            Prefix::Exa   => 1.0e18,
+            Prefix::Femto => 1.0e-15,
+            Prefix::Gibi  => 1_073_741_824.0,
+            Prefix::Giga  => 1.0e9,
+            Prefix::Hecto => 1.0e2,
+            Prefix::Kibi  => 1024.0,
+            Prefix::Kilo  => 1.0e3,
+            Prefix::Mebi  => 1_048_576.0,
+            Prefix::Mega  => 1.0e6,
+            Prefix::Micro => 1.0e-6,
+            Prefix::Milli => 1.0e-3,
+            Prefix::Nano  => 1.0e-9,
+            Prefix::Peta  => 1.0e15,
+            Prefix::Pico  => 1.0e-12,
+            Prefix::Tebi  => 1_099_511_627_776.0,
+            Prefix::Tera  => 1.0e12,
+            Prefix::Yocto => 1.0e-24,
+            Prefix::Yotta => 1.0e24,
+            Prefix::Zepto => 1.0e-21,
+            Prefix::Zetta => 1.0e21,
+        };
+
+        Definition { value: value, unit: unit }
     }
 
     pub fn composition(&self) -> Option<Composition> { None }
