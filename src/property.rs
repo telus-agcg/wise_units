@@ -118,8 +118,8 @@ impl fmt::Display for Property {
             Property::ActionArea => "action area",
             Property::AmountOfAllergen => {
                 "amount of an allergen callibrated through in-vivo testing based \
-                    on the ID50EAL method of (intradermal dilution for 50mm sum \
-                                              of erythema diameters"
+                 on the ID50EAL method of (intradermal dilution for 50mm sum \
+                 of erythema diameters"
             }
             Property::AmountOfFibrinogen => {
                 "amount of fibrinogen broken down into the measured d-dimers"
