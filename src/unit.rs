@@ -6,6 +6,7 @@ use pest::Parser;
 use reduction_decomposer::ReductionDecomposer;
 use simple_decomposer::SimpleDecomposer;
 use std::cmp::Ordering;
+use std::error;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
@@ -19,7 +20,30 @@ pub struct Unit {
 
 #[derive(Debug)]
 pub enum UnitError {
-    UnknownUnit,
+    UnknownUnitString {
+        string: String,
+    },
+}
+
+impl fmt::Display for UnitError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UnitError::UnknownUnitString { string: ref unit_string @ _, .. } => {
+                write!(f, "Unable to parse unit string '{}'", unit_string)
+            }
+        }
+    }
+}
+
+impl error::Error for UnitError {
+    // TODO: Make this return the full message, including the bad string
+    fn description(&self) -> &str {
+        match *self {
+            UnitError::UnknownUnitString { .. } => {
+                "Unable to parse unit string"
+            }
+        }
+    }
 }
 
 impl Unit {
@@ -141,13 +165,15 @@ impl FromStr for Unit {
     type Err = UnitError;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let pairs = UnitParser::parse_str(Rule::main_term, expression).unwrap_or_else(|e| {
-            println!("Parsing error: {}", e);
-            panic!("Unable to parse \"{}\"", expression);
-        });
-
-        let mut interpreter = Interpreter;
-        Ok(interpreter.interpret(pairs))
+        match UnitParser::parse_str(Rule::main_term, expression) {
+            Ok(pairs) => {
+                let mut interpreter = Interpreter;
+                Ok(interpreter.interpret(pairs))
+            },
+            Err(_)=> {
+                Err(UnitError::UnknownUnitString { string: expression.to_string() })
+            }
+        }
     }
 }
 
@@ -223,6 +249,12 @@ mod tests {
     use super::*;
     use composition::Composition;
     use dimension::Dimension;
+
+    #[test]
+    fn validate_from_str_error() {
+        let unit = Unit::from_str("ZZZXXXXXXXXXXXXx");
+        assert!(unit.is_err());
+    }
 
     #[test]
     fn validate_is_special() {
