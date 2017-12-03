@@ -169,6 +169,15 @@ impl Measurement {
             self.scalar() / other_unit.calculate_scalar(1.0)
         }
     }
+
+    pub fn div_scalar(&self, scalar: f64) -> Measurement {
+        let new_value = self.value / scalar;
+
+        Measurement {
+            value: new_value,
+            unit: self.unit.clone()
+        }
+    }
 }
 
 impl fmt::Display for Measurement {
@@ -462,5 +471,12 @@ mod tests {
         let m3 = Measurement::new(5.0, "m").unwrap();
         assert_eq!((&m1 / &m2).unwrap(), m3);
         assert_eq!((m1 / m2).unwrap(), m3);
+    }
+
+    #[test]
+    fn validate_div_scalar() {
+        let m1 = Measurement::new(10.0, "m").unwrap();
+        let m2 = Measurement::new(2.0, "m").unwrap();
+        assert_eq!(m1.div_scalar(5.0), m2);
     }
 }
