@@ -407,7 +407,7 @@ impl Atom {
     }
 
     pub fn definition(&self) -> Definition {
-        match *self {
+        let result = match *self {
             Atom::TheUnity                |
                 Atom::Candela             |
                 Atom::Coulomb             |
@@ -421,7 +421,7 @@ impl Atom {
                     let term = Term::new(Some(Atom::TheUnity), None);
                     let unit = Unit { terms: vec![term] };
 
-                    Definition { value: 1.0, unit: unit }
+                    Ok(Definition { value: 1.0, unit: unit })
                 },
             Atom::AcreBR                         => Definition::new(4840.0, "[yd_br]2"),
             Atom::AcreUS                         => Definition::new(160.0, "[rd_us]2"),
@@ -610,7 +610,9 @@ impl Atom {
             Atom::YardBR                                 => Definition::new(3.0, "[ft_br]"),
             Atom::YardUS                                 => Definition::new(3.0, "[ft_us]"),
             Atom::Year                                   => Definition::new(1.0, "a_j"),
-        }
+        };
+
+        result.expect("BUG! Bad Atom -> Definition mapping!")
     }
 
     pub fn composition(&self) -> Option<Composition> {

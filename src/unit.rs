@@ -1,49 +1,21 @@
 use atom::Atom;
 use composition::Composition;
 use decomposable::Decomposable;
+use error::Error;
 use interpreter::Interpreter;
 use pest::Parser;
 use reduction_decomposer::ReductionDecomposer;
 use simple_decomposer::SimpleDecomposer;
 use std::cmp::Ordering;
-use std::error;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
 use term::Term;
 use unit_parser::{Rule, UnitParser};
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Unit {
     pub terms: Vec<Term>,
-}
-
-#[derive(Debug)]
-pub enum UnitError {
-    UnknownUnitString {
-        string: String,
-    },
-}
-
-impl fmt::Display for UnitError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            UnitError::UnknownUnitString { string: ref unit_string @ _, .. } => {
-                write!(f, "Unable to parse unit string '{}'", unit_string)
-            }
-        }
-    }
-}
-
-impl error::Error for UnitError {
-    // TODO: Make this return the full message, including the bad string
-    fn description(&self) -> &str {
-        match *self {
-            UnitError::UnknownUnitString { .. } => {
-                "Unable to parse unit string"
-            }
-        }
-    }
 }
 
 impl Unit {
@@ -162,17 +134,15 @@ impl fmt::Display for Unit {
 }
 
 impl FromStr for Unit {
-    type Err = UnitError;
+    type Err = Error;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
         match UnitParser::parse_str(Rule::main_term, expression) {
             Ok(pairs) => {
                 let mut interpreter = Interpreter;
-                Ok(interpreter.interpret(pairs))
+                Ok(interpreter.interpret(pairs)?)
             },
-            Err(_)=> {
-                Err(UnitError::UnknownUnitString { string: expression.to_string() })
-            }
+            Err(_)=> Err(Error::UnknownUnitString(expression.to_string()))
         }
     }
 }

@@ -4,64 +4,64 @@ use wise_units::Measurement;
 
 #[test]
 fn validate_unity_conversions() {
-    let subject = Measurement::new(500.0, "1");
+    let subject = Measurement::new(500.0, "1").unwrap();
     let converted = subject.convert_to("10^").unwrap();
     assert_floats_eq(converted.value, 50.0);
 
-    let subject = Measurement::new(500.0, "1");
+    let subject = Measurement::new(500.0, "1").unwrap();
     let converted = subject.convert_to("%").unwrap();
     assert_floats_eq(converted.value, 50_000.0);
 }
 
 #[test]
 fn validate_meter_conversions() {
-    let subject = Measurement::new(1.0, "m");
+    let subject = Measurement::new(1.0, "m").unwrap();
     let converted = subject.convert_to("km").unwrap();
     assert_floats_eq(converted.value, 0.001);
 
-    let subject = Measurement::new(1.0, "km");
+    let subject = Measurement::new(1.0, "km").unwrap();
     let converted = subject.convert_to("m").unwrap();
     assert_floats_eq(converted.value, 1_000.0);
 
-    let subject = Measurement::new(1.0, "m2");
+    let subject = Measurement::new(1.0, "m2").unwrap();
     let converted = subject.convert_to("km2").unwrap();
     assert_floats_eq(converted.value, 0.000_001);
 
-    let subject = Measurement::new(1.0, "km2");
+    let subject = Measurement::new(1.0, "km2").unwrap();
     let converted = subject.convert_to("m2").unwrap();
     assert_floats_eq(converted.value, 1_000_000.0);
 
-    let subject = Measurement::new(1.0, "m2/s");
+    let subject = Measurement::new(1.0, "m2/s").unwrap();
     let converted = subject.convert_to("km2/s").unwrap();
     assert_floats_eq(converted.value, 0.000_001);
 
-    let subject = Measurement::new(1.0, "km2/s");
+    let subject = Measurement::new(1.0, "km2/s").unwrap();
     let converted = subject.convert_to("m2/s").unwrap();
     assert_floats_eq(converted.value, 1_000_000.0);
 
-    let subject = Measurement::new(1.0, "s/m2");
+    let subject = Measurement::new(1.0, "s/m2").unwrap();
     let converted = subject.convert_to("s/km2").unwrap();
     assert_floats_eq(converted.value, 1_000_000.0);
 
-    let subject = Measurement::new(1.0, "s/km2");
+    let subject = Measurement::new(1.0, "s/km2").unwrap();
     let converted = subject.convert_to("s/m2").unwrap();
     assert_floats_eq(converted.value, 0.000_001);
 }
 
 #[test]
 fn validate_pi_conversions() {
-    let subject = Measurement::new(5.0, "[pi].m2");
+    let subject = Measurement::new(5.0, "[pi].m2").unwrap();
     let converted = subject.convert_to("m2").unwrap();
     assert_floats_eq(converted.value, 15.707_963_267);
 }
 
 #[test]
 fn validate_number_conversions() {
-    let subject = Measurement::new(500.0, "%");
+    let subject = Measurement::new(500.0, "%").unwrap();
     let converted = subject.convert_to("10^").unwrap();
     assert_floats_eq(converted.value, 0.5);
 
-    let subject = Measurement::new(1.0, "[pi]");
+    let subject = Measurement::new(1.0, "[pi]").unwrap();
     let converted = subject.convert_to("[ppth]").unwrap();
     assert_floats_eq(converted.value, 3141.592_653_589);
 
@@ -77,7 +77,7 @@ fn validate_number_conversions() {
 
 #[test]
 fn validate_liter_conversions() {
-    let subject = Measurement::new(2.0, "l");
+    let subject = Measurement::new(2.0, "l").unwrap();
     let converted = subject.convert_to("m3").unwrap();
     assert_floats_eq(converted.value, 0.002);
 }
@@ -86,52 +86,52 @@ fn validate_liter_conversions() {
 #[test]
 #[ignore(reason = "Special Units")]
 fn validate_special_conversions() {
-    let subject = Measurement::new(25.0, "Cel");
+    let subject = Measurement::new(25.0, "Cel").unwrap();
     let converted = subject.convert_to("K").unwrap();
     assert_floats_eq(converted.value, 298.15);
 
-    let subject = Measurement::new(298.15, "K");
+    let subject = Measurement::new(298.15, "K").unwrap();
     let converted = subject.convert_to("Cel").unwrap();
     assert_floats_eq(converted.value, 25.0);
 
-    let subject = Measurement::new(98.6, "[degF]");
+    let subject = Measurement::new(98.6, "[degF]").unwrap();
     let converted = subject.convert_to("K").unwrap();
     assert_floats_eq(converted.value, 310.15);
 
-    let subject = Measurement::new(310.15, "K");
+    let subject = Measurement::new(310.15, "K").unwrap();
     let converted = subject.convert_to("[degF]").unwrap();
     assert_floats_eq(converted.value, 98.6);
 
-    let subject = Measurement::new(98.6, "[degF]");
+    let subject = Measurement::new(98.6, "[degF]").unwrap();
     let converted = subject.convert_to("Cel").unwrap();
     assert_floats_eq(converted.value, 37.0);
 
-    let subject = Measurement::new(37.0, "Cel");
+    let subject = Measurement::new(37.0, "Cel").unwrap();
     let converted = subject.convert_to("[degF]").unwrap();
     assert_floats_eq(converted.value, 98.6);
 
-    let subject = Measurement::new(100.0, "[degRe]");
+    let subject = Measurement::new(100.0, "[degRe]").unwrap();
     let converted = subject.convert_to("K").unwrap();
     assert_floats_eq(converted.value, 398.15);
 
-    let subject = Measurement::new(398.15, "K");
+    let subject = Measurement::new(398.15, "K").unwrap();
     let converted = subject.convert_to("[degRe]").unwrap();
     assert_floats_eq(converted.value, 100.0);
 
-    let subject = Measurement::new(100.0, "[degRe]");
+    let subject = Measurement::new(100.0, "[degRe]").unwrap();
     let converted = subject.convert_to("Cel").unwrap();
     assert_floats_eq(converted.value, 125.0);
 
-    let subject = Measurement::new(180.0, "deg");
+    let subject = Measurement::new(180.0, "deg").unwrap();
     let converted = subject.convert_to("rad").unwrap();
     assert_floats_eq(converted.value, std::f64::consts::PI);
 
-    let subject = Measurement::new(std::f64::consts::PI, "rad");
+    let subject = Measurement::new(std::f64::consts::PI, "rad").unwrap();
     let converted = subject.convert_to("deg").unwrap();
     assert_floats_eq(converted.value, 180.0);
 
     // TODO: I don't understand why this fails.
-    let subject = Measurement::new(1.0, "[p'diop]");
+    let subject = Measurement::new(1.0, "[p'diop]").unwrap();
     let converted = subject.convert_to("deg").unwrap();
     assert_floats_eq(converted.value, 0.57);
 }

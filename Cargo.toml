@@ -4,6 +4,8 @@ version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
 [dependencies]
+failure = "0.1"
+failure_derive = "0.1"
 pest = "1.0.0-beta"
 pest_derive = "1.0.0-beta"
 
