@@ -147,10 +147,10 @@ impl FromStr for Unit {
     }
 }
 
-impl<'pointer> Div for &'pointer Unit {
+impl Div for Unit {
     type Output = Unit;
 
-    fn div(self, other: &'pointer Unit) -> Unit {
+    fn div(self, other: Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
 
         for other_term in &other.terms {
@@ -163,10 +163,10 @@ impl<'pointer> Div for &'pointer Unit {
     }
 }
 
-impl<'pointer> Div for &'pointer mut Unit {
+impl<'a> Div for &'a Unit {
     type Output = Unit;
 
-    fn div(self, other: &'pointer mut Unit) -> Unit {
+    fn div(self, other: &'a Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
 
         for other_term in &other.terms {
@@ -179,10 +179,26 @@ impl<'pointer> Div for &'pointer mut Unit {
     }
 }
 
-impl<'pointer> Mul for &'pointer Unit {
+impl<'a> Div for &'a mut Unit {
     type Output = Unit;
 
-    fn mul(self, other: &'pointer Unit) -> Unit {
+    fn div(self, other: &'a mut Unit) -> Self::Output {
+        let mut new_terms = self.terms.clone();
+
+        for other_term in &other.terms {
+            let mut new_other_term = other_term.clone();
+            new_other_term.exponent = -new_other_term.exponent;
+            new_terms.push(new_other_term);
+        }
+
+        Unit { terms: new_terms }
+    }
+}
+
+impl Mul for Unit {
+    type Output = Unit;
+
+    fn mul(self, other: Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
         new_terms.extend(other.terms.clone());
 
@@ -190,10 +206,21 @@ impl<'pointer> Mul for &'pointer Unit {
     }
 }
 
-impl<'pointer> Mul for &'pointer mut Unit {
+impl<'a> Mul for &'a Unit {
     type Output = Unit;
 
-    fn mul(self, other: &'pointer mut Unit) -> Unit {
+    fn mul(self, other: &'a Unit) -> Self::Output {
+        let mut new_terms = self.terms.clone();
+        new_terms.extend(other.terms.clone());
+
+        Unit { terms: new_terms }
+    }
+}
+
+impl<'a> Mul for &'a mut Unit {
+    type Output = Unit;
+
+    fn mul(self, other: &'a mut Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
         new_terms.extend(other.terms.clone());
 

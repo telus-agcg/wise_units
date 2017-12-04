@@ -271,74 +271,68 @@ impl<'a> Sub for &'a mut Measurement {
 }
 
 impl Mul for Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Measurement;
 
     fn mul(self, other: Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value * other_converted.value;
+        let new_value = self.value * other.value;
+        let new_unit = self.unit * other.unit;
 
-        Measurement::new(new_value, &unit)
+        Measurement { value: new_value, unit: new_unit }
     }
 }
 
 impl<'a> Mul for &'a Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Measurement;
 
     fn mul(self, other: &'a Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value * other_converted.value;
+        let new_value = self.value * other.value;
+        let new_unit = &self.unit * &other.unit;
 
-        Measurement::new(new_value, &unit)
+        Measurement { value: new_value, unit: new_unit }
     }
 }
 
 impl<'a> Mul for &'a mut Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Measurement;
 
     fn mul(self, other: &'a mut Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value * other_converted.value;
+        let new_value = self.value * other.value;
+        let new_unit = &self.unit * &other.unit;
 
-        Measurement::new(new_value, &unit)
+        Measurement { value: new_value, unit: new_unit }
     }
 }
 
 impl Div for Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Measurement;
 
     fn div(self, other: Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value / other_converted.value;
+        let new_value = self.value / other.value;
+        let new_unit = self.unit / other.unit;
 
-        Measurement::new(new_value, &unit)
+        Measurement { value: new_value, unit: new_unit }
     }
 }
 
 impl<'a> Div for &'a Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Measurement;
 
     fn div(self, other: &'a Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value / other_converted.value;
+        let new_value = self.value / other.value;
+        let new_unit = &self.unit / &other.unit;
 
-        Measurement::new(new_value, &unit)
+        Measurement { value: new_value, unit: new_unit }
     }
 }
 
 impl<'a> Div for &'a mut Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Measurement;
 
     fn div(self, other: &'a mut Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value / other_converted.value;
+        let new_value = self.value / other.value;
+        let new_unit = &self.unit / &other.unit;
 
-        Measurement::new(new_value, &unit)
+        Measurement { value: new_value, unit: new_unit }
     }
 }
 
