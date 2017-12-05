@@ -127,6 +127,10 @@ impl Unit {
 
         Unit { terms: new_terms }
     }
+
+    pub fn is_valid(expression: &str) -> bool {
+        Unit::from_str(expression).is_ok()
+    }
 }
 
 impl fmt::Display for Unit {
