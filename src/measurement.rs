@@ -170,6 +170,19 @@ impl Measurement {
         }
     }
 
+    /// Multiplies the `Measurement`'s scalar by `scalar` and returns a new `Measurement`.
+    ///
+    pub fn mul_scalar(&self, scalar: f64) -> Measurement {
+        let new_value = self.value * scalar;
+
+        Measurement {
+            value: new_value,
+            unit: self.unit.clone()
+        }
+    }
+
+    /// Divides the `Measurement`'s scalar by `scalar` and returns a new `Measurement`.
+    ///
     pub fn div_scalar(&self, scalar: f64) -> Measurement {
         let new_value = self.value / scalar;
 
