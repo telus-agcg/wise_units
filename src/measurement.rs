@@ -117,12 +117,16 @@ impl Measurement {
     /// `"m2/s"`.
     ///
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
-        let my_unit = &self.unit;
-
         let pairs = UnitParser::parse_str(Rule::main_term, expression)?;
 
         let mut interpreter = Interpreter;
         let other_unit = interpreter.interpret(pairs)?;
+
+        if self.unit == other_unit {
+            return Ok(self.clone())
+        }
+
+        let my_unit = &self.unit;
 
         if !my_unit.is_compatible_with(&other_unit) {
             let e = Error::IncompatibleUnitTypes {
