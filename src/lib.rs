@@ -6,7 +6,12 @@ extern crate failure_derive;
 #[macro_use]
 extern crate pretty_assertions;
 
+// Only include macros for testing
+#[cfg(test)]
 #[macro_use]
+extern crate pest;
+
+#[cfg(not(test))]
 extern crate pest;
 
 #[macro_use]

@@ -117,7 +117,7 @@ impl Measurement {
     /// `"m2/s"`.
     ///
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
-        let pairs = UnitParser::parse_str(Rule::main_term, expression)?;
+        let pairs = UnitParser::parse(Rule::main_term, expression)?;
 
         let mut interpreter = Interpreter;
         let other_unit = interpreter.interpret(pairs)?;

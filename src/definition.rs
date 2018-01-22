@@ -13,7 +13,7 @@ pub struct Definition {
 
 impl Definition {
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
-        let pairs = UnitParser::parse_str(Rule::main_term, expression)?;
+        let pairs = UnitParser::parse(Rule::main_term, expression)?;
         let mut interpreter = Interpreter;
         let su = interpreter.interpret(pairs)?;
 

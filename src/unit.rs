@@ -141,7 +141,7 @@ impl FromStr for Unit {
     type Err = Error;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        match UnitParser::parse_str(Rule::main_term, expression) {
+        match UnitParser::parse(Rule::main_term, expression) {
             Ok(pairs) => {
                 let mut interpreter = Interpreter;
                 Ok(interpreter.interpret(pairs)?)

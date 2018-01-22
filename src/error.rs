@@ -1,5 +1,4 @@
 use pest;
-use unit_parser::Rule;
 
 /// Errors when trying to convert between types that aren't commensurable.
 ///
@@ -16,16 +15,13 @@ pub enum Error {
         expression: String,
     },
 
-    #[fail(display = "Unknown unit string: {}", _0)]
-    UnknownUnitString(String)
+    #[fail(display = "Unknown unit string: {}", _0)] UnknownUnitString(String),
 }
 
-impl<I> ::std::convert::From<pest::Error<Rule, I>> for Error
-    where I: pest::inputs::Input
-{
-    fn from(pest_error: pest::Error<Rule, I>) -> Self {
+impl<'i, R: ::pest::RuleType> ::std::convert::From<pest::Error<'i, R>> for Error {
+    fn from(pest_error: pest::Error<'i, R>) -> Self {
         Error::ParsingError {
-            expression: pest_error.to_string()
+            expression: pest_error.to_string(),
         }
     }
 }
@@ -33,7 +29,7 @@ impl<I> ::std::convert::From<pest::Error<Rule, I>> for Error
 impl ::std::convert::From<::std::num::ParseIntError> for Error {
     fn from(error: ::std::num::ParseIntError) -> Self {
         Error::ParsingError {
-            expression: error.to_string()
+            expression: error.to_string(),
         }
     }
 }

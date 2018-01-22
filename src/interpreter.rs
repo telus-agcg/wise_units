@@ -1,6 +1,5 @@
 use atom::Atom;
 use error::Error;
-use pest::inputs::Input;
 use pest::iterators::{Pair, Pairs};
 use prefix::Prefix;
 use term::Term;
@@ -10,7 +9,7 @@ use unit_parser::Rule;
 pub struct Interpreter;
 
 impl Interpreter {
-    pub fn interpret<I: Input>(&mut self, pairs: Pairs<Rule, I>) -> Result<Unit, Error> {
+    pub fn interpret(&mut self, pairs: Pairs<Rule>) -> Result<Unit, Error> {
         let mut terms: Vec<Term> = vec![];
 
         self.visit_with_pairs(pairs, &mut terms)?;
@@ -18,7 +17,7 @@ impl Interpreter {
         Ok(Unit { terms: terms })
     }
 
-    fn visit_with_pairs<I: Input>(&mut self, pairs: Pairs<Rule, I>, terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_with_pairs(&mut self, pairs: Pairs<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
         for pair in pairs {
             match pair.as_rule() {
                 Rule::main_term => self.visit_main_term(pair, terms)?,
@@ -32,7 +31,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_atom_symbol<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_atom_symbol(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         let pair_str = pair.into_span();
 
         let atom = match pair_str.as_str() {
@@ -238,7 +237,7 @@ impl Interpreter {
         Ok(term.atom = Some(atom))
     }
 
-    fn visit_prefix_symbol<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_prefix_symbol(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         let prefix_str = pair.into_span();
 
         let prefix = match prefix_str.as_str() {
@@ -271,7 +270,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_prefixed_atom<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_prefixed_atom(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::prefix_symbol => {
@@ -287,18 +286,16 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_digits<I: Input>(&mut self, pair: Pair<Rule, I>) -> Result<i32, Error> {
+    fn visit_digits(&mut self, pair: Pair<Rule>) -> Result<i32, Error> {
         let span = pair.into_span();
         let string = span.as_str();
 
-        string.parse::<i32>().map_err(|e| {
-            Error::ParsingError {
-                expression: e.to_string()
-            }
+        string.parse::<i32>().map_err(|e| Error::ParsingError {
+            expression: e.to_string(),
         })
     }
 
-    fn visit_exponent<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_exponent(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         let mut e = 1;
 
         for inner_pair in pair.into_inner() {
@@ -323,7 +320,7 @@ impl Interpreter {
         Ok(term.exponent = e)
     }
 
-    fn visit_simple_unit<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_simple_unit(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::prefixed_atom => {
@@ -339,7 +336,11 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_simple_unit_with_exponent<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_simple_unit_with_exponent(
+        &mut self,
+        pair: Pair<Rule>,
+        term: &mut Term,
+    ) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::simple_unit => {
@@ -361,7 +362,7 @@ impl Interpreter {
     //     unimplemented!()
     // }
 
-    fn visit_annotatable<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_annotatable(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::simple_unit_with_exponent => {
@@ -378,7 +379,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_annotation_string<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_annotation_string(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::annotation_string => {
@@ -391,7 +392,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_annotation<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_annotation(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::annotation_string => {
@@ -404,7 +405,11 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_annotated_annotatable<I: Input>(&mut self, pair: Pair<Rule, I>, term: &mut Term) -> Result<(), Error> {
+    fn visit_annotated_annotatable(
+        &mut self,
+        pair: Pair<Rule>,
+        term: &mut Term,
+    ) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::annotatable => {
@@ -420,7 +425,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_factor<I: Input>(&mut self, pair: Pair<Rule, I>) -> Result<u32, Error> {
+    fn visit_factor(&mut self, pair: Pair<Rule>) -> Result<u32, Error> {
         let mut factor = 0;
 
         for inner_pair in pair.into_inner() {
@@ -435,7 +440,11 @@ impl Interpreter {
         Ok(factor as u32)
     }
 
-    fn visit_basic_component<I: Input>(&mut self, pair: Pair<Rule, I>, terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_basic_component(
+        &mut self,
+        pair: Pair<Rule>,
+        terms: &mut Vec<Term>,
+    ) -> Result<(), Error> {
         let mut term = Term::new(None, None);
         let mut is_term = false;
 
@@ -468,9 +477,9 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_component_with_factor<I: Input>(
+    fn visit_component_with_factor(
         &mut self,
-        pair: Pair<Rule, I>,
+        pair: Pair<Rule>,
         terms: &mut Vec<Term>,
     ) -> Result<(), Error> {
         let mut factor = 1;
@@ -494,7 +503,11 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_component<I: Input>(&mut self, pair: Pair<Rule, I>, mut terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_component(
+        &mut self,
+        pair: Pair<Rule>,
+        mut terms: &mut Vec<Term>,
+    ) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::component_with_factor => {
@@ -508,7 +521,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_basic_term<I: Input>(&mut self, pair: Pair<Rule, I>, terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_basic_term(&mut self, pair: Pair<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::component => {
@@ -521,7 +534,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_slash_term<I: Input>(&mut self, pair: Pair<Rule, I>, terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_slash_term(&mut self, pair: Pair<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::component => {
@@ -544,7 +557,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_dot_term<I: Input>(&mut self, pair: Pair<Rule, I>, mut terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_dot_term(&mut self, pair: Pair<Rule>, mut terms: &mut Vec<Term>) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::component => {
@@ -563,7 +576,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_term<I: Input>(&mut self, pair: Pair<Rule, I>, mut terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_term(&mut self, pair: Pair<Rule>, mut terms: &mut Vec<Term>) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::dot_term => self.visit_dot_term(inner_pair, &mut terms)?,
@@ -579,7 +592,11 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_slash_main_term<I: Input>(&mut self, pair: Pair<Rule, I>, terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_slash_main_term(
+        &mut self,
+        pair: Pair<Rule>,
+        terms: &mut Vec<Term>,
+    ) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::term => {
@@ -599,7 +616,7 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_main_term<I: Input>(&mut self, pair: Pair<Rule, I>, terms: &mut Vec<Term>) -> Result<(), Error> {
+    fn visit_main_term(&mut self, pair: Pair<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::slash_main_term => {
@@ -626,7 +643,7 @@ mod tests {
 
     #[test]
     fn validate_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m-3").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m-3").unwrap();
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
 
@@ -639,7 +656,7 @@ mod tests {
 
         assert_eq!(actual, expected);
 
-        let pairs = UnitParser::parse_str(Rule::main_term, "km2/m-3").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "km2/m-3").unwrap();
         let actual = i.interpret(pairs).unwrap();
 
         let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
@@ -657,7 +674,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -670,7 +687,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term_with_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m2").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m2").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -686,7 +703,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term_with_prefix() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "km").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "km").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -700,7 +717,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_basic_term_with_factor() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "2m").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "2m").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -717,7 +734,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m/s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m/s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -735,7 +752,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_prefix() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "km/s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "km/s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -752,7 +769,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_denominator_prefix() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m/ks").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m/ks").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -769,7 +786,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m2/s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m2/s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -787,7 +804,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_denominator_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m/s2").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m/s2").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -804,7 +821,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_and_denominator_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m2/s2").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m2/s2").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -822,7 +839,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_numerator() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "2m/s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "2m/s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -840,7 +857,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_denominator() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m/2s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m/2s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -858,7 +875,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m.s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m.s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -874,7 +891,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_left_side_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m2.s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m2.s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -891,7 +908,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_right_side_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m.s2").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m.s2").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -908,7 +925,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_left_and_right_side_exponent() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m2.s2").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m2.s2").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -927,7 +944,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_factor_in_left_side() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "2m.s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "2m.s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -944,7 +961,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_right_side() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "m.2s").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "m.2s").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -961,7 +978,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_term_with_dot_term_then_slash_component() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "[acr_us].[in_i]/[acr_us]").unwrap();
+        let pairs = UnitParser::parse(Rule::main_term, "[acr_us].[in_i]/[acr_us]").unwrap();
 
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
