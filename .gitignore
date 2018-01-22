@@ -8,4 +8,7 @@ GRTAGS
 GTAGS
 .tags
 .vscode/tasks.json
+.criterion/
 ucum-essence.xml
+
+rusty-tags.vi
