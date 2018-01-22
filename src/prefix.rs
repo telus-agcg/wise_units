@@ -69,7 +69,10 @@ impl Prefix {
             Prefix::Zetta => 1.0e21,
         };
 
-        Definition { value: value, unit: unit }
+        Definition {
+            value: value,
+            unit: unit,
+        }
     }
 
     pub fn composition(&self) -> Option<Composition> { None }

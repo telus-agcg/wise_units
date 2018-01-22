@@ -36,7 +36,7 @@ mod simple_decomposer;
 mod term;
 mod unit_parser;
 
+pub use error::Error;
 pub use measurable::Measurable;
 pub use measurement::Measurement;
 pub use unit::Unit;
-pub use error::Error;

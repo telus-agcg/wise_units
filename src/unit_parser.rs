@@ -419,7 +419,6 @@ mod tests {
         let pairs = UnitParser::parse(Rule::slash_term, "km/s");
         assert!(pairs.is_ok());
 
-
         parses_to! {
             parser: UnitParser,
             input: "2km-2{meow}/[acr_us].[in_i]",

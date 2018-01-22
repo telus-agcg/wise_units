@@ -29,7 +29,7 @@ impl Unit {
     /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.
     /// This is helpful for knowing, internally, when to stop recursively
     /// calling some functions.
-    ///
+    /// 
     pub fn is_unity(&self) -> bool {
         self.terms.len() == 1
             && self.terms[0]
@@ -86,21 +86,21 @@ impl Unit {
     ///
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
-    ///
+    /// 
     pub fn expression(&self) -> String { SimpleDecomposer::new(&self.terms).expression() }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
     /// This always returns a String that is parsable back into the same Unit.
-    ///
+    /// 
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
 
     /// Allows for dividing a Unit by a factor; results in dividing this Unit's
     /// associated Terms' factors by `other_factor`.
-    ///
+    /// 
     pub fn div_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -115,7 +115,7 @@ impl Unit {
 
     /// Allows for multiplying a Unit by a factor; results in multiplying this
     /// Unit's associated Terms' factors by `other_factor`.
-    ///
+    /// 
     pub fn mul_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -128,9 +128,7 @@ impl Unit {
         Unit { terms: new_terms }
     }
 
-    pub fn is_valid(expression: &str) -> bool {
-        Unit::from_str(expression).is_ok()
-    }
+    pub fn is_valid(expression: &str) -> bool { Unit::from_str(expression).is_ok() }
 }
 
 impl fmt::Display for Unit {
@@ -145,8 +143,8 @@ impl FromStr for Unit {
             Ok(pairs) => {
                 let mut interpreter = Interpreter;
                 Ok(interpreter.interpret(pairs)?)
-            },
-            Err(_)=> Err(Error::UnknownUnitString(expression.to_string()))
+            }
+            Err(_) => Err(Error::UnknownUnitString(expression.to_string())),
         }
     }
 }

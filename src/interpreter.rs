@@ -306,7 +306,9 @@ impl Interpreter {
 
                     match string {
                         "+" => {}
-                        "-" => { e = -e; }
+                        "-" => {
+                            e = -e;
+                        }
                         _ => unreachable!(),
                     }
                 }
@@ -742,7 +744,6 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -1;
 
-
         let expected = Unit {
             terms: vec![meter_term, second_term],
         };
@@ -933,7 +934,6 @@ mod tests {
         meter_term.exponent = 2;
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = 2;
-
 
         let expected = Unit {
             terms: vec![meter_term, second_term],
