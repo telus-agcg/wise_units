@@ -493,22 +493,44 @@ mod tests {
         assert_eq!((m1 - m2).unwrap(), m3);
     }
 
+    // TODO: This doesn't make sense to me, but is in parity with Unitwise.
     #[test]
     fn validate_mul() {
         let m1 = Measurement::new(2.0, "m").unwrap();
         let m2 = Measurement::new(3.0, "m").unwrap();
-        let m3 = Measurement::new(6.0, "m").unwrap();
-        assert_eq!((&m1 * &m2).unwrap(), m3);
-        assert_eq!((m1 * m2).unwrap(), m3);
+        let r = &m1 * &m2;
+
+        let terms = r.unit.terms;
+        assert_eq!(terms.len(), 2);
+
+        let first_term = Term::new(Some(::atom::Atom::Meter), None);
+        assert_eq!(terms[0], first_term);
+        assert_eq!(terms[1], first_term);
     }
 
+    // TODO: This doesn't make sense to me, but is in parity with Unitwise.
     #[test]
     fn validate_div() {
         let m1 = Measurement::new(10.0, "m").unwrap();
         let m2 = Measurement::new(2.0, "m").unwrap();
-        let m3 = Measurement::new(5.0, "m").unwrap();
-        assert_eq!((&m1 / &m2).unwrap(), m3);
-        assert_eq!((m1 / m2).unwrap(), m3);
+        let r = &m1 / &m2;
+
+        let terms = r.unit.terms;
+        assert_eq!(terms.len(), 2);
+
+        let first_term = Term::new(Some(::atom::Atom::Meter), None);
+        assert_eq!(terms[0], first_term);
+
+        let mut last_term = Term::new(Some(::atom::Atom::Meter), None);
+        last_term.exponent = -1;
+        assert_eq!(terms[1], last_term);
+    }
+
+    #[test]
+    fn validate_mul_scalar() {
+        let m1 = Measurement::new(10.0, "m").unwrap();
+        let m2 = Measurement::new(200.0, "m").unwrap();
+        assert_eq!(m1.mul_scalar(20.0), m2);
     }
 
     #[test]

@@ -153,13 +153,18 @@ impl Div for Unit {
     type Output = Unit;
 
     fn div(self, other: Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
+        let mut new_terms = self.terms;
 
-        for other_term in &other.terms {
-            let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -new_other_term.exponent;
-            new_terms.push(new_other_term);
-        }
+        let mut other_terms: Vec<Term> = other
+            .terms
+            .into_iter()
+            .map(|mut term| {
+                term.exponent = -term.exponent;
+                term
+            })
+            .collect();
+
+        new_terms.append(&mut other_terms);
 
         Unit { terms: new_terms }
     }
@@ -173,7 +178,7 @@ impl<'a> Div for &'a Unit {
 
         for other_term in &other.terms {
             let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -new_other_term.exponent;
+            new_other_term.exponent = -other_term.exponent;
             new_terms.push(new_other_term);
         }
 
@@ -189,7 +194,7 @@ impl<'a> Div for &'a mut Unit {
 
         for other_term in &other.terms {
             let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -new_other_term.exponent;
+            new_other_term.exponent = -other_term.exponent;
             new_terms.push(new_other_term);
         }
 
@@ -558,11 +563,11 @@ mod tests {
     fn validate_div() {
         let unit = Unit::from_str("m").unwrap();
         let other = Unit::from_str("km").unwrap();
-        assert_eq!(unit.div(&other).to_string().as_str(), "m/km");
+        assert_eq!(unit.div(other).to_string().as_str(), "m/km");
 
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
-        assert_eq!(unit.div(&other).to_string().as_str(), "10m/20m");
+        assert_eq!(unit.div(other).to_string().as_str(), "10m/20m");
     }
 
     #[test]
@@ -575,10 +580,10 @@ mod tests {
     fn validate_mul() {
         let unit = Unit::from_str("m").unwrap();
         let other = Unit::from_str("km").unwrap();
-        assert_eq!(unit.mul(&other).to_string().as_str(), "m.km");
+        assert_eq!(unit.mul(other).to_string().as_str(), "m.km");
 
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
-        assert_eq!(unit.mul(&other).to_string().as_str(), "10m.20m");
+        assert_eq!(unit.mul(other).to_string().as_str(), "10m.20m");
     }
 }
