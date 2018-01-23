@@ -1,6 +1,7 @@
 use atom::Atom;
 use composition::Composition;
 use decomposable::Decomposable;
+use error::Error;
 use interpreter::Interpreter;
 use pest::Parser;
 use reduction_decomposer::ReductionDecomposer;
@@ -12,14 +13,9 @@ use std::str::FromStr;
 use term::Term;
 use unit_parser::{Rule, UnitParser};
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Unit {
     pub terms: Vec<Term>,
-}
-
-#[derive(Debug)]
-pub enum UnitError {
-    UnknownUnit,
 }
 
 impl Unit {
@@ -33,7 +29,7 @@ impl Unit {
     /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.
     /// This is helpful for knowing, internally, when to stop recursively
     /// calling some functions.
-    ///
+    /// 
     pub fn is_unity(&self) -> bool {
         self.terms.len() == 1
             && self.terms[0]
@@ -90,21 +86,21 @@ impl Unit {
     ///
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
-    ///
+    /// 
     pub fn expression(&self) -> String { SimpleDecomposer::new(&self.terms).expression() }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
     /// This always returns a String that is parsable back into the same Unit.
-    ///
+    /// 
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
 
     /// Allows for dividing a Unit by a factor; results in dividing this Unit's
     /// associated Terms' factors by `other_factor`.
-    ///
+    /// 
     pub fn div_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -119,7 +115,7 @@ impl Unit {
 
     /// Allows for multiplying a Unit by a factor; results in multiplying this
     /// Unit's associated Terms' factors by `other_factor`.
-    ///
+    /// 
     pub fn mul_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -131,6 +127,8 @@ impl Unit {
 
         Unit { terms: new_terms }
     }
+
+    pub fn is_valid(expression: &str) -> bool { Unit::from_str(expression).is_ok() }
 }
 
 impl fmt::Display for Unit {
@@ -138,28 +136,49 @@ impl fmt::Display for Unit {
 }
 
 impl FromStr for Unit {
-    type Err = UnitError;
+    type Err = Error;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let pairs = UnitParser::parse_str(Rule::main_term, expression).unwrap_or_else(|e| {
-            println!("Parsing error: {}", e);
-            panic!("Unable to parse \"{}\"", expression);
-        });
-
-        let mut interpreter = Interpreter;
-        Ok(interpreter.interpret(pairs))
+        match UnitParser::parse(Rule::main_term, expression) {
+            Ok(pairs) => {
+                let mut interpreter = Interpreter;
+                Ok(interpreter.interpret(pairs)?)
+            }
+            Err(_) => Err(Error::UnknownUnitString(expression.to_string())),
+        }
     }
 }
 
-impl<'pointer> Div for &'pointer Unit {
+impl Div for Unit {
     type Output = Unit;
 
-    fn div(self, other: &'pointer Unit) -> Unit {
+    fn div(self, other: Unit) -> Self::Output {
+        let mut new_terms = self.terms;
+
+        let mut other_terms: Vec<Term> = other
+            .terms
+            .into_iter()
+            .map(|mut term| {
+                term.exponent = -term.exponent;
+                term
+            })
+            .collect();
+
+        new_terms.append(&mut other_terms);
+
+        Unit { terms: new_terms }
+    }
+}
+
+impl<'a> Div for &'a Unit {
+    type Output = Unit;
+
+    fn div(self, other: &'a Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
 
         for other_term in &other.terms {
             let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -new_other_term.exponent;
+            new_other_term.exponent = -other_term.exponent;
             new_terms.push(new_other_term);
         }
 
@@ -167,15 +186,15 @@ impl<'pointer> Div for &'pointer Unit {
     }
 }
 
-impl<'pointer> Div for &'pointer mut Unit {
+impl<'a> Div for &'a mut Unit {
     type Output = Unit;
 
-    fn div(self, other: &'pointer mut Unit) -> Unit {
+    fn div(self, other: &'a mut Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
 
         for other_term in &other.terms {
             let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -new_other_term.exponent;
+            new_other_term.exponent = -other_term.exponent;
             new_terms.push(new_other_term);
         }
 
@@ -183,10 +202,10 @@ impl<'pointer> Div for &'pointer mut Unit {
     }
 }
 
-impl<'pointer> Mul for &'pointer Unit {
+impl Mul for Unit {
     type Output = Unit;
 
-    fn mul(self, other: &'pointer Unit) -> Unit {
+    fn mul(self, other: Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
         new_terms.extend(other.terms.clone());
 
@@ -194,10 +213,21 @@ impl<'pointer> Mul for &'pointer Unit {
     }
 }
 
-impl<'pointer> Mul for &'pointer mut Unit {
+impl<'a> Mul for &'a Unit {
     type Output = Unit;
 
-    fn mul(self, other: &'pointer mut Unit) -> Unit {
+    fn mul(self, other: &'a Unit) -> Self::Output {
+        let mut new_terms = self.terms.clone();
+        new_terms.extend(other.terms.clone());
+
+        Unit { terms: new_terms }
+    }
+}
+
+impl<'a> Mul for &'a mut Unit {
+    type Output = Unit;
+
+    fn mul(self, other: &'a mut Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
         new_terms.extend(other.terms.clone());
 
@@ -223,6 +253,12 @@ mod tests {
     use super::*;
     use composition::Composition;
     use dimension::Dimension;
+
+    #[test]
+    fn validate_from_str_error() {
+        let unit = Unit::from_str("ZZZXXXXXXXXXXXXx");
+        assert!(unit.is_err());
+    }
 
     #[test]
     fn validate_is_special() {
@@ -527,11 +563,11 @@ mod tests {
     fn validate_div() {
         let unit = Unit::from_str("m").unwrap();
         let other = Unit::from_str("km").unwrap();
-        assert_eq!(unit.div(&other).to_string().as_str(), "m/km");
+        assert_eq!(unit.div(other).to_string().as_str(), "m/km");
 
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
-        assert_eq!(unit.div(&other).to_string().as_str(), "10m/20m");
+        assert_eq!(unit.div(other).to_string().as_str(), "10m/20m");
     }
 
     #[test]
@@ -544,10 +580,10 @@ mod tests {
     fn validate_mul() {
         let unit = Unit::from_str("m").unwrap();
         let other = Unit::from_str("km").unwrap();
-        assert_eq!(unit.mul(&other).to_string().as_str(), "m.km");
+        assert_eq!(unit.mul(other).to_string().as_str(), "m.km");
 
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
-        assert_eq!(unit.mul(&other).to_string().as_str(), "10m.20m");
+        assert_eq!(unit.mul(other).to_string().as_str(), "10m.20m");
     }
 }

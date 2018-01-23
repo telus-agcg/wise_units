@@ -7,7 +7,7 @@ use std::fmt;
 /// (anything that can change its scalar). It is, however, possible to have an
 /// Atom-less Term, which would simple be a Factor (with or without an
 /// annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
-///
+/// 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Term {
     pub atom: Option<Atom>,

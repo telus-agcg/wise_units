@@ -3,7 +3,7 @@ use std::fmt;
 /// Property categorizes the unit by use. Not much mention of it in the UCUM
 /// HTML spec, but is used throughout the XML description:
 /// http://unitsofmeasure.org/ucum-essence.xml
-///
+/// 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Property {
     Acceleration,

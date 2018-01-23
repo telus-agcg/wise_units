@@ -29,25 +29,24 @@ mod tests {
         }
     }
 
-
     #[test]
     fn validate_digit() {
-        let pairs = UnitParser::parse_str(Rule::digit, "0");
+        let pairs = UnitParser::parse(Rule::digit, "0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::digit, "a");
+        let pairs = UnitParser::parse(Rule::digit, "a");
         assert!(pairs.is_err());
     }
 
     #[test]
     fn validate_digits() {
-        let pairs = UnitParser::parse_str(Rule::digits, "0");
+        let pairs = UnitParser::parse(Rule::digits, "0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::digits, "01");
+        let pairs = UnitParser::parse(Rule::digits, "01");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::digits, "123450");
+        let pairs = UnitParser::parse(Rule::digits, "123450");
         assert!(pairs.is_ok());
 
         // Looks like it stops parsing at the !, but doesn't error.
@@ -58,19 +57,19 @@ mod tests {
             tokens: [digits(0, 6)]
         }
 
-        let pairs = UnitParser::parse_str(Rule::digits, "!@#123450");
+        let pairs = UnitParser::parse(Rule::digits, "!@#123450");
         assert!(pairs.is_err());
     }
 
     #[test]
     fn validate_factor() {
-        let pairs = UnitParser::parse_str(Rule::factor, "0");
+        let pairs = UnitParser::parse(Rule::factor, "0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::factor, "01");
+        let pairs = UnitParser::parse(Rule::factor, "01");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::factor, "123450");
+        let pairs = UnitParser::parse(Rule::factor, "123450");
         assert!(pairs.is_ok());
 
         parses_to! {
@@ -83,13 +82,13 @@ mod tests {
 
     #[test]
     fn validate_exponent() {
-        let pairs = UnitParser::parse_str(Rule::exponent, "+0");
+        let pairs = UnitParser::parse(Rule::exponent, "+0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::exponent, "-0");
+        let pairs = UnitParser::parse(Rule::exponent, "-0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::exponent, "123");
+        let pairs = UnitParser::parse(Rule::exponent, "123");
         assert!(pairs.is_ok());
 
         parses_to! {
@@ -102,16 +101,16 @@ mod tests {
 
     #[test]
     fn validate_prefix_symbol() {
-        let pairs = UnitParser::parse_str(Rule::prefix_symbol, "k");
+        let pairs = UnitParser::parse(Rule::prefix_symbol, "k");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::prefix_symbol, "K");
+        let pairs = UnitParser::parse(Rule::prefix_symbol, "K");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::prefix_symbol, "kilo");
+        let pairs = UnitParser::parse(Rule::prefix_symbol, "kilo");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::prefix_symbol, "i");
+        let pairs = UnitParser::parse(Rule::prefix_symbol, "i");
         assert!(pairs.is_err());
 
         parses_to! {
@@ -124,16 +123,16 @@ mod tests {
 
     #[test]
     fn validate_atom_symbol() {
-        let pairs = UnitParser::parse_str(Rule::atom_symbol, "m");
+        let pairs = UnitParser::parse(Rule::atom_symbol, "m");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::atom_symbol, "M");
+        let pairs = UnitParser::parse(Rule::atom_symbol, "M");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::atom_symbol, "meter");
+        let pairs = UnitParser::parse(Rule::atom_symbol, "meter");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::atom_symbol, "k");
+        let pairs = UnitParser::parse(Rule::atom_symbol, "k");
         assert!(pairs.is_err());
 
         parses_to! {
@@ -153,13 +152,13 @@ mod tests {
 
     #[test]
     fn validate_prefixed_atom() {
-        let pairs = UnitParser::parse_str(Rule::prefixed_atom, "km");
+        let pairs = UnitParser::parse(Rule::prefixed_atom, "km");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::prefixed_atom, "k");
+        let pairs = UnitParser::parse(Rule::prefixed_atom, "k");
         assert!(pairs.is_err());
 
-        let pairs = UnitParser::parse_str(Rule::prefixed_atom, "m");
+        let pairs = UnitParser::parse(Rule::prefixed_atom, "m");
         assert!(pairs.is_err());
 
         parses_to! {
@@ -186,13 +185,13 @@ mod tests {
 
     #[test]
     fn validate_simple_unit() {
-        let pairs = UnitParser::parse_str(Rule::simple_unit, "km");
+        let pairs = UnitParser::parse(Rule::simple_unit, "km");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::simple_unit, "m");
+        let pairs = UnitParser::parse(Rule::simple_unit, "m");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::simple_unit, "k");
+        let pairs = UnitParser::parse(Rule::simple_unit, "k");
         assert!(pairs.is_err());
 
         parses_to! {
@@ -212,13 +211,13 @@ mod tests {
 
     #[test]
     fn validate_simple_unit_with_exponent() {
-        let pairs = UnitParser::parse_str(Rule::simple_unit, "km2");
+        let pairs = UnitParser::parse(Rule::simple_unit, "km2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::simple_unit, "m-1");
+        let pairs = UnitParser::parse(Rule::simple_unit, "m-1");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::simple_unit, "k4");
+        let pairs = UnitParser::parse(Rule::simple_unit, "k4");
         assert!(pairs.is_err());
 
         parses_to! {
@@ -241,31 +240,31 @@ mod tests {
 
     #[test]
     fn validate_annotatable() {
-        let pairs = UnitParser::parse_str(Rule::annotatable, "km2");
+        let pairs = UnitParser::parse(Rule::annotatable, "km2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::annotatable, "km-2");
+        let pairs = UnitParser::parse(Rule::annotatable, "km-2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::annotatable, "km+2");
+        let pairs = UnitParser::parse(Rule::annotatable, "km+2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::annotatable, "km");
+        let pairs = UnitParser::parse(Rule::annotatable, "km");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::annotatable, "m");
+        let pairs = UnitParser::parse(Rule::annotatable, "m");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::annotatable, "k");
+        let pairs = UnitParser::parse(Rule::annotatable, "k");
         assert!(pairs.is_err());
     }
 
     #[test]
     fn validate_annotation_string() {
-        let pairs = UnitParser::parse_str(Rule::annotation_string, "k");
+        let pairs = UnitParser::parse(Rule::annotation_string, "k");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::annotation_string, "{d'io}");
+        let pairs = UnitParser::parse(Rule::annotation_string, "{d'io}");
         assert!(pairs.is_ok());
 
         parses_to! {
@@ -278,7 +277,7 @@ mod tests {
 
     #[test]
     fn validate_annotation() {
-        let pairs = UnitParser::parse_str(Rule::annotation, "{d'io}");
+        let pairs = UnitParser::parse(Rule::annotation, "{d'io}");
         assert!(pairs.is_ok());
 
         parses_to! {
@@ -292,34 +291,34 @@ mod tests {
             ]
         };
 
-        let pairs = UnitParser::parse_str(Rule::annotation, "{tot'nit}");
+        let pairs = UnitParser::parse(Rule::annotation, "{tot'nit}");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::annotation, "k");
+        let pairs = UnitParser::parse(Rule::annotation, "k");
         assert!(pairs.is_err());
     }
 
     #[test]
     fn validate_basic_component() {
-        let pairs = UnitParser::parse_str(Rule::basic_component, "km{stuff}");
+        let pairs = UnitParser::parse(Rule::basic_component, "km{stuff}");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::basic_component, "km");
+        let pairs = UnitParser::parse(Rule::basic_component, "km");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::basic_component, "{stuff}");
+        let pairs = UnitParser::parse(Rule::basic_component, "{stuff}");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::basic_component, "234");
+        let pairs = UnitParser::parse(Rule::basic_component, "234");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::basic_component, "(m.s)");
+        let pairs = UnitParser::parse(Rule::basic_component, "(m.s)");
         assert!(pairs.is_ok());
     }
 
     #[test]
     fn validate_component_with_factor() {
-        let pairs = UnitParser::parse_str(Rule::component_with_factor, "100km");
+        let pairs = UnitParser::parse(Rule::component_with_factor, "100km");
         assert!(pairs.is_ok());
 
         parses_to! {
@@ -417,9 +416,8 @@ mod tests {
 
     #[test]
     fn validate_slash_term() {
-        let pairs = UnitParser::parse_str(Rule::slash_term, "km/s");
+        let pairs = UnitParser::parse(Rule::slash_term, "km/s");
         assert!(pairs.is_ok());
-
 
         parses_to! {
             parser: UnitParser,
@@ -536,10 +534,10 @@ mod tests {
 
     #[test]
     fn validate_main_term() {
-        let pairs = UnitParser::parse_str(Rule::main_term, "km/s");
+        let pairs = UnitParser::parse(Rule::main_term, "km/s");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse_str(Rule::main_term, "/km.s");
+        let pairs = UnitParser::parse(Rule::main_term, "/km.s");
         assert!(pairs.is_ok());
     }
 }

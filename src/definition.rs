@@ -1,3 +1,4 @@
+use error::Error;
 use interpreter::Interpreter;
 use measurable::Measurable;
 use pest::Parser;
@@ -11,19 +12,15 @@ pub struct Definition {
 }
 
 impl Definition {
-    pub fn new(value: f64, expression: &str) -> Self {
-        let pairs = UnitParser::parse_str(Rule::main_term, expression).unwrap_or_else(|e| {
-            println!("Parsing error: {}", e);
-            panic!("Unable to parse \"{}\"", expression);
-        });
-
+    pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
+        let pairs = UnitParser::parse(Rule::main_term, expression)?;
         let mut interpreter = Interpreter;
-        let su = interpreter.interpret(pairs);
+        let su = interpreter.interpret(pairs)?;
 
-        Definition {
+        Ok(Definition {
             value: value,
             unit: su,
-        }
+        })
     }
 
     pub fn calculate_scalar(&self, other_value: f64) -> f64 {

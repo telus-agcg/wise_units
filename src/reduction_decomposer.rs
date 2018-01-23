@@ -20,10 +20,12 @@ impl Decomposable for ReductionDecomposer {
         let result = self.0
             .iter()
             .filter(|&(_, v)| v.is_positive())
-            .map(|(k, v)| if *v == 1 {
-                k.to_string()
-            } else {
-                format!("{}{}", k, v)
+            .map(|(k, v)| {
+                if *v == 1 {
+                    k.to_string()
+                } else {
+                    format!("{}{}", k, v)
+                }
             })
             .filter(|s| !s.is_empty())
             .fold(String::new(), |mut acc, num_string| {
@@ -47,11 +49,13 @@ impl Decomposable for ReductionDecomposer {
         self.0
             .iter()
             .filter(|&(_, v)| v.is_negative())
-            .map(|(k, v)| if v.abs() == 1 {
-                k.to_string()
-            } else {
-                let v = -v;
-                format!("{}{}", k, v)
+            .map(|(k, v)| {
+                if v.abs() == 1 {
+                    k.to_string()
+                } else {
+                    let v = -v;
+                    format!("{}{}", k, v)
+                }
             })
             .filter(|s| !s.is_empty())
             .fold(String::new(), |mut acc, num_string| {

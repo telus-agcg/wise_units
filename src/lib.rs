@@ -1,8 +1,17 @@
+extern crate failure;
+#[macro_use]
+extern crate failure_derive;
+
 #[cfg(test)]
 #[macro_use]
 extern crate pretty_assertions;
 
+// Only include macros for testing
+#[cfg(test)]
 #[macro_use]
+extern crate pest;
+
+#[cfg(not(test))]
 extern crate pest;
 
 #[macro_use]
@@ -17,6 +26,7 @@ mod classification;
 mod decomposable;
 mod definition;
 mod dimension;
+mod error;
 mod interpreter;
 mod measurable;
 mod prefix;
@@ -26,6 +36,7 @@ mod simple_decomposer;
 mod term;
 mod unit_parser;
 
+pub use error::Error;
 pub use measurable::Measurable;
 pub use measurement::Measurement;
 pub use unit::Unit;

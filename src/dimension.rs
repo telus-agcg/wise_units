@@ -4,7 +4,7 @@ use std::fmt;
 /// uses dimensions to determine if two units are commensurable. Units that
 /// end up just being some sort of scalar value (pi, ppm, mole, etc) simply do
 /// not have a `Dimension`.
-///
+/// 
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub enum Dimension {
     ElectricCharge,    // Q
