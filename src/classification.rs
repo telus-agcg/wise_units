@@ -26,5 +26,7 @@ pub enum Classification {
 }
 
 impl Default for Classification {
-    fn default() -> Classification { Classification::SI }
+    fn default() -> Classification {
+        Classification::SI
+    }
 }

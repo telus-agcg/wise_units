@@ -38,9 +38,13 @@ impl Unit {
     }
 
     /// Use this when calculating the scalar when *not* part of a Measurable.
-    pub fn scalar(&self) -> f64 { self.calculate_scalar(1.0) }
+    pub fn scalar(&self) -> f64 {
+        self.calculate_scalar(1.0)
+    }
 
-    pub fn magnitude(&self) -> f64 { self.calculate_magnitude(self.scalar()) }
+    pub fn magnitude(&self) -> f64 {
+        self.calculate_magnitude(self.scalar())
+    }
 
     /// Use this when calculating the scalar when it's part of a Measurable.
     pub fn calculate_scalar(&self, value: f64) -> f64 {
@@ -87,7 +91,9 @@ impl Unit {
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
     /// 
-    pub fn expression(&self) -> String { SimpleDecomposer::new(&self.terms).expression() }
+    pub fn expression(&self) -> String {
+        SimpleDecomposer::new(&self.terms).expression()
+    }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
@@ -128,11 +134,15 @@ impl Unit {
         Unit { terms: new_terms }
     }
 
-    pub fn is_valid(expression: &str) -> bool { Unit::from_str(expression).is_ok() }
+    pub fn is_valid(expression: &str) -> bool {
+        Unit::from_str(expression).is_ok()
+    }
 }
 
 impl fmt::Display for Unit {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.expression()) }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.expression())
+    }
 }
 
 impl FromStr for Unit {

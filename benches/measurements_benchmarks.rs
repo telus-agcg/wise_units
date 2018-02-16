@@ -6,9 +6,7 @@ use criterion::Criterion;
 use wise_units::Measurement;
 
 fn create_meter(c: &mut Criterion) {
-    c.bench_function("create meter", |b| {
-        b.iter(|| Measurement::new(1.0, "m"))
-    });
+    c.bench_function("create meter", |b| b.iter(|| Measurement::new(1.0, "m")));
 }
 
 fn create_km(c: &mut Criterion) {
@@ -73,36 +71,28 @@ fn add_km_to_meter(c: &mut Criterion) {
     let km = &Measurement::new(1.0, "km").unwrap();
     let m = &Measurement::new(1.0, "m").unwrap();
 
-    c.bench_function("add km to m", |b| {
-        b.iter(|| km + m)
-    });
+    c.bench_function("add km to m", |b| b.iter(|| km + m));
 }
 
 fn sub_km_by_meter(c: &mut Criterion) {
     let km = &Measurement::new(1.0, "km").unwrap();
     let m = &Measurement::new(1.0, "m").unwrap();
 
-    c.bench_function("subtract km by m", |b| {
-        b.iter(|| km - m)
-    });
+    c.bench_function("subtract km by m", |b| b.iter(|| km - m));
 }
 
 fn mul_km_by_meter(c: &mut Criterion) {
     let km = &Measurement::new(1.0, "km").unwrap();
     let m = &Measurement::new(1.0, "m").unwrap();
 
-    c.bench_function("multiply km by m", |b| {
-        b.iter(|| km * m)
-    });
+    c.bench_function("multiply km by m", |b| b.iter(|| km * m));
 }
 
 fn div_km_by_m(c: &mut Criterion) {
     let km = &Measurement::new(1.0, "km").unwrap();
     let m = &Measurement::new(1.0, "m").unwrap();
 
-    c.bench_function("divide km by m", |b| {
-        b.iter(|| km / m)
-    });
+    c.bench_function("divide km by m", |b| b.iter(|| km / m));
 }
 
 criterion_group!(

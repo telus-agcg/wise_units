@@ -36,7 +36,9 @@ pub enum Prefix {
 }
 
 impl Prefix {
-    pub fn classification(&self) -> Classification { Classification::SI }
+    pub fn classification(&self) -> Classification {
+        Classification::SI
+    }
 
     pub fn definition(&self) -> Definition {
         let term = Term::new(Some(Atom::TheUnity), None);
@@ -75,7 +77,9 @@ impl Prefix {
         }
     }
 
-    pub fn composition(&self) -> Option<Composition> { None }
+    pub fn composition(&self) -> Option<Composition> {
+        None
+    }
 
     pub fn names(&self) -> Vec<&'static str> {
         match *self {
@@ -171,9 +175,13 @@ impl Prefix {
         }
     }
 
-    pub fn scalar(&self) -> f64 { self.definition().scalar() }
+    pub fn scalar(&self) -> f64 {
+        self.definition().scalar()
+    }
 
-    pub fn magnitude(&self) -> f64 { self.definition().magnitude() }
+    pub fn magnitude(&self) -> f64 {
+        self.definition().magnitude()
+    }
 
     // TODO: is ok?
     pub fn calculate_scalar(&self, magnitude: f64) -> f64 {

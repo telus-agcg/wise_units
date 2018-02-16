@@ -144,5 +144,11 @@ fn assert_floats_eq(actual: f64, expected: f64) {
     let error_threshold = f64::from(std::f32::EPSILON);
     let difference = actual - expected;
 
-    assert!(difference.abs() < error_threshold, "Actual: {}, Expected: {}, Diff: {}", actual, expected, difference);
+    assert!(
+        difference.abs() < error_threshold,
+        "Actual: {}, Expected: {}, Diff: {}",
+        actual,
+        expected,
+        difference
+    );
 }
