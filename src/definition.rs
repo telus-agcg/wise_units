@@ -41,13 +41,9 @@ impl Definition {
 }
 
 impl Measurable for Definition {
-    fn get_unit(&self) -> &Unit {
-        &self.unit
-    }
+    fn get_unit(&self) -> &Unit { &self.unit }
 
-    fn get_value(&self) -> f64 {
-        self.value
-    }
+    fn get_value(&self) -> f64 { self.value }
 
     fn scalar(&self) -> f64 {
         if self.is_special() {

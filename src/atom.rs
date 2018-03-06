@@ -2521,8 +2521,8 @@ mod tests {
 
         #[test]
         fn validate_deserialization() {
-            let k = serde_json::from_str("\"BushelUS\"")
-                .expect("Couldn't convert JSON String to Atom");
+            let k =
+                serde_json::from_str("\"BushelUS\"").expect("Couldn't convert JSON String to Atom");
 
             assert_eq!(Atom::BushelUS, k);
         }

@@ -106,9 +106,7 @@ pub enum Property {
 }
 
 impl Default for Property {
-    fn default() -> Property {
-        Property::Unclassified
-    }
+    fn default() -> Property { Property::Unclassified }
 }
 
 impl fmt::Display for Property {

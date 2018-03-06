@@ -1,21 +1,17 @@
 use pest;
 
 /// Errors when trying to convert between types that aren't commensurable.
-/// 
+///
 #[derive(Fail, Debug)]
 pub enum Error {
     #[fail(display = "Units are not compatible: {}, {}", lhs, rhs)]
-    IncompatibleUnitTypes {
-        lhs: String,
-        rhs: String,
-    },
+    IncompatibleUnitTypes { lhs: String, rhs: String },
 
     #[fail(display = "Unable to parse expression: {}", expression)]
-    ParsingError {
-        expression: String,
-    },
+    ParsingError { expression: String },
 
-    #[fail(display = "Unknown unit string: {}", _0)] UnknownUnitString(String),
+    #[fail(display = "Unknown unit string: {}", _0)]
+    UnknownUnitString(String),
 }
 
 impl<'i, R: ::pest::RuleType> ::std::convert::From<pest::Error<'i, R>> for Error {

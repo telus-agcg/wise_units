@@ -29,13 +29,9 @@ impl Term {
         }
     }
 
-    pub fn scalar(&self) -> f64 {
-        self.calculate_scalar(1.0)
-    }
+    pub fn scalar(&self) -> f64 { self.calculate_scalar(1.0) }
 
-    pub fn magnitude(&self) -> f64 {
-        self.calculate_magnitude(self.scalar())
-    }
+    pub fn magnitude(&self) -> f64 { self.calculate_magnitude(self.scalar()) }
 
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         let e = self.exponent;
@@ -238,9 +234,9 @@ mod tests {
 
     #[cfg(feature = "with_serde")]
     mod with_serde {
+        use super::super::Term;
         use atom::Atom;
         use prefix::Prefix;
-        use super::super::Term;
         use serde_json;
 
         #[test]
@@ -253,10 +249,10 @@ mod tests {
                                     "factor": 1,
                                     "exponent": 1,
                                     "annotation": null
-                                   }"#.replace("\n", "").replace(" ", "");
+                                   }"#.replace("\n", "")
+                .replace(" ", "");
 
-            let j = serde_json::to_string(&term)
-                .expect("Couldn't convert Term to JSON String");
+            let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");
 
             assert_eq!(expected_json.as_str(), j);
         }
@@ -274,10 +270,10 @@ mod tests {
                                     "factor": 123,
                                     "exponent": -456,
                                     "annotation": "stuff"
-                                   }"#.replace("\n", "").replace(" ", "");
+                                   }"#.replace("\n", "")
+                .replace(" ", "");
 
-            let j = serde_json::to_string(&term)
-                .expect("Couldn't convert Term to JSON String");
+            let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");
 
             assert_eq!(expected_json.as_str(), j);
         }
@@ -292,8 +288,7 @@ mod tests {
                             "annotation": null
                            }"#;
 
-            let k = serde_json::from_str(json)
-                .expect("Couldn't convert JSON String to Term");
+            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
 
             let expected_term = Term::new(None, None);
 
@@ -310,8 +305,7 @@ mod tests {
                             "annotation": "stuff"
                            }"#;
 
-            let k = serde_json::from_str(json)
-                .expect("Couldn't convert JSON String to Term");
+            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
 
             let mut expected_term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
             expected_term.factor = 123;
