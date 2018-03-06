@@ -13,6 +13,7 @@ use std::str::FromStr;
 use term::Term;
 use unit_parser::{Rule, UnitParser};
 
+#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
 pub struct Unit {
     pub terms: Vec<Term>,
@@ -595,5 +596,107 @@ mod tests {
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
         assert_eq!(unit.mul(other).to_string().as_str(), "10m.20m");
+    }
+
+    #[cfg(feature = "with_serde")]
+    mod with_serde {
+        use atom::Atom;
+        use prefix::Prefix;
+        use super::super::Unit;
+        use serde_json;
+        use term::Term;
+
+        #[test]
+        fn validate_serialization_empty_terms() {
+            let unit = Unit { terms: vec![] };
+            let expected_json = r#"{"terms":[]}"#;
+
+            let j = serde_json::to_string(&unit)
+                .expect("Couldn't convert Unit to JSON String");
+
+            assert_eq!(expected_json, j);
+        }
+
+        #[test]
+        fn validate_serialization_full_terms() {
+            let expected_json = r#"{
+                "terms":[{
+                    "atom": "Meter",
+                    "prefix": "Centi",
+                    "factor": 100,
+                    "exponent": 456,
+                    "annotation": "stuff"
+                }, {
+                    "atom": "Gram",
+                    "prefix": null,
+                    "factor": 1,
+                    "exponent": -4,
+                    "annotation": null
+                }]
+        }"#.replace("\n", "").replace(" ", "");
+
+            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
+            term1.factor = 100;
+            term1.exponent = 456;
+            term1.annotation = Some("stuff".to_string());
+
+            let mut term2 = Term::new(Some(Atom::Gram), None);
+            term2.factor = 1;
+            term2.exponent = -4;
+
+            let unit = Unit { terms: vec![term1, term2] };
+
+            let j = serde_json::to_string(&unit)
+                .expect("Couldn't convert Unit to JSON String");
+
+            assert_eq!(expected_json, j);
+        }
+
+        #[test]
+        fn validate_deserialization_empty_terms() {
+            let json = r#"{"terms": []}"#;
+
+            let k = serde_json::from_str(json)
+                .expect("Couldn't convert JSON String to Unit");
+
+            let expected_unit = Unit { terms: vec![] };
+
+            assert_eq!(expected_unit, k);
+        }
+
+        #[test]
+        fn validate_deserialization_full_terms() {
+            let json = r#"{
+                "terms":[{
+                    "atom": "Meter",
+                    "prefix": "Centi",
+                    "factor": 100,
+                    "exponent": 456,
+                    "annotation": "stuff"
+                }, {
+                    "atom": "Gram",
+                    "prefix": null,
+                    "factor": 1,
+                    "exponent": -4,
+                    "annotation": null
+                }]
+            }"#;
+
+            let k = serde_json::from_str(json)
+                .expect("Couldn't convert JSON String to Unit");
+
+            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
+            term1.factor = 100;
+            term1.exponent = 456;
+            term1.annotation = Some("stuff".to_string());
+
+            let mut term2 = Term::new(Some(Atom::Gram), None);
+            term2.factor = 1;
+            term2.exponent = -4;
+
+            let expected_unit = Unit { terms: vec![term1, term2] };
+
+            assert_eq!(expected_unit, k);
+        }
     }
 }

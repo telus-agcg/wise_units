@@ -7,6 +7,7 @@ use std::fmt;
 use term::Term;
 use unit::Unit;
 
+#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Prefix {
     Atto,
@@ -257,5 +258,27 @@ mod tests {
             expected,
             difference
         );
+    }
+
+    #[cfg(feature = "with_serde")]
+    mod with_serde {
+        use super::super::Prefix;
+        use serde_json;
+
+        #[test]
+        fn validate_serialization() {
+            let j = serde_json::to_string(&Prefix::Kilo)
+                .expect("Couldn't convert Prefix to JSON String");
+
+            assert_eq!("\"Kilo\"", j);
+        }
+
+        #[test]
+        fn validate_deserialization() {
+            let k = serde_json::from_str("\"Kilo\"")
+                .expect("Couldn't convert JSON String to Prefix");
+
+            assert_eq!(Prefix::Kilo, k);
+        }
     }
 }

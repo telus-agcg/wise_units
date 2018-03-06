@@ -27,6 +27,7 @@ use unit_parser::{Rule, UnitParser};
 /// assert!(value_difference < 0.000_001);
 /// ```
 /// 
+#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialOrd)]
 pub struct Measurement {
     pub value: f64,
@@ -546,5 +547,119 @@ mod tests {
         let m1 = Measurement::new(10.0, "m").unwrap();
         let m2 = Measurement::new(2.0, "m").unwrap();
         assert_eq!(m1.div_scalar(5.0), m2);
+    }
+
+    #[cfg(feature = "with_serde")]
+    mod with_serde {
+        use super::super::Measurement;
+
+        use atom::Atom;
+        use prefix::Prefix;
+        use serde_json;
+        use term::Term;
+        use unit::Unit;
+
+        #[test]
+        fn validate_serialization_empty_terms() {
+            let unit = Unit { terms: vec![] };
+            let measurement = Measurement { value: 123.4, unit: unit };
+            let expected_json = r#"{"value":123.4,"unit":{"terms":[]}}"#;
+
+            let j = serde_json::to_string(&measurement)
+                .expect("Couldn't convert Unit to JSON String");
+
+            assert_eq!(expected_json, j);
+        }
+
+        #[test]
+        fn validate_serialization_full_terms() {
+            let expected_json = r#"{
+                "value":123.4,
+                "unit":{
+                    "terms":[{
+                        "atom": "Meter",
+                        "prefix": "Centi",
+                        "factor": 100,
+                        "exponent": 456,
+                        "annotation": "stuff"
+                    }, {
+                        "atom": "Gram",
+                        "prefix": null,
+                        "factor": 1,
+                        "exponent": -4,
+                        "annotation": null
+                    }]
+                }
+            }"#.replace("\n", "").replace(" ", "");
+
+            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
+            term1.factor = 100;
+            term1.exponent = 456;
+            term1.annotation = Some("stuff".to_string());
+
+            let mut term2 = Term::new(Some(Atom::Gram), None);
+            term2.factor = 1;
+            term2.exponent = -4;
+
+            let unit = Unit { terms: vec![term1, term2] };
+            let measurement = Measurement { value: 123.4, unit: unit };
+
+            let j = serde_json::to_string(&measurement)
+                .expect("Couldn't convert Unit to JSON String");
+
+            assert_eq!(expected_json, j);
+        }
+
+        #[test]
+        fn validate_deserialization_empty_terms() {
+            let json = r#"{"value":1.0, "unit":{"terms": []}}"#;
+
+            let k = serde_json::from_str(json)
+                .expect("Couldn't convert JSON String to Unit");
+
+            let unit = Unit { terms: vec![] };
+            let expected_measurement = Measurement { value: 1.0, unit: unit };
+
+            assert_eq!(expected_measurement, k);
+        }
+
+        #[test]
+        fn validate_deserialization_full_terms() {
+            let json = r#"{
+                "value":432.1,
+                "unit":{
+                    "terms":[{
+                        "atom": "Meter",
+                        "prefix": "Centi",
+                        "factor": 100,
+                        "exponent": 456,
+                        "annotation": "stuff"
+                    }, {
+                        "atom": "Gram",
+                        "prefix": null,
+                        "factor": 1,
+                        "exponent": -4,
+                        "annotation": null
+                    }]
+                }
+            }"#;
+
+            let k = serde_json::from_str(json)
+                .expect("Couldn't convert JSON String to Unit");
+
+            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
+            term1.factor = 100;
+            term1.exponent = 456;
+            term1.annotation = Some("stuff".to_string());
+
+            let mut term2 = Term::new(Some(Atom::Gram), None);
+            term2.factor = 1;
+            term2.exponent = -4;
+
+            let unit = Unit { terms: vec![term1, term2] };
+            let expected_measurement = Measurement { value: 432.1, unit: unit };
+
+            assert_eq!(expected_measurement, k);
+        }
     }
 }
