@@ -234,7 +234,9 @@ impl Interpreter {
             _ => return Err(Error::UnknownUnitString(pair_str.as_str().to_string())),
         };
 
-        Ok(term.atom = Some(atom))
+        term.atom = Some(atom);
+
+        Ok(())
     }
 
     fn visit_prefix_symbol(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
@@ -267,6 +269,7 @@ impl Interpreter {
         };
 
         term.prefix = Some(prefix);
+
         Ok(())
     }
 
@@ -319,7 +322,9 @@ impl Interpreter {
             }
         }
 
-        Ok(term.exponent = e)
+        term.exponent = e;
+
+        Ok(())
     }
 
     fn visit_simple_unit(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
