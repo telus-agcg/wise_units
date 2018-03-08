@@ -3,5 +3,5 @@ normalize_comments     = true
 reorder_imported_names = true
 reorder_imports        = true
 # report_todo          = "Unnumbered"
-take_source_hints      = true
+# take_source_hints      = true
 wrap_comments          = true

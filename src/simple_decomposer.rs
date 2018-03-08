@@ -4,9 +4,7 @@ use term::Term;
 pub struct SimpleDecomposer<'a>(&'a [Term]);
 
 impl<'a> SimpleDecomposer<'a> {
-    pub fn new(terms: &'a [Term]) -> Self {
-        SimpleDecomposer(terms)
-    }
+    pub fn new(terms: &'a [Term]) -> Self { SimpleDecomposer(terms) }
 }
 
 impl<'a> Decomposable for SimpleDecomposer<'a> {

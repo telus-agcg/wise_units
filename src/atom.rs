@@ -8,6 +8,7 @@ use std::fmt;
 use term::Term;
 use unit::Unit;
 
+#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Atom {
     TheUnity,
@@ -431,15 +432,16 @@ impl Atom {
             Atom::AtomicMassUnit                 => Definition::new(1.660_540_2e-24, "g"),
             Atom::Bar                            => Definition::new(1.0e5, "Pa"),
             Atom::BarrelUS                       => Definition::new(42.0, "[gal_us]"),
-            Atom::Becquerel                      => Definition::new(1.0, "s-1"),
+            Atom::Becquerel |
+                Atom::Hertz                      => Definition::new(1.0, "s-1"),
             Atom::Biot                           => Definition::new(10.0, "A"),
             Atom::BoardFootInternational         => Definition::new(144.0, "[in_i]3"),
             Atom::BoltzmannConstant              => Definition::new(1.380_658e-23, "J/K"),
             Atom::BushelBR                       => Definition::new(4.0, "[pk_br]"),
             Atom::BushelUS                       => Definition::new(2150.42, "[in_i]3"),
             Atom::CircularMilInternational       => Definition::new(1.0, "[pi]/4.[mil_i]2"),
-            Atom::CordInternational              => Definition::new(128.0, "[ft_i]3"),
-            Atom::CordUS                         => Definition::new(128.0, "[ft_i]3"),
+            Atom::CordInternational |
+                Atom::CordUS                     => Definition::new(128.0, "[ft_i]3"),
             Atom::CubicFootInternational         => Definition::new(1.0, "[ft_i]3"),
             Atom::CubicInchInternational         => Definition::new(1.0, "[in_i]3"),
             Atom::CubicYardInternational         => Definition::new(1.0, "[yd_i]3"),
@@ -485,12 +487,12 @@ impl Atom {
             Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
             Atom::GramPercent                    => Definition::new(1.0, "g/dl"),
             Atom::Grain                          => Definition::new(64.798_91, "mg"),
-            Atom::Gray                           => Definition::new(1.0, "J/kg"),
+            Atom::Gray |
+                Atom::Sievert                    => Definition::new(1.0, "J/kg"),
             Atom::GuntersChainBR                 => Definition::new(4.0, "[rd_br]"),
             Atom::GuntersChainUS                 => Definition::new(4.0, "[rd_us]"),
             Atom::HandInternational              => Definition::new(4.0, "[in_i]"),
             Atom::Henry                          => Definition::new(1.0, "Wb/A"),
-            Atom::Hertz                          => Definition::new(1.0, "s-1"),
             Atom::HistoricalWinchesterGallon     => Definition::new(1.0, "[bu_us]"),
             Atom::Hour                           => Definition::new(60.0, "min"),
             Atom::Horsepower                     => Definition::new(550.0, "[ft_i].[lbf_av]/s"),
@@ -535,7 +537,7 @@ impl Atom {
             Atom::NauticalMileBR                 => Definition::new(6080.0, "[ft_br]"),
             Atom::NauticalMileInternational      => Definition::new(1852.0, "m"),
             Atom::Newton                         => Definition::new(1.0, "kg.m/s2"),
-            Atom::NewtonianConstantOfGravitation => Definition::new(1.0, "kg.m/s2"),
+            Atom::NewtonianConstantOfGravitation => Definition::new(6.67259e-11, "m3.kg-1.s-2"),
             Atom::Ohm                            => Definition::new(1.0, "V/A"),
             Atom::Oersted                        => Definition::new(250.0, "/[pi].A/m"),
             Atom::OunceAV                        => Definition::new(1.0, "[lb_av]/16"),
@@ -574,14 +576,13 @@ impl Atom {
             Atom::RodUS                          => Definition::new(16.5, "[ft_us]"),
             Atom::Roentgen                       => Definition::new(2.58e-4, "C/kg"),
 
-            Atom::Section                        => Definition::new(1.0, "[mi_us]2"),
+            Atom::Section |
+                Atom::SquareMileUS               => Definition::new(1.0, "[mi_us]2"),
             Atom::ShortHundredweightAV           => Definition::new(100.0, "[lb_av]"),
             Atom::ShortTonAV                     => Definition::new(20.0, "[scwt_at]"),
             Atom::Siemens                        => Definition::new(1.0, "Ohm-1"),
-            Atom::Sievert                        => Definition::new(1.0, "J/kg"),
             Atom::SquareFootInternational        => Definition::new(1.0, "[ft_i]2"),
             Atom::SquareInchInternational        => Definition::new(1.0, "[in_i]2"),
-            Atom::SquareMileUS                   => Definition::new(1.0, "[mi_us]2"),
             Atom::SquareRodUS                    => Definition::new(1.0, "[rd_us]2"),
             Atom::SquareYardInternational        => Definition::new(1.0, "[yd_i]2"),
             Atom::StandardAccelerationOfFreeFall => Definition::new(980_665e-5, "m/s2"),
@@ -738,7 +739,8 @@ impl Atom {
             Atom::Kelvin   => vec!["Kelvin"],
             Atom::Meter    => vec!["meter"],
             Atom::Radian   => vec!["radian"],
-            Atom::Second   => vec!["second"],
+            Atom::Second   |
+               Atom::DegreeSecond => vec!["second"],
 
             // Derived units
             Atom::AcreBR |
@@ -768,9 +770,9 @@ impl Atom {
             Atom::Degree              => vec!["degree"],
             Atom::DegreeCelsius       => vec!["degree Celsius"],
             Atom::DegreeFahrenheit    => vec!["degree Fahrenheit"],
-            Atom::DegreeMinute        => vec!["minute"],
+            Atom::DegreeMinute |
+                Atom::Minute          => vec!["minute"],
             Atom::DegreeReaumur       => vec!["degree Réaumur"],
-            Atom::DegreeSecond        => vec!["second"],
             Atom::DramAV              => vec!["dram"],
             Atom::DryPintUS           => vec!["dry pint"],
             Atom::DryQuartUS          => vec!["dry quart"],
@@ -847,7 +849,6 @@ impl Atom {
                 Atom::MileUS                     => vec!["mile"],
             Atom::MinimBR |
                 Atom::MinimUS                    => vec!["minim"],
-            Atom::Minute                         => vec!["minute"],
             Atom::Mole                           => vec!["mole"],
             Atom::Month                          => vec!["month"],
             Atom::Newton                         => vec!["newton"],
@@ -927,8 +928,8 @@ impl Atom {
             Atom::Watt              => vec!["watt"],
             Atom::Weber             => vec!["weber"],
             Atom::Week              => vec!["week"],
-            Atom::YardInternational => vec!["yard"],
             Atom::YardBR |
+                Atom::YardInternational |
                 Atom::YardUS        => vec!["yard"],
             Atom::Year              => vec!["year"],
         }
@@ -1249,7 +1250,7 @@ impl Atom {
             Atom::PH                             => Some("pH"),
             Atom::PermeabilityOfVacuum           => Some("μ₀"),
             Atom::PermittivityOfVacuum           => Some("ε₀"),
-            Atom::PlanckConstant                 => Some("𝑐"),
+            Atom::PlanckConstant                 => Some("ℎ"),
             Atom::PoundAV                        => Some("lb"),
             Atom::PoundForce                     => Some("lbf"),
             Atom::PrismDiopter                   => Some("PD"),
@@ -1477,7 +1478,7 @@ impl Atom {
             Atom::AcreBR                         => "[ACR_BR]",
             Atom::AcreUS                         => "[ACR_US]",
             Atom::Are                            => "AR",
-            Atom::AstronomicUnit                 => "AMU",
+            Atom::AstronomicUnit                 => "AU",
             Atom::AtomicMassUnit                 => "AMU",
             Atom::Bar                            => "BAR",
             Atom::BarrelUS                       => "[BBL_US]",
@@ -1598,7 +1599,7 @@ impl Atom {
             Atom::PennyweightTR                  => "[PWT_TR]",
             Atom::PintBR                         => "[PT_BR]",
             Atom::PintUS                         => "[PT_US]",
-            Atom::PlanckConstant                 => "[C]",
+            Atom::PlanckConstant                 => "[H]",
             Atom::PoundAV                        => "[LB_AV]",
             Atom::PoundTR                        => "[LB_TR]",
             Atom::PoundForce                     => "[LBF_AV]",
@@ -1698,7 +1699,7 @@ impl Atom {
             Atom::DegreeCelsius    => value - 273.15,
             Atom::DegreeFahrenheit => 9.0 * value / 5.0 - 459.67,
             Atom::DegreeReaumur    => (value - 273.15) * 0.8,
-            Atom::PH               => -value.log10(),
+            Atom::PH               => -value.log10(), // TODO: This seems wrong...
             Atom::PrismDiopter     => (value / 100.0).atan(),
             _                      => 1.0,
         }
@@ -2503,5 +2504,27 @@ mod tests {
             expected,
             difference
         );
+    }
+
+    #[cfg(feature = "with_serde")]
+    mod with_serde {
+        use super::super::Atom;
+        use serde_json;
+
+        #[test]
+        fn validate_serialization() {
+            let j = serde_json::to_string(&Atom::BushelUS)
+                .expect("Couldn't convert Atom to JSON String");
+
+            assert_eq!("\"BushelUS\"", j);
+        }
+
+        #[test]
+        fn validate_deserialization() {
+            let k =
+                serde_json::from_str("\"BushelUS\"").expect("Couldn't convert JSON String to Atom");
+
+            assert_eq!(Atom::BushelUS, k);
+        }
     }
 }

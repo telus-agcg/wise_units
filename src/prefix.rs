@@ -7,6 +7,7 @@ use std::fmt;
 use term::Term;
 use unit::Unit;
 
+#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Prefix {
     Atto,
@@ -36,9 +37,7 @@ pub enum Prefix {
 }
 
 impl Prefix {
-    pub fn classification(&self) -> Classification {
-        Classification::SI
-    }
+    pub fn classification(&self) -> Classification { Classification::SI }
 
     pub fn definition(&self) -> Definition {
         let term = Term::new(Some(Atom::TheUnity), None);
@@ -77,9 +76,7 @@ impl Prefix {
         }
     }
 
-    pub fn composition(&self) -> Option<Composition> {
-        None
-    }
+    pub fn composition(&self) -> Option<Composition> { None }
 
     pub fn names(&self) -> Vec<&'static str> {
         match *self {
@@ -175,13 +172,9 @@ impl Prefix {
         }
     }
 
-    pub fn scalar(&self) -> f64 {
-        self.definition().scalar()
-    }
+    pub fn scalar(&self) -> f64 { self.definition().scalar() }
 
-    pub fn magnitude(&self) -> f64 {
-        self.definition().magnitude()
-    }
+    pub fn magnitude(&self) -> f64 { self.definition().magnitude() }
 
     // TODO: is ok?
     pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
@@ -257,5 +250,27 @@ mod tests {
             expected,
             difference
         );
+    }
+
+    #[cfg(feature = "with_serde")]
+    mod with_serde {
+        use super::super::Prefix;
+        use serde_json;
+
+        #[test]
+        fn validate_serialization() {
+            let j = serde_json::to_string(&Prefix::Kilo)
+                .expect("Couldn't convert Prefix to JSON String");
+
+            assert_eq!("\"Kilo\"", j);
+        }
+
+        #[test]
+        fn validate_deserialization() {
+            let k =
+                serde_json::from_str("\"Kilo\"").expect("Couldn't convert JSON String to Prefix");
+
+            assert_eq!(Prefix::Kilo, k);
+        }
     }
 }

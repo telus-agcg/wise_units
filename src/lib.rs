@@ -17,6 +17,17 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
+#[cfg(feature = "with_serde")]
+extern crate serde;
+
+#[cfg(feature = "with_serde")]
+#[macro_use]
+extern crate serde_derive;
+
+#[cfg(feature = "with_serde")]
+#[cfg(test)]
+extern crate serde_json;
+
 pub mod measurement;
 pub mod unit;
 

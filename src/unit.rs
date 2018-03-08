@@ -13,6 +13,7 @@ use std::str::FromStr;
 use term::Term;
 use unit_parser::{Rule, UnitParser};
 
+#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
 pub struct Unit {
     pub terms: Vec<Term>,
@@ -29,7 +30,7 @@ impl Unit {
     /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.
     /// This is helpful for knowing, internally, when to stop recursively
     /// calling some functions.
-    /// 
+    ///
     pub fn is_unity(&self) -> bool {
         self.terms.len() == 1
             && self.terms[0]
@@ -38,13 +39,9 @@ impl Unit {
     }
 
     /// Use this when calculating the scalar when *not* part of a Measurable.
-    pub fn scalar(&self) -> f64 {
-        self.calculate_scalar(1.0)
-    }
+    pub fn scalar(&self) -> f64 { self.calculate_scalar(1.0) }
 
-    pub fn magnitude(&self) -> f64 {
-        self.calculate_magnitude(self.scalar())
-    }
+    pub fn magnitude(&self) -> f64 { self.calculate_magnitude(self.scalar()) }
 
     /// Use this when calculating the scalar when it's part of a Measurable.
     pub fn calculate_scalar(&self, value: f64) -> f64 {
@@ -90,23 +87,21 @@ impl Unit {
     ///
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
-    /// 
-    pub fn expression(&self) -> String {
-        SimpleDecomposer::new(&self.terms).expression()
-    }
+    ///
+    pub fn expression(&self) -> String { SimpleDecomposer::new(&self.terms).expression() }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
     /// This always returns a String that is parsable back into the same Unit.
-    /// 
+    ///
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
 
     /// Allows for dividing a Unit by a factor; results in dividing this Unit's
     /// associated Terms' factors by `other_factor`.
-    /// 
+    ///
     pub fn div_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -121,7 +116,7 @@ impl Unit {
 
     /// Allows for multiplying a Unit by a factor; results in multiplying this
     /// Unit's associated Terms' factors by `other_factor`.
-    /// 
+    ///
     pub fn mul_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -134,15 +129,11 @@ impl Unit {
         Unit { terms: new_terms }
     }
 
-    pub fn is_valid(expression: &str) -> bool {
-        Unit::from_str(expression).is_ok()
-    }
+    pub fn is_valid(expression: &str) -> bool { Unit::from_str(expression).is_ok() }
 }
 
 impl fmt::Display for Unit {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.expression())
-    }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{}", self.expression()) }
 }
 
 impl FromStr for Unit {
@@ -595,5 +586,108 @@ mod tests {
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
         assert_eq!(unit.mul(other).to_string().as_str(), "10m.20m");
+    }
+
+    #[cfg(feature = "with_serde")]
+    mod with_serde {
+        use super::super::Unit;
+        use atom::Atom;
+        use prefix::Prefix;
+        use serde_json;
+        use term::Term;
+
+        #[test]
+        fn validate_serialization_empty_terms() {
+            let unit = Unit { terms: vec![] };
+            let expected_json = r#"{"terms":[]}"#;
+
+            let j = serde_json::to_string(&unit).expect("Couldn't convert Unit to JSON String");
+
+            assert_eq!(expected_json, j);
+        }
+
+        #[test]
+        fn validate_serialization_full_terms() {
+            let expected_json = r#"{
+                "terms":[{
+                    "atom": "Meter",
+                    "prefix": "Centi",
+                    "factor": 100,
+                    "exponent": 456,
+                    "annotation": "stuff"
+                }, {
+                    "atom": "Gram",
+                    "prefix": null,
+                    "factor": 1,
+                    "exponent": -4,
+                    "annotation": null
+                }]
+        }"#.replace("\n", "")
+                .replace(" ", "");
+
+            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
+            term1.factor = 100;
+            term1.exponent = 456;
+            term1.annotation = Some("stuff".to_string());
+
+            let mut term2 = Term::new(Some(Atom::Gram), None);
+            term2.factor = 1;
+            term2.exponent = -4;
+
+            let unit = Unit {
+                terms: vec![term1, term2],
+            };
+
+            let j = serde_json::to_string(&unit).expect("Couldn't convert Unit to JSON String");
+
+            assert_eq!(expected_json, j);
+        }
+
+        #[test]
+        fn validate_deserialization_empty_terms() {
+            let json = r#"{"terms": []}"#;
+
+            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
+
+            let expected_unit = Unit { terms: vec![] };
+
+            assert_eq!(expected_unit, k);
+        }
+
+        #[test]
+        fn validate_deserialization_full_terms() {
+            let json = r#"{
+                "terms":[{
+                    "atom": "Meter",
+                    "prefix": "Centi",
+                    "factor": 100,
+                    "exponent": 456,
+                    "annotation": "stuff"
+                }, {
+                    "atom": "Gram",
+                    "prefix": null,
+                    "factor": 1,
+                    "exponent": -4,
+                    "annotation": null
+                }]
+            }"#;
+
+            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
+
+            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
+            term1.factor = 100;
+            term1.exponent = 456;
+            term1.annotation = Some("stuff".to_string());
+
+            let mut term2 = Term::new(Some(Atom::Gram), None);
+            term2.factor = 1;
+            term2.exponent = -4;
+
+            let expected_unit = Unit {
+                terms: vec![term1, term2],
+            };
+
+            assert_eq!(expected_unit, k);
+        }
     }
 }
