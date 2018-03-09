@@ -42,7 +42,8 @@ wise_units = { version = "0.1", features = ["with_serde"] }
 wise_units will make `Measurement` and `Unit` `js_serializable!` and
 `js_deserializable!` with this enabled, which means you can use it in javascript
 land, à la `[stdweb]`(https://github.com/koute/stdweb). Note that enabling this
-implies the feature `with_serde`.
+implies the feature `with_serde`. Also note that per-stdweb, this requires
+`nightly` Rust.
 
 This feature is disabled by default. To enable it:
 

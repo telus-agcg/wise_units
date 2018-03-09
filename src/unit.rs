@@ -19,10 +19,10 @@ pub struct Unit {
     pub terms: Vec<Term>,
 }
 
-#[cfg(feature = "with_stdweb")]
+#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 js_serializable!(Unit);
 
-#[cfg(feature = "with_stdweb")]
+#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 js_deserializable!(Unit);
 
 impl Unit {
