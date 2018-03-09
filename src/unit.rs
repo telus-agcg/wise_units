@@ -19,6 +19,12 @@ pub struct Unit {
     pub terms: Vec<Term>,
 }
 
+#[cfg(feature = "with_stdweb")]
+js_serializable!(Unit);
+
+#[cfg(feature = "with_stdweb")]
+js_deserializable!(Unit);
+
 impl Unit {
     pub fn is_special(&self) -> bool {
         self.terms.iter().any(|term| match term.atom {

@@ -34,6 +34,12 @@ pub struct Measurement {
     pub unit: Unit,
 }
 
+#[cfg(feature = "with_stdweb")]
+js_serializable!(Measurement);
+
+#[cfg(feature = "with_stdweb")]
+js_deserializable!(Measurement);
+
 impl Measurable for Measurement {
     fn get_unit(&self) -> &Unit { &self.unit }
 

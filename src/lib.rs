@@ -28,6 +28,10 @@ extern crate serde_derive;
 #[cfg(test)]
 extern crate serde_json;
 
+#[cfg(feature = "with_stdweb")]
+#[macro_use]
+extern crate stdweb;
+
 pub mod measurement;
 pub mod unit;
 
