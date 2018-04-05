@@ -350,24 +350,11 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_annotation_string(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::annotation_string => {
-                    term.annotation = Some(inner_pair.into_span().as_str().to_string())
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
     fn visit_annotation(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::annotation_string => {
-                    self.visit_annotation_string(inner_pair, term)?;
+                Rule::annotation => {
+                    term.annotation = Some(inner_pair.into_span().as_str().to_string())
                 }
                 _ => unreachable!(),
             }

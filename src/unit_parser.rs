@@ -221,22 +221,6 @@ mod tests {
     }
 
     #[test]
-    fn validate_annotation_string() {
-        let pairs = UnitParser::parse(Rule::annotation_string, "k");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::annotation_string, "{d'io}");
-        assert!(pairs.is_ok());
-
-        parses_to! {
-            parser: UnitParser,
-            input: "tot'nit",
-            rule: Rule::annotation_string,
-            tokens: [annotation_string(0, 7)]
-        };
-    }
-
-    #[test]
     fn validate_annotation() {
         let pairs = UnitParser::parse(Rule::annotation, "{d'io}");
         assert!(pairs.is_ok());
@@ -246,9 +230,7 @@ mod tests {
             input: "{tot'nit}",
             rule: Rule::annotation,
             tokens: [
-                annotation(0, 9, [
-                           annotation_string(1, 8)
-                ])
+                annotation(0, 9)
             ]
         };
 
@@ -319,9 +301,7 @@ mod tests {
                                 digits(4, 5)
                             ])
                         ]),
-                        annotation(5, 11, [
-                            annotation_string(6, 10)
-                        ])
+                        annotation(5, 11)
                    ])
                ])
             ]
@@ -350,9 +330,7 @@ mod tests {
                                         digits(4, 5)
                                     ])
                                 ]),
-                                annotation(5, 11, [
-                                    annotation_string(6, 10)
-                                ])
+                                annotation(5, 11)
                            ])
                        ])
                    ])
@@ -386,9 +364,7 @@ mod tests {
                                         digits(4, 5)
                                     ])
                                 ]),
-                                annotation(5, 11, [
-                                    annotation_string(6, 10)
-                                ])
+                                annotation(5, 11)
                            ])
                        ])
                     ]),
