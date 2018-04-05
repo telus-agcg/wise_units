@@ -11,8 +11,6 @@ pub trait Visitor<T> {
 }
 
 type Factor = u32;
-// type Digit = i32;
-// type Exponent = i32;
 struct Exponent(i32);
 struct Digit(i32);
 
@@ -25,7 +23,8 @@ impl Visitor<Factor> for Interpreter {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
                 Rule::digits => {
-                    factor = <Self as Visitor<Digit>>::visit(self, inner_pair)?;
+                    let digit = <Self as Visitor<Digit>>::visit(self, inner_pair)?;
+                    factor = digit.0;
                 }
                 _ => unreachable!(),
             }
@@ -37,6 +36,31 @@ impl Visitor<Factor> for Interpreter {
 
 impl Visitor<Exponent> for Interpreter {
     fn visit(&mut self, pair: Pair<Rule>) -> Result<Exponent, Error> {
+        let mut e = 1;
+
+        for inner_pair in pair.into_inner() {
+            match inner_pair.as_rule() {
+                Rule::sign => {
+                    let span = inner_pair.into_span();
+                    let string = span.as_str();
+
+                    match string {
+                        "+" => {}
+                        "-" => {
+                            e = -e;
+                        }
+                        _ => unreachable!(),
+                    }
+                }
+                Rule::digits => {
+                    let digit = <Self as Visitor<Digit>>::visit(self, inner_pair)?;
+                    e *= digit.0;
+                }
+                _ => unreachable!(),
+            }
+        }
+
+        Ok(Exponent(e))
     }
 }
 
@@ -330,35 +354,6 @@ impl Interpreter {
                 _ => unreachable!(),
             }
         }
-
-        Ok(())
-    }
-
-    fn visit_exponent(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
-        let mut e = 1;
-
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::sign => {
-                    let span = inner_pair.into_span();
-                    let string = span.as_str();
-
-                    match string {
-                        "+" => {}
-                        "-" => {
-                            e = -e;
-                        }
-                        _ => unreachable!(),
-                    }
-                }
-                Rule::digits => {
-                    e *= <Self as Visitor<Digit>>::visit(self, inner_pair)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        term.exponent = e;
 
         Ok(())
     }
