@@ -309,20 +309,18 @@ mod tests {
                 component_with_factor(0, 11, [
                     factor(0, 1, [digits(0, 1)]),
                     basic_component(1, 11, [
-                        annotated_annotatable(1, 11, [
-                            annotatable(1, 5, [
-                                simple_unit(1, 3, [
-                                    prefix_symbol(1, 2),
-                                    atom_symbol(2, 3)
-                                ]),
-                                exponent(3, 5, [
-                                    sign(3, 4),
-                                    digits(4, 5)
-                                ])
+                        annotatable(1, 5, [
+                            simple_unit(1, 3, [
+                                prefix_symbol(1, 2),
+                                atom_symbol(2, 3)
                             ]),
-                            annotation(5, 11, [
-                                annotation_string(6, 10)
+                            exponent(3, 5, [
+                                sign(3, 4),
+                                digits(4, 5)
                             ])
+                        ]),
+                        annotation(5, 11, [
+                            annotation_string(6, 10)
                         ])
                    ])
                ])
@@ -342,20 +340,18 @@ mod tests {
                         component_with_factor(0, 11, [
                             factor(0, 1, [digits(0, 1)]),
                             basic_component(1, 11, [
-                                annotated_annotatable(1, 11, [
-                                    annotatable(1, 5, [
-                                        simple_unit(1, 3, [
-                                            prefix_symbol(1, 2),
-                                            atom_symbol(2, 3)
-                                        ]),
-                                        exponent(3, 5, [
-                                            sign(3, 4),
-                                            digits(4, 5)
-                                        ])
+                                annotatable(1, 5, [
+                                    simple_unit(1, 3, [
+                                        prefix_symbol(1, 2),
+                                        atom_symbol(2, 3)
                                     ]),
-                                    annotation(5, 11, [
-                                        annotation_string(6, 10)
+                                    exponent(3, 5, [
+                                        sign(3, 4),
+                                        digits(4, 5)
                                     ])
+                                ]),
+                                annotation(5, 11, [
+                                    annotation_string(6, 10)
                                 ])
                            ])
                        ])
@@ -380,20 +376,18 @@ mod tests {
                         component_with_factor(0, 11, [
                             factor(0, 1, [digits(0, 1)]),
                             basic_component(1, 11, [
-                                annotated_annotatable(1, 11, [
-                                    annotatable(1, 5, [
-                                        simple_unit(1, 3, [
-                                            prefix_symbol(1, 2),
-                                            atom_symbol(2, 3)
-                                        ]),
-                                        exponent(3, 5, [
-                                            sign(3, 4),
-                                            digits(4, 5)
-                                        ])
+                                annotatable(1, 5, [
+                                    simple_unit(1, 3, [
+                                        prefix_symbol(1, 2),
+                                        atom_symbol(2, 3)
                                     ]),
-                                    annotation(5, 11, [
-                                        annotation_string(6, 10)
+                                    exponent(3, 5, [
+                                        sign(3, 4),
+                                        digits(4, 5)
                                     ])
+                                ]),
+                                annotation(5, 11, [
+                                    annotation_string(6, 10)
                                 ])
                            ])
                        ])

@@ -12,19 +12,19 @@ dot_term = { component ~ "." ~ term }
 slash_term = { component ~ "/" ~ term }
 basic_term = { component }
 
+// <component>
 component = { component_with_factor | basic_component }
 
 component_with_factor = { factor ~ basic_component }
 
 basic_component = {
-    annotated_annotatable |
+    annotatable ~ annotation |
         annotatable |
         annotation |
         factor |
         "(" ~ term ~ ")"
 }
 
-annotated_annotatable = { annotatable ~ annotation }
 annotation = { "{" ~ annotation_string ~ "}" }
 annotation_string = { ('!'..'z')* }
 open_curly = _{ "{" }

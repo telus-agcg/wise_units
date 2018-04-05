@@ -376,26 +376,6 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_annotated_annotatable(
-        &mut self,
-        pair: Pair<Rule>,
-        term: &mut Term,
-    ) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::annotatable => {
-                    self.visit_annotatable(inner_pair, term)?;
-                }
-                Rule::annotation => {
-                    self.visit_annotation(inner_pair, term)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
     fn visit_factor(&mut self, pair: Pair<Rule>) -> Result<u32, Error> {
         let mut factor = 0;
 
@@ -421,14 +401,11 @@ impl Interpreter {
 
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::annotated_annotatable => {
-                    self.visit_annotated_annotatable(inner_pair, &mut term)?;
-                }
                 Rule::annotatable => {
                     self.visit_annotatable(inner_pair, &mut term)?;
                 }
                 Rule::annotation => {
-                    term.annotation = Some(inner_pair.into_span().as_str().to_string());
+                    self.visit_annotation(inner_pair, &mut term)?;
                 }
                 Rule::factor => {
                     term.factor = self.visit_factor(inner_pair)?;
