@@ -151,39 +151,6 @@ mod tests {
     }
 
     #[test]
-    fn validate_prefixed_atom() {
-        let pairs = UnitParser::parse(Rule::prefixed_atom, "km");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::prefixed_atom, "k");
-        assert!(pairs.is_err());
-
-        let pairs = UnitParser::parse(Rule::prefixed_atom, "m");
-        assert!(pairs.is_err());
-
-        parses_to! {
-            parser: UnitParser,
-            input: "km",
-            rule: Rule::prefixed_atom,
-            tokens: [prefixed_atom(0, 2, [
-                                   prefix_symbol(0, 1),
-                                   atom_symbol(1, 2)
-            ])]
-        }
-
-        parses_to! {
-            parser: UnitParser,
-            input: "kilometer",
-            rule: Rule::prefixed_atom,
-            tokens: [
-                prefixed_atom(0, 9, [
-                   prefix_symbol(0, 4),
-                   atom_symbol(4, 9)
-            ])]
-        }
-    }
-
-    #[test]
     fn validate_simple_unit() {
         let pairs = UnitParser::parse(Rule::simple_unit, "km");
         assert!(pairs.is_ok());
@@ -200,11 +167,9 @@ mod tests {
             rule: Rule::simple_unit,
             tokens: [
                 simple_unit(0, 2, [
-                            prefixed_atom(0, 2, [
-                                          prefix_symbol(0, 1),
-                                          atom_symbol(1, 2)
-                            ])]
-                           )
+                      prefix_symbol(0, 1),
+                      atom_symbol(1, 2)
+                ])
             ]
         }
     }
@@ -226,10 +191,8 @@ mod tests {
             rule: Rule::simple_unit_with_exponent,
             tokens: [
                   simple_unit(0, 2, [
-                              prefixed_atom(0, 2, [
-                                            prefix_symbol(0, 1),
-                                            atom_symbol(1, 2)
-                              ])
+                        prefix_symbol(0, 1),
+                        atom_symbol(1, 2)
                   ]),
                   exponent(2, 3, [digits(2, 3)])
             ]
@@ -329,10 +292,8 @@ mod tests {
                       basic_component(1, 3, [
                               annotatable(1, 3, [
                                       simple_unit(1, 3, [
-                                              prefixed_atom(1, 3, [
-                                                        prefix_symbol(1, 2),
-                                                        atom_symbol(2, 3)
-                                              ])
+                                                prefix_symbol(1, 2),
+                                                atom_symbol(2, 3)
                                       ])
                               ])
                       ])
@@ -351,10 +312,8 @@ mod tests {
                         annotated_annotatable(1, 11, [
                             annotatable(1, 5, [
                                 simple_unit(1, 3, [
-                                    prefixed_atom(1, 3, [
-                                        prefix_symbol(1, 2),
-                                        atom_symbol(2, 3)
-                                    ])
+                                    prefix_symbol(1, 2),
+                                    atom_symbol(2, 3)
                                 ]),
                                 exponent(3, 5, [
                                     sign(3, 4),
@@ -386,10 +345,8 @@ mod tests {
                                 annotated_annotatable(1, 11, [
                                     annotatable(1, 5, [
                                         simple_unit(1, 3, [
-                                            prefixed_atom(1, 3, [
-                                                prefix_symbol(1, 2),
-                                                atom_symbol(2, 3)
-                                            ])
+                                            prefix_symbol(1, 2),
+                                            atom_symbol(2, 3)
                                         ]),
                                         exponent(3, 5, [
                                             sign(3, 4),
@@ -426,10 +383,8 @@ mod tests {
                                 annotated_annotatable(1, 11, [
                                     annotatable(1, 5, [
                                         simple_unit(1, 3, [
-                                            prefixed_atom(1, 3, [
-                                                prefix_symbol(1, 2),
-                                                atom_symbol(2, 3)
-                                            ])
+                                            prefix_symbol(1, 2),
+                                            atom_symbol(2, 3)
                                         ]),
                                         exponent(3, 5, [
                                             sign(3, 4),

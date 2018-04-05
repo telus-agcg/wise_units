@@ -30,11 +30,12 @@ annotation_string = { ('!'..'z')* }
 open_curly = _{ "{" }
 closed_curly = _{ "}" }
 
+// <annotatable>
 annotatable = { simple_unit_with_exponent | simple_unit }
 simple_unit_with_exponent = _{ simple_unit ~ exponent }
-simple_unit = { prefixed_atom | atom_symbol }
 
-prefixed_atom = { prefix_symbol ~ atom_symbol }
+// <simple-unit>
+simple_unit = { prefix_symbol ~ atom_symbol | atom_symbol }
 
 // Atoms
 atom_symbol = {

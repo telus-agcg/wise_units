@@ -273,22 +273,6 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_prefixed_atom(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::prefix_symbol => {
-                    self.visit_prefix_symbol(inner_pair, term)?;
-                }
-                Rule::atom_symbol => {
-                    self.visit_atom_symbol(inner_pair, term)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
     fn visit_digits(&mut self, pair: Pair<Rule>) -> Result<i32, Error> {
         let span = pair.into_span();
         let string = span.as_str();
@@ -330,8 +314,8 @@ impl Interpreter {
     fn visit_simple_unit(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::prefixed_atom => {
-                    self.visit_prefixed_atom(inner_pair, term)?;
+                Rule::prefix_symbol => {
+                    self.visit_prefix_symbol(inner_pair, term)?;
                 }
                 Rule::atom_symbol => {
                     self.visit_atom_symbol(inner_pair, term)?;
