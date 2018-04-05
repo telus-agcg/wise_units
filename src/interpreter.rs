@@ -11,7 +11,10 @@ pub trait Visitor<T> {
 }
 
 type Factor = u32;
-type Digit = i32;
+// type Digit = i32;
+// type Exponent = i32;
+struct Exponent(i32);
+struct Digit(i32);
 
 pub struct Interpreter;
 
@@ -32,14 +35,21 @@ impl Visitor<Factor> for Interpreter {
     }
 }
 
+impl Visitor<Exponent> for Interpreter {
+    fn visit(&mut self, pair: Pair<Rule>) -> Result<Exponent, Error> {
+    }
+}
+
 impl Visitor<Digit> for Interpreter {
-    fn visit(&mut self, pair: Pair<Rule>) -> Result<i32, Error> {
+    fn visit(&mut self, pair: Pair<Rule>) -> Result<Digit, Error> {
         let span = pair.into_span();
         let string = span.as_str();
 
-        string.parse::<i32>().map_err(|e| Error::ParsingError {
+        let internal = string.parse::<i32>().map_err(|e| Error::ParsingError {
             expression: e.to_string(),
-        })
+        })?;
+
+        Ok(Digit(internal))
     }
 }
 
