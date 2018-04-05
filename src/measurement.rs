@@ -26,7 +26,7 @@ use unit_parser::{Rule, UnitParser};
 ///
 /// assert!(value_difference < 0.000_001);
 /// ```
-///
+/// 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialOrd)]
 pub struct Measurement {
@@ -41,9 +41,13 @@ js_serializable!(Measurement);
 js_deserializable!(Measurement);
 
 impl Measurable for Measurement {
-    fn get_unit(&self) -> &Unit { &self.unit }
+    fn get_unit(&self) -> &Unit {
+        &self.unit
+    }
 
-    fn get_value(&self) -> f64 { self.value }
+    fn get_value(&self) -> f64 {
+        self.value
+    }
 
     /// This scalar is the Measurement's value combined with any scalars that
     /// are part of the Unit's designation.
@@ -66,7 +70,7 @@ impl Measurable for Measurement {
     /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
     /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
     /// ```
-    ///
+    /// 
     fn scalar(&self) -> f64 {
         if self.is_special() {
             self.unit.calculate_scalar(self.value)
@@ -96,7 +100,7 @@ impl Measurable for Measurement {
     /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
     /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
     /// ```
-    ///
+    /// 
     fn magnitude(&self) -> f64 {
         if self.is_special() {
             let scalar = self.scalar();
@@ -112,8 +116,8 @@ impl Measurement {
         let unit = Unit::from_str(expression)?;
 
         let m = Measurement {
-            value: value,
-            unit: unit,
+            value,
+            unit,
         };
 
         Ok(m)
@@ -122,7 +126,7 @@ impl Measurement {
     /// Converts the Measurement to another unit type. That type is specified
     /// using a str of characters that represents the other unit type: ex.
     /// `"m2/s"`.
-    ///
+    /// 
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
         let pairs = UnitParser::parse(Rule::main_term, expression)?;
 
@@ -160,13 +164,17 @@ impl Measurement {
     /// let km = Measurement::new(1.0, "km").unwrap();
     /// assert_eq!(km.unit_string(), "km".to_string());
     /// ```
-    ///
-    pub fn unit_string(&self) -> String { self.unit.to_string() }
+    /// 
+    pub fn unit_string(&self) -> String {
+        self.unit.to_string()
+    }
 
     /// Really this is just to comply with Unitwise's API; not really sure how
     /// useful it is.
-    ///
-    pub fn to_f64(&self) -> f64 { self.value }
+    /// 
+    pub fn to_f64(&self) -> f64 {
+        self.value
+    }
 
     fn converted_scalar(&self, other_unit: &Unit) -> f64 {
         if self.is_special() && other_unit.is_special() {
@@ -182,7 +190,7 @@ impl Measurement {
     }
 
     /// Multiplies the `Measurement`'s scalar by `scalar` and returns a new `Measurement`.
-    ///
+    /// 
     pub fn mul_scalar(&self, scalar: f64) -> Measurement {
         let new_value = self.value * scalar;
 
@@ -193,7 +201,7 @@ impl Measurement {
     }
 
     /// Divides the `Measurement`'s scalar by `scalar` and returns a new `Measurement`.
-    ///
+    /// 
     pub fn div_scalar(&self, scalar: f64) -> Measurement {
         let new_value = self.value / scalar;
 

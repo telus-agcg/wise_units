@@ -422,7 +422,7 @@ impl Atom {
                     let term = Term::new(Some(Atom::TheUnity), None);
                     let unit = Unit { terms: vec![term] };
 
-                    Ok(Definition { value: 1.0, unit: unit })
+                    Ok(Definition { value: 1.0, unit })
                 },
             Atom::AcreBR                         => Definition::new(4840.0, "[yd_br]2"),
             Atom::AcreUS                         => Definition::new(160.0, "[rd_us]2"),
