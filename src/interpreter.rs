@@ -343,26 +343,6 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_simple_unit_with_exponent(
-        &mut self,
-        pair: Pair<Rule>,
-        term: &mut Term,
-    ) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::simple_unit => {
-                    self.visit_simple_unit(inner_pair, term)?;
-                }
-                Rule::exponent => {
-                    self.visit_exponent(inner_pair, term)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
     // TODO
     // fn visit_special_unit(&mut self, su: &SpecialUnit) -> Term {
     //     // Term::new(None, None)
@@ -372,11 +352,11 @@ impl Interpreter {
     fn visit_annotatable(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::simple_unit_with_exponent => {
-                    self.visit_simple_unit_with_exponent(inner_pair, term)?;
-                }
                 Rule::simple_unit => {
                     self.visit_simple_unit(inner_pair, term)?;
+                }
+                Rule::exponent => {
+                    self.visit_exponent(inner_pair, term)?;
                 }
                 // Rule::special_unit => {}
                 _ => unreachable!(),

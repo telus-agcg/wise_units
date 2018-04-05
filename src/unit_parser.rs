@@ -225,15 +225,13 @@ mod tests {
             input: "km2",
             rule: Rule::simple_unit_with_exponent,
             tokens: [
-                simple_unit_with_exponent(0, 3, [
-                                          simple_unit(0, 2, [
-                                                      prefixed_atom(0, 2, [
-                                                                    prefix_symbol(0, 1),
-                                                                    atom_symbol(1, 2)
-                                                      ])
-                                          ]),
-                                          exponent(2, 3, [digits(2, 3)])
-                ])
+                  simple_unit(0, 2, [
+                              prefixed_atom(0, 2, [
+                                            prefix_symbol(0, 1),
+                                            atom_symbol(1, 2)
+                              ])
+                  ]),
+                  exponent(2, 3, [digits(2, 3)])
             ]
         }
     }
@@ -352,17 +350,15 @@ mod tests {
                     basic_component(1, 11, [
                         annotated_annotatable(1, 11, [
                             annotatable(1, 5, [
-                                simple_unit_with_exponent(1, 5, [
-                                    simple_unit(1, 3, [
-                                        prefixed_atom(1, 3, [
-                                            prefix_symbol(1, 2),
-                                            atom_symbol(2, 3)
-                                        ])
-                                    ]),
-                                    exponent(3, 5, [
-                                        sign(3, 4),
-                                        digits(4, 5)
+                                simple_unit(1, 3, [
+                                    prefixed_atom(1, 3, [
+                                        prefix_symbol(1, 2),
+                                        atom_symbol(2, 3)
                                     ])
+                                ]),
+                                exponent(3, 5, [
+                                    sign(3, 4),
+                                    digits(4, 5)
                                 ])
                             ]),
                             annotation(5, 11, [
@@ -389,17 +385,15 @@ mod tests {
                             basic_component(1, 11, [
                                 annotated_annotatable(1, 11, [
                                     annotatable(1, 5, [
-                                        simple_unit_with_exponent(1, 5, [
-                                            simple_unit(1, 3, [
-                                                prefixed_atom(1, 3, [
-                                                    prefix_symbol(1, 2),
-                                                    atom_symbol(2, 3)
-                                                ])
-                                            ]),
-                                            exponent(3, 5, [
-                                                sign(3, 4),
-                                                digits(4, 5)
+                                        simple_unit(1, 3, [
+                                            prefixed_atom(1, 3, [
+                                                prefix_symbol(1, 2),
+                                                atom_symbol(2, 3)
                                             ])
+                                        ]),
+                                        exponent(3, 5, [
+                                            sign(3, 4),
+                                            digits(4, 5)
                                         ])
                                     ]),
                                     annotation(5, 11, [
@@ -431,17 +425,15 @@ mod tests {
                             basic_component(1, 11, [
                                 annotated_annotatable(1, 11, [
                                     annotatable(1, 5, [
-                                        simple_unit_with_exponent(1, 5, [
-                                            simple_unit(1, 3, [
-                                                prefixed_atom(1, 3, [
-                                                    prefix_symbol(1, 2),
-                                                    atom_symbol(2, 3)
-                                                ])
-                                            ]),
-                                            exponent(3, 5, [
-                                                sign(3, 4),
-                                                digits(4, 5)
+                                        simple_unit(1, 3, [
+                                            prefixed_atom(1, 3, [
+                                                prefix_symbol(1, 2),
+                                                atom_symbol(2, 3)
                                             ])
+                                        ]),
+                                        exponent(3, 5, [
+                                            sign(3, 4),
+                                            digits(4, 5)
                                         ])
                                     ]),
                                     annotation(5, 11, [
