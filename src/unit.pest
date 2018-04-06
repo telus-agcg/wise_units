@@ -5,12 +5,11 @@ slash_main_term =  { "/" ~ term }
 term = {
     dot_term |
         slash_term |
-        basic_term
+        component
 }
 
 dot_term = { component ~ "." ~ term }
 slash_term = { component ~ "/" ~ term }
-basic_term = { component }
 
 // <component>
 component = { component_with_factor | basic_component }

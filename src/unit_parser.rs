@@ -309,32 +309,30 @@ mod tests {
     }
 
     #[test]
-    fn validate_basic_term() {
+    fn validate_component_with_annotation() {
         parses_to! {
             parser: UnitParser,
             input: "2km-2{meow}",
-            rule: Rule::basic_term,
+            rule: Rule::component,
             tokens: [
-                basic_term(0, 11, [
-                    component(0, 11, [
-                        component_with_factor(0, 11, [
-                            factor(0, 1, [digits(0, 1)]),
-                            basic_component(1, 11, [
-                                annotatable(1, 5, [
-                                    simple_unit(1, 3, [
-                                        prefix_symbol(1, 2),
-                                        atom_symbol(2, 3)
-                                    ]),
-                                    exponent(3, 5, [
-                                        sign(3, 4),
-                                        digits(4, 5)
-                                    ])
+                component(0, 11, [
+                    component_with_factor(0, 11, [
+                        factor(0, 1, [digits(0, 1)]),
+                        basic_component(1, 11, [
+                            annotatable(1, 5, [
+                                simple_unit(1, 3, [
+                                    prefix_symbol(1, 2),
+                                    atom_symbol(2, 3)
                                 ]),
-                                annotation(5, 11)
-                           ])
+                                exponent(3, 5, [
+                                    sign(3, 4),
+                                    digits(4, 5)
+                                ])
+                            ]),
+                            annotation(5, 11)
                        ])
                    ])
-                ])
+               ])
             ]
         };
     }
@@ -380,13 +378,11 @@ mod tests {
                                 ])
                             ]),
                             term(21, 27, [
-                                basic_term(21, 27, [
-                                    component(21, 27, [
-                                        basic_component(21, 27, [
-                                            annotatable(21, 27, [
-                                                simple_unit(21, 27, [
-                                                    atom_symbol(21, 27)
-                                                ])
+                                component(21, 27, [
+                                    basic_component(21, 27, [
+                                        annotatable(21, 27, [
+                                            simple_unit(21, 27, [
+                                                atom_symbol(21, 27)
                                             ])
                                         ])
                                     ])
@@ -429,13 +425,11 @@ mod tests {
                                     ])
                                 ]),
                                 term(16, 24, [
-                                    basic_term(16, 24, [
-                                        component(16, 24, [
-                                            basic_component(16, 24, [
-                                                annotatable(16, 24, [
-                                                    simple_unit(16, 24, [
-                                                        atom_symbol(16, 24)
-                                                    ])
+                                    component(16, 24, [
+                                        basic_component(16, 24, [
+                                            annotatable(16, 24, [
+                                                simple_unit(16, 24, [
+                                                    atom_symbol(16, 24)
                                                 ])
                                             ])
                                         ])

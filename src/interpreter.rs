@@ -456,19 +456,6 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_basic_term(&mut self, pair: Pair<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::component => {
-                    self.visit_component(inner_pair, terms)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
     fn visit_slash_term(&mut self, pair: Pair<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
@@ -516,7 +503,9 @@ impl Interpreter {
             match inner_pair.as_rule() {
                 Rule::dot_term => self.visit_dot_term(inner_pair, &mut terms)?,
                 Rule::slash_term => self.visit_slash_term(inner_pair, &mut terms)?,
-                Rule::basic_term => self.visit_basic_term(inner_pair, &mut terms)?,
+                Rule::component => {
+                    self.visit_component(inner_pair, terms)?;
+                }
                 _ => {
                     println!("visit_term: unreachable rule: {:?}", inner_pair);
                     unreachable!()
@@ -608,20 +597,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_interpret_basic_term() {
-        let pairs = UnitParser::parse(Rule::main_term, "m").unwrap();
-
-        let mut i = Interpreter;
-        let actual = i.interpret(pairs).unwrap();
-        let expected = Unit {
-            terms: vec![Term::new(Some(Atom::Meter), None)],
-        };
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_basic_term_with_exponent() {
+    fn validate_interpret_component_with_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m2").unwrap();
 
         let mut i = Interpreter;
@@ -637,7 +613,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_interpret_basic_term_with_prefix() {
+    fn validate_interpret_component_with_prefix() {
         let pairs = UnitParser::parse(Rule::main_term, "km").unwrap();
 
         let mut i = Interpreter;
@@ -651,7 +627,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_interpret_basic_term_with_factor() {
+    fn validate_interpret_component_with_factor() {
         let pairs = UnitParser::parse(Rule::main_term, "2m").unwrap();
 
         let mut i = Interpreter;
