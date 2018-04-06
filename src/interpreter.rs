@@ -273,22 +273,6 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_prefixed_atom(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::prefix_symbol => {
-                    self.visit_prefix_symbol(inner_pair, term)?;
-                }
-                Rule::atom_symbol => {
-                    self.visit_atom_symbol(inner_pair, term)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
     fn visit_digits(&mut self, pair: Pair<Rule>) -> Result<i32, Error> {
         let span = pair.into_span();
         let string = span.as_str();
@@ -330,31 +314,11 @@ impl Interpreter {
     fn visit_simple_unit(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::prefixed_atom => {
-                    self.visit_prefixed_atom(inner_pair, term)?;
+                Rule::prefix_symbol => {
+                    self.visit_prefix_symbol(inner_pair, term)?;
                 }
                 Rule::atom_symbol => {
                     self.visit_atom_symbol(inner_pair, term)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
-    fn visit_simple_unit_with_exponent(
-        &mut self,
-        pair: Pair<Rule>,
-        term: &mut Term,
-    ) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::simple_unit => {
-                    self.visit_simple_unit(inner_pair, term)?;
-                }
-                Rule::exponent => {
-                    self.visit_exponent(inner_pair, term)?;
                 }
                 _ => unreachable!(),
             }
@@ -372,26 +336,13 @@ impl Interpreter {
     fn visit_annotatable(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::simple_unit_with_exponent => {
-                    self.visit_simple_unit_with_exponent(inner_pair, term)?;
-                }
                 Rule::simple_unit => {
                     self.visit_simple_unit(inner_pair, term)?;
                 }
-                // Rule::special_unit => {}
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
-    fn visit_annotation_string(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::annotation_string => {
-                    term.annotation = Some(inner_pair.into_span().as_str().to_string())
+                Rule::exponent => {
+                    self.visit_exponent(inner_pair, term)?;
                 }
+                // Rule::special_unit => {}
                 _ => unreachable!(),
             }
         }
@@ -402,28 +353,8 @@ impl Interpreter {
     fn visit_annotation(&mut self, pair: Pair<Rule>, term: &mut Term) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::annotation_string => {
-                    self.visit_annotation_string(inner_pair, term)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
-    fn visit_annotated_annotatable(
-        &mut self,
-        pair: Pair<Rule>,
-        term: &mut Term,
-    ) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::annotatable => {
-                    self.visit_annotatable(inner_pair, term)?;
-                }
                 Rule::annotation => {
-                    self.visit_annotation(inner_pair, term)?;
+                    term.annotation = Some(inner_pair.into_span().as_str().to_string())
                 }
                 _ => unreachable!(),
             }
@@ -457,14 +388,11 @@ impl Interpreter {
 
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
-                Rule::annotated_annotatable => {
-                    self.visit_annotated_annotatable(inner_pair, &mut term)?;
-                }
                 Rule::annotatable => {
                     self.visit_annotatable(inner_pair, &mut term)?;
                 }
                 Rule::annotation => {
-                    term.annotation = Some(inner_pair.into_span().as_str().to_string());
+                    self.visit_annotation(inner_pair, &mut term)?;
                 }
                 Rule::factor => {
                     term.factor = self.visit_factor(inner_pair)?;
@@ -528,19 +456,6 @@ impl Interpreter {
         Ok(())
     }
 
-    fn visit_basic_term(&mut self, pair: Pair<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::component => {
-                    self.visit_component(inner_pair, terms)?;
-                }
-                _ => unreachable!(),
-            }
-        }
-
-        Ok(())
-    }
-
     fn visit_slash_term(&mut self, pair: Pair<Rule>, terms: &mut Vec<Term>) -> Result<(), Error> {
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
@@ -588,7 +503,9 @@ impl Interpreter {
             match inner_pair.as_rule() {
                 Rule::dot_term => self.visit_dot_term(inner_pair, &mut terms)?,
                 Rule::slash_term => self.visit_slash_term(inner_pair, &mut terms)?,
-                Rule::basic_term => self.visit_basic_term(inner_pair, &mut terms)?,
+                Rule::component => {
+                    self.visit_component(inner_pair, terms)?;
+                }
                 _ => {
                     println!("visit_term: unreachable rule: {:?}", inner_pair);
                     unreachable!()
@@ -680,20 +597,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_interpret_basic_term() {
-        let pairs = UnitParser::parse(Rule::main_term, "m").unwrap();
-
-        let mut i = Interpreter;
-        let actual = i.interpret(pairs).unwrap();
-        let expected = Unit {
-            terms: vec![Term::new(Some(Atom::Meter), None)],
-        };
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_basic_term_with_exponent() {
+    fn validate_interpret_component_with_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m2").unwrap();
 
         let mut i = Interpreter;
@@ -709,7 +613,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_interpret_basic_term_with_prefix() {
+    fn validate_interpret_component_with_prefix() {
         let pairs = UnitParser::parse(Rule::main_term, "km").unwrap();
 
         let mut i = Interpreter;
@@ -723,7 +627,7 @@ mod tests {
     }
 
     #[test]
-    fn validate_interpret_basic_term_with_factor() {
+    fn validate_interpret_component_with_factor() {
         let pairs = UnitParser::parse(Rule::main_term, "2m").unwrap();
 
         let mut i = Interpreter;

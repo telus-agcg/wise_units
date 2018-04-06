@@ -1,40 +1,43 @@
-main_term = { slash_main_term | term }
+// <main-term>
+main_term = ${ slash_main_term | term }
 
 slash_main_term =  { "/" ~ term }
 
+// <term>
 term = {
-    dot_term |
-        slash_term |
-        basic_term
+    dot_term | slash_term | component
 }
 
 dot_term = { component ~ "." ~ term }
 slash_term = { component ~ "/" ~ term }
-basic_term = { component }
 
+// <component>
 component = { component_with_factor | basic_component }
 
 component_with_factor = { factor ~ basic_component }
 
 basic_component = {
-    annotated_annotatable |
+    annotatable ~ annotation |
         annotatable |
         annotation |
         factor |
-        "(" ~ term ~ ")"
+        open_paren ~ term ~ closed_paren
 }
 
-annotated_annotatable = { annotatable ~ annotation }
-annotation = { "{" ~ annotation_string ~ "}" }
-annotation_string = { ('!'..'z')* }
+open_paren = _{ "(" }
+closed_paren = _{ ")" }
+
+// <annotation>
+annotation = { open_curly ~ ('!'..'z')* ~ closed_curly }
 open_curly = _{ "{" }
 closed_curly = _{ "}" }
 
+// <annotatable>
 annotatable = { simple_unit_with_exponent | simple_unit }
-simple_unit_with_exponent = { simple_unit ~ exponent }
-simple_unit = { prefixed_atom | atom_symbol }
+simple_unit_with_exponent = _{ simple_unit ~ exponent }
 
-prefixed_atom = { prefix_symbol ~ atom_symbol }
+// <simple-unit>
+simple_unit = { prefix_symbol ~ atom_symbol | atom_symbol }
 
 // Atoms
 atom_symbol = {

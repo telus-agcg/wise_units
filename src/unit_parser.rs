@@ -151,39 +151,6 @@ mod tests {
     }
 
     #[test]
-    fn validate_prefixed_atom() {
-        let pairs = UnitParser::parse(Rule::prefixed_atom, "km");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::prefixed_atom, "k");
-        assert!(pairs.is_err());
-
-        let pairs = UnitParser::parse(Rule::prefixed_atom, "m");
-        assert!(pairs.is_err());
-
-        parses_to! {
-            parser: UnitParser,
-            input: "km",
-            rule: Rule::prefixed_atom,
-            tokens: [prefixed_atom(0, 2, [
-                                   prefix_symbol(0, 1),
-                                   atom_symbol(1, 2)
-            ])]
-        }
-
-        parses_to! {
-            parser: UnitParser,
-            input: "kilometer",
-            rule: Rule::prefixed_atom,
-            tokens: [
-                prefixed_atom(0, 9, [
-                   prefix_symbol(0, 4),
-                   atom_symbol(4, 9)
-            ])]
-        }
-    }
-
-    #[test]
     fn validate_simple_unit() {
         let pairs = UnitParser::parse(Rule::simple_unit, "km");
         assert!(pairs.is_ok());
@@ -200,11 +167,9 @@ mod tests {
             rule: Rule::simple_unit,
             tokens: [
                 simple_unit(0, 2, [
-                            prefixed_atom(0, 2, [
-                                          prefix_symbol(0, 1),
-                                          atom_symbol(1, 2)
-                            ])]
-                           )
+                      prefix_symbol(0, 1),
+                      atom_symbol(1, 2)
+                ])
             ]
         }
     }
@@ -225,15 +190,11 @@ mod tests {
             input: "km2",
             rule: Rule::simple_unit_with_exponent,
             tokens: [
-                simple_unit_with_exponent(0, 3, [
-                                          simple_unit(0, 2, [
-                                                      prefixed_atom(0, 2, [
-                                                                    prefix_symbol(0, 1),
-                                                                    atom_symbol(1, 2)
-                                                      ])
-                                          ]),
-                                          exponent(2, 3, [digits(2, 3)])
-                ])
+                  simple_unit(0, 2, [
+                        prefix_symbol(0, 1),
+                        atom_symbol(1, 2)
+                  ]),
+                  exponent(2, 3, [digits(2, 3)])
             ]
         }
     }
@@ -260,22 +221,6 @@ mod tests {
     }
 
     #[test]
-    fn validate_annotation_string() {
-        let pairs = UnitParser::parse(Rule::annotation_string, "k");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::annotation_string, "{d'io}");
-        assert!(pairs.is_ok());
-
-        parses_to! {
-            parser: UnitParser,
-            input: "tot'nit",
-            rule: Rule::annotation_string,
-            tokens: [annotation_string(0, 7)]
-        };
-    }
-
-    #[test]
     fn validate_annotation() {
         let pairs = UnitParser::parse(Rule::annotation, "{d'io}");
         assert!(pairs.is_ok());
@@ -285,9 +230,7 @@ mod tests {
             input: "{tot'nit}",
             rule: Rule::annotation,
             tokens: [
-                annotation(0, 9, [
-                           annotation_string(1, 8)
-                ])
+                annotation(0, 9)
             ]
         };
 
@@ -331,10 +274,8 @@ mod tests {
                       basic_component(1, 3, [
                               annotatable(1, 3, [
                                       simple_unit(1, 3, [
-                                              prefixed_atom(1, 3, [
-                                                        prefix_symbol(1, 2),
-                                                        atom_symbol(2, 3)
-                                              ])
+                                                prefix_symbol(1, 2),
+                                                atom_symbol(2, 3)
                                       ])
                               ])
                       ])
@@ -350,25 +291,17 @@ mod tests {
                 component_with_factor(0, 11, [
                     factor(0, 1, [digits(0, 1)]),
                     basic_component(1, 11, [
-                        annotated_annotatable(1, 11, [
-                            annotatable(1, 5, [
-                                simple_unit_with_exponent(1, 5, [
-                                    simple_unit(1, 3, [
-                                        prefixed_atom(1, 3, [
-                                            prefix_symbol(1, 2),
-                                            atom_symbol(2, 3)
-                                        ])
-                                    ]),
-                                    exponent(3, 5, [
-                                        sign(3, 4),
-                                        digits(4, 5)
-                                    ])
-                                ])
+                        annotatable(1, 5, [
+                            simple_unit(1, 3, [
+                                prefix_symbol(1, 2),
+                                atom_symbol(2, 3)
                             ]),
-                            annotation(5, 11, [
-                                annotation_string(6, 10)
+                            exponent(3, 5, [
+                                sign(3, 4),
+                                digits(4, 5)
                             ])
-                        ])
+                        ]),
+                        annotation(5, 11)
                    ])
                ])
             ]
@@ -376,40 +309,30 @@ mod tests {
     }
 
     #[test]
-    fn validate_basic_term() {
+    fn validate_component_with_annotation() {
         parses_to! {
             parser: UnitParser,
             input: "2km-2{meow}",
-            rule: Rule::basic_term,
+            rule: Rule::component,
             tokens: [
-                basic_term(0, 11, [
-                    component(0, 11, [
-                        component_with_factor(0, 11, [
-                            factor(0, 1, [digits(0, 1)]),
-                            basic_component(1, 11, [
-                                annotated_annotatable(1, 11, [
-                                    annotatable(1, 5, [
-                                        simple_unit_with_exponent(1, 5, [
-                                            simple_unit(1, 3, [
-                                                prefixed_atom(1, 3, [
-                                                    prefix_symbol(1, 2),
-                                                    atom_symbol(2, 3)
-                                                ])
-                                            ]),
-                                            exponent(3, 5, [
-                                                sign(3, 4),
-                                                digits(4, 5)
-                                            ])
-                                        ])
-                                    ]),
-                                    annotation(5, 11, [
-                                        annotation_string(6, 10)
-                                    ])
+                component(0, 11, [
+                    component_with_factor(0, 11, [
+                        factor(0, 1, [digits(0, 1)]),
+                        basic_component(1, 11, [
+                            annotatable(1, 5, [
+                                simple_unit(1, 3, [
+                                    prefix_symbol(1, 2),
+                                    atom_symbol(2, 3)
+                                ]),
+                                exponent(3, 5, [
+                                    sign(3, 4),
+                                    digits(4, 5)
                                 ])
-                           ])
+                            ]),
+                            annotation(5, 11)
                        ])
                    ])
-                ])
+               ])
             ]
         };
     }
@@ -429,25 +352,17 @@ mod tests {
                         component_with_factor(0, 11, [
                             factor(0, 1, [digits(0, 1)]),
                             basic_component(1, 11, [
-                                annotated_annotatable(1, 11, [
-                                    annotatable(1, 5, [
-                                        simple_unit_with_exponent(1, 5, [
-                                            simple_unit(1, 3, [
-                                                prefixed_atom(1, 3, [
-                                                    prefix_symbol(1, 2),
-                                                    atom_symbol(2, 3)
-                                                ])
-                                            ]),
-                                            exponent(3, 5, [
-                                                sign(3, 4),
-                                                digits(4, 5)
-                                            ])
-                                        ])
+                                annotatable(1, 5, [
+                                    simple_unit(1, 3, [
+                                        prefix_symbol(1, 2),
+                                        atom_symbol(2, 3)
                                     ]),
-                                    annotation(5, 11, [
-                                        annotation_string(6, 10)
+                                    exponent(3, 5, [
+                                        sign(3, 4),
+                                        digits(4, 5)
                                     ])
-                                ])
+                                ]),
+                                annotation(5, 11)
                            ])
                        ])
                     ]),
@@ -463,13 +378,11 @@ mod tests {
                                 ])
                             ]),
                             term(21, 27, [
-                                basic_term(21, 27, [
-                                    component(21, 27, [
-                                        basic_component(21, 27, [
-                                            annotatable(21, 27, [
-                                                simple_unit(21, 27, [
-                                                    atom_symbol(21, 27)
-                                                ])
+                                component(21, 27, [
+                                    basic_component(21, 27, [
+                                        annotatable(21, 27, [
+                                            simple_unit(21, 27, [
+                                                atom_symbol(21, 27)
                                             ])
                                         ])
                                     ])
@@ -512,13 +425,11 @@ mod tests {
                                     ])
                                 ]),
                                 term(16, 24, [
-                                    basic_term(16, 24, [
-                                        component(16, 24, [
-                                            basic_component(16, 24, [
-                                                annotatable(16, 24, [
-                                                    simple_unit(16, 24, [
-                                                        atom_symbol(16, 24)
-                                                    ])
+                                    component(16, 24, [
+                                        basic_component(16, 24, [
+                                            annotatable(16, 24, [
+                                                simple_unit(16, 24, [
+                                                    atom_symbol(16, 24)
                                                 ])
                                             ])
                                         ])
