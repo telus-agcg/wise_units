@@ -1,7 +1,9 @@
-main_term = { slash_main_term | term }
+// <main-term>
+main_term = ${ slash_main_term | term }
 
 slash_main_term =  { "/" ~ term }
 
+// <term>
 term = {
     dot_term | slash_term | component
 }
