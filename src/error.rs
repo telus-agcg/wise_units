@@ -1,7 +1,7 @@
 use pest;
 
 /// Errors when trying to convert between types that aren't commensurable.
-///
+/// 
 #[derive(Fail, Debug)]
 pub enum Error {
     #[fail(display = "Units are not compatible: {}, {}", lhs, rhs)]

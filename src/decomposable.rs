@@ -1,9 +1,9 @@
 /// Defines an interface for deconstructing a Unit into a String that represents
 /// the Terms that define it.
-///
+/// 
 pub trait Decomposable {
     /// The main function clients should care about.
-    ///
+    /// 
     fn expression(&self) -> String {
         let numerator = self.numerator();
         let denominator = self.denominator();

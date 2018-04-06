@@ -26,7 +26,9 @@ impl Composition {
         }
     }
 
-    pub fn is_empty(&self) -> bool { self.0.is_empty() }
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
 }
 
 impl Default for Composition {
@@ -53,7 +55,9 @@ impl IntoIterator for Composition {
     type Item = (Dimension, i32);
     type IntoIter = ::std::collections::btree_map::IntoIter<Dimension, i32>;
 
-    fn into_iter(self) -> Self::IntoIter { self.0.into_iter() }
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
 }
 
 #[cfg(test)]

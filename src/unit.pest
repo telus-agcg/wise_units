@@ -1,40 +1,29 @@
 // <main-term>
-main_term = ${ slash_main_term | term }
-
-slash_main_term =  { "/" ~ term }
+main_term = ${ slash ~ term | term }
 
 // <term>
 term = {
-    dot_term | slash_term | component
+    component ~ "." ~ term | component ~ slash ~ term | component
 }
 
-dot_term = { component ~ "." ~ term }
-slash_term = { component ~ "/" ~ term }
+slash = { "/" }
 
 // <component>
-component = { component_with_factor | basic_component }
-
-component_with_factor = { factor ~ basic_component }
+component = { factor ~ basic_component | basic_component }
 
 basic_component = {
     annotatable ~ annotation |
         annotatable |
         annotation |
         factor |
-        open_paren ~ term ~ closed_paren
+        "(" ~ term ~ ")"
 }
 
-open_paren = _{ "(" }
-closed_paren = _{ ")" }
-
 // <annotation>
-annotation = { open_curly ~ ('!'..'z')* ~ closed_curly }
-open_curly = _{ "{" }
-closed_curly = _{ "}" }
+annotation = { "{" ~ ('!'..'z')* ~ "}" }
 
 // <annotatable>
-annotatable = { simple_unit_with_exponent | simple_unit }
-simple_unit_with_exponent = _{ simple_unit ~ exponent }
+annotatable = { simple_unit ~ exponent | simple_unit }
 
 // <simple-unit>
 simple_unit = { prefix_symbol ~ atom_symbol | atom_symbol }
@@ -200,9 +189,8 @@ prefix_symbol = {
 }
 
 exponent = { sign? ~ digits }
-factor = { digits }
-digits = @{ digit+ }
-digit = { '0'..'9' }
+factor = { '0'..'9'+ }
+digits = { '0'..'9'+ }
 sign = { "-" | "+" }
 
 // vim:ft=rust
