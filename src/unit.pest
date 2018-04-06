@@ -3,9 +3,7 @@ main_term = { slash_main_term | term }
 slash_main_term =  { "/" ~ term }
 
 term = {
-    dot_term |
-        slash_term |
-        component
+    dot_term | slash_term | component
 }
 
 dot_term = { component ~ "." ~ term }
@@ -21,10 +19,13 @@ basic_component = {
         annotatable |
         annotation |
         factor |
-        "(" ~ term ~ ")"
+        open_paren ~ term ~ closed_paren
 }
 
-// <annotatable>
+open_paren = _{ "(" }
+closed_paren = _{ ")" }
+
+// <annotation>
 annotation = { open_curly ~ ('!'..'z')* ~ closed_curly }
 open_curly = _{ "{" }
 closed_curly = _{ "}" }
