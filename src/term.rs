@@ -7,7 +7,7 @@ use std::fmt;
 /// (anything that can change its scalar). It is, however, possible to have an
 /// Atom-less Term, which would simple be a Factor (with or without an
 /// annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
-///
+/// 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
 pub struct Term {
@@ -21,17 +21,21 @@ pub struct Term {
 impl Term {
     pub fn new(atom: Option<Atom>, prefix: Option<Prefix>) -> Self {
         Term {
-            atom: atom,
-            prefix: prefix,
+            atom,
+            prefix,
             factor: 1,
             exponent: 1,
             annotation: None,
         }
     }
 
-    pub fn scalar(&self) -> f64 { self.calculate_scalar(1.0) }
+    pub fn scalar(&self) -> f64 {
+        self.calculate_scalar(1.0)
+    }
 
-    pub fn magnitude(&self) -> f64 { self.calculate_magnitude(self.scalar()) }
+    pub fn magnitude(&self) -> f64 {
+        self.calculate_magnitude(self.scalar())
+    }
 
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         let e = self.exponent;

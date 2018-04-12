@@ -30,15 +30,6 @@ mod tests {
     }
 
     #[test]
-    fn validate_digit() {
-        let pairs = UnitParser::parse(Rule::digit, "0");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::digit, "a");
-        assert!(pairs.is_err());
-    }
-
-    #[test]
     fn validate_digits() {
         let pairs = UnitParser::parse(Rule::digits, "0");
         assert!(pairs.is_ok());
@@ -76,7 +67,7 @@ mod tests {
             parser: UnitParser,
             input: "123456!@#",
             rule: Rule::factor,
-            tokens: [factor(0, 6, [digits(0, 6)])]
+            tokens: [factor(0, 6)]
         }
     }
 
@@ -188,13 +179,15 @@ mod tests {
         parses_to! {
             parser: UnitParser,
             input: "km2",
-            rule: Rule::simple_unit_with_exponent,
+            rule: Rule::annotatable,
             tokens: [
-                  simple_unit(0, 2, [
-                        prefix_symbol(0, 1),
-                        atom_symbol(1, 2)
-                  ]),
-                  exponent(2, 3, [digits(2, 3)])
+                annotatable(0, 3, [
+                      simple_unit(0, 2, [
+                            prefix_symbol(0, 1),
+                            atom_symbol(1, 2)
+                      ]),
+                      exponent(2, 3, [digits(2, 3)])
+                ])
             ]
         }
     }
@@ -261,16 +254,16 @@ mod tests {
 
     #[test]
     fn validate_component_with_factor() {
-        let pairs = UnitParser::parse(Rule::component_with_factor, "100km");
+        let pairs = UnitParser::parse(Rule::component, "100km");
         assert!(pairs.is_ok());
 
         parses_to! {
             parser: UnitParser,
             input: "2km",
-            rule: Rule::component_with_factor,
+            rule: Rule::component,
             tokens: [
-                component_with_factor(0, 3, [
-                      factor(0, 1, [digits(0, 1)]),
+                component(0, 3, [
+                      factor(0, 1),
                       basic_component(1, 3, [
                               annotatable(1, 3, [
                                       simple_unit(1, 3, [
@@ -286,10 +279,10 @@ mod tests {
         parses_to! {
             parser: UnitParser,
             input: "2km-2{meow}",
-            rule: Rule::component_with_factor,
+            rule: Rule::component,
             tokens: [
-                component_with_factor(0, 11, [
-                    factor(0, 1, [digits(0, 1)]),
+                component(0, 11, [
+                    factor(0, 1),
                     basic_component(1, 11, [
                         annotatable(1, 5, [
                             simple_unit(1, 3, [
@@ -316,8 +309,38 @@ mod tests {
             rule: Rule::component,
             tokens: [
                 component(0, 11, [
-                    component_with_factor(0, 11, [
-                        factor(0, 1, [digits(0, 1)]),
+                    factor(0, 1),
+                    basic_component(1, 11, [
+                        annotatable(1, 5, [
+                            simple_unit(1, 3, [
+                                prefix_symbol(1, 2),
+                                atom_symbol(2, 3)
+                            ]),
+                            exponent(3, 5, [
+                                sign(3, 4),
+                                digits(4, 5)
+                            ])
+                        ]),
+                        annotation(5, 11)
+                   ])
+               ])
+            ]
+        };
+    }
+
+    #[test]
+    fn validate_slash_term() {
+        let pairs = UnitParser::parse(Rule::term, "km/s");
+        assert!(pairs.is_ok());
+
+        parses_to! {
+            parser: UnitParser,
+            input: "2km-2{meow}/[acr_us].[in_i]",
+            rule: Rule::term,
+            tokens: [
+                term(0, 27, [
+                    component(0, 11, [
+                        factor(0, 1),
                         basic_component(1, 11, [
                             annotatable(1, 5, [
                                 simple_unit(1, 3, [
@@ -331,64 +354,29 @@ mod tests {
                             ]),
                             annotation(5, 11)
                        ])
-                   ])
-               ])
-            ]
-        };
-    }
-
-    #[test]
-    fn validate_slash_term() {
-        let pairs = UnitParser::parse(Rule::slash_term, "km/s");
-        assert!(pairs.is_ok());
-
-        parses_to! {
-            parser: UnitParser,
-            input: "2km-2{meow}/[acr_us].[in_i]",
-            rule: Rule::slash_term,
-            tokens: [
-                slash_term(0, 27, [
-                    component(0, 11, [
-                        component_with_factor(0, 11, [
-                            factor(0, 1, [digits(0, 1)]),
-                            basic_component(1, 11, [
-                                annotatable(1, 5, [
-                                    simple_unit(1, 3, [
-                                        prefix_symbol(1, 2),
-                                        atom_symbol(2, 3)
-                                    ]),
-                                    exponent(3, 5, [
-                                        sign(3, 4),
-                                        digits(4, 5)
-                                    ])
-                                ]),
-                                annotation(5, 11)
-                           ])
-                       ])
                     ]),
+                    slash(11, 12),
                     term(12, 27, [
-                         dot_term(12, 27, [
-                            component(12, 20, [
-                                basic_component(12, 20, [
-                                    annotatable(12, 20, [
-                                        simple_unit(12, 20, [
-                                            atom_symbol(12, 20)
-                                        ])
+                        component(12, 20, [
+                            basic_component(12, 20, [
+                                annotatable(12, 20, [
+                                    simple_unit(12, 20, [
+                                        atom_symbol(12, 20)
                                     ])
                                 ])
-                            ]),
-                            term(21, 27, [
-                                component(21, 27, [
-                                    basic_component(21, 27, [
-                                        annotatable(21, 27, [
-                                            simple_unit(21, 27, [
-                                                atom_symbol(21, 27)
-                                            ])
+                            ])
+                        ]),
+                        term(21, 27, [
+                            component(21, 27, [
+                                basic_component(21, 27, [
+                                    annotatable(21, 27, [
+                                        simple_unit(21, 27, [
+                                            atom_symbol(21, 27)
                                         ])
                                     ])
                                 ])
                             ])
-                         ])
+                        ])
                     ])
                ])
             ]
@@ -403,41 +391,38 @@ mod tests {
             rule: Rule::term,
             tokens: [
                 term(0, 24, [
-                    dot_term(0, 24, [
-                        component(0, 8, [
-                            basic_component(0, 8, [
-                                annotatable(0, 8, [
-                                    simple_unit(0, 8, [
-                                        atom_symbol(0, 8)
+                    component(0, 8, [
+                        basic_component(0, 8, [
+                            annotatable(0, 8, [
+                                simple_unit(0, 8, [
+                                    atom_symbol(0, 8)
+                                ])
+                           ])
+                        ])
+                    ]),
+                    term(9, 24, [
+                        component(9, 15, [
+                            basic_component(9, 15, [
+                                annotatable(9, 15, [
+                                    simple_unit(9, 15, [
+                                        atom_symbol(9, 15)
                                     ])
-                               ])
+                                ])
                             ])
                         ]),
-                        term(9, 24, [
-                             slash_term(9, 24, [
-                                component(9, 15, [
-                                    basic_component(9, 15, [
-                                        annotatable(9, 15, [
-                                            simple_unit(9, 15, [
-                                                atom_symbol(9, 15)
-                                            ])
-                                        ])
-                                    ])
-                                ]),
-                                term(16, 24, [
-                                    component(16, 24, [
-                                        basic_component(16, 24, [
-                                            annotatable(16, 24, [
-                                                simple_unit(16, 24, [
-                                                    atom_symbol(16, 24)
-                                                ])
-                                            ])
+                        slash(15, 16),
+                        term(16, 24, [
+                            component(16, 24, [
+                                basic_component(16, 24, [
+                                    annotatable(16, 24, [
+                                        simple_unit(16, 24, [
+                                            atom_symbol(16, 24)
                                         ])
                                     ])
                                 ])
-                             ])
+                            ])
                         ])
-                   ])
+                    ])
                 ])
             ]
         };
@@ -450,5 +435,28 @@ mod tests {
 
         let pairs = UnitParser::parse(Rule::main_term, "/km.s");
         assert!(pairs.is_ok());
+
+        parses_to! {
+            parser: UnitParser,
+            input: "/2m",
+            rule: Rule::main_term,
+            tokens: [
+                main_term(0, 3, [
+                    slash(0, 1),
+                    term(1, 3, [
+                        component(1, 3, [
+                            factor(1, 2),
+                            basic_component(2, 3, [
+                                annotatable(2, 3, [
+                                    simple_unit(2, 3, [
+                                        atom_symbol(2, 3)
+                                    ])
+                               ])
+                            ])
+                        ])
+                    ])
+                ])
+            ]
+        };
     }
 }
