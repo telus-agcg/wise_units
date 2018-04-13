@@ -30,60 +30,57 @@ simple_unit = { prefix_symbol ~ atom_symbol | atom_symbol }
 
 // Atoms
 atom_symbol = {
-    "acre"          | "are"   | "atm"   | "a_g" | "a_j" | "a_t" |
-        "ar"        | "aₜ"    | "aⱼ"    | "a"   |
+     "atm"   | "a_g" | "a_j" | "a_t" |
+        "ar"        | "a"   |
         "ANN_G"     | "ANN_J" | "ANN_T" |
         "AMU"       | "ANN"   | "ASU"   | "ATM" |
         "AR"        | "AU"    | "A"     |
-        "becquerel" | "bar"   |
+        "bar"   |
         "BAR"       | "Bi"    | "Bq"    | "BI"  | "BQ"  |
         "cd"        |
         "Cel"       | "CEL"   | "Ci"    | "CD"  | "CI"  | "C"   |
 
-        "degree" | "day" | "deg" | "dyn" | "d"  |
+        "deg" | "dyn" | "d"  |
         "DEG"    | "DYN" | "D"   |
         "erg"    | "eV"  | "eq"  | "ERG" | "EV" | "EQ" |
-        "foot"   | "ft"  |
+        "ft"  |
         "F"      |
 
-        "grade"     | "gram"  | "gon"   | "gf"  | "g%"  | "g"   |
+        "gon"   | "gf"  | "g%"  | "g"   |
         "GAL"       | "GON"   |
         "Gb"        | "Gy"    | "GB"    | "GF"  | "GL"  | "GS"  | "GY" |
         "G"         |
-        "hour"      | "h"     |
+        "h"     |
         "Hz"        | "HR"    | "HZ"    | "H"   |
-        "inch"      | "in"    |
+        "in"    |
 
         "J"         |
         "Ky"        | "KY"    | "K"     |
-        "liter"     | "l.y."  | "lbf"   | "lm"  | "lx"  | "l"   |
+        "l.y."  | "lbf"   | "lm"  | "lx"  | "l"   |
         "Lmb"       | "LMB"   | "LM"    | "LX"  | "L"   |
 
-        "minute"    | "meter" | "month" |
         "mo_g"      | "mo_j"  | "mo_s"  |
-        "min"       | "mol"   | "moⱼ"   | "moₛ" |
+        "min"       | "mol"   |
         "mo"        | "m"     |
         "MO_G"      | "MO_J"  | "MO_S"  |
         "MIN"       | "MOL"   | "Mx"    | "MO"  | "MX"  | "M"   |
         "N"         |
         "Ohm"       | "OHM"   | "Oe"    | "OE"  |
 
-        "pint"      | "ppb"   | "ppm"   | "ppt" | "pc"  | "pH"  | "ph" |
+        "ppb"   | "ppm"   | "ppt" | "pc"  | "pH"  | "ph" |
         "PAL"       | "PHT"   | "PRS"   | "Pa"  | "PD"  | "P"   |
-        "quart"     |
         "rad"       | "RAD"   | "REM"   | "ROE"   | "R"   |
 
-        "second"    | "sb"    | "sr"    | "s"   |
+        "sb"    | "sr"    | "s"   |
         "SIE"       | "St"    | "Sv"    | "SB"  | "ST"  | "SV"  | "SR" |
         "S"         |
-        "tonne"     | "t"     |
+        "t"     |
         "TNE"       | "T"     |
         "u"         |
 
-        "volt"      | "V"     |
-        "watt"      | "week"  | "wk"    |
+        "V"     |
+        "wk"    |
         "Wb"        | "WB"    | "WK"    | "W"   |
-        "yard"      | "year"  |
 
         "[acr_br]" | "[ACR_BR]" | "[acr_us]" | "[ACR_US]" |
         "[bbl_us]" | "[bu_br]"  | "[bu_us]"  | "[bf_i]"   |
@@ -141,51 +138,36 @@ atom_symbol = {
         "10^"      |
         "10*"      |
         "1"        |
-        "π"        |
-        "μ₀"       |
-        "𝑚ₚ"       |
-        "𝑚ₑ"       |
-        "𝑘"        |
-        "ℎ"        |
-        "𝑒"        |
-        "ε₀"       |
-        "𝑐"        |
-        "𝐺"        |
-        "𝑔"        |
-        "Ω"        |
-        "°"        |
-        "°C"       |
-        "°F"       |
-        "°Ré"      |
         "%"        |
         "'"        |
         "''"
+        | atom_char+
 }
 
 // Prefixes
 prefix_symbol = {
-    "atto"  | "a"  | "A"   |
-        "centi" | "c"  | "C"   |
-        "deka"  | "da" | "DA"  |
-        "deci"  | "d"  | "D"   |
-        "exa"   | "E"  | "EX"  |
-        "femto" | "f"  | "F"   |
-        "gibi"  | "Gi" | "GIB" |
-        "giga"  | "G"  | "GA"  |
-        "hecto" | "h"  | "H"   |
-        "kilo"  | "k"  | "K"   |
-        "mebi"  | "Mi" | "MIB" |
-        "mega"  | "M"  | "MA"  |
-        "micro" | "u"  | "U"   | "µ" |
-        "milli" | "m"  |
-        "nano"  | "n"  | "N"   |
-        "peta"  | "P"  | "PT"  |
-        "tebi"  | "Ti" | "TIB" |
-        "tera"  | "T"  | "TR"  |
-        "yocto" | "y"  | "YO"  |
-        "yotta" | "Y"  | "YA"  |
-        "zepto" | "z"  | "ZO"  |
-        "zetta" | "Z"  | "ZA"
+     "a"  | "A"   |
+         "c"  | "C"   |
+         "da" | "DA"  |
+         "d"  | "D"   |
+         "E"  | "EX"  |
+         "f"  | "F"   |
+         "Gi" | "GIB" |
+         "G"  | "GA"  |
+         "h"  | "H"   |
+         "k"  | "K"   |
+         "Mi" | "MIB" |
+         "M"  | "MA"  |
+         "u"  | "U"   |
+         "m"  |
+         "n"  | "N"   |
+         "P"  | "PT"  |
+         "Ti" | "TIB" |
+         "T"  | "TR"  |
+         "y"  | "YO"  |
+         "Y"  | "YA"  |
+         "z"  | "ZO"  |
+         "Z"  | "ZA"
 }
 
 exponent = { sign? ~ digits }
