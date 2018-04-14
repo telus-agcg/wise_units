@@ -6,6 +6,7 @@ use property::Property;
 use std::f64::consts::PI;
 use std::fmt;
 use term::Term;
+use ucum_symbol::UcumSymbol;
 use unit::Unit;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
@@ -211,8 +212,8 @@ pub enum Atom {
     Year,
 }
 
-impl Atom {
-    pub fn classification(&self) -> Classification {
+impl UcumSymbol for Atom {
+    fn classification(&self) -> Classification {
         match *self {
             Atom::PartsPerBillion                         |
                 Atom::PartsPerMillion                     |
@@ -407,7 +408,7 @@ impl Atom {
         }
     }
 
-    pub fn definition(&self) -> Definition {
+    fn definition(&self) -> Definition {
         let result = match *self {
             Atom::TheUnity                |
                 Atom::Candela             |
@@ -616,7 +617,7 @@ impl Atom {
         result.expect("BUG! Bad Atom -> Definition mapping!")
     }
 
-    pub fn composition(&self) -> Option<Composition> {
+    fn composition(&self) -> Option<Composition> {
         match *self {
             Atom::TheUnity => None,
             Atom::Candela => Some(Composition::new(Dimension::LuminousIntensity, 1)),
@@ -630,14 +631,14 @@ impl Atom {
         }
     }
 
-    pub fn is_arbitrary(&self) -> bool {
+    fn is_arbitrary(&self) -> bool {
         match *self {
             Atom::ProteinNitrogenUnit => true,
             _ => false,
         }
     }
 
-    pub fn is_metric(&self) -> bool {
+    fn is_metric(&self) -> bool {
         match *self {
             Atom::TheUnity          |
                 Atom::Candela       |
@@ -719,7 +720,7 @@ impl Atom {
         }
     }
 
-    pub fn is_special(&self) -> bool {
+    fn is_special(&self) -> bool {
         match *self {
             Atom::DegreeCelsius        |
                 Atom::DegreeFahrenheit |
@@ -730,7 +731,7 @@ impl Atom {
         }
     }
 
-    pub fn names(&self) -> Vec<&'static str> {
+    fn names(&self) -> Vec<&'static str> {
         match *self {
             Atom::TheUnity => vec!["the unity"],
             Atom::Candela  => vec!["candela"],
@@ -935,7 +936,7 @@ impl Atom {
         }
     }
 
-    pub fn primary_code(&self) -> &'static str {
+    fn primary_code(&self) -> &'static str {
         match *self {
             Atom::TheUnity => "1",
             Atom::Candela  => "cd",
@@ -1138,7 +1139,7 @@ impl Atom {
         }
     }
 
-    pub fn print_symbol(&self) -> Option<&'static str> {
+    fn print_symbol(&self) -> Option<&'static str> {
         match *self {
             Atom::Candela       |
                 Atom::Coulomb   |
@@ -1270,7 +1271,7 @@ impl Atom {
         }
     }
 
-    pub fn property(&self) -> Property {
+    fn property(&self) -> Property {
         match *self {
             Atom::Gal |
                 Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
@@ -1464,7 +1465,7 @@ impl Atom {
         }
     }
 
-    pub fn secondary_code(&self) -> &'static str {
+    fn secondary_code(&self) -> &'static str {
         match *self {
             Atom::TheUnity => "1",
             Atom::Candela  => "CD",
@@ -1668,21 +1669,21 @@ impl Atom {
         }
     }
 
-    pub fn scalar(&self) -> f64 {
+    fn scalar(&self) -> f64 {
         match *self {
             Atom::TheUnity => 1.0,
             _ => self.calculate_scalar(1.0),
         }
     }
 
-    pub fn magnitude(&self) -> f64 {
+    fn magnitude(&self) -> f64 {
         match *self {
             Atom::TheUnity => 1.0,
             _ => self.calculate_magnitude(self.scalar()),
         }
     }
 
-    pub fn calculate_scalar(&self, value: f64) -> f64 {
+    fn calculate_scalar(&self, value: f64) -> f64 {
         match *self {
             Atom::TheUnity         => 1.0,
             Atom::DegreeCelsius    => value + 273.15,
@@ -1694,7 +1695,7 @@ impl Atom {
         }
     }
 
-    pub fn calculate_magnitude(&self, value: f64) -> f64 {
+    fn calculate_magnitude(&self, value: f64) -> f64 {
         match *self {
             Atom::DegreeCelsius    => value - 273.15,
             Atom::DegreeFahrenheit => 9.0 * value / 5.0 - 459.67,
@@ -1722,6 +1723,7 @@ mod tests {
     use dimension::Dimension;
     use prefix::Prefix;
     use term::Term;
+    use ucum_symbol::UcumSymbol;
 
     #[test]
     fn validate_classification_si() {

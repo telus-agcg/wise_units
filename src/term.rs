@@ -2,6 +2,7 @@ use atom::Atom;
 use composition::Composition;
 use prefix::Prefix;
 use std::fmt;
+use ucum_symbol::UcumSymbol;
 
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an
