@@ -11,6 +11,7 @@ use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
 use term::Term;
+use ucum_symbol::UcumSymbol;
 use unit_parser::{Rule, UnitParser};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]

@@ -2,9 +2,10 @@ use atom::Atom;
 use classification::Classification;
 use composition::Composition;
 use definition::Definition;
-use measurable::Measurable;
+use property::Property;
 use std::fmt;
 use term::Term;
+use ucum_symbol::UcumSymbol;
 use unit::Unit;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
@@ -36,12 +37,17 @@ pub enum Prefix {
     Zetta,
 }
 
-impl Prefix {
-    pub fn classification(&self) -> Classification {
+impl UcumSymbol for Prefix {
+    // TODO Get rid of this.
+    fn property(&self) -> Property {
+        Property::Unclassified
+    }
+
+    fn classification(&self) -> Classification {
         Classification::SI
     }
 
-    pub fn definition(&self) -> Definition {
+    fn definition(&self) -> Definition {
         let term = Term::new(Some(Atom::TheUnity), None);
         let unit = Unit { terms: vec![term] };
 
@@ -78,11 +84,11 @@ impl Prefix {
         }
     }
 
-    pub fn composition(&self) -> Option<Composition> {
+    fn composition(&self) -> Option<Composition> {
         None
     }
 
-    pub fn names(&self) -> Vec<&'static str> {
+    fn names(&self) -> Vec<&'static str> {
         match *self {
             Prefix::Atto  => vec!["atto"],
             Prefix::Centi => vec!["centi"],
@@ -111,7 +117,7 @@ impl Prefix {
         }
     }
 
-    pub fn primary_code(&self) -> &'static str {
+    fn primary_code(&self) -> &'static str {
         match *self {
             Prefix::Atto  => "a",
             Prefix::Centi => "c",
@@ -140,14 +146,14 @@ impl Prefix {
         }
     }
 
-    pub fn print_symbol(&self) -> Option<&'static str> {
+    fn print_symbol(&self) -> Option<&'static str> {
         match *self {
             Prefix::Micro => Some("μ"),
             _ => Some(self.primary_code()),
         }
     }
 
-    pub fn secondary_code(&self) -> &'static str {
+    fn secondary_code(&self) -> &'static str {
         match *self {
             Prefix::Atto  => "A",
             Prefix::Centi => "C",
@@ -176,22 +182,16 @@ impl Prefix {
         }
     }
 
-    pub fn scalar(&self) -> f64 {
-        self.definition().scalar()
+    fn is_metric(&self) -> bool {
+        true
     }
 
-    pub fn magnitude(&self) -> f64 {
-        self.definition().magnitude()
+    fn is_arbitrary(&self) -> bool {
+        false
     }
 
-    // TODO: is ok?
-    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
-        self.definition().calculate_scalar(magnitude)
-    }
-
-    // TODO: is ok?
-    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
-        self.definition().calculate_magnitude(scalar)
+    fn is_special(&self) -> bool {
+        false
     }
 }
 
@@ -206,6 +206,7 @@ impl fmt::Display for Prefix {
 #[cfg(test)]
 mod tests {
     use super::Prefix;
+    use ucum_symbol::UcumSymbol;
 
     #[test]
     fn validate_scalar_atto() {

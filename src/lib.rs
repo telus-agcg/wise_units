@@ -36,6 +36,7 @@ extern crate serde_json;
 extern crate stdweb;
 
 pub mod measurement;
+pub mod ucum_symbol;
 pub mod unit;
 
 mod atom;
