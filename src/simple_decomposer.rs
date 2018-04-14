@@ -98,15 +98,15 @@ mod tests {
         let decomposer = SimpleDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "km/60s2");
 
-        let unit = Unit::from_str("100KM/60second2").unwrap();
+        let unit = Unit::from_str("100KM/60s2").unwrap();
         let decomposer = SimpleDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "100km/60s2");
 
-        let unit = Unit::from_str("[acr_us].[IN_I]/acre").unwrap();
+        let unit = Unit::from_str("[acr_us].[IN_I]/[acr_us]").unwrap();
         let decomposer = SimpleDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "[acr_us].[in_i]/[acr_us]");
 
-        let unit = Unit::from_str("[acr_us].[IN_I]/acre2").unwrap();
+        let unit = Unit::from_str("[acr_us].[IN_I]/[acr_us]2").unwrap();
         let decomposer = SimpleDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "[acr_us].[in_i]/[acr_us]2");
     }

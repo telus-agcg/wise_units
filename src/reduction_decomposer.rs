@@ -120,23 +120,7 @@ mod tests {
         let decomposer = ReductionDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "m");
 
-        let unit = Unit::from_str("meter").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "m");
-
-        let unit = Unit::from_str("kilom").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "km");
-
         let unit = Unit::from_str("KM").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "km");
-
-        let unit = Unit::from_str("kilometer").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "km");
-
-        let unit = Unit::from_str("kiloM").unwrap();
         let decomposer = ReductionDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "km");
 
@@ -152,11 +136,11 @@ mod tests {
         let decomposer = ReductionDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "km/60s2");
 
-        let unit = Unit::from_str("100KM/60second2").unwrap();
+        let unit = Unit::from_str("100KM/60s").unwrap();
         let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "100km/60s2");
+        assert_eq!(decomposer.expression(), "100km/60s");
 
-        let unit = Unit::from_str("[acr_us].[IN_I]/acre").unwrap();
+        let unit = Unit::from_str("[acr_us].[IN_I]/[acr_us]").unwrap();
         let decomposer = ReductionDecomposer::new(&unit.terms);
         assert_eq!(decomposer.expression(), "[in_i]");
     }

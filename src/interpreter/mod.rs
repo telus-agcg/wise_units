@@ -55,7 +55,6 @@ impl Interpreter {
 
         let atom = match pair_str.as_str() {
             // Base units first.
-            "1"           => Atom::TheUnity,
             "cd"  | "CD"  => Atom::Candela,
             "C"           => Atom::Coulomb,
             "g"           => Atom::Gram,
@@ -236,6 +235,7 @@ impl Interpreter {
             "[pi]"      | "[PI]"                => Atom::TheNumberPi,
             "10*"                               => Atom::TheNumberTenForArbitraryPowersStar,
             "10^"                               => Atom::TheNumberTenForArbitraryPowersCaret,
+            "1"           => Atom::TheUnity,
             "t"         | "TNE"                 => Atom::Tonne,
             "[twp]"     | "[TWP]"               => Atom::Township,
             "a_t"       | "ANN_T"               => Atom::TropicalYear,

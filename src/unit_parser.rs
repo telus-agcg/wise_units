@@ -123,9 +123,6 @@ mod tests {
         let pairs = UnitParser::parse(Rule::atom_symbol, "meter");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::atom_symbol, "k");
-        assert!(pairs.is_err());
-
         parses_to! {
             parser: UnitParser,
             input: "K",
@@ -149,9 +146,6 @@ mod tests {
         let pairs = UnitParser::parse(Rule::simple_unit, "m");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::simple_unit, "k");
-        assert!(pairs.is_err());
-
         parses_to! {
             parser: UnitParser,
             input: "km",
@@ -172,9 +166,6 @@ mod tests {
 
         let pairs = UnitParser::parse(Rule::simple_unit, "m-1");
         assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::simple_unit, "k4");
-        assert!(pairs.is_err());
 
         parses_to! {
             parser: UnitParser,
@@ -208,9 +199,6 @@ mod tests {
 
         let pairs = UnitParser::parse(Rule::annotatable, "m");
         assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::annotatable, "k");
-        assert!(pairs.is_err());
     }
 
     #[test]
