@@ -438,10 +438,6 @@ mod tests {
     #[test]
     fn validate_display() {
         assert_eq!(
-            Measurement::new(1.0, "meter").unwrap().to_string(),
-            "1m".to_string()
-        );
-        assert_eq!(
             Measurement::new(1.1, "m").unwrap().to_string(),
             "1.1m".to_string()
         );
