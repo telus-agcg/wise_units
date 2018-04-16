@@ -1,3 +1,5 @@
+#![feature(trace_macros)]
+
 // Turn on proc_macro if we're on nightly AND using the with_stdweb feature.
 #![cfg_attr(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"),
             feature(proc_macro))]
@@ -39,6 +41,10 @@ pub mod measurement;
 pub mod ucum_symbol;
 pub mod unit;
 
+#[macro_use]
+pub mod macros;
+pub mod test_atom;
+
 mod atom;
 mod composition;
 mod classification;
@@ -55,6 +61,7 @@ mod simple_decomposer;
 mod term;
 mod unit_parser;
 
+pub use classification::Classification;
 pub use error::Error;
 pub use measurable::Measurable;
 pub use measurement::Measurement;

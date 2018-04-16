@@ -9,6 +9,7 @@ use term::Term;
 use ucum_symbol::UcumSymbol;
 use unit::Unit;
 
+// TODO: Implement PartialEq
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Atom {
