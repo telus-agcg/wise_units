@@ -1,5 +1,3 @@
-#![feature(trace_macros)]
-
 // Turn on proc_macro if we're on nightly AND using the with_stdweb feature.
 #![cfg_attr(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"),
             feature(proc_macro))]
