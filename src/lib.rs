@@ -14,7 +14,7 @@ extern crate pretty_assertions;
 
 // Only include macros for testing
 #[cfg(test)]
-#[macro_use]
+#[macro_use(parses_to, consumes_to)]
 extern crate pest;
 
 #[cfg(not(test))]
