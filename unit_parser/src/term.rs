@@ -1,5 +1,4 @@
 use atom::Atom;
-use composition::Composition;
 use prefix::Prefix;
 use std::fmt;
 use ucum_symbol::UcumSymbol;
@@ -42,7 +41,9 @@ impl Term {
         let e = self.exponent;
 
         let atom_scalar = self.atom.map_or(1.0, |a| a.calculate_scalar(value));
-        let prefix_scalar = self.prefix.map_or(1.0, |p| p.magnitude());
+        // TODO: Interesting that this change causes tests to pass now.
+        // let prefix_scalar = self.prefix.map_or(1.0, |p| p.magnitude());
+        let prefix_scalar = self.prefix.map_or(1.0, |p| p.calculate_scalar(value));
 
         (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(e)
     }
@@ -54,25 +55,6 @@ impl Term {
         let prefix_magnitude = self.prefix.map_or(1.0, |p| atom_magnitude * p.scalar());
 
         (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(e)
-    }
-
-    pub fn composition(&self) -> Option<Composition> {
-        self.atom.and_then(|ref atom| {
-            atom.composition().and_then(|composition| {
-                if self.exponent == 1 {
-                    return Some(composition);
-                }
-
-                let mut new_composition = Composition::default();
-
-                for (dim, exp) in composition {
-                    let atom_exp = if exp == 1 { 0 } else { exp };
-                    new_composition.insert(dim, atom_exp + self.exponent);
-                }
-
-                Some(new_composition)
-            })
-        })
     }
 }
 
@@ -107,8 +89,8 @@ fn extract_term_string(term: &Term) -> String {
 #[cfg(test)]
 mod tests {
     use atom::Atom;
-    use composition::Composition;
-    use dimension::Dimension;
+    // use composition::Composition;
+    // use dimension::Dimension;
     use prefix::Prefix;
     use term::Term;
 
@@ -164,45 +146,45 @@ mod tests {
         assert_eq!(term.magnitude(), 0.0001);
     }
 
-    #[test]
-    fn validate_composition() {
-        let term = Term::new(None, None);
-        assert_eq!(term.composition(), None);
+    // #[test]
+    // fn validate_composition() {
+    //     let term = Term::new(None, None);
+    //     assert_eq!(term.composition(), None);
 
-        let term = Term::new(Some(Atom::Meter), None);
-        let composition = Composition::new(Dimension::Length, 1);
-        assert_eq!(term.composition().unwrap(), composition);
+    //     let term = Term::new(Some(Atom::Meter), None);
+    //     let composition = Composition::new(Dimension::Length, 1);
+    //     assert_eq!(term.composition().unwrap(), composition);
 
-        let term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-        let composition = Composition::new(Dimension::Length, 1);
-        assert_eq!(term.composition().unwrap(), composition);
+    //     let term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
+    //     let composition = Composition::new(Dimension::Length, 1);
+    //     assert_eq!(term.composition().unwrap(), composition);
 
-        let mut term = Term::new(Some(Atom::Meter), None);
-        term.exponent = -1;
-        let composition = Composition::new(Dimension::Length, -1);
-        assert_eq!(term.composition().unwrap(), composition);
+    //     let mut term = Term::new(Some(Atom::Meter), None);
+    //     term.exponent = -1;
+    //     let composition = Composition::new(Dimension::Length, -1);
+    //     assert_eq!(term.composition().unwrap(), composition);
 
-        let mut term = Term::new(Some(Atom::Meter), None);
-        term.exponent = -2;
-        let composition = Composition::new(Dimension::Length, -2);
-        assert_eq!(term.composition().unwrap(), composition);
+    //     let mut term = Term::new(Some(Atom::Meter), None);
+    //     term.exponent = -2;
+    //     let composition = Composition::new(Dimension::Length, -2);
+    //     assert_eq!(term.composition().unwrap(), composition);
 
-        let mut term = Term::new(Some(Atom::Meter), None);
-        term.factor = 10;
-        let composition = Composition::new(Dimension::Length, 1);
-        assert_eq!(term.composition().unwrap(), composition);
+    //     let mut term = Term::new(Some(Atom::Meter), None);
+    //     term.factor = 10;
+    //     let composition = Composition::new(Dimension::Length, 1);
+    //     assert_eq!(term.composition().unwrap(), composition);
 
-        let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-        term.factor = 10;
-        let composition = Composition::new(Dimension::Length, 1);
-        assert_eq!(term.composition().unwrap(), composition);
+    //     let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
+    //     term.factor = 10;
+    //     let composition = Composition::new(Dimension::Length, 1);
+    //     assert_eq!(term.composition().unwrap(), composition);
 
-        let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-        term.factor = 10;
-        term.exponent = -1;
-        let composition = Composition::new(Dimension::Length, -1);
-        assert_eq!(term.composition().unwrap(), composition);
-    }
+    //     let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
+    //     term.factor = 10;
+    //     term.exponent = -1;
+    //     let composition = Composition::new(Dimension::Length, -1);
+    //     assert_eq!(term.composition().unwrap(), composition);
+    // }
 
     #[test]
     fn validate_display() {

@@ -1,12 +1,11 @@
 use atom::Atom;
 use classification::Classification;
-use composition::Composition;
 use definition::Definition;
 use property::Property;
 use std::fmt;
 use term::Term;
 use ucum_symbol::UcumSymbol;
-use unit::Unit;
+// use unit::Unit;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -49,7 +48,7 @@ impl UcumSymbol for Prefix {
 
     fn definition(&self) -> Definition {
         let term = Term::new(Some(Atom::TheUnity), None);
-        let unit = Unit { terms: vec![term] };
+        let terms = vec![term];
 
         let value = match *self {
             Prefix::Atto  => 1.0e-18,
@@ -80,12 +79,8 @@ impl UcumSymbol for Prefix {
 
         Definition {
             value,
-            unit,
+            terms,
         }
-    }
-
-    fn composition(&self) -> Option<Composition> {
-        None
     }
 
     fn names(&self) -> Vec<&'static str> {
@@ -193,6 +188,22 @@ impl UcumSymbol for Prefix {
     fn is_special(&self) -> bool {
         false
     }
+
+    fn scalar(&self) -> f64 {
+        self.calculate_scalar(1.0)
+    }
+
+    fn magnitude(&self) -> f64 {
+        self.calculate_magnitude(1.0)
+    }
+
+    fn calculate_scalar(&self, magnitude: f64) -> f64 {
+        self.definition().calculate_scalar(magnitude)
+    }
+
+    fn calculate_magnitude(&self, scalar: f64) -> f64 {
+        self.definition().calculate_magnitude(scalar)
+    }
 }
 
 impl fmt::Display for Prefix {
@@ -211,54 +222,35 @@ mod tests {
     #[test]
     fn validate_scalar_atto() {
         let prefix = Prefix::Atto;
-        assert_floats_eq(prefix.scalar(), 0.000_000_000_000_000_001);
+        assert_relative_eq!(prefix.scalar(), 0.000_000_000_000_000_001);
+        assert_ulps_eq!(prefix.scalar(), 0.000_000_000_000_000_001);
     }
 
     #[test]
     fn validate_scalar_centi() {
         let prefix = Prefix::Centi;
-        assert_floats_eq(prefix.scalar(), 0.01);
+        assert_relative_eq!(prefix.scalar(), 0.01);
+        assert_ulps_eq!(prefix.scalar(), 0.01);
     }
 
     #[test]
     fn validate_scalar_deci() {
         let prefix = Prefix::Deci;
-        assert_floats_eq(prefix.scalar(), 0.1);
+        assert_relative_eq!(prefix.scalar(), 0.1);
+        assert_ulps_eq!(prefix.scalar(), 0.1);
     }
 
     #[test]
     fn validate_scalar_deka() {
         let prefix = Prefix::Deka;
-        assert_floats_eq(prefix.scalar(), 10.0);
-    }
-
-    #[test]
-    fn validate_composition() {
-        let prefix = Prefix::Kilo;
-        assert_eq!(prefix.composition(), None)
+        assert_relative_eq!(prefix.scalar(), 10.0);
+        assert_ulps_eq!(prefix.scalar(), 10.0);
     }
 
     #[test]
     fn validate_display() {
         let prefix = Prefix::Kilo;
         assert_eq!(&prefix.to_string(), "k")
-    }
-
-    // Because the precision of floats can vary, using assert_eq! with float values
-    // is not recommended; clippy's recommendation is to calculate the absolute
-    // value of the difference and make sure that it's under some acceptable
-    // threshold.
-    fn assert_floats_eq(actual: f64, expected: f64) {
-        let error_threshold = ::std::f32::EPSILON as f64;
-        let difference = actual - expected;
-
-        assert!(
-            difference.abs() < error_threshold,
-            "Actual: {}, Expected: {}, Diff: {}",
-            actual,
-            expected,
-            difference
-        );
     }
 
     #[cfg(feature = "with_serde")]

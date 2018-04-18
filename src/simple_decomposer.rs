@@ -1,5 +1,5 @@
 use decomposable::Decomposable;
-use term::Term;
+use unit_parser::Term;
 
 pub struct SimpleDecomposer<'a>(&'a [Term]);
 

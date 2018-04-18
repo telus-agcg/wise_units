@@ -1,13 +1,11 @@
 use classification::Classification;
-use composition::Composition;
 use definition::Definition;
-use dimension::Dimension;
+// use dimension::Dimension;
 use property::Property;
 use std::f64::consts::PI;
 use std::fmt;
 use term::Term;
 use ucum_symbol::UcumSymbol;
-use unit::Unit;
 
 // TODO: Implement PartialEq
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
@@ -422,9 +420,8 @@ impl UcumSymbol for Atom {
                 Atom::Second                     => {
                     // Manually build the Definition here for speed.
                     let term = Term::new(Some(Atom::TheUnity), None);
-                    let unit = Unit { terms: vec![term] };
 
-                    Ok(Definition { value: 1.0, unit })
+                    Ok(Definition { value: 1.0, terms: vec![term] })
                 },
             Atom::AcreBR                         => Definition::new(4840.0, "[yd_br]2"),
             Atom::AcreUS                         => Definition::new(160.0, "[rd_us]2"),
@@ -616,20 +613,6 @@ impl UcumSymbol for Atom {
         };
 
         result.expect("BUG! Bad Atom -> Definition mapping!")
-    }
-
-    fn composition(&self) -> Option<Composition> {
-        match *self {
-            Atom::TheUnity => None,
-            Atom::Candela => Some(Composition::new(Dimension::LuminousIntensity, 1)),
-            Atom::Coulomb => Some(Composition::new(Dimension::ElectricCharge, 1)),
-            Atom::Gram => Some(Composition::new(Dimension::Mass, 1)),
-            Atom::Kelvin => Some(Composition::new(Dimension::Temperature, 1)),
-            Atom::Meter => Some(Composition::new(Dimension::Length, 1)),
-            Atom::Radian => Some(Composition::new(Dimension::PlaneAngle, 1)),
-            Atom::Second => Some(Composition::new(Dimension::Time, 1)),
-            _ => self.definition().unit.composition(),
-        }
     }
 
     fn is_arbitrary(&self) -> bool {
@@ -1720,8 +1703,7 @@ impl fmt::Display for Atom {
 mod tests {
     use super::Atom;
     use classification::Classification;
-    use composition::Composition;
-    use dimension::Dimension;
+    // use dimension::Dimension;
     use prefix::Prefix;
     use term::Term;
     use ucum_symbol::UcumSymbol;
@@ -1845,7 +1827,7 @@ mod tests {
 
         for base_atom in base_atoms {
             assert_eq!(base_atom.definition().value, 1.0);
-            assert_eq!(base_atom.definition().unit.terms, terms);
+            assert_eq!(base_atom.definition().terms, terms);
         }
     }
 
@@ -1856,7 +1838,7 @@ mod tests {
         term.exponent = 2;
 
         assert_eq!(atom.definition().value, 160.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1866,7 +1848,7 @@ mod tests {
         term.exponent = 2;
 
         assert_eq!(atom.definition().value, 100.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1880,7 +1862,7 @@ mod tests {
         term3.exponent = -1;
 
         assert_eq!(atom.definition().value, 2.0);
-        assert_eq!(atom.definition().unit.terms, vec![term, term2, term3]);
+        assert_eq!(atom.definition().terms, vec![term, term2, term3]);
     }
 
     #[test]
@@ -1890,7 +1872,7 @@ mod tests {
         let term = Term::new(Some(Atom::TheUnity), None);
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1900,7 +1882,7 @@ mod tests {
         let term = Term::new(Some(Atom::TheUnity), None);
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1910,7 +1892,7 @@ mod tests {
         let term = Term::new(Some(Atom::TheUnity), None);
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1923,7 +1905,7 @@ mod tests {
         term2.exponent = -1;
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term, term2]);
+        assert_eq!(atom.definition().terms, vec![term, term2]);
     }
 
     #[test]
@@ -1932,7 +1914,7 @@ mod tests {
         let term = Term::new(Some(Atom::InchInternational), None);
 
         assert_eq!(atom.definition().value, 12.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1945,7 +1927,7 @@ mod tests {
         term2.exponent = -1;
 
         assert_eq!(atom.definition().value, 1200.0);
-        assert_eq!(atom.definition().unit.terms, vec![term1, term2]);
+        assert_eq!(atom.definition().terms, vec![term1, term2]);
     }
 
     #[test]
@@ -1958,7 +1940,7 @@ mod tests {
         term2.exponent = -1;
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term, term2]);
+        assert_eq!(atom.definition().terms, vec![term, term2]);
     }
 
     #[test]
@@ -1967,7 +1949,7 @@ mod tests {
         let term = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
 
         assert_eq!(atom.definition().value, 254e-2);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1977,7 +1959,7 @@ mod tests {
         term.exponent = 3;
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1987,7 +1969,7 @@ mod tests {
         term.exponent = 23;
 
         assert_eq!(atom.definition().value, 6.022_136_7);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -1997,7 +1979,7 @@ mod tests {
         term.exponent = -9;
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -2009,7 +1991,7 @@ mod tests {
         let terms = vec![term];
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, terms);
+        assert_eq!(atom.definition().terms, terms);
     }
 
     #[test]
@@ -2021,7 +2003,7 @@ mod tests {
         let terms = vec![term];
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, terms);
+        assert_eq!(atom.definition().terms, terms);
     }
 
     #[test]
@@ -2032,7 +2014,7 @@ mod tests {
         let terms = vec![term];
 
         assert_eq!(atom.definition().value, 16.6);
-        assert_eq!(atom.definition().unit.terms, terms);
+        assert_eq!(atom.definition().terms, terms);
     }
 
     #[test]
@@ -2047,7 +2029,7 @@ mod tests {
         let terms = vec![term, term2];
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, terms);
+        assert_eq!(atom.definition().terms, terms);
     }
 
     #[test]
@@ -2058,7 +2040,7 @@ mod tests {
         let terms = vec![term];
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, terms);
+        assert_eq!(atom.definition().terms, terms);
     }
 
     #[test]
@@ -2071,7 +2053,7 @@ mod tests {
         term2.exponent = -1;
 
         assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().unit.terms, vec![term, term2]);
+        assert_eq!(atom.definition().terms, vec![term, term2]);
     }
 
     #[test]
@@ -2081,7 +2063,7 @@ mod tests {
         term.exponent = 3;
 
         assert_eq!(atom.definition().value, 231.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -2090,7 +2072,7 @@ mod tests {
         let term = Term::new(Some(Atom::FootUS), None);
 
         assert_eq!(atom.definition().value, 16.5);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -2102,7 +2084,7 @@ mod tests {
             atom.definition().value,
             3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3
         );
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -2111,7 +2093,7 @@ mod tests {
         let term = Term::new(Some(Atom::TheUnity), None);
 
         assert_eq!(atom.definition().value, 10.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -2120,38 +2102,7 @@ mod tests {
         let term = Term::new(Some(Atom::TheUnity), None);
 
         assert_eq!(atom.definition().value, 10.0);
-        assert_eq!(atom.definition().unit.terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_composition() {
-        let atom = Atom::Candela;
-        let composition = Composition::new(Dimension::LuminousIntensity, 1);
-        assert_eq!(atom.composition().unwrap(), composition);
-
-        let atom = Atom::Coulomb;
-        let composition = Composition::new(Dimension::ElectricCharge, 1);
-        assert_eq!(atom.composition().unwrap(), composition);
-
-        let atom = Atom::Gram;
-        let composition = Composition::new(Dimension::Mass, 1);
-        assert_eq!(atom.composition().unwrap(), composition);
-
-        let atom = Atom::Kelvin;
-        let composition = Composition::new(Dimension::Temperature, 1);
-        assert_eq!(atom.composition().unwrap(), composition);
-
-        let atom = Atom::Meter;
-        let composition = Composition::new(Dimension::Length, 1);
-        assert_eq!(atom.composition().unwrap(), composition);
-
-        let atom = Atom::Radian;
-        let composition = Composition::new(Dimension::PlaneAngle, 1);
-        assert_eq!(atom.composition().unwrap(), composition);
-
-        let atom = Atom::Second;
-        let composition = Composition::new(Dimension::Time, 1);
-        assert_eq!(atom.composition().unwrap(), composition);
+        assert_eq!(atom.definition().terms, vec![term]);
     }
 
     #[test]
@@ -2174,150 +2125,174 @@ mod tests {
     #[test]
     fn validate_scalar_acre_us() {
         let atom = Atom::AcreUS;
-        assert_floats_eq(atom.scalar(), 4046.872_609_874_252);
+        assert_relative_eq!(atom.scalar(), 4046.872_609_874_252);
+        assert_ulps_eq!(atom.scalar(), 4046.872_609_874_252);
     }
 
     #[test]
     fn validate_scalar_are() {
         let atom = Atom::Are;
-        assert_floats_eq(atom.scalar(), 100.0);
+        assert_relative_eq!(atom.scalar(), 100.0);
+        assert_ulps_eq!(atom.scalar(), 100.0);
     }
 
     #[test]
     fn validate_scalar_degree() {
         let atom = Atom::Degree;
-        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_scalar_degree_celsius() {
         let atom = Atom::DegreeCelsius;
-        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_scalar_degree_fahrenheit() {
         let atom = Atom::DegreeFahrenheit;
-        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_scalar_degree_reaumur() {
         let atom = Atom::DegreeReaumur;
-        assert_floats_eq(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
+        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
     }
 
     #[test]
     fn validate_scalar_fluid_ounce_us() {
         let atom = Atom::FluidOunceUS;
-        assert_floats_eq(atom.scalar(), 2.95735295625e-05);
+        assert_relative_eq!(atom.scalar(), 2.95735295625e-05);
+        assert_ulps_eq!(atom.scalar(), 2.95735295625e-05);
     }
 
     #[test]
     fn validate_scalar_foot_international() {
         let atom = Atom::FootInternational;
-        assert_floats_eq(atom.scalar(), 0.3048);
+        assert_relative_eq!(atom.scalar(), 0.3048);
+        assert_ulps_eq!(atom.scalar(), 0.3048);
     }
 
     #[test]
     fn validate_scalar_foot_us() {
         let atom = Atom::FootUS;
-        assert_floats_eq(atom.scalar(), 0.304_800_609_601_219_2);
+        assert_relative_eq!(atom.scalar(), 0.304_800_609_601_219_2);
+        assert_ulps_eq!(atom.scalar(), 0.304_800_609_601_219_2);
     }
 
     #[test]
     fn validate_scalar_gill_us() {
         let atom = Atom::GillUS;
-        assert_floats_eq(atom.scalar(), 0.000_118_294_118_25);
+        assert_relative_eq!(atom.scalar(), 0.000_118_294_118_25);
+        assert_ulps_eq!(atom.scalar(), 0.000_118_294_118_25);
     }
 
     #[test]
     fn validate_scalar_inch_international() {
         let atom = Atom::InchInternational;
-        assert_floats_eq(atom.scalar(), 0.0254);
+        assert_relative_eq!(atom.scalar(), 0.0254);
+        assert_ulps_eq!(atom.scalar(), 0.0254);
     }
 
     #[test]
     fn validate_scalar_liter() {
         let atom = Atom::Liter;
-        assert_floats_eq(atom.scalar(), 0.001);
+        assert_relative_eq!(atom.scalar(), 0.001);
+        assert_ulps_eq!(atom.scalar(), 0.001);
     }
 
     #[test]
     fn validate_scalar_mole() {
         let atom = Atom::Mole;
-        assert_floats_eq(atom.scalar(), 6.0221367e+23);
+        assert_relative_eq!(atom.scalar(), 6.0221367e+23);
+        assert_ulps_eq!(atom.scalar(), 6.0221367e+23);
     }
 
     #[test]
     fn validate_scalar_parts_per_billion() {
         let atom = Atom::PartsPerBillion;
-        assert_floats_eq(atom.scalar(), 1.0e-09);
+        assert_relative_eq!(atom.scalar(), 1.0e-09);
+        assert_ulps_eq!(atom.scalar(), 1.0e-09);
     }
 
     #[test]
     fn validate_scalar_parts_per_million() {
         let atom = Atom::PartsPerMillion;
-        assert_floats_eq(atom.scalar(), 1.0e-06);
+        assert_relative_eq!(atom.scalar(), 1.0e-06);
+        assert_ulps_eq!(atom.scalar(), 1.0e-06);
     }
 
     #[test]
     fn validate_scalar_parts_per_thousand() {
         let atom = Atom::PartsPerThousand;
-        assert_floats_eq(atom.scalar(), 1.0e-03);
+        assert_relative_eq!(atom.scalar(), 1.0e-03);
+        assert_ulps_eq!(atom.scalar(), 1.0e-03);
     }
 
     #[test]
     fn validate_scalar_percent() {
         let atom = Atom::Percent;
-        assert_floats_eq(atom.scalar(), 0.01);
+        assert_relative_eq!(atom.scalar(), 0.01);
+        assert_ulps_eq!(atom.scalar(), 0.01);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_scalar_ph() {
         let atom = Atom::PH;
-        assert_floats_eq(atom.scalar(), 1.0e-09);
+        assert_relative_eq!(atom.scalar(), 1.0e-09);
+        assert_ulps_eq!(atom.scalar(), 1.0e-09);
     }
 
     #[test]
     fn validate_scalar_pint_us() {
         let atom = Atom::PintUS;
-        assert_floats_eq(atom.scalar(), 0.000_473_176_473);
+        assert_relative_eq!(atom.scalar(), 0.000_473_176_473);
+        assert_ulps_eq!(atom.scalar(), 0.000_473_176_473);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_scalar_prism_diopter() {
         let atom = Atom::PrismDiopter;
-        assert_floats_eq(atom.scalar(), 0.000_473_176_473);
+        assert_relative_eq!(atom.scalar(), 0.000_473_176_473);
+        assert_ulps_eq!(atom.scalar(), 0.000_473_176_473);
     }
 
     #[test]
     fn validate_scalar_quart_us() {
         let atom = Atom::QuartUS;
-        assert_floats_eq(atom.scalar(), 0.000_946_352_946);
+        assert_relative_eq!(atom.scalar(), 0.000_946_352_946);
+        assert_ulps_eq!(atom.scalar(), 0.000_946_352_946);
     }
 
     #[test]
     fn validate_scalar_queen_annes_wine_gallon() {
         let atom = Atom::QueenAnnesWineGallon;
-        assert_floats_eq(atom.scalar(), 0.003_785_411_784);
+        assert_relative_eq!(atom.scalar(), 0.003_785_411_784);
+        assert_ulps_eq!(atom.scalar(), 0.003_785_411_784);
     }
 
     #[test]
     fn validate_scalar_rod_us() {
         let atom = Atom::RodUS;
-        assert_floats_eq(atom.scalar(), 5.029_210_058_420_117);
+        assert_relative_eq!(atom.scalar(), 5.029_210_058_420_117);
+        assert_ulps_eq!(atom.scalar(), 5.029_210_058_420_117);
     }
 
     #[test]
     fn validate_scalar_the_number_pi() {
         let atom = Atom::TheNumberPi;
-        assert_floats_eq(atom.scalar(), 3.141_592_653_589_793);
+        assert_relative_eq!(atom.scalar(), 3.141_592_653_589_793);
+        assert_ulps_eq!(atom.scalar(), 3.141_592_653_589_793);
     }
 
     #[test]
@@ -2340,173 +2315,180 @@ mod tests {
     #[test]
     fn validate_magnitude_acre_us() {
         let atom = Atom::AcreUS;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_are() {
         let atom = Atom::Are;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_degree() {
         let atom = Atom::Degree;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_magnitude_degree_celsius() {
         let atom = Atom::DegreeCelsius;
-        assert_floats_eq(atom.magnitude(), 0.0174_532_925_199_432_95);
+        assert_relative_eq!(atom.magnitude(), 0.0174_532_925_199_432_95);
+        assert_ulps_eq!(atom.magnitude(), 0.0174_532_925_199_432_95);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_magnitude_degree_fahrenheit() {
         let atom = Atom::DegreeFahrenheit;
-        assert_floats_eq(atom.magnitude(), 0.0174_532_925_199_432_95);
+        assert_relative_eq!(atom.magnitude(), 0.0174_532_925_199_432_95);
+        assert_ulps_eq!(atom.magnitude(), 0.0174_532_925_199_432_95);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_magnitude_degree_reaumur() {
         let atom = Atom::DegreeReaumur;
-        assert_floats_eq(atom.magnitude(), 0.0174_532_925_199_432_95);
+        assert_relative_eq!(atom.magnitude(), 0.0174_532_925_199_432_95);
+        assert_ulps_eq!(atom.magnitude(), 0.0174_532_925_199_432_95);
     }
 
     #[test]
     fn validate_magnitude_fluid_ounce_us() {
         let atom = Atom::FluidOunceUS;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_foot_international() {
         let atom = Atom::FootInternational;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_foot_us() {
         let atom = Atom::FootUS;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_gill_us() {
         let atom = Atom::GillUS;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_inch_international() {
         let atom = Atom::InchInternational;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_liter() {
         let atom = Atom::Liter;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_mole() {
         let atom = Atom::Mole;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_parts_per_billion() {
         let atom = Atom::PartsPerBillion;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_parts_per_million() {
         let atom = Atom::PartsPerMillion;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_parts_per_thousand() {
         let atom = Atom::PartsPerThousand;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_percent() {
         let atom = Atom::Percent;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_magnitude_ph() {
         let atom = Atom::PH;
-        assert_floats_eq(atom.magnitude(), 1.0e-09);
+        assert_relative_eq!(atom.magnitude(), 1.0e-09);
+        assert_ulps_eq!(atom.magnitude(), 1.0e-09);
     }
 
     #[test]
     fn validate_magnitude_pint_us() {
         let atom = Atom::PintUS;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     #[ignore(reason = "Special Units")]
     fn validate_magnitude_prism_diopter() {
         let atom = Atom::PrismDiopter;
-        assert_floats_eq(atom.magnitude(), 0.000_473_176_473);
+        assert_relative_eq!(atom.magnitude(), 0.000_473_176_473);
+        assert_ulps_eq!(atom.magnitude(), 0.000_473_176_473);
     }
 
     #[test]
     fn validate_magnitude_quart_us() {
         let atom = Atom::QuartUS;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_queen_annes_wine_gallon() {
         let atom = Atom::QueenAnnesWineGallon;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_rod_us() {
         let atom = Atom::RodUS;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_magnitude_the_number_pi() {
         let atom = Atom::TheNumberPi;
-        assert_floats_eq(atom.magnitude(), 1.0);
+        assert_relative_eq!(atom.magnitude(), 1.0);
+        assert_ulps_eq!(atom.magnitude(), 1.0);
     }
 
     #[test]
     fn validate_display() {
         let atom = Atom::TheNumberPi;
         assert_eq!(&atom.to_string(), "[pi]")
-    }
-
-    // Because the precision of floats can vary, using assert_eq! with float values
-    // is not recommended; clippy's recommendation is to calculate the absolute
-    // value of the difference and make sure that it's under some acceptable
-    // threshold.
-    fn assert_floats_eq(actual: f64, expected: f64) {
-        let error_threshold = ::std::f32::EPSILON as f64;
-        let difference = actual - expected;
-
-        assert!(
-            difference.abs() < error_threshold,
-            "Actual: {}, Expected: {}, Diff: {}",
-            actual,
-            expected,
-            difference
-        );
     }
 
     #[cfg(feature = "with_serde")]

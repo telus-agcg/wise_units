@@ -18,19 +18,18 @@ use self::component::Component;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
 use term::Term;
-use unit::Unit;
-use unit_parser::Rule;
+use parser::Rule;
 
 pub struct Interpreter;
 
 impl Interpreter {
-    pub fn interpret(&mut self, pairs: Pairs<Rule>) -> Result<Unit, Error> {
+    pub fn interpret(&mut self, pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
         let unit = self.visit_pairs(pairs)?;
 
         Ok(unit)
     }
 
-    fn visit_pairs(&mut self, pairs: Pairs<Rule>) -> Result<Unit, Error> {
+    fn visit_pairs(&mut self, pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
         let mut main_term = MainTerm::new();
 
         for pair in pairs {
@@ -513,8 +512,8 @@ mod tests {
     use super::*;
     use atom::Atom;
     use pest::Parser;
-    use unit::Unit;
-    use unit_parser::{Rule, UnitParser};
+    use term::Term;
+    use parser::{Rule, UnitParser};
 
     #[test]
     fn validate_exponent() {
@@ -525,9 +524,7 @@ mod tests {
         let mut expected_term = Term::new(Some(Atom::Meter), None);
         expected_term.exponent = -3;
 
-        let expected = Unit {
-            terms: vec![expected_term],
-        };
+        let expected = vec![expected_term];
 
         assert_eq!(actual, expected);
 
@@ -540,9 +537,7 @@ mod tests {
         let mut term2 = Term::new(Some(Atom::Meter), None);
         term2.exponent = 3;
 
-        let expected = Unit {
-            terms: vec![term1, term2],
-        };
+        let expected = vec![term1, term2];
 
         assert_eq!(actual, expected);
     }
@@ -556,9 +551,7 @@ mod tests {
         let mut expected_term = Term::new(Some(Atom::Meter), None);
         expected_term.exponent = 2;
 
-        let expected = Unit {
-            terms: vec![expected_term],
-        };
+        let expected = vec![expected_term];
 
         assert_eq!(actual, expected);
     }
@@ -570,9 +563,7 @@ mod tests {
         let mut i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
 
-        let expected = Unit {
-            terms: vec![Term::new(Some(Atom::Meter), Some(Prefix::Kilo))],
-        };
+        let expected = vec![Term::new(Some(Atom::Meter), Some(Prefix::Kilo))];
 
         assert_eq!(actual, expected);
     }
@@ -587,9 +578,7 @@ mod tests {
         let mut expected_term = Term::new(Some(Atom::Meter), None);
         expected_term.factor = 2;
 
-        let expected = Unit {
-            terms: vec![expected_term],
-        };
+        let expected = vec![expected_term];
 
         assert_eq!(actual, expected);
     }
@@ -604,9 +593,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -1;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -621,9 +608,7 @@ mod tests {
         let mut expected_denominator_term = Term::new(Some(Atom::Second), None);
         expected_denominator_term.exponent = -1;
 
-        let expected = Unit {
-            terms: vec![expected_numerator_term, expected_denominator_term],
-        };
+        let expected = vec![expected_numerator_term, expected_denominator_term];
 
         assert_eq!(actual, expected);
     }
@@ -638,9 +623,7 @@ mod tests {
         let mut expected_denominator_term = Term::new(Some(Atom::Second), Some(Prefix::Kilo));
         expected_denominator_term.exponent = -1;
 
-        let expected = Unit {
-            terms: vec![expected_numerator_term, expected_denominator_term],
-        };
+        let expected = vec![expected_numerator_term, expected_denominator_term];
 
         assert_eq!(actual, expected);
     }
@@ -656,9 +639,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -1;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -673,9 +654,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -2;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -691,9 +670,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -2;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -709,9 +686,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -1;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -727,9 +702,7 @@ mod tests {
         second_term.exponent = -1;
         second_term.factor = 2;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -743,9 +716,7 @@ mod tests {
         let meter_term = Term::new(Some(Atom::Meter), None);
         let second_term = Term::new(Some(Atom::Second), None);
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -760,9 +731,7 @@ mod tests {
         meter_term.exponent = 2;
         let second_term = Term::new(Some(Atom::Second), None);
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -777,9 +746,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = 2;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -795,9 +762,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = 2;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -812,9 +777,7 @@ mod tests {
         meter_term.factor = 2;
         let second_term = Term::new(Some(Atom::Second), None);
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -829,9 +792,7 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.factor = 2;
 
-        let expected = Unit {
-            terms: vec![meter_term, second_term],
-        };
+        let expected = vec![meter_term, second_term];
 
         assert_eq!(actual, expected);
     }
@@ -847,9 +808,7 @@ mod tests {
         let mut acre2_term = Term::new(Some(Atom::AcreUS), None);
         acre2_term.exponent = -1;
 
-        let expected = Unit {
-            terms: vec![acre_term, inch_term, acre2_term],
-        };
+        let expected = vec![acre_term, inch_term, acre2_term];
 
         assert_eq!(actual, expected);
     }
