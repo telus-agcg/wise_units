@@ -13,10 +13,9 @@ macro_rules! build_atoms {
             primary_code => $primary_code: expr
          );+
     ) => {
-        use classification::Classification;
         use definition::Definition;
         use measurable::Measurable;
-        use error::Error;
+        use unit_parser::{Classification, Error};
 
         #[derive(Debug)]
         pub enum TestAtom {
@@ -64,13 +63,3 @@ macro_rules! build_atoms {
         }
     };
 }
-
-// macro_rules! add_atom {
-//     $(
-//         name => $variant_name: ident,
-//         classification => $classification_variant: ident,
-
-//     )+ => {
-//     };
-// }
-

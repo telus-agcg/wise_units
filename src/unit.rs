@@ -1,18 +1,13 @@
-use atom::Atom;
+use composable::Composable;
 use composition::Composition;
 use decomposable::Decomposable;
-use error::Error;
-use interpreter::Interpreter;
-use pest::Parser;
 use reduction_decomposer::ReductionDecomposer;
 use simple_decomposer::SimpleDecomposer;
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
-use term::Term;
-use ucum_symbol::UcumSymbol;
-use unit_parser::{Rule, UnitParser};
+use unit_parser::{Atom, Error, Term, UcumSymbol};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
@@ -65,32 +60,6 @@ impl Unit {
         self.terms
             .iter()
             .fold(1.0, |acc, term| acc * term.calculate_magnitude(value))
-    }
-
-    pub fn composition(&self) -> Option<Composition> {
-        let mut composition = Composition::default();
-
-        for term in &self.terms {
-            match term.composition() {
-                Some(term_composition) => for (term_dimension, term_exponent) in term_composition {
-                    composition.insert(term_dimension, term_exponent);
-                },
-                None => continue,
-            }
-        }
-
-        if composition.is_empty() {
-            None
-        } else {
-            Some(composition)
-        }
-    }
-
-    pub fn is_compatible_with(&self, other_unit: &Unit) -> bool {
-        let me = self.composition();
-        let other_comp = other_unit.composition();
-
-        me == other_comp
     }
 
     /// Turns the Unit's Terms into Strings and combines them accordingly.
@@ -147,6 +116,27 @@ impl Unit {
     }
 }
 
+impl Composable for Unit {
+    fn composition(&self) -> Option<Composition> {
+        let mut composition = Composition::default();
+
+        for term in &self.terms {
+            match term.composition() {
+                Some(term_composition) => for (term_dimension, term_exponent) in term_composition {
+                    composition.insert(term_dimension, term_exponent);
+                },
+                None => continue,
+            }
+        }
+
+        if composition.is_empty() {
+            None
+        } else {
+            Some(composition)
+        }
+    }
+}
+
 impl fmt::Display for Unit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.expression())
@@ -157,13 +147,9 @@ impl FromStr for Unit {
     type Err = Error;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        match UnitParser::parse(Rule::main_term, expression) {
-            Ok(pairs) => {
-                let mut interpreter = Interpreter;
-                Ok(interpreter.interpret(pairs)?)
-            }
-            Err(_) => Err(Error::UnknownUnitString(expression.to_string())),
-        }
+        let terms = ::unit_parser::parse(expression)?;
+
+        Ok(Unit { terms })
     }
 }
 

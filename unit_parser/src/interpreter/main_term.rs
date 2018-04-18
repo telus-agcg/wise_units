@@ -1,5 +1,5 @@
 use term::Term;
-use unit::Unit;
+// use unit::Unit;
 
 pub(super) struct MainTerm {
     pub terms: Vec<Term>,
@@ -11,8 +11,8 @@ impl MainTerm {
     }
 }
 
-impl Into<Unit> for MainTerm {
-    fn into(self) -> Unit {
-        Unit { terms: self.terms }
+impl Into<Vec<Term>> for MainTerm {
+    fn into(self) -> Vec<Term> {
+       self.terms
     }
 }
