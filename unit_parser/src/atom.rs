@@ -453,7 +453,7 @@ impl UcumSymbol for Atom {
             Atom::DegreeFahrenheit               => Definition::new(1.0, "degf(5.0 K/9)"),
             Atom::DegreeMinute                   => Definition::new(1.0, "deg/60"),
             Atom::DegreeReaumur                  => Definition::new(1.0, "degre(5.0 K/4)"),
-            Atom::DegreeSecond                   => Definition::new(1.0, "/60"),
+            Atom::DegreeSecond                   => Definition::new(1.0, "'/60"),
             Atom::DramAV                         => Definition::new(1.0, "[oz_av]/16"),
             Atom::DryPintUS                      => Definition::new(1.0, "[dqt_us]/2"),
             Atom::DryQuartUS                     => Definition::new(1.0, "[pk_us]/8"),
@@ -490,13 +490,14 @@ impl UcumSymbol for Atom {
                 Atom::Sievert                    => Definition::new(1.0, "J/kg"),
             Atom::GuntersChainBR                 => Definition::new(4.0, "[rd_br]"),
             Atom::GuntersChainUS                 => Definition::new(4.0, "[rd_us]"),
+
             Atom::HandInternational              => Definition::new(4.0, "[in_i]"),
             Atom::Henry                          => Definition::new(1.0, "Wb/A"),
-            Atom::HistoricalWinchesterGallon     => Definition::new(1.0, "[bu_us]"),
-            Atom::Hour                           => Definition::new(60.0, "min"),
+            Atom::HistoricalWinchesterGallon     => Definition::new(1.0, "[bu_us]/8"),
             Atom::Horsepower                     => Definition::new(550.0, "[ft_i].[lbf_av]/s"),
-            Atom::InchInternational              => Definition::new(254.0e-2, "cm"),
+            Atom::Hour                           => Definition::new(60.0, "min"),
             Atom::InchBR                         => Definition::new(2.539_998, "cm"),
+            Atom::InchInternational              => Definition::new(254.0e-2, "cm"),
             Atom::InchUS                         => Definition::new(1.0, "[ft_us]/12"),
 
             Atom::Joule                          => Definition::new(1.0, "N.m"),
@@ -565,6 +566,7 @@ impl UcumSymbol for Atom {
             Atom::PoundForce                     => Definition::new(1.0, "[lb_av].[g]"),
             Atom::PrismDiopter                   => Definition::new(1.0, "100tan(1.0 rad)"),
             Atom::ProtonMass                     => Definition::new(1.672_623_1e-24, "g"),
+
             Atom::QuartBR                        => Definition::new(1.0, "[gal_br]/4"),
             Atom::QuartUS                        => Definition::new(1.0, "[gal_us]/4"),
             Atom::QueenAnnesWineGallon           => Definition::new(231.0, "[in_i]3"),
@@ -578,7 +580,7 @@ impl UcumSymbol for Atom {
             Atom::Section |
                 Atom::SquareMileUS               => Definition::new(1.0, "[mi_us]2"),
             Atom::ShortHundredweightAV           => Definition::new(100.0, "[lb_av]"),
-            Atom::ShortTonAV                     => Definition::new(20.0, "[scwt_at]"),
+            Atom::ShortTonAV                     => Definition::new(20.0, "[scwt_av]"),
             Atom::Siemens                        => Definition::new(1.0, "Ohm-1"),
             Atom::SquareFootInternational        => Definition::new(1.0, "[ft_i]2"),
             Atom::SquareInchInternational        => Definition::new(1.0, "[in_i]2"),
@@ -1701,6 +1703,40 @@ impl fmt::Display for Atom {
 
 #[cfg(test)]
 mod tests {
+    macro_rules! validate_scalar {
+        ($test_name: ident, $variant: ident, $value: expr) => {
+            #[test]
+            fn $test_name() {
+                let atom = Atom::$variant;
+                assert_relative_eq!(atom.scalar(), $value);
+                assert_ulps_eq!(atom.scalar(), $value);
+            }
+        };
+    }
+
+    macro_rules! ignore_validate_scalar {
+        ($test_name: ident, $variant: ident, $value: expr) => {
+            #[ignore(reason = "Special Units")]
+            validate_scalar!($test_name, $variant, $value);
+        };
+    }
+
+    macro_rules! validate_scalars {
+        ($($test_name: ident, $variant: ident, $value: expr);+ $(;)*) => {
+            $(
+                validate_scalar!($test_name, $variant, $value);
+            )+
+        };
+    }
+    macro_rules! ignore_validate_scalars {
+        ($($test_name: ident, $variant: ident, $value: expr);+ $(;)*) => {
+            $(
+                ignore_validate_scalar!($test_name, $variant, $value);
+            )+
+        };
+    }
+
+
     use super::Atom;
     use classification::Classification;
     // use dimension::Dimension;
@@ -2105,195 +2141,210 @@ mod tests {
         assert_eq!(atom.definition().terms, vec![term]);
     }
 
-    #[test]
-    fn validate_scalar_base_atoms() {
-        let base_atoms = vec![
-            Atom::TheUnity,
-            Atom::Candela,
-            Atom::Coulomb,
-            Atom::Gram,
-            Atom::Kelvin,
-            Atom::Meter,
-            Atom::Radian,
-            Atom::Second,
-        ];
-        for base_atom in base_atoms {
-            assert_eq!(base_atom.scalar(), 1.0);
-        }
-    }
+    validate_scalars!(
+        validate_scalar_the_unity, TheUnity, 1.0;
+        validate_scalar_candela, Candela, 1.0;
+        validate_scalar_coulomb, Coulomb, 1.0;
+        validate_scalar_gram, Gram, 1.0;
+        validate_scalar_kelvin, Kelvin, 1.0;
+        validate_scalar_meter, Meter, 1.0;
+        validate_scalar_radian, Radian, 1.0;
+        validate_scalar_second, Second, 1.0;
 
-    #[test]
-    fn validate_scalar_acre_us() {
-        let atom = Atom::AcreUS;
-        assert_relative_eq!(atom.scalar(), 4046.872_609_874_252);
-        assert_ulps_eq!(atom.scalar(), 4046.872_609_874_252);
-    }
+        validate_scalar_acre_br, AcreBR, 4046.850_049_400_268_7;
+        validate_scalar_acre_us, AcreUS, 4046.872_609_874_252;
+        validate_scalar_are, Are, 100.0;
+        validate_scalar_astronomic_unit, AstronomicUnit, 149_597_870_691.0;
+        validate_scalar_atomic_mass_unit, AtomicMassUnit, 1.660_540_2e-24;
+        // validate_scalar_bar, Bar, 100_000_000.0;
+        validate_scalar_barrel_us, BarrelUS, 0.158_987_294_928;
+        validate_scalar_becquerel, Becquerel, 1.0;
+        validate_scalar_biot, Biot, 10.0;
+        validate_scalar_board_foot_international, BoardFootInternational, 0.002_359_737_216;
+        validate_scalar_boltzmann_constant, BoltzmannConstant, 1.380_658e-20;
+        validate_scalar_bushel_br, BushelBR, 0.036_368_72;
+        validate_scalar_bushel_us, BushelUS, 0.035_239_070_166_88;
 
-    #[test]
-    fn validate_scalar_are() {
-        let atom = Atom::Are;
-        assert_relative_eq!(atom.scalar(), 100.0);
-        assert_ulps_eq!(atom.scalar(), 100.0);
-    }
+        validate_scalar_circular_mil_international, CircularMilInternational, 1_217_369_588.005_220_4;
+        validate_scalar_cord_international, CordInternational, 3.624_556_363_776;
+        validate_scalar_cord_us, CordUS, 3.624_556_363_776;
+        validate_scalar_cubic_foot_international, CubicFootInternational, 0.028_316_846_592;
+        validate_scalar_cubic_inch_international, CubicInchInternational, 1.638_706_4e-05;
+        validate_scalar_cubic_yard_international, CubicYardInternational, 0.764_554_857_984;
+        validate_scalar_cup_us, CupUS, 0.000_236_588_236_5;
+        validate_scalar_curie, Curie, 37_000_000_000.0;
 
-    #[test]
-    fn validate_scalar_degree() {
-        let atom = Atom::Degree;
-        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-    }
+        // validate_scalar_day, Day, 86_400.0; // parsing error
+        validate_scalar_degree, Degree, 0.0174_532_925_199_432_95;
+        // validate_scalar_degree_minute, DegreeMinute, 0.000_290_888_208_665_721_6; // parsing error
+        // validate_scalar_degree_second, DegreeSecond, 4.848_136_811_095_36e-06; // parsing error
+        // validate_scalar_dram_av, DramAV, 1.771_845_195_312_5; // conversion error
+        validate_scalar_dry_pint_us, DryPintUS, 0.000_550_610_471_357_5;
+        validate_scalar_dry_quart_us, DryQuartUS, 0.001_101_220_942_715;
+        validate_scalar_dyne, Dyne, 0.01;
+        validate_scalar_electron_mass, ElectronMass, 9.109_389_7e-28;
+        validate_scalar_electron_vold, ElectronVolt, 1.602_177_33e-16;
+        validate_scalar_elementary_charge, ElementaryCharge, 1.60217733e-19;
+        // validate_scalar_equivalents, Equivalents, 6.0221367e+23; // parsing error
+        // validate_scalar_erg, Erg, 0.0001; // parsing error
+        validate_scalar_farad, Farad, 0.001;
+        validate_scalar_fathom_br, FathomBR, 1.828_798_56;
+        validate_scalar_fathom_international, FathomInternational, 1.828_8;
+        validate_scalar_fathom_us, FathomUS, 1.828_803_657_607_315_2;
+        validate_scalar_fluid_dram_br, FluidDramBR, 3.551_632_812_5e-06;
+        validate_scalar_fluid_dram_us, FluidDramUS, 3.696_691_195_312_5e-06;
+        validate_scalar_fluid_ounce_br, FluidOunceBR, 2.841_306_25e-05;
+        validate_scalar_fluid_ounce_us, FluidOunceUS, 2.95735295625e-05;
+        validate_scalar_foot_br, FootBR, 0.304_799_76;
+        validate_scalar_foot_international, FootInternational, 0.3048;
+        validate_scalar_foot_us, FootUS, 0.304_800_609_601_219_2;
+        validate_scalar_furlong_us, FurlongUS, 201.16840233680466;
 
-    #[test]
-    #[ignore(reason = "Special Units")]
-    fn validate_scalar_degree_celsius() {
-        let atom = Atom::DegreeCelsius;
-        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-    }
+        validate_scalar_gal, Gal, 0.01;
+        validate_scalar_gallon_br, GallonBR, 0.004_546_09;
+        validate_scalar_gauss, Gauss, 0.1;
+        validate_scalar_gilbert, Gilbert, 0.795_774_715_459_476_8;
+        validate_scalar_gill_br, GillBR, 0.000_142_065_312_5;
+        validate_scalar_gill_us, GillUS, 0.000_118_294_118_25;
+        // validate_scalar_gon, Gon, 0.015_707_963_267_948_967; // parsing error
+        validate_scalar_gram_force, GramForce, 9.806_65;
+        validate_scalar_gram_percent, GramPercent, 9999.999_999_999_996;
+        validate_scalar_grain, Grain, 0.064_798_91;
+        validate_scalar_gray, Gray, 1.0;
+        validate_scalar_gunters_chain_br, GuntersChainBR, 20.116_784_16;
+        validate_scalar_gunters_chain_us, GuntersChainUS, 20.116_840_233_680_467;
 
-    #[test]
-    #[ignore(reason = "Special Units")]
-    fn validate_scalar_degree_fahrenheit() {
-        let atom = Atom::DegreeFahrenheit;
-        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-    }
+        validate_scalar_hand_international, HandInternational, 0.1016;
+        validate_scalar_hertz, Hertz, 1.0;
+        validate_scalar_henry, Henry, 1_000.0;
+        validate_scalar_historical_winchester_gallon, HistoricalWinchesterGallon, 0.004_404_883_770_86;
+        validate_scalar_horsepower, Horsepower, 745_699.871_582_270_3;
+        // validate_scalar_hour, Hour, 3600.0; // parsing error
 
-    #[test]
-    #[ignore(reason = "Special Units")]
-    fn validate_scalar_degree_reaumur() {
-        let atom = Atom::DegreeReaumur;
-        assert_relative_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-        assert_ulps_eq!(atom.scalar(), 0.0174_532_925_199_432_95);
-    }
+        validate_scalar_inch_br, InchBR, 0.025_399_98;
+        validate_scalar_inch_international, InchInternational, 0.025_4;
+        // validate_scalar_inch_us, InchUS, 0.025_400_050_800_101_6; // conversion error
 
-    #[test]
-    fn validate_scalar_fluid_ounce_us() {
-        let atom = Atom::FluidOunceUS;
-        assert_relative_eq!(atom.scalar(), 2.95735295625e-05);
-        assert_ulps_eq!(atom.scalar(), 2.95735295625e-05);
-    }
+        validate_scalar_joule, Joule, 1000.0;
+        validate_scalar_kayser, Kayser, 100.0;
+        // validate_scalar_knot_br, KnotBR, 0.514_772_928; // parsing error
+        // validate_scalar_knot_international, KnotInternational, 0.514_772_928; // parsing error
 
-    #[test]
-    fn validate_scalar_foot_international() {
-        let atom = Atom::FootInternational;
-        assert_relative_eq!(atom.scalar(), 0.3048);
-        assert_ulps_eq!(atom.scalar(), 0.3048);
-    }
+        // validate_scalar_lambert, Lambert, 31_415.926_5; // parsing error
+        validate_scalar_long_hundredweight_av, LongHundredweightAV, 50_802.345_44;
+        validate_scalar_long_ton_av, LongTonAV, 1_016_046.908_8;
+        // validate_scalar_light_year, LightYear, 9.460_730_472_580_8e+15; // parsing error
+        // validate_scalar_link_for_gunters_chain_br, LinkForGuntersChainBR, 0.201_167_841_6; // conversion error. not accounting for denominator.
+        // validate_scalar_link_for_gunters_chain_us, LinkForGuntersChainUS, 0.201_168_402_336_804_66; // conversion error. not accounting for denominator.
+        validate_scalar_liter, Liter, 0.001;
+        // validate_scalar_lumen, Lumen, 1.0; // parsing error: "in"
+        // validate_scalar_lux, Lux, 1.0; // parsing error: "in"
 
-    #[test]
-    fn validate_scalar_foot_us() {
-        let atom = Atom::FootUS;
-        assert_relative_eq!(atom.scalar(), 0.304_800_609_601_219_2);
-        assert_ulps_eq!(atom.scalar(), 0.304_800_609_601_219_2);
-    }
+        validate_scalar_maxwell, Maxwell, 1.0e-05;
+        // validate_scalar_mean_gregorian_month, MeanGregorianMonth, 2_629_746.0; // parsing_error: "_j"
+        // validate_scalar_mean_gregorian_year, MeanGregorianYear, 31_556_952.0; // parsing_error: "in"
+        // validate_scalar_mean_julian_month, MeanJulianMonth, 2_629_800.0; // parsing_error: "_j"
+        // validate_scalar_mean_julian_year, MeanJulianYear, 31_557_600.0; // parsing_error: "in"
+        validate_scalar_metric_cup, MetricCup, 0.000_24;
+        validate_scalar_metric_fluid_ounce, MetricFluidOunce, 3.0e-05;
+        validate_scalar_metric_tablespoon, MetricTablespoon, 1.5e-05;
+        validate_scalar_metric_teaspoon, MetricTeaspoon, 5.0e-06;
+        validate_scalar_mil_international, MilInternational, 2.54e-05;
+        // validate_scalar_mil_us, MilUS, 2.540_005_080_010_16e-05; // conversion error
+        validate_scalar_mile_br, MileBR, 1_609.342_732_8;
+        validate_scalar_mile_international, MileInternational, 1_609.344;
+        validate_scalar_mile_us, MileUS, 1_609.347_218_694_437_3;
+        validate_scalar_minim_br, MinimBR, 5.919_388_020_833_333_4e-08;
+        validate_scalar_minim_us, MinimUS, 6.161_151_992_187_5e-08;
+        validate_scalar_mole, Mole, 6.0221367e+23;
+        // validate_scalar_month, Month, 2_629_800.0; // parsing error: "o_j"
 
-    #[test]
-    fn validate_scalar_gill_us() {
-        let atom = Atom::GillUS;
-        assert_relative_eq!(atom.scalar(), 0.000_118_294_118_25);
-        assert_ulps_eq!(atom.scalar(), 0.000_118_294_118_25);
-    }
+        validate_scalar_nautical_mile_br, NauticalMileBR, 1_853.182_540_8;
+        validate_scalar_nautical_mile_internationa, NauticalMileInternational, 1852.0;
+        validate_scalar_newton, Newton, 1000.0;
+        validate_scalar_ohm, Ohm, 1000.0;
+        validate_scalar_oersted, Oersted, 79.577_471_545_947_67;
+        // validate_scalar_ounce_av, OunceAV, 28.349_523_125; // conversion error
+        validate_scalar_ounce_tr, OunceTR, 31.103_476_8;
 
-    #[test]
-    fn validate_scalar_inch_international() {
-        let atom = Atom::InchInternational;
-        assert_relative_eq!(atom.scalar(), 0.0254);
-        assert_ulps_eq!(atom.scalar(), 0.0254);
-    }
+        validate_scalar_pace_br, PaceBR, 0.761_999_4;
+        validate_scalar_parsec, Parsec, 3.085_678e+16;
+        validate_scalar_parts_per_billion, PartsPerBillion, 1.0e-09;
+        validate_scalar_parts_per_million, PartsPerMillion, 1.0e-06;
+        validate_scalar_parts_per_thousand, PartsPerThousand, 1.0e-03;
+        validate_scalar_pascal, Pascal, 1_000.0;
+        validate_scalar_peck_br, PeckBR, 0.009_092_18;
+        validate_scalar_peck_us, PeckUS, 0.008_809_767_541_72;
+        validate_scalar_percent, Percent, 0.01;
+        validate_scalar_permeability_of_vacuum, PermeabilityOfVacuum, 0.001_256_637_061_435_917_5;
+        validate_scalar_permittivity_of_vacuum, PermittivityOfVacuum, 8.854_187_817e-15;
+        // validate_scalar_phot, Phot, 0.000_1; // parsing_error: "in"
+        validate_scalar_pint_br, PintBR, 0.000_568_261_25;
+        validate_scalar_pint_us, PintUS, 0.000_473_176_473;
+        validate_scalar_planck_constant, PlanckConstant, 6.626_075_5e-31;
+        validate_scalar_pound_av, PoundAV, 453.592_37;
+        validate_scalar_pound_tr, PoundTR, 373.241_721_6;
+        validate_scalar_pound_force, PoundForce, 4448.221_615_260_5;
+        // validate_scalar_poise, Poise, 100.0; // parsing error: "yn"
+        validate_scalar_protein_nitrogen_unit, ProteinNitrogenUnit, 1.0;
+        validate_scalar_proton_mass, ProtonMass, 1.672_623_100_000_000_2e-24;
 
-    #[test]
-    fn validate_scalar_liter() {
-        let atom = Atom::Liter;
-        assert_relative_eq!(atom.scalar(), 0.001);
-        assert_ulps_eq!(atom.scalar(), 0.001);
-    }
+        validate_scalar_quart_br, QuartBR, 0.001_136_522_5;
+        validate_scalar_quart_us, QuartUS, 0.000_946_352_946;
+        validate_scalar_queen_annes_wine_gallon, QueenAnnesWineGallon, 0.003_785_411_784;
 
-    #[test]
-    fn validate_scalar_mole() {
-        let atom = Atom::Mole;
-        assert_relative_eq!(atom.scalar(), 6.0221367e+23);
-        assert_ulps_eq!(atom.scalar(), 6.0221367e+23);
-    }
+        validate_scalar_ramdens_chain_us, RamdensChainUS, 30.480_060_960_121_92;
+        // validate_scalar_radiation_absorbed_dose, RadiationAbsorbedDose, 0.01; // parsing error: "yn"
+        // validate_scalar_radiation_equivalent_man, RadiationEquivalentMan, 0.01; // parsing error: "yn"
+        validate_scalar_rod_br, RodBR, 5.029_196_04;
+        validate_scalar_rod_us, RodUS, 5.029_210_058_420_117;
+        validate_scalar_roentgen, Roentgen, 2.58e-07;
 
-    #[test]
-    fn validate_scalar_parts_per_billion() {
-        let atom = Atom::PartsPerBillion;
-        assert_relative_eq!(atom.scalar(), 1.0e-09);
-        assert_ulps_eq!(atom.scalar(), 1.0e-09);
-    }
+        validate_scalar_section, Section, 2_589_998.470_319_521;
+        validate_scalar_short_hundredweight_av, ShortHundredweightAV, 45_359.237;
+        validate_scalar_short_ton_av, ShortTonAV, 907_184.74;
+        validate_scalar_siemens, Siemens, 0.001;
+        validate_scalar_sievert, Sievert, 1.0;
+        validate_scalar_square_foot_international, SquareFootInternational, 0.092_903_04;
+        validate_scalar_square_mile_us, SquareMileUS, 2_589_998.470_319_521;
+        validate_scalar_square_rod_us, SquareRodUS, 25.292_953_811_714_074;
+        validate_scalar_square_yard_international, SquareYardInternational, 0.836_127_36;
+        validate_scalar_standard_acceleration_of_free_fall, StandardAccelerationOfFreeFall, 9.80665;
+        // validate_scalar_standard_atomsphere, StandardAtmosphere, 101_325_000.0; // parsing error: "_j"
+        validate_scalar_steradian, Steradian, 1.0;
+        // validate_scalar_stilb, Stilb, 10_000.0; // parsing error: "in"
+        validate_scalar_stokes, Stokes, 0.000_1;
+        validate_scalar_stone_av, StoneAV, 6_350.293_18;
+        // validate_scalar_synodal_month, SynodalMonth, 2_551_442.976; // parsing error: "in"
 
-    #[test]
-    fn validate_scalar_parts_per_million() {
-        let atom = Atom::PartsPerMillion;
-        assert_relative_eq!(atom.scalar(), 1.0e-06);
-        assert_ulps_eq!(atom.scalar(), 1.0e-06);
-    }
+        validate_scalar_tablespoon_us, TablespoonUS, 1.478_676_478_125e-05;
+        validate_scalar_teaspoon_us, TeaspoonUS, 4.928_921_593_75e-06;
+        validate_scalar_tesla, Tesla, 1000.0;
+        validate_scalar_the_number_pi, TheNumberPi, 3.141_592_653_589_793;
+        validate_scalar_the_number_ten_for_arbitrary_powers_caret, TheNumberTenForArbitraryPowersCaret, 10.0;
+        validate_scalar_the_number_ten_for_arbitrary_powers_star, TheNumberTenForArbitraryPowersStar, 10.0;
+        validate_scalar_tonne, Tonne, 1_000_000.0;
+        validate_scalar_township, Township, 93_239_944.931_502_76;
+        // validate_scalar_tropical_year, TropicalYear, 31_556_925.216; // parsing error: "in"
 
-    #[test]
-    fn validate_scalar_parts_per_thousand() {
-        let atom = Atom::PartsPerThousand;
-        assert_relative_eq!(atom.scalar(), 1.0e-03);
-        assert_ulps_eq!(atom.scalar(), 1.0e-03);
-    }
+        validate_scalar_velocity_of_light, VelocityOfLight, 299_792_458.0;
+        validate_scalar_volt, Volt, 1000.0;
+        validate_scalar_watt, Watt, 1000.0;
+        validate_scalar_weber, Weber, 1000.0;
+        // validate_scalar_week, Week, 604_800.0; // parsing error: "in"
+        validate_scalar_yard_br, YardBR, 0.914_399_28;
+        validate_scalar_yard_international, YardInternational, 0.914_4;
+        validate_scalar_yard_us, YardUS, 0.914_401_828_803_657_6;
+        // validate_scalar_year, Year, 31_557_600.0; // parsing error: "_j"
+    );
 
-    #[test]
-    fn validate_scalar_percent() {
-        let atom = Atom::Percent;
-        assert_relative_eq!(atom.scalar(), 0.01);
-        assert_ulps_eq!(atom.scalar(), 0.01);
-    }
-
-    #[test]
-    #[ignore(reason = "Special Units")]
-    fn validate_scalar_ph() {
-        let atom = Atom::PH;
-        assert_relative_eq!(atom.scalar(), 1.0e-09);
-        assert_ulps_eq!(atom.scalar(), 1.0e-09);
-    }
-
-    #[test]
-    fn validate_scalar_pint_us() {
-        let atom = Atom::PintUS;
-        assert_relative_eq!(atom.scalar(), 0.000_473_176_473);
-        assert_ulps_eq!(atom.scalar(), 0.000_473_176_473);
-    }
-
-    #[test]
-    #[ignore(reason = "Special Units")]
-    fn validate_scalar_prism_diopter() {
-        let atom = Atom::PrismDiopter;
-        assert_relative_eq!(atom.scalar(), 0.000_473_176_473);
-        assert_ulps_eq!(atom.scalar(), 0.000_473_176_473);
-    }
-
-    #[test]
-    fn validate_scalar_quart_us() {
-        let atom = Atom::QuartUS;
-        assert_relative_eq!(atom.scalar(), 0.000_946_352_946);
-        assert_ulps_eq!(atom.scalar(), 0.000_946_352_946);
-    }
-
-    #[test]
-    fn validate_scalar_queen_annes_wine_gallon() {
-        let atom = Atom::QueenAnnesWineGallon;
-        assert_relative_eq!(atom.scalar(), 0.003_785_411_784);
-        assert_ulps_eq!(atom.scalar(), 0.003_785_411_784);
-    }
-
-    #[test]
-    fn validate_scalar_rod_us() {
-        let atom = Atom::RodUS;
-        assert_relative_eq!(atom.scalar(), 5.029_210_058_420_117);
-        assert_ulps_eq!(atom.scalar(), 5.029_210_058_420_117);
-    }
-
-    #[test]
-    fn validate_scalar_the_number_pi() {
-        let atom = Atom::TheNumberPi;
-        assert_relative_eq!(atom.scalar(), 3.141_592_653_589_793);
-        assert_ulps_eq!(atom.scalar(), 3.141_592_653_589_793);
-    }
+    ignore_validate_scalars!(
+        validate_special_scalar_degree_celsius, DegreeCelsius, 0.0174_532_925_199_432_95;
+        validate_special_scalar_degree_fahrenheit, DegreeFahrenheit, 0.0174_532_925_199_432_95;
+        validate_special_scalar_degree_reaumur, DegreeReaumur, 0.0174_532_925_199_432_95;
+        validate_special_scalar_ph, PH, 1.0e-09;
+        validate_special_scalar_prism_diopter, PrismDiopter, 0.000_473_176_473;
+    );
 
     #[test]
     fn validate_magnitude_base_atoms() {
