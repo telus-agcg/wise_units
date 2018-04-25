@@ -26,7 +26,12 @@ annotation = { "{" ~ ('!'..'z')* ~ "}" }
 annotatable = { simple_unit ~ exponent | simple_unit }
 
 // <simple-unit>
-simple_unit = { atom_char+ }
+simple_unit = {
+    "10*"
+        | "10^"
+        | "1"
+        | atom_char+
+}
 
 atom_char = _{
     "!" // 33
