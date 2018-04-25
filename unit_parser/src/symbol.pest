@@ -1,4 +1,4 @@
-symbol = {
+symbol = ${
     pri_prefix ~ pri_atom | pri_atom
         | sec_prefix ~ sec_atom | sec_atom
 }
@@ -104,9 +104,16 @@ pri_bushel_us    = { "[bu_us]" }
 // C
 pri_c = _{
     pri_degree_celsius
+        | pri_calorie_at_20c
+        | pri_calorie_at_15c
+        | pri_calorie_it
+        | pri_calorie_th
+        | pri_calorie_m
+        | pri_calorie
         | pri_curie
         | pri_candela
         | coulomb
+        | pri_cicero
         | pri_cubic_foot_i
         | pri_cubic_inch_i
         | pri_circular_mil_i
@@ -121,10 +128,17 @@ pri_c = _{
 }
 
 pri_degree_celsius    = { "Cel" }
+pri_calorie_at_20c    = { "cal_[20]" }
+pri_calorie_at_15c    = { "cal_[15]" }
+pri_calorie_it        = { "cal_IT" }
+pri_calorie_th        = { "cal_th" }
+pri_calorie_m         = { "cal_m" }
+pri_calorie           = { "cal" }
 pri_curie             = { "Ci" }
 pri_candela           = { "cd" }
 coulomb               = { "C" }
 pri_centi             = { "c" }
+pri_cicero            = { "[cicero]" }
 pri_cubic_foot_i      = { "[cft_i]" }
 pri_cubic_inch_i      = { "[cin_i]" }
 pri_circular_mil_i    = { "[cml_i]" }
@@ -142,19 +156,29 @@ pri_d = _{
     pri_degree
         | pri_dyne
         | pri_day
+        | pri_didot
+        | degree_reaumur
+        | pri_degree_fahrenheit
+        | degree_rankine
         | pri_dry_pint_us
         | pri_dry_quart_us
+        | pri_dram_ap
         | pri_dram_av
 }
 
-pri_degree       = { "deg" }
-pri_dyne         = { "dyn" }
-pri_deka         = { "da" }
-pri_deci         = { "d" }
-pri_day          = { "d" }
-pri_dry_pint_us  = { "[dpt_us]" }
-pri_dry_quart_us = { "[dqt_us]" }
-pri_dram_av      = { "[dr_av]" }
+pri_degree            = { "deg" }
+pri_dyne              = { "dyn" }
+pri_deka              = { "da" }
+pri_deci              = { "d" }
+pri_day               = { "d" }
+pri_didot             = { "[didot]" }
+degree_reaumur        = { "[degRe]" }
+pri_degree_fahrenheit = { "[degF]" }
+degree_rankine        = { "[degR]" }
+pri_dry_pint_us       = { "[dpt_us]" }
+pri_dry_quart_us      = { "[dqt_us]" }
+pri_dram_ap           = { "[dr_ap]" }
+pri_dram_av           = { "[dr_av]" }
 
 // E
 pri_e = _{
@@ -295,10 +319,14 @@ pri_l = _{
         | pri_lumen
         | pri_lux
         | pri_liter
+        | pri_ligne
         | pri_long_hundredweight_av
         | pri_long_ton_av
         | pri_pound_force
+        | pri_line
+        | pri_pound_ap
         | pri_pound_av
+        | pri_pound_tr
         | pri_link_for_gunters_chain_br
         | pri_link_for_gunters_chain_us
         | pri_light_year
@@ -308,10 +336,14 @@ pri_lambert                   = { "Lmb" }
 pri_lumen                     = { "lm" }
 pri_lux                       = { "lx" }
 pri_liter                     = { "l" | "L" }
+pri_ligne                     = { "[ligne]" }
 pri_long_hundredweight_av     = { "[lcwt_av]" }
 pri_long_ton_av               = { "[lton_av]" }
 pri_pound_force               = { "[lbf_av]" }
+pri_line                      = { "[lne]" }
+pri_pound_ap                  = { "[lb_ap]" }
 pri_pound_av                  = { "[lb_av]" }
+pri_pound_tr                  = { "[lb_tr]" }
 pri_link_for_gunters_chain_br = { "[lk_br]" }
 pri_link_for_gunters_chain_us = { "[lk_us]" }
 pri_light_year                = { "[ly]" }
@@ -376,12 +408,18 @@ pri_nautical_mile_i  = { "[nmi_i]" }
 pri_o = _{
     pri_ohm
         | pri_oersted
+        | pri_ounce_ap
         | pri_ounce_av
+        | pri_ounce_tr
+        | pri_ounce_m
 }
 
 pri_ohm      = { "Ohm" }
 pri_oersted  = { "Oe" }
+pri_ounce_ap = { "[oz_ap]" }
 pri_ounce_av = { "[oz_av]" }
+pri_ounce_tr = { "[oz_tr]" }
+pri_ounce_m  = { "[oz_m]" }
 
 // P
 pri_p = _{
@@ -389,8 +427,15 @@ pri_p = _{
         | pri_parsec
         | pri_phot
         | poise
+        | pri_pouce
+        | pri_pied
         | pri_parts_per_thousand
         | pri_parts_per_trillion
+        | pri_printers_pica
+        | pri_printers_point
+        | pri_pennyweight_tr
+        | pri_pica
+        | pri_point
         | pri_parts_per_billion
         | pri_parts_per_million
         | pri_pace_br
@@ -407,8 +452,15 @@ pri_phot               = { "ph" }
 pri_peta               = { "P" }
 poise                  = { "P" }
 pri_pico               = { "p" }
+pri_pouce              = { "[pouce]" }
+pri_pied               = { "[pied]" }
 pri_parts_per_thousand = { "[ppth]" }
 pri_parts_per_trillion = { "[pptr]" }
+pri_printers_pica      = { "[pca_pr]" }
+pri_printers_point     = { "[pnt_pr]" }
+pri_pennyweight_tr     = { "[pwt_tr]" }
+pri_pica               = { "[pca]" }
+pri_point              = { "[pnt]" }
 pri_parts_per_billion  = { "[ppb]" }
 pri_parts_per_million  = { "[ppm]" }
 pri_pace_br            = { "[pc_br]" }
@@ -465,6 +517,7 @@ pri_s = _{
         | pri_square_inch_i
         | pri_square_yard_i
         | pri_section
+        | pri_scruple
 }
 
 pri_stokes                 = { "St" }
@@ -482,6 +535,7 @@ pri_square_foot_i          = { "[sft_i]" }
 pri_square_inch_i          = { "[sin_i]" }
 pri_square_yard_i          = { "[syd_i]" }
 pri_section                = { "[sct]" }
+pri_scruple                = { "[sc_ap]" }
 
 // T
 pri_t = _{
@@ -645,10 +699,17 @@ sec_bushel_us    = { "[BU_US]" }
 
 // C
 sec_c = _{
-    sec_degree_celsius
+    sec_calorie_at_20c
+        | sec_calorie_at_15c
+        | sec_calorie_it
+        | sec_calorie_th
+        | sec_calorie_m
+        | sec_calorie
+        | sec_degree_celsius
         | sec_candela
         | sec_curie
         | coulomb
+        | sec_cicero
         | sec_cubic_foot_i
         | sec_cubic_inch_i
         | sec_circular_mil_i
@@ -662,10 +723,17 @@ sec_c = _{
         | sec_velocity_of_light
 }
 
+sec_calorie_at_20c    = { "CAL_[20]" }
+sec_calorie_at_15c    = { "CAL_[15]" }
+sec_calorie_it        = { "CAL_IT" }
+sec_calorie_th        = { "CAL_TH" }
+sec_calorie_m         = { "CAL_M" }
+sec_calorie           = { "CAL" }
 sec_degree_celsius    = { "CEL" }
 sec_candela           = { "CD" }
 sec_curie             = { "CI" }
 sec_centi             = { "C" }
+sec_cicero            = { "[CICERO]" }
 sec_cubic_foot_i      = { "[CFT_I]" }
 sec_cubic_inch_i      = { "[CIN_I]" }
 sec_circular_mil_i    = { "[CML_I]" }
@@ -683,19 +751,27 @@ sec_d = _{
     sec_degree
         | sec_dyne
         | sec_day
+        | sec_didot
+        | sec_degree_fahrenheit
+        | degree_reaumur
+        | degree_rankine
         | sec_dry_pint_us
         | sec_dry_quart_us
+        | sec_dram_ap
         | sec_dram_av
 }
 
-sec_degree       = { "DEG" }
-sec_dyne         = { "DYN" }
-sec_deka         = { "DA" }
-sec_deci         = { "D" }
-sec_day          = { "D" }
-sec_dry_pint_us  = { "[DPT_US]" }
-sec_dry_quart_us = { "[DQT_US]" }
-sec_dram_av      = { "[DR_AV]" }
+sec_degree            = { "DEG" }
+sec_dyne              = { "DYN" }
+sec_deka              = { "DA" }
+sec_deci              = { "D" }
+sec_day               = { "D" }
+sec_didot             = { "[DIDOT]" }
+sec_degree_fahrenheit = { "[DEGF]" }
+sec_dry_pint_us       = { "[DPT_US]" }
+sec_dry_quart_us      = { "[DQT_US]" }
+sec_dram_ap           = { "[DR_AP]" }
+sec_dram_av           = { "[DR_AV]" }
 
 // E
 sec_e = _{
@@ -831,10 +907,14 @@ sec_l = _{
         | sec_lumen
         | sec_lux
         | sec_liter
+        | sec_ligne
         | sec_long_hundredweight_av
         | sec_long_ton_av
         | sec_pound_force
+        | sec_line
+        | sec_pound_ap
         | sec_pound_av
+        | sec_pound_tr
         | sec_link_for_gunters_chain_br
         | sec_link_for_gunters_chain_us
         | sec_light_year
@@ -844,10 +924,14 @@ sec_lambert                   = { "LMB" }
 sec_lumen                     = { "LM" }
 sec_lux                       = { "LX" }
 sec_liter                     = { "L" }
+sec_ligne                     = { "[LIGNE]" }
 sec_long_hundredweight_av     = { "[LCWT_AV]" }
 sec_long_ton_av               = { "[LTON_AV]" }
 sec_pound_force               = { "[LBF_AV]" }
+sec_line                      = { "[LNE]" }
+sec_pound_ap                  = { "[LB_AP]" }
 sec_pound_av                  = { "[LB_AV]" }
+sec_pound_tr                  = { "[LB_TR]" }
 sec_link_for_gunters_chain_br = { "[LK_BR]" }
 sec_link_for_gunters_chain_us = { "[LK_US]" }
 sec_light_year                = { "[LY]" }
@@ -911,12 +995,18 @@ sec_nautical_mile_i  = { "[NMI_I]" }
 sec_o = _{
     sec_ohm
         | sec_oersted
+        | sec_ounce_ap
         | sec_ounce_av
+        | sec_ounce_tr
+        | sec_ounce_m
 }
 
 sec_ohm      = { "OHM" }
 sec_oersted  = { "OE" }
+sec_ounce_ap = { "[OZ_AP]" }
 sec_ounce_av = { "[OZ_AV]" }
+sec_ounce_tr = { "[OZ_TR]" }
+sec_ounce_m  = { "[OZ_M]" }
 
 // P
 sec_p = _{
@@ -924,8 +1014,15 @@ sec_p = _{
         | sec_phot
         | sec_parsec
         | poise
+        | sec_pouce
+        | sec_pied
         | sec_parts_per_thousand
         | sec_parts_per_trillion
+        | sec_printers_pica
+        | sec_printers_point
+        | sec_pennyweight_tr
+        | sec_pica
+        | sec_point
         | sec_parts_per_billion
         | sec_parts_per_million
         | sec_pace_br
@@ -940,8 +1037,15 @@ sec_phot               = { "PHT" }
 sec_parsec             = { "PRS" }
 sec_peta               = { "PT" }
 sec_pico               = { "P" }
+sec_pouce              = { "[POUCE]" }
+sec_pied               = { "[PIED]" }
 sec_parts_per_thousand = { "[PPTH]" }
 sec_parts_per_trillion = { "[PPTR]" }
+sec_printers_pica      = { "[PCA_PR]" }
+sec_printers_point     = { "[PNT_PR]" }
+sec_pennyweight_tr     = { "[PWT_TR]" }
+sec_pica               = { "[PCA]" }
+sec_point              = { "[PNT]" }
 sec_parts_per_billion  = { "[PPB]" }
 sec_parts_per_million  = { "[PPM]" }
 sec_pace_br            = { "[PC_BR]" }
@@ -998,6 +1102,7 @@ sec_s = _{
         | sec_square_inch_i
         | sec_square_yard_i
         | sec_section
+        | sec_scruple
 }
 
 sec_siemens                = { "SIE" }
@@ -1015,6 +1120,7 @@ sec_square_foot_i          = { "[SFT_I]" }
 sec_square_inch_i          = { "[SIN_I]" }
 sec_square_yard_i          = { "[SYD_I]" }
 sec_section                = { "[SCT]" }
+sec_scruple                = { "[SC_AP]" }
 
 // T
 sec_t = _{
