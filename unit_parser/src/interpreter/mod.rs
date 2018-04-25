@@ -7,10 +7,9 @@ pub(self) mod component;
 pub(self) mod main_term;
 pub(self) mod simple_unit;
 
-use atom::Atom;
 use error::Error;
+use pest::Parser;
 use pest::iterators::{Pair, Pairs};
-use prefix::Prefix;
 use self::annotatable::Annotatable;
 use self::ast_term::AstTerm;
 use self::basic_component::BasicComponent;
@@ -19,17 +18,23 @@ use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
 use term::Term;
 use parser::Rule;
+use symbol_interpreter::SymbolInterpreter;
+use symbol_parser::SymbolParser;
+
+lazy_static! {
+    static ref SYMBOL_INTERPRETER: SymbolInterpreter = SymbolInterpreter;
+}
 
 pub struct Interpreter;
 
 impl Interpreter {
-    pub fn interpret(&mut self, pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
-        let unit = self.visit_pairs(pairs)?;
+    pub fn interpret(&self, pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
+        let terms = self.visit_pairs(pairs)?;
 
-        Ok(unit)
+        Ok(terms)
     }
 
-    fn visit_pairs(&mut self, pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
+    fn visit_pairs(&self, pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
         let mut main_term = MainTerm::new();
 
         for pair in pairs {
@@ -49,257 +54,7 @@ impl Interpreter {
         Ok(main_term.into())
     }
 
-    fn visit_atom_symbol(&mut self, pair: Pair<Rule>) -> Result<Atom, Error> {
-        let pair_str = pair.into_span();
-
-        let atom = match pair_str.as_str() {
-            // Base units first.
-            "cd"  | "CD" => Atom::Candela,
-            "C"          => Atom::Coulomb,
-            "g"          => Atom::Gram,
-            "K"          => Atom::Kelvin,
-            "m"   | "M"  => Atom::Meter,
-            "rad"        => Atom::Radian,
-            "s"          => Atom::Second,
-
-            // Derived units last.
-            "[acr_br]"  | "[ACR_BR]" => Atom::AcreBR,
-            "[acr_us]"  | "[ACR_US]" => Atom::AcreUS,
-            "A"                      => Atom::Ampere,
-            "ar"        | "AR"       => Atom::Are,
-            "AU"        | "ASU"      => Atom::AstronomicUnit,
-            "u"         | "AMU"      => Atom::AtomicMassUnit,
-
-            "bar"       | "BAR"      => Atom::Bar,
-            "[bbl_us]"  | "[BBL_US]" => Atom::BarrelUS,
-            "Bq"        | "BQ"       => Atom::Becquerel,
-            "Bi"        | "BI"       => Atom::Biot,
-            "[bf_i]"    | "[BF_I]"   => Atom::BoardFootInternational,
-            "[k]"       | "[K]"      => Atom::BoltzmannConstant,
-            "[bu_br]"   | "[BU_BR]"  => Atom::BushelBR,
-            "[bu_us]"   | "[BU_US]"  => Atom::BushelUS,
-
-            "[cml_i]"   | "[CML_I]"  => Atom::CircularMilInternational,
-            "[cr_i]"    | "[CR_I]"   => Atom::CordInternational,
-            "[crd_us]"  | "[CRD_US]" => Atom::CordUS,
-            "[cft_i]"   | "[CFT_I]"  => Atom::CubicFootInternational,
-            "[cin_i]"   | "[CIN_I]"  => Atom::CubicInchInternational,
-            "[cyd_i]"   | "[CYD_I]"  => Atom::CubicYardInternational,
-            "[cup_us]"  | "[CUP_US]" => Atom::CupUS,
-            "Ci"        | "CI"       => Atom::Curie,
-
-            "d"         | "D"        => Atom::Day,
-            "Cel"       | "CEL"      => Atom::DegreeCelsius,
-            "[degF]"    | "[DEGF]"   => Atom::DegreeFahrenheit,
-            "'"                      => Atom::DegreeMinute,
-            "''"                     => Atom::DegreeSecond,
-            "[degRe]"   | "°Ré"      => Atom::DegreeReaumur,
-            "deg"       | "DEG"      => Atom::Degree,
-            "[dr_av]"   | "[DR_AV]"  => Atom::DramAV,
-            "[dpt_us]"  | "[DPT_US]" => Atom::DryPintUS,
-            "[dqt_us]"  | "[DQT_US]" => Atom::DryQuartUS,
-            "dyn"       | "DYN"      => Atom::Dyne,
-
-            "eV"        | "EV"       => Atom::ElectronVolt,
-            "[m_e]"     | "[M_E]"    => Atom::ElectronMass,
-            "[e]"       | "[E]"      => Atom::ElementaryCharge,
-            "eq"        | "EQ"       => Atom::Equivalents,
-            "erg"       | "ERG"      => Atom::Erg,
-
-            "F"                      => Atom::Farad,
-            "[fth_br]"  | "[FTH_BR]" => Atom::FathomBR,
-            "[fth_i]"   | "[FTH_I]"  => Atom::FathomInternational,
-            "[fth_us]"  | "[FTH_US]" => Atom::FathomUS,
-            "[fdr_br]"  | "[FDR_BR]" => Atom::FluidDramBR,
-            "[fdr_us]"  | "[FDR_US]" => Atom::FluidDramUS,
-            "[foz_br]"  | "[FOZ_BR]" => Atom::FluidOunceBR,
-            "[foz_us]"  | "[FOZ_US]" => Atom::FluidOunceUS,
-            "[ft_br]"   | "[FT_BR]"  => Atom::FootBR,
-            "[ft_i]"    | "[FT_I]"   => Atom::FootInternational,
-            "[ft_us]"   | "[FT_US]"  => Atom::FootUS,
-            "[fur_us]"  | "[FUR_US]" => Atom::FurlongUS,
-
-            "Gal"       | "GL"       => Atom::Gal,
-            "[gal_br]"  | "[GAL_BR]" => Atom::GallonBR,
-            "G"         | "GS"       => Atom::Gauss,
-            "Gb"        | "GB"       => Atom::Gilbert,
-            "[gil_br]"  | "[GIL_BR]" => Atom::GillBR,
-            "[gil_us]"  | "[GIL_US]" => Atom::GillUS,
-            "gon"       | "GON"      => Atom::Gon,
-            "gf"        | "GF"       => Atom::GramForce,
-            "g%"        | "G%"       => Atom::GramPercent,
-            "[gr]"      | "[GR]"     => Atom::Grain,
-            "Gy"        | "GY"       => Atom::Gray,
-            "[ch_br]"   | "[CH_BR]"  => Atom::GuntersChainBR,
-            "[ch_us]"   | "[CH_US]"  => Atom::GuntersChainUS,
-
-            "[hd_i]"    | "[HD_I]"   => Atom::HandInternational,
-            "Hz"        | "HZ"       => Atom::Hertz,
-            "H"                      => Atom::Henry,
-            "[gal_wi]"  | "[GAL_WI]" => Atom::HistoricalWinchesterGallon,
-            "[HP]"                   => Atom::Horsepower,
-            "h"         | "HR"       => Atom::Hour,
-
-            "[in_br]"   | "[IN_BR]"  => Atom::InchBR,
-            "[in_i]"    | "[IN_I]"   => Atom::InchInternational,
-            "[in_us]"   | "[IN_US]"  => Atom::InchUS,
-
-            "J"                       => Atom::Joule,
-            "Ky"        | "KY"        => Atom::Kayser,
-            "[kn_br]"   | "[KN_BR]"   => Atom::KnotBR,
-            "[kn_i]"    | "[KN_I]"    => Atom::KnotInternational,
-
-            "Lmb"       | "LMB"       => Atom::Lambert,
-            "[lcwt_av]" | "[LCWT_AV]" => Atom::LongHundredweightAV,
-            "[lton_av]" | "[LTON_AV]" => Atom::LongTonAV,
-            "[ly]"      | "[LY]"      => Atom::LightYear,
-            "[lk_br]"   | "[LK_BR]"   => Atom::LinkForGuntersChainBR,
-            "[lk_us]"   | "[LK_US]"   => Atom::LinkForGuntersChainUS,
-            "[rlk_us]"  | "[RLK_US]"  => Atom::LinkForRamdensChainUS,
-            "l"         | "L"         => Atom::Liter,
-            "lm"        | "LM"        => Atom::Lumen,
-            "lx"        | "LX"        => Atom::Lux,
-
-            "Mx"        | "MX"       => Atom::Maxwell,
-            "mo_g"      | "MO_G"     => Atom::MeanGregorianMonth,
-            "a_g"       | "ANN_G"    => Atom::MeanGregorianYear,
-            "mo_j"      | "MO_J"     => Atom::MeanJulianMonth,
-            "a_j"       | "ANN_J"    => Atom::MeanJulianYear,
-            "[cup_m]"   | "[CUP_M]"  => Atom::MetricCup,
-            "[foz_m]"   | "[FOZ_M]"  => Atom::MetricFluidOunce,
-            "[tbs_m]"   | "[TBS_M]"  => Atom::MetricTablespoon,
-            "[tsp_m]"   | "[TSP_M]"  => Atom::MetricTeaspoon,
-            "[mil_i]"   | "[MIL_I]"  => Atom::MilInternational,
-            "[mil_us]"  | "[MIL_US]" => Atom::MilUS,
-            "[mi_br]"   | "[MI_BR]"  => Atom::MileBR,
-            "[mi_i]"    | "[MI_I]"   => Atom::MileInternational,
-            "[mi_us]"   | "[MI_US]"  => Atom::MileUS,
-            "[min_br]"  | "[MIN_BR]" => Atom::MinimBR,
-            "[min_us]"  | "[MIN_US]" => Atom::MinimUS,
-            "mol"       | "MOL"      => Atom::Mole,
-            "mo"        | "MO"       => Atom::Month,
-
-            "[nmi_br]"  | "[NMI_BR]" => Atom::NauticalMileBR,
-            "[nmi_i]"   | "[NMI_I]"  => Atom::NauticalMileInternational,
-            "N"                      => Atom::Newton,
-            "Ohm"       | "OHM"      => Atom::Ohm,
-            "Oe"        | "OE"       => Atom::Oersted,
-            "[oz_av]"   | "[OZ_AV]"  => Atom::OunceAV,
-            "[oz_tr]"   | "[OZ_TR]"  => Atom::OunceTR,
-
-            "[pc_br]"   | "[PC_BR]"  => Atom::PaceBR,
-            "pc"        | "PRS"      => Atom::Parsec,
-            "[ppb]"     | "[PPB]"    => Atom::PartsPerBillion,
-            "[ppm]"     | "[PPM]"    => Atom::PartsPerMillion,
-            "[ppth]"    | "[PPTH]"   => Atom::PartsPerThousand,
-            "Pa"        | "PAL"      => Atom::Pascal,
-            "[pk_br]"   | "[PK_BR]"  => Atom::PeckBR,
-            "%"                      => Atom::Percent,
-            "[mu_0]"    | "[MU_0]"   => Atom::PermeabilityOfVacuum,
-            "[eps_0]"   | "[EPS_0]"  => Atom::PermittivityOfVacuum,
-            "[pk_us]"   | "[PK_US]"  => Atom::PeckUS,
-            "[pwt_tr]"  | "[PWT_TR]" => Atom::PennyweightTR,
-            "[pH]"      | "[PH]"     => Atom::PH,
-            "ph"        | "PHT"      => Atom::Phot,
-            "[pt_br]"   | "[PT_BR]"  => Atom::PintBR,
-            "[pt_us]"   | "[PT_US]"  => Atom::PintUS,
-            "[h]"       | "[H]"      => Atom::PlanckConstant,
-            "[lb_av]"   | "[LB_AV]"  => Atom::PoundAV,
-            "[lb_tr]"   | "[LB_TR]"  => Atom::PoundTR,
-            "[lbf_av]"  | "[LBF_AV]" => Atom::PoundForce,
-            "P"                      => Atom::Poise,
-            "[p'diop]"  | "[P'DIOP]" => Atom::PrismDiopter,
-            "[PNU]"                  => Atom::ProteinNitrogenUnit,
-            "[m_p]"     | "[M_P]"    => Atom::ProtonMass,
-
-            "[qt_br]"   | "[QT_BR]"  => Atom::QuartBR,
-            "[qt_us]"   | "[QT_US]"  => Atom::QuartUS,
-            "[gal_us]"  | "[GAL_US]" => Atom::QueenAnnesWineGallon,
-            "[rch_us]"  | "[RCH_US]" => Atom::RamdensChainUS,
-            "RAD"       | "[RAD]"    => Atom::RadiationAbsorbedDose,
-            "REM"       | "[REM]"    => Atom::RadiationEquivalentMan,
-            "[rd_br]"   | "[RD_BR]"  => Atom::RodBR,
-            "[rd_us]"   | "[RD_US]"  => Atom::RodUS,
-            "R"         | "ROE"      => Atom::Roentgen,
-
-            "[sct]"      | "[SCT]"      => Atom::Section,
-            "[scwt_av]"  | "[SCWT_AV]"  => Atom::ShortHundredweightAV,
-            "[ston_av]"  | "[STON_AV]"  => Atom::ShortTonAV,
-            "S"          | "SIE"        => Atom::Siemens,
-            "Sv"         | "SV"         => Atom::Sievert,
-            "[sft_i]"    | "[SFT_I]"    => Atom::SquareFootInternational,
-            "[sin_i]"    | "[SIN_I]"    => Atom::SquareInchInternational,
-            "[smi_us]"   | "[SMI_US]"   => Atom::SquareMileUS,
-            "[srd_us]"   | "[SRD_US]"   => Atom::SquareRodUS,
-            "[syd_i]"    | "[SYD_I]"    => Atom::SquareYardInternational,
-            "[g]"        | "[G]"        => Atom::StandardAccelerationOfFreeFall,
-            "atm"        | "ATM"        => Atom::StandardAtmosphere,
-            "sr"         | "SR"         => Atom::Steradian,
-            "sb"         | "SB"         => Atom::Stilb,
-            "St"         | "ST"         => Atom::Stokes,
-            "[stone_av]" | "[STONE_AV]" => Atom::StoneAV,
-            "mo_s"       | "MO_S"       => Atom::SynodalMonth,
-
-            "[tbs_us]"   | "[TBS_US]"   => Atom::TablespoonUS,
-            "[tsp_us]"   | "[TSP_US]"   => Atom::TeaspoonUS,
-            "T"                         => Atom::Tesla,
-            "[pi]"      | "[PI]"        => Atom::TheNumberPi,
-            "10*"                       => Atom::TheNumberTenForArbitraryPowersStar,
-            "10^"                       => Atom::TheNumberTenForArbitraryPowersCaret,
-            "1"                         => Atom::TheUnity,
-            "t"         | "TNE"         => Atom::Tonne,
-            "[twp]"     | "[TWP]"       => Atom::Township,
-            "a_t"       | "ANN_T"       => Atom::TropicalYear,
-
-            "[c]"       | "[C]"     => Atom::VelocityOfLight,
-            "V"                     => Atom::Volt,
-            "W"                     => Atom::Watt,
-            "Wb"        | "WB"      => Atom::Weber,
-            "wk"        | "WK"      => Atom::Week,
-            "[yd_br]"   | "[YD_BR]" => Atom::YardBR,
-            "[yd_i]"    | "[YD_I]"  => Atom::YardInternational,
-            "[yd_us]"   | "[YD_US]" => Atom::YardUS,
-            "a"         | "ANN"     => Atom::Year,
-
-            _ => return Err(Error::UnknownUnitString(pair_str.as_str().to_string())),
-        };
-
-        Ok(atom)
-    }
-
-    fn visit_prefix_symbol(&mut self, pair: Pair<Rule>) -> Result<Prefix, Error> {
-        let prefix_str = pair.into_span();
-
-        let prefix = match prefix_str.as_str() {
-            "a"   | "A"   => Prefix::Atto,
-            "c"   | "C"   => Prefix::Centi,
-            "d"   | "D"   => Prefix::Deci,
-            "da"  | "DA"  => Prefix::Deka,
-            "E"   | "EX"  => Prefix::Exa,
-            "f"   | "F"   => Prefix::Femto,
-            "Gi"  | "GIB" => Prefix::Gibi,
-            "G"   | "GA"  => Prefix::Giga,
-            "h"   | "H"   => Prefix::Hecto,
-            "k"   | "K"   => Prefix::Kilo,
-            "Mi"  | "MIB" => Prefix::Mebi,
-            "M"   | "MA"  => Prefix::Mega,
-            "u"   | "U"   => Prefix::Micro,
-            "m"           => Prefix::Milli,
-            "n"   | "N"   => Prefix::Nano,
-            "P"   | "PT"  => Prefix::Peta,
-            "Ti"  | "TIB" => Prefix::Tebi,
-            "T"   | "TR"  => Prefix::Tera,
-            "y"   | "YO"  => Prefix::Yocto,
-            "Y"   | "YA"  => Prefix::Yotta,
-            "z"   | "ZO"  => Prefix::Zepto,
-            "Z"   | "ZA"  => Prefix::Zetta,
-            _             => return Err(Error::UnknownUnitString(prefix_str.as_str().to_string()))
-        };
-
-        Ok(prefix)
-    }
-
-    fn visit_digits(&mut self, pair: Pair<Rule>) -> Result<i32, Error> {
+    fn visit_digits(&self, pair: Pair<Rule>) -> Result<i32, Error> {
         let span = pair.into_span();
         let string = span.as_str();
 
@@ -308,7 +63,7 @@ impl Interpreter {
         })
     }
 
-    fn visit_exponent(&mut self, pair: Pair<Rule>) -> Result<i32, Error> {
+    fn visit_exponent(&self, pair: Pair<Rule>) -> Result<i32, Error> {
         let mut e = 1;
 
         for inner_pair in pair.into_inner() {
@@ -335,35 +90,30 @@ impl Interpreter {
         Ok(e)
     }
 
-    fn visit_simple_unit(&mut self, pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
+    fn visit_simple_unit(&self, pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
         let mut simple_unit = SimpleUnit::new();
 
-        for inner_pair in pair.into_inner() {
-            match inner_pair.as_rule() {
-                Rule::prefix_symbol => {
-                    let prefix = self.visit_prefix_symbol(inner_pair)?;
+        let span = pair.into_span();
+        let string = span.as_str();
+        println!("SYMBOL string len pre-parse: {}", string.len());
 
-                    simple_unit.prefix = Some(prefix);
-                }
-                Rule::atom_symbol => {
-                    let atom = self.visit_atom_symbol(inner_pair)?;
-
-                    simple_unit.atom = Some(atom);
-                }
-                _ => unreachable!(),
+        match SymbolParser::parse(::symbol_parser::Rule::symbol, string) {
+            Ok(symbol_pairs) => {
+                let symbol = SYMBOL_INTERPRETER.interpret(symbol_pairs)?;
+                simple_unit.atom = symbol.atom;
+                simple_unit.prefix = symbol.prefix;
+            },
+            Err(e) => {
+                // Try 3rd party lookup
+                println!("MEOW: {:#?}", &e);
+                return Err(Error::ParsingError { expression: string.to_string() })
             }
-        }
+        };
 
         Ok(simple_unit)
     }
 
-    // TODO
-    // fn visit_special_unit(&mut self, su: &SpecialUnit) -> Term {
-    //     // Term::new(None, None)
-    //     unimplemented!()
-    // }
-
-    fn visit_annotatable(&mut self, pair: Pair<Rule>) -> Result<Annotatable, Error> {
+    fn visit_annotatable(&self, pair: Pair<Rule>) -> Result<Annotatable, Error> {
         let mut annotatable = Annotatable::new();
 
         for inner_pair in pair.into_inner() {
@@ -377,7 +127,6 @@ impl Interpreter {
                 Rule::exponent => {
                     annotatable.exponent = self.visit_exponent(inner_pair)?;
                 }
-                // Rule::special_unit => {}
                 _ => unreachable!(),
             }
         }
@@ -385,13 +134,13 @@ impl Interpreter {
         Ok(annotatable)
     }
 
-    fn visit_annotation(&mut self, pair: Pair<Rule>) -> Result<String, Error> {
+    fn visit_annotation(&self, pair: Pair<Rule>) -> Result<String, Error> {
         let string = pair.into_span().as_str().to_string();
 
         Ok(string)
     }
 
-    fn visit_factor(&mut self, pair: Pair<Rule>) -> Result<u32, Error> {
+    fn visit_factor(&self, pair: Pair<Rule>) -> Result<u32, Error> {
         let span = pair.into_span();
         let string = span.as_str();
 
@@ -400,7 +149,7 @@ impl Interpreter {
         })
     }
 
-    fn visit_basic_component(&mut self, pair: Pair<Rule>) -> Result<BasicComponent, Error> {
+    fn visit_basic_component(&self, pair: Pair<Rule>) -> Result<BasicComponent, Error> {
         let mut bc = BasicComponent::new();
 
         for inner_pair in pair.into_inner() {
@@ -432,7 +181,7 @@ impl Interpreter {
         Ok(bc)
     }
 
-    fn visit_component(&mut self, pair: Pair<Rule>) -> Result<Component, Error> {
+    fn visit_component(&self, pair: Pair<Rule>) -> Result<Component, Error> {
         let mut component = Component::new();
 
         for inner_pair in pair.into_inner() {
@@ -452,7 +201,7 @@ impl Interpreter {
         Ok(component)
     }
 
-    fn visit_term(&mut self, pair: Pair<Rule>) -> Result<AstTerm, Error> {
+    fn visit_term(&self, pair: Pair<Rule>) -> Result<AstTerm, Error> {
         let mut has_slash = false;
         let mut ast_term = AstTerm::new();
 
@@ -489,7 +238,7 @@ impl Interpreter {
         Ok(ast_term)
     }
 
-    fn visit_main_term(&mut self, pair: Pair<Rule>) -> Result<MainTerm, Error> {
+    fn visit_main_term(&self, pair: Pair<Rule>) -> Result<MainTerm, Error> {
         let mut main_term = MainTerm::new();
         let mut has_slash = false;
 
@@ -526,11 +275,12 @@ mod tests {
     use pest::Parser;
     use term::Term;
     use parser::{Rule, UnitParser};
+    use prefix::Prefix;
 
     #[test]
     fn validate_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m-3").unwrap();
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
 
         let mut expected_term = Term::new(Some(Atom::Meter), None);
@@ -558,7 +308,7 @@ mod tests {
     fn validate_interpret_component_with_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m2").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let mut expected_term = Term::new(Some(Atom::Meter), None);
         expected_term.exponent = 2;
@@ -572,7 +322,7 @@ mod tests {
     fn validate_interpret_component_with_prefix() {
         let pairs = UnitParser::parse(Rule::main_term, "km").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
 
         let expected = vec![Term::new(Some(Atom::Meter), Some(Prefix::Kilo))];
@@ -584,7 +334,7 @@ mod tests {
     fn validate_interpret_component_with_factor() {
         let pairs = UnitParser::parse(Rule::main_term, "2m").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
 
         let mut expected_term = Term::new(Some(Atom::Meter), None);
@@ -599,7 +349,7 @@ mod tests {
     fn validate_interpret_slash_term() {
         let pairs = UnitParser::parse(Rule::main_term, "m/s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -614,7 +364,7 @@ mod tests {
     fn validate_interpret_slash_term_with_numerator_prefix() {
         let pairs = UnitParser::parse(Rule::main_term, "km/s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let expected_numerator_term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
         let mut expected_denominator_term = Term::new(Some(Atom::Second), None);
@@ -629,7 +379,7 @@ mod tests {
     fn validate_interpret_slash_term_with_denominator_prefix() {
         let pairs = UnitParser::parse(Rule::main_term, "m/ks").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let expected_numerator_term = Term::new(Some(Atom::Meter), None);
         let mut expected_denominator_term = Term::new(Some(Atom::Second), Some(Prefix::Kilo));
@@ -644,7 +394,7 @@ mod tests {
     fn validate_interpret_slash_term_with_numerator_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m2/s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
@@ -660,7 +410,7 @@ mod tests {
     fn validate_interpret_slash_term_with_denominator_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m/s2").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -675,7 +425,7 @@ mod tests {
     fn validate_interpret_slash_term_with_numerator_and_denominator_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m2/s2").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
@@ -691,7 +441,7 @@ mod tests {
     fn validate_interpret_slash_term_with_factor_in_numerator() {
         let pairs = UnitParser::parse(Rule::main_term, "2m/s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.factor = 2;
@@ -707,7 +457,7 @@ mod tests {
     fn validate_interpret_slash_term_with_factor_in_denominator() {
         let pairs = UnitParser::parse(Rule::main_term, "m/2s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -723,7 +473,7 @@ mod tests {
     fn validate_interpret_dot_term() {
         let pairs = UnitParser::parse(Rule::main_term, "m.s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let meter_term = Term::new(Some(Atom::Meter), None);
         let second_term = Term::new(Some(Atom::Second), None);
@@ -737,7 +487,7 @@ mod tests {
     fn validate_interpret_dot_term_with_left_side_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m2.s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
@@ -752,7 +502,7 @@ mod tests {
     fn validate_interpret_dot_term_with_right_side_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m.s2").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -767,7 +517,7 @@ mod tests {
     fn validate_interpret_dot_term_with_left_and_right_side_exponent() {
         let pairs = UnitParser::parse(Rule::main_term, "m2.s2").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.exponent = 2;
@@ -783,7 +533,7 @@ mod tests {
     fn validate_interpret_dot_term_with_factor_in_left_side() {
         let pairs = UnitParser::parse(Rule::main_term, "2m.s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let mut meter_term = Term::new(Some(Atom::Meter), None);
         meter_term.factor = 2;
@@ -798,7 +548,7 @@ mod tests {
     fn validate_interpret_slash_term_with_factor_in_right_side() {
         let pairs = UnitParser::parse(Rule::main_term, "m.2s").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let meter_term = Term::new(Some(Atom::Meter), None);
         let mut second_term = Term::new(Some(Atom::Second), None);
@@ -813,7 +563,7 @@ mod tests {
     fn validate_interpret_term_with_dot_term_then_slash_component() {
         let pairs = UnitParser::parse(Rule::main_term, "[acr_us].[in_i]/[acr_us]").unwrap();
 
-        let mut i = Interpreter;
+        let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
         let acre_term = Term::new(Some(Atom::AcreUS), None);
         let inch_term = Term::new(Some(Atom::InchInternational), None);

@@ -6,6 +6,9 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 
+#[macro_use]
+extern crate lazy_static;
+
 // Only include macros for testing
 #[cfg(test)]
 #[macro_use(parses_to, consumes_to)]
@@ -26,6 +29,8 @@ mod definition;
 mod error;
 mod prefix;
 mod property;
+mod symbol_interpreter;
+mod symbol_parser;
 mod term;
 mod ucum_symbol;
 
@@ -36,6 +41,8 @@ pub use parser::UnitParser;
 pub use prefix::Prefix;
 pub use term::Term;
 pub use ucum_symbol::UcumSymbol;
+pub use symbol_interpreter::SymbolInterpreter;
+pub use symbol_parser::SymbolParser;
 
 use interpreter::Interpreter;
 use pest::Parser;
