@@ -41,6 +41,7 @@ pub enum Atom {
     CubicFootInternational,
     CubicInchInternational,
     CubicYardInternational,
+    CupM,
     CupUS,
     Curie,
 
@@ -56,7 +57,7 @@ pub enum Atom {
     DryQuartUS,
     Dyne,
     ElectronMass,
-    ElectronVolt,
+    Electronvolt,
     ElementaryCharge,
     Equivalents,
     Erg,
@@ -67,6 +68,7 @@ pub enum Atom {
     FluidDramBR,
     FluidDramUS,
     FluidOunceBR,
+    FluidOunceM,
     FluidOunceUS,
     FootInternational,
     FootBR,
@@ -116,10 +118,6 @@ pub enum Atom {
     MeanGregorianYear,
     MeanJulianMonth,
     MeanJulianYear,
-    MetricCup,
-    MetricFluidOunce,
-    MetricTablespoon,
-    MetricTeaspoon,
     MilInternational,
     MilUS,
     MileInternational,
@@ -145,6 +143,7 @@ pub enum Atom {
     PartsPerBillion,
     PartsPerMillion,
     PartsPerThousand,
+    PartsPerTrillion,
     Percent,
     PermeabilityOfVacuum,
     PermittivityOfVacuum,
@@ -190,7 +189,9 @@ pub enum Atom {
     StoneAV,
     Stokes,
     SynodalMonth,
+    TablespoonM,
     TablespoonUS,
+    TeaspoonM,
     TeaspoonUS,
     Tesla,
     TheNumberPi,
@@ -217,6 +218,7 @@ impl UcumSymbol for Atom {
             Atom::PartsPerBillion                         |
                 Atom::PartsPerMillion                     |
                 Atom::PartsPerThousand                    |
+                Atom::PartsPerTrillion                    |
                 Atom::Percent                             |
                 Atom::TheNumberPi                         |
                 Atom::TheNumberTenForArbitraryPowersCaret |
@@ -260,7 +262,7 @@ impl UcumSymbol for Atom {
                 Atom::DegreeMinute       |
                 Atom::DegreeSecond       |
                 Atom::ElectronMass       |
-                Atom::ElectronVolt       |
+                Atom::Electronvolt       |
                 Atom::Gon                |
                 Atom::Hour               |
                 Atom::Liter              |
@@ -364,10 +366,10 @@ impl UcumSymbol for Atom {
                 Atom::FluidOunceUS               |
                 Atom::GillUS                     |
                 Atom::HistoricalWinchesterGallon |
-                Atom::MetricCup                  |
-                Atom::MetricFluidOunce           |
-                Atom::MetricTablespoon           |
-                Atom::MetricTeaspoon             |
+                Atom::CupM                 |
+                Atom::FluidOunceM          |
+                Atom::TablespoonM          |
+                Atom::TeaspoonM            |
                 Atom::MinimUS                    |
                 Atom::PeckUS                     |
                 Atom::PintUS                     |
@@ -459,7 +461,7 @@ impl UcumSymbol for Atom {
             Atom::DryQuartUS                     => Definition::new(1.0, "[pk_us]/8"),
             Atom::Dyne                           => Definition::new(1.0, "g.cm/s2"),
             Atom::ElectronMass                   => Definition::new(9.109_389_7e-28, "g"),
-            Atom::ElectronVolt                   => Definition::new(1.0, "[e].V"),
+            Atom::Electronvolt                   => Definition::new(1.0, "[e].V"),
             Atom::ElementaryCharge               => Definition::new(1.602_177_33e-19, "C"),
             Atom::Equivalents                    => Definition::new(1.0, "mol"),
             Atom::Erg                            => Definition::new(1.0, "dyn.cm"),
@@ -520,10 +522,10 @@ impl UcumSymbol for Atom {
             Atom::MeanGregorianYear              => Definition::new(365.2425, "d"),
             Atom::MeanJulianMonth                => Definition::new(1.0, "a_j/12"),
             Atom::MeanJulianYear                 => Definition::new(365.25, "d"),
-            Atom::MetricCup                      => Definition::new(240.0, "mL"),
-            Atom::MetricFluidOunce               => Definition::new(30.0, "mL"),
-            Atom::MetricTablespoon               => Definition::new(15.0, "mL"),
-            Atom::MetricTeaspoon                 => Definition::new(5.0, "mL"),
+            Atom::CupM                     => Definition::new(240.0, "mL"),
+            Atom::FluidOunceM              => Definition::new(30.0, "mL"),
+            Atom::TablespoonM              => Definition::new(15.0, "mL"),
+            Atom::TeaspoonM                => Definition::new(5.0, "mL"),
             Atom::MilInternational               => Definition::new(1.0e-3, "[in_i]"),
             Atom::MilUS                          => Definition::new(1.0e-3, "[in_us]"),
             Atom::MileInternational              => Definition::new(5280.0, "[ft_i]"),
@@ -549,6 +551,7 @@ impl UcumSymbol for Atom {
             Atom::PartsPerBillion                => Definition::new(1.0, "10*-9"),
             Atom::PartsPerMillion                => Definition::new(1.0, "10*-6"),
             Atom::PartsPerThousand               => Definition::new(1.0, "10*-3"),
+            Atom::PartsPerTrillion               => Definition::new(1.0, "10*-12"),
             Atom::Pascal                         => Definition::new(1.0, "N/m2"),
             Atom::Percent                        => Definition::new(1.0, "10*-2"),
             Atom::PermeabilityOfVacuum           => Definition::new(1.0, "4.[PI].10*-7.N/A2"),
@@ -647,7 +650,7 @@ impl UcumSymbol for Atom {
 
                 Atom::Dyne                           |
                 Atom::ElectronMass                   |
-                Atom::ElectronVolt                   |
+                Atom::Electronvolt                   |
                 Atom::ElementaryCharge               |
                 Atom::Equivalents                    |
                 Atom::Erg                            |
@@ -765,7 +768,7 @@ impl UcumSymbol for Atom {
             Atom::DryQuartUS          => vec!["dry quart"],
             Atom::Dyne                => vec!["dyne"],
             Atom::ElectronMass        => vec!["electron mass"],
-            Atom::ElectronVolt        => vec!["electronvolt"],
+            Atom::Electronvolt        => vec!["electronvolt"],
             Atom::ElementaryCharge    => vec!["elementary charge"],
             Atom::Equivalents         => vec!["equivalents"],
             Atom::Erg                 => vec!["erg"],
@@ -825,10 +828,10 @@ impl UcumSymbol for Atom {
             Atom::MeanGregorianYear              => vec!["mean Gregorian year"],
             Atom::MeanJulianMonth                => vec!["mean Julian month"],
             Atom::MeanJulianYear                 => vec!["mean Julian year"],
-            Atom::MetricCup                      => vec!["metric cup"],
-            Atom::MetricFluidOunce               => vec!["metric fluid ounce"],
-            Atom::MetricTablespoon               => vec!["metric tablespoon"],
-            Atom::MetricTeaspoon                 => vec!["metric teaspoon"],
+            Atom::CupM                     => vec!["metric cup"],
+            Atom::FluidOunceM              => vec!["metric fluid ounce"],
+            Atom::TablespoonM              => vec!["metric tablespoon"],
+            Atom::TeaspoonM                => vec!["metric teaspoon"],
             Atom::MilInternational |
                 Atom::MilUS                      => vec!["mil"],
             Atom::MileInternational |
@@ -853,6 +856,7 @@ impl UcumSymbol for Atom {
             Atom::PartsPerBillion                => vec!["parts per billion"],
             Atom::PartsPerMillion                => vec!["parts per million"],
             Atom::PartsPerThousand               => vec!["parts per thousand"],
+            Atom::PartsPerTrillion               => vec!["parts per trillion"],
             Atom::Pascal                         => vec!["pascal"],
             Atom::Percent                        => vec!["percent"],
             Atom::PermeabilityOfVacuum           => vec!["permeability of vacuum"],
@@ -969,7 +973,7 @@ impl UcumSymbol for Atom {
             Atom::DryQuartUS                          => "[dqt_us]",
             Atom::Dyne                                => "dyn",
             Atom::ElectronMass                        => "[m_e]",
-            Atom::ElectronVolt                        => "eV",
+            Atom::Electronvolt                        => "eV",
             Atom::ElementaryCharge                    => "[e]",
             Atom::Equivalents                         => "eq",
             Atom::Erg                                 => "erg",
@@ -1029,10 +1033,10 @@ impl UcumSymbol for Atom {
             Atom::MeanGregorianYear                   => "a_g",
             Atom::MeanJulianMonth                     => "mo_j",
             Atom::MeanJulianYear                      => "a_j",
-            Atom::MetricCup                           => "[cup_m]",
-            Atom::MetricFluidOunce                    => "[foz_m]",
-            Atom::MetricTablespoon                    => "[tbs_m]",
-            Atom::MetricTeaspoon                      => "[tsp_m]",
+            Atom::CupM                          => "[cup_m]",
+            Atom::FluidOunceM                   => "[foz_m]",
+            Atom::TablespoonM                   => "[tbs_m]",
+            Atom::TeaspoonM                     => "[tsp_m]",
             Atom::MilInternational                    => "[mil_i]",
             Atom::MilUS                               => "[mil_us]",
             Atom::MileInternational                   => "[mi_i]",
@@ -1058,6 +1062,7 @@ impl UcumSymbol for Atom {
             Atom::PartsPerBillion                     => "[ppb]",
             Atom::PartsPerMillion                     => "[ppm]",
             Atom::PartsPerThousand                    => "[ppth]",
+            Atom::PartsPerTrillion                    => "[pptr]",
             Atom::Pascal                              => "Pa",
             Atom::Percent                             => "%",
             Atom::PermeabilityOfVacuum                => "[mu_0]",
@@ -1147,7 +1152,7 @@ impl UcumSymbol for Atom {
                 Atom::DegreeMinute       |
                 Atom::DegreeSecond       |
                 Atom::Dyne               |
-                Atom::ElectronVolt       |
+                Atom::Electronvolt       |
                 Atom::Erg                |
                 Atom::Farad              |
 
@@ -1210,7 +1215,7 @@ impl UcumSymbol for Atom {
             Atom::Equivalents                    => Some("eq"),
             Atom::FathomInternational            => Some("fth"),
             Atom::FluidOunceUS |
-                Atom::MetricFluidOunce           => Some("oz fl"),
+                Atom::FluidOunceM          => Some("oz fl"),
             Atom::FootInternational              => Some("ft"),
             Atom::FootUS                         => Some("ft (us)"),
 
@@ -1234,6 +1239,7 @@ impl UcumSymbol for Atom {
             Atom::PartsPerBillion                => Some("ppb"),
             Atom::PartsPerMillion                => Some("ppm"),
             Atom::PartsPerThousand               => Some("ppth"),
+            Atom::PartsPerTrillion               => Some("pptr"),
             Atom::PH                             => Some("pH"),
             Atom::PermeabilityOfVacuum           => Some("μ₀"),
             Atom::PermittivityOfVacuum           => Some("ε₀"),
@@ -1328,7 +1334,7 @@ impl UcumSymbol for Atom {
             Atom::Volt                                      => Property::ElectricPotential,
             Atom::Ohm                                       => Property::ElectricResistance,
             Atom::Joule            |
-                Atom::ElectronVolt |
+                Atom::Electronvolt |
                 Atom::Erg                                   => Property::Energy,
             Atom::Gray |
                 Atom::RadiationAbsorbedDose                 => Property::EnergyDose,
@@ -1337,7 +1343,7 @@ impl UcumSymbol for Atom {
                 Atom::FluidDramUS      |
                 Atom::FluidOunceUS     |
                 Atom::GillUS           |
-                Atom::MetricFluidOunce |
+                Atom::FluidOunceM |
                 Atom::MinimUS          |
                 Atom::PintUS           |
                 Atom::QuartUS          |
@@ -1349,6 +1355,7 @@ impl UcumSymbol for Atom {
                 Atom::PoundForce                            => Property::Force,
             Atom::PartsPerBillion     |
                 Atom::PartsPerMillion |
+                Atom::PartsPerTrillion |
                 Atom::PartsPerThousand                      => Property::Fraction,
             Atom::Hertz                                     => Property::Frequency,
             Atom::HandInternational                         => Property::HeightOfHorses,
@@ -1439,9 +1446,9 @@ impl UcumSymbol for Atom {
                 Atom::GallonBR               |
                 Atom::GillBR                 |
                 Atom::Liter                  |
-                Atom::MetricCup              |
-                Atom::MetricTablespoon       |
-                Atom::MetricTeaspoon         |
+                Atom::CupM             |
+                Atom::TablespoonM      |
+                Atom::TeaspoonM        |
                 Atom::MinimBR                |
                 Atom::PeckBR                 |
                 Atom::PintBR                 |
@@ -1493,7 +1500,7 @@ impl UcumSymbol for Atom {
             Atom::DryQuartUS                     => "[DQT_US]",
             Atom::Dyne                           => "DYN",
             Atom::ElectronMass                   => "[M_E]",
-            Atom::ElectronVolt                   => "EV",
+            Atom::Electronvolt                   => "EV",
             Atom::ElementaryCharge               => "[E]",
             Atom::Equivalents                    => "EQ",
             Atom::Erg                            => "ERG",
@@ -1549,10 +1556,10 @@ impl UcumSymbol for Atom {
             Atom::MeanGregorianYear              => "ANN_G",
             Atom::MeanJulianMonth                => "MO_J",
             Atom::MeanJulianYear                 => "ANN_J",
-            Atom::MetricCup                      => "[CUP_M]",
-            Atom::MetricFluidOunce               => "[FOZ_M]",
-            Atom::MetricTablespoon               => "[TBS_M]",
-            Atom::MetricTeaspoon                 => "[TSP_M]",
+            Atom::CupM                     => "[CUP_M]",
+            Atom::FluidOunceM              => "[FOZ_M]",
+            Atom::TablespoonM              => "[TBS_M]",
+            Atom::TeaspoonM                => "[TSP_M]",
             Atom::MilInternational               => "[MIL_I]",
             Atom::MilUS                          => "[MIL_US]",
             Atom::MileInternational              => "[MI_I]",
@@ -1577,6 +1584,7 @@ impl UcumSymbol for Atom {
             Atom::PartsPerBillion                => "[PPB]",
             Atom::PartsPerMillion                => "[PPM]",
             Atom::PartsPerThousand               => "[PPTH]",
+            Atom::PartsPerTrillion               => "[PPTR]",
             Atom::Pascal                         => "PAL",
             Atom::PermeabilityOfVacuum           => "[MU_0]",
             Atom::PermittivityOfVacuum           => "[EPS_0]",
@@ -1819,6 +1827,7 @@ mod tests {
             Atom::PartsPerBillion,
             Atom::PartsPerMillion,
             Atom::PartsPerThousand,
+            Atom::PartsPerTrillion,
             Atom::Percent,
             Atom::TheNumberPi,
             Atom::TheNumberTenForArbitraryPowersCaret,
@@ -2156,7 +2165,7 @@ mod tests {
         validate_scalar_are, Are, 100.0;
         validate_scalar_astronomic_unit, AstronomicUnit, 149_597_870_691.0;
         validate_scalar_atomic_mass_unit, AtomicMassUnit, 1.660_540_2e-24;
-        // validate_scalar_bar, Bar, 100_000_000.0;
+        // validate_scalar_bar, Bar, 100_000_000.0; // parsing error: "_j"
         validate_scalar_barrel_us, BarrelUS, 0.158_987_294_928;
         validate_scalar_becquerel, Becquerel, 1.0;
         validate_scalar_biot, Biot, 10.0;
@@ -2174,19 +2183,19 @@ mod tests {
         validate_scalar_cup_us, CupUS, 0.000_236_588_236_5;
         validate_scalar_curie, Curie, 37_000_000_000.0;
 
-        // validate_scalar_day, Day, 86_400.0; // parsing error
+        // validate_scalar_day, Day, 86_400.0; // parsing error: "in"
         validate_scalar_degree, Degree, 0.0174_532_925_199_432_95;
-        // validate_scalar_degree_minute, DegreeMinute, 0.000_290_888_208_665_721_6; // parsing error
-        // validate_scalar_degree_second, DegreeSecond, 4.848_136_811_095_36e-06; // parsing error
+        // validate_scalar_degree_minute, DegreeMinute, 0.000_290_888_208_665_721_6; // parsing error: "eg"
+        // validate_scalar_degree_second, DegreeSecond, 4.848_136_811_095_36e-06; // parsing error: "eg"
         // validate_scalar_dram_av, DramAV, 1.771_845_195_312_5; // conversion error
         validate_scalar_dry_pint_us, DryPintUS, 0.000_550_610_471_357_5;
         validate_scalar_dry_quart_us, DryQuartUS, 0.001_101_220_942_715;
         validate_scalar_dyne, Dyne, 0.01;
         validate_scalar_electron_mass, ElectronMass, 9.109_389_7e-28;
-        validate_scalar_electron_vold, ElectronVolt, 1.602_177_33e-16;
+        validate_scalar_electron_vold, Electronvolt, 1.602_177_33e-16;
         validate_scalar_elementary_charge, ElementaryCharge, 1.60217733e-19;
-        // validate_scalar_equivalents, Equivalents, 6.0221367e+23; // parsing error
-        // validate_scalar_erg, Erg, 0.0001; // parsing error
+        // validate_scalar_equivalents, Equivalents, 6.0221367e+23; // parsing error: "ol"
+        // validate_scalar_erg, Erg, 0.0001; // parsing error: "yn"
         validate_scalar_farad, Farad, 0.001;
         validate_scalar_fathom_br, FathomBR, 1.828_798_56;
         validate_scalar_fathom_international, FathomInternational, 1.828_8;
@@ -2206,7 +2215,7 @@ mod tests {
         validate_scalar_gilbert, Gilbert, 0.795_774_715_459_476_8;
         validate_scalar_gill_br, GillBR, 0.000_142_065_312_5;
         validate_scalar_gill_us, GillUS, 0.000_118_294_118_25;
-        // validate_scalar_gon, Gon, 0.015_707_963_267_948_967; // parsing error
+        // validate_scalar_gon, Gon, 0.015_707_963_267_948_967; // parsing error: "eg"
         validate_scalar_gram_force, GramForce, 9.806_65;
         validate_scalar_gram_percent, GramPercent, 9999.999_999_999_996;
         validate_scalar_grain, Grain, 0.064_798_91;
@@ -2219,7 +2228,7 @@ mod tests {
         validate_scalar_henry, Henry, 1_000.0;
         validate_scalar_historical_winchester_gallon, HistoricalWinchesterGallon, 0.004_404_883_770_86;
         validate_scalar_horsepower, Horsepower, 745_699.871_582_270_3;
-        // validate_scalar_hour, Hour, 3600.0; // parsing error
+        // validate_scalar_hour, Hour, 3600.0; // parsing error: "in"
 
         validate_scalar_inch_br, InchBR, 0.025_399_98;
         validate_scalar_inch_international, InchInternational, 0.025_4;
@@ -2227,13 +2236,13 @@ mod tests {
 
         validate_scalar_joule, Joule, 1000.0;
         validate_scalar_kayser, Kayser, 100.0;
-        // validate_scalar_knot_br, KnotBR, 0.514_772_928; // parsing error
-        // validate_scalar_knot_international, KnotInternational, 0.514_772_928; // parsing error
+        // validate_scalar_knot_br, KnotBR, 0.514_772_928; // parsing error: "in"
+        // validate_scalar_knot_international, KnotInternational, 0.514_772_928; // parsing error: "in"
 
-        // validate_scalar_lambert, Lambert, 31_415.926_5; // parsing error
+        // validate_scalar_lambert, Lambert, 31_415.926_5; // parsing error: "in"
         validate_scalar_long_hundredweight_av, LongHundredweightAV, 50_802.345_44;
         validate_scalar_long_ton_av, LongTonAV, 1_016_046.908_8;
-        // validate_scalar_light_year, LightYear, 9.460_730_472_580_8e+15; // parsing error
+        validate_scalar_light_year, LightYear, 9.460_730_472_580_8e+15; // parsing error: "_j"
         // validate_scalar_link_for_gunters_chain_br, LinkForGuntersChainBR, 0.201_167_841_6; // conversion error. not accounting for denominator.
         // validate_scalar_link_for_gunters_chain_us, LinkForGuntersChainUS, 0.201_168_402_336_804_66; // conversion error. not accounting for denominator.
         validate_scalar_liter, Liter, 0.001;
@@ -2241,14 +2250,14 @@ mod tests {
         // validate_scalar_lux, Lux, 1.0; // parsing error: "in"
 
         validate_scalar_maxwell, Maxwell, 1.0e-05;
-        // validate_scalar_mean_gregorian_month, MeanGregorianMonth, 2_629_746.0; // parsing_error: "_j"
-        // validate_scalar_mean_gregorian_year, MeanGregorianYear, 31_556_952.0; // parsing_error: "in"
-        // validate_scalar_mean_julian_month, MeanJulianMonth, 2_629_800.0; // parsing_error: "_j"
-        // validate_scalar_mean_julian_year, MeanJulianYear, 31_557_600.0; // parsing_error: "in"
-        validate_scalar_metric_cup, MetricCup, 0.000_24;
-        validate_scalar_metric_fluid_ounce, MetricFluidOunce, 3.0e-05;
-        validate_scalar_metric_tablespoon, MetricTablespoon, 1.5e-05;
-        validate_scalar_metric_teaspoon, MetricTeaspoon, 5.0e-06;
+        // validate_scalar_mean_gregorian_month, MeanGregorianMonth, 2_629_746.0; // parsing error: "_j"
+        // validate_scalar_mean_gregorian_year, MeanGregorianYear, 31_556_952.0; // parsing error: "in"
+        // validate_scalar_mean_julian_month, MeanJulianMonth, 2_629_800.0; // parsing error: "_j"
+        // validate_scalar_mean_julian_year, MeanJulianYear, 31_557_600.0; // parsing error: "in"
+        validate_scalar_metric_cup, CupM, 0.000_24;
+        validate_scalar_metric_fluid_ounce, FluidOunceM, 3.0e-05;
+        validate_scalar_metric_tablespoon, TablespoonM, 1.5e-05;
+        validate_scalar_metric_teaspoon, TeaspoonM, 5.0e-06;
         validate_scalar_mil_international, MilInternational, 2.54e-05;
         // validate_scalar_mil_us, MilUS, 2.540_005_080_010_16e-05; // conversion error
         validate_scalar_mile_br, MileBR, 1_609.342_732_8;
@@ -2278,7 +2287,7 @@ mod tests {
         validate_scalar_percent, Percent, 0.01;
         validate_scalar_permeability_of_vacuum, PermeabilityOfVacuum, 0.001_256_637_061_435_917_5;
         validate_scalar_permittivity_of_vacuum, PermittivityOfVacuum, 8.854_187_817e-15;
-        // validate_scalar_phot, Phot, 0.000_1; // parsing_error: "in"
+        // validate_scalar_phot, Phot, 0.000_1; // parsing error: "in"
         validate_scalar_pint_br, PintBR, 0.000_568_261_25;
         validate_scalar_pint_us, PintUS, 0.000_473_176_473;
         validate_scalar_planck_constant, PlanckConstant, 6.626_075_5e-31;

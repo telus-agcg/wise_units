@@ -26,18 +26,7 @@ annotation = { "{" ~ ('!'..'z')* ~ "}" }
 annotatable = { simple_unit ~ exponent | simple_unit }
 
 // <simple-unit>
-simple_unit = { prefix_symbol ~ atom_symbol | atom_symbol }
-
-// Atoms
-atom_symbol = {
-    "10*"
-        | "10^"
-        | "1"
-        | "%"
-        | "'"
-        | "''"
-        | atom_char+
-}
+simple_unit = { atom_char+ }
 
 atom_char = _{
     "!" // 33
@@ -47,32 +36,6 @@ atom_char = _{
         | '>'..'z'  // 62-90
         | "|"       // 124
         | "~"       // 126
-}
-
-// Prefixes
-prefix_symbol = {
-     "a"  | "A"   |
-         "c"  | "C"   |
-         "da" | "DA"  |
-         "d"  | "D"   |
-         "E"  | "EX"  |
-         "f"  | "F"   |
-         "Gi" | "GIB" |
-         "G"  | "GA"  |
-         "h"  | "H"   |
-         "k"  | "K"   |
-         "Mi" | "MIB" |
-         "M"  | "MA"  |
-         "u"  | "U"   |
-         "m"  |
-         "n"  | "N"   |
-         "P"  | "PT"  |
-         "Ti" | "TIB" |
-         "T"  | "TR"  |
-         "y"  | "YO"  |
-         "Y"  | "YA"  |
-         "z"  | "ZO"  |
-         "Z"  | "ZA"
 }
 
 exponent = { sign? ~ digits }

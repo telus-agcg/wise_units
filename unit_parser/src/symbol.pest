@@ -1,0 +1,1076 @@
+symbol = {
+    pri_prefix ~ pri_atom | pri_atom
+        | sec_prefix ~ sec_atom | sec_atom
+}
+
+pri_prefix = {
+    pri_yotta
+        | pri_zetta
+        | pri_exa
+        | pri_peta
+        | pri_tera
+        | pri_giga
+        | pri_mega
+        | pri_kilo
+        | pri_hecto
+        | pri_deka
+        | pri_deci
+        | pri_centi
+        | pri_milli
+        | pri_micro
+        | pri_nano
+        | pri_pico
+        | pri_femto
+        | pri_atto
+        | pri_zepto
+        | pri_yocto
+        | pri_kibi
+        | pri_mebi
+        | pri_gibi
+        | pri_tebi
+}
+
+pri_atom = {
+    // Non-alpha
+    ten_for_arbitrary_powers_star
+        | ten_for_arbitrary_powers_caret
+        | the_unity
+        | percent
+        | minute_angle
+        | second_angle
+
+        | pri_a | pri_b | pri_c | pri_d | pri_e | pri_f | pri_g | pri_h | pri_i
+        | joule
+        | pri_k | pri_l | pri_m | pri_n | pri_o | pri_p | pri_q
+        | pri_r | pri_s | pri_t
+        | pri_unified_atom_mass_unit
+        | volt
+        | pri_w | pri_y
+}
+
+// non-alpha
+ten_for_arbitrary_powers_star  = { "10*" }
+ten_for_arbitrary_powers_caret = { "10^" }
+the_unity                      = { "1" }
+percent                        = { "%" }
+minute_angle                   = { "'" }
+second_angle                   = { "''" }
+
+// A
+pri_a = _{
+    pri_mean_gregorian_year
+        | pri_mean_julian_year
+        | pri_tropical_year
+        | pri_standard_atmosphere
+        | pri_astronomic_unit
+        | pri_are
+        | ampere
+        | pri_year
+        | pri_acre_br
+        | pri_acre_us
+}
+
+pri_mean_gregorian_year = { "a_g" }
+pri_mean_julian_year    = { "a_j" }
+pri_tropical_year       = { "a_t" }
+pri_standard_atmosphere = { "atm" }
+pri_astronomic_unit     = { "AU" }
+pri_are                 = { "ar" }
+ampere                  = { "A" }
+pri_atto                = { "a" }
+pri_year                = { "a" }
+pri_acre_br             = { "[acr_br]" }
+pri_acre_us             = { "[acr_us]" }
+
+// B
+pri_b = _{
+    pri_bar
+        | pri_biot
+        | pri_becquerel
+        | pri_barrel_us
+        | pri_board_foot_i
+        | pri_bushel_br
+        | pri_bushel_us
+}
+
+pri_bar          = { "bar" }
+pri_biot         = { "Bi" }
+pri_becquerel    = { "Bq" }
+pri_barrel_us    = { "[bbl_us]" }
+pri_board_foot_i = { "[bf_i]" }
+pri_bushel_br    = { "[bu_br]" }
+pri_bushel_us    = { "[bu_us]" }
+
+// C
+pri_c = _{
+    pri_degree_celsius
+        | pri_curie
+        | pri_candela
+        | coulomb
+        | pri_cubic_foot_i
+        | pri_cubic_inch_i
+        | pri_circular_mil_i
+        | pri_cord_us
+        | pri_cup_us
+        | pri_cup_m
+        | pri_cubic_yard_i
+        | pri_gunters_chain_br
+        | pri_gunters_chain_us
+        | pri_cord_i
+        | pri_velocity_of_light
+}
+
+pri_degree_celsius    = { "Cel" }
+pri_curie             = { "Ci" }
+pri_candela           = { "cd" }
+coulomb               = { "C" }
+pri_centi             = { "c" }
+pri_cubic_foot_i      = { "[cft_i]" }
+pri_cubic_inch_i      = { "[cin_i]" }
+pri_circular_mil_i    = { "[cml_i]" }
+pri_cord_us           = { "[crd_us]" }
+pri_cup_us            = { "[cup_us]" }
+pri_cup_m             = { "[cup_m]" }
+pri_cubic_yard_i      = { "[cyd_i]" }
+pri_gunters_chain_br  = { "[ch_br]" }
+pri_gunters_chain_us  = { "[ch_us]" }
+pri_cord_i            = { "[cr_i]" }
+pri_velocity_of_light = { "[c]" }
+
+// D
+pri_d = _{
+    pri_degree
+        | pri_dyne
+        | pri_day
+        | pri_dry_pint_us
+        | pri_dry_quart_us
+        | pri_dram_av
+}
+
+pri_degree       = { "deg" }
+pri_dyne         = { "dyn" }
+pri_deka         = { "da" }
+pri_deci         = { "d" }
+pri_day          = { "d" }
+pri_dry_pint_us  = { "[dpt_us]" }
+pri_dry_quart_us = { "[dqt_us]" }
+pri_dram_av      = { "[dr_av]" }
+
+// E
+pri_e = _{
+    pri_erg
+        | pri_electronvolt
+        | pri_permittivity_of_vacuum
+        | pri_elementary_charge
+}
+
+pri_erg                    = { "erg" }
+pri_electronvolt           = { "eV" }
+pri_exa                    = { "E" }
+pri_permittivity_of_vacuum = { "[eps_0]" }
+pri_elementary_charge      = { "[e]" }
+
+// F
+pri_f = _{
+    farad
+        | pri_fluid_dram_br
+        | pri_fluid_dram_us
+        | pri_fluid_ounce_br
+        | pri_fluid_ounce_us
+        | pri_fluid_ounce_m
+        | pri_fathom_br
+        | pri_fathom_us
+        | pri_fathom_i
+        | pri_furlong_us
+        | pri_foot_br
+        | pri_foot_us
+        | pri_foot_i
+}
+
+farad              = { "F" }
+pri_femto          = { "f" }
+pri_fluid_dram_br  = { "[fdr_br]" }
+pri_fluid_dram_us  = { "[fdr_us]" }
+pri_fluid_ounce_br = { "[foz_br]" }
+pri_fluid_ounce_us = { "[foz_us]" }
+pri_fluid_ounce_m  = { "[foz_m]" }
+pri_fathom_br      = { "[fth_br]" }
+pri_fathom_us      = { "[fth_us]" }
+pri_fathom_i       = { "[fth_i]" }
+pri_furlong_us     = { "[fur_us]" }
+pri_foot_br        = { "[ft_br]" }
+pri_foot_us        = { "[ft_us]" }
+pri_foot_i         = { "[ft_i]" }
+
+// G
+pri_g = _{
+    pri_gal
+        | pri_gon
+        | pri_gilbert
+        | pri_gray
+        | pri_gram_force
+        | pri_gauss
+        | pri_gram
+        | pri_gallon_br
+        | pri_queen_annes_wine_gallon
+        | pri_historical_winchester_gallon
+        | pri_gill_br
+        | pri_gill_us
+        | pri_grain
+        | pri_newtonian_constant_of_gravitation
+        | pri_standard_acceleration_of_free_fall
+}
+
+pri_gal                                = { "Gal" }
+pri_gon                                = { "gon" }
+pri_gilbert                            = { "Gb" }
+pri_gibi                               = { "Gi" }
+pri_gray                               = { "Gy" }
+pri_gram_force                         = { "gf" }
+pri_giga                               = { "G" }
+pri_gauss                              = { "G" }
+pri_gram                               = { "g" }
+pri_gallon_br                          = { "[gal_br]" }
+pri_queen_annes_wine_gallon            = { "[gal_us]" }
+pri_historical_winchester_gallon       = { "[gal_wi]" }
+pri_gill_br                            = { "[gil_br]" }
+pri_gill_us                            = { "[gil_us]" }
+pri_grain                              = { "[gr]" }
+pri_newtonian_constant_of_gravitation  = { "[G]" }
+pri_standard_acceleration_of_free_fall = { "[g]" }
+
+// H
+pri_h = _{
+    pri_hertz
+        | henry
+        | pri_hour
+        | pri_hand_i
+        | pri_planck_constant
+}
+
+pri_hertz           = { "Hz" }
+henry               = { "H" }
+pri_hecto           = { "h" }
+pri_hour            = { "h" }
+pri_hand_i          = { "[hd_i]" }
+pri_planck_constant = { "[h]" }
+
+// I
+pri_i = _{
+    pri_inch_br
+        | pri_inch_us
+        | pri_inch_i
+}
+
+pri_inch_br = { "[in_br]" }
+pri_inch_us = { "[in_us]" }
+pri_inch_i  = { "[in_i]" }
+
+// J
+// pri_j = _{
+//     joule
+// }
+
+joule = { "J" }
+
+// K
+pri_k = _{
+    pri_kayser
+        | kelvin
+        | pri_knot_br
+        | pri_knot_i
+        | pri_boltzmann_constant
+}
+pri_kibi               = { "Ki" }
+pri_kayser             = { "Ky" }
+pri_kilo               = { "k" }
+kelvin                 = { "K" }
+pri_knot_br            = { "[kn_br]" }
+pri_knot_i             = { "[kn_i]" }
+pri_boltzmann_constant = { "[k]" }
+
+// L
+pri_l = _{
+    pri_lambert
+        | pri_lumen
+        | pri_lux
+        | pri_liter
+        | pri_long_hundredweight_av
+        | pri_long_ton_av
+        | pri_pound_force
+        | pri_pound_av
+        | pri_link_for_gunters_chain_br
+        | pri_link_for_gunters_chain_us
+        | pri_light_year
+}
+
+pri_lambert                   = { "Lmb" }
+pri_lumen                     = { "lm" }
+pri_lux                       = { "lx" }
+pri_liter                     = { "l" | "L" }
+pri_long_hundredweight_av     = { "[lcwt_av]" }
+pri_long_ton_av               = { "[lton_av]" }
+pri_pound_force               = { "[lbf_av]" }
+pri_pound_av                  = { "[lb_av]" }
+pri_link_for_gunters_chain_br = { "[lk_br]" }
+pri_link_for_gunters_chain_us = { "[lk_us]" }
+pri_light_year                = { "[ly]" }
+
+// M
+pri_m = _{
+    pri_mean_gregorian_month
+        | pri_mean_julian_month
+        | pri_synodal_month
+        | pri_minute_time
+        | pri_mole
+        | pri_maxwell
+        | pri_month
+        | pri_meter
+        | pri_mil_us
+        | pri_mil_i
+        | pri_minim_br
+        | pri_minim_us
+        | pri_mile_br
+        | pri_mile_us
+        | pri_mile_i
+        | pri_permeability_of_vacuum
+        | pri_electron_mass
+        | pri_proton_mass
+}
+
+pri_mean_gregorian_month   = { "mo_g" }
+pri_mean_julian_month      = { "mo_j" }
+pri_synodal_month          = { "mo_s" }
+pri_minute_time            = { "min" }
+pri_mole                   = { "mol" }
+pri_mebi                   = { "Mi" }
+pri_maxwell                = { "Mx" }
+pri_month                  = { "mo" }
+pri_mega                   = { "M" }
+pri_milli                  = { "m" }
+pri_meter                  = { "m" }
+pri_mil_us                 = { "[mil_us]" }
+pri_mil_i                  = { "[mil_i]" }
+pri_minim_br               = { "[min_br]" }
+pri_minim_us               = { "[min_us]" }
+pri_mile_br                = { "[mi_br]" }
+pri_mile_us                = { "[mi_us]" }
+pri_mile_i                 = { "[mi_i]" }
+pri_permeability_of_vacuum = { "[mu_0]" }
+pri_electron_mass          = { "[m_e]" }
+pri_proton_mass            = { "[m_p]" }
+
+// N
+pri_n = _{
+    newton
+        | pri_nautical_mile_br
+        | pri_nautical_mile_i
+}
+
+newton               = { "N" }
+pri_nano             = { "n" }
+pri_nautical_mile_br = { "[nmi_br]" }
+pri_nautical_mile_i  = { "[nmi_i]" }
+
+// O
+pri_o = _{
+    pri_ohm
+        | pri_oersted
+        | pri_ounce_av
+}
+
+pri_ohm      = { "Ohm" }
+pri_oersted  = { "Oe" }
+pri_ounce_av = { "[oz_av]" }
+
+// P
+pri_p = _{
+    pri_pascal
+        | pri_parsec
+        | pri_phot
+        | poise
+        | pri_parts_per_thousand
+        | pri_parts_per_trillion
+        | pri_parts_per_billion
+        | pri_parts_per_million
+        | pri_pace_br
+        | pri_peck_br
+        | pri_peck_us
+        | pri_pint_br
+        | pri_pint_us
+        | pri_pi
+}
+
+pri_pascal             = { "Pa" }
+pri_parsec             = { "pc" }
+pri_phot               = { "ph" }
+pri_peta               = { "P" }
+poise                  = { "P" }
+pri_pico               = { "p" }
+pri_parts_per_thousand = { "[ppth]" }
+pri_parts_per_trillion = { "[pptr]" }
+pri_parts_per_billion  = { "[ppb]" }
+pri_parts_per_million  = { "[ppm]" }
+pri_pace_br            = { "[pc_br]" }
+pri_peck_br            = { "[pk_br]" }
+pri_peck_us            = { "[pk_us]" }
+pri_pint_br            = { "[pt_br]" }
+pri_pint_us            = { "[pt_us]" }
+pri_pi                 = { "[pi]" }
+
+// Q
+pri_q = _{
+    pri_quart_br
+        | pri_quart_us
+}
+
+pri_quart_br = { "[qt_br]" }
+pri_quart_us = { "[qt_us]" }
+
+// R
+pri_r = _{
+    pri_radiation_absorbed_dose
+        | pri_radiation_equivalent_man
+        | pri_radian
+        | pri_roentgen
+        | pri_ramdens_chain_us
+        | pri_link_for_ramdens_chain_us
+        | pri_rod_br
+        | pri_rod_us
+}
+
+pri_radiation_absorbed_dose   = { "RAD" }
+pri_radiation_equivalent_man  = { "REM" }
+pri_radian                    = { "rad" }
+pri_roentgen                  = { "R" }
+pri_ramdens_chain_us          = { "[rch_us]" }
+pri_link_for_ramdens_chain_us = { "[rlk_us]" }
+pri_rod_br                    = { "[rd_br]" }
+pri_rod_us                    = { "[rd_us]" }
+
+// S
+pri_s = _{
+    pri_stokes
+        | pri_sievert
+        | pri_stilb
+        | pri_steradian
+        | pri_siemens
+        | pri_second
+        | pri_stone_av
+        | pri_short_hundredweight_av
+        | pri_short_ton_av
+        | pri_square_mile_us
+        | pri_square_rod_us
+        | pri_square_foot_i
+        | pri_square_inch_i
+        | pri_square_yard_i
+        | pri_section
+}
+
+pri_stokes                 = { "St" }
+pri_sievert                = { "Sv" }
+pri_stilb                  = { "sb" }
+pri_steradian              = { "sr" }
+pri_siemens                = { "S" }
+pri_second                 = { "s" }
+pri_stone_av               = { "[stone_av]" }
+pri_short_hundredweight_av = { "[scwt_av]" }
+pri_short_ton_av           = { "[ston_av]" }
+pri_square_mile_us         = { "[smi_us]" }
+pri_square_rod_us          = { "[srd_us]" }
+pri_square_foot_i          = { "[sft_i]" }
+pri_square_inch_i          = { "[sin_i]" }
+pri_square_yard_i          = { "[syd_i]" }
+pri_section                = { "[sct]" }
+
+// T
+pri_t = _{
+    tesla
+        | pri_tonne
+        | pri_tablespoon_us
+        | pri_tablespoon_m
+        | pri_teaspoon_us
+        | pri_teaspoon_m
+        | pri_township
+}
+
+pri_tebi          = { "Ti" }
+pri_tera          = { "T" }
+tesla             = { "T" }
+pri_tonne         = { "t" }
+pri_tablespoon_us = { "[tbs_us]" }
+pri_tablespoon_m  = { "[tbs_m]" }
+pri_teaspoon_us   = { "[tsp_us]" }
+pri_teaspoon_m    = { "[tsp_m]" }
+pri_township      = { "[twp]" }
+
+// U
+// pri_u = _{
+//     pri_unified_atom_mass_unit
+// }
+
+pri_micro = { "u" }
+pri_unified_atom_mass_unit = { "u" }
+
+// V
+// pri_v = _{
+//     volt
+// }
+
+volt = { "V" }
+
+// W
+pri_w = _{
+    pri_weber
+        | pri_week
+        | watt
+}
+
+pri_weber = { "Wb" }
+pri_week = { "wk" }
+watt = { "W" }
+
+// X
+
+// Y
+pri_y = _{
+    pri_yard_br
+        | pri_yard_us
+        | pri_yard_i
+}
+
+pri_yotta = { "Y" }
+pri_yocto = { "y" }
+pri_yard_br = { "[yd_br]" }
+pri_yard_us = { "[yd_us]" }
+pri_yard_i = { "[yd_i]" }
+
+// Z
+pri_zetta = { "Z" }
+pri_zepto = { "z" }
+
+//-----------------------------------------------------------------------------
+// Secondary stuff
+//-----------------------------------------------------------------------------
+
+sec_prefix = {
+  sec_yotta
+      | sec_zetta
+      | sec_exa
+      | sec_peta
+      | sec_tera
+      | sec_giga
+      | sec_mega
+      | sec_kilo
+      | sec_hecto
+      | sec_deka
+      | sec_deci
+      | sec_centi
+      | sec_milli
+      | sec_micro
+      | sec_nano
+      | sec_pico
+      | sec_femto
+      | sec_atto
+      | sec_zepto
+      | sec_yocto
+      | sec_kibi
+      | sec_mebi
+      | sec_gibi
+      | sec_tebi
+}
+
+sec_atom = {
+    ten_for_arbitrary_powers_star
+        | ten_for_arbitrary_powers_caret
+        | the_unity
+        | percent
+        | minute_angle
+        | second_angle
+
+        // A
+        | sec_a | sec_b | sec_c | sec_d | sec_e | sec_f | sec_g | sec_h | sec_i
+        | joule
+        | sec_k | sec_l | sec_m | sec_n | sec_o | sec_p | sec_q
+        | sec_r | sec_s | sec_t
+        | volt
+        | sec_w | sec_y
+}
+
+// A
+sec_a = _{
+    sec_mean_gregorian_year
+        | sec_mean_julian_year
+        | sec_tropical_year
+        | sec_astronomic_unit
+        | sec_standard_atmosphere
+        | sec_year
+        | sec_unified_atom_mass_unit
+        | sec_are
+        | ampere
+        | sec_acre_br
+        | sec_acre_us
+}
+
+sec_mean_gregorian_year = { "ANN_G" }
+sec_mean_julian_year = { "ANN_J" }
+sec_tropical_year = { "ANN_T" }
+sec_unified_atom_mass_unit = { "AMU" }
+sec_year = { "ANN" }
+sec_astronomic_unit = { "ASU" }
+sec_standard_atmosphere = { "ATM" }
+sec_are = { "AR" }
+sec_atto = { "A" }
+sec_acre_br = { "[ACR_BR]" }
+sec_acre_us = { "[ACR_US]" }
+
+// B
+sec_b = _{
+    sec_bar
+        | sec_biot
+        | sec_becquerel
+        | sec_barrel_us
+        | sec_board_foot_i
+        | sec_bushel_br
+        | sec_bushel_us
+}
+
+sec_bar          = { "BAR" }
+sec_biot         = { "BI" }
+sec_becquerel    = { "BQ" }
+sec_barrel_us    = { "[BBL_US]" }
+sec_board_foot_i = { "[BF_I]" }
+sec_bushel_br    = { "[BU_BR]" }
+sec_bushel_us    = { "[BU_US]" }
+
+// C
+sec_c = _{
+    sec_degree_celsius
+        | sec_candela
+        | sec_curie
+        | coulomb
+        | sec_cubic_foot_i
+        | sec_cubic_inch_i
+        | sec_circular_mil_i
+        | sec_cord_us
+        | sec_cup_us
+        | sec_cup_m
+        | sec_cubic_yard_i
+        | sec_gunters_chain_br
+        | sec_gunters_chain_us
+        | sec_cord_i
+        | sec_velocity_of_light
+}
+
+sec_degree_celsius    = { "CEL" }
+sec_candela           = { "CD" }
+sec_curie             = { "CI" }
+sec_centi             = { "C" }
+sec_cubic_foot_i      = { "[CFT_I]" }
+sec_cubic_inch_i      = { "[CIN_I]" }
+sec_circular_mil_i    = { "[CML_I]" }
+sec_cord_us           = { "[CRD_US]" }
+sec_cup_us            = { "[CUP_US]" }
+sec_cup_m             = { "[CUP_M]" }
+sec_cubic_yard_i      = { "[CYD_I]" }
+sec_gunters_chain_br  = { "[CH_BR]" }
+sec_gunters_chain_us  = { "[CH_US]" }
+sec_cord_i            = { "[CR_I]" }
+sec_velocity_of_light = { "[C]" }
+
+// D
+sec_d = _{
+    sec_degree
+        | sec_dyne
+        | sec_day
+        | sec_dry_pint_us
+        | sec_dry_quart_us
+        | sec_dram_av
+}
+
+sec_degree       = { "DEG" }
+sec_dyne         = { "DYN" }
+sec_deka         = { "DA" }
+sec_deci         = { "D" }
+sec_day          = { "D" }
+sec_dry_pint_us  = { "[DPT_US]" }
+sec_dry_quart_us = { "[DQT_US]" }
+sec_dram_av      = { "[DR_AV]" }
+
+// E
+sec_e = _{
+    sec_erg
+        | sec_electronvolt
+        | sec_permittivity_of_vacuum
+        | sec_elementary_charge
+}
+
+sec_erg                    = { "ERG" }
+sec_electronvolt           = { "EV" }
+sec_exa                    = { "EX" }
+sec_permittivity_of_vacuum = { "[EPS_0]" }
+sec_elementary_charge      = { "[E]" }
+
+// F
+sec_f = _{
+    farad
+        | sec_fluid_dram_br
+        | sec_fluid_dram_us
+        | sec_fluid_ounce_br
+        | sec_fluid_ounce_us
+        | sec_fluid_ounce_m
+        | sec_fathom_br
+        | sec_fathom_us
+        | sec_fathom_i
+        | sec_furlong_us
+        | sec_foot_br
+        | sec_foot_us
+        | sec_foot_i
+}
+
+sec_femto          = { "F" }
+sec_fluid_dram_br  = { "[FDR_BR]" }
+sec_fluid_dram_us  = { "[FDR_US]" }
+sec_fluid_ounce_br = { "[FOZ_BR]" }
+sec_fluid_ounce_us = { "[FOZ_US]" }
+sec_fluid_ounce_m  = { "[FOZ_M]" }
+sec_fathom_br      = { "[FTH_BR]" }
+sec_fathom_us      = { "[FTH_US]" }
+sec_fathom_i       = { "[FTH_I]" }
+sec_furlong_us     = { "[FUR_US]" }
+sec_foot_br        = { "[FT_US]" }
+sec_foot_us        = { "[FT_US]" }
+sec_foot_i         = { "[FT_I]" }
+
+// G
+sec_g = _{
+    sec_gon
+        | sec_gilbert
+        | sec_gram_force
+        | sec_gal
+        | sec_gauss
+        | sec_gray
+        | sec_gram
+        | sec_gallon_br
+        | sec_queen_annes_wine_gallon
+        | sec_historical_winchester_gallon
+        | sec_gill_br
+        | sec_gill_us
+        | sec_newtonian_constant_of_gravitation
+        | sec_grain
+        | sec_standard_acceleration_of_free_fall
+}
+
+sec_gibi                               = { "GIB" }
+sec_gon                                = { "GON" }
+sec_giga                               = { "GA" }
+sec_gilbert                            = { "GB" }
+sec_gram_force                         = { "GF" }
+sec_gal                                = { "GL" }
+sec_gauss                              = { "GS" }
+sec_gray                               = { "GY" }
+sec_gram                               = { "G" }
+sec_gallon_br                          = { "[GAL_BR]" }
+sec_queen_annes_wine_gallon            = { "[GAL_US]" }
+sec_historical_winchester_gallon       = { "[GAL_WI]" }
+sec_gill_br                            = { "[GIL_BR]" }
+sec_gill_us                            = { "[GIL_US]" }
+sec_newtonian_constant_of_gravitation  = { "[GC]" }
+sec_grain                              = { "[GR]" }
+sec_standard_acceleration_of_free_fall = { "[G]" }
+
+// H
+sec_h = _{
+    sec_hour
+        | sec_hertz
+        | henry
+        | sec_hand_i
+        | sec_planck_constant
+}
+
+sec_hour            = { "HR" }
+sec_hertz           = { "HZ" }
+sec_hecto           = { "H" }
+sec_hand_i          = { "[HD_I]" }
+sec_planck_constant = { "[H]" }
+
+// I
+sec_i = _{
+    sec_inch_br
+        | sec_inch_us
+        | sec_inch_i
+}
+
+sec_inch_br = { "[IN_BR]" }
+sec_inch_us = { "[IN_US]" }
+sec_inch_i  = { "[IN_I]" }
+
+// J
+// sec_j = {
+//     joule
+// }
+
+// K
+sec_k = _{
+    sec_kayser
+        | kelvin
+        | sec_knot_br
+        | sec_boltzmann_constant
+}
+
+sec_kibi               = { "KIB" }
+sec_kayser             = { "KY" }
+sec_kilo               = { "K" }
+sec_knot_br            = { "[KN_BR]" }
+sec_knot_i             = { "[KN_I]" }
+sec_boltzmann_constant = { "[K]" }
+
+// L
+sec_l = _{
+    sec_lambert
+        | sec_lumen
+        | sec_lux
+        | sec_liter
+        | sec_long_hundredweight_av
+        | sec_long_ton_av
+        | sec_pound_force
+        | sec_pound_av
+        | sec_link_for_gunters_chain_br
+        | sec_link_for_gunters_chain_us
+        | sec_light_year
+}
+
+sec_lambert                   = { "LMB" }
+sec_lumen                     = { "LM" }
+sec_lux                       = { "LX" }
+sec_liter                     = { "L" }
+sec_long_hundredweight_av     = { "[LCWT_AV]" }
+sec_long_ton_av               = { "[LTON_AV]" }
+sec_pound_force               = { "[LBF_AV]" }
+sec_pound_av                  = { "[LB_AV]" }
+sec_link_for_gunters_chain_br = { "[LK_BR]" }
+sec_link_for_gunters_chain_us = { "[LK_US]" }
+sec_light_year                = { "[LY]" }
+
+// M
+sec_m = _{
+    sec_mean_gregorian_month
+        | sec_mean_julian_month
+        | sec_synodal_month
+        | sec_minute_time
+        | sec_mole
+        | sec_month
+        | sec_maxwell
+        | sec_meter
+        | sec_mil_us
+        | sec_mil_i
+        | sec_minim_br
+        | sec_minim_us
+        | sec_mile_br
+        | sec_mile_us
+        | sec_mile_i
+        | sec_permeability_of_vacuum
+        | sec_electron_mass
+        | sec_proton_mass
+}
+
+sec_mean_gregorian_month   = { "MO_G" }
+sec_mean_julian_month      = { "MO_J" }
+sec_synodal_month          = { "MO_S" }
+sec_mebi                   = { "MIB" }
+sec_minute_time            = { "MIN" }
+sec_mole                   = { "MOL" }
+sec_mega                   = { "MA" }
+sec_month                  = { "MO" }
+sec_maxwell                = { "MX" }
+sec_milli                  = { "M" }
+sec_meter                  = { "M" }
+sec_mil_us                 = { "[MIL_US]" }
+sec_mil_i                  = { "[MIL_I]" }
+sec_minim_br               = { "[MIN_BR]" }
+sec_minim_us               = { "[MIN_US]" }
+sec_mile_br                = { "[MI_BR]" }
+sec_mile_us                = { "[MI_US]" }
+sec_mile_i                 = { "[MI_I]" }
+sec_permeability_of_vacuum = { "[MU_0]" }
+sec_electron_mass          = { "[M_E]" }
+sec_proton_mass            = { "[M_P]" }
+
+// N
+sec_n = _{
+    newton
+        | sec_nautical_mile_br
+        | sec_nautical_mile_i
+}
+
+sec_nano             = { "N" }
+sec_nautical_mile_br = { "[NMI_BR]" }
+sec_nautical_mile_i  = { "[NMI_I]" }
+
+// O
+sec_o = _{
+    sec_ohm
+        | sec_oersted
+        | sec_ounce_av
+}
+
+sec_ohm      = { "OHM" }
+sec_oersted  = { "OE" }
+sec_ounce_av = { "[OZ_AV]" }
+
+// P
+sec_p = _{
+    sec_pascal
+        | sec_phot
+        | sec_parsec
+        | poise
+        | sec_parts_per_thousand
+        | sec_parts_per_trillion
+        | sec_parts_per_billion
+        | sec_parts_per_million
+        | sec_pace_br
+        | sec_peck_br
+        | sec_peck_us
+        | sec_pint_us
+        | sec_pi
+}
+
+sec_pascal             = { "PAL" }
+sec_phot               = { "PHT" }
+sec_parsec             = { "PRS" }
+sec_peta               = { "PT" }
+sec_pico               = { "P" }
+sec_parts_per_thousand = { "[PPTH]" }
+sec_parts_per_trillion = { "[PPTR]" }
+sec_parts_per_billion  = { "[PPB]" }
+sec_parts_per_million  = { "[PPM]" }
+sec_pace_br            = { "[PC_BR]" }
+sec_peck_br            = { "[PK_BR]" }
+sec_peck_us            = { "[PK_US]" }
+sec_pint_br            = { "[PT_BR]" }
+sec_pint_us            = { "[PT_US]" }
+sec_pi                 = { "[PI]" }
+
+// Q
+sec_q = _{
+    sec_quart_br
+        | sec_quart_us
+}
+
+sec_quart_br = { "[QT_BR]" }
+sec_quart_us = { "[QT_US]" }
+
+// R
+sec_r = _{
+    sec_radian
+        | sec_roentgen
+        | sec_ramdens_chain_us
+        | sec_link_for_ramdens_chain_us
+        | sec_radiation_absorbed_dose
+        | sec_radiation_equivalent_man
+        | sec_rod_br
+        | sec_rod_us
+}
+
+sec_radian                    = { "RAD" }
+sec_roentgen                  = { "ROE" }
+sec_ramdens_chain_us          = { "[RCH_US]" }
+sec_link_for_ramdens_chain_us = { "[RLK_US]" }
+sec_radiation_absorbed_dose   = { "[RAD]" }
+sec_radiation_equivalent_man  = { "[REM]" }
+sec_rod_br                    = { "[RD_BR]" }
+sec_rod_us                    = { "[RD_US]" }
+
+// S
+sec_s = _{
+    sec_siemens
+        | sec_stilb
+        | sec_steradian
+        | sec_stokes
+        | sec_sievert
+        | sec_second
+        | sec_stone_av
+        | sec_short_hundredweight_av
+        | sec_short_ton_av
+        | sec_square_mile_us
+        | sec_square_rod_us
+        | sec_square_foot_i
+        | sec_square_inch_i
+        | sec_square_yard_i
+        | sec_section
+}
+
+sec_siemens                = { "SIE" }
+sec_stilb                  = { "SB" }
+sec_steradian              = { "SR" }
+sec_stokes                 = { "ST" }
+sec_sievert                = { "SV" }
+sec_second                 = { "S" }
+sec_stone_av               = { "[STONE_AV]" }
+sec_short_hundredweight_av = { "[SCWT_AV]" }
+sec_short_ton_av           = { "[STON_AV]" }
+sec_square_mile_us         = { "[SMI_US]" }
+sec_square_rod_us          = { "[SRD_US]" }
+sec_square_foot_i          = { "[SFT_I]" }
+sec_square_inch_i          = { "[SIN_I]" }
+sec_square_yard_i          = { "[SYD_I]" }
+sec_section                = { "[SCT]" }
+
+// T
+sec_t = _{
+    tesla
+        | sec_tonne
+        | sec_tablespoon_us
+        | sec_tablespoon_m
+        | sec_teaspoon_us
+        | sec_teaspoon_m
+        | sec_township
+}
+
+sec_tebi          = { "TIB" }
+sec_tonne         = { "TNE" }
+sec_tera          = { "TR" }
+sec_tablespoon_us = { "[TBS_US]" }
+sec_tablespoon_m  = { "[TBS_M]" }
+sec_teaspoon_us   = { "[TSP_US]" }
+sec_teaspoon_m    = { "[TSP_M]" }
+sec_township      = { "[TWP]" }
+
+// U
+sec_micro = { "U" }
+
+// V
+// sec_v = _{
+//     volt
+// }
+
+// W
+sec_w = _{
+    sec_weber
+        | sec_week
+        | watt
+}
+
+sec_weber = { "WB" }
+sec_week = { "WK" }
+
+// X
+
+// Y
+sec_y = _{
+    sec_yard_br
+        | sec_yard_us
+        | sec_yard_i
+}
+
+sec_yotta = { "YA" }
+sec_yocto = { "YO" }
+sec_yard_br = { "[YD_BR]" }
+sec_yard_us = { "[YD_US]" }
+sec_yard_i = { "[YD_I]" }
+
+// Z
+sec_zetta = { "ZA" }
+sec_zepto = { "ZO" }
+
+// vim:ft=rust
