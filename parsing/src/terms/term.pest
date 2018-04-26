@@ -1,5 +1,5 @@
 // <main-term>
-main_term = ${ slash ~ term | term }
+main_term = ${ soi ~ (slash ~ term | term) ~ eoi }
 
 // <term>
 term = {
@@ -29,11 +29,13 @@ annotatable = { simple_unit ~ exponent | simple_unit }
 simple_unit = {
     "10*"
         | "10^"
-        | "1"
-        | atom_char+
+        | &the_unity
+        | symbol_char+
 }
 
-atom_char = _{
+the_unity = _{ "1" ~ !factor }
+
+symbol_char = _{
     "!" // 33
         | '#'..'\'' // 35-39
         | ","       // 44
