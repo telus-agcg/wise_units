@@ -17,8 +17,6 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
-extern crate wise_units_symbol_parser;
-
 pub mod interpreter;
 pub mod parser;
 
@@ -29,6 +27,7 @@ mod error;
 mod prefix;
 mod property;
 mod symbol_interpreter;
+mod symbol_parser;
 mod term;
 mod ucum_symbol;
 
@@ -37,9 +36,9 @@ pub use classification::Classification;
 pub use error::Error;
 pub use parser::UnitParser;
 pub use prefix::Prefix;
+pub use symbol_parser::SymbolParser;
 pub use term::Term;
 pub use ucum_symbol::UcumSymbol;
-pub use symbol_interpreter::SymbolInterpreter;
 
 use interpreter::Interpreter;
 use pest::Parser;
