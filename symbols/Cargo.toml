@@ -1,5 +1,5 @@
 [package]
-name = "wise_units-symbol_parser"
+name = "wise_units-symbols"
 version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
