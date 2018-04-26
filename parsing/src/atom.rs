@@ -661,7 +661,7 @@ impl UcumSymbol for Atom {
             Atom::PartsPerTrillion               => Definition::new(1.0, "10*-12"),
             Atom::Pascal                         => Definition::new(1.0, "N/m2"),
             Atom::Percent                        => Definition::new(1.0, "10*-2"),
-            Atom::PermeabilityOfVacuum           => Definition::new(1.0, "4.[PI].10*-7.N/A2"),
+            Atom::PermeabilityOfVacuum           => Definition::new(1.0, "4.[pi].10*-7.N/A2"),
             Atom::PermittivityOfVacuum           => Definition::new(8.854_187_817e-12, "F/m"),
             Atom::PeckBR                         => Definition::new(2.0, "[gal_br]"),
             Atom::PeckUS                         => Definition::new(1.0, "[bu_us]/4"),
@@ -2414,7 +2414,7 @@ mod tests {
     #[test]
     fn validate_definition_the_number_pi() {
         let atom = Atom::TheNumberPi;
-        let term = Term::new(Some(Atom::TheUnity), None);
+        let term = Term::new(None, None);
 
         assert_eq!(
             atom.definition().value,
@@ -2426,7 +2426,7 @@ mod tests {
     #[test]
     fn validate_definition_the_number_ten_for_arbitrary_powers_caret() {
         let atom = Atom::TheNumberTenForArbitraryPowersCaret;
-        let term = Term::new(Some(Atom::TheUnity), None);
+        let term = Term::new(None, None);
 
         assert_eq!(atom.definition().value, 10.0);
         assert_eq!(atom.definition().terms, vec![term]);
@@ -2435,7 +2435,7 @@ mod tests {
     #[test]
     fn validate_definition_the_number_ten_for_arbitrary_powers_star() {
         let atom = Atom::TheNumberTenForArbitraryPowersCaret;
-        let term = Term::new(Some(Atom::TheUnity), None);
+        let term = Term::new(None, None);
 
         assert_eq!(atom.definition().value, 10.0);
         assert_eq!(atom.definition().terms, vec![term]);
@@ -2666,13 +2666,13 @@ mod tests {
         validate_scalar_year, Year, 31_557_600.0;
     );
 
-    ignore_validate_scalars!(
-        validate_special_scalar_degree_celsius, DegreeCelsius, 0.0174_532_925_199_432_95;
-        validate_special_scalar_degree_fahrenheit, DegreeFahrenheit, 0.0174_532_925_199_432_95;
-        validate_special_scalar_degree_reaumur, DegreeReaumur, 0.0174_532_925_199_432_95;
-        validate_special_scalar_ph, PH, 1.0e-09;
-        validate_special_scalar_prism_diopter, PrismDiopter, 0.000_473_176_473;
-    );
+    // ignore_validate_scalars!(
+    //     validate_special_scalar_degree_celsius, DegreeCelsius, 0.0174_532_925_199_432_95;
+    //     validate_special_scalar_degree_fahrenheit, DegreeFahrenheit, 0.0174_532_925_199_432_95;
+    //     validate_special_scalar_degree_reaumur, DegreeReaumur, 0.0174_532_925_199_432_95;
+    //     validate_special_scalar_ph, PH, 1.0e-09;
+    //     validate_special_scalar_prism_diopter, PrismDiopter, 0.000_473_176_473;
+    // );
 
     #[test]
     fn validate_magnitude_base_atoms() {

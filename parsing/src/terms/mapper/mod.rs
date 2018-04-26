@@ -90,6 +90,10 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
     let span = pair.into_span();
     let string = span.as_str();
 
+    if string.is_empty() {
+        return Ok(simple_unit);
+    }
+
     match SymbolParser::parse(SymbolRule::symbol, string) {
         Ok(mut symbol_pairs) => {
             let symbol = mapper::map(symbol_pairs.next().unwrap())?;
@@ -444,6 +448,21 @@ mod tests {
         let mut second_term = Term::new(Some(Atom::Second), None);
         second_term.exponent = -1;
         second_term.factor = 2;
+
+        let expected = vec![meter_term, second_term];
+
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn validate_interpret_slash_term_with_only_factor_in_denominator() {
+        let pairs = TermParser::parse(Rule::main_term, "[ft_i]/12").unwrap();
+
+        let actual = map(pairs).unwrap();
+        let meter_term = Term::new(Some(Atom::FootInternational), None);
+        let mut second_term = Term::new(None, None);
+        second_term.exponent = -1;
+        second_term.factor = 12;
 
         let expected = vec![meter_term, second_term];
 
