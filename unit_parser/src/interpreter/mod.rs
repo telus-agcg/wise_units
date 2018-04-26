@@ -92,10 +92,8 @@ impl Interpreter {
 
     fn visit_simple_unit(&self, pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
         let mut simple_unit = SimpleUnit::new();
-
         let span = pair.into_span();
         let string = span.as_str();
-        println!("SYMBOL string len pre-parse: {}", string.len());
 
         match SymbolParser::parse(::symbol_parser::Rule::symbol, string) {
             Ok(symbol_pairs) => {

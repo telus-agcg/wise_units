@@ -2346,6 +2346,15 @@ mod tests {
     }
 
     #[test]
+    fn validate_definition_cup_m() {
+        let atom = Atom::CupM;
+        let term = Term::new(Some(Atom::Liter), Some(Prefix::Milli));
+
+        assert_eq!(atom.definition().value, 240.0);
+        assert_eq!(atom.definition().terms, vec![term]);
+    }
+
+    #[test]
     fn validate_definition_queen_annes_wine_gallon_us() {
         let atom = Atom::QueenAnnesWineGallon;
         let mut term = Term::new(Some(Atom::InchInternational), None);
