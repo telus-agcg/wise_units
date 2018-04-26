@@ -26,7 +26,7 @@ mod definition;
 mod error;
 mod prefix;
 mod property;
-mod symbol_interpreter;
+mod symbol_mapper;
 mod symbol_parser;
 mod term;
 mod ucum_symbol;

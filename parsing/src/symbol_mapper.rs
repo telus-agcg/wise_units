@@ -20,7 +20,7 @@ impl Symbol {
     }
 }
 
-pub fn interpret(pair: Pair<Rule>) -> Result<Symbol, Error> {
+pub fn map(pair: Pair<Rule>) -> Result<Symbol, Error> {
     fn visit_pairs(pair: Pair<Rule>) -> Result<Symbol, Error> {
         let symbol = match pair.as_rule() {
             Rule::symbol => visit_symbol(pair)?,
