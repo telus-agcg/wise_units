@@ -48,8 +48,6 @@ impl SymbolInterpreter {
     }
 
     fn visit_symbol(&self, pair: Pair<Rule>) -> Result<Symbol, Error> {
-        println!("SYMBOL");
-        println!("SYMBOL string: {}", pair.as_str());
         let mut symbol = Symbol::new();
 
         for inner_pair in pair.into_inner() {

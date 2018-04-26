@@ -1,6 +1,13 @@
-symbol = ${
-    pri_prefix ~ pri_atom | pri_atom
-        | sec_prefix ~ sec_atom | sec_atom
+symbol = {
+    primary_symbol | secondary_symbol
+}
+
+primary_symbol = _{
+    (soi ~ pri_atom ~ eoi) | (soi ~ pri_prefix ~ pri_atom ~ eoi)
+}
+
+secondary_symbol = _{
+    (soi ~ sec_atom ~ eoi) | (soi ~ sec_prefix ~ sec_atom ~ eoi)
 }
 
 pri_prefix = {
