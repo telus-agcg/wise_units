@@ -91,54 +91,6 @@ mod tests {
     }
 
     #[test]
-    fn validate_prefix_symbol() {
-        let pairs = UnitParser::parse(Rule::prefix_symbol, "k");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::prefix_symbol, "K");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::prefix_symbol, "kilo");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::prefix_symbol, "i");
-        assert!(pairs.is_err());
-
-        parses_to! {
-            parser: UnitParser,
-            input: "a",
-            rule: Rule::prefix_symbol,
-            tokens: [prefix_symbol(0, 1)]
-        }
-    }
-
-    #[test]
-    fn validate_atom_symbol() {
-        let pairs = UnitParser::parse(Rule::atom_symbol, "m");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::atom_symbol, "M");
-        assert!(pairs.is_ok());
-
-        let pairs = UnitParser::parse(Rule::atom_symbol, "meter");
-        assert!(pairs.is_ok());
-
-        parses_to! {
-            parser: UnitParser,
-            input: "K",
-            rule: Rule::atom_symbol,
-            tokens: [atom_symbol(0, 1)]
-        }
-
-        parses_to! {
-            parser: UnitParser,
-            input: "10*",
-            rule: Rule::atom_symbol,
-            tokens: [atom_symbol(0, 3)]
-        }
-    }
-
-    #[test]
     fn validate_simple_unit() {
         let pairs = UnitParser::parse(Rule::simple_unit, "km");
         assert!(pairs.is_ok());
@@ -151,10 +103,7 @@ mod tests {
             input: "km",
             rule: Rule::simple_unit,
             tokens: [
-                simple_unit(0, 2, [
-                      prefix_symbol(0, 1),
-                      atom_symbol(1, 2)
-                ])
+                simple_unit(0, 2)
             ]
         }
     }
@@ -173,10 +122,7 @@ mod tests {
             rule: Rule::annotatable,
             tokens: [
                 annotatable(0, 3, [
-                      simple_unit(0, 2, [
-                            prefix_symbol(0, 1),
-                            atom_symbol(1, 2)
-                      ]),
+                      simple_unit(0, 2),
                       exponent(2, 3, [digits(2, 3)])
                 ])
             ]
@@ -254,10 +200,7 @@ mod tests {
                       factor(0, 1),
                       basic_component(1, 3, [
                               annotatable(1, 3, [
-                                      simple_unit(1, 3, [
-                                                prefix_symbol(1, 2),
-                                                atom_symbol(2, 3)
-                                      ])
+                                      simple_unit(1, 3)
                               ])
                       ])
                 ])
@@ -273,10 +216,7 @@ mod tests {
                     factor(0, 1),
                     basic_component(1, 11, [
                         annotatable(1, 5, [
-                            simple_unit(1, 3, [
-                                prefix_symbol(1, 2),
-                                atom_symbol(2, 3)
-                            ]),
+                            simple_unit(1, 3),
                             exponent(3, 5, [
                                 sign(3, 4),
                                 digits(4, 5)
@@ -300,10 +240,7 @@ mod tests {
                     factor(0, 1),
                     basic_component(1, 11, [
                         annotatable(1, 5, [
-                            simple_unit(1, 3, [
-                                prefix_symbol(1, 2),
-                                atom_symbol(2, 3)
-                            ]),
+                            simple_unit(1, 3),
                             exponent(3, 5, [
                                 sign(3, 4),
                                 digits(4, 5)
@@ -331,10 +268,7 @@ mod tests {
                         factor(0, 1),
                         basic_component(1, 11, [
                             annotatable(1, 5, [
-                                simple_unit(1, 3, [
-                                    prefix_symbol(1, 2),
-                                    atom_symbol(2, 3)
-                                ]),
+                                simple_unit(1, 3),
                                 exponent(3, 5, [
                                     sign(3, 4),
                                     digits(4, 5)
@@ -348,9 +282,7 @@ mod tests {
                         component(12, 20, [
                             basic_component(12, 20, [
                                 annotatable(12, 20, [
-                                    simple_unit(12, 20, [
-                                        atom_symbol(12, 20)
-                                    ])
+                                    simple_unit(12, 20)
                                 ])
                             ])
                         ]),
@@ -358,9 +290,7 @@ mod tests {
                             component(21, 27, [
                                 basic_component(21, 27, [
                                     annotatable(21, 27, [
-                                        simple_unit(21, 27, [
-                                            atom_symbol(21, 27)
-                                        ])
+                                        simple_unit(21, 27)
                                     ])
                                 ])
                             ])
@@ -382,9 +312,7 @@ mod tests {
                     component(0, 8, [
                         basic_component(0, 8, [
                             annotatable(0, 8, [
-                                simple_unit(0, 8, [
-                                    atom_symbol(0, 8)
-                                ])
+                                simple_unit(0, 8)
                            ])
                         ])
                     ]),
@@ -392,9 +320,7 @@ mod tests {
                         component(9, 15, [
                             basic_component(9, 15, [
                                 annotatable(9, 15, [
-                                    simple_unit(9, 15, [
-                                        atom_symbol(9, 15)
-                                    ])
+                                    simple_unit(9, 15)
                                 ])
                             ])
                         ]),
@@ -403,9 +329,7 @@ mod tests {
                             component(16, 24, [
                                 basic_component(16, 24, [
                                     annotatable(16, 24, [
-                                        simple_unit(16, 24, [
-                                            atom_symbol(16, 24)
-                                        ])
+                                        simple_unit(16, 24)
                                     ])
                                 ])
                             ])
@@ -436,9 +360,7 @@ mod tests {
                             factor(1, 2),
                             basic_component(2, 3, [
                                 annotatable(2, 3, [
-                                    simple_unit(2, 3, [
-                                        atom_symbol(2, 3)
-                                    ])
+                                    simple_unit(2, 3)
                                ])
                             ])
                         ])
