@@ -18,12 +18,8 @@ use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
 use term::Term;
 use parser::Rule;
-use symbol_interpreter::SymbolInterpreter;
+use symbol_interpreter;
 use wise_units_symbol_parser::SymbolParser;
-
-lazy_static! {
-    static ref SYMBOL_INTERPRETER: SymbolInterpreter = SymbolInterpreter;
-}
 
 pub struct Interpreter;
 
@@ -96,8 +92,8 @@ impl Interpreter {
         let string = span.as_str();
 
         match SymbolParser::parse(::wise_units_symbol_parser::Rule::symbol, string) {
-            Ok(symbol_pairs) => {
-                let symbol = SYMBOL_INTERPRETER.interpret(symbol_pairs)?;
+            Ok(mut symbol_pairs) => {
+                let symbol = symbol_interpreter::interpret(symbol_pairs.next().unwrap())?;
                 simple_unit.atom = symbol.atom;
                 simple_unit.prefix = symbol.prefix;
             },

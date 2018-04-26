@@ -6,9 +6,6 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 
-#[macro_use]
-extern crate lazy_static;
-
 // Only include macros for testing
 #[cfg(test)]
 #[macro_use(parses_to, consumes_to)]
