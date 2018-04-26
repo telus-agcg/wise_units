@@ -5,6 +5,63 @@ pub struct SymbolParser;
 #[cfg(test)]
 mod tests {
     use super::{Rule, SymbolParser};
+    use pest::Parser;
+
+    #[test]
+    fn validate_prefixes() {
+        parses_to! {
+            parser: SymbolParser,
+            input: "k",
+            rule: Rule::pri_prefix,
+            tokens: [pri_prefix(0, 1, [pri_kilo(0, 1)])]
+        }
+
+        parses_to! {
+            parser: SymbolParser,
+            input: "K",
+            rule: Rule::sec_prefix,
+            tokens: [sec_prefix(0, 1, [sec_kilo(0, 1)])]
+        }
+
+        fails_with! {
+            parser: SymbolParser,
+            input: "i",
+            rule: Rule::pri_prefix,
+            positives: vec![Rule::pri_prefix],
+            negatives: vec![],
+            pos: 0
+        }
+
+        parses_to! {
+            parser: SymbolParser,
+            input: "a",
+            rule: Rule::pri_prefix,
+            tokens: [pri_prefix(0, 1, [pri_atto(0, 1)])]
+        }
+    }
+
+    #[test]
+    fn validate_atoms() {
+        let pairs = SymbolParser::parse(Rule::pri_atom, "m");
+        assert!(pairs.is_ok());
+
+        let pairs = SymbolParser::parse(Rule::sec_atom, "M");
+        assert!(pairs.is_ok());
+
+        parses_to! {
+            parser: SymbolParser,
+            input: "K",
+            rule: Rule::pri_atom,
+            tokens: [pri_atom(0, 1, [kelvin(0, 1)])]
+        }
+
+        parses_to! {
+            parser: SymbolParser,
+            input: "10*",
+            rule: Rule::pri_atom,
+            tokens: [pri_atom(0, 3, [ten_for_arbitrary_powers_star(0, 3)])]
+        }
+    }
 
     #[test]
     fn parse_yotta() {

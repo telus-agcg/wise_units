@@ -11,7 +11,7 @@ extern crate lazy_static;
 
 // Only include macros for testing
 #[cfg(test)]
-#[macro_use(parses_to, consumes_to)]
+#[macro_use(parses_to, consumes_to, fails_with)]
 extern crate pest;
 
 #[cfg(not(test))]

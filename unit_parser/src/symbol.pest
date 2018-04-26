@@ -1,4 +1,4 @@
-symbol = {
+symbol = ${
     primary_symbol | secondary_symbol
 }
 
