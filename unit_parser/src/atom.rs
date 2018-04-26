@@ -43,6 +43,7 @@ pub enum Atom {
     CalorieTH,
     CalorieM,
     Calorie,
+    CalorieNutritionLabel,
     Cicero,
     CircularMilInternational,
     CordInternational,
@@ -445,6 +446,7 @@ impl UcumSymbol for Atom {
                 Atom::CalorieTH                  |
                 Atom::CalorieM                   |
                 Atom::Calorie                    |
+                Atom::CalorieNutritionLabel      |
                 Atom::DegreeFahrenheit           |
                 Atom::DegreeRankine              |
                 Atom::DegreeReaumur              |
@@ -506,6 +508,7 @@ impl UcumSymbol for Atom {
             Atom::CalorieTH                      => Definition::new(4.184, "J"),
             Atom::CalorieM                       => Definition::new(4.19002, "J"),
             Atom::Calorie                        => Definition::new(1.0, "cal_th"),
+            Atom::CalorieNutritionLabel          => Definition::new(1.0, "kcal_th"),
             Atom::Cicero                         => Definition::new(12.0, "[didot]"),
             Atom::CircularMilInternational       => Definition::new(1.0, "[pi]/4.[mil_i]2"),
             Atom::CordInternational |
@@ -854,6 +857,7 @@ impl UcumSymbol for Atom {
             Atom::CalorieTH                => vec!["thermochemical calorie"],
             Atom::CalorieM                 => vec!["mean calorie"],
             Atom::Calorie                  => vec!["calorie"],
+            Atom::CalorieNutritionLabel    => vec!["nutrition label calorie"],
             Atom::Cicero                   => vec!["cicero", "Didot's pica"],
             Atom::CircularMilInternational => vec!["circular mil"],
             Atom::CordInternational |
@@ -1094,6 +1098,7 @@ impl UcumSymbol for Atom {
             Atom::CalorieTH                           => "cal_th",
             Atom::CalorieM                            => "cal_m",
             Atom::Calorie                             => "cal",
+            Atom::CalorieNutritionLabel               => "[Cal]",
             Atom::Cicero                              => "[cicero]",
             Atom::CircularMilInternational            => "[cml_i]",
             Atom::CordInternational                   => "[cr_i]",
@@ -1383,6 +1388,7 @@ impl UcumSymbol for Atom {
             Atom::CalorieIT                      => Some("cal<sub>IT</sub>"),
             Atom::CalorieTH                      => Some("cal<sub>th</sub>"),
             Atom::CalorieM                       => Some("cal<sub>m</sub>"),
+            Atom::CalorieNutritionLabel          => Some("Cal"),
             Atom::CircularMilInternational       => Some("circ.mil"),
             Atom::CubicYardInternational         => Some("cu.yd"),
 
@@ -1529,14 +1535,15 @@ impl UcumSymbol for Atom {
             Atom::PermittivityOfVacuum                      => Property::ElectricPermittivity,
             Atom::Volt                                      => Property::ElectricPotential,
             Atom::Ohm                                       => Property::ElectricResistance,
-            Atom::CalorieAt15C     |
-                Atom::CalorieAt20C |
-                Atom::Calorie      |
-                Atom::CalorieM     |
-                Atom::CalorieIT    |
-                Atom::CalorieTH    |
-                Atom::Joule        |
-                Atom::Electronvolt |
+            Atom::CalorieAt15C              |
+                Atom::CalorieAt20C          |
+                Atom::Calorie               |
+                Atom::CalorieM              |
+                Atom::CalorieNutritionLabel |
+                Atom::CalorieIT             |
+                Atom::CalorieTH             |
+                Atom::Joule                 |
+                Atom::Electronvolt          |
                 Atom::Erg                                   => Property::Energy,
 
             Atom::Gray |
@@ -1699,6 +1706,7 @@ impl UcumSymbol for Atom {
             Atom::CalorieTH                      => "CAL_TH",
             Atom::CalorieM                       => "CAL_M",
             Atom::Calorie                        => "CAL",
+            Atom::CalorieNutritionLabel          => "[CAL]",
             Atom::Cicero                         => "[CICERO]",
             Atom::CircularMilInternational       => "[CML_I]",
             Atom::CordInternational              => "[CR_I]",
@@ -2432,7 +2440,8 @@ mod tests {
         validate_scalar_calorie_it, CalorieIT, 4186.8;
         validate_scalar_calorie_th, CalorieTH, 4184.0;
         validate_scalar_calorie_m, CalorieM, 4190.02;
-        validate_scalar_caloriemeow, Calorie, 4184.0;
+        validate_scalar_calorie, Calorie, 4184.0;
+        validate_scalar_calorie_nutrition_label, CalorieNutritionLabel, 4_184_000.0;
         validate_scalar_cicero, Cicero, 0.004_511_111_111_111_111;
         validate_scalar_circular_mil_international, CircularMilInternational, 1_217_369_588.005_220_4;
         validate_scalar_cord_international, CordInternational, 3.624_556_363_776;
