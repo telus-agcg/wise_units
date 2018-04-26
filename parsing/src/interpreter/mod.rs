@@ -8,6 +8,7 @@ pub(self) mod main_term;
 pub(self) mod simple_unit;
 
 use error::Error;
+use parser::Rule;
 use pest::Parser;
 use pest::iterators::{Pair, Pairs};
 use self::annotatable::Annotatable;
@@ -16,10 +17,10 @@ use self::basic_component::BasicComponent;
 use self::component::Component;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
+use symbols::symbol_parser::SymbolParser;
+use symbols::symbol_parser::Rule as SymbolRule;
+use symbols::mapper;
 use term::Term;
-use parser::Rule;
-use symbol_mapper;
-use symbol_parser::SymbolParser;
 
 pub struct Interpreter;
 
@@ -91,9 +92,9 @@ impl Interpreter {
         let span = pair.into_span();
         let string = span.as_str();
 
-        match SymbolParser::parse(::symbol_parser::Rule::symbol, string) {
+        match SymbolParser::parse(SymbolRule::symbol, string) {
             Ok(mut symbol_pairs) => {
-                let symbol = symbol_mapper::map(symbol_pairs.next().unwrap())?;
+                let symbol = mapper::map(symbol_pairs.next().unwrap())?;
                 simple_unit.atom = symbol.atom;
                 simple_unit.prefix = symbol.prefix;
             },
