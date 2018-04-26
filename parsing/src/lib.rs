@@ -38,14 +38,12 @@ pub use terms::term_parser::TermParser;
 pub use ucum_symbol::UcumSymbol;
 
 use pest::Parser;
-use terms::mapper::Interpreter;
 use terms::term_parser::Rule;
 
 pub fn parse(expression: &str) -> Result<Vec<Term>, Error> {
     match TermParser::parse(Rule::main_term, expression) {
         Ok(pairs) => {
-            let mut interpreter = Interpreter;
-            Ok(interpreter.interpret(pairs)?)
+            Ok(terms::mapper::map(pairs)?)
         }
         Err(_) => Err(Error::UnknownUnitString(expression.to_string())),
     }
