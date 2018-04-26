@@ -18,7 +18,7 @@ use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
 use term::Term;
 use parser::Rule;
-use symbol_interpreter;
+use symbol_mapper;
 use symbol_parser::SymbolParser;
 
 pub struct Interpreter;
@@ -93,7 +93,7 @@ impl Interpreter {
 
         match SymbolParser::parse(::symbol_parser::Rule::symbol, string) {
             Ok(mut symbol_pairs) => {
-                let symbol = symbol_interpreter::interpret(symbol_pairs.next().unwrap())?;
+                let symbol = symbol_mapper::map(symbol_pairs.next().unwrap())?;
                 simple_unit.atom = symbol.atom;
                 simple_unit.prefix = symbol.prefix;
             },
