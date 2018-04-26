@@ -26,8 +26,7 @@ mod definition;
 mod error;
 mod prefix;
 mod property;
-mod symbol_mapper;
-mod symbol_parser;
+mod symbols;
 mod term;
 mod ucum_symbol;
 
@@ -36,7 +35,7 @@ pub use classification::Classification;
 pub use error::Error;
 pub use parser::UnitParser;
 pub use prefix::Prefix;
-pub use symbol_parser::SymbolParser;
+pub use symbols::symbol_parser::SymbolParser;
 pub use term::Term;
 pub use ucum_symbol::UcumSymbol;
 

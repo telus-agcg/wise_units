@@ -2,23 +2,8 @@ use atom::Atom;
 use error::Error;
 use pest::iterators::Pair;
 use prefix::Prefix;
-use symbol_parser::Rule;
-
-// Technically there should never be a symbol without an atom.
-#[derive(Debug)]
-pub struct Symbol {
-    pub prefix: Option<Prefix>,
-    pub atom: Option<Atom>,
-}
-
-impl Symbol {
-    pub fn new() -> Self {
-        Symbol {
-            prefix: None,
-            atom: None,
-        }
-    }
-}
+use symbols::symbol_parser::Rule;
+use symbols::symbol::Symbol;
 
 pub fn map(pair: Pair<Rule>) -> Result<Symbol, Error> {
     fn visit_pairs(pair: Pair<Rule>) -> Result<Symbol, Error> {
