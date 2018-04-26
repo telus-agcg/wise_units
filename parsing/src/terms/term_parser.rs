@@ -1,17 +1,17 @@
 #[derive(Parser)]
 #[grammar = "unit.pest"]
-pub struct UnitParser;
+pub struct TermParser;
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use super::UnitParser;
+    use super::TermParser;
     use pest::Parser;
 
     #[test]
     fn parse_sign() {
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "+",
             rule: Rule::sign,
             tokens: [
@@ -20,7 +20,7 @@ mod tests {
         }
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "-",
             rule: Rule::sign,
             tokens: [
@@ -31,40 +31,40 @@ mod tests {
 
     #[test]
     fn validate_digits() {
-        let pairs = UnitParser::parse(Rule::digits, "0");
+        let pairs = TermParser::parse(Rule::digits, "0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::digits, "01");
+        let pairs = TermParser::parse(Rule::digits, "01");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::digits, "123450");
+        let pairs = TermParser::parse(Rule::digits, "123450");
         assert!(pairs.is_ok());
 
         // Looks like it stops parsing at the !, but doesn't error.
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "123456!@#",
             rule: Rule::digits,
             tokens: [digits(0, 6)]
         }
 
-        let pairs = UnitParser::parse(Rule::digits, "!@#123450");
+        let pairs = TermParser::parse(Rule::digits, "!@#123450");
         assert!(pairs.is_err());
     }
 
     #[test]
     fn validate_factor() {
-        let pairs = UnitParser::parse(Rule::factor, "0");
+        let pairs = TermParser::parse(Rule::factor, "0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::factor, "01");
+        let pairs = TermParser::parse(Rule::factor, "01");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::factor, "123450");
+        let pairs = TermParser::parse(Rule::factor, "123450");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "123456!@#",
             rule: Rule::factor,
             tokens: [factor(0, 6)]
@@ -73,17 +73,17 @@ mod tests {
 
     #[test]
     fn validate_exponent() {
-        let pairs = UnitParser::parse(Rule::exponent, "+0");
+        let pairs = TermParser::parse(Rule::exponent, "+0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::exponent, "-0");
+        let pairs = TermParser::parse(Rule::exponent, "-0");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::exponent, "123");
+        let pairs = TermParser::parse(Rule::exponent, "123");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "-123",
             rule: Rule::exponent,
             tokens: [exponent(0, 4, [sign(0, 1), digits(1, 4)])]
@@ -92,14 +92,14 @@ mod tests {
 
     #[test]
     fn validate_simple_unit() {
-        let pairs = UnitParser::parse(Rule::simple_unit, "km");
+        let pairs = TermParser::parse(Rule::simple_unit, "km");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::simple_unit, "m");
+        let pairs = TermParser::parse(Rule::simple_unit, "m");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "km",
             rule: Rule::simple_unit,
             tokens: [
@@ -110,14 +110,14 @@ mod tests {
 
     #[test]
     fn validate_simple_unit_with_exponent() {
-        let pairs = UnitParser::parse(Rule::simple_unit, "km2");
+        let pairs = TermParser::parse(Rule::simple_unit, "km2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::simple_unit, "m-1");
+        let pairs = TermParser::parse(Rule::simple_unit, "m-1");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "km2",
             rule: Rule::annotatable,
             tokens: [
@@ -131,29 +131,29 @@ mod tests {
 
     #[test]
     fn validate_annotatable() {
-        let pairs = UnitParser::parse(Rule::annotatable, "km2");
+        let pairs = TermParser::parse(Rule::annotatable, "km2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::annotatable, "km-2");
+        let pairs = TermParser::parse(Rule::annotatable, "km-2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::annotatable, "km+2");
+        let pairs = TermParser::parse(Rule::annotatable, "km+2");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::annotatable, "km");
+        let pairs = TermParser::parse(Rule::annotatable, "km");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::annotatable, "m");
+        let pairs = TermParser::parse(Rule::annotatable, "m");
         assert!(pairs.is_ok());
     }
 
     #[test]
     fn validate_annotation() {
-        let pairs = UnitParser::parse(Rule::annotation, "{d'io}");
+        let pairs = TermParser::parse(Rule::annotation, "{d'io}");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "{tot'nit}",
             rule: Rule::annotation,
             tokens: [
@@ -161,38 +161,38 @@ mod tests {
             ]
         };
 
-        let pairs = UnitParser::parse(Rule::annotation, "{tot'nit}");
+        let pairs = TermParser::parse(Rule::annotation, "{tot'nit}");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::annotation, "k");
+        let pairs = TermParser::parse(Rule::annotation, "k");
         assert!(pairs.is_err());
     }
 
     #[test]
     fn validate_basic_component() {
-        let pairs = UnitParser::parse(Rule::basic_component, "km{stuff}");
+        let pairs = TermParser::parse(Rule::basic_component, "km{stuff}");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::basic_component, "km");
+        let pairs = TermParser::parse(Rule::basic_component, "km");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::basic_component, "{stuff}");
+        let pairs = TermParser::parse(Rule::basic_component, "{stuff}");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::basic_component, "234");
+        let pairs = TermParser::parse(Rule::basic_component, "234");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::basic_component, "(m.s)");
+        let pairs = TermParser::parse(Rule::basic_component, "(m.s)");
         assert!(pairs.is_ok());
     }
 
     #[test]
     fn validate_component_with_factor() {
-        let pairs = UnitParser::parse(Rule::component, "100km");
+        let pairs = TermParser::parse(Rule::component, "100km");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "2km",
             rule: Rule::component,
             tokens: [
@@ -208,7 +208,7 @@ mod tests {
         };
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "2km-2{meow}",
             rule: Rule::component,
             tokens: [
@@ -232,7 +232,7 @@ mod tests {
     #[test]
     fn validate_component_with_annotation() {
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "2km-2{meow}",
             rule: Rule::component,
             tokens: [
@@ -255,11 +255,11 @@ mod tests {
 
     #[test]
     fn validate_slash_term() {
-        let pairs = UnitParser::parse(Rule::term, "km/s");
+        let pairs = TermParser::parse(Rule::term, "km/s");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "2km-2{meow}/[acr_us].[in_i]",
             rule: Rule::term,
             tokens: [
@@ -304,7 +304,7 @@ mod tests {
     #[test]
     fn validate_interpret_term_with_dot_term_then_slash_component() {
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "[acr_us].[in_i]/[acr_us]",
             rule: Rule::term,
             tokens: [
@@ -342,14 +342,14 @@ mod tests {
 
     #[test]
     fn validate_main_term() {
-        let pairs = UnitParser::parse(Rule::main_term, "km/s");
+        let pairs = TermParser::parse(Rule::main_term, "km/s");
         assert!(pairs.is_ok());
 
-        let pairs = UnitParser::parse(Rule::main_term, "/km.s");
+        let pairs = TermParser::parse(Rule::main_term, "/km.s");
         assert!(pairs.is_ok());
 
         parses_to! {
-            parser: UnitParser,
+            parser: TermParser,
             input: "/2m",
             rule: Rule::main_term,
             tokens: [

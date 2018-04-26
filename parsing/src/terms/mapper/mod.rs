@@ -8,7 +8,6 @@ pub(self) mod main_term;
 pub(self) mod simple_unit;
 
 use error::Error;
-use parser::Rule;
 use pest::Parser;
 use pest::iterators::{Pair, Pairs};
 use self::annotatable::Annotatable;
@@ -21,6 +20,7 @@ use symbols::symbol_parser::SymbolParser;
 use symbols::symbol_parser::Rule as SymbolRule;
 use symbols::mapper;
 use term::Term;
+use terms::term_parser::Rule;
 
 pub struct Interpreter;
 
@@ -138,6 +138,7 @@ impl Interpreter {
     fn visit_factor(&self, pair: Pair<Rule>) -> Result<u32, Error> {
         let span = pair.into_span();
         let string = span.as_str();
+        println!("visit_factor, string: {}", &string);
 
         string.parse::<u32>().map_err(|e| Error::ParsingError {
             expression: e.to_string(),
@@ -269,12 +270,12 @@ mod tests {
     use atom::Atom;
     use pest::Parser;
     use term::Term;
-    use parser::{Rule, UnitParser};
+    use terms::term_parser::{Rule, TermParser};
     use prefix::Prefix;
 
     #[test]
     fn validate_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m-3").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m-3").unwrap();
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
 
@@ -285,7 +286,7 @@ mod tests {
 
         assert_eq!(actual, expected);
 
-        let pairs = UnitParser::parse(Rule::main_term, "km2/m-3").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "km2/m-3").unwrap();
         let actual = i.interpret(pairs).unwrap();
 
         let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
@@ -301,7 +302,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_component_with_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m2").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m2").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -315,7 +316,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_component_with_prefix() {
-        let pairs = UnitParser::parse(Rule::main_term, "km").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "km").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -327,7 +328,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_component_with_factor() {
-        let pairs = UnitParser::parse(Rule::main_term, "2m").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "2m").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -342,7 +343,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term() {
-        let pairs = UnitParser::parse(Rule::main_term, "m/s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m/s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -357,7 +358,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_prefix() {
-        let pairs = UnitParser::parse(Rule::main_term, "km/s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "km/s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -372,7 +373,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_denominator_prefix() {
-        let pairs = UnitParser::parse(Rule::main_term, "m/ks").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m/ks").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -387,7 +388,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m2/s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m2/s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -403,7 +404,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_denominator_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m/s2").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m/s2").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -418,7 +419,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_numerator_and_denominator_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m2/s2").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m2/s2").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -434,7 +435,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_numerator() {
-        let pairs = UnitParser::parse(Rule::main_term, "2m/s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "2m/s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -450,7 +451,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_denominator() {
-        let pairs = UnitParser::parse(Rule::main_term, "m/2s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m/2s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -466,7 +467,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term() {
-        let pairs = UnitParser::parse(Rule::main_term, "m.s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m.s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -480,7 +481,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_left_side_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m2.s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m2.s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -495,7 +496,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_right_side_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m.s2").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m.s2").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -510,7 +511,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_left_and_right_side_exponent() {
-        let pairs = UnitParser::parse(Rule::main_term, "m2.s2").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m2.s2").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -526,7 +527,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_dot_term_with_factor_in_left_side() {
-        let pairs = UnitParser::parse(Rule::main_term, "2m.s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "2m.s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -541,7 +542,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_slash_term_with_factor_in_right_side() {
-        let pairs = UnitParser::parse(Rule::main_term, "m.2s").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "m.2s").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
@@ -556,7 +557,7 @@ mod tests {
 
     #[test]
     fn validate_interpret_term_with_dot_term_then_slash_component() {
-        let pairs = UnitParser::parse(Rule::main_term, "[acr_us].[in_i]/[acr_us]").unwrap();
+        let pairs = TermParser::parse(Rule::main_term, "[acr_us].[in_i]/[acr_us]").unwrap();
 
         let i = Interpreter;
         let actual = i.interpret(pairs).unwrap();
