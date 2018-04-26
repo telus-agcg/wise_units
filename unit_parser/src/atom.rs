@@ -34,6 +34,13 @@ pub enum Atom {
     Biot,
     BoardFootInternational,
     BoltzmannConstant,
+    BtuAt39F,
+    // BtuAt59F,
+    // BtuAt60F,
+    // BtuAt60F,
+    // BtuM,
+    // BtuIT,
+    // Btu,
     BushelBR,
     BushelUS,
 
@@ -260,11 +267,13 @@ impl UcumSymbol for Atom {
                 Atom::TheNumberPi                         |
                 Atom::TheNumberTenForArbitraryPowersCaret |
                 Atom::TheNumberTenForArbitraryPowersStar    => Classification::Dimless,
+
             Atom::DramAP      |
                 Atom::PoundAP |
                 Atom::OunceAP |
                 Atom::OunceM  |
                 Atom::ScrupleAP => Classification::Apoth,
+
             Atom::TheUnity          |
                 Atom::Candela       |
                 Atom::Coulomb       |
@@ -295,6 +304,7 @@ impl UcumSymbol for Atom {
                 Atom::Volt          |
                 Atom::Watt          |
                 Atom::Weber                                 => Classification::SI,
+
             Atom::Are                    |
                 Atom::AstronomicUnit     |
                 Atom::AtomicMassUnit     |
@@ -320,6 +330,7 @@ impl UcumSymbol for Atom {
                 Atom::TropicalYear       |
                 Atom::Week               |
                 Atom::Year                                  => Classification::ISO1000,
+
             Atom::BoltzmannConstant                  |
                 Atom::ElementaryCharge               |
                 Atom::GramForce                      |
@@ -333,6 +344,7 @@ impl UcumSymbol for Atom {
                 Atom::StandardAccelerationOfFreeFall |
                 Atom::StandardAtmosphere             |
                 Atom::VelocityOfLight                       => Classification::Const,
+
             Atom::Biot                       |
                 Atom::Curie                  |
                 Atom::Dyne                   |
@@ -351,6 +363,7 @@ impl UcumSymbol for Atom {
                 Atom::Roentgen               |
                 Atom::Stilb                  |
                 Atom::Stokes                                => Classification::CGS,
+
             Atom::BoardFootInternational        |
                 Atom::CircularMilInternational  |
                 Atom::CordInternational         |
@@ -369,6 +382,7 @@ impl UcumSymbol for Atom {
                 Atom::SquareInchInternational   |
                 Atom::SquareYardInternational   |
                 Atom::YardInternational                     => Classification::Intcust,
+
             Atom::AcreUS                    |
                 Atom::FathomUS              |
                 Atom::FootUS                |
@@ -386,6 +400,7 @@ impl UcumSymbol for Atom {
                 Atom::SquareRodUS           |
                 Atom::Township              |
                 Atom::YardUS                                => Classification::USLengths,
+
             Atom::AcreBR                    |
                 Atom::FathomBR              |
                 Atom::FootBR                |
@@ -398,6 +413,7 @@ impl UcumSymbol for Atom {
                 Atom::PaceBR                |
                 Atom::RodBR                 |
                 Atom::YardBR                                => Classification::BritLength,
+
             Atom::BarrelUS                       |
                 Atom::BushelUS                   |
                 Atom::CordUS                     |
@@ -419,7 +435,8 @@ impl UcumSymbol for Atom {
                 Atom::QueenAnnesWineGallon       |
                 Atom::TablespoonUS               |
                 Atom::TeaspoonUS                            => Classification::USVolumes,
-                Atom::BushelBR                   |
+
+           Atom::BushelBR                        |
                 Atom::FluidDramBR                |
                 Atom::FluidOunceBR               |
                 Atom::GallonBR                   |
@@ -428,6 +445,7 @@ impl UcumSymbol for Atom {
                 Atom::PeckBR                     |
                 Atom::PintBR                     |
                 Atom::QuartBR                               => Classification::BritVolumes,
+
             Atom::DramAV                         |
                 Atom::Grain                      |
                 Atom::OunceAV                    |
@@ -437,10 +455,13 @@ impl UcumSymbol for Atom {
                 Atom::ShortHundredweightAV       |
                 Atom::ShortTonAV                 |
                 Atom::StoneAV                               => Classification::Avoirdupois,
+
             Atom::OunceTR                        |
                 Atom::PennyweightTR              |
                 Atom::PoundTR                               => Classification::Troy,
-            Atom::CalorieAt15C                   |
+
+            Atom::BtuAt39F                       |
+                Atom::CalorieAt15C               |
                 Atom::CalorieAt20C               |
                 Atom::CalorieIT                  |
                 Atom::CalorieTH                  |
@@ -451,11 +472,14 @@ impl UcumSymbol for Atom {
                 Atom::DegreeRankine              |
                 Atom::DegreeReaumur              |
                 Atom::Horsepower                            => Classification::Heat,
+
             Atom::PrismDiopter                              => Classification::Clinical,
+
             Atom::Equivalents                    |
                 Atom::GramPercent                |
                 Atom::PH                         |
                 Atom::ProteinNitrogenUnit                   => Classification::Chemical,
+
             Atom::Cicero            |
                 Atom::Didot         |
                 Atom::Ligne         |
@@ -499,6 +523,7 @@ impl UcumSymbol for Atom {
             Atom::Biot                           => Definition::new(10.0, "A"),
             Atom::BoardFootInternational         => Definition::new(144.0, "[in_i]3"),
             Atom::BoltzmannConstant              => Definition::new(1.380_658e-23, "J/K"),
+            Atom::BtuAt39F                       => Definition::new(1.05967, "kJ"),
             Atom::BushelBR                       => Definition::new(4.0, "[pk_br]"),
             Atom::BushelUS                       => Definition::new(2150.42, "[in_i]3"),
 
@@ -847,12 +872,13 @@ impl UcumSymbol for Atom {
             Atom::Becquerel                => vec!["becquerel"],
             Atom::Biot                     => vec!["Biot"],
             Atom::BoardFootInternational   => vec!["board foot"],
+            Atom::BtuAt39F                 => vec!["British thermal unit at 39 °F"],
             Atom::BoltzmannConstant        => vec!["Boltzmann constant"],
             Atom::BushelBR |
                 Atom::BushelUS             => vec!["bushel"],
 
-            Atom::CalorieAt20C             => vec!["calorie at 20° C"],
-            Atom::CalorieAt15C             => vec!["calorie at 15° C"],
+            Atom::CalorieAt20C             => vec!["calorie at 20 °C"],
+            Atom::CalorieAt15C             => vec!["calorie at 15 °C"],
             Atom::CalorieIT                => vec!["international table calorie"],
             Atom::CalorieTH                => vec!["thermochemical calorie"],
             Atom::CalorieM                 => vec!["mean calorie"],
@@ -1089,6 +1115,7 @@ impl UcumSymbol for Atom {
             Atom::Biot                                => "Bi",
             Atom::BoardFootInternational              => "[bf_i]",
             Atom::BoltzmannConstant                   => "[k]",
+            Atom::BtuAt39F                            => "[Btu_39]",
             Atom::BushelBR                            => "[bu_br]",
             Atom::BushelUS                            => "[bu_us]",
 
@@ -1383,6 +1410,7 @@ impl UcumSymbol for Atom {
                 Atom::Year                       => Some(self.primary_code()),
             Atom::Are                            => Some("a"),
             Atom::BoltzmannConstant              => Some("𝑘"),
+            Atom::BtuAt39F                       => Some("Btu<sub>39°F</sub>"),
             Atom::CalorieAt20C                   => Some("cal 20°"),
             Atom::CalorieAt15C                   => Some("cal 15°"),
             Atom::CalorieIT                      => Some("cal<sub>IT</sub>"),
@@ -1485,6 +1513,54 @@ impl UcumSymbol for Atom {
             Atom::Coulomb  |
                 Atom::ElementaryCharge                      => Property::ElectricCharge,
 
+            Atom::Farad                                     => Property::ElectricCapacitance,
+            Atom::Siemens                                   => Property::ElectricConductance,
+            Atom::Ampere |
+                Atom::Biot                                  => Property::ElectricCurrent,
+            Atom::PermittivityOfVacuum                      => Property::ElectricPermittivity,
+            Atom::Volt                                      => Property::ElectricPotential,
+            Atom::Ohm                                       => Property::ElectricResistance,
+            Atom::BtuAt39F                  |
+                Atom::CalorieAt15C          |
+                Atom::CalorieAt20C          |
+                Atom::Calorie               |
+                Atom::CalorieM              |
+                Atom::CalorieNutritionLabel |
+                Atom::CalorieIT             |
+                Atom::CalorieTH             |
+                Atom::Joule                 |
+                Atom::Electronvolt          |
+                Atom::Erg                                   => Property::Energy,
+
+            Atom::Gray |
+                Atom::RadiationAbsorbedDose                 => Property::EnergyDose,
+            Atom::BarrelUS             |
+                Atom::CordUS           |
+                Atom::FluidDramUS      |
+                Atom::FluidOunceUS     |
+                Atom::GillUS           |
+                Atom::FluidOunceM |
+                Atom::MinimUS          |
+                Atom::PintUS           |
+                Atom::QuartUS          |
+                Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
+            Atom::Maxwell                                   => Property::FluxOfMagneticInduction,
+            Atom::Newton        |
+                Atom::Dyne      |
+                Atom::GramForce |
+                Atom::PoundForce                            => Property::Force,
+            Atom::PartsPerBillion     |
+                Atom::PartsPerMillion |
+                Atom::PartsPerTrillion |
+                Atom::PartsPerThousand                      => Property::Fraction,
+            Atom::Hertz                                     => Property::Frequency,
+            Atom::HandInternational                         => Property::HeightOfHorses,
+            Atom::Lux |
+                Atom::Phot                                  => Property::Illuminance,
+            Atom::Henry                                     => Property::Inductance,
+            Atom::Roentgen                                  => Property::IonDose,
+            Atom::Stokes                                    => Property::KinematicViscosity,
+
             Atom::Meter                         |
                 Atom::AstronomicUnit            |
                 Atom::Cicero                    |
@@ -1527,53 +1603,6 @@ impl UcumSymbol for Atom {
                 Atom::YardInternational         |
                 Atom::YardBR                    |
                 Atom::YardUS                                => Property::Length,
-
-            Atom::Farad                                     => Property::ElectricCapacitance,
-            Atom::Siemens                                   => Property::ElectricConductance,
-            Atom::Ampere |
-                Atom::Biot                                  => Property::ElectricCurrent,
-            Atom::PermittivityOfVacuum                      => Property::ElectricPermittivity,
-            Atom::Volt                                      => Property::ElectricPotential,
-            Atom::Ohm                                       => Property::ElectricResistance,
-            Atom::CalorieAt15C              |
-                Atom::CalorieAt20C          |
-                Atom::Calorie               |
-                Atom::CalorieM              |
-                Atom::CalorieNutritionLabel |
-                Atom::CalorieIT             |
-                Atom::CalorieTH             |
-                Atom::Joule                 |
-                Atom::Electronvolt          |
-                Atom::Erg                                   => Property::Energy,
-
-            Atom::Gray |
-                Atom::RadiationAbsorbedDose                 => Property::EnergyDose,
-            Atom::BarrelUS             |
-                Atom::CordUS           |
-                Atom::FluidDramUS      |
-                Atom::FluidOunceUS     |
-                Atom::GillUS           |
-                Atom::FluidOunceM |
-                Atom::MinimUS          |
-                Atom::PintUS           |
-                Atom::QuartUS          |
-                Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
-            Atom::Maxwell                                   => Property::FluxOfMagneticInduction,
-            Atom::Newton        |
-                Atom::Dyne      |
-                Atom::GramForce |
-                Atom::PoundForce                            => Property::Force,
-            Atom::PartsPerBillion     |
-                Atom::PartsPerMillion |
-                Atom::PartsPerTrillion |
-                Atom::PartsPerThousand                      => Property::Fraction,
-            Atom::Hertz                                     => Property::Frequency,
-            Atom::HandInternational                         => Property::HeightOfHorses,
-            Atom::Lux |
-                Atom::Phot                                  => Property::Illuminance,
-            Atom::Henry                                     => Property::Inductance,
-            Atom::Roentgen                                  => Property::IonDose,
-            Atom::Stokes                                    => Property::KinematicViscosity,
             Atom::Kayser                                    => Property::LineicNumber,
             Atom::Lumen                                     => Property::LuminousFlux,
             Atom::Candela                                   => Property::LuminousIntensity,
@@ -1697,6 +1726,7 @@ impl UcumSymbol for Atom {
             Atom::Biot                           => "BI",
             Atom::BoardFootInternational         => "[BF_I]",
             Atom::BoltzmannConstant              => "[K]",
+            Atom::BtuAt39F                       => "[Btu_39]",
             Atom::BushelBR                       => "[BU_BR]",
             Atom::BushelUS                       => "[BU_US]",
 
@@ -2432,6 +2462,7 @@ mod tests {
         validate_scalar_biot, Biot, 10.0;
         validate_scalar_board_foot_international, BoardFootInternational, 0.002_359_737_216;
         validate_scalar_boltzmann_constant, BoltzmannConstant, 1.380_658e-20;
+        validate_scalar_btu_at_39f, BtuAt39F, 1_059_670.0;
         validate_scalar_bushel_br, BushelBR, 0.036_368_72;
         validate_scalar_bushel_us, BushelUS, 0.035_239_070_166_88;
 

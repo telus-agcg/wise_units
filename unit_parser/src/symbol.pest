@@ -94,6 +94,7 @@ pri_b = _{
     pri_bar
         | pri_biot
         | pri_becquerel
+        | pri_btu_at_39f
         | pri_barrel_us
         | pri_board_foot_i
         | pri_bushel_br
@@ -103,6 +104,7 @@ pri_b = _{
 pri_bar          = { "bar" }
 pri_biot         = { "Bi" }
 pri_becquerel    = { "Bq" }
+pri_btu_at_39f   = { "[Btu_39]" }
 pri_barrel_us    = { "[bbl_us]" }
 pri_board_foot_i = { "[bf_i]" }
 pri_bushel_br    = { "[bu_br]" }
@@ -693,6 +695,7 @@ sec_b = _{
         | sec_biot
         | sec_becquerel
         | sec_barrel_us
+        | sec_btu_at_39f
         | sec_board_foot_i
         | sec_bushel_br
         | sec_bushel_us
@@ -702,6 +705,7 @@ sec_bar          = { "BAR" }
 sec_biot         = { "BI" }
 sec_becquerel    = { "BQ" }
 sec_barrel_us    = { "[BBL_US]" }
+sec_btu_at_39f   = { "[BTU_39]" }
 sec_board_foot_i = { "[BF_I]" }
 sec_bushel_br    = { "[BU_BR]" }
 sec_bushel_us    = { "[BU_US]" }

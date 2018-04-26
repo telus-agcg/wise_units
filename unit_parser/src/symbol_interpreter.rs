@@ -80,8 +80,8 @@ impl SymbolInterpreter {
         for inner_pair in pair.into_inner() {
             let atom_value = match inner_pair.as_rule() {
                 // Base units first.
-                Rule::coulomb                                   => Atom::Coulomb,
-                Rule::kelvin                                    => Atom::Kelvin,
+                Rule::coulomb                         => Atom::Coulomb,
+                Rule::kelvin                          => Atom::Kelvin,
                 Rule::pri_meter   | Rule::sec_meter   => Atom::Meter,
                 Rule::pri_candela | Rule::sec_candela => Atom::Candela,
                 Rule::pri_gram    | Rule::sec_gram    => Atom::Gram,
@@ -89,21 +89,22 @@ impl SymbolInterpreter {
                 Rule::pri_second  | Rule::sec_second  => Atom::Second,
 
                 // Derived units last.
-                Rule::pri_acre_br | Rule::sec_acre_br => Atom::AcreBR,
-                Rule::pri_acre_us | Rule::sec_acre_us => Atom::AcreUS,
-                Rule::ampere => Atom::Ampere,
-                Rule::pri_are | Rule::sec_are => Atom::Are,
-                Rule::pri_astronomic_unit | Rule::sec_astronomic_unit => Atom::AstronomicUnit,
+                Rule::pri_acre_br                | Rule::sec_acre_br                => Atom::AcreBR,
+                Rule::pri_acre_us                | Rule::sec_acre_us                => Atom::AcreUS,
+                Rule::ampere                                                        => Atom::Ampere,
+                Rule::pri_are                    | Rule::sec_are                    => Atom::Are,
+                Rule::pri_astronomic_unit        | Rule::sec_astronomic_unit        => Atom::AstronomicUnit,
                 Rule::pri_unified_atom_mass_unit | Rule::sec_unified_atom_mass_unit => Atom::AtomicMassUnit,
 
-                Rule::pri_bar | Rule::sec_bar => Atom::Bar,
-                Rule::pri_barrel_us | Rule::sec_barrel_us => Atom::BarrelUS,
-                Rule::pri_becquerel | Rule::sec_becquerel => Atom::Becquerel,
-                Rule::pri_biot | Rule::sec_biot => Atom::Biot,
-                Rule::pri_board_foot_i | Rule::sec_board_foot_i => Atom::BoardFootInternational,
+                Rule::pri_bar                | Rule::sec_bar                => Atom::Bar,
+                Rule::pri_barrel_us          | Rule::sec_barrel_us          => Atom::BarrelUS,
+                Rule::pri_becquerel          | Rule::sec_becquerel          => Atom::Becquerel,
+                Rule::pri_biot               | Rule::sec_biot               => Atom::Biot,
+                Rule::pri_board_foot_i       | Rule::sec_board_foot_i       => Atom::BoardFootInternational,
                 Rule::pri_boltzmann_constant | Rule::sec_boltzmann_constant => Atom::BoltzmannConstant,
-                Rule::pri_bushel_br | Rule::sec_bushel_br => Atom::BushelBR,
-                Rule::pri_bushel_us | Rule::sec_bushel_us => Atom::BushelUS,
+                Rule::pri_btu_at_39f         | Rule::sec_btu_at_39f         => Atom::BtuAt39F,
+                Rule::pri_bushel_br          | Rule::sec_bushel_br          => Atom::BushelBR,
+                Rule::pri_bushel_us          | Rule::sec_bushel_us          => Atom::BushelUS,
 
                 Rule::pri_calorie_at_15c | Rule::sec_calorie_at_15c => Atom::CalorieAt15C,
                 Rule::pri_calorie_at_20c | Rule::sec_calorie_at_20c => Atom::CalorieAt20C,
