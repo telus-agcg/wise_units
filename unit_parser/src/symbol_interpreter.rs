@@ -2,9 +2,7 @@ use atom::Atom;
 use error::Error;
 use pest::iterators::Pair;
 use prefix::Prefix;
-use wise_units_symbol_parser::Rule;
-
-pub struct SymbolInterpreter;
+use symbol_parser::Rule;
 
 // Technically there should never be a symbol without an atom.
 #[derive(Debug)]

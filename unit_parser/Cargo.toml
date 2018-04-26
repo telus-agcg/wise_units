@@ -8,7 +8,6 @@ failure = "0.1"
 failure_derive = "0.1"
 pest = "^1.0"
 pest_derive = "^1.0"
-wise_units-symbol_parser = { path = "../symbol_parser" }
 
 [dev-dependencies]
 approx = "0.1"
