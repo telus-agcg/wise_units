@@ -6,7 +6,6 @@ authors = ["Steve Loveless <steve@agrian.com>"]
 [dependencies]
 failure = "0.1"
 failure_derive = "0.1"
-lazy_static = "1.0"
 pest = "^1.0"
 pest_derive = "^1.0"
 wise_units-symbol_parser = { path = "../symbol_parser" }
