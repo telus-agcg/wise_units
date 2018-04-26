@@ -2,7 +2,7 @@ use atom::Atom;
 use error::Error;
 use pest::iterators::{Pair, Pairs};
 use prefix::Prefix;
-use symbol_parser::Rule;
+use wise_units_symbol_parser::Rule;
 
 pub struct SymbolInterpreter;
 

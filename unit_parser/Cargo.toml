@@ -1,5 +1,5 @@
 [package]
-name = "unit_parser"
+name = "wise_units-unit_parser"
 version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
@@ -9,6 +9,7 @@ failure_derive = "0.1"
 lazy_static = "1.0"
 pest = "^1.0"
 pest_derive = "^1.0"
+wise_units-symbol_parser = { path = "../symbol_parser" }
 
 [dev-dependencies]
 approx = "0.1"

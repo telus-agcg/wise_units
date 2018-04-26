@@ -19,7 +19,7 @@ use self::simple_unit::SimpleUnit;
 use term::Term;
 use parser::Rule;
 use symbol_interpreter::SymbolInterpreter;
-use symbol_parser::SymbolParser;
+use wise_units_symbol_parser::SymbolParser;
 
 lazy_static! {
     static ref SYMBOL_INTERPRETER: SymbolInterpreter = SymbolInterpreter;
@@ -95,7 +95,7 @@ impl Interpreter {
         let span = pair.into_span();
         let string = span.as_str();
 
-        match SymbolParser::parse(::symbol_parser::Rule::symbol, string) {
+        match SymbolParser::parse(::wise_units_symbol_parser::Rule::symbol, string) {
             Ok(symbol_pairs) => {
                 let symbol = SYMBOL_INTERPRETER.interpret(symbol_pairs)?;
                 simple_unit.atom = symbol.atom;
