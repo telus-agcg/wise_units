@@ -131,32 +131,34 @@ pri_c = _{
         | pri_gunters_chain_br
         | pri_gunters_chain_us
         | pri_cord_i
+        | pri_calorie_nutrition_label
         | pri_velocity_of_light
 }
 
-pri_degree_celsius    = { "Cel" }
-pri_calorie_at_20c    = { "cal_[20]" }
-pri_calorie_at_15c    = { "cal_[15]" }
-pri_calorie_it        = { "cal_IT" }
-pri_calorie_th        = { "cal_th" }
-pri_calorie_m         = { "cal_m" }
-pri_calorie           = { "cal" }
-pri_curie             = { "Ci" }
-pri_candela           = { "cd" }
-coulomb               = { "C" }
-pri_centi             = { "c" }
-pri_cicero            = { "[cicero]" }
-pri_cubic_foot_i      = { "[cft_i]" }
-pri_cubic_inch_i      = { "[cin_i]" }
-pri_circular_mil_i    = { "[cml_i]" }
-pri_cord_us           = { "[crd_us]" }
-pri_cup_us            = { "[cup_us]" }
-pri_cup_m             = { "[cup_m]" }
-pri_cubic_yard_i      = { "[cyd_i]" }
-pri_gunters_chain_br  = { "[ch_br]" }
-pri_gunters_chain_us  = { "[ch_us]" }
-pri_cord_i            = { "[cr_i]" }
-pri_velocity_of_light = { "[c]" }
+pri_degree_celsius          = { "Cel" }
+pri_calorie_at_20c          = { "cal_[20]" }
+pri_calorie_at_15c          = { "cal_[15]" }
+pri_calorie_it              = { "cal_IT" }
+pri_calorie_th              = { "cal_th" }
+pri_calorie_m               = { "cal_m" }
+pri_calorie                 = { "cal" }
+pri_curie                   = { "Ci" }
+pri_candela                 = { "cd" }
+coulomb                     = { "C" }
+pri_centi                   = { "c" }
+pri_cicero                  = { "[cicero]" }
+pri_cubic_foot_i            = { "[cft_i]" }
+pri_cubic_inch_i            = { "[cin_i]" }
+pri_circular_mil_i          = { "[cml_i]" }
+pri_cord_us                 = { "[crd_us]" }
+pri_cup_us                  = { "[cup_us]" }
+pri_cup_m                   = { "[cup_m]" }
+pri_cubic_yard_i            = { "[cyd_i]" }
+pri_gunters_chain_br        = { "[ch_br]" }
+pri_gunters_chain_us        = { "[ch_us]" }
+pri_cord_i                  = { "[cr_i]" }
+pri_calorie_nutrition_label = { "[Cal]" }
+pri_velocity_of_light       = { "[c]" }
 
 // D
 pri_d = _{
@@ -727,31 +729,33 @@ sec_c = _{
         | sec_gunters_chain_br
         | sec_gunters_chain_us
         | sec_cord_i
+        | sec_calorie_nutrition_label
         | sec_velocity_of_light
 }
 
-sec_calorie_at_20c    = { "CAL_[20]" }
-sec_calorie_at_15c    = { "CAL_[15]" }
-sec_calorie_it        = { "CAL_IT" }
-sec_calorie_th        = { "CAL_TH" }
-sec_calorie_m         = { "CAL_M" }
-sec_calorie           = { "CAL" }
-sec_degree_celsius    = { "CEL" }
-sec_candela           = { "CD" }
-sec_curie             = { "CI" }
-sec_centi             = { "C" }
-sec_cicero            = { "[CICERO]" }
-sec_cubic_foot_i      = { "[CFT_I]" }
-sec_cubic_inch_i      = { "[CIN_I]" }
-sec_circular_mil_i    = { "[CML_I]" }
-sec_cord_us           = { "[CRD_US]" }
-sec_cup_us            = { "[CUP_US]" }
-sec_cup_m             = { "[CUP_M]" }
-sec_cubic_yard_i      = { "[CYD_I]" }
-sec_gunters_chain_br  = { "[CH_BR]" }
-sec_gunters_chain_us  = { "[CH_US]" }
-sec_cord_i            = { "[CR_I]" }
-sec_velocity_of_light = { "[C]" }
+sec_calorie_at_20c          = { "CAL_[20]" }
+sec_calorie_at_15c          = { "CAL_[15]" }
+sec_calorie_it              = { "CAL_IT" }
+sec_calorie_th              = { "CAL_TH" }
+sec_calorie_m               = { "CAL_M" }
+sec_calorie                 = { "CAL" }
+sec_degree_celsius          = { "CEL" }
+sec_candela                 = { "CD" }
+sec_curie                   = { "CI" }
+sec_centi                   = { "C" }
+sec_cicero                  = { "[CICERO]" }
+sec_cubic_foot_i            = { "[CFT_I]" }
+sec_cubic_inch_i            = { "[CIN_I]" }
+sec_circular_mil_i          = { "[CML_I]" }
+sec_cord_us                 = { "[CRD_US]" }
+sec_cup_us                  = { "[CUP_US]" }
+sec_cup_m                   = { "[CUP_M]" }
+sec_cubic_yard_i            = { "[CYD_I]" }
+sec_gunters_chain_br        = { "[CH_BR]" }
+sec_gunters_chain_us        = { "[CH_US]" }
+sec_cord_i                  = { "[CR_I]" }
+sec_calorie_nutrition_label = { "[CAL]" }
+sec_velocity_of_light       = { "[C]" }
 
 // D
 sec_d = _{
