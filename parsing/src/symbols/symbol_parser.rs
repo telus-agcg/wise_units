@@ -1,5 +1,5 @@
 #[derive(Parser)]
-#[grammar = "symbol.pest"]
+#[grammar = "symbols/symbol.pest"]
 pub struct SymbolParser;
 
 #[cfg(test)]
