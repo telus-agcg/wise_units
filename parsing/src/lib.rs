@@ -8,7 +8,7 @@ extern crate failure_derive;
 
 // Only include macros for testing
 #[cfg(test)]
-#[macro_use(parses_to, consumes_to)]
+#[macro_use(consumes_to, fails_with, parses_to)]
 extern crate pest;
 
 #[cfg(not(test))]
