@@ -2018,6 +2018,7 @@ mod tests {
             )+
         };
     }
+
     macro_rules! ignore_validate_scalars {
         ($($test_name: ident, $variant: ident, $value: expr);+ $(;)*) => {
             $(
