@@ -91,7 +91,7 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
     let span = pair.into_span();
     let string = span.as_str();
 
-    if string.is_empty() {
+    if string == "1" {
         return Ok(simple_unit);
     }
 

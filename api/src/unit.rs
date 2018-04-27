@@ -7,7 +7,7 @@ use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
-use wise_units_parsing::{Atom, Error, Term, UcumSymbol};
+use wise_units_parsing::{Error, Term, UcumSymbol};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
@@ -35,9 +35,7 @@ impl Unit {
     /// 
     pub fn is_unity(&self) -> bool {
         self.terms.len() == 1
-            && self.terms[0]
-                .atom
-                .map_or(false, |atom| atom == Atom::TheUnity)
+            && self.terms[0].is_unity()
     }
 
     /// Use this when calculating the scalar when *not* part of a Measurable.

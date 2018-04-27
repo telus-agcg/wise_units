@@ -41,7 +41,6 @@ pri_atom = {
     // Non-alpha
     ten_for_arbitrary_powers_star
         | ten_for_arbitrary_powers_caret
-        | the_unity
         | percent
         | minute_angle
         | second_angle
