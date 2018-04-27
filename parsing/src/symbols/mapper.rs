@@ -30,13 +30,13 @@ fn visit_symbol(pair: Pair<Rule>) -> Result<Symbol, Error> {
         match inner_pair.as_rule() {
             Rule::pri_prefix | Rule::sec_prefix => {
                 let next = inner_pair.into_inner().next().expect("Unable to get next prefix");
-                let prefix = visit_prefix(next)?;
+                let prefix = visit_prefix(&next)?;
 
                 symbol.prefix = Some(prefix);
             }
             Rule::pri_atom | Rule::sec_atom => {
                 let next = inner_pair.into_inner().next().expect("Unable to get next atom");
-                let atom = visit_atom(next)?;
+                let atom = visit_atom(&next)?;
 
                 symbol.atom = Some(atom);
             }
@@ -50,7 +50,7 @@ fn visit_symbol(pair: Pair<Rule>) -> Result<Symbol, Error> {
     Ok(symbol)
 }
 
-fn visit_atom(pair: Pair<Rule>) -> Result<Atom, Error> {
+fn visit_atom(pair: &Pair<Rule>) -> Result<Atom, Error> {
     let atom = match pair.as_rule() {
         // Base units first.
         Rule::coulomb                         => Atom::Coulomb,
@@ -298,7 +298,7 @@ fn visit_atom(pair: Pair<Rule>) -> Result<Atom, Error> {
     Ok(atom)
 }
 
-fn visit_prefix(pair: Pair<Rule>) -> Result<Prefix, Error> {
+fn visit_prefix(pair: &Pair<Rule>) -> Result<Prefix, Error> {
     let prefix = match pair.as_rule() {
         Rule::pri_atto  | Rule::sec_atto  => Prefix::Atto,
         Rule::pri_centi | Rule::sec_centi => Prefix::Centi,
