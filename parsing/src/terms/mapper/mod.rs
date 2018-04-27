@@ -22,30 +22,26 @@ use symbols::mapper;
 use term::Term;
 use terms::term_parser::Rule;
 
-pub fn map(pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
-    let terms = visit_pairs(pairs)?;
-
-    Ok(terms)
-}
-
-fn visit_pairs(pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
-    let mut main_term = MainTerm::new();
-
-    for pair in pairs {
-        match pair.as_rule() {
-            Rule::main_term => {
-                let child_main_term = visit_main_term(pair)?;
-
-                main_term = child_main_term;
-            }
+pub fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
+    fn visit_pairs(pair: Pair<Rule>) -> Result<Vec<Term>, Error> {
+        let main_term = match pair.as_rule() {
+            Rule::main_term => visit_main_term(pair)?,
             _ => {
                 println!("visit_with_pairs: unreachable rule: {:?}", pair);
                 unreachable!()
             }
         };
+
+        Ok(main_term.into())
     }
 
-    Ok(main_term.into())
+    match pairs.next() {
+        Some(pair) => {
+            let terms = visit_pairs(pair)?;
+            Ok(terms)
+        }
+        None => Ok(vec![])
+    }
 }
 
 fn visit_digits(pair: Pair<Rule>) -> Result<i32, Error> {
