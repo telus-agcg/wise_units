@@ -124,7 +124,6 @@ impl Measurement {
     /// 
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
         let other_terms = ::wise_units_parsing::parse(expression)?;
-        println!("convert_to: {:#?}", &other_terms);
         let other_unit = Unit { terms: other_terms };
 
         if self.unit == other_unit {

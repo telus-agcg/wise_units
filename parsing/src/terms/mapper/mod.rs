@@ -27,8 +27,8 @@ pub fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
         let main_term = match pair.as_rule() {
             Rule::main_term => visit_main_term(pair)?,
             _ => {
-                println!("visit_with_pairs: unreachable rule: {:?}", pair);
-                unreachable!()
+                let e = Error::ParsingError { expression: pair.as_str().to_string() };
+                return Err(e)
             }
         };
 
@@ -67,13 +67,19 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
                     "-" => {
                         e = -e;
                     }
-                    _ => unreachable!(),
+                    _ => {
+                        let error = Error::ParsingError { expression: string.to_string() };
+                        return Err(error)
+                    }
                 }
             }
             Rule::digits => {
                 e *= visit_digits(inner_pair)?;
             }
-            _ => unreachable!(),
+            _ => {
+                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
+                return Err(error)
+            }
         }
     }
 
@@ -121,7 +127,10 @@ fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
             Rule::exponent => {
                 annotatable.exponent = visit_exponent(inner_pair)?;
             }
-            _ => unreachable!(),
+            _ => {
+                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
+                return Err(error)
+            }
         }
     }
 
@@ -168,7 +177,10 @@ fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
 
                 bc.terms.append(&mut ast_term.into());
             }
-            _ => unreachable!(),
+            _ => {
+                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
+                return Err(error)
+            }
         }
     }
 
@@ -188,7 +200,10 @@ fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
 
                 component.terms.append(&mut bc.into());
             }
-            _ => unreachable!(),
+            _ => {
+                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
+                return Err(error)
+            }
         }
     }
 
@@ -223,8 +238,8 @@ fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
                 ast_term.component = Some(component);
             }
             _ => {
-                println!("visit_term: unreachable rule: {:?}", inner_pair);
-                unreachable!()
+                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
+                return Err(error)
             }
         }
     }
@@ -254,7 +269,10 @@ fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
 
                 main_term.terms.append(&mut new_terms);
             }
-            _ => unreachable!(),
+            _ => {
+                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
+                return Err(error)
+            }
         }
     }
 

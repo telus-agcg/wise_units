@@ -10,8 +10,8 @@ pub fn map(pair: Pair<Rule>) -> Result<Symbol, Error> {
         let symbol = match pair.as_rule() {
             Rule::symbol => visit_symbol(pair)?,
             _ => {
-                println!("visit_with_pairs: unreachable rule: {:#?}", pair);
-                unreachable!()
+                let error = Error::ParsingError { expression: pair.as_str().to_string() };
+                return Err(error)
             }
         };
 
@@ -47,8 +47,9 @@ fn visit_symbol(pair: Pair<Rule>) -> Result<Symbol, Error> {
                 symbol.atom = Some(atom);
             }
             _ => {
-                println!("visit_symbol: unreachable rule: {:#?}", inner_pair);
-                unreachable!()
+                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
+
+                return Err(error)
             }
         }
     }
