@@ -1,4 +1,3 @@
-use atom::Atom;
 use classification::Classification;
 use definition::Definition;
 use property::Property;
@@ -47,7 +46,7 @@ impl UcumSymbol for Prefix {
     }
 
     fn definition(&self) -> Definition {
-        let term = Term::new(Some(Atom::TheUnity), None);
+        let term = Term::new(None, None);
         let terms = vec![term];
 
         let value = match *self {

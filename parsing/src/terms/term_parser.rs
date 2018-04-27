@@ -368,5 +368,25 @@ mod tests {
                 ])
             ]
         };
+
+        parses_to! {
+            parser: TermParser,
+            input: "/1",
+            rule: Rule::main_term,
+            tokens: [
+                main_term(0, 2, [
+                    slash(0, 1),
+                    term(1, 2, [
+                        component(1, 2, [
+                            basic_component(1, 2, [
+                                annotatable(1, 2, [
+                                    simple_unit(1, 2)
+                               ])
+                            ])
+                        ])
+                    ])
+                ])
+            ]
+        }
     }
 }

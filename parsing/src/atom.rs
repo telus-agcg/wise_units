@@ -11,8 +11,6 @@ use ucum_symbol::UcumSymbol;
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Atom {
-    TheUnity,
-
     Candela,
     Coulomb,
     Gram,
@@ -272,8 +270,7 @@ impl UcumSymbol for Atom {
                 Classification::Apoth
             }
 
-            Atom::TheUnity
-            | Atom::Candela
+            Atom::Candela
             | Atom::Coulomb
             | Atom::DegreeCelsius
             | Atom::Gram
@@ -489,8 +486,7 @@ impl UcumSymbol for Atom {
 
     fn definition(&self) -> Definition {
         let result = match *self {
-            Atom::TheUnity
-            | Atom::Candela
+            Atom::Candela
             | Atom::Coulomb
             | Atom::Gram
             | Atom::Kelvin
@@ -499,7 +495,7 @@ impl UcumSymbol for Atom {
             | Atom::Radian
             | Atom::Second => {
                 // Manually build the Definition here for speed.
-                let term = Term::new(Some(Atom::TheUnity), None);
+                let term = Term::new(None, None);
 
                 Ok(Definition {
                     value: 1.0,
@@ -743,80 +739,79 @@ impl UcumSymbol for Atom {
 
     fn is_metric(&self) -> bool {
         match *self {
-            Atom::TheUnity
-            | Atom::Candela
-            | Atom::Coulomb
-            | Atom::DegreeCelsius
-            | Atom::Gram
-            | Atom::Kelvin
-            | Atom::Meter
-            | Atom::Radian
-            | Atom::Second
-            | Atom::Ampere
-            | Atom::Are
-            | Atom::AtomicMassUnit
-            | Atom::Bar
-            | Atom::Becquerel
-            | Atom::Biot
-            | Atom::BoltzmannConstant
-            | Atom::CalorieAt20C
-            | Atom::CalorieAt15C
-            | Atom::CalorieIT
-            | Atom::CalorieTH
-            | Atom::CalorieM
-            | Atom::Calorie
-            | Atom::Curie
-            | Atom::Dyne
-            | Atom::ElectronMass
-            | Atom::Electronvolt
-            | Atom::ElementaryCharge
-            | Atom::Equivalents
-            | Atom::Erg
-            | Atom::Farad
-            | Atom::Gal
-            | Atom::Gauss
-            | Atom::Gilbert
-            | Atom::GramForce
-            | Atom::GramPercent
-            | Atom::Gray
-            | Atom::Henry
-            | Atom::Hertz
-            | Atom::Joule
-            | Atom::Kayser
-            | Atom::Lambert
-            | Atom::LightYear
-            | Atom::Liter
-            | Atom::Lumen
-            | Atom::Lux
-            | Atom::Maxwell
-            | Atom::Mole
-            | Atom::Newton
-            | Atom::NewtonianConstantOfGravitation
-            | Atom::Ohm
-            | Atom::Oersted
-            | Atom::Parsec
-            | Atom::Pascal
-            | Atom::PermeabilityOfVacuum
-            | Atom::PermittivityOfVacuum
-            | Atom::Phot
-            | Atom::PlanckConstant
-            | Atom::Poise
-            | Atom::ProtonMass
-            | Atom::RadiationAbsorbedDose
-            | Atom::RadiationEquivalentMan
-            | Atom::Roentgen
-            | Atom::StandardAccelerationOfFreeFall
-            | Atom::Steradian
-            | Atom::Stokes
-            | Atom::Stilb
-            | Atom::Siemens
-            | Atom::Sievert
-            | Atom::Tesla
-            | Atom::Tonne
-            | Atom::VelocityOfLight
-            | Atom::Volt
-            | Atom::Watt
-            | Atom::Weber => true,
+            Atom::Candela
+                | Atom::Coulomb
+                | Atom::DegreeCelsius
+                | Atom::Gram
+                | Atom::Kelvin
+                | Atom::Meter
+                | Atom::Radian
+                | Atom::Second
+                | Atom::Ampere
+                | Atom::Are
+                | Atom::AtomicMassUnit
+                | Atom::Bar
+                | Atom::Becquerel
+                | Atom::Biot
+                | Atom::BoltzmannConstant
+                | Atom::CalorieAt20C
+                | Atom::CalorieAt15C
+                | Atom::CalorieIT
+                | Atom::CalorieTH
+                | Atom::CalorieM
+                | Atom::Calorie
+                | Atom::Curie
+                | Atom::Dyne
+                | Atom::ElectronMass
+                | Atom::Electronvolt
+                | Atom::ElementaryCharge
+                | Atom::Equivalents
+                | Atom::Erg
+                | Atom::Farad
+                | Atom::Gal
+                | Atom::Gauss
+                | Atom::Gilbert
+                | Atom::GramForce
+                | Atom::GramPercent
+                | Atom::Gray
+                | Atom::Henry
+                | Atom::Hertz
+                | Atom::Joule
+                | Atom::Kayser
+                | Atom::Lambert
+                | Atom::LightYear
+                | Atom::Liter
+                | Atom::Lumen
+                | Atom::Lux
+                | Atom::Maxwell
+                | Atom::Mole
+                | Atom::Newton
+                | Atom::NewtonianConstantOfGravitation
+                | Atom::Ohm
+                | Atom::Oersted
+                | Atom::Parsec
+                | Atom::Pascal
+                | Atom::PermeabilityOfVacuum
+                | Atom::PermittivityOfVacuum
+                | Atom::Phot
+                | Atom::PlanckConstant
+                | Atom::Poise
+                | Atom::ProtonMass
+                | Atom::RadiationAbsorbedDose
+                | Atom::RadiationEquivalentMan
+                | Atom::Roentgen
+                | Atom::StandardAccelerationOfFreeFall
+                | Atom::Steradian
+                | Atom::Stokes
+                | Atom::Stilb
+                | Atom::Siemens
+                | Atom::Sievert
+                | Atom::Tesla
+                | Atom::Tonne
+                | Atom::VelocityOfLight
+                | Atom::Volt
+                | Atom::Watt
+                | Atom::Weber => true,
             _ => false,
         }
     }
@@ -834,7 +829,6 @@ impl UcumSymbol for Atom {
 
     fn names(&self) -> Vec<&'static str> {
         match *self {
-            Atom::TheUnity => vec!["the unity"],
             Atom::Candela => vec!["candela"],
             Atom::Coulomb => vec!["Coulomb"],
             Atom::Gram => vec!["gram"],
@@ -1048,7 +1042,6 @@ impl UcumSymbol for Atom {
 
     fn primary_code(&self) -> &'static str {
         match *self {
-            Atom::TheUnity => "1",
             Atom::Candela => "cd",
             Atom::Coulomb => "C",
             Atom::Gram => "g",
@@ -1600,7 +1593,7 @@ impl UcumSymbol for Atom {
             | Atom::TropicalYear
             | Atom::Week
             | Atom::Year => Property::Time,
-            Atom::TheUnity | Atom::BoltzmannConstant | Atom::NewtonianConstantOfGravitation => {
+            Atom::BoltzmannConstant | Atom::NewtonianConstantOfGravitation => {
                 Property::Unclassified
             }
             Atom::KnotBR | Atom::KnotInternational | Atom::VelocityOfLight => Property::Velocity,
@@ -1630,7 +1623,6 @@ impl UcumSymbol for Atom {
 
     fn secondary_code(&self) -> &'static str {
         match *self {
-            Atom::TheUnity => "1",
             Atom::Candela => "CD",
             Atom::Coulomb => "C",
             Atom::Gram => "G",
@@ -1871,22 +1863,15 @@ impl UcumSymbol for Atom {
     }
 
     fn scalar(&self) -> f64 {
-        match *self {
-            Atom::TheUnity => 1.0,
-            _ => self.calculate_scalar(1.0),
-        }
+        self.calculate_scalar(1.0)
     }
 
     fn magnitude(&self) -> f64 {
-        match *self {
-            Atom::TheUnity => 1.0,
-            _ => self.calculate_magnitude(self.scalar()),
-        }
+        self.calculate_magnitude(self.scalar())
     }
 
     fn calculate_scalar(&self, value: f64) -> f64 {
         match *self {
-            Atom::TheUnity => 1.0,
             Atom::DegreeCelsius => value + 273.15,
             Atom::DegreeFahrenheit => 5.0 / 9.0 * (value + 459.67),
             Atom::DegreeReaumur => (value / 0.8) + 273.15,
@@ -2075,7 +2060,7 @@ mod tests {
             Atom::Radian,
             Atom::Second,
         ];
-        let terms = vec![Term::new(Some(Atom::TheUnity), None)];
+        let terms = vec![Term::new(None, None)];
 
         for base_atom in base_atoms {
             assert_eq!(base_atom.definition().value, 1.0);
@@ -2121,7 +2106,7 @@ mod tests {
     #[ignore(reason = "Special Units")]
     fn validate_definition_degree_celsius() {
         let atom = Atom::DegreeCelsius;
-        let term = Term::new(Some(Atom::TheUnity), None);
+        let term = Term::new(None, None);
 
         assert_eq!(atom.definition().value, 1.0);
         assert_eq!(atom.definition().terms, vec![term]);
@@ -2131,7 +2116,7 @@ mod tests {
     #[ignore(reason = "Special Units")]
     fn validate_definition_degree_fahrenheit() {
         let atom = Atom::DegreeFahrenheit;
-        let term = Term::new(Some(Atom::TheUnity), None);
+        let term = Term::new(None, None);
 
         assert_eq!(atom.definition().value, 1.0);
         assert_eq!(atom.definition().terms, vec![term]);
@@ -2141,7 +2126,7 @@ mod tests {
     #[ignore(reason = "Special Units")]
     fn validate_definition_degree_reaumur() {
         let atom = Atom::DegreeReaumur;
-        let term = Term::new(Some(Atom::TheUnity), None);
+        let term = Term::new(None, None);
 
         assert_eq!(atom.definition().value, 1.0);
         assert_eq!(atom.definition().terms, vec![term]);
@@ -2367,7 +2352,6 @@ mod tests {
     }
 
     validate_scalars!(
-        validate_scalar_the_unity, TheUnity, 1.0;
         validate_scalar_candela, Candela, 1.0;
         validate_scalar_coulomb, Coulomb, 1.0;
         validate_scalar_gram, Gram, 1.0;
@@ -2603,7 +2587,6 @@ mod tests {
     #[test]
     fn validate_magnitude_base_atoms() {
         let base_atoms = vec![
-            Atom::TheUnity,
             Atom::Candela,
             Atom::Coulomb,
             Atom::Gram,

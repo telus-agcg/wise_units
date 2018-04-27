@@ -20,9 +20,9 @@ impl Composable for Prefix {
 }
 
 impl Composable for Atom {
+    // TODO: Now that TheUnity is gone, does this need to return an Option?
     fn composition(&self) -> Option<Composition> {
         match *self {
-            Atom::TheUnity => None,
             Atom::Candela => Some(Composition::new(Dimension::LuminousIntensity, 1)),
             Atom::Coulomb => Some(Composition::new(Dimension::ElectricCharge, 1)),
             Atom::Gram => Some(Composition::new(Dimension::Mass, 1)),

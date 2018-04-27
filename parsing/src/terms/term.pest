@@ -29,7 +29,7 @@ annotatable = { simple_unit ~ exponent | simple_unit }
 simple_unit = {
     "10^"
         | "10*"
-        | &the_unity
+        | the_unity
         | symbol_char+
 }
 
@@ -48,7 +48,8 @@ symbol_char = _{
 }
 
 exponent = { sign? ~ digits }
-factor = { '0'..'9'+ ~ !("*" | "^")  }
+factor = { '0'..'9'+ ~ !not_factor  }
+not_factor = _{ "*" | "^" }
 digits = { '0'..'9'+ }
 sign = { "-" | "+" }
 

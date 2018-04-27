@@ -308,7 +308,6 @@ fn visit_atom(pair: &Pair<Rule>) -> Result<Atom, Error> {
         Rule::pri_pi | Rule::sec_pi => Atom::TheNumberPi,
         Rule::ten_for_arbitrary_powers_caret => Atom::TheNumberTenForArbitraryPowersCaret,
         Rule::ten_for_arbitrary_powers_star => Atom::TheNumberTenForArbitraryPowersStar,
-        Rule::the_unity => Atom::TheUnity,
         Rule::pri_tonne | Rule::sec_tonne => Atom::Tonne,
         Rule::pri_township | Rule::sec_township => Atom::Township,
         Rule::pri_tropical_year | Rule::sec_tropical_year => Atom::TropicalYear,

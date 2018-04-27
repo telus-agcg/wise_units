@@ -1,4 +1,3 @@
-use atom::Atom;
 use error::Error;
 use term::Term;
 use ucum_symbol::UcumSymbol;
@@ -66,9 +65,6 @@ impl Definition {
     }
 
     pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1
-            && self.terms[0]
-                .atom
-                .map_or(false, |atom| atom == Atom::TheUnity)
+        self.terms.len() == 1 && self.terms[0].is_unity()
     }
 }

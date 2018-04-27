@@ -29,6 +29,13 @@ impl Term {
         }
     }
 
+    pub fn is_unity(&self) -> bool {
+        self.factor == 1
+            && self.exponent == 1
+            && self.atom.is_none()
+            && self.prefix.is_none()
+    }
+
     pub fn scalar(&self) -> f64 {
         self.calculate_scalar(1.0)
     }
