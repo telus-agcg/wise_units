@@ -28,13 +28,13 @@ fn visit_symbol(pair: Pair<Rule>) -> Result<Symbol, Error> {
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
-            Rule::pri_prefix => {
+            Rule::pri_prefix | Rule::sec_prefix => {
                 let next = inner_pair.into_inner().next().expect("Unable to get next prefix");
                 let prefix = visit_prefix(next)?;
 
                 symbol.prefix = Some(prefix);
             }
-            Rule::pri_atom => {
+            Rule::pri_atom | Rule::sec_atom => {
                 let next = inner_pair.into_inner().next().expect("Unable to get next atom");
                 let atom = visit_atom(next)?;
 
