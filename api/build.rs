@@ -8,10 +8,9 @@ use std::io::Read;
 use std::io::Write;
 use std::path::Path;
 
-
 #[derive(Debug, Deserialize)]
 struct AtomList {
-    atoms: Vec<Atom>
+    atoms: Vec<Atom>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -30,8 +29,7 @@ struct Definition {
 fn main() {
     let contents = read_atoms_toml();
 
-    let atoms: AtomList = toml::from_str(&contents)
-        .expect("unable to deserialize Atoms.toml");
+    let atoms: AtomList = toml::from_str(&contents).expect("unable to deserialize Atoms.toml");
 
     write_atoms_rs(atoms);
 }
@@ -40,12 +38,12 @@ fn read_atoms_toml() -> String {
     let src_dir = env::current_dir().unwrap();
     let src_path = Path::new(&src_dir).join("Atoms.toml");
 
-    let mut atoms_file = File::open(src_path)
-        .expect("file not found");
+    let mut atoms_file = File::open(src_path).expect("file not found");
 
     let mut contents = String::new();
 
-    atoms_file.read_to_string(&mut contents)
+    atoms_file
+        .read_to_string(&mut contents)
         .expect("something went wrong reading the file");
 
     contents

@@ -118,22 +118,6 @@ impl Unit {
 
 impl Composable for Unit {
     fn composition(&self) -> Option<Composition> {
-        // let mut composition = Composition::default();
-
-        // for term in &self.terms {
-        //     match term.composition() {
-        //         Some(term_composition) => for (term_dimension, term_exponent) in term_composition {
-        //             composition.insert(term_dimension, term_exponent);
-        //         },
-        //         None => continue,
-        //     }
-        // }
-
-        // if composition.is_empty() {
-        //     None
-        // } else {
-        //     Some(composition)
-        // }
         self.terms.composition()
     }
 }

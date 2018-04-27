@@ -126,8 +126,16 @@ mod tests {
     validate_expression!(validate_expression_sec_km, "KM", "km");
     validate_expression!(validate_expression_pri_km_slash_pri_10m, "km/10m", "km/10m");
     validate_expression!(validate_expression_pri_km_slash_pri_s2, "km/s2", "km/s2");
-    validate_expression!(validate_expression_pri_km_slash_pri_60s2, "km/60s2", "km/60s2");
-    validate_expression!(validate_expression_sec_100km_slash_pri_60s, "100KM/60s2", "100km/60s2");
+    validate_expression!(
+        validate_expression_pri_km_slash_pri_60s2,
+        "km/60s2",
+        "km/60s2"
+    );
+    validate_expression!(
+        validate_expression_sec_100km_slash_pri_60s,
+        "100KM/60s2",
+        "100km/60s2"
+    );
     validate_expression!(
         validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us,
         "[acr_us].[IN_I]/[acr_us]",

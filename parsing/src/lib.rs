@@ -42,9 +42,7 @@ use terms::term_parser::Rule;
 
 pub fn parse(expression: &str) -> Result<Vec<Term>, Error> {
     match TermParser::parse(Rule::main_term, expression) {
-        Ok(pairs) => {
-            Ok(terms::mapper::map(pairs)?)
-        }
+        Ok(pairs) => Ok(terms::mapper::map(pairs)?),
         Err(_) => Err(Error::UnknownUnitString(expression.to_string())),
     }
 }

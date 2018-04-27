@@ -2,7 +2,7 @@
 // The atom needs to be added to:
 //      * `enum Atom` - The type that Term holds.
 //      * AtomMap - The thing used for lookup in Interpreter.
-//
+// 
 
 macro_rules! build_atoms {
     (

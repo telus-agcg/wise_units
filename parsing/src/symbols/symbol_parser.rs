@@ -141,9 +141,9 @@ mod tests {
         }
     }
 
-    // The Atom "cal" is the primary symbol for "Calorie", but the "ca" in "cal" can also
-    // match "c" => "centi" and "a" => "year", depending on the grammar. This test makes sure "cal"
-    // actually matches the "calorie" Atom.
+    // The Atom "cal" is the primary symbol for "Calorie", but the "ca" in "cal"
+    // can also match "c" => "centi" and "a" => "year", depending on the
+    // grammar. This test makes sure "cal" actually matches the "calorie" Atom.
     #[test]
     fn valid_atom_with_possible_matching_prefix_and_atom() {
         parses_to! {

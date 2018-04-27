@@ -22,7 +22,6 @@ use symbols::mapper;
 use term::Term;
 use terms::term_parser::Rule;
 
-
 pub fn map(pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
     let terms = visit_pairs(pairs)?;
 
@@ -99,11 +98,13 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
             let symbol = mapper::map(symbol_pairs.next().unwrap())?;
             simple_unit.atom = symbol.atom;
             simple_unit.prefix = symbol.prefix;
-        },
+        }
         Err(e) => {
             // Try 3rd party lookup
             println!("MEOW: {:#?}", &e);
-            return Err(Error::ParsingError { expression: string.to_string() })
+            return Err(Error::ParsingError {
+                expression: string.to_string(),
+            });
         }
     };
 
