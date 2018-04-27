@@ -113,10 +113,7 @@ impl Measurement {
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
         let unit = Unit::from_str(expression)?;
 
-        let m = Measurement {
-            value,
-            unit,
-        };
+        let m = Measurement { value, unit };
 
         Ok(m)
     }

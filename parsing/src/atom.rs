@@ -259,483 +259,476 @@ pub enum Atom {
 impl UcumSymbol for Atom {
     fn classification(&self) -> Classification {
         match *self {
-            Atom::PartsPerBillion                         |
-                Atom::PartsPerMillion                     |
-                Atom::PartsPerThousand                    |
-                Atom::PartsPerTrillion                    |
-                Atom::Percent                             |
-                Atom::TheNumberPi                         |
-                Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar    => Classification::Dimless,
+            Atom::PartsPerBillion
+            | Atom::PartsPerMillion
+            | Atom::PartsPerThousand
+            | Atom::PartsPerTrillion
+            | Atom::Percent
+            | Atom::TheNumberPi
+            | Atom::TheNumberTenForArbitraryPowersCaret
+            | Atom::TheNumberTenForArbitraryPowersStar => Classification::Dimless,
 
-            Atom::DramAP      |
-                Atom::PoundAP |
-                Atom::OunceAP |
-                Atom::OunceM  |
-                Atom::ScrupleAP => Classification::Apoth,
+            Atom::DramAP | Atom::PoundAP | Atom::OunceAP | Atom::OunceM | Atom::ScrupleAP => {
+                Classification::Apoth
+            }
 
-            Atom::TheUnity          |
-                Atom::Candela       |
-                Atom::Coulomb       |
-                Atom::DegreeCelsius |
-                Atom::Gram          |
+            Atom::TheUnity
+            | Atom::Candela
+            | Atom::Coulomb
+            | Atom::DegreeCelsius
+            | Atom::Gram
+            | Atom::Ampere
+            | Atom::Becquerel
+            | Atom::Farad
+            | Atom::Gray
+            | Atom::Henry
+            | Atom::Hertz
+            | Atom::Joule
+            | Atom::Kelvin
+            | Atom::Lumen
+            | Atom::Lux
+            | Atom::Meter
+            | Atom::Mole
+            | Atom::Newton
+            | Atom::Ohm
+            | Atom::Pascal
+            | Atom::Radian
+            | Atom::Second
+            | Atom::Siemens
+            | Atom::Sievert
+            | Atom::Steradian
+            | Atom::Tesla
+            | Atom::Volt
+            | Atom::Watt
+            | Atom::Weber => Classification::SI,
 
-                Atom::Ampere        |
-                Atom::Becquerel     |
-                Atom::Farad         |
-                Atom::Gray          |
-                Atom::Henry         |
-                Atom::Hertz         |
-                Atom::Joule         |
-                Atom::Kelvin        |
-                Atom::Lumen         |
-                Atom::Lux           |
-                Atom::Meter         |
-                Atom::Mole          |
-                Atom::Newton        |
-                Atom::Ohm           |
-                Atom::Pascal        |
-                Atom::Radian        |
-                Atom::Second        |
-                Atom::Siemens       |
-                Atom::Sievert       |
-                Atom::Steradian     |
-                Atom::Tesla         |
-                Atom::Volt          |
-                Atom::Watt          |
-                Atom::Weber                                 => Classification::SI,
+            Atom::Are
+            | Atom::AstronomicUnit
+            | Atom::AtomicMassUnit
+            | Atom::Bar
+            | Atom::Day
+            | Atom::Degree
+            | Atom::DegreeMinute
+            | Atom::DegreeSecond
+            | Atom::ElectronMass
+            | Atom::Electronvolt
+            | Atom::Gon
+            | Atom::Hour
+            | Atom::Liter
+            | Atom::MeanGregorianMonth
+            | Atom::MeanGregorianYear
+            | Atom::MeanJulianMonth
+            | Atom::MeanJulianYear
+            | Atom::Minute
+            | Atom::Month
+            | Atom::Parsec
+            | Atom::SynodalMonth
+            | Atom::Tonne
+            | Atom::TropicalYear
+            | Atom::Week
+            | Atom::Year => Classification::ISO1000,
 
-            Atom::Are                    |
-                Atom::AstronomicUnit     |
-                Atom::AtomicMassUnit     |
-                Atom::Bar                |
-                Atom::Day                |
-                Atom::Degree             |
-                Atom::DegreeMinute       |
-                Atom::DegreeSecond       |
-                Atom::ElectronMass       |
-                Atom::Electronvolt       |
-                Atom::Gon                |
-                Atom::Hour               |
-                Atom::Liter              |
-                Atom::MeanGregorianMonth |
-                Atom::MeanGregorianYear  |
-                Atom::MeanJulianMonth    |
-                Atom::MeanJulianYear     |
-                Atom::Minute             |
-                Atom::Month              |
-                Atom::Parsec             |
-                Atom::SynodalMonth       |
-                Atom::Tonne              |
-                Atom::TropicalYear       |
-                Atom::Week               |
-                Atom::Year                                  => Classification::ISO1000,
+            Atom::BoltzmannConstant
+            | Atom::ElementaryCharge
+            | Atom::GramForce
+            | Atom::LightYear
+            | Atom::NewtonianConstantOfGravitation
+            | Atom::PermeabilityOfVacuum
+            | Atom::PermittivityOfVacuum
+            | Atom::PlanckConstant
+            | Atom::PoundForce
+            | Atom::ProtonMass
+            | Atom::StandardAccelerationOfFreeFall
+            | Atom::StandardAtmosphere
+            | Atom::VelocityOfLight => Classification::Const,
 
-            Atom::BoltzmannConstant                  |
-                Atom::ElementaryCharge               |
-                Atom::GramForce                      |
-                Atom::LightYear                      |
-                Atom::NewtonianConstantOfGravitation |
-                Atom::PermeabilityOfVacuum           |
-                Atom::PermittivityOfVacuum           |
-                Atom::PlanckConstant                 |
-                Atom::PoundForce                     |
-                Atom::ProtonMass                     |
-                Atom::StandardAccelerationOfFreeFall |
-                Atom::StandardAtmosphere             |
-                Atom::VelocityOfLight                       => Classification::Const,
+            Atom::Biot
+            | Atom::Curie
+            | Atom::Dyne
+            | Atom::Erg
+            | Atom::Gal
+            | Atom::Gauss
+            | Atom::Gilbert
+            | Atom::Kayser
+            | Atom::Lambert
+            | Atom::Maxwell
+            | Atom::Oersted
+            | Atom::Phot
+            | Atom::Poise
+            | Atom::RadiationAbsorbedDose
+            | Atom::RadiationEquivalentMan
+            | Atom::Roentgen
+            | Atom::Stilb
+            | Atom::Stokes => Classification::CGS,
 
-            Atom::Biot                       |
-                Atom::Curie                  |
-                Atom::Dyne                   |
-                Atom::Erg                    |
-                Atom::Gal                    |
-                Atom::Gauss                  |
-                Atom::Gilbert                |
-                Atom::Kayser                 |
-                Atom::Lambert                |
-                Atom::Maxwell                |
-                Atom::Oersted                |
-                Atom::Phot                   |
-                Atom::Poise                  |
-                Atom::RadiationAbsorbedDose  |
-                Atom::RadiationEquivalentMan |
-                Atom::Roentgen               |
-                Atom::Stilb                  |
-                Atom::Stokes                                => Classification::CGS,
+            Atom::BoardFootInternational
+            | Atom::CircularMilInternational
+            | Atom::CordInternational
+            | Atom::CubicFootInternational
+            | Atom::CubicInchInternational
+            | Atom::CubicYardInternational
+            | Atom::HandInternational
+            | Atom::InchInternational
+            | Atom::FathomInternational
+            | Atom::FootInternational
+            | Atom::KnotInternational
+            | Atom::MilInternational
+            | Atom::MileInternational
+            | Atom::NauticalMileInternational
+            | Atom::SquareFootInternational
+            | Atom::SquareInchInternational
+            | Atom::SquareYardInternational
+            | Atom::YardInternational => Classification::Intcust,
 
-            Atom::BoardFootInternational        |
-                Atom::CircularMilInternational  |
-                Atom::CordInternational         |
-                Atom::CubicFootInternational    |
-                Atom::CubicInchInternational    |
-                Atom::CubicYardInternational    |
-                Atom::HandInternational         |
-                Atom::InchInternational         |
-                Atom::FathomInternational       |
-                Atom::FootInternational         |
-                Atom::KnotInternational         |
-                Atom::MilInternational          |
-                Atom::MileInternational         |
-                Atom::NauticalMileInternational |
-                Atom::SquareFootInternational   |
-                Atom::SquareInchInternational   |
-                Atom::SquareYardInternational   |
-                Atom::YardInternational                     => Classification::Intcust,
+            Atom::AcreUS
+            | Atom::FathomUS
+            | Atom::FootUS
+            | Atom::FurlongUS
+            | Atom::GuntersChainUS
+            | Atom::InchUS
+            | Atom::LinkForGuntersChainUS
+            | Atom::LinkForRamdensChainUS
+            | Atom::MilUS
+            | Atom::MileUS
+            | Atom::RamdensChainUS
+            | Atom::RodUS
+            | Atom::Section
+            | Atom::SquareMileUS
+            | Atom::SquareRodUS
+            | Atom::Township
+            | Atom::YardUS => Classification::USLengths,
 
-            Atom::AcreUS                    |
-                Atom::FathomUS              |
-                Atom::FootUS                |
-                Atom::FurlongUS             |
-                Atom::GuntersChainUS        |
-                Atom::InchUS                |
-                Atom::LinkForGuntersChainUS |
-                Atom::LinkForRamdensChainUS |
-                Atom::MilUS                 |
-                Atom::MileUS                |
-                Atom::RamdensChainUS        |
-                Atom::RodUS                 |
-                Atom::Section               |
-                Atom::SquareMileUS          |
-                Atom::SquareRodUS           |
-                Atom::Township              |
-                Atom::YardUS                                => Classification::USLengths,
+            Atom::AcreBR
+            | Atom::FathomBR
+            | Atom::FootBR
+            | Atom::GuntersChainBR
+            | Atom::InchBR
+            | Atom::KnotBR
+            | Atom::LinkForGuntersChainBR
+            | Atom::MileBR
+            | Atom::NauticalMileBR
+            | Atom::PaceBR
+            | Atom::RodBR
+            | Atom::YardBR => Classification::BritLength,
 
-            Atom::AcreBR                    |
-                Atom::FathomBR              |
-                Atom::FootBR                |
-                Atom::GuntersChainBR        |
-                Atom::InchBR                |
-                Atom::KnotBR                |
-                Atom::LinkForGuntersChainBR |
-                Atom::MileBR                |
-                Atom::NauticalMileBR        |
-                Atom::PaceBR                |
-                Atom::RodBR                 |
-                Atom::YardBR                                => Classification::BritLength,
+            Atom::BarrelUS
+            | Atom::BushelUS
+            | Atom::CordUS
+            | Atom::CupUS
+            | Atom::DryPintUS
+            | Atom::DryQuartUS
+            | Atom::FluidDramUS
+            | Atom::FluidOunceUS
+            | Atom::GillUS
+            | Atom::HistoricalWinchesterGallon
+            | Atom::CupM
+            | Atom::FluidOunceM
+            | Atom::TablespoonM
+            | Atom::TeaspoonM
+            | Atom::MinimUS
+            | Atom::PeckUS
+            | Atom::PintUS
+            | Atom::QuartUS
+            | Atom::QueenAnnesWineGallon
+            | Atom::TablespoonUS
+            | Atom::TeaspoonUS => Classification::USVolumes,
 
-            Atom::BarrelUS                       |
-                Atom::BushelUS                   |
-                Atom::CordUS                     |
-                Atom::CupUS                      |
-                Atom::DryPintUS                  |
-                Atom::DryQuartUS                 |
-                Atom::FluidDramUS                |
-                Atom::FluidOunceUS               |
-                Atom::GillUS                     |
-                Atom::HistoricalWinchesterGallon |
-                Atom::CupM                 |
-                Atom::FluidOunceM          |
-                Atom::TablespoonM          |
-                Atom::TeaspoonM            |
-                Atom::MinimUS                    |
-                Atom::PeckUS                     |
-                Atom::PintUS                     |
-                Atom::QuartUS                    |
-                Atom::QueenAnnesWineGallon       |
-                Atom::TablespoonUS               |
-                Atom::TeaspoonUS                            => Classification::USVolumes,
+            Atom::BushelBR
+            | Atom::FluidDramBR
+            | Atom::FluidOunceBR
+            | Atom::GallonBR
+            | Atom::GillBR
+            | Atom::MinimBR
+            | Atom::PeckBR
+            | Atom::PintBR
+            | Atom::QuartBR => Classification::BritVolumes,
 
-           Atom::BushelBR                        |
-                Atom::FluidDramBR                |
-                Atom::FluidOunceBR               |
-                Atom::GallonBR                   |
-                Atom::GillBR                     |
-                Atom::MinimBR                    |
-                Atom::PeckBR                     |
-                Atom::PintBR                     |
-                Atom::QuartBR                               => Classification::BritVolumes,
+            Atom::DramAV
+            | Atom::Grain
+            | Atom::OunceAV
+            | Atom::LongHundredweightAV
+            | Atom::LongTonAV
+            | Atom::PoundAV
+            | Atom::ShortHundredweightAV
+            | Atom::ShortTonAV
+            | Atom::StoneAV => Classification::Avoirdupois,
 
-            Atom::DramAV                         |
-                Atom::Grain                      |
-                Atom::OunceAV                    |
-                Atom::LongHundredweightAV        |
-                Atom::LongTonAV                  |
-                Atom::PoundAV                    |
-                Atom::ShortHundredweightAV       |
-                Atom::ShortTonAV                 |
-                Atom::StoneAV                               => Classification::Avoirdupois,
+            Atom::OunceTR | Atom::PennyweightTR | Atom::PoundTR => Classification::Troy,
 
-            Atom::OunceTR                        |
-                Atom::PennyweightTR              |
-                Atom::PoundTR                               => Classification::Troy,
+            Atom::BtuAt39F
+            | Atom::CalorieAt15C
+            | Atom::CalorieAt20C
+            | Atom::CalorieIT
+            | Atom::CalorieTH
+            | Atom::CalorieM
+            | Atom::Calorie
+            | Atom::CalorieNutritionLabel
+            | Atom::DegreeFahrenheit
+            | Atom::DegreeRankine
+            | Atom::DegreeReaumur
+            | Atom::Horsepower => Classification::Heat,
 
-            Atom::BtuAt39F                       |
-                Atom::CalorieAt15C               |
-                Atom::CalorieAt20C               |
-                Atom::CalorieIT                  |
-                Atom::CalorieTH                  |
-                Atom::CalorieM                   |
-                Atom::Calorie                    |
-                Atom::CalorieNutritionLabel      |
-                Atom::DegreeFahrenheit           |
-                Atom::DegreeRankine              |
-                Atom::DegreeReaumur              |
-                Atom::Horsepower                            => Classification::Heat,
+            Atom::PrismDiopter => Classification::Clinical,
 
-            Atom::PrismDiopter                              => Classification::Clinical,
+            Atom::Equivalents | Atom::GramPercent | Atom::PH | Atom::ProteinNitrogenUnit => {
+                Classification::Chemical
+            }
 
-            Atom::Equivalents                    |
-                Atom::GramPercent                |
-                Atom::PH                         |
-                Atom::ProteinNitrogenUnit                   => Classification::Chemical,
-
-            Atom::Cicero            |
-                Atom::Didot         |
-                Atom::Ligne         |
-                Atom::Line          |
-                Atom::Pica          |
-                Atom::Pied          |
-                Atom::PrintersPica  |
-                Atom::PrintersPoint |
-                Atom::Point         |
-                Atom::Pouce                                 => Classification::Typeset,
+            Atom::Cicero
+            | Atom::Didot
+            | Atom::Ligne
+            | Atom::Line
+            | Atom::Pica
+            | Atom::Pied
+            | Atom::PrintersPica
+            | Atom::PrintersPoint
+            | Atom::Point
+            | Atom::Pouce => Classification::Typeset,
         }
     }
 
     fn definition(&self) -> Definition {
         let result = match *self {
-            Atom::TheUnity                |
-                Atom::Candela             |
-                Atom::Coulomb             |
-                Atom::Gram                |
-                Atom::Kelvin              |
-                Atom::Meter               |
-                Atom::ProteinNitrogenUnit |
-                Atom::Radian              |
-                Atom::Second                     => {
-                    // Manually build the Definition here for speed.
-                    let term = Term::new(Some(Atom::TheUnity), None);
+            Atom::TheUnity
+            | Atom::Candela
+            | Atom::Coulomb
+            | Atom::Gram
+            | Atom::Kelvin
+            | Atom::Meter
+            | Atom::ProteinNitrogenUnit
+            | Atom::Radian
+            | Atom::Second => {
+                // Manually build the Definition here for speed.
+                let term = Term::new(Some(Atom::TheUnity), None);
 
-                    Ok(Definition { value: 1.0, terms: vec![term] })
-                },
-            Atom::AcreBR                         => Definition::new(4840.0, "[yd_br]2"),
-            Atom::AcreUS                         => Definition::new(160.0, "[rd_us]2"),
-            Atom::Ampere                         => Definition::new(1.0, "C/s"),
-            Atom::Are                            => Definition::new(100.0, "m2"),
-            Atom::AstronomicUnit                 => Definition::new(149_597.870_691, "Mm"),
-            Atom::AtomicMassUnit                 => Definition::new(1.660_540_2e-24, "g"),
+                Ok(Definition {
+                    value: 1.0,
+                    terms: vec![term],
+                })
+            }
+            Atom::AcreBR => Definition::new(4840.0, "[yd_br]2"),
+            Atom::AcreUS => Definition::new(160.0, "[rd_us]2"),
+            Atom::Ampere => Definition::new(1.0, "C/s"),
+            Atom::Are => Definition::new(100.0, "m2"),
+            Atom::AstronomicUnit => Definition::new(149_597.870_691, "Mm"),
+            Atom::AtomicMassUnit => Definition::new(1.660_540_2e-24, "g"),
 
-            Atom::Bar                            => Definition::new(1.0e5, "Pa"),
-            Atom::BarrelUS                       => Definition::new(42.0, "[gal_us]"),
-            Atom::Becquerel |
-                Atom::Hertz                      => Definition::new(1.0, "s-1"),
-            Atom::Biot                           => Definition::new(10.0, "A"),
-            Atom::BoardFootInternational         => Definition::new(144.0, "[in_i]3"),
-            Atom::BoltzmannConstant              => Definition::new(1.380_658e-23, "J/K"),
-            Atom::BtuAt39F                       => Definition::new(1.05967, "kJ"),
-            Atom::BushelBR                       => Definition::new(4.0, "[pk_br]"),
-            Atom::BushelUS                       => Definition::new(2150.42, "[in_i]3"),
+            Atom::Bar => Definition::new(1.0e5, "Pa"),
+            Atom::BarrelUS => Definition::new(42.0, "[gal_us]"),
+            Atom::Becquerel | Atom::Hertz => Definition::new(1.0, "s-1"),
+            Atom::Biot => Definition::new(10.0, "A"),
+            Atom::BoardFootInternational => Definition::new(144.0, "[in_i]3"),
+            Atom::BoltzmannConstant => Definition::new(1.380_658e-23, "J/K"),
+            Atom::BtuAt39F => Definition::new(1.05967, "kJ"),
+            Atom::BushelBR => Definition::new(4.0, "[pk_br]"),
+            Atom::BushelUS => Definition::new(2150.42, "[in_i]3"),
 
-            Atom::CalorieAt20C                   => Definition::new(4.18190, "J"),
-            Atom::CalorieAt15C                   => Definition::new(4.18580, "J"),
-            Atom::CalorieIT                      => Definition::new(4.1868, "J"),
-            Atom::CalorieTH                      => Definition::new(4.184, "J"),
-            Atom::CalorieM                       => Definition::new(4.19002, "J"),
-            Atom::Calorie                        => Definition::new(1.0, "cal_th"),
-            Atom::CalorieNutritionLabel          => Definition::new(1.0, "kcal_th"),
-            Atom::Cicero                         => Definition::new(12.0, "[didot]"),
-            Atom::CircularMilInternational       => Definition::new(1.0, "[pi]/4.[mil_i]2"),
-            Atom::CordInternational |
-                Atom::CordUS                     => Definition::new(128.0, "[ft_i]3"),
-            Atom::CubicFootInternational         => Definition::new(1.0, "[ft_i]3"),
-            Atom::CubicInchInternational         => Definition::new(1.0, "[in_i]3"),
-            Atom::CubicYardInternational         => Definition::new(1.0, "[yd_i]3"),
-            Atom::CupM                           => Definition::new(240.0, "mL"),
-            Atom::CupUS                          => Definition::new(16.0, "[tbs_us]"),
-            Atom::Curie                          => Definition::new(37e9, "Bq"),
+            Atom::CalorieAt20C => Definition::new(4.18190, "J"),
+            Atom::CalorieAt15C => Definition::new(4.18580, "J"),
+            Atom::CalorieIT => Definition::new(4.1868, "J"),
+            Atom::CalorieTH => Definition::new(4.184, "J"),
+            Atom::CalorieM => Definition::new(4.19002, "J"),
+            Atom::Calorie => Definition::new(1.0, "cal_th"),
+            Atom::CalorieNutritionLabel => Definition::new(1.0, "kcal_th"),
+            Atom::Cicero => Definition::new(12.0, "[didot]"),
+            Atom::CircularMilInternational => Definition::new(1.0, "[pi]/4.[mil_i]2"),
+            Atom::CordInternational | Atom::CordUS => Definition::new(128.0, "[ft_i]3"),
+            Atom::CubicFootInternational => Definition::new(1.0, "[ft_i]3"),
+            Atom::CubicInchInternational => Definition::new(1.0, "[in_i]3"),
+            Atom::CubicYardInternational => Definition::new(1.0, "[yd_i]3"),
+            Atom::CupM => Definition::new(240.0, "mL"),
+            Atom::CupUS => Definition::new(16.0, "[tbs_us]"),
+            Atom::Curie => Definition::new(37e9, "Bq"),
 
-            Atom::Day                            => Definition::new(24.0, "h"),
-            Atom::Degree                         => Definition::new(2.0, "[pi].rad/360"),
-            Atom::DegreeCelsius                  => Definition::new(1.0, "cel(1.0 K)"),
-            Atom::DegreeFahrenheit               => Definition::new(1.0, "degf(5.0 K/9)"),
-            Atom::DegreeMinute                   => Definition::new(1.0, "deg/60"),
-            Atom::DegreeRankine                  => Definition::new(5.0, "K/9"),
-            Atom::DegreeReaumur                  => Definition::new(1.0, "degre(5.0 K/4)"),
-            Atom::DegreeSecond                   => Definition::new(1.0, "'/60"),
-            Atom::Didot                          => Definition::new(1.0, "[ligne]/6"),
-            Atom::DramAP                         => Definition::new(3.0, "[sc_ap]"),
-            Atom::DramAV                         => Definition::new(1.0, "[oz_av]/16"),
-            Atom::DryPintUS                      => Definition::new(1.0, "[dqt_us]/2"),
-            Atom::DryQuartUS                     => Definition::new(1.0, "[pk_us]/8"),
-            Atom::Dyne                           => Definition::new(1.0, "g.cm/s2"),
+            Atom::Day => Definition::new(24.0, "h"),
+            Atom::Degree => Definition::new(2.0, "[pi].rad/360"),
+            Atom::DegreeCelsius => Definition::new(1.0, "cel(1.0 K)"),
+            Atom::DegreeFahrenheit => Definition::new(1.0, "degf(5.0 K/9)"),
+            Atom::DegreeMinute => Definition::new(1.0, "deg/60"),
+            Atom::DegreeRankine => Definition::new(5.0, "K/9"),
+            Atom::DegreeReaumur => Definition::new(1.0, "degre(5.0 K/4)"),
+            Atom::DegreeSecond => Definition::new(1.0, "'/60"),
+            Atom::Didot => Definition::new(1.0, "[ligne]/6"),
+            Atom::DramAP => Definition::new(3.0, "[sc_ap]"),
+            Atom::DramAV => Definition::new(1.0, "[oz_av]/16"),
+            Atom::DryPintUS => Definition::new(1.0, "[dqt_us]/2"),
+            Atom::DryQuartUS => Definition::new(1.0, "[pk_us]/8"),
+            Atom::Dyne => Definition::new(1.0, "g.cm/s2"),
 
-            Atom::ElectronMass                   => Definition::new(9.109_389_7e-28, "g"),
-            Atom::Electronvolt                   => Definition::new(1.0, "[e].V"),
-            Atom::ElementaryCharge               => Definition::new(1.602_177_33e-19, "C"),
-            Atom::Equivalents                    => Definition::new(1.0, "mol"),
-            Atom::Erg                            => Definition::new(1.0, "dyn.cm"),
+            Atom::ElectronMass => Definition::new(9.109_389_7e-28, "g"),
+            Atom::Electronvolt => Definition::new(1.0, "[e].V"),
+            Atom::ElementaryCharge => Definition::new(1.602_177_33e-19, "C"),
+            Atom::Equivalents => Definition::new(1.0, "mol"),
+            Atom::Erg => Definition::new(1.0, "dyn.cm"),
 
-            Atom::Farad                          => Definition::new(1.0, "C/V"),
-            Atom::FathomInternational            => Definition::new(6.0, "[ft_i]"),
-            Atom::FathomBR                       => Definition::new(6.0, "[ft_br]"),
-            Atom::FathomUS                       => Definition::new(6.0, "[ft_us]"),
-            Atom::FluidDramBR                    => Definition::new(1.0, "[foz_br]/8"),
-            Atom::FluidDramUS                    => Definition::new(1.0, "[foz_us]/8"),
-            Atom::FluidOunceBR                   => Definition::new(1.0, "[gil_br]/5"),
-            Atom::FluidOunceM                    => Definition::new(30.0, "mL"),
-            Atom::FluidOunceUS                   => Definition::new(1.0, "[gil_us]/4"),
-            Atom::FootInternational              => Definition::new(12.0, "[in_i]"),
-            Atom::FootBR                         => Definition::new(12.0, "[in_br]"),
-            Atom::FootUS                         => Definition::new(1200.0, "m/3937"),
-            Atom::FurlongUS                      => Definition::new(40.0, "[rd_us]"),
+            Atom::Farad => Definition::new(1.0, "C/V"),
+            Atom::FathomInternational => Definition::new(6.0, "[ft_i]"),
+            Atom::FathomBR => Definition::new(6.0, "[ft_br]"),
+            Atom::FathomUS => Definition::new(6.0, "[ft_us]"),
+            Atom::FluidDramBR => Definition::new(1.0, "[foz_br]/8"),
+            Atom::FluidDramUS => Definition::new(1.0, "[foz_us]/8"),
+            Atom::FluidOunceBR => Definition::new(1.0, "[gil_br]/5"),
+            Atom::FluidOunceM => Definition::new(30.0, "mL"),
+            Atom::FluidOunceUS => Definition::new(1.0, "[gil_us]/4"),
+            Atom::FootInternational => Definition::new(12.0, "[in_i]"),
+            Atom::FootBR => Definition::new(12.0, "[in_br]"),
+            Atom::FootUS => Definition::new(1200.0, "m/3937"),
+            Atom::FurlongUS => Definition::new(40.0, "[rd_us]"),
 
-            Atom::Gal                            => Definition::new(1.0, "cm/s2"),
-            Atom::GallonBR                       => Definition::new(4.546_09, "l"),
-            Atom::Gauss                          => Definition::new(1.0e-4, "T"),
-            Atom::Gilbert                        => Definition::new(1.0, "Oe.cm"),
-            Atom::GillBR                         => Definition::new(1.0, "[pt_br]/4"),
-            Atom::GillUS                         => Definition::new(1.0, "[pt_us]/4"),
-            Atom::Gon                            => Definition::new(0.9, "deg"),
-            Atom::GramForce                      => Definition::new(1.0, "g.[g]"),
-            Atom::GramPercent                    => Definition::new(1.0, "g/dl"),
-            Atom::Grain                          => Definition::new(64.798_91, "mg"),
-            Atom::Gray |
-                Atom::Sievert                    => Definition::new(1.0, "J/kg"),
-            Atom::GuntersChainBR                 => Definition::new(4.0, "[rd_br]"),
-            Atom::GuntersChainUS                 => Definition::new(4.0, "[rd_us]"),
+            Atom::Gal => Definition::new(1.0, "cm/s2"),
+            Atom::GallonBR => Definition::new(4.546_09, "l"),
+            Atom::Gauss => Definition::new(1.0e-4, "T"),
+            Atom::Gilbert => Definition::new(1.0, "Oe.cm"),
+            Atom::GillBR => Definition::new(1.0, "[pt_br]/4"),
+            Atom::GillUS => Definition::new(1.0, "[pt_us]/4"),
+            Atom::Gon => Definition::new(0.9, "deg"),
+            Atom::GramForce => Definition::new(1.0, "g.[g]"),
+            Atom::GramPercent => Definition::new(1.0, "g/dl"),
+            Atom::Grain => Definition::new(64.798_91, "mg"),
+            Atom::Gray | Atom::Sievert => Definition::new(1.0, "J/kg"),
+            Atom::GuntersChainBR => Definition::new(4.0, "[rd_br]"),
+            Atom::GuntersChainUS => Definition::new(4.0, "[rd_us]"),
 
-            Atom::HandInternational              => Definition::new(4.0, "[in_i]"),
-            Atom::Henry                          => Definition::new(1.0, "Wb/A"),
-            Atom::HistoricalWinchesterGallon     => Definition::new(1.0, "[bu_us]/8"),
-            Atom::Horsepower                     => Definition::new(550.0, "[ft_i].[lbf_av]/s"),
-            Atom::Hour                           => Definition::new(60.0, "min"),
+            Atom::HandInternational => Definition::new(4.0, "[in_i]"),
+            Atom::Henry => Definition::new(1.0, "Wb/A"),
+            Atom::HistoricalWinchesterGallon => Definition::new(1.0, "[bu_us]/8"),
+            Atom::Horsepower => Definition::new(550.0, "[ft_i].[lbf_av]/s"),
+            Atom::Hour => Definition::new(60.0, "min"),
 
-            Atom::InchBR                         => Definition::new(2.539_998, "cm"),
-            Atom::InchInternational              => Definition::new(254.0e-2, "cm"),
-            Atom::InchUS                         => Definition::new(1.0, "[ft_us]/12"),
+            Atom::InchBR => Definition::new(2.539_998, "cm"),
+            Atom::InchInternational => Definition::new(254.0e-2, "cm"),
+            Atom::InchUS => Definition::new(1.0, "[ft_us]/12"),
 
-            Atom::Joule                          => Definition::new(1.0, "N.m"),
+            Atom::Joule => Definition::new(1.0, "N.m"),
 
-            Atom::Kayser                         => Definition::new(1.0, "cm-1"),
-            Atom::KnotBR                         => Definition::new(1.0, "[nmi_br]/h"),
-            Atom::KnotInternational              => Definition::new(1.0, "[nmi_i]/h"),
+            Atom::Kayser => Definition::new(1.0, "cm-1"),
+            Atom::KnotBR => Definition::new(1.0, "[nmi_br]/h"),
+            Atom::KnotInternational => Definition::new(1.0, "[nmi_i]/h"),
 
-            Atom::Lambert                        => Definition::new(1.0, "cd/cm2/[pi]"),
-            Atom::LongHundredweightAV            => Definition::new(112.0, "[lb_av]"),
-            Atom::LongTonAV                      => Definition::new(20.0, "[lcwt_av]"),
-            Atom::LightYear                      => Definition::new(1.0, "[c].a_j"),
-            Atom::Ligne                          => Definition::new(1.0, "[pouce]/12"),
-            Atom::Line                           => Definition::new(1.0, "[in_i]/12"),
-            Atom::LinkForGuntersChainBR          => Definition::new(1.0, "[ch_br]/100"),
-            Atom::LinkForGuntersChainUS          => Definition::new(1.0, "[ch_us]/100"),
-            Atom::LinkForRamdensChainUS          => Definition::new(1.0, "[rch_us]/100"),
-            Atom::Liter                          => Definition::new(1.0, "dm3"),
-            Atom::Lumen                          => Definition::new(1.0, "cd.sr"),
-            Atom::Lux                            => Definition::new(1.0, "lm/m2"),
+            Atom::Lambert => Definition::new(1.0, "cd/cm2/[pi]"),
+            Atom::LongHundredweightAV => Definition::new(112.0, "[lb_av]"),
+            Atom::LongTonAV => Definition::new(20.0, "[lcwt_av]"),
+            Atom::LightYear => Definition::new(1.0, "[c].a_j"),
+            Atom::Ligne => Definition::new(1.0, "[pouce]/12"),
+            Atom::Line => Definition::new(1.0, "[in_i]/12"),
+            Atom::LinkForGuntersChainBR => Definition::new(1.0, "[ch_br]/100"),
+            Atom::LinkForGuntersChainUS => Definition::new(1.0, "[ch_us]/100"),
+            Atom::LinkForRamdensChainUS => Definition::new(1.0, "[rch_us]/100"),
+            Atom::Liter => Definition::new(1.0, "dm3"),
+            Atom::Lumen => Definition::new(1.0, "cd.sr"),
+            Atom::Lux => Definition::new(1.0, "lm/m2"),
 
-            Atom::Maxwell                        => Definition::new(1.0e-8, "Wb"),
-            Atom::MeanGregorianMonth             => Definition::new(1.0, "a_g/12"),
-            Atom::MeanGregorianYear              => Definition::new(365.2425, "d"),
-            Atom::MeanJulianMonth                => Definition::new(1.0, "a_j/12"),
-            Atom::MeanJulianYear                 => Definition::new(365.25, "d"),
-            Atom::MilInternational               => Definition::new(1.0e-3, "[in_i]"),
-            Atom::MilUS                          => Definition::new(1.0e-3, "[in_us]"),
-            Atom::MileInternational              => Definition::new(5280.0, "[ft_i]"),
-            Atom::MileBR                         => Definition::new(5280.0, "[ft_br]"),
-            Atom::MileUS                         => Definition::new(8.0, "[fur_us]"),
-            Atom::MinimBR                        => Definition::new(1.0, "[fdr_br]/60"),
-            Atom::MinimUS                        => Definition::new(1.0, "[fdr_us]/60"),
-            Atom::Minute                         => Definition::new(60.0, "s"),
-            Atom::Mole                           => Definition::new(6.022_136_7, "10*23"),
-            Atom::Month                          => Definition::new(1.0, "mo_j"),
+            Atom::Maxwell => Definition::new(1.0e-8, "Wb"),
+            Atom::MeanGregorianMonth => Definition::new(1.0, "a_g/12"),
+            Atom::MeanGregorianYear => Definition::new(365.2425, "d"),
+            Atom::MeanJulianMonth => Definition::new(1.0, "a_j/12"),
+            Atom::MeanJulianYear => Definition::new(365.25, "d"),
+            Atom::MilInternational => Definition::new(1.0e-3, "[in_i]"),
+            Atom::MilUS => Definition::new(1.0e-3, "[in_us]"),
+            Atom::MileInternational => Definition::new(5280.0, "[ft_i]"),
+            Atom::MileBR => Definition::new(5280.0, "[ft_br]"),
+            Atom::MileUS => Definition::new(8.0, "[fur_us]"),
+            Atom::MinimBR => Definition::new(1.0, "[fdr_br]/60"),
+            Atom::MinimUS => Definition::new(1.0, "[fdr_us]/60"),
+            Atom::Minute => Definition::new(60.0, "s"),
+            Atom::Mole => Definition::new(6.022_136_7, "10*23"),
+            Atom::Month => Definition::new(1.0, "mo_j"),
 
-            Atom::NauticalMileBR                 => Definition::new(6080.0, "[ft_br]"),
-            Atom::NauticalMileInternational      => Definition::new(1852.0, "m"),
-            Atom::Newton                         => Definition::new(1.0, "kg.m/s2"),
+            Atom::NauticalMileBR => Definition::new(6080.0, "[ft_br]"),
+            Atom::NauticalMileInternational => Definition::new(1852.0, "m"),
+            Atom::Newton => Definition::new(1.0, "kg.m/s2"),
             Atom::NewtonianConstantOfGravitation => Definition::new(6.67259e-11, "m3.kg-1.s-2"),
 
-            Atom::Oersted                        => Definition::new(250.0, "/[pi].A/m"),
-            Atom::Ohm                            => Definition::new(1.0, "V/A"),
-            Atom::OunceAP                        => Definition::new(8.0, "[dr_ap]"),
-            Atom::OunceAV                        => Definition::new(1.0, "[lb_av]/16"),
-            Atom::OunceM                         => Definition::new(28.0, "g"),
-            Atom::OunceTR                        => Definition::new(20.0, "[pwt_tr]"),
+            Atom::Oersted => Definition::new(250.0, "/[pi].A/m"),
+            Atom::Ohm => Definition::new(1.0, "V/A"),
+            Atom::OunceAP => Definition::new(8.0, "[dr_ap]"),
+            Atom::OunceAV => Definition::new(1.0, "[lb_av]/16"),
+            Atom::OunceM => Definition::new(28.0, "g"),
+            Atom::OunceTR => Definition::new(20.0, "[pwt_tr]"),
 
-            Atom::PH                             => Definition::new(1.0, "ph(1.0 mol/l)"),
-            Atom::PaceBR                         => Definition::new(2.5, "[ft_br]"),
-            Atom::Parsec                         => Definition::new(3.085_678e16, "m"),
-            Atom::PartsPerBillion                => Definition::new(1.0, "10*-9"),
-            Atom::PartsPerMillion                => Definition::new(1.0, "10*-6"),
-            Atom::PartsPerThousand               => Definition::new(1.0, "10*-3"),
-            Atom::PartsPerTrillion               => Definition::new(1.0, "10*-12"),
-            Atom::Pascal                         => Definition::new(1.0, "N/m2"),
-            Atom::Percent                        => Definition::new(1.0, "10*-2"),
-            Atom::PermeabilityOfVacuum           => Definition::new(1.0, "4.[pi].10*-7.N/A2"),
-            Atom::PermittivityOfVacuum           => Definition::new(8.854_187_817e-12, "F/m"),
-            Atom::PeckBR                         => Definition::new(2.0, "[gal_br]"),
-            Atom::PeckUS                         => Definition::new(1.0, "[bu_us]/4"),
-            Atom::PennyweightTR                  => Definition::new(24.0, "[gr]"),
-            Atom::Phot                           => Definition::new(1.0e-4, "lx"),
-            Atom::Pica                           => Definition::new(12.0, "[pnt]"),
-            Atom::Pied                           => Definition::new(32.48, "cm"),
-            Atom::PintBR                         => Definition::new(1.0, "[qt_br]/2"),
-            Atom::PintUS                         => Definition::new(1.0, "[qt_us]/2"),
-            Atom::PlanckConstant                 => Definition::new(6.626_075_5e-34, "J.s"),
-            Atom::Point                          => Definition::new(1.0, "[lne]/6"),
-            Atom::Poise                          => Definition::new(1.0, "dyn.s/cm2"),
-            Atom::Pouce                          => Definition::new(1.0, "[pied]/12"),
-            Atom::PoundAP                        => Definition::new(12.0, "[oz_ap]"),
-            Atom::PoundAV                        => Definition::new(7000.0, "[gr]"),
-            Atom::PoundTR                        => Definition::new(12.0, "[oz_tr]"),
-            Atom::PoundForce                     => Definition::new(1.0, "[lb_av].[g]"),
-            Atom::PrintersPica                   => Definition::new(12.0, "[pnt_pr]"),
-            Atom::PrintersPoint                  => Definition::new(0.013_837, "[in_i]"),
-            Atom::PrismDiopter                   => Definition::new(1.0, "100tan(1.0 rad)"),
-            Atom::ProtonMass                     => Definition::new(1.672_623_1e-24, "g"),
+            Atom::PH => Definition::new(1.0, "ph(1.0 mol/l)"),
+            Atom::PaceBR => Definition::new(2.5, "[ft_br]"),
+            Atom::Parsec => Definition::new(3.085_678e16, "m"),
+            Atom::PartsPerBillion => Definition::new(1.0, "10*-9"),
+            Atom::PartsPerMillion => Definition::new(1.0, "10*-6"),
+            Atom::PartsPerThousand => Definition::new(1.0, "10*-3"),
+            Atom::PartsPerTrillion => Definition::new(1.0, "10*-12"),
+            Atom::Pascal => Definition::new(1.0, "N/m2"),
+            Atom::Percent => Definition::new(1.0, "10*-2"),
+            Atom::PermeabilityOfVacuum => Definition::new(1.0, "4.[pi].10*-7.N/A2"),
+            Atom::PermittivityOfVacuum => Definition::new(8.854_187_817e-12, "F/m"),
+            Atom::PeckBR => Definition::new(2.0, "[gal_br]"),
+            Atom::PeckUS => Definition::new(1.0, "[bu_us]/4"),
+            Atom::PennyweightTR => Definition::new(24.0, "[gr]"),
+            Atom::Phot => Definition::new(1.0e-4, "lx"),
+            Atom::Pica => Definition::new(12.0, "[pnt]"),
+            Atom::Pied => Definition::new(32.48, "cm"),
+            Atom::PintBR => Definition::new(1.0, "[qt_br]/2"),
+            Atom::PintUS => Definition::new(1.0, "[qt_us]/2"),
+            Atom::PlanckConstant => Definition::new(6.626_075_5e-34, "J.s"),
+            Atom::Point => Definition::new(1.0, "[lne]/6"),
+            Atom::Poise => Definition::new(1.0, "dyn.s/cm2"),
+            Atom::Pouce => Definition::new(1.0, "[pied]/12"),
+            Atom::PoundAP => Definition::new(12.0, "[oz_ap]"),
+            Atom::PoundAV => Definition::new(7000.0, "[gr]"),
+            Atom::PoundTR => Definition::new(12.0, "[oz_tr]"),
+            Atom::PoundForce => Definition::new(1.0, "[lb_av].[g]"),
+            Atom::PrintersPica => Definition::new(12.0, "[pnt_pr]"),
+            Atom::PrintersPoint => Definition::new(0.013_837, "[in_i]"),
+            Atom::PrismDiopter => Definition::new(1.0, "100tan(1.0 rad)"),
+            Atom::ProtonMass => Definition::new(1.672_623_1e-24, "g"),
 
-            Atom::QuartBR                        => Definition::new(1.0, "[gal_br]/4"),
-            Atom::QuartUS                        => Definition::new(1.0, "[gal_us]/4"),
-            Atom::QueenAnnesWineGallon           => Definition::new(231.0, "[in_i]3"),
+            Atom::QuartBR => Definition::new(1.0, "[gal_br]/4"),
+            Atom::QuartUS => Definition::new(1.0, "[gal_us]/4"),
+            Atom::QueenAnnesWineGallon => Definition::new(231.0, "[in_i]3"),
 
-            Atom::RadiationAbsorbedDose          => Definition::new(100.0, "erg/g"),
-            Atom::RadiationEquivalentMan         => Definition::new(1.0, "RAD"),
-            Atom::RamdensChainUS                 => Definition::new(100.0, "[ft_us]"),
-            Atom::RodBR                          => Definition::new(16.5, "[ft_br]"),
-            Atom::RodUS                          => Definition::new(16.5, "[ft_us]"),
-            Atom::Roentgen                       => Definition::new(2.58e-4, "C/kg"),
+            Atom::RadiationAbsorbedDose => Definition::new(100.0, "erg/g"),
+            Atom::RadiationEquivalentMan => Definition::new(1.0, "RAD"),
+            Atom::RamdensChainUS => Definition::new(100.0, "[ft_us]"),
+            Atom::RodBR => Definition::new(16.5, "[ft_br]"),
+            Atom::RodUS => Definition::new(16.5, "[ft_us]"),
+            Atom::Roentgen => Definition::new(2.58e-4, "C/kg"),
 
-            Atom::ScrupleAP                      => Definition::new(20.0, "[gr]"),
-            Atom::Section |
-                Atom::SquareMileUS               => Definition::new(1.0, "[mi_us]2"),
-            Atom::ShortHundredweightAV           => Definition::new(100.0, "[lb_av]"),
-            Atom::ShortTonAV                     => Definition::new(20.0, "[scwt_av]"),
-            Atom::Siemens                        => Definition::new(1.0, "Ohm-1"),
-            Atom::SquareFootInternational        => Definition::new(1.0, "[ft_i]2"),
-            Atom::SquareInchInternational        => Definition::new(1.0, "[in_i]2"),
-            Atom::SquareRodUS                    => Definition::new(1.0, "[rd_us]2"),
-            Atom::SquareYardInternational        => Definition::new(1.0, "[yd_i]2"),
+            Atom::ScrupleAP => Definition::new(20.0, "[gr]"),
+            Atom::Section | Atom::SquareMileUS => Definition::new(1.0, "[mi_us]2"),
+            Atom::ShortHundredweightAV => Definition::new(100.0, "[lb_av]"),
+            Atom::ShortTonAV => Definition::new(20.0, "[scwt_av]"),
+            Atom::Siemens => Definition::new(1.0, "Ohm-1"),
+            Atom::SquareFootInternational => Definition::new(1.0, "[ft_i]2"),
+            Atom::SquareInchInternational => Definition::new(1.0, "[in_i]2"),
+            Atom::SquareRodUS => Definition::new(1.0, "[rd_us]2"),
+            Atom::SquareYardInternational => Definition::new(1.0, "[yd_i]2"),
             Atom::StandardAccelerationOfFreeFall => Definition::new(980_665e-5, "m/s2"),
-            Atom::StandardAtmosphere             => Definition::new(101_325.0, "Pa"),
-            Atom::Steradian                      => Definition::new(1.0, "rad2"),
-            Atom::Stokes                         => Definition::new(1.0, "cm2/s"),
-            Atom::Stilb                          => Definition::new(1.0, "cd/cm2"),
-            Atom::StoneAV                        => Definition::new(14.0, "[lb_av]"),
-            Atom::SynodalMonth                   => Definition::new(29.530_59, "d"),
+            Atom::StandardAtmosphere => Definition::new(101_325.0, "Pa"),
+            Atom::Steradian => Definition::new(1.0, "rad2"),
+            Atom::Stokes => Definition::new(1.0, "cm2/s"),
+            Atom::Stilb => Definition::new(1.0, "cd/cm2"),
+            Atom::StoneAV => Definition::new(14.0, "[lb_av]"),
+            Atom::SynodalMonth => Definition::new(29.530_59, "d"),
 
-            Atom::TablespoonM                    => Definition::new(15.0, "mL"),
-            Atom::TablespoonUS                   => Definition::new(1.0, "[foz_us]/2"),
-            Atom::TeaspoonM                      => Definition::new(5.0, "mL"),
-            Atom::TeaspoonUS                     => Definition::new(1.0, "[tbs_us]/3"),
-            Atom::Tesla                          => Definition::new(1.0, "Wb/m2"),
-            Atom::TheNumberPi                    => Definition::new(PI, "1"),
-            Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
-            Atom::TropicalYear                           => Definition::new(365.242_19, "d"),
-            Atom::Tonne                                  => Definition::new(1.0e3, "kg"),
-            Atom::Township                               => Definition::new(36.0, "[sct]"),
+            Atom::TablespoonM => Definition::new(15.0, "mL"),
+            Atom::TablespoonUS => Definition::new(1.0, "[foz_us]/2"),
+            Atom::TeaspoonM => Definition::new(5.0, "mL"),
+            Atom::TeaspoonUS => Definition::new(1.0, "[tbs_us]/3"),
+            Atom::Tesla => Definition::new(1.0, "Wb/m2"),
+            Atom::TheNumberPi => Definition::new(PI, "1"),
+            Atom::TheNumberTenForArbitraryPowersCaret
+            | Atom::TheNumberTenForArbitraryPowersStar => Definition::new(10.0, "1"),
+            Atom::TropicalYear => Definition::new(365.242_19, "d"),
+            Atom::Tonne => Definition::new(1.0e3, "kg"),
+            Atom::Township => Definition::new(36.0, "[sct]"),
 
-            Atom::VelocityOfLight                        => Definition::new(299_792_458.0, "m/s"),
-            Atom::Volt                                   => Definition::new(1.0, "J/C"),
+            Atom::VelocityOfLight => Definition::new(299_792_458.0, "m/s"),
+            Atom::Volt => Definition::new(1.0, "J/C"),
 
-            Atom::Watt                                   => Definition::new(1.0, "J/s"),
-            Atom::Weber                                  => Definition::new(1.0, "V.s"),
-            Atom::Week                                   => Definition::new(7.0, "d"),
+            Atom::Watt => Definition::new(1.0, "J/s"),
+            Atom::Weber => Definition::new(1.0, "V.s"),
+            Atom::Week => Definition::new(7.0, "d"),
 
-            Atom::YardInternational                      => Definition::new(3.0, "[ft_i]"),
-            Atom::YardBR                                 => Definition::new(3.0, "[ft_br]"),
-            Atom::YardUS                                 => Definition::new(3.0, "[ft_us]"),
-            Atom::Year                                   => Definition::new(1.0, "a_j"),
+            Atom::YardInternational => Definition::new(3.0, "[ft_i]"),
+            Atom::YardBR => Definition::new(3.0, "[ft_br]"),
+            Atom::YardUS => Definition::new(3.0, "[ft_us]"),
+            Atom::Year => Definition::new(1.0, "a_j"),
         };
 
         result.expect("BUG! Bad Atom -> Definition mapping!")
@@ -750,99 +743,91 @@ impl UcumSymbol for Atom {
 
     fn is_metric(&self) -> bool {
         match *self {
-            Atom::TheUnity          |
-                Atom::Candela       |
-                Atom::Coulomb       |
-                Atom::DegreeCelsius |
-                Atom::Gram          |
-                Atom::Kelvin        |
-                Atom::Meter         |
-                Atom::Radian        |
-                Atom::Second        |
-
-                Atom::Ampere                         |
-                Atom::Are                            |
-                Atom::AtomicMassUnit                 |
-                Atom::Bar                            |
-                Atom::Becquerel                      |
-                Atom::Biot                           |
-                Atom::BoltzmannConstant              |
-                Atom::CalorieAt20C                   |
-                Atom::CalorieAt15C                   |
-                Atom::CalorieIT                      |
-                Atom::CalorieTH                      |
-                Atom::CalorieM                       |
-                Atom::Calorie                        |
-                Atom::Curie                          |
-
-                Atom::Dyne                           |
-                Atom::ElectronMass                   |
-                Atom::Electronvolt                   |
-                Atom::ElementaryCharge               |
-                Atom::Equivalents                    |
-                Atom::Erg                            |
-                Atom::Farad                          |
-
-                Atom::Gal                            |
-                Atom::Gauss                          |
-                Atom::Gilbert                        |
-                Atom::GramForce                      |
-                Atom::GramPercent                    |
-                Atom::Gray                           |
-                Atom::Henry                          |
-                Atom::Hertz                          |
-
-                Atom::Joule                          |
-                Atom::Kayser                         |
-                Atom::Lambert                        |
-                Atom::LightYear                      |
-                Atom::Liter                          |
-                Atom::Lumen                          |
-                Atom::Lux                            |
-
-                Atom::Maxwell                        |
-                Atom::Mole                           |
-                Atom::Newton                         |
-                Atom::NewtonianConstantOfGravitation |
-                Atom::Ohm                            |
-                Atom::Oersted                        |
-
-                Atom::Parsec                         |
-                Atom::Pascal                         |
-                Atom::PermeabilityOfVacuum           |
-                Atom::PermittivityOfVacuum           |
-                Atom::Phot                           |
-                Atom::PlanckConstant                 |
-                Atom::Poise                          |
-                Atom::ProtonMass                     |
-                Atom::RadiationAbsorbedDose          |
-                Atom::RadiationEquivalentMan         |
-                Atom::Roentgen                       |
-
-                Atom::StandardAccelerationOfFreeFall |
-                Atom::Steradian                      |
-                Atom::Stokes                         |
-                Atom::Stilb                          |
-                Atom::Siemens                        |
-                Atom::Sievert                        |
-                Atom::Tesla                          |
-                Atom::Tonne                          |
-
-                Atom::VelocityOfLight                |
-                Atom::Volt                           |
-                Atom::Watt                           |
-                Atom::Weber => true,
+            Atom::TheUnity
+            | Atom::Candela
+            | Atom::Coulomb
+            | Atom::DegreeCelsius
+            | Atom::Gram
+            | Atom::Kelvin
+            | Atom::Meter
+            | Atom::Radian
+            | Atom::Second
+            | Atom::Ampere
+            | Atom::Are
+            | Atom::AtomicMassUnit
+            | Atom::Bar
+            | Atom::Becquerel
+            | Atom::Biot
+            | Atom::BoltzmannConstant
+            | Atom::CalorieAt20C
+            | Atom::CalorieAt15C
+            | Atom::CalorieIT
+            | Atom::CalorieTH
+            | Atom::CalorieM
+            | Atom::Calorie
+            | Atom::Curie
+            | Atom::Dyne
+            | Atom::ElectronMass
+            | Atom::Electronvolt
+            | Atom::ElementaryCharge
+            | Atom::Equivalents
+            | Atom::Erg
+            | Atom::Farad
+            | Atom::Gal
+            | Atom::Gauss
+            | Atom::Gilbert
+            | Atom::GramForce
+            | Atom::GramPercent
+            | Atom::Gray
+            | Atom::Henry
+            | Atom::Hertz
+            | Atom::Joule
+            | Atom::Kayser
+            | Atom::Lambert
+            | Atom::LightYear
+            | Atom::Liter
+            | Atom::Lumen
+            | Atom::Lux
+            | Atom::Maxwell
+            | Atom::Mole
+            | Atom::Newton
+            | Atom::NewtonianConstantOfGravitation
+            | Atom::Ohm
+            | Atom::Oersted
+            | Atom::Parsec
+            | Atom::Pascal
+            | Atom::PermeabilityOfVacuum
+            | Atom::PermittivityOfVacuum
+            | Atom::Phot
+            | Atom::PlanckConstant
+            | Atom::Poise
+            | Atom::ProtonMass
+            | Atom::RadiationAbsorbedDose
+            | Atom::RadiationEquivalentMan
+            | Atom::Roentgen
+            | Atom::StandardAccelerationOfFreeFall
+            | Atom::Steradian
+            | Atom::Stokes
+            | Atom::Stilb
+            | Atom::Siemens
+            | Atom::Sievert
+            | Atom::Tesla
+            | Atom::Tonne
+            | Atom::VelocityOfLight
+            | Atom::Volt
+            | Atom::Watt
+            | Atom::Weber => true,
             _ => false,
         }
     }
 
     fn is_special(&self) -> bool {
         match *self {
-            Atom::DegreeCelsius        |
-                Atom::DegreeFahrenheit |
-                Atom::DegreeReaumur    |
-                Atom::PH               |
-                Atom::PrismDiopter => true,
+            Atom::DegreeCelsius
+            | Atom::DegreeFahrenheit
+            | Atom::DegreeReaumur
+            | Atom::PH
+            | Atom::PrismDiopter => true,
             _ => false,
         }
     }
@@ -850,629 +835,588 @@ impl UcumSymbol for Atom {
     fn names(&self) -> Vec<&'static str> {
         match *self {
             Atom::TheUnity => vec!["the unity"],
-            Atom::Candela  => vec!["candela"],
-            Atom::Coulomb  => vec!["Coulomb"],
-            Atom::Gram     => vec!["gram"],
-            Atom::Kelvin   => vec!["Kelvin"],
-            Atom::Meter    => vec!["meter"],
-            Atom::Radian   => vec!["radian"],
-            Atom::Second   |
-               Atom::DegreeSecond => vec!["second"],
+            Atom::Candela => vec!["candela"],
+            Atom::Coulomb => vec!["Coulomb"],
+            Atom::Gram => vec!["gram"],
+            Atom::Kelvin => vec!["Kelvin"],
+            Atom::Meter => vec!["meter"],
+            Atom::Radian => vec!["radian"],
+            Atom::Second | Atom::DegreeSecond => vec!["second"],
 
             // Derived units
-            Atom::AcreBR |
-                Atom::AcreUS               => vec!["acre"],
-            Atom::Ampere                   => vec!["ampère"],
-            Atom::Are                      => vec!["are"],
-            Atom::AstronomicUnit           => vec!["astronomic unit"],
-            Atom::AtomicMassUnit           => vec!["unified atomic mass unit"],
+            Atom::AcreBR | Atom::AcreUS => vec!["acre"],
+            Atom::Ampere => vec!["ampère"],
+            Atom::Are => vec!["are"],
+            Atom::AstronomicUnit => vec!["astronomic unit"],
+            Atom::AtomicMassUnit => vec!["unified atomic mass unit"],
 
-            Atom::Bar                      => vec!["bar"],
-            Atom::BarrelUS                 => vec!["barrel"],
-            Atom::Becquerel                => vec!["becquerel"],
-            Atom::Biot                     => vec!["Biot"],
-            Atom::BoardFootInternational   => vec!["board foot"],
-            Atom::BtuAt39F                 => vec!["British thermal unit at 39 °F"],
-            Atom::BoltzmannConstant        => vec!["Boltzmann constant"],
-            Atom::BushelBR |
-                Atom::BushelUS             => vec!["bushel"],
+            Atom::Bar => vec!["bar"],
+            Atom::BarrelUS => vec!["barrel"],
+            Atom::Becquerel => vec!["becquerel"],
+            Atom::Biot => vec!["Biot"],
+            Atom::BoardFootInternational => vec!["board foot"],
+            Atom::BtuAt39F => vec!["British thermal unit at 39 °F"],
+            Atom::BoltzmannConstant => vec!["Boltzmann constant"],
+            Atom::BushelBR | Atom::BushelUS => vec!["bushel"],
 
-            Atom::CalorieAt20C             => vec!["calorie at 20 °C"],
-            Atom::CalorieAt15C             => vec!["calorie at 15 °C"],
-            Atom::CalorieIT                => vec!["international table calorie"],
-            Atom::CalorieTH                => vec!["thermochemical calorie"],
-            Atom::CalorieM                 => vec!["mean calorie"],
-            Atom::Calorie                  => vec!["calorie"],
-            Atom::CalorieNutritionLabel    => vec!["nutrition label calorie"],
-            Atom::Cicero                   => vec!["cicero", "Didot's pica"],
+            Atom::CalorieAt20C => vec!["calorie at 20 °C"],
+            Atom::CalorieAt15C => vec!["calorie at 15 °C"],
+            Atom::CalorieIT => vec!["international table calorie"],
+            Atom::CalorieTH => vec!["thermochemical calorie"],
+            Atom::CalorieM => vec!["mean calorie"],
+            Atom::Calorie => vec!["calorie"],
+            Atom::CalorieNutritionLabel => vec!["nutrition label calorie"],
+            Atom::Cicero => vec!["cicero", "Didot's pica"],
             Atom::CircularMilInternational => vec!["circular mil"],
-            Atom::CordInternational |
-                Atom::CordUS               => vec!["cord"],
-            Atom::CubicFootInternational   => vec!["cubic foot"],
-            Atom::CubicInchInternational   => vec!["cubic inch"],
-            Atom::CubicYardInternational   => vec!["cubic yard"],
-            Atom::CupM                     => vec!["metric cup"],
-            Atom::CupUS                    => vec!["cup"],
-            Atom::Curie                    => vec!["Curie"],
+            Atom::CordInternational | Atom::CordUS => vec!["cord"],
+            Atom::CubicFootInternational => vec!["cubic foot"],
+            Atom::CubicInchInternational => vec!["cubic inch"],
+            Atom::CubicYardInternational => vec!["cubic yard"],
+            Atom::CupM => vec!["metric cup"],
+            Atom::CupUS => vec!["cup"],
+            Atom::Curie => vec!["Curie"],
 
-            Atom::Day                 => vec!["day"],
-            Atom::Degree              => vec!["degree"],
-            Atom::DegreeCelsius       => vec!["degree Celsius"],
-            Atom::DegreeFahrenheit    => vec!["degree Fahrenheit"],
-            Atom::DegreeMinute |
-                Atom::Minute          => vec!["minute"],
-            Atom::DegreeRankine       => vec!["degree Rankine"],
-            Atom::DegreeReaumur       => vec!["degree Réaumur"],
-            Atom::Didot               => vec!["didot", "Didot's point"],
-            Atom::DramAP              => vec!["dram"],
-            Atom::DramAV              => vec!["dram"],
-            Atom::DryPintUS           => vec!["dry pint"],
-            Atom::DryQuartUS          => vec!["dry quart"],
-            Atom::Dyne                => vec!["dyne"],
+            Atom::Day => vec!["day"],
+            Atom::Degree => vec!["degree"],
+            Atom::DegreeCelsius => vec!["degree Celsius"],
+            Atom::DegreeFahrenheit => vec!["degree Fahrenheit"],
+            Atom::DegreeMinute | Atom::Minute => vec!["minute"],
+            Atom::DegreeRankine => vec!["degree Rankine"],
+            Atom::DegreeReaumur => vec!["degree Réaumur"],
+            Atom::Didot => vec!["didot", "Didot's point"],
+            Atom::DramAP => vec!["dram"],
+            Atom::DramAV => vec!["dram"],
+            Atom::DryPintUS => vec!["dry pint"],
+            Atom::DryQuartUS => vec!["dry quart"],
+            Atom::Dyne => vec!["dyne"],
 
-            Atom::ElectronMass        => vec!["electron mass"],
-            Atom::Electronvolt        => vec!["electronvolt"],
-            Atom::ElementaryCharge    => vec!["elementary charge"],
-            Atom::Equivalents         => vec!["equivalents"],
-            Atom::Erg                 => vec!["erg"],
+            Atom::ElectronMass => vec!["electron mass"],
+            Atom::Electronvolt => vec!["electronvolt"],
+            Atom::ElementaryCharge => vec!["elementary charge"],
+            Atom::Equivalents => vec!["equivalents"],
+            Atom::Erg => vec!["erg"],
 
-            Atom::Farad               => vec!["farad"],
-            Atom::FathomInternational |
-                Atom::FathomBR        |
-                Atom::FathomUS => vec!["fathom"],
-            Atom::FluidDramBR  |
-                Atom::FluidDramUS  => vec!["fluid dram"],
-            Atom::FluidOunceBR |
-                Atom::FluidOunceUS => vec!["fluid ounce"],
-            Atom::FluidOunceM              => vec!["metric fluid ounce"],
-            Atom::FootInternational |
-                Atom::FootBR        |
-                Atom::FootUS                     => vec!["foot"],
-            Atom::FurlongUS                      => vec!["furlong"],
+            Atom::Farad => vec!["farad"],
+            Atom::FathomInternational | Atom::FathomBR | Atom::FathomUS => vec!["fathom"],
+            Atom::FluidDramBR | Atom::FluidDramUS => vec!["fluid dram"],
+            Atom::FluidOunceBR | Atom::FluidOunceUS => vec!["fluid ounce"],
+            Atom::FluidOunceM => vec!["metric fluid ounce"],
+            Atom::FootInternational | Atom::FootBR | Atom::FootUS => vec!["foot"],
+            Atom::FurlongUS => vec!["furlong"],
 
-            Atom::Gal                            => vec!["Gal"],
-            Atom::GallonBR                       => vec!["gallon"],
-            Atom::Gauss                          => vec!["Gauss"],
-            Atom::Gilbert                        => vec!["Gilbert"],
-            Atom::GillBR |
-                Atom::GillUS                     => vec!["gill"],
-            Atom::Gon                            => vec!["gon", "grade"],
-            Atom::GramForce                      => vec!["gram-force"],
-            Atom::GramPercent                    => vec!["gram percent"],
-            Atom::Grain                          => vec!["grain"],
-            Atom::Gray                           => vec!["gray"],
-            Atom::GuntersChainBR                 => vec!["Gunter's chain"],
-            Atom::GuntersChainUS                 => vec!["Gunter's chain", "Surveyor's chain"],
+            Atom::Gal => vec!["Gal"],
+            Atom::GallonBR => vec!["gallon"],
+            Atom::Gauss => vec!["Gauss"],
+            Atom::Gilbert => vec!["Gilbert"],
+            Atom::GillBR | Atom::GillUS => vec!["gill"],
+            Atom::Gon => vec!["gon", "grade"],
+            Atom::GramForce => vec!["gram-force"],
+            Atom::GramPercent => vec!["gram percent"],
+            Atom::Grain => vec!["grain"],
+            Atom::Gray => vec!["gray"],
+            Atom::GuntersChainBR => vec!["Gunter's chain"],
+            Atom::GuntersChainUS => vec!["Gunter's chain", "Surveyor's chain"],
 
-            Atom::HandInternational              => vec!["hand"],
-            Atom::Henry                          => vec!["henry"],
-            Atom::Hertz                          => vec!["hertz"],
-            Atom::HistoricalWinchesterGallon     => vec!["historical winchester gallon"],
-            Atom::Horsepower                     => vec!["horsepower"],
-            Atom::Hour                           => vec!["hour"],
+            Atom::HandInternational => vec!["hand"],
+            Atom::Henry => vec!["henry"],
+            Atom::Hertz => vec!["hertz"],
+            Atom::HistoricalWinchesterGallon => vec!["historical winchester gallon"],
+            Atom::Horsepower => vec!["horsepower"],
+            Atom::Hour => vec!["hour"],
 
-            Atom::InchInternational |
-                Atom::InchBR        |
-                Atom::InchUS                     => vec!["inch"],
+            Atom::InchInternational | Atom::InchBR | Atom::InchUS => vec!["inch"],
 
-            Atom::Joule                          => vec!["joule"],
+            Atom::Joule => vec!["joule"],
 
-            Atom::Kayser                         => vec!["Kayser"],
-            Atom::KnotBR |
-                Atom::KnotInternational          => vec!["knot"],
+            Atom::Kayser => vec!["Kayser"],
+            Atom::KnotBR | Atom::KnotInternational => vec!["knot"],
 
-            Atom::Lambert                        => vec!["Lambert"],
-            Atom::LongHundredweightAV            => vec!["long hundredweight", "British hundredweight"],
-            Atom::LongTonAV                      => vec!["long ton", "British ton"],
-            Atom::LinkForGuntersChainBR |
-                Atom::LinkForGuntersChainUS      => vec!["link for Gunter's chain"],
-            Atom::LinkForRamdensChainUS          => vec!["link for Ramden's chain"],
-            Atom::LightYear                      => vec!["light-year"],
-            Atom::Ligne                          => vec!["ligne", "French line"],
-            Atom::Line                           => vec!["line"],
-            Atom::Liter                          => vec!["liter"],
-            Atom::Lumen                          => vec!["lumen"],
-            Atom::Lux                            => vec!["lux"],
+            Atom::Lambert => vec!["Lambert"],
+            Atom::LongHundredweightAV => vec!["long hundredweight", "British hundredweight"],
+            Atom::LongTonAV => vec!["long ton", "British ton"],
+            Atom::LinkForGuntersChainBR | Atom::LinkForGuntersChainUS => {
+                vec!["link for Gunter's chain"]
+            }
+            Atom::LinkForRamdensChainUS => vec!["link for Ramden's chain"],
+            Atom::LightYear => vec!["light-year"],
+            Atom::Ligne => vec!["ligne", "French line"],
+            Atom::Line => vec!["line"],
+            Atom::Liter => vec!["liter"],
+            Atom::Lumen => vec!["lumen"],
+            Atom::Lux => vec!["lux"],
 
-            Atom::Maxwell                        => vec!["Maxwell"],
-            Atom::MeanGregorianMonth             => vec!["mean Gregorian month"],
-            Atom::MeanGregorianYear              => vec!["mean Gregorian year"],
-            Atom::MeanJulianMonth                => vec!["mean Julian month"],
-            Atom::MeanJulianYear                 => vec!["mean Julian year"],
-            Atom::MilInternational |
-                Atom::MilUS                      => vec!["mil"],
-            Atom::MileInternational |
-                Atom::MileBR        |
-                Atom::MileUS                     => vec!["mile"],
-            Atom::MinimBR |
-                Atom::MinimUS                    => vec!["minim"],
-            Atom::Mole                           => vec!["mole"],
-            Atom::Month                          => vec!["month"],
+            Atom::Maxwell => vec!["Maxwell"],
+            Atom::MeanGregorianMonth => vec!["mean Gregorian month"],
+            Atom::MeanGregorianYear => vec!["mean Gregorian year"],
+            Atom::MeanJulianMonth => vec!["mean Julian month"],
+            Atom::MeanJulianYear => vec!["mean Julian year"],
+            Atom::MilInternational | Atom::MilUS => vec!["mil"],
+            Atom::MileInternational | Atom::MileBR | Atom::MileUS => vec!["mile"],
+            Atom::MinimBR | Atom::MinimUS => vec!["minim"],
+            Atom::Mole => vec!["mole"],
+            Atom::Month => vec!["month"],
 
-            Atom::Newton                         => vec!["newton"],
-            Atom::NauticalMileBR |
-                Atom::NauticalMileInternational  => vec!["nautical mile"],
+            Atom::Newton => vec!["newton"],
+            Atom::NauticalMileBR | Atom::NauticalMileInternational => vec!["nautical mile"],
             Atom::NewtonianConstantOfGravitation => vec!["Newtonian constant of gravitation"],
 
-            Atom::Oersted                        => vec!["Oersted"],
-            Atom::Ohm                            => vec!["ohm"],
-            Atom::OunceAP     |
-                Atom::OunceAV |
-                Atom::OunceTR                    => vec!["ounce"],
-            Atom::OunceM                         => vec!["metric ounce"],
+            Atom::Oersted => vec!["Oersted"],
+            Atom::Ohm => vec!["ohm"],
+            Atom::OunceAP | Atom::OunceAV | Atom::OunceTR => vec!["ounce"],
+            Atom::OunceM => vec!["metric ounce"],
 
-            Atom::PH                             => vec!["pH"],
-            Atom::PaceBR                         => vec!["pace"],
-            Atom::Parsec                         => vec!["parsec"],
-            Atom::PartsPerBillion                => vec!["parts per billion"],
-            Atom::PartsPerMillion                => vec!["parts per million"],
-            Atom::PartsPerThousand               => vec!["parts per thousand"],
-            Atom::PartsPerTrillion               => vec!["parts per trillion"],
-            Atom::Pascal                         => vec!["pascal"],
-            Atom::Percent                        => vec!["percent"],
-            Atom::PermeabilityOfVacuum           => vec!["permeability of vacuum"],
-            Atom::PermittivityOfVacuum           => vec!["permittivity of vacuum"],
-            Atom::PeckBR |
-                Atom::PeckUS                     => vec!["peck"],
-            Atom::PennyweightTR                  => vec!["pennyweight"],
-            Atom::Phot                           => vec!["phot"],
-            Atom::Pica                           => vec!["pica"],
-            Atom::Pied                           => vec!["pied", "French foot"],
-            Atom::PintBR |
-                Atom::PintUS                     => vec!["pint"],
-            Atom::PlanckConstant                 => vec!["Planck constant"],
-            Atom::Poise                          => vec!["Poise"],
-            Atom::Point                          => vec!["point"],
-            Atom::Pouce                          => vec!["pouce", "French inch"],
-            Atom::PoundAP     |
-                Atom::PoundAV |
-                Atom::PoundTR                    => vec!["pound"],
-            Atom::PoundForce                     => vec!["pound force"],
-            Atom::PrintersPica                   => vec!["Printer's pica"],
-            Atom::PrintersPoint                  => vec!["Printer's point"],
-            Atom::PrismDiopter                   => vec!["prism diopter"],
-            Atom::ProteinNitrogenUnit            => vec!["protein nitrogen unit"],
-            Atom::ProtonMass                     => vec!["proton mass"],
+            Atom::PH => vec!["pH"],
+            Atom::PaceBR => vec!["pace"],
+            Atom::Parsec => vec!["parsec"],
+            Atom::PartsPerBillion => vec!["parts per billion"],
+            Atom::PartsPerMillion => vec!["parts per million"],
+            Atom::PartsPerThousand => vec!["parts per thousand"],
+            Atom::PartsPerTrillion => vec!["parts per trillion"],
+            Atom::Pascal => vec!["pascal"],
+            Atom::Percent => vec!["percent"],
+            Atom::PermeabilityOfVacuum => vec!["permeability of vacuum"],
+            Atom::PermittivityOfVacuum => vec!["permittivity of vacuum"],
+            Atom::PeckBR | Atom::PeckUS => vec!["peck"],
+            Atom::PennyweightTR => vec!["pennyweight"],
+            Atom::Phot => vec!["phot"],
+            Atom::Pica => vec!["pica"],
+            Atom::Pied => vec!["pied", "French foot"],
+            Atom::PintBR | Atom::PintUS => vec!["pint"],
+            Atom::PlanckConstant => vec!["Planck constant"],
+            Atom::Poise => vec!["Poise"],
+            Atom::Point => vec!["point"],
+            Atom::Pouce => vec!["pouce", "French inch"],
+            Atom::PoundAP | Atom::PoundAV | Atom::PoundTR => vec!["pound"],
+            Atom::PoundForce => vec!["pound force"],
+            Atom::PrintersPica => vec!["Printer's pica"],
+            Atom::PrintersPoint => vec!["Printer's point"],
+            Atom::PrismDiopter => vec!["prism diopter"],
+            Atom::ProteinNitrogenUnit => vec!["protein nitrogen unit"],
+            Atom::ProtonMass => vec!["proton mass"],
 
-            Atom::QuartBR |
-                Atom::QuartUS                    => vec!["quart"],
-            Atom::QueenAnnesWineGallon           => vec!["Queen Ann's wine gallon"],
+            Atom::QuartBR | Atom::QuartUS => vec!["quart"],
+            Atom::QueenAnnesWineGallon => vec!["Queen Ann's wine gallon"],
 
-            Atom::RadiationAbsorbedDose          => vec!["radiation absorbed dose"],
-            Atom::RadiationEquivalentMan         => vec!["radiation equivalent man"],
-            Atom::RamdensChainUS                 => vec!["Ramden's chain", "Engineer's chain"],
-            Atom::RodBR |
-                Atom::RodUS                      => vec!["rod"],
-            Atom::Roentgen                       => vec!["Roentgen"],
+            Atom::RadiationAbsorbedDose => vec!["radiation absorbed dose"],
+            Atom::RadiationEquivalentMan => vec!["radiation equivalent man"],
+            Atom::RamdensChainUS => vec!["Ramden's chain", "Engineer's chain"],
+            Atom::RodBR | Atom::RodUS => vec!["rod"],
+            Atom::Roentgen => vec!["Roentgen"],
 
-            Atom::ScrupleAP                      => vec!["scruple"],
-            Atom::Section                        => vec!["section"],
-            Atom::ShortHundredweightAV           => vec!["short hundredweight", "U.S. hundredweight"],
-            Atom::ShortTonAV                     => vec!["short ton", "U.S. ton"],
-            Atom::Siemens                        => vec!["siemens"],
-            Atom::Sievert                        => vec!["sievert"],
-            Atom::SquareFootInternational        => vec!["square foot"],
-            Atom::SquareInchInternational        => vec!["square inch"],
-            Atom::SquareMileUS                   => vec!["square mile"],
-            Atom::SquareRodUS                    => vec!["square rod"],
-            Atom::SquareYardInternational        => vec!["square yard"],
+            Atom::ScrupleAP => vec!["scruple"],
+            Atom::Section => vec!["section"],
+            Atom::ShortHundredweightAV => vec!["short hundredweight", "U.S. hundredweight"],
+            Atom::ShortTonAV => vec!["short ton", "U.S. ton"],
+            Atom::Siemens => vec!["siemens"],
+            Atom::Sievert => vec!["sievert"],
+            Atom::SquareFootInternational => vec!["square foot"],
+            Atom::SquareInchInternational => vec!["square inch"],
+            Atom::SquareMileUS => vec!["square mile"],
+            Atom::SquareRodUS => vec!["square rod"],
+            Atom::SquareYardInternational => vec!["square yard"],
             Atom::StandardAccelerationOfFreeFall => vec!["standard acceleration of free fall"],
-            Atom::StandardAtmosphere             => vec!["standard atmosphere"],
-            Atom::Steradian                      => vec!["steradian"],
-            Atom::Stilb                          => vec!["stilb"],
-            Atom::StoneAV                        => vec!["stone", "British stone"],
-            Atom::Stokes                         => vec!["Stokes"],
-            Atom::SynodalMonth                   => vec!["synodal month"],
+            Atom::StandardAtmosphere => vec!["standard atmosphere"],
+            Atom::Steradian => vec!["steradian"],
+            Atom::Stilb => vec!["stilb"],
+            Atom::StoneAV => vec!["stone", "British stone"],
+            Atom::Stokes => vec!["Stokes"],
+            Atom::SynodalMonth => vec!["synodal month"],
 
-            Atom::TablespoonM              => vec!["metric tablespoon"],
-            Atom::TablespoonUS                   => vec!["tablespoon"],
-            Atom::TeaspoonM                => vec!["metric teaspoon"],
-            Atom::TeaspoonUS                     => vec!["teaspoon"],
-            Atom::Tesla                          => vec!["tesla"],
-            Atom::TheNumberPi                    => vec!["the number pi"],
-            Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar => {
+            Atom::TablespoonM => vec!["metric tablespoon"],
+            Atom::TablespoonUS => vec!["tablespoon"],
+            Atom::TeaspoonM => vec!["metric teaspoon"],
+            Atom::TeaspoonUS => vec!["teaspoon"],
+            Atom::Tesla => vec!["tesla"],
+            Atom::TheNumberPi => vec!["the number pi"],
+            Atom::TheNumberTenForArbitraryPowersCaret
+            | Atom::TheNumberTenForArbitraryPowersStar => {
                 vec!["the number ten for arbitrary powers"]
-            },
-            Atom::Tonne           => vec!["tonne"],
-            Atom::Township        => vec!["township"],
-            Atom::TropicalYear    => vec!["tropical year"],
+            }
+            Atom::Tonne => vec!["tonne"],
+            Atom::Township => vec!["township"],
+            Atom::TropicalYear => vec!["tropical year"],
 
-            Atom::VelocityOfLight   => vec!["velocity of light"],
-            Atom::Volt              => vec!["volt"],
-            Atom::Watt              => vec!["watt"],
-            Atom::Weber             => vec!["weber"],
-            Atom::Week              => vec!["week"],
-            Atom::YardBR |
-                Atom::YardInternational |
-                Atom::YardUS        => vec!["yard"],
-            Atom::Year              => vec!["year"],
+            Atom::VelocityOfLight => vec!["velocity of light"],
+            Atom::Volt => vec!["volt"],
+            Atom::Watt => vec!["watt"],
+            Atom::Weber => vec!["weber"],
+            Atom::Week => vec!["week"],
+            Atom::YardBR | Atom::YardInternational | Atom::YardUS => vec!["yard"],
+            Atom::Year => vec!["year"],
         }
     }
 
     fn primary_code(&self) -> &'static str {
         match *self {
             Atom::TheUnity => "1",
-            Atom::Candela  => "cd",
-            Atom::Coulomb  => "C",
-            Atom::Gram     => "g",
-            Atom::Kelvin   => "K",
-            Atom::Meter    => "m",
-            Atom::Radian   => "rad",
-            Atom::Second   => "s",
+            Atom::Candela => "cd",
+            Atom::Coulomb => "C",
+            Atom::Gram => "g",
+            Atom::Kelvin => "K",
+            Atom::Meter => "m",
+            Atom::Radian => "rad",
+            Atom::Second => "s",
 
             // Derived units
-            Atom::AcreBR                              => "[acr_br]",
-            Atom::AcreUS                              => "[acr_us]",
-            Atom::Ampere                              => "A",
-            Atom::Are                                 => "ar",
-            Atom::AstronomicUnit                      => "AU",
-            Atom::AtomicMassUnit                      => "u",
+            Atom::AcreBR => "[acr_br]",
+            Atom::AcreUS => "[acr_us]",
+            Atom::Ampere => "A",
+            Atom::Are => "ar",
+            Atom::AstronomicUnit => "AU",
+            Atom::AtomicMassUnit => "u",
 
-            Atom::Bar                                 => "bar",
-            Atom::BarrelUS                            => "[bbl_us]",
-            Atom::Becquerel                           => "Bq",
-            Atom::Biot                                => "Bi",
-            Atom::BoardFootInternational              => "[bf_i]",
-            Atom::BoltzmannConstant                   => "[k]",
-            Atom::BtuAt39F                            => "[Btu_39]",
-            Atom::BushelBR                            => "[bu_br]",
-            Atom::BushelUS                            => "[bu_us]",
+            Atom::Bar => "bar",
+            Atom::BarrelUS => "[bbl_us]",
+            Atom::Becquerel => "Bq",
+            Atom::Biot => "Bi",
+            Atom::BoardFootInternational => "[bf_i]",
+            Atom::BoltzmannConstant => "[k]",
+            Atom::BtuAt39F => "[Btu_39]",
+            Atom::BushelBR => "[bu_br]",
+            Atom::BushelUS => "[bu_us]",
 
-            Atom::CalorieAt15C                        => "cal_[15]",
-            Atom::CalorieAt20C                        => "cal_[20]",
-            Atom::CalorieIT                           => "cal_IT",
-            Atom::CalorieTH                           => "cal_th",
-            Atom::CalorieM                            => "cal_m",
-            Atom::Calorie                             => "cal",
-            Atom::CalorieNutritionLabel               => "[Cal]",
-            Atom::Cicero                              => "[cicero]",
-            Atom::CircularMilInternational            => "[cml_i]",
-            Atom::CordInternational                   => "[cr_i]",
-            Atom::CordUS                              => "[crd_us]",
-            Atom::CubicFootInternational              => "[cft_i]",
-            Atom::CubicInchInternational              => "[cin_i]",
-            Atom::CubicYardInternational              => "[cyd_i]",
-            Atom::CupM                          => "[cup_m]",
-            Atom::CupUS                               => "[cup_us]",
-            Atom::Curie                               => "Ci",
+            Atom::CalorieAt15C => "cal_[15]",
+            Atom::CalorieAt20C => "cal_[20]",
+            Atom::CalorieIT => "cal_IT",
+            Atom::CalorieTH => "cal_th",
+            Atom::CalorieM => "cal_m",
+            Atom::Calorie => "cal",
+            Atom::CalorieNutritionLabel => "[Cal]",
+            Atom::Cicero => "[cicero]",
+            Atom::CircularMilInternational => "[cml_i]",
+            Atom::CordInternational => "[cr_i]",
+            Atom::CordUS => "[crd_us]",
+            Atom::CubicFootInternational => "[cft_i]",
+            Atom::CubicInchInternational => "[cin_i]",
+            Atom::CubicYardInternational => "[cyd_i]",
+            Atom::CupM => "[cup_m]",
+            Atom::CupUS => "[cup_us]",
+            Atom::Curie => "Ci",
 
-            Atom::Day                                 => "d",
-            Atom::Degree                              => "deg",
-            Atom::DegreeCelsius                       => "Cel",
-            Atom::DegreeFahrenheit                    => "[degF]",
-            Atom::DegreeMinute                        => "'",
-            Atom::DegreeRankine                       => "[degR]",
-            Atom::DegreeReaumur                       => "[degRe]",
-            Atom::DegreeSecond                        => "''",
-            Atom::Didot                               => "[didot]",
-            Atom::DramAP                              => "[dr_ap]",
-            Atom::DramAV                              => "[dr_av]",
-            Atom::DryPintUS                           => "[dpt_us]",
-            Atom::DryQuartUS                          => "[dqt_us]",
-            Atom::Dyne                                => "dyn",
+            Atom::Day => "d",
+            Atom::Degree => "deg",
+            Atom::DegreeCelsius => "Cel",
+            Atom::DegreeFahrenheit => "[degF]",
+            Atom::DegreeMinute => "'",
+            Atom::DegreeRankine => "[degR]",
+            Atom::DegreeReaumur => "[degRe]",
+            Atom::DegreeSecond => "''",
+            Atom::Didot => "[didot]",
+            Atom::DramAP => "[dr_ap]",
+            Atom::DramAV => "[dr_av]",
+            Atom::DryPintUS => "[dpt_us]",
+            Atom::DryQuartUS => "[dqt_us]",
+            Atom::Dyne => "dyn",
 
-            Atom::ElectronMass                        => "[m_e]",
-            Atom::Electronvolt                        => "eV",
-            Atom::ElementaryCharge                    => "[e]",
-            Atom::Equivalents                         => "eq",
-            Atom::Erg                                 => "erg",
+            Atom::ElectronMass => "[m_e]",
+            Atom::Electronvolt => "eV",
+            Atom::ElementaryCharge => "[e]",
+            Atom::Equivalents => "eq",
+            Atom::Erg => "erg",
 
-            Atom::Farad                               => "F",
-            Atom::FathomInternational                 => "[fth_i]",
-            Atom::FathomBR                            => "[fth_br]",
-            Atom::FathomUS                            => "[fth_us]",
-            Atom::FluidDramBR                         => "[fdr_br]",
-            Atom::FluidDramUS                         => "[fdr_us]",
-            Atom::FluidOunceBR                        => "[foz_br]",
-            Atom::FluidOunceM                   => "[foz_m]",
-            Atom::FluidOunceUS                        => "[foz_us]",
-            Atom::FootInternational                   => "[ft_i]",
-            Atom::FootBR                              => "[ft_br]",
-            Atom::FootUS                              => "[ft_us]",
-            Atom::FurlongUS                           => "[fur_us]",
+            Atom::Farad => "F",
+            Atom::FathomInternational => "[fth_i]",
+            Atom::FathomBR => "[fth_br]",
+            Atom::FathomUS => "[fth_us]",
+            Atom::FluidDramBR => "[fdr_br]",
+            Atom::FluidDramUS => "[fdr_us]",
+            Atom::FluidOunceBR => "[foz_br]",
+            Atom::FluidOunceM => "[foz_m]",
+            Atom::FluidOunceUS => "[foz_us]",
+            Atom::FootInternational => "[ft_i]",
+            Atom::FootBR => "[ft_br]",
+            Atom::FootUS => "[ft_us]",
+            Atom::FurlongUS => "[fur_us]",
 
-            Atom::Gal                                 => "Gal",
-            Atom::GallonBR                            => "[gal_br]",
-            Atom::Gauss                               => "G",
-            Atom::Gilbert                             => "Gb",
-            Atom::GillBR                              => "[gil_br]",
-            Atom::GillUS                              => "[gil_us]",
-            Atom::Gon                                 => "gon",
-            Atom::GramForce                           => "gf",
-            Atom::GramPercent                         => "g%",
-            Atom::Grain                               => "[gr]",
-            Atom::Gray                                => "Gy",
-            Atom::GuntersChainBR                      => "[ch_br]",
-            Atom::GuntersChainUS                      => "[ch_us]",
+            Atom::Gal => "Gal",
+            Atom::GallonBR => "[gal_br]",
+            Atom::Gauss => "G",
+            Atom::Gilbert => "Gb",
+            Atom::GillBR => "[gil_br]",
+            Atom::GillUS => "[gil_us]",
+            Atom::Gon => "gon",
+            Atom::GramForce => "gf",
+            Atom::GramPercent => "g%",
+            Atom::Grain => "[gr]",
+            Atom::Gray => "Gy",
+            Atom::GuntersChainBR => "[ch_br]",
+            Atom::GuntersChainUS => "[ch_us]",
 
-            Atom::HandInternational                   => "[hd_i]",
-            Atom::Henry                               => "H",
-            Atom::Hertz                               => "Hz",
-            Atom::HistoricalWinchesterGallon          => "[gal_wi]",
-            Atom::Horsepower                          => "[HP]",
-            Atom::Hour                                => "h",
+            Atom::HandInternational => "[hd_i]",
+            Atom::Henry => "H",
+            Atom::Hertz => "Hz",
+            Atom::HistoricalWinchesterGallon => "[gal_wi]",
+            Atom::Horsepower => "[HP]",
+            Atom::Hour => "h",
 
-            Atom::InchInternational                   => "[in_i]",
-            Atom::InchBR                              => "[in_br]",
-            Atom::InchUS                              => "[in_us]",
+            Atom::InchInternational => "[in_i]",
+            Atom::InchBR => "[in_br]",
+            Atom::InchUS => "[in_us]",
 
-            Atom::Joule                               => "J",
+            Atom::Joule => "J",
 
-            Atom::Kayser                              => "Ky",
-            Atom::KnotBR                              => "[kn_br]",
-            Atom::KnotInternational                   => "[kn_i]",
+            Atom::Kayser => "Ky",
+            Atom::KnotBR => "[kn_br]",
+            Atom::KnotInternational => "[kn_i]",
 
-            Atom::Lambert                             => "Lmb",
-            Atom::LongHundredweightAV                 => "[lcwt_av]",
-            Atom::LongTonAV                           => "[lton_av]",
-            Atom::LightYear                           => "[ly]",
-            Atom::Ligne                               => "[ligne]",
-            Atom::Line                                => "[lne]",
-            Atom::LinkForGuntersChainBR               => "[lk_br]",
-            Atom::LinkForGuntersChainUS               => "[lk_us]",
-            Atom::LinkForRamdensChainUS               => "[rlk_us]",
-            Atom::Liter                               => "l",
-            Atom::Lumen                               => "lm",
-            Atom::Lux                                 => "lx",
+            Atom::Lambert => "Lmb",
+            Atom::LongHundredweightAV => "[lcwt_av]",
+            Atom::LongTonAV => "[lton_av]",
+            Atom::LightYear => "[ly]",
+            Atom::Ligne => "[ligne]",
+            Atom::Line => "[lne]",
+            Atom::LinkForGuntersChainBR => "[lk_br]",
+            Atom::LinkForGuntersChainUS => "[lk_us]",
+            Atom::LinkForRamdensChainUS => "[rlk_us]",
+            Atom::Liter => "l",
+            Atom::Lumen => "lm",
+            Atom::Lux => "lx",
 
-            Atom::Maxwell                             => "Mx",
-            Atom::MeanGregorianMonth                  => "mo_g",
-            Atom::MeanGregorianYear                   => "a_g",
-            Atom::MeanJulianMonth                     => "mo_j",
-            Atom::MeanJulianYear                      => "a_j",
-            Atom::MilInternational                    => "[mil_i]",
-            Atom::MilUS                               => "[mil_us]",
-            Atom::MileInternational                   => "[mi_i]",
-            Atom::MileBR                              => "[mi_br]",
-            Atom::MileUS                              => "[mi_us]",
-            Atom::MinimBR                             => "[min_br]",
-            Atom::MinimUS                             => "[min_us]",
-            Atom::Minute                              => "min",
-            Atom::Mole                                => "mol",
-            Atom::Month                               => "mo",
+            Atom::Maxwell => "Mx",
+            Atom::MeanGregorianMonth => "mo_g",
+            Atom::MeanGregorianYear => "a_g",
+            Atom::MeanJulianMonth => "mo_j",
+            Atom::MeanJulianYear => "a_j",
+            Atom::MilInternational => "[mil_i]",
+            Atom::MilUS => "[mil_us]",
+            Atom::MileInternational => "[mi_i]",
+            Atom::MileBR => "[mi_br]",
+            Atom::MileUS => "[mi_us]",
+            Atom::MinimBR => "[min_br]",
+            Atom::MinimUS => "[min_us]",
+            Atom::Minute => "min",
+            Atom::Mole => "mol",
+            Atom::Month => "mo",
 
-            Atom::NauticalMileBR                      => "[nmi_br]",
-            Atom::NauticalMileInternational           => "[nmi_i]",
-            Atom::Newton                              => "N",
-            Atom::NewtonianConstantOfGravitation      => "[G]",
+            Atom::NauticalMileBR => "[nmi_br]",
+            Atom::NauticalMileInternational => "[nmi_i]",
+            Atom::Newton => "N",
+            Atom::NewtonianConstantOfGravitation => "[G]",
 
-            Atom::Ohm                                 => "Ohm",
-            Atom::Oersted                             => "Oe",
-            Atom::OunceAP                             => "[oz_ap]",
-            Atom::OunceAV                             => "[oz_av]",
-            Atom::OunceM                              => "[oz_m]",
-            Atom::OunceTR                             => "[oz_tr]",
+            Atom::Ohm => "Ohm",
+            Atom::Oersted => "Oe",
+            Atom::OunceAP => "[oz_ap]",
+            Atom::OunceAV => "[oz_av]",
+            Atom::OunceM => "[oz_m]",
+            Atom::OunceTR => "[oz_tr]",
 
-            Atom::PH                                  => "[pH]",
-            Atom::PaceBR                              => "[pc_br]",
-            Atom::Parsec                              => "pc",
-            Atom::PartsPerBillion                     => "[ppb]",
-            Atom::PartsPerMillion                     => "[ppm]",
-            Atom::PartsPerThousand                    => "[ppth]",
-            Atom::PartsPerTrillion                    => "[pptr]",
-            Atom::Pascal                              => "Pa",
-            Atom::Percent                             => "%",
-            Atom::PermeabilityOfVacuum                => "[mu_0]",
-            Atom::PermittivityOfVacuum                => "[eps_0]",
-            Atom::PeckBR                              => "[pk_br]",
-            Atom::PeckUS                              => "[pk_us]",
-            Atom::PennyweightTR                       => "[pwt_tr]",
-            Atom::Phot                                => "ph",
-            Atom::Pica                                => "[pca]",
-            Atom::Pied                                => "[pied]",
-            Atom::PintBR                              => "[pt_br]",
-            Atom::PintUS                              => "[pt_us]",
-            Atom::PlanckConstant                      => "[h]",
-            Atom::Poise                               => "P",
-            Atom::Point                               => "[pnt]",
-            Atom::Pouce                               => "[pouce]",
-            Atom::PoundAP                             => "[lb_ap]",
-            Atom::PoundAV                             => "[lb_av]",
-            Atom::PoundTR                             => "[lb_tr]",
-            Atom::PoundForce                          => "[lbf_av]",
-            Atom::PrintersPica                        => "[pca_pr]",
-            Atom::PrintersPoint                       => "[pnt_pr]",
-            Atom::PrismDiopter                        => "[p'diop]",
-            Atom::ProteinNitrogenUnit                 => "[PNU]",
-            Atom::ProtonMass                          => "[m_p]",
+            Atom::PH => "[pH]",
+            Atom::PaceBR => "[pc_br]",
+            Atom::Parsec => "pc",
+            Atom::PartsPerBillion => "[ppb]",
+            Atom::PartsPerMillion => "[ppm]",
+            Atom::PartsPerThousand => "[ppth]",
+            Atom::PartsPerTrillion => "[pptr]",
+            Atom::Pascal => "Pa",
+            Atom::Percent => "%",
+            Atom::PermeabilityOfVacuum => "[mu_0]",
+            Atom::PermittivityOfVacuum => "[eps_0]",
+            Atom::PeckBR => "[pk_br]",
+            Atom::PeckUS => "[pk_us]",
+            Atom::PennyweightTR => "[pwt_tr]",
+            Atom::Phot => "ph",
+            Atom::Pica => "[pca]",
+            Atom::Pied => "[pied]",
+            Atom::PintBR => "[pt_br]",
+            Atom::PintUS => "[pt_us]",
+            Atom::PlanckConstant => "[h]",
+            Atom::Poise => "P",
+            Atom::Point => "[pnt]",
+            Atom::Pouce => "[pouce]",
+            Atom::PoundAP => "[lb_ap]",
+            Atom::PoundAV => "[lb_av]",
+            Atom::PoundTR => "[lb_tr]",
+            Atom::PoundForce => "[lbf_av]",
+            Atom::PrintersPica => "[pca_pr]",
+            Atom::PrintersPoint => "[pnt_pr]",
+            Atom::PrismDiopter => "[p'diop]",
+            Atom::ProteinNitrogenUnit => "[PNU]",
+            Atom::ProtonMass => "[m_p]",
 
-            Atom::QuartBR                             => "[qt_br]",
-            Atom::QuartUS                             => "[qt_us]",
-            Atom::QueenAnnesWineGallon                => "[gal_us]",
+            Atom::QuartBR => "[qt_br]",
+            Atom::QuartUS => "[qt_us]",
+            Atom::QueenAnnesWineGallon => "[gal_us]",
 
-            Atom::RadiationAbsorbedDose               => "RAD",
-            Atom::RadiationEquivalentMan              => "REM",
-            Atom::RamdensChainUS                      => "[rch_us]",
-            Atom::RodBR                               => "[rd_br]",
-            Atom::RodUS                               => "[rd_us]",
-            Atom::Roentgen                            => "R",
+            Atom::RadiationAbsorbedDose => "RAD",
+            Atom::RadiationEquivalentMan => "REM",
+            Atom::RamdensChainUS => "[rch_us]",
+            Atom::RodBR => "[rd_br]",
+            Atom::RodUS => "[rd_us]",
+            Atom::Roentgen => "R",
 
-            Atom::ScrupleAP                           => "[SC_AP]",
-            Atom::Section                             => "[sct]",
-            Atom::ShortHundredweightAV                => "[scwt_av]",
-            Atom::ShortTonAV                          => "[ston_av]",
-            Atom::Siemens                             => "S",
-            Atom::Sievert                             => "Sv",
-            Atom::SquareFootInternational             => "[sft_i]",
-            Atom::SquareInchInternational             => "[sin_i]",
-            Atom::SquareMileUS                        => "[smi_us]",
-            Atom::SquareRodUS                         => "[srd_us]",
-            Atom::SquareYardInternational             => "[syd_i]",
-            Atom::StandardAccelerationOfFreeFall      => "[g]",
-            Atom::StandardAtmosphere                  => "atm",
-            Atom::Steradian                           => "sr",
-            Atom::Stilb                               => "sb",
-            Atom::StoneAV                             => "[stone_av]",
-            Atom::Stokes                              => "St",
-            Atom::SynodalMonth                        => "mo_s",
+            Atom::ScrupleAP => "[SC_AP]",
+            Atom::Section => "[sct]",
+            Atom::ShortHundredweightAV => "[scwt_av]",
+            Atom::ShortTonAV => "[ston_av]",
+            Atom::Siemens => "S",
+            Atom::Sievert => "Sv",
+            Atom::SquareFootInternational => "[sft_i]",
+            Atom::SquareInchInternational => "[sin_i]",
+            Atom::SquareMileUS => "[smi_us]",
+            Atom::SquareRodUS => "[srd_us]",
+            Atom::SquareYardInternational => "[syd_i]",
+            Atom::StandardAccelerationOfFreeFall => "[g]",
+            Atom::StandardAtmosphere => "atm",
+            Atom::Steradian => "sr",
+            Atom::Stilb => "sb",
+            Atom::StoneAV => "[stone_av]",
+            Atom::Stokes => "St",
+            Atom::SynodalMonth => "mo_s",
 
-            Atom::TablespoonM                   => "[tbs_m]",
-            Atom::TablespoonUS                        => "[tbs_us]",
-            Atom::TeaspoonM                     => "[tsp_m]",
-            Atom::TeaspoonUS                          => "[tsp_us]",
-            Atom::Tesla                               => "T",
-            Atom::TheNumberPi                         => "[pi]",
+            Atom::TablespoonM => "[tbs_m]",
+            Atom::TablespoonUS => "[tbs_us]",
+            Atom::TeaspoonM => "[tsp_m]",
+            Atom::TeaspoonUS => "[tsp_us]",
+            Atom::Tesla => "T",
+            Atom::TheNumberPi => "[pi]",
             Atom::TheNumberTenForArbitraryPowersCaret => "10^",
-            Atom::TheNumberTenForArbitraryPowersStar  => "10*",
-            Atom::Tonne                               => "t",
-            Atom::Township                            => "[twp]",
-            Atom::TropicalYear                        => "a_t",
+            Atom::TheNumberTenForArbitraryPowersStar => "10*",
+            Atom::Tonne => "t",
+            Atom::Township => "[twp]",
+            Atom::TropicalYear => "a_t",
 
-            Atom::VelocityOfLight                     => "[c]",
-            Atom::Volt                                => "V",
+            Atom::VelocityOfLight => "[c]",
+            Atom::Volt => "V",
 
-            Atom::Watt                                => "W",
-            Atom::Weber                               => "Wb",
-            Atom::Week                                => "wk",
+            Atom::Watt => "W",
+            Atom::Weber => "Wb",
+            Atom::Week => "wk",
 
-            Atom::YardInternational                   => "[yd_i]",
-            Atom::YardBR                              => "[yd_br]",
-            Atom::YardUS                              => "[yd_us]",
-            Atom::Year                                => "a",
+            Atom::YardInternational => "[yd_i]",
+            Atom::YardBR => "[yd_br]",
+            Atom::YardUS => "[yd_us]",
+            Atom::Year => "a",
         }
     }
 
     fn print_symbol(&self) -> Option<&'static str> {
         match *self {
-            Atom::Candela       |
-                Atom::Coulomb   |
-                Atom::Gram      |
-                Atom::Kelvin    |
-                Atom::Meter     |
-                Atom::Radian    |
-                Atom::Second    |
+            Atom::Candela
+            | Atom::Coulomb
+            | Atom::Gram
+            | Atom::Kelvin
+            | Atom::Meter
+            | Atom::Radian
+            | Atom::Second
+            | Atom::Ampere
+            | Atom::AstronomicUnit
+            | Atom::AtomicMassUnit
+            | Atom::Bar
+            | Atom::Becquerel
+            | Atom::Biot
+            | Atom::Calorie
+            | Atom::Curie
+            | Atom::Day
+            | Atom::DegreeMinute
+            | Atom::DegreeSecond
+            | Atom::Dyne
+            | Atom::Electronvolt
+            | Atom::Erg
+            | Atom::Farad
+            | Atom::Gal
+            | Atom::Gilbert
+            | Atom::GramForce
+            | Atom::GramPercent
+            | Atom::Gray
+            | Atom::Henry
+            | Atom::Hertz
+            | Atom::Hour
+            | Atom::Joule
+            | Atom::Liter
+            | Atom::Lumen
+            | Atom::Lux
+            | Atom::Maxwell
+            | Atom::MeanGregorianMonth
+            | Atom::MeanGregorianYear
+            | Atom::Minute
+            | Atom::Mole
+            | Atom::Month
+            | Atom::Oersted
+            | Atom::Parsec
+            | Atom::Pascal
+            | Atom::Percent
+            | Atom::Phot
+            | Atom::Poise
+            | Atom::RadiationAbsorbedDose
+            | Atom::RadiationEquivalentMan
+            | Atom::Roentgen
+            | Atom::Siemens
+            | Atom::Sievert
+            | Atom::StandardAtmosphere
+            | Atom::Steradian
+            | Atom::Stilb
+            | Atom::Stokes
+            | Atom::Tesla
+            | Atom::Tonne
+            | Atom::Volt
+            | Atom::Watt
+            | Atom::Weber
+            | Atom::Week
+            | Atom::Year => Some(self.primary_code()),
+            Atom::Are => Some("a"),
+            Atom::BoltzmannConstant => Some("𝑘"),
+            Atom::BtuAt39F => Some("Btu<sub>39°F</sub>"),
+            Atom::CalorieAt20C => Some("cal 20°"),
+            Atom::CalorieAt15C => Some("cal 15°"),
+            Atom::CalorieIT => Some("cal<sub>IT</sub>"),
+            Atom::CalorieTH => Some("cal<sub>th</sub>"),
+            Atom::CalorieM => Some("cal<sub>m</sub>"),
+            Atom::CalorieNutritionLabel => Some("Cal"),
+            Atom::CircularMilInternational => Some("circ.mil"),
+            Atom::CubicYardInternational => Some("cu.yd"),
 
-                Atom::Ampere             |
-                Atom::AstronomicUnit     |
-                Atom::AtomicMassUnit     |
+            Atom::Degree => Some("°"),
+            Atom::DegreeCelsius => Some("°C"),
+            Atom::DegreeFahrenheit => Some("°F"),
+            Atom::DegreeRankine => Some("°R"),
+            Atom::DegreeReaumur => Some("°Ré"),
+            Atom::ElectronMass => Some("𝑚ₑ"),
+            Atom::ElementaryCharge => Some("𝑒"),
+            Atom::Equivalents => Some("eq"),
+            Atom::FathomInternational => Some("fth"),
+            Atom::FluidOunceUS | Atom::FluidOunceM => Some("oz fl"),
+            Atom::FootInternational => Some("ft"),
+            Atom::FootUS => Some("ft (us)"),
 
-                Atom::Bar                |
-                Atom::Becquerel          |
-                Atom::Biot               |
+            Atom::Gauss => Some("Gs"),
+            Atom::Gon => Some("□"),
+            Atom::HandInternational => Some("hd"),
 
-                Atom::Calorie            |
-                Atom::Curie              |
+            Atom::Kayser => Some("K"),
+            Atom::KnotInternational => Some("knot"),
+            Atom::Lambert => Some("L"),
+            Atom::LightYear => Some("l.y."),
 
-                Atom::Day                |
-                Atom::DegreeMinute       |
-                Atom::DegreeSecond       |
-                Atom::Dyne               |
+            Atom::MeanJulianMonth => Some("moⱼ"),
+            Atom::MeanJulianYear => Some("aⱼ"),
+            Atom::MilInternational => Some("mil"),
+            Atom::MileInternational => Some("mi"),
+            Atom::NauticalMileInternational => Some("n.mi"),
+            Atom::Ohm => Some("Ω"),
+            Atom::OunceAV => Some("oz"),
 
-                Atom::Electronvolt       |
-                Atom::Erg                |
-                Atom::Farad              |
-
-                Atom::Gal                |
-                Atom::Gilbert            |
-                Atom::GramForce          |
-                Atom::GramPercent        |
-                Atom::Gray               |
-                Atom::Henry              |
-                Atom::Hertz              |
-                Atom::Hour               |
-
-                Atom::Joule              |
-                Atom::Liter              |
-                Atom::Lumen              |
-                Atom::Lux                |
-
-                Atom::Maxwell            |
-                Atom::MeanGregorianMonth |
-                Atom::MeanGregorianYear  |
-                Atom::Minute             |
-                Atom::Mole               |
-                Atom::Month              |
-                Atom::Oersted            |
-
-                Atom::Parsec                 |
-                Atom::Pascal                 |
-                Atom::Percent                |
-                Atom::Phot                   |
-                Atom::Poise                  |
-                Atom::RadiationAbsorbedDose  |
-                Atom::RadiationEquivalentMan |
-                Atom::Roentgen               |
-
-                Atom::Siemens            |
-                Atom::Sievert            |
-                Atom::StandardAtmosphere |
-                Atom::Steradian          |
-                Atom::Stilb              |
-                Atom::Stokes             |
-                Atom::Tesla              |
-                Atom::Tonne              |
-
-                Atom::Volt               |
-                Atom::Watt               |
-                Atom::Weber              |
-                Atom::Week               |
-                Atom::Year                       => Some(self.primary_code()),
-            Atom::Are                            => Some("a"),
-            Atom::BoltzmannConstant              => Some("𝑘"),
-            Atom::BtuAt39F                       => Some("Btu<sub>39°F</sub>"),
-            Atom::CalorieAt20C                   => Some("cal 20°"),
-            Atom::CalorieAt15C                   => Some("cal 15°"),
-            Atom::CalorieIT                      => Some("cal<sub>IT</sub>"),
-            Atom::CalorieTH                      => Some("cal<sub>th</sub>"),
-            Atom::CalorieM                       => Some("cal<sub>m</sub>"),
-            Atom::CalorieNutritionLabel          => Some("Cal"),
-            Atom::CircularMilInternational       => Some("circ.mil"),
-            Atom::CubicYardInternational         => Some("cu.yd"),
-
-            Atom::Degree                         => Some("°"),
-            Atom::DegreeCelsius                  => Some("°C"),
-            Atom::DegreeFahrenheit               => Some("°F"),
-            Atom::DegreeRankine                  => Some("°R"),
-            Atom::DegreeReaumur                  => Some("°Ré"),
-            Atom::ElectronMass                   => Some("𝑚ₑ"),
-            Atom::ElementaryCharge               => Some("𝑒"),
-            Atom::Equivalents                    => Some("eq"),
-            Atom::FathomInternational            => Some("fth"),
-            Atom::FluidOunceUS |
-                Atom::FluidOunceM          => Some("oz fl"),
-            Atom::FootInternational              => Some("ft"),
-            Atom::FootUS                         => Some("ft (us)"),
-
-            Atom::Gauss                          => Some("Gs"),
-            Atom::Gon                            => Some("□"),
-            Atom::HandInternational              => Some("hd"),
-
-            Atom::Kayser                         => Some("K"),
-            Atom::KnotInternational              => Some("knot"),
-            Atom::Lambert                        => Some("L"),
-            Atom::LightYear                      => Some("l.y."),
-
-            Atom::MeanJulianMonth                => Some("moⱼ"),
-            Atom::MeanJulianYear                 => Some("aⱼ"),
-            Atom::MilInternational               => Some("mil"),
-            Atom::MileInternational              => Some("mi"),
-            Atom::NauticalMileInternational      => Some("n.mi"),
-            Atom::Ohm                            => Some("Ω"),
-            Atom::OunceAV                        => Some("oz"),
-
-            Atom::PartsPerBillion                => Some("ppb"),
-            Atom::PartsPerMillion                => Some("ppm"),
-            Atom::PartsPerThousand               => Some("ppth"),
-            Atom::PartsPerTrillion               => Some("pptr"),
-            Atom::PH                             => Some("pH"),
-            Atom::PermeabilityOfVacuum           => Some("μ₀"),
-            Atom::PermittivityOfVacuum           => Some("ε₀"),
-            Atom::PlanckConstant                 => Some("ℎ"),
-            Atom::PoundAV                        => Some("lb"),
-            Atom::PoundForce                     => Some("lbf"),
-            Atom::PrismDiopter                   => Some("PD"),
-            Atom::ProteinNitrogenUnit            => Some("PNU"),
-            Atom::ProtonMass                     => Some("𝑚ₚ"),
+            Atom::PartsPerBillion => Some("ppb"),
+            Atom::PartsPerMillion => Some("ppm"),
+            Atom::PartsPerThousand => Some("ppth"),
+            Atom::PartsPerTrillion => Some("pptr"),
+            Atom::PH => Some("pH"),
+            Atom::PermeabilityOfVacuum => Some("μ₀"),
+            Atom::PermittivityOfVacuum => Some("ε₀"),
+            Atom::PlanckConstant => Some("ℎ"),
+            Atom::PoundAV => Some("lb"),
+            Atom::PoundForce => Some("lbf"),
+            Atom::PrismDiopter => Some("PD"),
+            Atom::ProteinNitrogenUnit => Some("PNU"),
+            Atom::ProtonMass => Some("𝑚ₚ"),
 
             Atom::StandardAccelerationOfFreeFall => Some("𝑔"),
-            Atom::SynodalMonth                   => Some("moₛ"),
-            Atom::TheNumberPi                    => Some("π"),
-            Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar => Some("10"),
-            Atom::TropicalYear      => Some("aₜ"),
+            Atom::SynodalMonth => Some("moₛ"),
+            Atom::TheNumberPi => Some("π"),
+            Atom::TheNumberTenForArbitraryPowersCaret
+            | Atom::TheNumberTenForArbitraryPowersStar => Some("10"),
+            Atom::TropicalYear => Some("aₜ"),
 
-            Atom::VelocityOfLight   => Some("𝑐"),
+            Atom::VelocityOfLight => Some("𝑐"),
             Atom::YardInternational => Some("yd"),
             _ => None,
         }
@@ -1480,468 +1424,449 @@ impl UcumSymbol for Atom {
 
     fn property(&self) -> Property {
         match *self {
-            Atom::Gal |
-                Atom::StandardAccelerationOfFreeFall        => Property::Acceleration,
-            Atom::PH                                        => Property::Acidity,
-            Atom::PlanckConstant                            => Property::Action,
-            Atom::Equivalents |
-                Atom::Mole                                  => Property::AmountOfSubstance,
-            Atom::AcreBR                       |
-                Atom::AcreUS                   |
-                Atom::Are                      |
-                Atom::CircularMilInternational |
-                Atom::Section                  |
-                Atom::SquareFootInternational  |
-                Atom::SquareInchInternational  |
-                Atom::SquareMileUS             |
-                Atom::SquareRodUS              |
-                Atom::SquareYardInternational  |
-                Atom::Township                              => Property::Area,
+            Atom::Gal | Atom::StandardAccelerationOfFreeFall => Property::Acceleration,
+            Atom::PH => Property::Acidity,
+            Atom::PlanckConstant => Property::Action,
+            Atom::Equivalents | Atom::Mole => Property::AmountOfSubstance,
+            Atom::AcreBR
+            | Atom::AcreUS
+            | Atom::Are
+            | Atom::CircularMilInternational
+            | Atom::Section
+            | Atom::SquareFootInternational
+            | Atom::SquareInchInternational
+            | Atom::SquareMileUS
+            | Atom::SquareRodUS
+            | Atom::SquareYardInternational
+            | Atom::Township => Property::Area,
 
-            Atom::Lambert                                   => Property::Brightness,
-            Atom::FathomInternational                       => Property::DepthOfWater,
-            Atom::RadiationEquivalentMan |
-                Atom::Sievert                               => Property::DoseEquivalent,
+            Atom::Lambert => Property::Brightness,
+            Atom::FathomInternational => Property::DepthOfWater,
+            Atom::RadiationEquivalentMan | Atom::Sievert => Property::DoseEquivalent,
 
-            Atom::BushelUS       |
-                Atom::PeckUS     |
-                Atom::DryPintUS  |
-                Atom::DryQuartUS |
-                Atom::HistoricalWinchesterGallon            => Property::DryVolume,
+            Atom::BushelUS
+            | Atom::PeckUS
+            | Atom::DryPintUS
+            | Atom::DryQuartUS
+            | Atom::HistoricalWinchesterGallon => Property::DryVolume,
 
-            Atom::Poise                                     => Property::DynamicViscosity,
-            Atom::Coulomb  |
-                Atom::ElementaryCharge                      => Property::ElectricCharge,
+            Atom::Poise => Property::DynamicViscosity,
+            Atom::Coulomb | Atom::ElementaryCharge => Property::ElectricCharge,
 
-            Atom::Farad                                     => Property::ElectricCapacitance,
-            Atom::Siemens                                   => Property::ElectricConductance,
-            Atom::Ampere |
-                Atom::Biot                                  => Property::ElectricCurrent,
-            Atom::PermittivityOfVacuum                      => Property::ElectricPermittivity,
-            Atom::Volt                                      => Property::ElectricPotential,
-            Atom::Ohm                                       => Property::ElectricResistance,
-            Atom::BtuAt39F                  |
-                Atom::CalorieAt15C          |
-                Atom::CalorieAt20C          |
-                Atom::Calorie               |
-                Atom::CalorieM              |
-                Atom::CalorieNutritionLabel |
-                Atom::CalorieIT             |
-                Atom::CalorieTH             |
-                Atom::Joule                 |
-                Atom::Electronvolt          |
-                Atom::Erg                                   => Property::Energy,
+            Atom::Farad => Property::ElectricCapacitance,
+            Atom::Siemens => Property::ElectricConductance,
+            Atom::Ampere | Atom::Biot => Property::ElectricCurrent,
+            Atom::PermittivityOfVacuum => Property::ElectricPermittivity,
+            Atom::Volt => Property::ElectricPotential,
+            Atom::Ohm => Property::ElectricResistance,
+            Atom::BtuAt39F
+            | Atom::CalorieAt15C
+            | Atom::CalorieAt20C
+            | Atom::Calorie
+            | Atom::CalorieM
+            | Atom::CalorieNutritionLabel
+            | Atom::CalorieIT
+            | Atom::CalorieTH
+            | Atom::Joule
+            | Atom::Electronvolt
+            | Atom::Erg => Property::Energy,
 
-            Atom::Gray |
-                Atom::RadiationAbsorbedDose                 => Property::EnergyDose,
-            Atom::BarrelUS             |
-                Atom::CordUS           |
-                Atom::FluidDramUS      |
-                Atom::FluidOunceUS     |
-                Atom::GillUS           |
-                Atom::FluidOunceM |
-                Atom::MinimUS          |
-                Atom::PintUS           |
-                Atom::QuartUS          |
-                Atom::QueenAnnesWineGallon                  => Property::FluidVolume,
-            Atom::Maxwell                                   => Property::FluxOfMagneticInduction,
-            Atom::Newton        |
-                Atom::Dyne      |
-                Atom::GramForce |
-                Atom::PoundForce                            => Property::Force,
-            Atom::PartsPerBillion     |
-                Atom::PartsPerMillion |
-                Atom::PartsPerTrillion |
-                Atom::PartsPerThousand                      => Property::Fraction,
-            Atom::Hertz                                     => Property::Frequency,
-            Atom::HandInternational                         => Property::HeightOfHorses,
-            Atom::Lux |
-                Atom::Phot                                  => Property::Illuminance,
-            Atom::Henry                                     => Property::Inductance,
-            Atom::Roentgen                                  => Property::IonDose,
-            Atom::Stokes                                    => Property::KinematicViscosity,
+            Atom::Gray | Atom::RadiationAbsorbedDose => Property::EnergyDose,
+            Atom::BarrelUS
+            | Atom::CordUS
+            | Atom::FluidDramUS
+            | Atom::FluidOunceUS
+            | Atom::GillUS
+            | Atom::FluidOunceM
+            | Atom::MinimUS
+            | Atom::PintUS
+            | Atom::QuartUS
+            | Atom::QueenAnnesWineGallon => Property::FluidVolume,
+            Atom::Maxwell => Property::FluxOfMagneticInduction,
+            Atom::Newton | Atom::Dyne | Atom::GramForce | Atom::PoundForce => Property::Force,
+            Atom::PartsPerBillion
+            | Atom::PartsPerMillion
+            | Atom::PartsPerTrillion
+            | Atom::PartsPerThousand => Property::Fraction,
+            Atom::Hertz => Property::Frequency,
+            Atom::HandInternational => Property::HeightOfHorses,
+            Atom::Lux | Atom::Phot => Property::Illuminance,
+            Atom::Henry => Property::Inductance,
+            Atom::Roentgen => Property::IonDose,
+            Atom::Stokes => Property::KinematicViscosity,
 
-            Atom::Meter                         |
-                Atom::AstronomicUnit            |
-                Atom::Cicero                    |
-                Atom::Didot                     |
-                Atom::FathomBR                  |
-                Atom::FathomUS                  |
-                Atom::FootInternational         |
-                Atom::FootBR                    |
-                Atom::FootUS                    |
-                Atom::FurlongUS                 |
-                Atom::GuntersChainBR            |
-                Atom::GuntersChainUS            |
-                Atom::InchInternational         |
-                Atom::InchBR                    |
-                Atom::InchUS                    |
-                Atom::LightYear                 |
-                Atom::Ligne                     |
-                Atom::Line                      |
-                Atom::LinkForGuntersChainBR     |
-                Atom::LinkForGuntersChainUS     |
-                Atom::LinkForRamdensChainUS     |
-                Atom::MilInternational          |
-                Atom::MilUS                     |
-                Atom::MileInternational         |
-                Atom::MileBR                    |
-                Atom::MileUS                    |
-                Atom::NauticalMileBR            |
-                Atom::NauticalMileInternational |
-                Atom::PaceBR                    |
-                Atom::Parsec                    |
-                Atom::Pica                      |
-                Atom::Pied                      |
-                Atom::Point                     |
-                Atom::Pouce                     |
-                Atom::PrintersPica              |
-                Atom::PrintersPoint             |
-                Atom::RamdensChainUS            |
-                Atom::RodBR                     |
-                Atom::RodUS                     |
-                Atom::YardInternational         |
-                Atom::YardBR                    |
-                Atom::YardUS                                => Property::Length,
-            Atom::Kayser                                    => Property::LineicNumber,
-            Atom::Lumen                                     => Property::LuminousFlux,
-            Atom::Candela                                   => Property::LuminousIntensity,
-            Atom::Stilb                                     => Property::LuminousIntensityDensity,
-            Atom::Oersted                                   => Property::MagneticFieldIntensity,
-            Atom::Weber                                     => Property::MagneticFlux,
-            Atom::Gauss |
-                Atom::Tesla                                 => Property::MagneticFluxDensity,
-            Atom::PermeabilityOfVacuum                      => Property::MagneticPermeability,
-            Atom::Gilbert                                   => Property::MagneticTension,
-            Atom::AtomicMassUnit           |
-                Atom::DramAP               |
-                Atom::DramAV               |
-                Atom::Grain                |
-                Atom::Gram                 |
-                Atom::ElectronMass         |
-                Atom::LongHundredweightAV  |
-                Atom::LongTonAV            |
-                Atom::OunceAP              |
-                Atom::OunceAV              |
-                Atom::OunceM               |
-                Atom::OunceTR              |
-                Atom::PennyweightTR        |
-                Atom::PoundAP              |
-                Atom::PoundAV              |
-                Atom::PoundTR              |
-                Atom::ProtonMass           |
-                Atom::ScrupleAP            |
-                Atom::ShortHundredweightAV |
-                Atom::ShortTonAV           |
-                Atom::StoneAV              |
-                Atom::Tonne                                 => Property::Mass,
-            Atom::GramPercent                               => Property::MassConcentration,
-            Atom::Percent                                 |
-                Atom::TheNumberPi                         |
-                Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar    => Property::Number,
-            Atom::Radian           |
-                Atom::Degree       |
-                Atom::DegreeMinute |
-                Atom::DegreeSecond |
-                Atom::Gon                                   => Property::PlaneAngle,
-            Atom::Horsepower |
-                Atom::Watt                                  => Property::Power,
-            Atom::Pascal  |
-                Atom::Bar |
-                Atom::StandardAtmosphere                    => Property::Pressure,
-            Atom::ProteinNitrogenUnit                       => Property::ProcedureDefinedProtein,
-            Atom::PrismDiopter                              => Property::RefractionOfPrism,
-            Atom::Becquerel |
-                Atom::Curie                                 => Property::Radioactivity,
-            Atom::Steradian                                 => Property::SolidAngle,
-            Atom::Kelvin               |
-                Atom::DegreeCelsius    |
-                Atom::DegreeFahrenheit |
-                Atom::DegreeRankine    |
-                Atom::DegreeReaumur                         => Property::Temperature,
-            Atom::Second                 |
-                Atom::Day                |
-                Atom::Hour               |
-                Atom::MeanGregorianMonth |
-                Atom::MeanGregorianYear  |
-                Atom::MeanJulianMonth    |
-                Atom::MeanJulianYear     |
-                Atom::Minute             |
-                Atom::Month              |
-                Atom::SynodalMonth       |
-                Atom::TropicalYear       |
-                Atom::Week               |
-                Atom::Year                                  => Property::Time,
-            Atom::TheUnity              |
-                Atom::BoltzmannConstant |
-                Atom::NewtonianConstantOfGravitation        => Property::Unclassified,
-            Atom::KnotBR                |
-                Atom::KnotInternational |
-                Atom::VelocityOfLight                       => Property::Velocity,
-            Atom::BoardFootInternational     |
-                Atom::BushelBR               |
-                Atom::CordInternational      |
-                Atom::CubicFootInternational |
-                Atom::CubicInchInternational |
-                Atom::CubicYardInternational |
-                Atom::CupUS                  |
-                Atom::FluidDramBR            |
-                Atom::FluidOunceBR           |
-                Atom::GallonBR               |
-                Atom::GillBR                 |
-                Atom::Liter                  |
-                Atom::CupM             |
-                Atom::TablespoonM      |
-                Atom::TeaspoonM        |
-                Atom::MinimBR                |
-                Atom::PeckBR                 |
-                Atom::PintBR                 |
-                Atom::QuartBR                |
-                Atom::TablespoonUS           |
-                Atom::TeaspoonUS                            => Property::Volume,
+            Atom::Meter
+            | Atom::AstronomicUnit
+            | Atom::Cicero
+            | Atom::Didot
+            | Atom::FathomBR
+            | Atom::FathomUS
+            | Atom::FootInternational
+            | Atom::FootBR
+            | Atom::FootUS
+            | Atom::FurlongUS
+            | Atom::GuntersChainBR
+            | Atom::GuntersChainUS
+            | Atom::InchInternational
+            | Atom::InchBR
+            | Atom::InchUS
+            | Atom::LightYear
+            | Atom::Ligne
+            | Atom::Line
+            | Atom::LinkForGuntersChainBR
+            | Atom::LinkForGuntersChainUS
+            | Atom::LinkForRamdensChainUS
+            | Atom::MilInternational
+            | Atom::MilUS
+            | Atom::MileInternational
+            | Atom::MileBR
+            | Atom::MileUS
+            | Atom::NauticalMileBR
+            | Atom::NauticalMileInternational
+            | Atom::PaceBR
+            | Atom::Parsec
+            | Atom::Pica
+            | Atom::Pied
+            | Atom::Point
+            | Atom::Pouce
+            | Atom::PrintersPica
+            | Atom::PrintersPoint
+            | Atom::RamdensChainUS
+            | Atom::RodBR
+            | Atom::RodUS
+            | Atom::YardInternational
+            | Atom::YardBR
+            | Atom::YardUS => Property::Length,
+            Atom::Kayser => Property::LineicNumber,
+            Atom::Lumen => Property::LuminousFlux,
+            Atom::Candela => Property::LuminousIntensity,
+            Atom::Stilb => Property::LuminousIntensityDensity,
+            Atom::Oersted => Property::MagneticFieldIntensity,
+            Atom::Weber => Property::MagneticFlux,
+            Atom::Gauss | Atom::Tesla => Property::MagneticFluxDensity,
+            Atom::PermeabilityOfVacuum => Property::MagneticPermeability,
+            Atom::Gilbert => Property::MagneticTension,
+            Atom::AtomicMassUnit
+            | Atom::DramAP
+            | Atom::DramAV
+            | Atom::Grain
+            | Atom::Gram
+            | Atom::ElectronMass
+            | Atom::LongHundredweightAV
+            | Atom::LongTonAV
+            | Atom::OunceAP
+            | Atom::OunceAV
+            | Atom::OunceM
+            | Atom::OunceTR
+            | Atom::PennyweightTR
+            | Atom::PoundAP
+            | Atom::PoundAV
+            | Atom::PoundTR
+            | Atom::ProtonMass
+            | Atom::ScrupleAP
+            | Atom::ShortHundredweightAV
+            | Atom::ShortTonAV
+            | Atom::StoneAV
+            | Atom::Tonne => Property::Mass,
+            Atom::GramPercent => Property::MassConcentration,
+            Atom::Percent
+            | Atom::TheNumberPi
+            | Atom::TheNumberTenForArbitraryPowersCaret
+            | Atom::TheNumberTenForArbitraryPowersStar => Property::Number,
+            Atom::Radian | Atom::Degree | Atom::DegreeMinute | Atom::DegreeSecond | Atom::Gon => {
+                Property::PlaneAngle
+            }
+            Atom::Horsepower | Atom::Watt => Property::Power,
+            Atom::Pascal | Atom::Bar | Atom::StandardAtmosphere => Property::Pressure,
+            Atom::ProteinNitrogenUnit => Property::ProcedureDefinedProtein,
+            Atom::PrismDiopter => Property::RefractionOfPrism,
+            Atom::Becquerel | Atom::Curie => Property::Radioactivity,
+            Atom::Steradian => Property::SolidAngle,
+            Atom::Kelvin
+            | Atom::DegreeCelsius
+            | Atom::DegreeFahrenheit
+            | Atom::DegreeRankine
+            | Atom::DegreeReaumur => Property::Temperature,
+            Atom::Second
+            | Atom::Day
+            | Atom::Hour
+            | Atom::MeanGregorianMonth
+            | Atom::MeanGregorianYear
+            | Atom::MeanJulianMonth
+            | Atom::MeanJulianYear
+            | Atom::Minute
+            | Atom::Month
+            | Atom::SynodalMonth
+            | Atom::TropicalYear
+            | Atom::Week
+            | Atom::Year => Property::Time,
+            Atom::TheUnity | Atom::BoltzmannConstant | Atom::NewtonianConstantOfGravitation => {
+                Property::Unclassified
+            }
+            Atom::KnotBR | Atom::KnotInternational | Atom::VelocityOfLight => Property::Velocity,
+            Atom::BoardFootInternational
+            | Atom::BushelBR
+            | Atom::CordInternational
+            | Atom::CubicFootInternational
+            | Atom::CubicInchInternational
+            | Atom::CubicYardInternational
+            | Atom::CupUS
+            | Atom::FluidDramBR
+            | Atom::FluidOunceBR
+            | Atom::GallonBR
+            | Atom::GillBR
+            | Atom::Liter
+            | Atom::CupM
+            | Atom::TablespoonM
+            | Atom::TeaspoonM
+            | Atom::MinimBR
+            | Atom::PeckBR
+            | Atom::PintBR
+            | Atom::QuartBR
+            | Atom::TablespoonUS
+            | Atom::TeaspoonUS => Property::Volume,
         }
     }
 
     fn secondary_code(&self) -> &'static str {
         match *self {
             Atom::TheUnity => "1",
-            Atom::Candela  => "CD",
-            Atom::Coulomb  => "C",
-            Atom::Gram     => "G",
-            Atom::Meter    => "M",
-            Atom::Radian   => "RAD",
-            Atom::Second   => "S",
+            Atom::Candela => "CD",
+            Atom::Coulomb => "C",
+            Atom::Gram => "G",
+            Atom::Meter => "M",
+            Atom::Radian => "RAD",
+            Atom::Second => "S",
 
             // Derived units
-            Atom::AcreBR                         => "[ACR_BR]",
-            Atom::AcreUS                         => "[ACR_US]",
-            Atom::Are                            => "AR",
-            Atom::AstronomicUnit                 => "AU",
-            Atom::AtomicMassUnit                 => "AMU",
+            Atom::AcreBR => "[ACR_BR]",
+            Atom::AcreUS => "[ACR_US]",
+            Atom::Are => "AR",
+            Atom::AstronomicUnit => "AU",
+            Atom::AtomicMassUnit => "AMU",
 
-            Atom::Bar                            => "BAR",
-            Atom::BarrelUS                       => "[BBL_US]",
-            Atom::Becquerel                      => "BQ",
-            Atom::Biot                           => "BI",
-            Atom::BoardFootInternational         => "[BF_I]",
-            Atom::BoltzmannConstant              => "[K]",
-            Atom::BtuAt39F                       => "[Btu_39]",
-            Atom::BushelBR                       => "[BU_BR]",
-            Atom::BushelUS                       => "[BU_US]",
+            Atom::Bar => "BAR",
+            Atom::BarrelUS => "[BBL_US]",
+            Atom::Becquerel => "BQ",
+            Atom::Biot => "BI",
+            Atom::BoardFootInternational => "[BF_I]",
+            Atom::BoltzmannConstant => "[K]",
+            Atom::BtuAt39F => "[Btu_39]",
+            Atom::BushelBR => "[BU_BR]",
+            Atom::BushelUS => "[BU_US]",
 
-            Atom::CalorieAt15C                   => "CAL_[15]",
-            Atom::CalorieAt20C                   => "CAL_[20]",
-            Atom::CalorieIT                      => "CAL_IT",
-            Atom::CalorieTH                      => "CAL_TH",
-            Atom::CalorieM                       => "CAL_M",
-            Atom::Calorie                        => "CAL",
-            Atom::CalorieNutritionLabel          => "[CAL]",
-            Atom::Cicero                         => "[CICERO]",
-            Atom::CircularMilInternational       => "[CML_I]",
-            Atom::CordInternational              => "[CR_I]",
-            Atom::CordUS                         => "[CRD_US]",
-            Atom::CubicFootInternational         => "[CFT_I]",
-            Atom::CubicInchInternational         => "[CIN_I]",
-            Atom::CubicYardInternational         => "[CYD_I]",
-            Atom::CupM                           => "[CUP_M]",
-            Atom::CupUS                          => "[CUP_US]",
-            Atom::Curie                          => "CI",
+            Atom::CalorieAt15C => "CAL_[15]",
+            Atom::CalorieAt20C => "CAL_[20]",
+            Atom::CalorieIT => "CAL_IT",
+            Atom::CalorieTH => "CAL_TH",
+            Atom::CalorieM => "CAL_M",
+            Atom::Calorie => "CAL",
+            Atom::CalorieNutritionLabel => "[CAL]",
+            Atom::Cicero => "[CICERO]",
+            Atom::CircularMilInternational => "[CML_I]",
+            Atom::CordInternational => "[CR_I]",
+            Atom::CordUS => "[CRD_US]",
+            Atom::CubicFootInternational => "[CFT_I]",
+            Atom::CubicInchInternational => "[CIN_I]",
+            Atom::CubicYardInternational => "[CYD_I]",
+            Atom::CupM => "[CUP_M]",
+            Atom::CupUS => "[CUP_US]",
+            Atom::Curie => "CI",
 
-            Atom::Day                            => "D",
-            Atom::Degree                         => "DEG",
-            Atom::DegreeCelsius                  => "CEL",
-            Atom::DegreeFahrenheit               => "[DEGF]",
-            Atom::Didot                          => "[DIDOT]",
-            Atom::DramAP                         => "[DR_AP]",
-            Atom::DramAV                         => "[DR_AV]",
-            Atom::DryPintUS                      => "[DPT_US]",
-            Atom::DryQuartUS                     => "[DQT_US]",
-            Atom::Dyne                           => "DYN",
+            Atom::Day => "D",
+            Atom::Degree => "DEG",
+            Atom::DegreeCelsius => "CEL",
+            Atom::DegreeFahrenheit => "[DEGF]",
+            Atom::Didot => "[DIDOT]",
+            Atom::DramAP => "[DR_AP]",
+            Atom::DramAV => "[DR_AV]",
+            Atom::DryPintUS => "[DPT_US]",
+            Atom::DryQuartUS => "[DQT_US]",
+            Atom::Dyne => "DYN",
 
-            Atom::ElectronMass                   => "[M_E]",
-            Atom::Electronvolt                   => "EV",
-            Atom::ElementaryCharge               => "[E]",
-            Atom::Equivalents                    => "EQ",
-            Atom::Erg                            => "ERG",
+            Atom::ElectronMass => "[M_E]",
+            Atom::Electronvolt => "EV",
+            Atom::ElementaryCharge => "[E]",
+            Atom::Equivalents => "EQ",
+            Atom::Erg => "ERG",
 
-            Atom::FathomInternational            => "[FTH_I]",
-            Atom::FathomBR                       => "[FTH_BR]",
-            Atom::FathomUS                       => "[FTH_US]",
-            Atom::FluidDramBR                    => "[FDR_BR]",
-            Atom::FluidDramUS                    => "[FDR_US]",
-            Atom::FluidOunceBR                   => "[FOZ_BR]",
-            Atom::FluidOunceM                    => "[FOZ_M]",
-            Atom::FluidOunceUS                   => "[FOZ_US]",
-            Atom::FootInternational              => "[FT_I]",
-            Atom::FootBR                         => "[FT_BR]",
-            Atom::FootUS                         => "[FT_US]",
-            Atom::FurlongUS                      => "[FUR_US]",
+            Atom::FathomInternational => "[FTH_I]",
+            Atom::FathomBR => "[FTH_BR]",
+            Atom::FathomUS => "[FTH_US]",
+            Atom::FluidDramBR => "[FDR_BR]",
+            Atom::FluidDramUS => "[FDR_US]",
+            Atom::FluidOunceBR => "[FOZ_BR]",
+            Atom::FluidOunceM => "[FOZ_M]",
+            Atom::FluidOunceUS => "[FOZ_US]",
+            Atom::FootInternational => "[FT_I]",
+            Atom::FootBR => "[FT_BR]",
+            Atom::FootUS => "[FT_US]",
+            Atom::FurlongUS => "[FUR_US]",
 
-            Atom::Gal                            => "GL",
-            Atom::GallonBR                       => "[GAL_BR]",
-            Atom::Gauss                          => "GS",
-            Atom::Gilbert                        => "GB",
-            Atom::GillBR                         => "[GIL_BR]",
-            Atom::GillUS                         => "[GIL_US]",
-            Atom::Gon                            => "GON",
-            Atom::GramForce                      => "GF",
-            Atom::GramPercent                    => "G%",
-            Atom::Grain                          => "[GR]",
-            Atom::Gray                           => "GY",
-            Atom::GuntersChainBR                 => "[CH_BR]",
-            Atom::GuntersChainUS                 => "[CH_US]",
+            Atom::Gal => "GL",
+            Atom::GallonBR => "[GAL_BR]",
+            Atom::Gauss => "GS",
+            Atom::Gilbert => "GB",
+            Atom::GillBR => "[GIL_BR]",
+            Atom::GillUS => "[GIL_US]",
+            Atom::Gon => "GON",
+            Atom::GramForce => "GF",
+            Atom::GramPercent => "G%",
+            Atom::Grain => "[GR]",
+            Atom::Gray => "GY",
+            Atom::GuntersChainBR => "[CH_BR]",
+            Atom::GuntersChainUS => "[CH_US]",
 
-            Atom::HandInternational              => "[HD_I]",
-            Atom::Hertz                          => "HZ",
-            Atom::HistoricalWinchesterGallon     => "[GAL_WI]",
-            Atom::Hour                           => "HR",
+            Atom::HandInternational => "[HD_I]",
+            Atom::Hertz => "HZ",
+            Atom::HistoricalWinchesterGallon => "[GAL_WI]",
+            Atom::Hour => "HR",
 
-            Atom::InchInternational              => "[IN_I]",
-            Atom::InchBR                         => "[IN_BR]",
-            Atom::InchUS                         => "[IN_US]",
+            Atom::InchInternational => "[IN_I]",
+            Atom::InchBR => "[IN_BR]",
+            Atom::InchUS => "[IN_US]",
 
-            Atom::Kayser                         => "KY",
-            Atom::KnotBR                         => "[KN_BR]",
-            Atom::KnotInternational              => "[KN_I]",
+            Atom::Kayser => "KY",
+            Atom::KnotBR => "[KN_BR]",
+            Atom::KnotInternational => "[KN_I]",
 
-            Atom::Lambert                        => "LMB",
-            Atom::LongHundredweightAV            => "[LCWT_AV]",
-            Atom::LongTonAV                      => "[LTON_AV]",
-            Atom::LightYear                      => "[LY]",
-            Atom::Ligne                          => "[LIGNE]",
-            Atom::Line                           => "[LNE]",
-            Atom::LinkForGuntersChainBR          => "[LK_BR]",
-            Atom::LinkForGuntersChainUS          => "[LK_US]",
-            Atom::LinkForRamdensChainUS          => "[RLK_US]",
-            Atom::Liter                          => "L",
-            Atom::Lumen                          => "LM",
-            Atom::Lux                            => "LX",
+            Atom::Lambert => "LMB",
+            Atom::LongHundredweightAV => "[LCWT_AV]",
+            Atom::LongTonAV => "[LTON_AV]",
+            Atom::LightYear => "[LY]",
+            Atom::Ligne => "[LIGNE]",
+            Atom::Line => "[LNE]",
+            Atom::LinkForGuntersChainBR => "[LK_BR]",
+            Atom::LinkForGuntersChainUS => "[LK_US]",
+            Atom::LinkForRamdensChainUS => "[RLK_US]",
+            Atom::Liter => "L",
+            Atom::Lumen => "LM",
+            Atom::Lux => "LX",
 
-            Atom::Maxwell                        => "Mx",
-            Atom::MeanGregorianMonth             => "MO_G",
-            Atom::MeanGregorianYear              => "ANN_G",
-            Atom::MeanJulianMonth                => "MO_J",
-            Atom::MeanJulianYear                 => "ANN_J",
-            Atom::MilInternational               => "[MIL_I]",
-            Atom::MilUS                          => "[MIL_US]",
-            Atom::MileInternational              => "[MI_I]",
-            Atom::MileBR                         => "[MI_BR]",
-            Atom::MileUS                         => "[MI_US]",
-            Atom::MinimBR                        => "[MIN_BR]",
-            Atom::MinimUS                        => "[MIN_US]",
-            Atom::Minute                         => "MIN",
-            Atom::Mole                           => "MOL",
-            Atom::Month                          => "MO",
+            Atom::Maxwell => "Mx",
+            Atom::MeanGregorianMonth => "MO_G",
+            Atom::MeanGregorianYear => "ANN_G",
+            Atom::MeanJulianMonth => "MO_J",
+            Atom::MeanJulianYear => "ANN_J",
+            Atom::MilInternational => "[MIL_I]",
+            Atom::MilUS => "[MIL_US]",
+            Atom::MileInternational => "[MI_I]",
+            Atom::MileBR => "[MI_BR]",
+            Atom::MileUS => "[MI_US]",
+            Atom::MinimBR => "[MIN_BR]",
+            Atom::MinimUS => "[MIN_US]",
+            Atom::Minute => "MIN",
+            Atom::Mole => "MOL",
+            Atom::Month => "MO",
 
-            Atom::NauticalMileBR                 => "[NMI_BR]",
-            Atom::NauticalMileInternational      => "[NMI_I]",
+            Atom::NauticalMileBR => "[NMI_BR]",
+            Atom::NauticalMileInternational => "[NMI_I]",
             Atom::NewtonianConstantOfGravitation => "[GC]",
 
-            Atom::Oersted                        => "OE",
-            Atom::Ohm                            => "OHM",
-            Atom::OunceAP                        => "[OZ_AP]",
-            Atom::OunceAV                        => "[OZ_AV]",
-            Atom::OunceM                         => "[OZ_M]",
-            Atom::OunceTR                        => "[OZ_TR]",
+            Atom::Oersted => "OE",
+            Atom::Ohm => "OHM",
+            Atom::OunceAP => "[OZ_AP]",
+            Atom::OunceAV => "[OZ_AV]",
+            Atom::OunceM => "[OZ_M]",
+            Atom::OunceTR => "[OZ_TR]",
 
-            Atom::PH                             => "[PH]",
-            Atom::PaceBR                         => "[PC_BR]",
-            Atom::Parsec                         => "PRS",
-            Atom::PartsPerBillion                => "[PPB]",
-            Atom::PartsPerMillion                => "[PPM]",
-            Atom::PartsPerThousand               => "[PPTH]",
-            Atom::PartsPerTrillion               => "[PPTR]",
-            Atom::Pascal                         => "PAL",
-            Atom::PermeabilityOfVacuum           => "[MU_0]",
-            Atom::PermittivityOfVacuum           => "[EPS_0]",
-            Atom::PeckBR                         => "[PK_BR]",
-            Atom::PeckUS                         => "[PK_US]",
-            Atom::PennyweightTR                  => "[PWT_TR]",
-            Atom::Phot                           => "PHT",
-            Atom::Pica                           => "[PCA]",
-            Atom::Pied                           => "[PIED]",
-            Atom::PintBR                         => "[PT_BR]",
-            Atom::PintUS                         => "[PT_US]",
-            Atom::PlanckConstant                 => "[H]",
-            Atom::Point                          => "[PNT]",
-            Atom::Pouce                          => "[POUCE]",
-            Atom::PoundAP                        => "[LB_AP]",
-            Atom::PoundAV                        => "[LB_AV]",
-            Atom::PoundTR                        => "[LB_TR]",
-            Atom::PoundForce                     => "[LBF_AV]",
-            Atom::PrintersPica                   => "[PCA_PR]",
-            Atom::PrintersPoint                  => "[PNT_PR]",
-            Atom::PrismDiopter                   => "[P'DIOP]",
-            Atom::ProtonMass                     => "[M_P]",
+            Atom::PH => "[PH]",
+            Atom::PaceBR => "[PC_BR]",
+            Atom::Parsec => "PRS",
+            Atom::PartsPerBillion => "[PPB]",
+            Atom::PartsPerMillion => "[PPM]",
+            Atom::PartsPerThousand => "[PPTH]",
+            Atom::PartsPerTrillion => "[PPTR]",
+            Atom::Pascal => "PAL",
+            Atom::PermeabilityOfVacuum => "[MU_0]",
+            Atom::PermittivityOfVacuum => "[EPS_0]",
+            Atom::PeckBR => "[PK_BR]",
+            Atom::PeckUS => "[PK_US]",
+            Atom::PennyweightTR => "[PWT_TR]",
+            Atom::Phot => "PHT",
+            Atom::Pica => "[PCA]",
+            Atom::Pied => "[PIED]",
+            Atom::PintBR => "[PT_BR]",
+            Atom::PintUS => "[PT_US]",
+            Atom::PlanckConstant => "[H]",
+            Atom::Point => "[PNT]",
+            Atom::Pouce => "[POUCE]",
+            Atom::PoundAP => "[LB_AP]",
+            Atom::PoundAV => "[LB_AV]",
+            Atom::PoundTR => "[LB_TR]",
+            Atom::PoundForce => "[LBF_AV]",
+            Atom::PrintersPica => "[PCA_PR]",
+            Atom::PrintersPoint => "[PNT_PR]",
+            Atom::PrismDiopter => "[P'DIOP]",
+            Atom::ProtonMass => "[M_P]",
 
-            Atom::QuartBR                        => "[QT_BR]",
-            Atom::QuartUS                        => "[QT_US]",
-            Atom::QueenAnnesWineGallon           => "[GAL_US]",
+            Atom::QuartBR => "[QT_BR]",
+            Atom::QuartUS => "[QT_US]",
+            Atom::QueenAnnesWineGallon => "[GAL_US]",
 
-            Atom::RadiationAbsorbedDose          => "[RAD]",
-            Atom::RadiationEquivalentMan         => "[REM]",
-            Atom::RamdensChainUS                 => "[RCH_US]",
-            Atom::RodBR                          => "[RD_BR]",
-            Atom::RodUS                          => "[RD_US]",
-            Atom::Roentgen                       => "ROE",
+            Atom::RadiationAbsorbedDose => "[RAD]",
+            Atom::RadiationEquivalentMan => "[REM]",
+            Atom::RamdensChainUS => "[RCH_US]",
+            Atom::RodBR => "[RD_BR]",
+            Atom::RodUS => "[RD_US]",
+            Atom::Roentgen => "ROE",
 
-            Atom::ScrupleAP                      => "[SC_AP]",
-            Atom::Section                        => "[SCT]",
-            Atom::ShortHundredweightAV           => "[SCWT_AV]",
-            Atom::ShortTonAV                     => "[STON_AV]",
-            Atom::Siemens                        => "SIE",
-            Atom::Sievert                        => "SV",
-            Atom::SquareFootInternational        => "[SFT_I]",
-            Atom::SquareInchInternational        => "[SIN_I]",
-            Atom::SquareMileUS                   => "[SMI_US]",
-            Atom::SquareRodUS                    => "[SRD_US]",
-            Atom::SquareYardInternational        => "[SYD_I]",
+            Atom::ScrupleAP => "[SC_AP]",
+            Atom::Section => "[SCT]",
+            Atom::ShortHundredweightAV => "[SCWT_AV]",
+            Atom::ShortTonAV => "[STON_AV]",
+            Atom::Siemens => "SIE",
+            Atom::Sievert => "SV",
+            Atom::SquareFootInternational => "[SFT_I]",
+            Atom::SquareInchInternational => "[SIN_I]",
+            Atom::SquareMileUS => "[SMI_US]",
+            Atom::SquareRodUS => "[SRD_US]",
+            Atom::SquareYardInternational => "[SYD_I]",
             Atom::StandardAccelerationOfFreeFall => "[G]",
-            Atom::StandardAtmosphere             => "ATM",
-            Atom::Steradian                      => "SR",
-            Atom::Stilb                          => "SB",
-            Atom::StoneAV                        => "[STONE_AV]",
-            Atom::Stokes                         => "ST",
-            Atom::SynodalMonth                   => "MO_S",
+            Atom::StandardAtmosphere => "ATM",
+            Atom::Steradian => "SR",
+            Atom::Stilb => "SB",
+            Atom::StoneAV => "[STONE_AV]",
+            Atom::Stokes => "ST",
+            Atom::SynodalMonth => "MO_S",
 
-            Atom::TablespoonM                    => "[TBS_M]",
-            Atom::TablespoonUS                   => "[TBS_US]",
-            Atom::TeaspoonM                      => "[TSP_M]",
-            Atom::TeaspoonUS                     => "[TSP_US]",
-            Atom::TheNumberPi                    => "[PI]",
-            Atom::Tonne                          => "TNE",
-            Atom::Township                       => "[TWP]",
-            Atom::TropicalYear                   => "ANN_T",
+            Atom::TablespoonM => "[TBS_M]",
+            Atom::TablespoonUS => "[TBS_US]",
+            Atom::TeaspoonM => "[TSP_M]",
+            Atom::TeaspoonUS => "[TSP_US]",
+            Atom::TheNumberPi => "[PI]",
+            Atom::Tonne => "TNE",
+            Atom::Township => "[TWP]",
+            Atom::TropicalYear => "ANN_T",
 
-            Atom::VelocityOfLight                => "[C]",
+            Atom::VelocityOfLight => "[C]",
 
-            Atom::Weber                          => "WB",
-            Atom::Week                           => "WK",
+            Atom::Weber => "WB",
+            Atom::Week => "WK",
 
-            Atom::YardInternational              => "[YD_I]",
-            Atom::YardBR                         => "[YD_BR]",
-            Atom::YardUS                         => "[YD_US]",
-            Atom::Year                           => "ANN",
-            Atom::Ampere                                  |
-                Atom::DegreeRankine                       |
-                Atom::DegreeReaumur                       |
-                Atom::DegreeMinute                        |
-                Atom::DegreeSecond                        |
-                Atom::Farad                               |
-                Atom::Henry                               |
-                Atom::Horsepower                          |
-                Atom::Joule                               |
-                Atom::Kelvin                              |
-                Atom::Newton                              |
-                Atom::Percent                             |
-                Atom::Poise                               |
-                Atom::ProteinNitrogenUnit                 |
-                Atom::Tesla                               |
-                Atom::TheNumberTenForArbitraryPowersCaret |
-                Atom::TheNumberTenForArbitraryPowersStar  |
-                Atom::Volt                                |
-                Atom::Watt => self.primary_code(),
+            Atom::YardInternational => "[YD_I]",
+            Atom::YardBR => "[YD_BR]",
+            Atom::YardUS => "[YD_US]",
+            Atom::Year => "ANN",
+            Atom::Ampere
+            | Atom::DegreeRankine
+            | Atom::DegreeReaumur
+            | Atom::DegreeMinute
+            | Atom::DegreeSecond
+            | Atom::Farad
+            | Atom::Henry
+            | Atom::Horsepower
+            | Atom::Joule
+            | Atom::Kelvin
+            | Atom::Newton
+            | Atom::Percent
+            | Atom::Poise
+            | Atom::ProteinNitrogenUnit
+            | Atom::Tesla
+            | Atom::TheNumberTenForArbitraryPowersCaret
+            | Atom::TheNumberTenForArbitraryPowersStar
+            | Atom::Volt
+            | Atom::Watt => self.primary_code(),
         }
     }
 
@@ -1961,24 +1886,24 @@ impl UcumSymbol for Atom {
 
     fn calculate_scalar(&self, value: f64) -> f64 {
         match *self {
-            Atom::TheUnity         => 1.0,
-            Atom::DegreeCelsius    => value + 273.15,
+            Atom::TheUnity => 1.0,
+            Atom::DegreeCelsius => value + 273.15,
             Atom::DegreeFahrenheit => 5.0 / 9.0 * (value + 459.67),
-            Atom::DegreeReaumur    => (value / 0.8) + 273.15,
-            Atom::PH               => 10.0_f64.powf(-value),
-            Atom::PrismDiopter     => value.tan() * 100.0,
-            _                      => self.definition().calculate_scalar(value),
+            Atom::DegreeReaumur => (value / 0.8) + 273.15,
+            Atom::PH => 10.0_f64.powf(-value),
+            Atom::PrismDiopter => value.tan() * 100.0,
+            _ => self.definition().calculate_scalar(value),
         }
     }
 
     fn calculate_magnitude(&self, value: f64) -> f64 {
         match *self {
-            Atom::DegreeCelsius    => value - 273.15,
+            Atom::DegreeCelsius => value - 273.15,
             Atom::DegreeFahrenheit => 9.0 * value / 5.0 - 459.67,
-            Atom::DegreeReaumur    => (value - 273.15) * 0.8,
-            Atom::PH               => -value.log10(), // TODO: This seems wrong...
-            Atom::PrismDiopter     => (value / 100.0).atan(),
-            _                      => 1.0,
+            Atom::DegreeReaumur => (value - 273.15) * 0.8,
+            Atom::PH => -value.log10(), // TODO: This seems wrong...
+            Atom::PrismDiopter => (value / 100.0).atan(),
+            _ => 1.0,
         }
     }
 }
@@ -2026,7 +1951,6 @@ mod tests {
             )+
         };
     }
-
 
     use super::Atom;
     use classification::Classification;
@@ -2668,10 +2592,11 @@ mod tests {
     );
 
     // ignore_validate_scalars!(
-    //     validate_special_scalar_degree_celsius, DegreeCelsius, 0.0174_532_925_199_432_95;
-    //     validate_special_scalar_degree_fahrenheit, DegreeFahrenheit, 0.0174_532_925_199_432_95;
-    //     validate_special_scalar_degree_reaumur, DegreeReaumur, 0.0174_532_925_199_432_95;
-    //     validate_special_scalar_ph, PH, 1.0e-09;
+    // validate_special_scalar_degree_celsius, DegreeCelsius,
+    // 0.0174_532_925_199_432_95; validate_special_scalar_degree_fahrenheit,
+    // DegreeFahrenheit, 0.0174_532_925_199_432_95;
+    // validate_special_scalar_degree_reaumur, DegreeReaumur,
+    // 0.0174_532_925_199_432_95;     validate_special_scalar_ph, PH, 1.0e-09;
     //     validate_special_scalar_prism_diopter, PrismDiopter, 0.000_473_176_473;
     // );
 

@@ -14,10 +14,7 @@ impl Definition {
         let terms = super::parse(expression)?;
         println!("Definition Terms: {:#?}", &terms);
 
-        Ok(Definition {
-            value,
-            terms,
-        })
+        Ok(Definition { value, terms })
     }
 
     pub fn is_special(&self) -> bool {
