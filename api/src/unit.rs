@@ -7,7 +7,7 @@ use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
-use unit_parser::{Atom, Error, Term, UcumSymbol};
+use wise_units_parsing::{Atom, Error, Term, UcumSymbol};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
@@ -118,22 +118,23 @@ impl Unit {
 
 impl Composable for Unit {
     fn composition(&self) -> Option<Composition> {
-        let mut composition = Composition::default();
+        // let mut composition = Composition::default();
 
-        for term in &self.terms {
-            match term.composition() {
-                Some(term_composition) => for (term_dimension, term_exponent) in term_composition {
-                    composition.insert(term_dimension, term_exponent);
-                },
-                None => continue,
-            }
-        }
+        // for term in &self.terms {
+        //     match term.composition() {
+        //         Some(term_composition) => for (term_dimension, term_exponent) in term_composition {
+        //             composition.insert(term_dimension, term_exponent);
+        //         },
+        //         None => continue,
+        //     }
+        // }
 
-        if composition.is_empty() {
-            None
-        } else {
-            Some(composition)
-        }
+        // if composition.is_empty() {
+        //     None
+        // } else {
+        //     Some(composition)
+        // }
+        self.terms.composition()
     }
 }
 
@@ -147,7 +148,7 @@ impl FromStr for Unit {
     type Err = Error;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let terms = ::unit_parser::parse(expression)?;
+        let terms = ::wise_units_parsing::parse(expression)?;
 
         Ok(Unit { terms })
     }
@@ -254,6 +255,25 @@ impl PartialOrd for Unit {
 
 #[cfg(test)]
 mod tests {
+    macro_rules! validate_scalar {
+        ($test_name: ident, $input_string: expr, $expected_value: expr) => {
+            #[test]
+            fn $test_name() {
+                let unit = Unit::from_str($input_string).unwrap();
+                assert_relative_eq!(unit.scalar(), $expected_value);
+                assert_ulps_eq!(unit.scalar(), $expected_value);
+            }
+        };
+    }
+
+    macro_rules! validate_scalars {
+        ($($test_name: ident, $input_string: expr, $expected_value: expr);+ $(;)*) => {
+            $(
+                validate_scalar!($test_name, $input_string, $expected_value);
+            )+
+        };
+    }
+
     use super::*;
     use composition::Composition;
     use dimension::Dimension;
@@ -272,10 +292,6 @@ mod tests {
 
     #[test]
     fn validate_is_unity() {
-        // The unity
-        let unit = Unit::from_str("1").unwrap();
-        assert!(unit.is_unity());
-
         // Dimless unit
         let unit = Unit::from_str("[ppth]").unwrap();
         assert!(!unit.is_unity());
@@ -285,50 +301,21 @@ mod tests {
         assert!(!unit.is_unity());
     }
 
-    #[test]
-    fn validate_scalar() {
-        let unit = Unit::from_str("m").unwrap();
-        assert_eq!(unit.scalar(), 1.0);
-
-        let unit = Unit::from_str("km").unwrap();
-        assert_eq!(unit.scalar(), 1000.0);
-
-        let unit = Unit::from_str("km/10m").unwrap();
-        assert_eq!(unit.scalar(), 100.0);
-
-        let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.scalar(), 1.0);
-
-        let unit = Unit::from_str("10m").unwrap();
-        assert_eq!(unit.scalar(), 10.0);
-
-        let unit = Unit::from_str("10km").unwrap();
-        assert_eq!(unit.scalar(), 10_000.0);
-
-        let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.scalar(), 0.0001);
-
-        let unit = Unit::from_str("km-1m2").unwrap();
-        assert_eq!(unit.scalar(), 0.001);
-
-        let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.scalar(), 100_000.0);
-
-        let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.scalar(), 0.1);
-
-        let unit = Unit::from_str("m/s2").unwrap();
-        assert_eq!(unit.scalar(), 1.0);
-
-        let unit = Unit::from_str("/1").unwrap();
-        assert_eq!(unit.scalar(), 1.0);
-
-        let unit = Unit::from_str("/m").unwrap();
-        assert_eq!(unit.scalar(), 1.0);
-
-        let unit = Unit::from_str("/{tot}").unwrap();
-        assert_eq!(unit.scalar(), 1.0);
-    }
+    validate_scalars!(
+        validate_scalar_m, "m", 1.0;
+        validate_scalar_km, "km", 1000.0;
+        validate_scalar_m_minus_1, "m-1", 1.0;
+        validate_scalar_10m, "10m", 10.0;
+        validate_scalar_10km, "10km", 10_000.0;
+        validate_scalar_10km_minus_1, "10km-1", 0.000_1;
+        validate_scalar_10km_minus_1_m2, "10km-1.m2", 0.000_1;
+        validate_scalar_km_slash_m2_dot_cm, "km/m2.cm", 100_000.0;
+        validate_scalar_km_minus_1_slash_m2_dot_cm, "km-1/m2.cm", 0.1;
+        validate_scalar_m_slash_s2, "m/s2", 1.0;
+        validate_scalar_slash_1, "/1", 1.0;
+        validate_scalar_slash_m, "/m", 1.0;
+        validate_scalar_slash_annotation, "/{tot}", 1.0;
+    );
 
     #[test]
     fn validate_magnitude() {

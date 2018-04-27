@@ -4,7 +4,7 @@ use std::fmt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 use unit::Unit;
-use unit_parser::Error;
+use wise_units_parsing::Error;
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -126,7 +126,8 @@ impl Measurement {
     /// `"m2/s"`.
     /// 
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
-        let other_terms = ::unit_parser::parse(expression)?;
+        let other_terms = ::wise_units_parsing::parse(expression)?;
+        println!("convert_to: {:#?}", &other_terms);
         let other_unit = Unit { terms: other_terms };
 
         if self.unit == other_unit {
@@ -386,7 +387,7 @@ impl<'a> Div for &'a mut Measurement {
 mod tests {
     use super::*;
     use unit::Unit;
-    use unit_parser::{Atom, Term};
+    use wise_units_parsing::{Atom, Term};
 
     #[test]
     fn validate_new() {
@@ -509,7 +510,7 @@ mod tests {
         let terms = r.unit.terms;
         assert_eq!(terms.len(), 2);
 
-        let first_term = Term::new(Some(::unit_parser::Atom::Meter), None);
+        let first_term = Term::new(Some(::wise_units_parsing::Atom::Meter), None);
         assert_eq!(terms[0], first_term);
         assert_eq!(terms[1], first_term);
     }
@@ -524,10 +525,10 @@ mod tests {
         let terms = r.unit.terms;
         assert_eq!(terms.len(), 2);
 
-        let first_term = Term::new(Some(::unit_parser::Atom::Meter), None);
+        let first_term = Term::new(Some(::wise_units_parsing::Atom::Meter), None);
         assert_eq!(terms[0], first_term);
 
-        let mut last_term = Term::new(Some(::unit_parser::Atom::Meter), None);
+        let mut last_term = Term::new(Some(::wise_units_parsing::Atom::Meter), None);
         last_term.exponent = -1;
         assert_eq!(terms[1], last_term);
     }
