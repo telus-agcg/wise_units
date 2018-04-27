@@ -4,6 +4,10 @@
 
 #[cfg(test)]
 #[macro_use]
+extern crate approx;
+
+#[cfg(test)]
+#[macro_use]
 extern crate pretty_assertions;
 
 #[cfg(feature = "with_serde")]
@@ -16,7 +20,7 @@ extern crate serde_derive;
 #[cfg(all(test, feature = "with_serde"))]
 extern crate serde_json;
 
-extern crate unit_parser;
+extern crate wise_units_parsing;
 
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 #[macro_use]

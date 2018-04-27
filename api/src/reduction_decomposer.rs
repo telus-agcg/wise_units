@@ -1,7 +1,7 @@
 use decomposable::Decomposable;
 use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
-use unit_parser::Term;
+use wise_units_parsing::Term;
 
 type Exponent = i32;
 
@@ -105,43 +105,32 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
 
 #[cfg(test)]
 mod tests {
+    macro_rules! validate_expression {
+        ($test_name: ident, $input_string: expr, $expected_expression: expr) => {
+            #[test]
+            fn $test_name() {
+                let unit = Unit::from_str($input_string).unwrap();
+                let decomposer = ReductionDecomposer::new(&unit.terms);
+                assert_eq!(decomposer.expression(), $expected_expression);
+            }
+        };
+    }
+
     use super::ReductionDecomposer;
     use decomposable::Decomposable;
     use std::str::FromStr;
     use unit::Unit;
 
-    #[test]
-    fn validate_expression() {
-        let unit = Unit::from_str("m").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "m");
-
-        let unit = Unit::from_str("M").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "m");
-
-        let unit = Unit::from_str("KM").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "km");
-
-        let unit = Unit::from_str("km/10m").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "km/10m");
-
-        let unit = Unit::from_str("km/s2").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "km/s2");
-
-        let unit = Unit::from_str("km/60s2").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "km/60s2");
-
-        let unit = Unit::from_str("100KM/60s").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "100km/60s");
-
-        let unit = Unit::from_str("[acr_us].[IN_I]/[acr_us]").unwrap();
-        let decomposer = ReductionDecomposer::new(&unit.terms);
-        assert_eq!(decomposer.expression(), "[in_i]");
-    }
+    validate_expression!(validate_expression_pri_m, "m", "m");
+    validate_expression!(validate_expression_sec_m, "M", "m");
+    validate_expression!(validate_expression_sec_km, "KM", "km");
+    validate_expression!(validate_expression_pri_km_slash_pri_10m, "km/10m", "km/10m");
+    validate_expression!(validate_expression_pri_km_slash_pri_s2, "km/s2", "km/s2");
+    validate_expression!(validate_expression_pri_km_slash_pri_60s2, "km/60s2", "km/60s2");
+    validate_expression!(validate_expression_sec_100km_slash_pri_60s, "100KM/60s2", "100km/60s2");
+    validate_expression!(
+        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us,
+        "[acr_us].[IN_I]/[acr_us]",
+        "[in_i]"
+    );
 }

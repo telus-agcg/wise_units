@@ -1,6 +1,6 @@
 use composition::Composition;
 use dimension::Dimension;
-use unit_parser::{Atom, Prefix, Term};
+use wise_units_parsing::{Atom, Prefix, Term, UcumSymbol};
 
 pub trait Composable {
     fn composition(&self) -> Option<Composition>;
@@ -30,7 +30,7 @@ impl Composable for Atom {
             Atom::Meter => Some(Composition::new(Dimension::Length, 1)),
             Atom::Radian => Some(Composition::new(Dimension::PlaneAngle, 1)),
             Atom::Second => Some(Composition::new(Dimension::Time, 1)),
-            _ => self.definition().unit.composition(),
+            _ => self.definition().terms.composition(),
         }
     }
 }
@@ -56,9 +56,33 @@ impl Composable for Term {
     }
 }
 
+impl Composable for Vec<Term> {
+    fn composition(&self) -> Option<Composition> {
+        let mut composition = Composition::default();
+
+        for term in self {
+            match term.composition() {
+                Some(term_composition) => for (term_dimension, term_exponent) in term_composition {
+                    composition.insert(term_dimension, term_exponent);
+                },
+                None => continue,
+            }
+        }
+
+        if composition.is_empty() {
+            None
+        } else {
+            Some(composition)
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use unit_parser::{Atom, Prefix};
+    use super::Composable;
+    use composition::Composition;
+    use dimension::Dimension;
+    use wise_units_parsing::{Atom, Prefix};
 
     #[test]
     fn validate_prefix_composition() {

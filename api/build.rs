@@ -7,7 +7,6 @@ use std::fs::File;
 use std::io::Read;
 use std::io::Write;
 use std::path::Path;
-// use toml::Value;
 
 
 #[derive(Debug, Deserialize)]
@@ -19,7 +18,7 @@ struct AtomList {
 struct Atom {
     primary_code: String,
     variant: String,
-    definition: Definition,
+    definition: Option<Definition>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -54,7 +53,7 @@ fn read_atoms_toml() -> String {
 
 fn write_atoms_rs(atom_list: AtomList) {
     let dest_dir = env::current_dir().unwrap();
-    let dest_path = Path::new(&dest_dir).join("Atoms.rs");
+    let dest_path = Path::new(&dest_dir).join("atoms.rs");
     let mut f = File::create(&dest_path).unwrap();
 
     let atom_string = format!("{:?}", atom_list);

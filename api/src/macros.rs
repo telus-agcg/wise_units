@@ -13,9 +13,9 @@ macro_rules! build_atoms {
             primary_code => $primary_code: expr
          );+
     ) => {
-        use definition::Definition;
-        use measurable::Measurable;
-        use unit_parser::{Classification, Error};
+        // use measurable::Measurable;
+        use wise_units_parsing::{Classification, Error};
+        // use wise_units_parsing::definition::Definition;
 
         #[derive(Debug)]
         pub enum TestAtom {
@@ -42,24 +42,24 @@ macro_rules! build_atoms {
                 }
             }
 
-            pub fn definition(&self) -> Definition {
-                let result = match *self {
-                    $(
-                        TestAtom::$variant_name => {
-                            Definition::new($definition_value, $definition_string)
-                        },
-                    )+
-                };
+            // pub fn definition(&self) -> Definition {
+            //     let result = match *self {
+            //         $(
+            //             TestAtom::$variant_name => {
+            //                 Definition::new($definition_value, $definition_string)
+            //             },
+            //         )+
+            //     };
 
-                result.expect("BUG! Bad Definition for $variant_name")
-            }
+            //     result.expect("BUG! Bad Definition for $variant_name")
+            // }
         }
 
-        impl PartialEq for TestAtom {
-            fn eq(&self, other: &TestAtom) -> bool {
-                // Composition check
-                self.definition().scalar() == other.definition().scalar()
-            }
-        }
+        // impl PartialEq for TestAtom {
+        //     fn eq(&self, other: &TestAtom) -> bool {
+        //         // Composition check
+        //         self.definition().scalar() == other.definition().scalar()
+        //     }
+        // }
     };
 }
