@@ -12,7 +12,6 @@ pub struct Definition {
 impl Definition {
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
         let terms = super::parse(expression)?;
-        println!("Definition Terms: {:#?}", &terms);
 
         Ok(Definition { value, terms })
     }
