@@ -140,7 +140,6 @@ fn visit_annotation(pair: Pair<Rule>) -> Result<String, Error> {
 fn visit_factor(pair: Pair<Rule>) -> Result<u32, Error> {
     let span = pair.into_span();
     let string = span.as_str();
-    println!("visit_factor, string: {}", &string);
 
     string.parse::<u32>().map_err(|e| Error::ParsingError {
         expression: e.to_string(),
