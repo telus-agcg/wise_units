@@ -2,7 +2,7 @@ use classification::Classification;
 use definition::Definition;
 use property::Property;
 
-pub trait UcumSymbol {
+pub trait UcumSymbol: Send + Sync + Copy + Clone {
     fn classification(&self) -> Classification;
     fn definition(&self) -> Definition;
     fn primary_code(&self) -> &'static str;

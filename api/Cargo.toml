@@ -9,11 +9,6 @@ serde_derive = { version = "1.0", optional = true, default-features = false }
 stdweb = { version = "0.4", optional = true, default-features = false }
 wise_units-parsing = { path = "../parsing" }
 
-[build-dependencies]
-serde = "1.0"
-serde_derive = "1.0"
-toml = "0.4"
-
 [dev-dependencies]
 approx = "0.1"
 criterion = "0.1.2"

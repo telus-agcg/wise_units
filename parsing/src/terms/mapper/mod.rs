@@ -104,6 +104,11 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
         Err(e) => {
             // Try 3rd party lookup
             println!("MEOW: {:#?}", &e);
+            // if let Some(atom) =  CUSTOM_UNITS.get(string) {
+            //     let a = *atom;
+            //     return a.clone()
+            // }
+
             return Err(Error::ParsingError {
                 expression: string.to_string(),
             });
@@ -570,6 +575,21 @@ mod tests {
     #[test]
     fn validate_interpret_term_with_dot_term_then_slash_component() {
         let pairs = TermParser::parse(Rule::main_term, "[acr_us].[in_i]/[acr_us]").unwrap();
+
+        let actual = map(pairs).unwrap();
+        let acre_term = Term::new(Some(Atom::AcreUS), None);
+        let inch_term = Term::new(Some(Atom::InchInternational), None);
+        let mut acre2_term = Term::new(Some(Atom::AcreUS), None);
+        acre2_term.exponent = -1;
+
+        let expected = vec![acre_term, inch_term, acre2_term];
+
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn validate_custom_atom() {
+        let pairs = TermParser::parse(Rule::main_term, "[meow]").unwrap();
 
         let actual = map(pairs).unwrap();
         let acre_term = Term::new(Some(Atom::AcreUS), None);

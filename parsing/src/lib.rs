@@ -6,6 +6,9 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 
+#[macro_use]
+extern crate lazy_static;
+
 // Only include macros for testing
 #[cfg(test)]
 #[macro_use(consumes_to, fails_with, parses_to)]
@@ -17,8 +20,11 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
+include!("../atoms.rs");
+
 mod atom;
 mod classification;
+mod custom_atoms;
 mod definition;
 mod error;
 mod prefix;
