@@ -1,8 +1,0 @@
-[[atoms]]
-primary_code = "m"
-variant = "Meter"
-
-[[atoms]]
-primary_code = "ar"
-variant = "Are"
-definition = { value = 2.0, unit = "m2" }

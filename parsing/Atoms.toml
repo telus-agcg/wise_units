@@ -1,0 +1,8 @@
+[[atoms]]
+type_name = "Meow"
+human_name = "meow"
+primary_code = "[meow]"
+definition = { value = 2.0, unit = "m2" }
+classification = "Misc"
+property = "Area"
+secondary_code = "[MEOW]"
