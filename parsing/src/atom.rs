@@ -538,11 +538,11 @@ impl UcumSymbol for Atom {
 
             Atom::Day => Definition::new(24.0, "h"),
             Atom::Degree => Definition::new(2.0, "[pi].rad/360"),
-            Atom::DegreeCelsius => Definition::new(1.0, "cel(1.0 K)"),
-            Atom::DegreeFahrenheit => Definition::new(1.0, "degf(5.0 K/9)"),
+            Atom::DegreeCelsius => Definition::new(1.0, "K"),
+            Atom::DegreeFahrenheit => Definition::new(1.0, "K"),
             Atom::DegreeMinute => Definition::new(1.0, "deg/60"),
             Atom::DegreeRankine => Definition::new(5.0, "K/9"),
-            Atom::DegreeReaumur => Definition::new(1.0, "degre(5.0 K/4)"),
+            Atom::DegreeReaumur => Definition::new(1.0, "K"),
             Atom::DegreeSecond => Definition::new(1.0, "'/60"),
             Atom::Didot => Definition::new(1.0, "[ligne]/6"),
             Atom::DramAP => Definition::new(3.0, "[sc_ap]"),
@@ -642,7 +642,7 @@ impl UcumSymbol for Atom {
             Atom::OunceM => Definition::new(28.0, "g"),
             Atom::OunceTR => Definition::new(20.0, "[pwt_tr]"),
 
-            Atom::PH => Definition::new(1.0, "ph(1.0 mol/l)"),
+            Atom::PH => Definition::new(100.0, "mol/l"),
             Atom::PaceBR => Definition::new(2.5, "[ft_br]"),
             Atom::Parsec => Definition::new(3.085_678e16, "m"),
             Atom::PartsPerBillion => Definition::new(1.0, "10*-9"),
@@ -671,7 +671,7 @@ impl UcumSymbol for Atom {
             Atom::PoundForce => Definition::new(1.0, "[lb_av].[g]"),
             Atom::PrintersPica => Definition::new(12.0, "[pnt_pr]"),
             Atom::PrintersPoint => Definition::new(0.013_837, "[in_i]"),
-            Atom::PrismDiopter => Definition::new(1.0, "100tan(1.0 rad)"),
+            Atom::PrismDiopter => Definition::new(1.0, "rad"),
             Atom::ProtonMass => Definition::new(1.672_623_1e-24, "g"),
 
             Atom::QuartBR => Definition::new(1.0, "[gal_br]/4"),
@@ -1875,7 +1875,7 @@ impl UcumSymbol for Atom {
             Atom::DegreeCelsius => value + 273.15,
             Atom::DegreeFahrenheit => 5.0 / 9.0 * (value + 459.67),
             Atom::DegreeReaumur => (value / 0.8) + 273.15,
-            Atom::PH => 10.0_f64.powf(-value),
+            Atom::PH => -value.log10(),
             Atom::PrismDiopter => value.tan() * 100.0,
             _ => self.definition().calculate_scalar(value),
         }
@@ -1886,7 +1886,7 @@ impl UcumSymbol for Atom {
             Atom::DegreeCelsius => value - 273.15,
             Atom::DegreeFahrenheit => 9.0 * value / 5.0 - 459.67,
             Atom::DegreeReaumur => (value - 273.15) * 0.8,
-            Atom::PH => -value.log10(), // TODO: This seems wrong...
+            Atom::PH => 10.0_f64.powf(-value),
             Atom::PrismDiopter => (value / 100.0).atan(),
             _ => 1.0,
         }
@@ -1895,9 +1895,7 @@ impl UcumSymbol for Atom {
 
 impl fmt::Display for Atom {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            _ => write!(f, "{}", self.primary_code()),
-        }
+        write!(f, "{}", self.primary_code())
     }
 }
 

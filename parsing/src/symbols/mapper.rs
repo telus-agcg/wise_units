@@ -243,7 +243,7 @@ fn visit_atom(pair: &Pair<Rule>) -> Result<Atom, Error> {
             Atom::PermittivityOfVacuum
         }
         Rule::pri_pennyweight_tr | Rule::sec_pennyweight_tr => Atom::PennyweightTR,
-        // "[pH]"      | "[PH]"                                             => Atom::PH,
+        Rule::pri_ph   | Rule::sec_ph   => Atom::PH,
         Rule::pri_phot | Rule::sec_phot => Atom::Phot,
         Rule::pri_pica | Rule::sec_pica => Atom::Pica,
         Rule::pri_pied | Rule::sec_pied => Atom::Pied,
@@ -257,7 +257,7 @@ fn visit_atom(pair: &Pair<Rule>) -> Result<Atom, Error> {
         Rule::pri_pound_tr | Rule::sec_pound_tr => Atom::PoundTR,
         Rule::pri_pound_force | Rule::sec_pound_force => Atom::PoundForce,
         Rule::poise => Atom::Poise,
-        // "[p'diop]"  | "[P'DIOP]"                                         => Atom::PrismDiopter,
+        Rule::pri_prism_diopter | Rule::sec_prism_diopter => Atom::PrismDiopter,
         // "[PNU]"                                                          =>
         // Atom::ProteinNitrogenUnit,
         Rule::pri_proton_mass | Rule::sec_proton_mass => Atom::ProtonMass,
