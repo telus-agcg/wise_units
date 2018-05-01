@@ -31,7 +31,6 @@ pub mod composable;
 #[macro_use]
 pub mod macros;
 pub mod measurement;
-pub mod test_atom;
 pub mod unit;
 
 mod composition;
