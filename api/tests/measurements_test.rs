@@ -1,154 +1,149 @@
+#[macro_use]
+extern crate approx;
+
 extern crate wise_units;
 
 use wise_units::Measurement;
 
-#[test]
-fn validate_unity_conversions() {
-    let subject = Measurement::new(500.0, "1").unwrap();
-    let converted = subject.convert_to("10^").unwrap();
-    assert_floats_eq(converted.value, 50.0);
+macro_rules! validate_conversion {
+    (
+        $test_name: ident,
+        $measurement_value: expr,
+        $measurement_unit: expr,
+        $convert_to_unit: expr,
+        $expected_value: expr
+    ) => {
+        #[test]
+        fn $test_name() {
+            let subject = Measurement::new($measurement_value, $measurement_unit).unwrap();
+            let converted = subject.convert_to($convert_to_unit).unwrap();
+            assert_relative_eq!(converted.value, $expected_value);
+            assert_ulps_eq!(converted.value, $expected_value);
 
-    let subject = Measurement::new(500.0, "1").unwrap();
-    let converted = subject.convert_to("%").unwrap();
-    assert_floats_eq(converted.value, 50_000.0);
+            // Now test converting back
+            let subject = Measurement::new($expected_value, $convert_to_unit).unwrap();
+            let converted = subject.convert_to($measurement_unit).unwrap();
+            assert_ulps_eq!(converted.value, $measurement_value);
+        }
+    };
 }
 
-#[test]
-fn validate_meter_conversions() {
-    let subject = Measurement::new(1.0, "m").unwrap();
-    let converted = subject.convert_to("km").unwrap();
-    assert_floats_eq(converted.value, 0.001);
+validate_conversion!(
+    validate_conversion_unity_to_10power,
+    500.0, "1", "10^",
+    50.0
+);
 
-    let subject = Measurement::new(1.0, "km").unwrap();
-    let converted = subject.convert_to("m").unwrap();
-    assert_floats_eq(converted.value, 1_000.0);
+validate_conversion!(
+    validate_conversion_unity_to_percent,
+    500.0, "1", "%",
+    50_000.0
+);
 
-    let subject = Measurement::new(1.0, "m2").unwrap();
-    let converted = subject.convert_to("km2").unwrap();
-    assert_floats_eq(converted.value, 0.000_001);
+validate_conversion!(
+    validate_conversion_m_to_km,
+    1.0, "m", "km",
+    0.001
+);
 
-    let subject = Measurement::new(1.0, "km2").unwrap();
-    let converted = subject.convert_to("m2").unwrap();
-    assert_floats_eq(converted.value, 1_000_000.0);
+validate_conversion!(
+    validate_conversion_m2_to_km2,
+    1.0, "m2", "km2",
+    0.000_001
+);
 
-    let subject = Measurement::new(1.0, "m2/s").unwrap();
-    let converted = subject.convert_to("km2/s").unwrap();
-    assert_floats_eq(converted.value, 0.000_001);
+validate_conversion!(
+    validate_conversion_m2_per_s_to_km2_per_s,
+    1.0, "m2/s", "km2/s",
+    0.000_001
+);
 
-    let subject = Measurement::new(1.0, "km2/s").unwrap();
-    let converted = subject.convert_to("m2/s").unwrap();
-    assert_floats_eq(converted.value, 1_000_000.0);
+validate_conversion!(
+    validate_conversion_s_per_m2_to_s_per_km2,
+    1.0, "s/m2", "s/km2",
+    1_000_000.0
+);
 
-    let subject = Measurement::new(1.0, "s/m2").unwrap();
-    let converted = subject.convert_to("s/km2").unwrap();
-    assert_floats_eq(converted.value, 1_000_000.0);
+validate_conversion!(
+    validate_conversion_pi_m2_to_m2,
+    5.0, "[pi].m2", "m2",
+    5.0 * std::f64::consts::PI
+);
 
-    let subject = Measurement::new(1.0, "s/km2").unwrap();
-    let converted = subject.convert_to("s/m2").unwrap();
-    assert_floats_eq(converted.value, 0.000_001);
-}
+validate_conversion!(
+    validate_conversion_percent_to_10power,
+    500.0, "%", "10^",
+    0.5
+);
 
-#[test]
-fn validate_pi_conversions() {
-    let subject = Measurement::new(5.0, "[pi].m2").unwrap();
-    let converted = subject.convert_to("m2").unwrap();
-    assert_floats_eq(converted.value, 15.707_963_267);
-}
+validate_conversion!(
+    validate_conversion_pi_to_ppth,
+    1.0, "[pi]", "[ppth]",
+    1000.0 * std::f64::consts::PI
+);
 
-#[test]
-fn validate_number_conversions() {
-    let subject = Measurement::new(500.0, "%").unwrap();
-    let converted = subject.convert_to("10^").unwrap();
-    assert_floats_eq(converted.value, 0.5);
+validate_conversion!(
+    validate_conversion_l_to_m3,
+    2.0, "l", "m3",
+    0.002
+);
 
-    let subject = Measurement::new(1.0, "[pi]").unwrap();
-    let converted = subject.convert_to("[ppth]").unwrap();
-    assert_floats_eq(converted.value, 3141.592_653_589);
+validate_conversion!(
+    validate_special_conversion_cel_to_k,
+    25.0, "Cel", "K",
+    298.15
+);
 
-    // TODO: Special units
-    // let subject = Measurement::new(7.0, "[pH]");
-    // let converted = subject.convert_to("mol/l").unwrap();
-    // assert_floats_eq(converted.value, 0.000_000_1);
+validate_conversion!(
+    validate_special_conversion_degf_to_k,
+    98.6, "[degF]", "K",
+    310.15
+);
 
-    // let subject = Measurement::new(7.0, "mol/l");
-    // let converted = subject.convert_to("[pH]").unwrap();
-    // assert_floats_eq(converted.value, -0.845098040014257);
-}
+validate_conversion!(
+    validate_special_conversion_degf_to_cel,
+    98.6, "[degF]", "Cel",
+    37.0
+);
 
-#[test]
-fn validate_liter_conversions() {
-    let subject = Measurement::new(2.0, "l").unwrap();
-    let converted = subject.convert_to("m3").unwrap();
-    assert_floats_eq(converted.value, 0.002);
-}
+validate_conversion!(
+    validate_special_conversion_degre_to_k,
+    100.0, "[degRe]", "K",
+    398.15
+);
 
-// TODO: Special units
-#[test]
-#[ignore(reason = "Special Units")]
-fn validate_special_conversions() {
-    let subject = Measurement::new(25.0, "Cel").unwrap();
-    let converted = subject.convert_to("K").unwrap();
-    assert_floats_eq(converted.value, 298.15);
+validate_conversion!(
+    validate_special_conversion_degre_to_cel,
+    100.0, "[degRe]", "Cel",
+    125.0
+);
 
-    let subject = Measurement::new(298.15, "K").unwrap();
-    let converted = subject.convert_to("Cel").unwrap();
-    assert_floats_eq(converted.value, 25.0);
+validate_conversion!(
+    validate_special_conversion_deg_to_rad,
+    180.0, "deg", "rad",
+    std::f64::consts::PI
+);
 
-    let subject = Measurement::new(98.6, "[degF]").unwrap();
-    let converted = subject.convert_to("K").unwrap();
-    assert_floats_eq(converted.value, 310.15);
+validate_conversion!(
+    validate_special_conversion_ph_to_mol_per_l1,
+    1.0, "[pH]", "mol/l",
+    0.0
+);
 
-    let subject = Measurement::new(310.15, "K").unwrap();
-    let converted = subject.convert_to("[degF]").unwrap();
-    assert_floats_eq(converted.value, 98.6);
+validate_conversion!(
+    validate_special_conversion_ph_to_mol_per_l2,
+    10.0, "[pH]", "mol/l",
+    -1.0
+);
 
-    let subject = Measurement::new(98.6, "[degF]").unwrap();
-    let converted = subject.convert_to("Cel").unwrap();
-    assert_floats_eq(converted.value, 37.0);
+validate_conversion!(
+    validate_special_conversion_mol_per_l_to_ph1,
+    0.0, "mol/l", "[pH]",
+    1.0
+);
 
-    let subject = Measurement::new(37.0, "Cel").unwrap();
-    let converted = subject.convert_to("[degF]").unwrap();
-    assert_floats_eq(converted.value, 98.6);
-
-    let subject = Measurement::new(100.0, "[degRe]").unwrap();
-    let converted = subject.convert_to("K").unwrap();
-    assert_floats_eq(converted.value, 398.15);
-
-    let subject = Measurement::new(398.15, "K").unwrap();
-    let converted = subject.convert_to("[degRe]").unwrap();
-    assert_floats_eq(converted.value, 100.0);
-
-    let subject = Measurement::new(100.0, "[degRe]").unwrap();
-    let converted = subject.convert_to("Cel").unwrap();
-    assert_floats_eq(converted.value, 125.0);
-
-    let subject = Measurement::new(180.0, "deg").unwrap();
-    let converted = subject.convert_to("rad").unwrap();
-    assert_floats_eq(converted.value, std::f64::consts::PI);
-
-    let subject = Measurement::new(std::f64::consts::PI, "rad").unwrap();
-    let converted = subject.convert_to("deg").unwrap();
-    assert_floats_eq(converted.value, 180.0);
-
-    // TODO: I don't understand why this fails.
-    let subject = Measurement::new(1.0, "[p'diop]").unwrap();
-    let converted = subject.convert_to("deg").unwrap();
-    assert_floats_eq(converted.value, 0.57);
-}
-
-// Because the precision of floats can vary, using assert_eq! with float values
-// is not recommended; clippy's recommendation is to calculate the absolute
-// value of the difference and make sure that it's under some acceptable
-// threshold.
-fn assert_floats_eq(actual: f64, expected: f64) {
-    let error_threshold = f64::from(std::f32::EPSILON);
-    let difference = actual - expected;
-
-    assert!(
-        difference.abs() < error_threshold,
-        "Actual: {}, Expected: {}, Diff: {}",
-        actual,
-        expected,
-        difference
-    );
-}
+validate_conversion!(
+    validate_special_conversion_mol_per_l_to_ph2,
+    -1.0, "mol/l", "[pH]",
+    10.0
+);

@@ -437,6 +437,7 @@ pri_p = _{
         | pri_parsec
         | pri_phot
         | poise
+        | pri_prism_diopter
         | pri_pouce
         | pri_pied
         | pri_parts_per_thousand
@@ -453,6 +454,7 @@ pri_p = _{
         | pri_peck_us
         | pri_pint_br
         | pri_pint_us
+        | pri_ph
         | pri_pi
 }
 
@@ -462,6 +464,7 @@ pri_phot               = { "ph" }
 pri_peta               = { "P" }
 poise                  = { "P" }
 pri_pico               = { "p" }
+pri_prism_diopter      = { "[p'diop]" }
 pri_pouce              = { "[pouce]" }
 pri_pied               = { "[pied]" }
 pri_parts_per_thousand = { "[ppth]" }
@@ -478,6 +481,7 @@ pri_peck_br            = { "[pk_br]" }
 pri_peck_us            = { "[pk_us]" }
 pri_pint_br            = { "[pt_br]" }
 pri_pint_us            = { "[pt_us]" }
+pri_ph                 = { "[pH]" }
 pri_pi                 = { "[pi]" }
 
 // Q
@@ -1028,6 +1032,7 @@ sec_p = _{
         | sec_phot
         | sec_parsec
         | poise
+        | sec_prism_diopter
         | sec_pouce
         | sec_pied
         | sec_parts_per_thousand
@@ -1043,6 +1048,7 @@ sec_p = _{
         | sec_peck_br
         | sec_peck_us
         | sec_pint_us
+        | sec_ph
         | sec_pi
 }
 
@@ -1051,6 +1057,7 @@ sec_phot               = { "PHT" }
 sec_parsec             = { "PRS" }
 sec_peta               = { "PT" }
 sec_pico               = { "P" }
+sec_prism_diopter      = { "[P'DIOP]" }
 sec_pouce              = { "[POUCE]" }
 sec_pied               = { "[PIED]" }
 sec_parts_per_thousand = { "[PPTH]" }
@@ -1067,6 +1074,7 @@ sec_peck_br            = { "[PK_BR]" }
 sec_peck_us            = { "[PK_US]" }
 sec_pint_br            = { "[PT_BR]" }
 sec_pint_us            = { "[PT_US]" }
+sec_ph                 = { "[PH]" }
 sec_pi                 = { "[PI]" }
 
 // Q
