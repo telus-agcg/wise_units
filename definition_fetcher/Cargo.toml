@@ -1,0 +1,16 @@
+[package]
+name = "wise_units-definition_fetcher"
+version = "0.1.0"
+authors = ["Steve Loveless <steve@agrian.com>"]
+
+[dependencies]
+reqwest = "0.8"
+serde = "1"
+serde_derive = "1"
+serde-transcode = "1.0"
+simple_logger = "0.5"
+toml = "0.4"
+
+[dependencies.serde-xml-rs]
+version = "0.2"
+git = "https://github.com/RReverser/serde-xml-rs"
