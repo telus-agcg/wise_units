@@ -46,8 +46,8 @@ impl Composable for Term {
                 }
 
                 new_composition
-            },
-            None => Composition::default()
+            }
+            None => Composition::default(),
         }
     }
 }

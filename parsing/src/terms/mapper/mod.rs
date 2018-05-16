@@ -7,18 +7,18 @@ pub(self) mod component;
 pub(self) mod main_term;
 pub(self) mod simple_unit;
 
-use error::Error;
-use pest::Parser;
-use pest::iterators::{Pair, Pairs};
 use self::annotatable::Annotatable;
 use self::ast_term::AstTerm;
 use self::basic_component::BasicComponent;
 use self::component::Component;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
-use symbols::symbol_parser::SymbolParser;
-use symbols::symbol_parser::Rule as SymbolRule;
+use error::Error;
+use pest::Parser;
+use pest::iterators::{Pair, Pairs};
 use symbols::mapper;
+use symbols::symbol_parser::Rule as SymbolRule;
+use symbols::symbol_parser::SymbolParser;
 use term::Term;
 use terms::term_parser::Rule;
 
@@ -27,8 +27,10 @@ pub fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
         let main_term = match pair.as_rule() {
             Rule::main_term => visit_main_term(pair)?,
             _ => {
-                let e = Error::ParsingError { expression: pair.as_str().to_string() };
-                return Err(e)
+                let e = Error::ParsingError {
+                    expression: pair.as_str().to_string(),
+                };
+                return Err(e);
             }
         };
 
@@ -40,7 +42,7 @@ pub fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
             let terms = visit_pairs(pair)?;
             Ok(terms)
         }
-        None => Ok(vec![])
+        None => Ok(vec![]),
     }
 }
 
@@ -68,8 +70,10 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
                         e = -e;
                     }
                     _ => {
-                        let error = Error::ParsingError { expression: string.to_string() };
-                        return Err(error)
+                        let error = Error::ParsingError {
+                            expression: string.to_string(),
+                        };
+                        return Err(error);
                     }
                 }
             }
@@ -77,8 +81,10 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
                 e *= visit_digits(inner_pair)?;
             }
             _ => {
-                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
-                return Err(error)
+                let error = Error::ParsingError {
+                    expression: inner_pair.as_str().to_string(),
+                };
+                return Err(error);
             }
         }
     }
@@ -133,8 +139,10 @@ fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
                 annotatable.exponent = visit_exponent(inner_pair)?;
             }
             _ => {
-                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
-                return Err(error)
+                let error = Error::ParsingError {
+                    expression: inner_pair.as_str().to_string(),
+                };
+                return Err(error);
             }
         }
     }
@@ -183,8 +191,10 @@ fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
                 bc.terms.append(&mut ast_term.into());
             }
             _ => {
-                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
-                return Err(error)
+                let error = Error::ParsingError {
+                    expression: inner_pair.as_str().to_string(),
+                };
+                return Err(error);
             }
         }
     }
@@ -206,8 +216,10 @@ fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
                 component.terms.append(&mut bc.into());
             }
             _ => {
-                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
-                return Err(error)
+                let error = Error::ParsingError {
+                    expression: inner_pair.as_str().to_string(),
+                };
+                return Err(error);
             }
         }
     }
@@ -243,8 +255,10 @@ fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
                 ast_term.component = Some(component);
             }
             _ => {
-                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
-                return Err(error)
+                let error = Error::ParsingError {
+                    expression: inner_pair.as_str().to_string(),
+                };
+                return Err(error);
             }
         }
     }
@@ -275,8 +289,10 @@ fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
                 main_term.terms.append(&mut new_terms);
             }
             _ => {
-                let error = Error::ParsingError { expression: inner_pair.as_str().to_string() };
-                return Err(error)
+                let error = Error::ParsingError {
+                    expression: inner_pair.as_str().to_string(),
+                };
+                return Err(error);
             }
         }
     }
@@ -289,9 +305,9 @@ mod tests {
     use super::*;
     use atom::Atom;
     use pest::Parser;
+    use prefix::Prefix;
     use term::Term;
     use terms::term_parser::{Rule, TermParser};
-    use prefix::Prefix;
 
     #[test]
     fn validate_exponent() {
@@ -588,6 +604,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore]
     fn validate_custom_atom() {
         let pairs = TermParser::parse(Rule::main_term, "[meow]").unwrap();
 

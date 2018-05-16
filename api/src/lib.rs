@@ -20,6 +20,9 @@ extern crate serde_derive;
 #[cfg(all(test, feature = "with_serde"))]
 extern crate serde_json;
 
+#[cfg(test)]
+extern crate simple_logger;
+
 extern crate wise_units_parsing;
 
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
@@ -27,9 +30,6 @@ extern crate wise_units_parsing;
 extern crate stdweb;
 
 pub mod composable;
-
-#[macro_use]
-pub mod macros;
 pub mod measurement;
 pub mod unit;
 

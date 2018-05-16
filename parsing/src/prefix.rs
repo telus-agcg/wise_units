@@ -1,10 +1,7 @@
 use classification::Classification;
 use definition::Definition;
-use property::Property;
 use std::fmt;
 use term::Term;
-use ucum_symbol::UcumSymbol;
-// use unit::Unit;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -35,17 +32,12 @@ pub enum Prefix {
     Zetta,
 }
 
-impl UcumSymbol for Prefix {
-    // TODO Get rid of this.
-    fn property(&self) -> Property {
-        Property::Unclassified
+impl Prefix {
+    pub fn classification(&self) -> Classification {
+        Classification::Si
     }
 
-    fn classification(&self) -> Classification {
-        Classification::SI
-    }
-
-    fn definition(&self) -> Definition {
+    pub fn definition(&self) -> Definition {
         let term = Term::new(None, None);
         let terms = vec![term];
 
@@ -76,10 +68,14 @@ impl UcumSymbol for Prefix {
             Prefix::Zetta => 1.0e21,
         };
 
-        Definition { value, terms }
+        Definition {
+            value,
+            terms,
+            function_set: None,
+        }
     }
 
-    fn names(&self) -> Vec<&'static str> {
+    pub fn names(&self) -> Vec<&'static str> {
         match *self {
             Prefix::Atto => vec!["atto"],
             Prefix::Centi => vec!["centi"],
@@ -108,7 +104,7 @@ impl UcumSymbol for Prefix {
         }
     }
 
-    fn primary_code(&self) -> &'static str {
+    pub fn primary_code(&self) -> &'static str {
         match *self {
             Prefix::Atto => "a",
             Prefix::Centi => "c",
@@ -137,15 +133,15 @@ impl UcumSymbol for Prefix {
         }
     }
 
-    fn print_symbol(&self) -> Option<&'static str> {
+    pub fn print_symbol(&self) -> Option<&'static str> {
         match *self {
             Prefix::Micro => Some("μ"),
             _ => Some(self.primary_code()),
         }
     }
 
-    fn secondary_code(&self) -> &'static str {
-        match *self {
+    pub fn secondary_code(&self) -> Option<&'static str> {
+        let code = match *self {
             Prefix::Atto => "A",
             Prefix::Centi => "C",
             Prefix::Deci => "D",
@@ -170,34 +166,38 @@ impl UcumSymbol for Prefix {
             Prefix::Yotta => "YA",
             Prefix::Zepto => "ZO",
             Prefix::Zetta => "ZA",
-        }
+        };
+
+        Some(code)
     }
 
-    fn is_metric(&self) -> bool {
+    pub fn is_metric(&self) -> bool {
         true
     }
 
-    fn is_arbitrary(&self) -> bool {
+    pub fn is_arbitrary(&self) -> bool {
         false
     }
 
-    fn is_special(&self) -> bool {
+    pub fn is_special(&self) -> bool {
         false
     }
 
-    fn scalar(&self) -> f64 {
+    pub fn scalar(&self) -> f64 {
         self.calculate_scalar(1.0)
     }
 
-    fn magnitude(&self) -> f64 {
+    pub fn magnitude(&self) -> f64 {
         self.calculate_magnitude(1.0)
     }
 
-    fn calculate_scalar(&self, magnitude: f64) -> f64 {
+    // TODO: It seems really silly to have to depend on a Definition when all
+    // Prefixes really do is just multiple an Atom by some scalar value.
+    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
         self.definition().calculate_scalar(magnitude)
     }
 
-    fn calculate_magnitude(&self, scalar: f64) -> f64 {
+    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
         self.definition().calculate_magnitude(scalar)
     }
 }
@@ -213,35 +213,52 @@ impl fmt::Display for Prefix {
 #[cfg(test)]
 mod tests {
     use super::Prefix;
-    use ucum_symbol::UcumSymbol;
 
-    #[test]
-    fn validate_scalar_atto() {
-        let prefix = Prefix::Atto;
-        assert_relative_eq!(prefix.scalar(), 0.000_000_000_000_000_001);
-        assert_ulps_eq!(prefix.scalar(), 0.000_000_000_000_000_001);
+    macro_rules! validate_scalar {
+        ($test_name:ident, $variant:ident, $value:expr) => {
+            #[test]
+            fn $test_name() {
+                let prefix = Prefix::$variant;
+                assert_relative_eq!(prefix.scalar(), $value);
+                assert_ulps_eq!(prefix.scalar(), $value);
+            }
+        };
     }
 
-    #[test]
-    fn validate_scalar_centi() {
-        let prefix = Prefix::Centi;
-        assert_relative_eq!(prefix.scalar(), 0.01);
-        assert_ulps_eq!(prefix.scalar(), 0.01);
+    macro_rules! validate_scalars {
+        ($($test_name: ident, $variant: ident, $value: expr);+ $(;)*) => {
+            $(
+                validate_scalar!($test_name, $variant, $value);
+            )+
+        };
     }
 
-    #[test]
-    fn validate_scalar_deci() {
-        let prefix = Prefix::Deci;
-        assert_relative_eq!(prefix.scalar(), 0.1);
-        assert_ulps_eq!(prefix.scalar(), 0.1);
-    }
-
-    #[test]
-    fn validate_scalar_deka() {
-        let prefix = Prefix::Deka;
-        assert_relative_eq!(prefix.scalar(), 10.0);
-        assert_ulps_eq!(prefix.scalar(), 10.0);
-    }
+    validate_scalars!(
+        validate_scalar_atto, Atto, 1.0e-18;
+        validate_scalar_centi, Centi, 1.0e-2;
+        validate_scalar_deci, Deci, 1.0e-1;
+        validate_scalar_deka, Deka, 1.0e1;
+        validate_scalar_exa, Exa, 1.0e18;
+        validate_scalar_femto, Femto, 1.0e-15;
+        validate_scalar_gibi, Gibi, 1_073_741_824.0;
+        validate_scalar_giga, Giga, 1.0e9;
+        validate_scalar_hecto, Hecto, 1.0e2;
+        validate_scalar_kibi, Kibi, 1024.0;
+        validate_scalar_kilo, Kilo, 1.0e3;
+        validate_scalar_mebi, Mebi, 1_048_576.0;
+        validate_scalar_mega, Mega, 1.0e6;
+        validate_scalar_micro, Micro, 1.0e-6;
+        validate_scalar_milli, Milli, 1.0e-3;
+        validate_scalar_nano, Nano, 1.0e-9;
+        validate_scalar_peta, Peta, 1.0e15;
+        validate_scalar_pico, Pico, 1.0e-12;
+        validate_scalar_tebi, Tebi, 1_099_511_627_776.0;
+        validate_scalar_tera, Tera, 1.0e12;
+        validate_scalar_yocto, Yocto, 1.0e-24;
+        validate_scalar_yotta, Yotta, 1.0e24;
+        validate_scalar_zepto, Zepto, 1.0e-21;
+        validate_scalar_zetta, Zetta, 1.0e21;
+    );
 
     #[test]
     fn validate_display() {

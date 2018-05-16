@@ -1,3 +1,7 @@
+// Turn on proc_macro if we're on nightly AND using the with_stdweb feature.
+#![cfg_attr(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"),
+            feature(proc_macro))]
+
 #[cfg(test)]
 #[macro_use]
 extern crate approx;
@@ -7,7 +11,7 @@ extern crate failure;
 extern crate failure_derive;
 
 #[macro_use]
-extern crate lazy_static;
+extern crate log;
 
 // Only include macros for testing
 #[cfg(test)]
@@ -20,18 +24,29 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
-include!("../atoms.rs");
+#[cfg(feature = "with_serde")]
+extern crate serde;
+
+#[cfg(feature = "with_serde")]
+#[cfg_attr(feature = "with_serde", macro_use)]
+extern crate serde_derive;
+
+#[cfg(all(test, feature = "with_serde"))]
+extern crate serde_json;
+
+#[cfg(test)]
+extern crate simple_logger;
 
 mod atom;
 mod classification;
-mod custom_atoms;
 mod definition;
 mod error;
+mod function_set;
 mod prefix;
 mod property;
 mod symbols;
-mod terms;
 mod term;
+mod terms;
 mod ucum_symbol;
 
 pub use atom::Atom;
