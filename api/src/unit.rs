@@ -32,10 +32,9 @@ impl Unit {
     /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.
     /// This is helpful for knowing, internally, when to stop recursively
     /// calling some functions.
-    /// 
+    ///
     pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1
-            && self.terms[0].is_unity()
+        self.terms.len() == 1 && self.terms[0].is_unity()
     }
 
     /// Use this when calculating the scalar when *not* part of a Measurable.
@@ -65,7 +64,7 @@ impl Unit {
     ///
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
-    /// 
+    ///
     pub fn expression(&self) -> String {
         SimpleDecomposer::new(&self.terms).expression()
     }
@@ -74,14 +73,14 @@ impl Unit {
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
     /// This always returns a String that is parsable back into the same Unit.
-    /// 
+    ///
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
 
     /// Allows for dividing a Unit by a factor; results in dividing this Unit's
     /// associated Terms' factors by `other_factor`.
-    /// 
+    ///
     pub fn div_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -96,7 +95,7 @@ impl Unit {
 
     /// Allows for multiplying a Unit by a factor; results in multiplying this
     /// Unit's associated Terms' factors by `other_factor`.
-    /// 
+    ///
     pub fn mul_u32(&self, other_factor: u32) -> Unit {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
@@ -238,7 +237,7 @@ impl PartialOrd for Unit {
 #[cfg(test)]
 mod tests {
     macro_rules! validate_scalar {
-        ($test_name: ident, $input_string: expr, $expected_value: expr) => {
+        ($test_name:ident, $input_string:expr, $expected_value:expr) => {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();

@@ -52,14 +52,14 @@ mod tests {
             parser: SymbolParser,
             input: "K",
             rule: Rule::pri_atom,
-            tokens: [pri_atom(0, 1, [kelvin(0, 1)])]
+            tokens: [pri_atom(0, 1, [pri_kelvin(0, 1)])]
         }
 
         parses_to! {
             parser: SymbolParser,
             input: "10*",
             rule: Rule::pri_atom,
-            tokens: [pri_atom(0, 3, [ten_for_arbitrary_powers_star(0, 3)])]
+            tokens: [pri_atom(0, 3, [pri_the_number_ten_for_arbitrary_powers_star(0, 3)])]
         }
     }
 
@@ -107,9 +107,9 @@ mod tests {
         parses_to! {
             parser: SymbolParser,
             input: "cal_th",
-            rule: Rule::pri_calorie_th,
+            rule: Rule::pri_thermochemical_calorie,
             tokens: [
-                pri_calorie_th(0, 6)
+                pri_thermochemical_calorie(0, 6)
             ]
         }
 
@@ -118,16 +118,16 @@ mod tests {
             input: "cal_th",
             rule: Rule::pri_atom,
             tokens: [
-                pri_atom(0, 6, [pri_calorie_th(0, 6)])
+                pri_atom(0, 6, [pri_thermochemical_calorie(0, 6)])
             ]
         }
 
         parses_to! {
             parser: SymbolParser,
             input: "CAL_TH",
-            rule: Rule::sec_calorie_th,
+            rule: Rule::sec_thermochemical_calorie,
             tokens: [
-                sec_calorie_th(0, 6)
+                sec_thermochemical_calorie(0, 6)
             ]
         }
 
@@ -136,7 +136,7 @@ mod tests {
             input: "CAL_TH",
             rule: Rule::sec_atom,
             tokens: [
-                sec_atom(0, 6, [sec_calorie_th(0, 6)])
+                sec_atom(0, 6, [sec_thermochemical_calorie(0, 6)])
             ]
         }
     }

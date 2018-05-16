@@ -106,7 +106,7 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
 #[cfg(test)]
 mod tests {
     macro_rules! validate_expression {
-        ($test_name: ident, $input_string: expr, $expected_expression: expr) => {
+        ($test_name:ident, $input_string:expr, $expected_expression:expr) => {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();
