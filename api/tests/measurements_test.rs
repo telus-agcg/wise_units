@@ -34,6 +34,15 @@ macro_rules! validate_conversion {
 }
 
 validate_conversion!(
+    validate_conversion_meters_per_second_to_miles_per_hour_forward,
+    validate_conversion_meters_per_second_to_miles_per_hour_back,
+    1.0,
+    "m/s",
+    "[mi_i]/h",
+    2.2369362920544025
+);
+
+validate_conversion!(
     validate_conversion_unity_to_10power_forward,
     validate_conversion_unity_to_10power_back,
     500.0,

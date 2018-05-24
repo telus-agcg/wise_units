@@ -16,7 +16,7 @@ pub fn map(pair: Pair<Rule>) -> Result<Symbol, Error> {
             Rule::symbol => visit_symbol(pair)?,
             _ => {
                 let error = Error::ParsingError {
-                    expression: pair.as_str().to_string()
+                    expression: pair.as_str().to_string(),
                 };
 
                 return Err(error);

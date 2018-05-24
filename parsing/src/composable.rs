@@ -1,6 +1,8 @@
+use atom::Atom;
 use composition::Composition;
 use dimension::Dimension;
-use wise_units_parsing::{Atom, Term, UcumSymbol};
+use term::Term;
+use ucum_symbol::UcumSymbol;
 
 pub trait Composable {
     fn composition(&self) -> Composition;
@@ -71,9 +73,9 @@ impl Composable for Vec<Term> {
 #[cfg(test)]
 mod tests {
     use super::Composable;
+    use atom::Atom;
     use composition::Composition;
     use dimension::Dimension;
-    use wise_units_parsing::Atom;
 
     #[test]
     fn validate_atom_composition() {
