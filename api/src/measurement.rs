@@ -1,10 +1,9 @@
-use composable::Composable;
 use measurable::Measurable;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 use unit::Unit;
-use wise_units_parsing::Error;
+use wise_units_parsing::{Composable, Error};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
