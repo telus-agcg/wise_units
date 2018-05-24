@@ -24,7 +24,7 @@ use wise_units_parsing::Error;
 ///
 /// assert!(value_difference < 0.000_001);
 /// ```
-/// 
+///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialOrd)]
 pub struct Measurement {
@@ -68,7 +68,7 @@ impl Measurable for Measurement {
     /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
     /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
     /// ```
-    /// 
+    ///
     fn scalar(&self) -> f64 {
         if self.is_special() {
             self.unit.calculate_scalar(self.value)
@@ -98,7 +98,7 @@ impl Measurable for Measurement {
     /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
     /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
     /// ```
-    /// 
+    ///
     fn magnitude(&self) -> f64 {
         if self.is_special() {
             let scalar = self.scalar();
@@ -121,7 +121,7 @@ impl Measurement {
     /// Converts the Measurement to another unit type. That type is specified
     /// using a str of characters that represents the other unit type: ex.
     /// `"m2/s"`.
-    /// 
+    ///
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
         let other_terms = ::wise_units_parsing::parse(expression)?;
         let other_unit = Unit { terms: other_terms };
@@ -157,14 +157,14 @@ impl Measurement {
     /// let km = Measurement::new(1.0, "km").unwrap();
     /// assert_eq!(km.unit_string(), "km".to_string());
     /// ```
-    /// 
+    ///
     pub fn unit_string(&self) -> String {
         self.unit.to_string()
     }
 
     /// Really this is just to comply with Unitwise's API; not really sure how
     /// useful it is.
-    /// 
+    ///
     pub fn to_f64(&self) -> f64 {
         self.value
     }
@@ -182,8 +182,9 @@ impl Measurement {
         }
     }
 
-    /// Multiplies the `Measurement`'s scalar by `scalar` and returns a new `Measurement`.
-    /// 
+    /// Multiplies the `Measurement`'s scalar by `scalar` and returns a new
+    /// `Measurement`.
+    ///
     pub fn mul_scalar(&self, scalar: f64) -> Measurement {
         let new_value = self.value * scalar;
 
@@ -193,8 +194,9 @@ impl Measurement {
         }
     }
 
-    /// Divides the `Measurement`'s scalar by `scalar` and returns a new `Measurement`.
-    /// 
+    /// Divides the `Measurement`'s scalar by `scalar` and returns a new
+    /// `Measurement`.
+    ///
     pub fn div_scalar(&self, scalar: f64) -> Measurement {
         let new_value = self.value / scalar;
 

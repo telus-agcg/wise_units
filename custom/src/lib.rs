@@ -1,56 +1,54 @@
+extern crate handlebars;
+extern crate heck;
+#[macro_use]
+extern crate lazy_static;
+#[macro_use]
+extern crate log;
+extern crate regex;
+extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate toml;
+
+mod generator;
+mod rust_structs;
+mod toml_structs;
 
 use std::env;
 use std::fs::File;
 use std::io::Read;
 use std::io::Write;
 use std::path::Path;
-
-#[derive(Debug, Deserialize)]
-struct AtomList {
-    atoms: Vec<TomlAtom>,
-}
-
-#[derive(Debug, Deserialize)]
-struct TomlAtom {
-    classification: String,
-    definition: TomlDefinition,
-    primary_code: String,
-    print_symbol: Option<String>,
-    property: String,
-    type_name: String,
-    human_name: String,
-    secondary_code: String,
-
-    // always true
-    // is_arbitrary
-
-    // always false?
-    // is_metric
-
-    // support later
-    // is_special
-}
-
-#[derive(Debug, Deserialize)]
-struct TomlDefinition {
-    value: f64,
-    unit: String,
-}
+use toml_structs::TomlAtomList;
 
 pub fn build() {
     let contents = read_atoms_toml();
-    let atoms = convert_toml_to_struct(&contents);
-    let atom_string = build_atoms_string(atoms);
+    let toml_atoms = convert_toml_to_struct(&contents);
+    let rust_atoms = generator::build_rust_atoms(&toml_atoms);
 
-    write_atoms_rs(&atom_string);
+    let classification_file_body = generator::build_classification_file_body(&rust_atoms);
+    write_project_file("src/classification.rs", &classification_file_body);
+
+    let property_file_body = generator::build_property_file_body(&rust_atoms);
+    write_project_file("src/property.rs", &property_file_body);
+
+    let atom_file_body = generator::build_atom_file_body(&rust_atoms);
+    write_project_file("src/atom.rs", &atom_file_body);
+
+    let symbol_file_body = generator::build_symbol_file_body(&rust_atoms);
+    write_project_file("src/symbols/symbol.pest", &symbol_file_body);
+
+    let mapper_file_body = generator::build_mapper_file_body(&rust_atoms);
+    write_project_file("src/symbols/mapper.rs", &mapper_file_body);
 }
 
 fn read_atoms_toml() -> String {
     let src_dir = env::current_dir().unwrap();
-    let src_path = Path::new(&src_dir).join("Atoms.toml");
+    debug!("[read_atoms_toml] src_dir: {:?}", &src_dir);
+
+    let src_path = Path::new(&src_dir).join("../custom/Atoms.toml");
+
+    debug!("[read_atoms_toml] src_path: {:?}", src_path.to_str());
 
     let mut atoms_file = File::open(src_path).expect("file not found");
 
@@ -59,125 +57,22 @@ fn read_atoms_toml() -> String {
     atoms_file
         .read_to_string(&mut read_contents)
         .expect("something went wrong reading the file");
+    debug!("[read_atoms_toml] Read Atoms.toml");
 
     read_contents
 }
 
-fn convert_toml_to_struct(toml: &str) -> AtomList {
-     let atoms: AtomList = toml::from_str(&toml).expect("unable to deserialize Atoms.toml");
+fn convert_toml_to_struct(toml: &str) -> TomlAtomList {
+    let atoms: TomlAtomList = toml::from_str(&toml).expect("unable to deserialize Atoms.toml");
 
-     atoms
+    atoms
 }
 
-fn build_atoms_string(atom_list: AtomList) -> String {
-    let mut structs = String::new();
-    let mut inserts = String::new();
-
-    for atom in atom_list.atoms {
-        structs = format!("{}\n{}", &structs, build_atom_def_string(&atom));
-        inserts = format!("{}\n{}", &inserts, build_atom_insert_string(&atom));
-    }
-
-    let file_text = format!("
-use custom_atoms::CustomAtoms;
-use property::Property;
-use definition::Definition;
-
-{structs}
-
-lazy_static! {{
-    static ref CUSTOM_ATOMS: CustomAtoms = {{
-        let mut atoms = CustomAtoms::default();
-        {inserts}
-        atoms
-    }};
-}}", structs = structs, inserts = inserts);
-
-    file_text
-}
-
-fn build_atom_insert_string(atom: &TomlAtom) -> String {
-    format!("    atoms.insert(\"{}\", Box::new({}) as Box<UcumSymbol + 'static>);", atom.primary_code, atom.type_name)
-}
-
-fn build_atom_def_string(atom: &TomlAtom) -> String {
-    let ps = match atom.print_symbol {
-        Some(ref p) => format!("Some(\"{}\")", p),
-        None => format!("None"),
-    };
-
-    format!("
-    #[derive(Clone, Copy)]
-    pub struct {type_name};
-
-    impl UcumSymbol for {type_name} {{
-        fn classification(&self) -> Classification {{
-            Classification::{classification}
-        }}
-
-        fn definition(&self) -> Definition {{
-            Definition::new({definition_value:.64}, \"{definition_unit}\")
-                .expect(\"Bad custom definition for {type_name}\")
-        }}
-
-        fn primary_code(&self) -> &'static str {{
-            \"{primary_code}\"
-        }}
-
-        fn print_symbol(&self) -> Option<&'static str> {{
-            {print_symbol}
-        }}
-
-        fn property(&self) -> Property {{
-            Property::{property}
-        }}
-
-        fn names(&self) -> Vec<&'static str> {{
-            vec![\"{human_name}\"]
-        }}
-
-        fn secondary_code(&self) -> &'static str {{
-            \"{secondary_code}\"
-        }}
-
-        fn is_arbitrary(&self) -> bool {{ true }}
-        fn is_metric(&self) -> bool {{ false }}
-        fn is_special(&self) -> bool {{ false }}
-
-        fn scalar(&self) -> f64 {{
-            self.calculate_scalar(1.0)
-        }}
-
-        fn magnitude(&self) -> f64 {{
-            self.calculate_magnitude(self.scalar())
-        }}
-
-        fn calculate_scalar(&self, value: f64) -> f64 {{
-            self.definition().calculate_scalar(value)
-        }}
-
-        fn calculate_magnitude(&self, _value: f64) -> f64 {{
-            1.0
-        }}
-    }}
-    ", type_name = atom.type_name,
-    classification = atom.classification,
-    definition_value = atom.definition.value,
-    definition_unit = atom.definition.unit,
-    primary_code = atom.primary_code,
-    print_symbol = ps,
-    property = atom.property,
-    human_name = atom.human_name,
-    secondary_code = atom.secondary_code
-    )
-}
-
-fn write_atoms_rs(atoms_string: &str) {
+fn write_project_file(file_name: &str, file_body: &str) {
     let dest_dir = env::current_dir().unwrap();
-    let dest_path = Path::new(&dest_dir).join("atoms.rs");
+    let dest_path = Path::new(&dest_dir).join(file_name);
     let mut f = File::create(&dest_path).unwrap();
 
-
-    // f.write_all(atom_string.as_bytes()).unwrap();
-    f.write_all(atoms_string.as_bytes()).expect("Problem writing the file")
+    f.write_all(file_body.as_bytes())
+        .expect("Problem writing the file")
 }

@@ -9,7 +9,7 @@ pub trait UcumSymbol: Send + Sync + Copy + Clone {
     fn print_symbol(&self) -> Option<&'static str>;
     fn property(&self) -> Property;
     fn names(&self) -> Vec<&'static str>;
-    fn secondary_code(&self) -> &'static str;
+    fn secondary_code(&self) -> Option<&'static str>;
 
     fn is_arbitrary(&self) -> bool;
     fn is_metric(&self) -> bool;

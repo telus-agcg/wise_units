@@ -6,12 +6,21 @@ authors = ["Steve Loveless <steve@agrian.com>"]
 [dependencies]
 failure = "0.1"
 failure_derive = "0.1"
-lazy_static = "1.0"
+log = "0.4"
 pest = "^1.0"
 pest_derive = "^1.0"
+serde = { version = "1.0", optional = true, default-features = false }
+serde_derive = { version = "1.0", optional = true, default-features = false }
+stdweb = { version = "0.4", optional = true, default-features = false }
 
 [dev-dependencies]
 approx = "0.1"
+serde_json = { version = "1.0", default-features = false }
+simple_logger = "0.5"
 
 [build-dependencies]
 wise_units-custom = { path = "../custom" }
+
+[features]
+with_serde = ["serde", "serde_derive"]
+with_stdweb = ["stdweb", "with_serde"]

@@ -4,8 +4,8 @@ pub struct TermParser;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::TermParser;
+    use super::*;
     use pest::Parser;
 
     #[test]
