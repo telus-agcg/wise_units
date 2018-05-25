@@ -309,6 +309,19 @@ mod tests {
     use term::Term;
     use terms::term_parser::{Rule, TermParser};
 
+    macro_rules! validate_interpret {
+        ($test_name:ident, $input:expr, $($terms:expr),+) => {
+            #[test]
+            fn $test_name() {
+                let pairs = TermParser::parse(Rule::main_term, $input).unwrap();
+                let actual = map(pairs).unwrap();
+                let expected = vec![$($terms),+];
+
+                assert_eq!(actual, expected);
+            }
+        };
+    }
+
     #[test]
     fn validate_exponent() {
         let pairs = TermParser::parse(Rule::main_term, "m-3").unwrap();
@@ -335,273 +348,151 @@ mod tests {
         assert_eq!(actual, expected);
     }
 
-    #[test]
-    fn validate_interpret_component_with_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m2").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let mut expected_term = Term::new(Some(Atom::Meter), None);
-        expected_term.exponent = 2;
-
-        let expected = vec![expected_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_component_with_prefix() {
-        let pairs = TermParser::parse(Rule::main_term, "km").unwrap();
-
-        let actual = map(pairs).unwrap();
-
-        let expected = vec![Term::new(Some(Atom::Meter), Some(Prefix::Kilo))];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_component_with_factor() {
-        let pairs = TermParser::parse(Rule::main_term, "2m").unwrap();
-
-        let actual = map(pairs).unwrap();
-
-        let mut expected_term = Term::new(Some(Atom::Meter), None);
-        expected_term.factor = 2;
-
-        let expected = vec![expected_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term() {
-        let pairs = TermParser::parse(Rule::main_term, "m/s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let meter_term = Term::new(Some(Atom::Meter), None);
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = -1;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_numerator_prefix() {
-        let pairs = TermParser::parse(Rule::main_term, "km/s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let expected_numerator_term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-        let mut expected_denominator_term = Term::new(Some(Atom::Second), None);
-        expected_denominator_term.exponent = -1;
-
-        let expected = vec![expected_numerator_term, expected_denominator_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_denominator_prefix() {
-        let pairs = TermParser::parse(Rule::main_term, "m/ks").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let expected_numerator_term = Term::new(Some(Atom::Meter), None);
-        let mut expected_denominator_term = Term::new(Some(Atom::Second), Some(Prefix::Kilo));
-        expected_denominator_term.exponent = -1;
-
-        let expected = vec![expected_numerator_term, expected_denominator_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_numerator_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m2/s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let mut meter_term = Term::new(Some(Atom::Meter), None);
-        meter_term.exponent = 2;
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = -1;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_denominator_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m/s2").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let meter_term = Term::new(Some(Atom::Meter), None);
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = -2;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_numerator_and_denominator_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m2/s2").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let mut meter_term = Term::new(Some(Atom::Meter), None);
-        meter_term.exponent = 2;
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = -2;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_factor_in_numerator() {
-        let pairs = TermParser::parse(Rule::main_term, "2m/s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let mut meter_term = Term::new(Some(Atom::Meter), None);
-        meter_term.factor = 2;
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = -1;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_factor_in_denominator() {
-        let pairs = TermParser::parse(Rule::main_term, "m/2s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let meter_term = Term::new(Some(Atom::Meter), None);
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = -1;
-        second_term.factor = 2;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_only_factor_in_denominator() {
-        let pairs = TermParser::parse(Rule::main_term, "[ft_i]/12").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let meter_term = Term::new(Some(Atom::FootInternational), None);
-        let mut second_term = Term::new(None, None);
-        second_term.exponent = -1;
-        second_term.factor = 12;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_dot_term() {
-        let pairs = TermParser::parse(Rule::main_term, "m.s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let meter_term = Term::new(Some(Atom::Meter), None);
-        let second_term = Term::new(Some(Atom::Second), None);
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_dot_term_with_left_side_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m2.s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let mut meter_term = Term::new(Some(Atom::Meter), None);
-        meter_term.exponent = 2;
-        let second_term = Term::new(Some(Atom::Second), None);
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_dot_term_with_right_side_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m.s2").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let meter_term = Term::new(Some(Atom::Meter), None);
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = 2;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_dot_term_with_left_and_right_side_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m2.s2").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let mut meter_term = Term::new(Some(Atom::Meter), None);
-        meter_term.exponent = 2;
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.exponent = 2;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_dot_term_with_factor_in_left_side() {
-        let pairs = TermParser::parse(Rule::main_term, "2m.s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let mut meter_term = Term::new(Some(Atom::Meter), None);
-        meter_term.factor = 2;
-        let second_term = Term::new(Some(Atom::Second), None);
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_slash_term_with_factor_in_right_side() {
-        let pairs = TermParser::parse(Rule::main_term, "m.2s").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let meter_term = Term::new(Some(Atom::Meter), None);
-        let mut second_term = Term::new(Some(Atom::Second), None);
-        second_term.factor = 2;
-
-        let expected = vec![meter_term, second_term];
-
-        assert_eq!(actual, expected);
-    }
-
-    #[test]
-    fn validate_interpret_term_with_dot_term_then_slash_component() {
-        let pairs = TermParser::parse(Rule::main_term, "[acr_us].[in_i]/[acr_us]").unwrap();
-
-        let actual = map(pairs).unwrap();
-        let acre_term = Term::new(Some(Atom::AcreUS), None);
-        let inch_term = Term::new(Some(Atom::InchInternational), None);
-        let mut acre2_term = Term::new(Some(Atom::AcreUS), None);
-        acre2_term.exponent = -1;
-
-        let expected = vec![acre_term, inch_term, acre2_term];
-
-        assert_eq!(actual, expected);
-    }
+    validate_interpret!(validate_interpret_meter, "m", term!(Meter));
+    validate_interpret!(
+        validate_interpret_meter_positive_exponent,
+        "m2",
+        term!(Meter, exponent: 2)
+    );
+    validate_interpret!(
+        validate_interpret_meter_negative_exponent,
+        "m-2",
+        term!(Meter, exponent: -2)
+    );
+    validate_interpret!(
+        validate_interpret_meter_factor,
+        "2m",
+        term!(Meter, factor: 2)
+    );
+    validate_interpret!(validate_interpret_kilometer, "km", term!(Kilo, Meter));
+
+    // Slash terms
+    validate_interpret!(
+        validate_interpret_meter_per_second,
+        "m/s",
+        term!(Meter),
+        term!(Second, exponent: -1)
+    );
+    validate_interpret!(
+        validate_interpret_kilometer_per_second,
+        "km/s",
+        term!(Kilo, Meter),
+        term!(Second, exponent: -1)
+    );
+    validate_interpret!(
+        validate_interpret_meter_per_kilosecond,
+        "m/ks",
+        term!(Meter),
+        term!(Kilo, Second, exponent: -1)
+    );
+    validate_interpret!(
+        validate_interpret_meter2_per_second,
+        "m2/s",
+        term!(Meter, exponent: 2),
+        term!(Second, exponent: -1)
+    );
+    validate_interpret!(
+        validate_interpret_meter_per_second2,
+        "m/s2",
+        term!(Meter),
+        term!(Second, exponent: -2)
+    );
+    validate_interpret!(
+        validate_interpret_meter2_per_second2,
+        "m2/s2",
+        term!(Meter, exponent: 2),
+        term!(Second, exponent: -2)
+    );
+    validate_interpret!(
+        validate_interpret_2meter_per_second,
+        "2m/s",
+        term!(Meter, factor: 2),
+        term!(Second, exponent: -1)
+    );
+    validate_interpret!(
+        validate_interpret_meter_per_2second,
+        "m/2s",
+        term!(Meter),
+        term!(Second, exponent: -1, factor: 2)
+    );
+    validate_interpret!(
+        validate_interpret_2meter2_per_2second2,
+        "2m2/2s2",
+        term!(Meter, factor: 2, exponent: 2),
+        term!(Second, factor: 2, exponent: -2)
+    );
+    validate_interpret!(
+        validate_interpret_foot_per_factor,
+        "[ft_i]/12",
+        term!(FootInternational),
+        term!(factor: 12, exponent: -1)
+    );
+
+    // Dot terms
+    validate_interpret!(
+        validate_interpret_meter_second,
+        "m.s",
+        term!(Meter),
+        term!(Second)
+    );
+    validate_interpret!(
+        validate_interpret_meter2_second,
+        "m2.s",
+        term!(Meter, exponent: 2),
+        term!(Second)
+    );
+    validate_interpret!(
+        validate_interpret_meter_second2,
+        "m.s2",
+        term!(Meter),
+        term!(Second, exponent: 2)
+    );
+    validate_interpret!(
+        validate_interpret_meter2_second2,
+        "m2.s2",
+        term!(Meter, exponent: 2),
+        term!(Second, exponent: 2)
+    );
+    validate_interpret!(
+        validate_interpret_2meter_second,
+        "2m.s",
+        term!(Meter, factor: 2),
+        term!(Second)
+    );
+    validate_interpret!(
+        validate_interpret_meter_2second,
+        "m.2s",
+        term!(Meter),
+        term!(Second, factor: 2)
+    );
+    validate_interpret!(
+        validate_interpret_2meter_2second,
+        "2m.2s",
+        term!(Meter, factor: 2),
+        term!(Second, factor: 2)
+    );
+    validate_interpret!(
+        validate_interpret_2meter2_2second2,
+        "2m2.2s2",
+        term!(Meter, factor: 2, exponent: 2),
+        term!(Second, factor: 2, exponent: 2)
+    );
+
+    // Dot and slash combined terms
+    validate_interpret!(
+        validate_interpret_acre_inch_per_acre,
+        "[acr_us].[in_i]/[acr_us]",
+        term!(AcreUS),
+        term!(InchInternational),
+        term!(AcreUS, exponent: -1)
+    );
+    validate_interpret!(
+        validate_interpret_2acre3_3inch4_per_4acre5,
+        "2[acr_us]3.3[in_i]4/4[acr_us]5",
+        term!(AcreUS, factor: 2, exponent: 3),
+        term!(InchInternational, factor: 3, exponent: 4),
+        term!(AcreUS, factor: 4, exponent: -5)
+    );
 
     #[test]
     #[ignore]
@@ -609,10 +500,9 @@ mod tests {
         let pairs = TermParser::parse(Rule::main_term, "[meow]").unwrap();
 
         let actual = map(pairs).unwrap();
-        let acre_term = Term::new(Some(Atom::AcreUS), None);
-        let inch_term = Term::new(Some(Atom::InchInternational), None);
-        let mut acre2_term = Term::new(Some(Atom::AcreUS), None);
-        acre2_term.exponent = -1;
+        let acre_term = term!(AcreUS);
+        let inch_term = term!(InchInternational);
+        let acre2_term = term!(AcreUS, exponent: -1);
 
         let expected = vec![acre_term, inch_term, acre2_term];
 

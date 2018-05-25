@@ -37,9 +37,8 @@ extern crate serde_json;
 #[cfg(test)]
 extern crate simple_logger;
 
-#[cfg(test)]
 #[macro_use]
-mod test_macros;
+mod macros;
 
 mod atom;
 mod classification;

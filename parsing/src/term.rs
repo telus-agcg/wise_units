@@ -1,4 +1,6 @@
 use atom::Atom;
+use composable::Composable;
+use composition::Composition;
 use prefix::Prefix;
 use std::fmt;
 use ucum_symbol::UcumSymbol;
@@ -69,6 +71,46 @@ impl Term {
     }
 }
 
+impl Composable for Term {
+    fn composition(&self) -> Composition {
+        match self.atom {
+            Some(atom) => {
+                let composition = atom.composition();
+
+                if self.exponent == 1 {
+                    return composition;
+                }
+
+                let mut new_composition = Composition::default();
+
+                for (dim, exp) in composition {
+                    let atom_exp = if exp == 1 { 0 } else { exp };
+                    new_composition.insert(dim, atom_exp + self.exponent);
+                }
+
+                new_composition
+            }
+            None => Composition::default(),
+        }
+    }
+}
+
+impl Composable for Vec<Term> {
+    fn composition(&self) -> Composition {
+        let mut composition = Composition::default();
+
+        for term in self {
+            let term_composition = term.composition();
+
+            for (term_dimension, term_exponent) in term_composition {
+                composition.insert(term_dimension, term_exponent);
+            }
+        }
+
+        composition
+    }
+}
+
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", extract_term_string(self))
@@ -118,7 +160,7 @@ mod tests {
         ($test_name:ident, $output:expr) => {
             #[test]
             fn $test_name() {
-                let term = Term::new(None, None);
+                let term = term!();
                 assert_eq!(term.to_string().as_str(), $output);
             }
         };
@@ -156,7 +198,7 @@ mod tests {
         ($test_name:ident, $expected_value:expr) => {
             #[test]
             fn $test_name() {
-                let term = Term::new(None, None);
+                let term = term!();
                 assert_eq!(term.composition(), $expected_value);
             }
         };
@@ -327,7 +369,7 @@ mod tests {
 
         #[test]
         fn validate_serialization_empty_term() {
-            let term = Term::new(None, None);
+            let term = term!();
 
             let expected_json = r#"{
                                     "atom": null,
@@ -345,9 +387,7 @@ mod tests {
 
         #[test]
         fn validate_serialization_full_term() {
-            let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-            term.factor = 123;
-            term.exponent = -456;
+            let mut term = term!(Kilo, Meter, factor: 123, exponent: -456);
             term.annotation = Some("stuff".to_string());
 
             let expected_json = r#"{
@@ -376,7 +416,7 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
 
-            let expected_term = Term::new(None, None);
+            let expected_term = term!();
 
             assert_eq!(expected_term, k);
         }
@@ -393,9 +433,7 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
 
-            let mut expected_term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-            expected_term.factor = 123;
-            expected_term.exponent = -456;
+            let mut expected_term = term!(Kilo, Meter, factor: 123, exponent: -456);
             expected_term.annotation = Some("stuff".to_string());
 
             assert_eq!(expected_term, k);

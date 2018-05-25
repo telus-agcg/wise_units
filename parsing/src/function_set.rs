@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct FunctionSet {
     // AKA "calculate_magnitude"
     pub convert_from: fn(value: f64) -> f64,
