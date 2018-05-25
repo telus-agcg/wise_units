@@ -21,7 +21,7 @@ pub struct Term {
 }
 
 impl Term {
-    pub fn new(atom: Option<Atom>, prefix: Option<Prefix>) -> Self {
+    pub fn new(prefix: Option<Prefix>, atom: Option<Atom>) -> Self {
         Term {
             atom,
             prefix,

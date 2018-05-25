@@ -23,6 +23,7 @@ extern crate serde_json;
 #[cfg(test)]
 extern crate simple_logger;
 
+#[cfg_attr(test, macro_use)]
 extern crate wise_units_parsing;
 
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]

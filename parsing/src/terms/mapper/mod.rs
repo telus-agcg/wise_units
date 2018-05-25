@@ -327,9 +327,7 @@ mod tests {
         let pairs = TermParser::parse(Rule::main_term, "m-3").unwrap();
         let actual = map(pairs).unwrap();
 
-        let mut expected_term = Term::new(Some(Atom::Meter), None);
-        expected_term.exponent = -3;
-
+        let expected_term = term!(Meter, exponent: -3);
         let expected = vec![expected_term];
 
         assert_eq!(actual, expected);
@@ -337,12 +335,8 @@ mod tests {
         let pairs = TermParser::parse(Rule::main_term, "km2/m-3").unwrap();
         let actual = map(pairs).unwrap();
 
-        let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-        term1.exponent = 2;
-
-        let mut term2 = Term::new(Some(Atom::Meter), None);
-        term2.exponent = 3;
-
+        let term1 = term!(Kilo, Meter, exponent: 2);
+        let term2 = term!(Meter, exponent: 3);
         let expected = vec![term1, term2];
 
         assert_eq!(actual, expected);

@@ -1,8 +1,9 @@
+/// The `term!` macro makes building `Term`s slightly more ergonomic and terse.
+/// It was initially made for testing purposes (since `Term`s are really mainly
+/// used by internal APIs), but since they are used all over the place, it may
+/// be useful elsewhere.
 ///
-/// The `term!` macro makes building `Term`s slightly more ergonomic and terse. It was initially
-/// made for testing purposes (since `Term`s are really mainly used by internal APIs), but since
-/// they are used all over the place, it may be useful elsewhere.
-///
+#[macro_export]
 macro_rules! term {
     (@params $term:expr, $attribute_name:ident: $attribute_value:expr) => {
         $term.$attribute_name = $attribute_value;
@@ -10,7 +11,7 @@ macro_rules! term {
 
     ($prefix:ident, $atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = Term::new(Some(Atom::$atom), Some(Prefix::$prefix));
+            let mut term = Term::new(Some(Prefix::$prefix), Some(Atom::$atom));
             $(
                 term!(@params term, $attribute_name: $attribute_value);
             )+
@@ -19,12 +20,12 @@ macro_rules! term {
     };
 
     ($prefix:ident, $atom:ident) => {
-        Term::new(Some(Atom::$atom), Some(Prefix::$prefix))
+        Term::new(Some(Prefix::$prefix), Some(Atom::$atom))
     };
 
     ($atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = Term::new(Some(Atom::$atom), None);
+            let mut term = Term::new(None, Some(Atom::$atom));
             $(
                 term!(@params term, $attribute_name: $attribute_value);
             )+
@@ -33,7 +34,7 @@ macro_rules! term {
     };
 
     ($atom:ident) => {
-        Term::new(Some(Atom::$atom), None)
+        Term::new(None, Some(Atom::$atom))
     };
 
     ($($attribute_name:ident: $attribute_value:expr),+) => {
@@ -59,10 +60,10 @@ mod tests {
 
     #[test]
     fn validate_term_macro() {
-        let expected = Term::new(Some(Atom::Meter), None);
+        let expected = Term::new(None, Some(Atom::Meter));
         assert_eq!(term!(Meter), expected);
 
-        let expected = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
+        let expected = Term::new(Some(Prefix::Kilo), Some(Atom::Meter));
         assert_eq!(term!(Kilo, Meter), expected);
     }
 }
