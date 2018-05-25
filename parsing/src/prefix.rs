@@ -38,7 +38,7 @@ impl Prefix {
     }
 
     pub fn definition(&self) -> Definition {
-        let term = Term::new(None, None);
+        let term = term!();
         let terms = vec![term];
 
         let value = match *self {
