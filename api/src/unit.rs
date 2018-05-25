@@ -559,10 +559,8 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Unit;
-        use atom::Atom;
-        use prefix::Prefix;
         use serde_json;
-        use term::Term;
+        use wise_units_parsing::{Atom, Prefix, Term};
 
         #[test]
         fn validate_serialization_empty_terms() {
@@ -593,14 +591,8 @@ mod tests {
         }"#.replace("\n", "")
                 .replace(" ", "");
 
-            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
-            term1.factor = 100;
-            term1.exponent = 456;
-            term1.annotation = Some("stuff".to_string());
-
-            let mut term2 = Term::new(Some(Atom::Gram), None);
-            term2.factor = 1;
-            term2.exponent = -4;
+            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: Some("stuff".to_string()));
+            let term2 = term!(Gram, factor: 1, exponent: -4);
 
             let unit = Unit {
                 terms: vec![term1, term2],
@@ -642,14 +634,8 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
-            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
-            term1.factor = 100;
-            term1.exponent = 456;
-            term1.annotation = Some("stuff".to_string());
-
-            let mut term2 = Term::new(Some(Atom::Gram), None);
-            term2.factor = 1;
-            term2.exponent = -4;
+            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: Some("stuff".to_string()));
+            let term2 = term!(Gram, exponent: -4);
 
             let expected_unit = Unit {
                 terms: vec![term1, term2],

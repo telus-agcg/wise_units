@@ -1,10 +1,10 @@
 use composition::Composition;
 
-///
-/// The main purpose of `Composable` is to get you to be able to determine compatibility with other
-/// unit-like structs/enums. You solely need to define how a thing is composed (using
-/// `composition()`, then you can compare `Composable`s with `is_compatible_with()`. Two things are
-/// compatible if they `Composition`s are equal.
+/// The main purpose of `Composable` is to get you to be able to determine
+/// compatibility with other unit-like structs/enums. You solely need to define
+/// how a thing is composed (using `composition()`, then you can compare
+/// `Composable`s with `is_compatible_with()`. Two things are compatible if
+/// they `Composition`s are equal.
 ///
 pub trait Composable {
     fn composition(&self) -> Composition;
