@@ -46,7 +46,7 @@ fn read_atoms_toml() -> String {
     let src_dir = env::current_dir().unwrap();
     debug!("[read_atoms_toml] src_dir: {:?}", &src_dir);
 
-    let src_path = Path::new(&src_dir).join("../custom/Atoms.toml");
+    let src_path = Path::new(&src_dir).join("../atom_generator/Atoms.toml");
 
     debug!("[read_atoms_toml] src_path: {:?}", src_path.to_str());
 

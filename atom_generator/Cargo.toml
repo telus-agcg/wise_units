@@ -1,5 +1,5 @@
 [package]
-name = "wise_units-custom"
+name = "wise_units-atom_generator"
 version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 

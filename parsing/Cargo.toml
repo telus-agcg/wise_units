@@ -19,7 +19,7 @@ serde_json = { version = "1.0", default-features = false }
 simple_logger = "0.5"
 
 [build-dependencies]
-wise_units-custom = { path = "../custom" }
+wise_units-atom_generator = { path = "../atom_generator" }
 
 [features]
 with_serde = ["serde", "serde_derive"]

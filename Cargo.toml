@@ -2,6 +2,6 @@
 members = [
   "api",
   "parsing",
-  "custom",
+  "atom_generator",
   "definition_fetcher",
 ]
