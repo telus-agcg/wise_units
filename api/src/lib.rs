@@ -24,7 +24,7 @@ extern crate serde_json;
 extern crate simple_logger;
 
 #[cfg_attr(test, macro_use)]
-extern crate wise_units_parsing;
+extern crate wise_units_parser;
 
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 #[macro_use]
@@ -41,4 +41,4 @@ mod simple_decomposer;
 pub use measurable::Measurable;
 pub use measurement::Measurement;
 pub use unit::Unit;
-pub use wise_units_parsing::Composable;
+pub use wise_units_parser::Composable;

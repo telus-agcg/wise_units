@@ -3,7 +3,7 @@ use std::fmt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 use unit::Unit;
-use wise_units_parsing::{Composable, Error};
+use wise_units_parser::{Composable, Error};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -122,7 +122,7 @@ impl Measurement {
     /// `"m2/s"`.
     ///
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
-        let other_terms = ::wise_units_parsing::parse(expression)?;
+        let other_terms = ::wise_units_parser::parse(expression)?;
         let other_unit = Unit { terms: other_terms };
 
         if self.unit == other_unit {
@@ -384,7 +384,7 @@ impl<'a> Div for &'a mut Measurement {
 mod tests {
     use super::*;
     use unit::Unit;
-    use wise_units_parsing::{Atom, Term};
+    use wise_units_parser::{Atom, Term};
 
     #[test]
     fn validate_new() {
@@ -548,7 +548,7 @@ mod tests {
         use super::super::Measurement;
         use serde_json;
         use unit::Unit;
-        use wise_units_parsing::{Atom, Prefix, Term};
+        use wise_units_parser::{Atom, Prefix, Term};
 
         #[test]
         fn validate_serialization_empty_terms() {

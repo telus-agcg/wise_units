@@ -13,7 +13,7 @@
 * Split into two subcrates:
   * `wise_units` (under `api/`): The main API for dealing with units via `Measurement`
     and `Unit` types.
-  * `wise_units-parsing` (under `parsing/`): Code used strictly for parsing unit
+  * `wise_units-parser` (under `parser/`): Code used strictly for parsing unit
     strings and mapping them to types used in the api.
 * To allow for defining custom units, parsing is now done in two stages:
   1. Parsing the outer tokens (`.`, `/`, `{` and `}`, etc.)
