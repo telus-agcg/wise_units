@@ -7,7 +7,7 @@ authors = ["Steve Loveless <steve@agrian.com>"]
 serde = { version = "1.0", optional = true, default-features = false }
 serde_derive = { version = "1.0", optional = true, default-features = false }
 stdweb = { version = "0.4", optional = true, default-features = false }
-wise_units-parsing = { path = "../parsing" }
+wise_units-parser = { path = "../parser" }
 
 [dev-dependencies]
 approx = "0.1"

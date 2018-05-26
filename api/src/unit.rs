@@ -5,7 +5,7 @@ use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
-use wise_units_parsing::{Composable, Composition, Error, Term, UcumSymbol};
+use wise_units_parser::{Composable, Composition, Error, Term, UcumSymbol};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
@@ -127,7 +127,7 @@ impl FromStr for Unit {
     type Err = Error;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let terms = ::wise_units_parsing::parse(expression)?;
+        let terms = ::wise_units_parser::parse(expression)?;
 
         Ok(Unit { terms })
     }
@@ -254,7 +254,7 @@ mod tests {
     }
 
     use super::*;
-    use wise_units_parsing::{Composition, Dimension};
+    use wise_units_parser::{Composition, Dimension};
 
     #[test]
     fn validate_from_str_error() {
@@ -560,7 +560,7 @@ mod tests {
     mod with_serde {
         use super::super::Unit;
         use serde_json;
-        use wise_units_parsing::{Atom, Prefix, Term};
+        use wise_units_parser::{Atom, Prefix, Term};
 
         #[test]
         fn validate_serialization_empty_terms() {
