@@ -10,7 +10,7 @@ lazy_static! {
     pub static ref HANDLEBARS: Handlebars = {
         fn register_template(template_name: &str, extension: &str, handlebars: &mut Handlebars) {
             let file = format!(
-                "../custom/src/templates/{}.{}.hbs",
+                "../atom_generator/src/templates/{}.{}.hbs",
                 template_name, extension
             );
             let pb = PathBuf::from(file);
