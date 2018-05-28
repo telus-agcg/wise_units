@@ -34,6 +34,25 @@ macro_rules! validate_conversion {
 }
 
 validate_conversion!(
+    validate_conversion_meters_per_second_to_miles_per_hour_forward,
+    validate_conversion_meters_per_second_to_miles_per_hour_back,
+    1.0,
+    "m/s",
+    "[mi_i]/h",
+    2.2369362920544025
+);
+
+// TODO: AGDEV-32407
+// validate_conversion!(
+//     validate_conversion_lb_per_acre_to_lb_per_m2_forward,
+//     validate_conversion_lb_per_acre_to_lb_per_m2_back,
+//     1.0,
+//     "[lb_av]/[acr_us]",
+//     "[lb_av]/m2",
+//     0.000_247_104_393_046_627_9
+// );
+
+validate_conversion!(
     validate_conversion_unity_to_10power_forward,
     validate_conversion_unity_to_10power_back,
     500.0,

@@ -1,4 +1,6 @@
 use atom::Atom;
+use composable::Composable;
+use composition::Composition;
 use prefix::Prefix;
 use std::fmt;
 use ucum_symbol::UcumSymbol;
@@ -69,6 +71,46 @@ impl Term {
     }
 }
 
+impl Composable for Term {
+    fn composition(&self) -> Composition {
+        match self.atom {
+            Some(atom) => {
+                let composition = atom.composition();
+
+                if self.exponent == 1 {
+                    return composition;
+                }
+
+                let mut new_composition = Composition::default();
+
+                for (dim, exp) in composition {
+                    let atom_exp = if exp == 1 { 0 } else { exp };
+                    new_composition.insert(dim, atom_exp + self.exponent);
+                }
+
+                new_composition
+            }
+            None => Composition::default(),
+        }
+    }
+}
+
+impl Composable for Vec<Term> {
+    fn composition(&self) -> Composition {
+        let mut composition = Composition::default();
+
+        for term in self {
+            let term_composition = term.composition();
+
+            for (term_dimension, term_exponent) in term_composition {
+                composition.insert(term_dimension, term_exponent);
+            }
+        }
+
+        composition
+    }
+}
+
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", extract_term_string(self))
@@ -100,251 +142,223 @@ fn extract_term_string(term: &Term) -> String {
 #[cfg(test)]
 mod tests {
     use atom::Atom;
-    // use composition::Composition;
-    // use dimension::Dimension;
+    use composable::Composable;
+    use composition::Composition;
+    use dimension::Dimension;
     use prefix::Prefix;
     use term::Term;
 
-    macro_rules! term {
-        ($atom:ident, $prefix:ident) => {
-            Term::new(Some(Atom::$atom), Some(Prefix::$prefix))
-        };
-
-        ($atom:ident) => {
-            Term::new(Some(Atom::$atom), None)
-        };
-    }
-
     macro_rules! validate_display {
-        (
-            $test_name:ident,
-            $term:expr,
-            $output:expr,factor:
-            $factor:expr,exponent:
-            $exponent:expr
-        ) => {
-            #[test]
-            fn $test_name() {
-                let mut term = $term;
-                term.factor = $factor;
-                term.exponent = $exponent;
-                assert_eq!(term.to_string().as_str(), $output);
-            }
-        };
-
-        ($test_name:ident, $term:expr, $output:expr,factor: $factor:expr) => {
-            #[test]
-            fn $test_name() {
-                let mut term = $term;
-                term.factor = $factor;
-                assert_eq!(term.to_string().as_str(), $output);
-            }
-        };
-
-        ($test_name:ident, $term:expr, $output:expr,exponent: $exponent:expr) => {
-            #[test]
-            fn $test_name() {
-                let mut term = $term;
-                term.exponent = $exponent;
-                assert_eq!(term.to_string().as_str(), $output);
-            }
-        };
-
         ($test_name:ident, $term:expr, $output:expr) => {
             #[test]
             fn $test_name() {
-                assert_eq!($term.to_string().as_str(), $output);
+                let term = $term;
+                assert_eq!(term.to_string().as_str(), $output);
             }
         };
 
         ($test_name:ident, $output:expr) => {
             #[test]
             fn $test_name() {
-                let term = Term::new(None, None);
+                let term = term!();
                 assert_eq!(term.to_string().as_str(), $output);
             }
         };
     }
 
     macro_rules! validate_scalar {
-        (
-            $test_name:ident,
-            $method:ident,
-            $atom_variant:ident,
-            $prefix_variant:ident,
-            $expected_value:expr,exponent:
-            $exponent:expr,factor:
-            $factor:expr
-        ) => {
+        ($test_name:ident, $term:expr, $expected_value:expr) => {
             #[test]
             fn $test_name() {
-                let mut term = Term::new(Some(Atom::$atom_variant), Some(Prefix::$prefix_variant));
-                term.factor = $factor;
-                term.exponent = $exponent;
-                assert_relative_eq!(term.$method(), $expected_value);
-            }
-        };
-
-        (
-            $test_name:ident,
-            $method:ident,
-            $atom_variant:ident,
-            $prefix_variant:ident,
-            $expected_value:expr,factor:
-            $factor:expr
-        ) => {
-            #[test]
-            fn $test_name() {
-                let mut term = Term::new(Some(Atom::$atom_variant), Some(Prefix::$prefix_variant));
-                term.factor = $factor;
-                assert_relative_eq!(term.$method(), $expected_value);
-            }
-        };
-
-        (
-            $test_name:ident,
-            $method:ident,
-            $atom_variant:ident,
-            $expected_value:expr,factor:
-            $factor:expr
-        ) => {
-            #[test]
-            fn $test_name() {
-                let mut term = Term::new(Some(Atom::$atom_variant), None);
-                term.factor = $factor;
-                assert_relative_eq!(term.$method(), $expected_value);
-            }
-        };
-
-        (
-            $test_name:ident,
-            $method:ident,
-            $atom_variant:ident,
-            $expected_value:expr,exponent:
-            $exponent:expr
-        ) => {
-            #[test]
-            fn $test_name() {
-                let mut term = Term::new(Some(Atom::$atom_variant), None);
-                term.exponent = $exponent;
-                assert_relative_eq!(term.$method(), $expected_value);
-            }
-        };
-
-        (
-            $test_name:ident,
-            $method:ident,
-            $atom_variant:ident,
-            $prefix_variant:ident,
-            $expected_value:expr
-        ) => {
-            #[test]
-            fn $test_name() {
-                let term = Term::new(Some(Atom::$atom_variant), Some(Prefix::$prefix_variant));
-                assert_relative_eq!(term.$method(), $expected_value);
-            }
-        };
-
-        ($test_name:ident, $method:ident, $atom_variant:ident, $expected_value:expr) => {
-            #[test]
-            fn $test_name() {
-                let term = Term::new(Some(Atom::$atom_variant), None);
-                assert_relative_eq!(term.$method(), $expected_value);
+                let term = $term;
+                assert_relative_eq!(term.scalar(), $expected_value);
             }
         };
     }
 
-    validate_scalar!(validate_scalar_meter, scalar, Meter, 1.0);
-    validate_scalar!(validate_scalar_kilometer, scalar, Meter, Kilo, 1000.0);
-    validate_scalar!(validate_scalar_meter_eminus1, scalar, Meter, 1.0, exponent: -1);
-    validate_scalar!(validate_scalar_meter_factor, scalar, Meter, 10.0, factor: 10);
-    validate_scalar!(validate_scalar_kilometer_factor, scalar, Meter, Kilo, 10_000.0, factor: 10);
-    validate_scalar!(validate_scalar_kilometer_factor_exponent, scalar, Meter, Kilo, 0.0001, exponent: -1, factor: 10);
-    validate_scalar!(validate_scalar_liter, scalar, Liter, 0.001);
+    macro_rules! validate_magnitude {
+        ($test_name:ident, $term:expr, $expected_value:expr) => {
+            #[test]
+            fn $test_name() {
+                let term = $term;
+                assert_relative_eq!(term.magnitude(), $expected_value);
+            }
+        };
+    }
+
+    macro_rules! validate_composition {
+        ($test_name:ident, $term:expr, $expected_value:expr) => {
+            #[test]
+            fn $test_name() {
+                let term = $term;
+                assert_eq!(term.composition(), $expected_value);
+            }
+        };
+
+        ($test_name:ident, $expected_value:expr) => {
+            #[test]
+            fn $test_name() {
+                let term = term!();
+                assert_eq!(term.composition(), $expected_value);
+            }
+        };
+    }
+
+    // scalar tests
+    validate_scalar!(validate_scalar_meter, term!(Meter), 1.0);
+    validate_scalar!(validate_scalar_kilometer, term!(Kilo, Meter), 1000.0);
+    validate_scalar!(
+        validate_scalar_meter_eminus1,
+        term!(Meter, exponent: -1),
+        1.0
+    );
+    validate_scalar!(validate_scalar_meter_factor, term!(Meter, factor: 10), 10.0);
+    validate_scalar!(
+        validate_scalar_kilometer_factor,
+        term!(Kilo, Meter, factor: 10),
+        10_000.0
+    );
+    validate_scalar!(
+        validate_scalar_kilometer_factor_exponent,
+        term!(Kilo, Meter, exponent: -1, factor: 10),
+        0.0001
+    );
+    validate_scalar!(validate_scalar_liter, term!(Liter), 0.001);
     validate_scalar!(
         validate_scalar_pi,
-        scalar,
-        TheNumberPi,
+        term!(TheNumberPi),
         ::std::f64::consts::PI
     );
-    validate_scalar!(validate_scalar_pi_factor, scalar, TheNumberPi, ::std::f64::consts::PI * 10.0, factor: 10);
-    validate_scalar!(validate_scalar_hectare, scalar, Are, Hecto, 10_000.0);
-    validate_scalar!(validate_scalar_week, scalar, Week, 604_800.0);
-    validate_scalar!(validate_scalar_kilogram, scalar, Gram, Kilo, 1000.0);
+    validate_scalar!(
+        validate_scalar_pi_factor,
+        term!(TheNumberPi, factor: 10),
+        ::std::f64::consts::PI * 10.0
+    );
+    validate_scalar!(validate_scalar_hectare, term!(Hecto, Are), 10_000.0);
+    validate_scalar!(validate_scalar_week, term!(Week), 604_800.0);
+    validate_scalar!(validate_scalar_kilogram, term!(Kilo, Gram), 1000.0);
     validate_scalar!(
         validate_scalar_fahrenheit,
-        scalar,
-        DegreeFahrenheit,
+        term!(DegreeFahrenheit),
         255.927_777_777_777_8
     );
 
-    validate_scalar!(validate_magnitude_meter, magnitude, Meter, 1.0);
-    validate_scalar!(validate_magnitude_kilometer, magnitude, Meter, Kilo, 1000.0);
-    validate_scalar!(validate_magnitude_meter_eminus1, magnitude, Meter, 1.0, exponent: -1);
-    validate_scalar!(validate_magnitude_meter_factor, magnitude, Meter, 10.0, factor: 10);
-    validate_scalar!(validate_magnitude_kilometer_factor, magnitude, Meter, Kilo, 10_000.0, factor: 10);
-    validate_scalar!(validate_magnitude_kilometer_factor_exponent, magnitude, Meter, Kilo, 0.000_1, exponent: -1, factor: 10);
-    validate_scalar!(validate_magnitude_liter, magnitude, Liter, 1.0);
-    validate_scalar!(validate_magnitude_pi, magnitude, TheNumberPi, 1.0);
-    validate_scalar!(validate_magnitude_pi_factor, magnitude, TheNumberPi, 10.0, factor: 10);
-    validate_scalar!(validate_magnitude_hectare, magnitude, Are, Hecto, 100.0);
-    validate_scalar!(validate_magnitude_week, magnitude, Week, 1.0);
-    validate_scalar!(validate_magnitude_kilogram, magnitude, Gram, Kilo, 1000.0);
-    validate_scalar!(
+    // magnitude tests
+    validate_magnitude!(validate_magnitude_meter, term!(Meter), 1.0);
+    validate_magnitude!(validate_magnitude_kilometer, term!(Kilo, Meter), 1000.0);
+    validate_magnitude!(
+        validate_magnitude_meter_eminus1,
+        term!(Meter, exponent: -1),
+        1.0
+    );
+    validate_magnitude!(
+        validate_magnitude_meter_factor,
+        term!(Meter, factor: 10),
+        10.0
+    );
+    validate_magnitude!(
+        validate_magnitude_kilometer_factor,
+        term!(Kilo, Meter, factor: 10),
+        10_000.0
+    );
+    validate_magnitude!(
+        validate_magnitude_kilometer_factor_exponent,
+        term!(Kilo, Meter, exponent: -1, factor: 10),
+        0.000_1
+    );
+    validate_magnitude!(validate_magnitude_liter, term!(Liter), 1.0);
+    validate_magnitude!(validate_magnitude_pi, term!(TheNumberPi), 1.0);
+    validate_magnitude!(
+        validate_magnitude_pi_factor,
+        term!(TheNumberPi, factor: 10),
+        10.0
+    );
+    validate_magnitude!(validate_magnitude_hectare, term!(Hecto, Are), 100.0);
+    validate_magnitude!(validate_magnitude_week, term!(Week), 1.0);
+    validate_magnitude!(validate_magnitude_kilogram, term!(Kilo, Gram), 1000.0);
+    validate_magnitude!(
         validate_magnitude_fahrenheit,
-        magnitude,
-        DegreeFahrenheit,
+        term!(DegreeFahrenheit),
         1.000_000_000_000_056_8
     );
 
-    // #[test]
-    // fn validate_composition() {
-    //     let term = Term::new(None, None);
-    //     assert_eq!(term.composition(), None);
+    // Composition tests
+    validate_composition!(validate_composition_blank, Composition::default());
+    validate_composition!(
+        validate_composition_meter,
+        term!(Meter),
+        Composition::new(Dimension::Length, 1)
+    );
+    validate_composition!(
+        validate_composition_kilometer,
+        term!(Kilo, Meter),
+        Composition::new(Dimension::Length, 1)
+    );
+    validate_composition!(
+        validate_composition_meter_positive_non1_exponent,
+        term!(Meter, exponent: 2),
+        Composition::new(Dimension::Length, 2)
+    );
+    validate_composition!(
+        validate_composition_meter_negative_exponent,
+        term!(Meter, exponent: -1),
+        Composition::new(Dimension::Length, -1)
+    );
+    validate_composition!(
+        validate_composition_meter_negative_exponent2,
+        term!(Meter, exponent: -2),
+        Composition::new(Dimension::Length, -2)
+    );
+    validate_composition!(
+        validate_composition_meter_factor,
+        term!(Meter, factor: 10),
+        Composition::new(Dimension::Length, 1)
+    );
+    validate_composition!(
+        validate_composition_kilometer_factor,
+        term!(Kilo, Meter, factor: 10),
+        Composition::new(Dimension::Length, 1)
+    );
+    validate_composition!(
+        validate_composition_kilometer_factor_negative_exponent,
+        term!(Kilo, Meter, factor: 10, exponent: -1),
+        Composition::new(Dimension::Length, -1)
+    );
 
-    //     let term = Term::new(Some(Atom::Meter), None);
-    //     let composition = Composition::new(Dimension::Length, 1);
-    //     assert_eq!(term.composition().unwrap(), composition);
-
-    //     let term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-    //     let composition = Composition::new(Dimension::Length, 1);
-    //     assert_eq!(term.composition().unwrap(), composition);
-
-    //     let mut term = Term::new(Some(Atom::Meter), None);
-    //     term.exponent = -1;
-    //     let composition = Composition::new(Dimension::Length, -1);
-    //     assert_eq!(term.composition().unwrap(), composition);
-
-    //     let mut term = Term::new(Some(Atom::Meter), None);
-    //     term.exponent = -2;
-    //     let composition = Composition::new(Dimension::Length, -2);
-    //     assert_eq!(term.composition().unwrap(), composition);
-
-    //     let mut term = Term::new(Some(Atom::Meter), None);
-    //     term.factor = 10;
-    //     let composition = Composition::new(Dimension::Length, 1);
-    //     assert_eq!(term.composition().unwrap(), composition);
-
-    //     let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-    //     term.factor = 10;
-    //     let composition = Composition::new(Dimension::Length, 1);
-    //     assert_eq!(term.composition().unwrap(), composition);
-
-    //     let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-    //     term.factor = 10;
-    //     term.exponent = -1;
-    //     let composition = Composition::new(Dimension::Length, -1);
-    //     assert_eq!(term.composition().unwrap(), composition);
-    // }
-
+    // Display tests
     validate_display!(validate_display_empty, "");
     validate_display!(validate_display_meter, term!(Meter), "m");
-    validate_display!(validate_display_meter_exponent1, term!(Meter), "m-1", exponent: -1);
-    validate_display!(validate_display_meter_exponent2, term!(Meter), "m-2", exponent: -2);
-    validate_display!(validate_display_meter_factor, term!(Meter), "10m", factor: 10);
-    validate_display!(validate_display_kilometer, term!(Meter, Kilo), "km");
-    validate_display!(validate_display_kilometer_factor, term!(Meter, Kilo), "10km", factor: 10);
-    validate_display!(validate_display_kilometer_factor_exponent, term!(Meter, Kilo), "10km-1", factor: 10, exponent: -1);
+    validate_display!(
+        validate_display_meter_exponent1,
+        term!(Meter, exponent: -1),
+        "m-1"
+    );
+    validate_display!(
+        validate_display_meter_exponent_factor,
+        term!(Meter, exponent: -1, factor: 5),
+        "5m-1"
+    );
+    validate_display!(
+        validate_display_meter_exponent2,
+        term!(Meter, exponent: -2),
+        "m-2"
+    );
+    validate_display!(
+        validate_display_meter_factor,
+        term!(Meter, factor: 10),
+        "10m"
+    );
+    validate_display!(validate_display_kilometer, term!(Kilo, Meter), "km");
+    validate_display!(
+        validate_display_kilometer_factor,
+        term!(Kilo, Meter, factor: 10),
+        "10km"
+    );
+    validate_display!(
+        validate_display_kilometer_factor_exponent,
+        term!(Kilo, Meter, factor: 10, exponent: -1),
+        "10km-1"
+    );
 
     #[cfg(feature = "with_serde")]
     mod with_serde {
@@ -355,7 +369,7 @@ mod tests {
 
         #[test]
         fn validate_serialization_empty_term() {
-            let term = Term::new(None, None);
+            let term = term!();
 
             let expected_json = r#"{
                                     "atom": null,
@@ -373,9 +387,7 @@ mod tests {
 
         #[test]
         fn validate_serialization_full_term() {
-            let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-            term.factor = 123;
-            term.exponent = -456;
+            let mut term = term!(Kilo, Meter, factor: 123, exponent: -456);
             term.annotation = Some("stuff".to_string());
 
             let expected_json = r#"{
@@ -404,7 +416,7 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
 
-            let expected_term = Term::new(None, None);
+            let expected_term = term!();
 
             assert_eq!(expected_term, k);
         }
@@ -421,9 +433,7 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
 
-            let mut expected_term = Term::new(Some(Atom::Meter), Some(Prefix::Kilo));
-            expected_term.factor = 123;
-            expected_term.exponent = -456;
+            let mut expected_term = term!(Kilo, Meter, factor: 123, exponent: -456);
             expected_term.annotation = Some("stuff".to_string());
 
             assert_eq!(expected_term, k);

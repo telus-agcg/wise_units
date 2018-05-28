@@ -8,8 +8,10 @@
 #![cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
 
 use classification::Classification;
+use composable::Composable;
+use composition::Composition;
 use definition::Definition;
-// use dimension::Dimension;
+use dimension::Dimension;
 use function_set::FunctionSet;
 use property::Property;
 use std::fmt;
@@ -140,6 +142,21 @@ impl UcumSymbol for Atom {
     }
 }
 
+impl Composable for Atom {
+    fn composition(&self) -> Composition {
+        match *self {
+            Atom::Candela => Composition::new(Dimension::LuminousIntensity, 1),
+            Atom::Coulomb => Composition::new(Dimension::ElectricCharge, 1),
+            Atom::Gram => Composition::new(Dimension::Mass, 1),
+            Atom::Kelvin => Composition::new(Dimension::Temperature, 1),
+            Atom::Meter => Composition::new(Dimension::Length, 1),
+            Atom::Radian => Composition::new(Dimension::PlaneAngle, 1),
+            Atom::Second => Composition::new(Dimension::Time, 1),
+            _ => self.definition().terms.composition(),
+        }
+    }
+}
+
 impl fmt::Display for Atom {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.primary_code())
@@ -148,6 +165,50 @@ impl fmt::Display for Atom {
 
 #[cfg(test)]
 mod tests {
+    use super::Atom;
+    use classification::Classification;
+    use composable::Composable;
+    use composition::Composition;
+    use dimension::Dimension;
+    use prefix::Prefix;
+    use term::Term;
+    use ucum_symbol::UcumSymbol;
+
+    macro_rules! validate_definition {
+        (
+            $test_name:ident,
+            $atom_name:ident,
+            $expected_value:expr,
+            with_function_set,
+            $($expected_term:expr),+
+        ) => {
+            #[test]
+            fn $test_name() {
+                let atom = Atom::$atom_name;
+
+                assert_eq!(atom.definition().value, $expected_value);
+                assert_eq!(atom.definition().terms, vec![$($expected_term),+]);
+                assert!(atom.definition().function_set.is_some());
+            }
+        };
+
+        (
+            $test_name:ident,
+            $atom_name:ident,
+            $expected_value:expr,
+            $($expected_term:expr),+
+        ) => {
+            #[test]
+            fn $test_name() {
+                let atom = Atom::$atom_name;
+
+                assert_eq!(atom.definition().value, $expected_value);
+                assert_eq!(atom.definition().terms, vec![$($expected_term),+]);
+                assert_eq!(atom.definition().function_set, None);
+            }
+        };
+    }
+
     macro_rules! validate_scalar {
         ($test_name:ident, $variant:ident, $value:expr) => {
             #[test]
@@ -187,12 +248,31 @@ mod tests {
         };
     }
 
-    use super::Atom;
-    use classification::Classification;
-    // use dimension::Dimension;
-    use prefix::Prefix;
-    use term::Term;
-    use ucum_symbol::UcumSymbol;
+    macro_rules! validate_composition {
+        (
+            @insert
+            $composition:expr,
+            $dimension_variant:ident: $value:expr
+        ) => {
+            $composition.insert(Dimension::$dimension_variant, $value);
+        };
+
+        (
+            $test_name:ident,
+            $atom_variant:ident,
+            $($dimension_variant:ident: $value:expr),+
+        ) => {
+            #[test]
+            fn $test_name() {
+                let atom = Atom::$atom_variant;
+                let mut composition = Composition::default();
+                $(
+                    validate_composition!(@insert composition, $dimension_variant: $value);
+                )+
+                assert_eq!(atom.composition(), composition);
+            }
+        };
+    }
 
     #[test]
     fn validate_classification_si() {
@@ -310,7 +390,7 @@ mod tests {
             Atom::Radian,
             Atom::Second,
         ];
-        let terms = vec![Term::new(None, None)];
+        let terms = vec![term!()];
 
         for base_atom in base_atoms {
             assert_eq!(base_atom.definition().value, 1.0);
@@ -318,302 +398,245 @@ mod tests {
         }
     }
 
-    #[test]
-    fn validate_definition_acre_us() {
-        let atom = Atom::AcreUS;
-        let mut term = Term::new(Some(Atom::RodUS), None);
-        term.exponent = 2;
+    validate_definition!(
+        validate_definition_acre_us,
+        AcreUS,
+        160.0,
+        term!(RodUS, exponent: 2)
+    );
+    validate_definition!(
+        validate_definition_are,
+        Are,
+        100.0,
+        term!(Meter, exponent: 2)
+    );
+    validate_definition!(
+        validate_definition_degree,
+        Degree,
+        2.0,
+        term!(TheNumberPi),
+        term!(Radian),
+        term!(factor: 360, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_degree_celsius,
+        DegreeCelsius,
+        1.0,
+        with_function_set,
+        term!(Kelvin)
+    );
+    validate_definition!(
+        validate_definition_degree_fahrenheit,
+        DegreeFahrenheit,
+        5.0,
+        with_function_set,
+        term!(Kelvin),
+        term!(factor: 9, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_degree_reaumur,
+        DegreeReaumur,
+        5.0,
+        with_function_set,
+        term!(Kelvin),
+        term!(factor: 4, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_fluid_ounce_us,
+        FluidOunceUS,
+        1.0,
+        term!(GillUS),
+        term!(factor: 4, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_foot_international,
+        FootInternational,
+        12.0,
+        term!(InchInternational)
+    );
+    validate_definition!(
+        validate_definition_inch_international,
+        InchInternational,
+        254e-2,
+        term!(Centi, Meter)
+    );
+    validate_definition!(
+        validate_definition_foot_us,
+        FootUS,
+        1200.0,
+        term!(Meter),
+        term!(factor: 3937, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_gill_us,
+        GillUS,
+        1.0,
+        term!(PintUS),
+        term!(factor: 4, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_liter,
+        Liter,
+        1.0,
+        term!(Deci, Meter, exponent: 3)
+    );
+    validate_definition!(
+        validate_definition_mole,
+        Mole,
+        6.022_136_7,
+        term!(TheNumberTenForArbitraryPowersStar, exponent: 23)
+    );
+    validate_definition!(
+        validate_definition_parts_per_billion,
+        PartsPerBillion,
+        1.0,
+        term!(TheNumberTenForArbitraryPowersStar, exponent: -9)
+    );
+    validate_definition!(
+        validate_definition_parts_per_million,
+        PartsPerMillion,
+        1.0,
+        term!(TheNumberTenForArbitraryPowersStar, exponent: -6)
+    );
+    validate_definition!(
+        validate_definition_parts_per_thousand,
+        PartsPerThousand,
+        1.0,
+        term!(TheNumberTenForArbitraryPowersStar, exponent: -3)
+    );
+    validate_definition!(
+        validate_definition_ph,
+        PH,
+        1.0,
+        with_function_set,
+        term!(Mole),
+        term!(Liter, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_pint_us,
+        PintUS,
+        1.0,
+        term!(QuartUS),
+        term!(factor: 2, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_prism_diopter,
+        PrismDiopter,
+        1.0,
+        with_function_set,
+        term!(Radian)
+    );
+    validate_definition!(
+        validate_definition_bel_watt,
+        BelWatt,
+        1.0,
+        with_function_set,
+        term!(Watt)
+    );
+    validate_definition!(
+        validate_definition_quart_us,
+        QuartUS,
+        1.0,
+        term!(QueenAnnesWineGallonUS),
+        term!(factor: 4, exponent: -1)
+    );
+    validate_definition!(
+        validate_definition_metric_cup,
+        MetricCup,
+        240.0,
+        term!(Milli, LiterSecondary)
+    );
+    validate_definition!(
+        validate_definition_queen_annes_wine_gallon_us,
+        QueenAnnesWineGallonUS,
+        231.0,
+        term!(InchInternational, exponent: 3)
+    );
+    validate_definition!(
+        validate_definition_rod_us,
+        RodUS,
+        16.5,
+        term!(FootUS)
+    );
+    validate_definition!(
+        validate_definition_the_number_pi,
+        TheNumberPi,
+        3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3,
+        term!()
+    );
+    validate_definition!(
+        validate_definition_the_number_ten_for_arbitrary_powers_caret,
+        TheNumberTenForArbitraryPowersCaret,
+        10.0,
+        term!()
+    );
+    validate_definition!(
+        validate_definition_the_number_ten_for_arbitrary_powers_star,
+        TheNumberTenForArbitraryPowersStar,
+        10.0,
+        term!()
+    );
 
-        assert_eq!(atom.definition().value, 160.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
+    // Composition tests
+    validate_composition!(validate_composition_candela, Candela, LuminousIntensity: 1);
+    validate_composition!(validate_composition_coulomb, Coulomb, ElectricCharge: 1);
+    validate_composition!(validate_composition_gram, Gram, Mass: 1);
+    validate_composition!(validate_composition_kelvin, Kelvin, Temperature: 1);
+    validate_composition!(validate_composition_meter, Meter, Length: 1);
+    validate_composition!(validate_composition_radian, Radian, PlaneAngle: 1);
+    validate_composition!(validate_composition_second, Second, Time: 1);
 
-    #[test]
-    fn validate_definition_are() {
-        let atom = Atom::Are;
-        let mut term = Term::new(Some(Atom::Meter), None);
-        term.exponent = 2;
+    validate_composition!(validate_composition_acre_british, AcreBritish, Length: 2);
+    validate_composition!(validate_composition_acre_us, AcreUS, Length: 2);
+    validate_composition!(validate_composition_are, Are, Length: 2);
+    validate_composition!(validate_composition_astronomic_unit, AstronomicUnit, Length: 1);
+    validate_composition!(validate_composition_bar, Bar, Length: -1, Mass: 1, Time: -2);
+    validate_composition!(validate_composition_barrel_us, BarrelUS, Length: 3);
+    validate_composition!(validate_composition_becquerel, Becquerel, Time: -1);
+    validate_composition!(validate_composition_biot, Biot, ElectricCharge: 1, Time: -1);
+    validate_composition!(validate_composition_board_foot_international, BoardFootInternational, Length: 3);
+    validate_composition!(
+        validate_composition_boltzmann_constant,
+        BoltzmannConstant,
+        Length: 2, Mass: 1, Temperature: -1, Time: -2
+    );
+    validate_composition!(
+        validate_composition_british_thermal_unit_at_39f,
+        BritishThermalUnitAt39F,
+        Length: 2, Mass: 1, Time: -2
+    );
+    validate_composition!(
+        validate_composition_bushel_british,
+        BushelBritish,
+        Length: 3
+    );
+    validate_composition!(
+        validate_composition_bushel_us,
+        BushelUS,
+        Length: 3
+    );
+    validate_composition!(
+        validate_composition_calorie_at_15c,
+        CalorieAt15C,
+        Length: 2, Mass: 1, Time: -2
+    );
+    validate_composition!(
+        validate_composition_calorie_at_20c,
+        CalorieAt20C,
+        Length: 2, Mass: 1, Time: -2
+    );
+    validate_composition!(
+        validate_composition_international_table_calorie,
+        InternationalTableCalorie,
+        Length: 2, Mass: 1, Time: -2
+    );
+    validate_composition!(
+        validate_composition_pound_av,
+        PoundAvoirdupois,
+        Mass: 1
+    );
 
-        assert_eq!(atom.definition().value, 100.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_degree() {
-        let atom = Atom::Degree;
-        let term = Term::new(Some(Atom::TheNumberPi), None);
-        let term2 = Term::new(Some(Atom::Radian), None);
-
-        let mut term3 = Term::new(None, None);
-        term3.factor = 360;
-        term3.exponent = -1;
-
-        assert_eq!(atom.definition().value, 2.0);
-        assert_eq!(atom.definition().terms, vec![term, term2, term3]);
-    }
-
-    #[test]
-    fn validate_definition_degree_celsius() {
-        let atom = Atom::DegreeCelsius;
-        let term = Term::new(Some(Atom::Kelvin), None);
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_degree_fahrenheit() {
-        let atom = Atom::DegreeFahrenheit;
-        let term1 = Term::new(Some(Atom::Kelvin), None);
-        let mut term2 = Term::new(None, None);
-        term2.factor = 9;
-        term2.exponent = -1;
-
-        assert_eq!(atom.definition().value, 5.0);
-        assert_eq!(atom.definition().terms, vec![term1, term2]);
-    }
-
-    #[test]
-    fn validate_definition_degree_reaumur() {
-        let atom = Atom::DegreeReaumur;
-        let term1 = Term::new(Some(Atom::Kelvin), None);
-        let mut term2 = Term::new(None, None);
-        term2.factor = 4;
-        term2.exponent = -1;
-
-        assert_eq!(atom.definition().value, 5.0);
-        assert_eq!(atom.definition().terms, vec![term1, term2]);
-    }
-
-    #[test]
-    fn validate_definition_fluid_ounce_us() {
-        let atom = Atom::FluidOunceUS;
-        let term = Term::new(Some(Atom::GillUS), None);
-
-        let mut term2 = Term::new(None, None);
-        term2.factor = 4;
-        term2.exponent = -1;
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, vec![term, term2]);
-    }
-
-    #[test]
-    fn validate_definition_foot_international() {
-        let atom = Atom::FootInternational;
-        let term = Term::new(Some(Atom::InchInternational), None);
-
-        assert_eq!(atom.definition().value, 12.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_foot_us() {
-        let atom = Atom::FootUS;
-        let term1 = Term::new(Some(Atom::Meter), None);
-
-        let mut term2 = Term::new(None, None);
-        term2.factor = 3937;
-        term2.exponent = -1;
-
-        assert_eq!(atom.definition().value, 1200.0);
-        assert_eq!(atom.definition().terms, vec![term1, term2]);
-    }
-
-    #[test]
-    fn validate_definition_gill_us() {
-        let atom = Atom::GillUS;
-        let term = Term::new(Some(Atom::PintUS), None);
-
-        let mut term2 = Term::new(None, None);
-        term2.factor = 4;
-        term2.exponent = -1;
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, vec![term, term2]);
-    }
-
-    #[test]
-    fn validate_definition_inch_international() {
-        let atom = Atom::InchInternational;
-        let term = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
-
-        assert_eq!(atom.definition().value, 254e-2);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_liter() {
-        let atom = Atom::Liter;
-        let mut term = Term::new(Some(Atom::Meter), Some(Prefix::Deci));
-        term.exponent = 3;
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_mole() {
-        let atom = Atom::Mole;
-        let mut term = Term::new(Some(Atom::TheNumberTenForArbitraryPowersStar), None);
-        term.exponent = 23;
-
-        assert_eq!(atom.definition().value, 6.022_136_7);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_parts_per_billion() {
-        let atom = Atom::PartsPerBillion;
-        let mut term = Term::new(Some(Atom::TheNumberTenForArbitraryPowersStar), None);
-        term.exponent = -9;
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_parts_per_million() {
-        let atom = Atom::PartsPerMillion;
-        let mut term = Term::new(Some(Atom::TheNumberTenForArbitraryPowersStar), None);
-        term.exponent = -6;
-
-        let terms = vec![term];
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, terms);
-    }
-
-    #[test]
-    fn validate_definition_parts_per_thousand() {
-        let atom = Atom::PartsPerThousand;
-        let mut term = Term::new(Some(Atom::TheNumberTenForArbitraryPowersStar), None);
-        term.exponent = -3;
-
-        let terms = vec![term];
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, terms);
-    }
-
-    #[test]
-    fn validate_definition_ph() {
-        let atom = Atom::PH;
-        let term1 = Term::new(Some(Atom::Mole), None);
-        let mut term2 = Term::new(Some(Atom::Liter), None);
-        term2.exponent = -1;
-        let terms = vec![term1, term2];
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, terms);
-    }
-
-    #[test]
-    fn validate_definition_pint_us() {
-        let atom = Atom::PintUS;
-        let term = Term::new(Some(Atom::QuartUS), None);
-
-        let mut term2 = Term::new(None, None);
-        term2.factor = 2;
-        term2.exponent = -1;
-
-        let terms = vec![term, term2];
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, terms);
-    }
-
-    #[test]
-    fn validate_definition_prism_diopter() {
-        let atom = Atom::PrismDiopter;
-        let term = Term::new(Some(Atom::Radian), None);
-        let terms = vec![term];
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, terms);
-    }
-
-    #[test]
-    fn validate_definition_bel_watt() {
-        let atom = Atom::BelWatt;
-        let term = Term::new(Some(Atom::Watt), None);
-        let terms = vec![term];
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, terms);
-    }
-
-    #[test]
-    fn validate_definition_quart_us() {
-        let atom = Atom::QuartUS;
-        let term = Term::new(Some(Atom::QueenAnnesWineGallonUS), None);
-
-        let mut term2 = Term::new(None, None);
-        term2.factor = 4;
-        term2.exponent = -1;
-
-        assert_eq!(atom.definition().value, 1.0);
-        assert_eq!(atom.definition().terms, vec![term, term2]);
-    }
-
-    #[test]
-    fn validate_definition_cup_m() {
-        let atom = Atom::MetricCup;
-        let term = Term::new(Some(Atom::LiterSecondary), Some(Prefix::Milli));
-
-        assert_eq!(atom.definition().value, 240.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_queen_annes_wine_gallon_us() {
-        let atom = Atom::QueenAnnesWineGallonUS;
-        let mut term = Term::new(Some(Atom::InchInternational), None);
-        term.exponent = 3;
-
-        assert_eq!(atom.definition().value, 231.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_rod_us() {
-        let atom = Atom::RodUS;
-        let term = Term::new(Some(Atom::FootUS), None);
-
-        assert_eq!(atom.definition().value, 16.5);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_the_number_pi() {
-        let atom = Atom::TheNumberPi;
-        let term = Term::new(None, None);
-
-        assert_eq!(
-            atom.definition().value,
-            3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3
-        );
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_the_number_ten_for_arbitrary_powers_caret() {
-        let atom = Atom::TheNumberTenForArbitraryPowersCaret;
-        let term = Term::new(None, None);
-
-        assert_eq!(atom.definition().value, 10.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
-    #[test]
-    fn validate_definition_the_number_ten_for_arbitrary_powers_star() {
-        let atom = Atom::TheNumberTenForArbitraryPowersCaret;
-        let term = Term::new(None, None);
-
-        assert_eq!(atom.definition().value, 10.0);
-        assert_eq!(atom.definition().terms, vec![term]);
-    }
-
+    // Scalar tests
     validate_scalars!(
         validate_scalar_candela, Candela, 1.0;
         validate_scalar_coulomb, Coulomb, 1.0;
@@ -627,7 +650,6 @@ mod tests {
         validate_scalar_acre_us, AcreUS, 4046.872_609_874_252;
         validate_scalar_are, Are, 100.0;
         validate_scalar_astronomic_unit, AstronomicUnit, 149_597_870_691.0;
-        validate_scalar_atomic_mass_unit, UnifiedAtomicMassUnit, 1.660_540_2e-24;
         validate_scalar_bar, Bar, 100_000_000.0;
         validate_scalar_barrel_us, BarrelUS, 0.158_987_294_928;
         validate_scalar_becquerel, Becquerel, 1.0;
@@ -827,6 +849,7 @@ mod tests {
         validate_scalar_township, Township, 93_239_944.931_502_76;
         validate_scalar_tropical_year, TropicalYear, 31_556_925.216;
 
+        validate_scalar_unified_atomic_mass_unit, UnifiedAtomicMassUnit, 1.660_540_2e-24;
         validate_scalar_velocity_of_light, VelocityOfLight, 299_792_458.0;
         validate_scalar_volt, Volt, 1000.0;
         validate_scalar_watt, Watt, 1000.0;

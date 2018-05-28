@@ -29,13 +29,10 @@ extern crate wise_units_parsing;
 #[macro_use]
 extern crate stdweb;
 
-pub mod composable;
 pub mod measurement;
 pub mod unit;
 
-mod composition;
 mod decomposable;
-mod dimension;
 mod measurable;
 mod reduction_decomposer;
 mod simple_decomposer;
@@ -43,3 +40,4 @@ mod simple_decomposer;
 pub use measurable::Measurable;
 pub use measurement::Measurement;
 pub use unit::Unit;
+pub use wise_units_parsing::Composable;

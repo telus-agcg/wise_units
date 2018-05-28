@@ -29,3 +29,13 @@ impl fmt::Display for Dimension {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use dimension::Dimension;
+
+    #[test]
+    fn validate_display() {
+        assert_eq!(&Dimension::Time.to_string(), "T");
+    }
+}

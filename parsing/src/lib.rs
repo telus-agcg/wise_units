@@ -37,9 +37,15 @@ extern crate serde_json;
 #[cfg(test)]
 extern crate simple_logger;
 
+#[macro_use]
+mod macros;
+
 mod atom;
 mod classification;
+mod composable;
+mod composition;
 mod definition;
+mod dimension;
 mod error;
 mod function_set;
 mod prefix;
@@ -51,6 +57,9 @@ mod ucum_symbol;
 
 pub use atom::Atom;
 pub use classification::Classification;
+pub use composable::Composable;
+pub use composition::Composition;
+pub use dimension::Dimension;
 pub use error::Error;
 pub use prefix::Prefix;
 pub use symbols::symbol_parser::SymbolParser;

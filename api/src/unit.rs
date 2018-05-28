@@ -1,5 +1,3 @@
-use composable::Composable;
-use composition::Composition;
 use decomposable::Decomposable;
 use reduction_decomposer::ReductionDecomposer;
 use simple_decomposer::SimpleDecomposer;
@@ -7,7 +5,7 @@ use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
-use wise_units_parsing::{Error, Term, UcumSymbol};
+use wise_units_parsing::{Composable, Composition, Error, Term, UcumSymbol};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
@@ -256,8 +254,7 @@ mod tests {
     }
 
     use super::*;
-    use composition::Composition;
-    use dimension::Dimension;
+    use wise_units_parsing::{Composition, Dimension};
 
     #[test]
     fn validate_from_str_error() {
