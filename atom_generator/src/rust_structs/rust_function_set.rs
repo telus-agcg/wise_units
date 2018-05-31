@@ -1,5 +1,5 @@
 #[derive(Debug, Serialize)]
-pub struct RustFunctionSet {
+pub(crate) struct RustFunctionSet {
     // AKA "calculate_magnitude"
     pub convert_from: String,
 

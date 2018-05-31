@@ -1,5 +1,5 @@
 #[derive(Debug, Deserialize, Clone)]
-pub struct TomlDefinition {
+pub(crate) struct TomlDefinition {
     #[serde(default = "default_value")]
     pub value: f64,
 
@@ -10,7 +10,7 @@ pub struct TomlDefinition {
 }
 
 #[derive(Debug, Deserialize, Clone)]
-pub struct TomlFunction {
+pub(crate) struct TomlFunction {
     pub name: String,
     pub value: f64,
     #[serde(rename = "Unit")]

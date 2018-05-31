@@ -1,5 +1,5 @@
 #[derive(Debug, Deserialize)]
-pub struct TomlPrefix {
+pub(crate) struct TomlPrefix {
     #[serde(rename = "Code")]
     pub primary_code: String,
 

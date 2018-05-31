@@ -1,5 +1,5 @@
 #[derive(Debug, Serialize)]
-pub struct RustUnit {
+pub(crate) struct RustAtom {
     pub type_name: String,
     pub classification: String,
     pub dim: Option<String>,

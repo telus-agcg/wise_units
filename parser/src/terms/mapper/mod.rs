@@ -14,9 +14,9 @@ use self::component::Component;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
 use error::Error;
-use pest::Parser;
 use pest::iterators::{Pair, Pairs};
-use symbols::mapper;
+use pest::Parser;
+use symbols::mapper as symbol_mapper;
 use symbols::symbol_parser::Rule as SymbolRule;
 use symbols::symbol_parser::SymbolParser;
 use term::Term;
@@ -27,7 +27,7 @@ pub fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
         let main_term = match pair.as_rule() {
             Rule::main_term => visit_main_term(pair)?,
             _ => {
-                let e = Error::ParsingError {
+                let e = Error::UnableToParse {
                     expression: pair.as_str().to_string(),
                 };
                 return Err(e);
@@ -50,7 +50,7 @@ fn visit_digits(pair: Pair<Rule>) -> Result<i32, Error> {
     let span = pair.into_span();
     let string = span.as_str();
 
-    string.parse::<i32>().map_err(|e| Error::ParsingError {
+    string.parse::<i32>().map_err(|e| Error::UnableToParse {
         expression: e.to_string(),
     })
 }
@@ -70,7 +70,7 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
                         e = -e;
                     }
                     _ => {
-                        let error = Error::ParsingError {
+                        let error = Error::UnableToParse {
                             expression: string.to_string(),
                         };
                         return Err(error);
@@ -81,7 +81,7 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
                 e *= visit_digits(inner_pair)?;
             }
             _ => {
-                let error = Error::ParsingError {
+                let error = Error::UnableToParse {
                     expression: inner_pair.as_str().to_string(),
                 };
                 return Err(error);
@@ -93,7 +93,7 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
 }
 
 fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
-    let mut simple_unit = SimpleUnit::new();
+    let mut simple_unit = SimpleUnit::default();
     let span = pair.into_span();
     let string = span.as_str();
 
@@ -103,7 +103,7 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
 
     match SymbolParser::parse(SymbolRule::symbol, string) {
         Ok(mut symbol_pairs) => {
-            let symbol = mapper::map(symbol_pairs.next().unwrap())?;
+            let symbol = symbol_mapper::map(symbol_pairs.next().unwrap())?;
             simple_unit.atom = symbol.atom;
             simple_unit.prefix = symbol.prefix;
         }
@@ -115,7 +115,7 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
             //     return a.clone()
             // }
 
-            return Err(Error::ParsingError {
+            return Err(Error::UnableToParse {
                 expression: string.to_string(),
             });
         }
@@ -125,7 +125,7 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
 }
 
 fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
-    let mut annotatable = Annotatable::new();
+    let mut annotatable = Annotatable::default();
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
@@ -139,7 +139,7 @@ fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
                 annotatable.exponent = visit_exponent(inner_pair)?;
             }
             _ => {
-                let error = Error::ParsingError {
+                let error = Error::UnableToParse {
                     expression: inner_pair.as_str().to_string(),
                 };
                 return Err(error);
@@ -160,13 +160,13 @@ fn visit_factor(pair: Pair<Rule>) -> Result<u32, Error> {
     let span = pair.into_span();
     let string = span.as_str();
 
-    string.parse::<u32>().map_err(|e| Error::ParsingError {
+    string.parse::<u32>().map_err(|e| Error::UnableToParse {
         expression: e.to_string(),
     })
 }
 
 fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
-    let mut bc = BasicComponent::new();
+    let mut bc = BasicComponent::default();
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
@@ -191,7 +191,7 @@ fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
                 bc.terms.append(&mut ast_term.into());
             }
             _ => {
-                let error = Error::ParsingError {
+                let error = Error::UnableToParse {
                     expression: inner_pair.as_str().to_string(),
                 };
                 return Err(error);
@@ -203,7 +203,7 @@ fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
 }
 
 fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
-    let mut component = Component::new();
+    let mut component = Component::default();
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
@@ -216,7 +216,7 @@ fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
                 component.terms.append(&mut bc.into());
             }
             _ => {
-                let error = Error::ParsingError {
+                let error = Error::UnableToParse {
                     expression: inner_pair.as_str().to_string(),
                 };
                 return Err(error);
@@ -229,7 +229,7 @@ fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
 
 fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
     let mut has_slash = false;
-    let mut ast_term = AstTerm::new();
+    let mut ast_term = AstTerm::default();
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
@@ -255,7 +255,7 @@ fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
                 ast_term.component = Some(component);
             }
             _ => {
-                let error = Error::ParsingError {
+                let error = Error::UnableToParse {
                     expression: inner_pair.as_str().to_string(),
                 };
                 return Err(error);
@@ -267,7 +267,7 @@ fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
 }
 
 fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
-    let mut main_term = MainTerm::new();
+    let mut main_term = MainTerm::default();
     let mut has_slash = false;
 
     for inner_pair in pair.into_inner() {
@@ -289,7 +289,7 @@ fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
                 main_term.terms.append(&mut new_terms);
             }
             _ => {
-                let error = Error::ParsingError {
+                let error = Error::UnableToParse {
                     expression: inner_pair.as_str().to_string(),
                 };
                 return Err(error);

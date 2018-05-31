@@ -1,6 +1,8 @@
 // Turn on proc_macro if we're on nightly AND using the with_stdweb feature.
-#![cfg_attr(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"),
-            feature(proc_macro))]
+#![cfg_attr(
+    all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"),
+    feature(proc_macro)
+)]
 
 #[cfg(test)]
 #[macro_use]
@@ -15,7 +17,7 @@ extern crate log;
 
 // Only include macros for testing
 #[cfg(test)]
-#[macro_use(consumes_to, fails_with, parses_to)]
+#[macro_use(consumes_to, parses_to)]
 extern crate pest;
 
 #[cfg(not(test))]
@@ -37,11 +39,15 @@ extern crate serde_json;
 #[cfg(test)]
 extern crate simple_logger;
 
+include!(concat!(env!("OUT_DIR"), "/classification.rs"));
+include!(concat!(env!("OUT_DIR"), "/property.rs"));
+include!(concat!(env!("OUT_DIR"), "/atom.rs"));
+
 #[macro_use]
 mod macros;
 
-mod atom;
-mod classification;
+pub mod symbols;
+
 mod composable;
 mod composition;
 mod definition;
@@ -49,8 +55,6 @@ mod dimension;
 mod error;
 mod function_set;
 mod prefix;
-mod property;
-mod symbols;
 mod term;
 mod terms;
 mod ucum_symbol;
@@ -59,8 +63,10 @@ pub use atom::Atom;
 pub use classification::Classification;
 pub use composable::Composable;
 pub use composition::Composition;
+pub use definition::Definition;
 pub use dimension::Dimension;
 pub use error::Error;
+pub use function_set::FunctionSet;
 pub use prefix::Prefix;
 pub use symbols::symbol_parser::SymbolParser;
 pub use term::Term;

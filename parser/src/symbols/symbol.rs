@@ -8,9 +8,9 @@ pub struct Symbol {
     pub atom: Option<Atom>,
 }
 
-impl Symbol {
-    pub fn new() -> Self {
-        Symbol {
+impl Default for Symbol {
+    fn default() -> Self {
+        Self {
             prefix: None,
             atom: None,
         }

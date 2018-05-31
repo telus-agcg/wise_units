@@ -7,9 +7,9 @@ pub(super) struct Annotatable {
     pub exponent: i32,
 }
 
-impl Annotatable {
-    pub(super) fn new() -> Self {
-        Annotatable {
+impl Default for Annotatable {
+    fn default() -> Self {
+        Self {
             prefix: None,
             atom: None,
             exponent: 1,

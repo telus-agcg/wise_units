@@ -39,7 +39,7 @@ macro_rules! term {
 
     ($($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = Term::new(None, None);
+            let mut term = Term::default();
             $(
                 term!(@params term, $attribute_name: $attribute_value);
             )+
@@ -48,7 +48,7 @@ macro_rules! term {
     };
 
     () => {
-        Term::new(None, None);
+        Term::default();
     };
 }
 

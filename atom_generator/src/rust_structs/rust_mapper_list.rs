@@ -4,7 +4,7 @@ use std::collections::HashMap;
 type AtomTypeName = String;
 
 #[derive(Debug, Serialize)]
-pub struct RustMapperList {
+pub(crate) struct RustMapperList {
     pub mappings: HashMap<AtomTypeName, RustMappingValue>,
 }
 
@@ -34,7 +34,7 @@ impl<'a> From<&'a RustAtomList> for RustMapperList {
 }
 
 #[derive(Debug, Serialize)]
-pub struct RustMappingValue {
+pub(crate) struct RustMappingValue {
     pub primary_rule_name: String,
     pub secondary_rule_name: Option<String>,
 }

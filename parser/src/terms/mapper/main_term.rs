@@ -1,13 +1,12 @@
 use term::Term;
-// use unit::Unit;
 
 pub(super) struct MainTerm {
     pub terms: Vec<Term>,
 }
 
-impl MainTerm {
-    pub fn new() -> Self {
-        MainTerm { terms: vec![] }
+impl Default for MainTerm {
+    fn default() -> Self {
+        Self { terms: vec![] }
     }
 }
 

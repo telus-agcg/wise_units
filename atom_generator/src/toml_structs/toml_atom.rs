@@ -5,7 +5,7 @@ lazy_static! {
     static ref NUMBER_REGEX: Regex = Regex::new(r"^\d+").unwrap();
 }
 
-pub trait TomlAtom {
+pub(crate) trait TomlAtom {
     fn primary_code(&self) -> String;
     fn names(&self) -> Vec<String>;
 

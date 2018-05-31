@@ -1,7 +1,7 @@
 use toml_structs::TomlAtom;
 
 #[derive(Debug, Deserialize)]
-pub struct TomlBaseUnit {
+pub(crate) struct TomlBaseUnit {
     #[serde(rename = "Code")]
     pub primary_code: String,
 

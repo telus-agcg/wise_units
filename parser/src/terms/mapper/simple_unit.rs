@@ -6,9 +6,9 @@ pub(super) struct SimpleUnit {
     pub atom: Option<Atom>,
 }
 
-impl SimpleUnit {
-    pub(super) fn new() -> Self {
-        SimpleUnit {
+impl Default for SimpleUnit {
+    fn default() -> Self {
+        Self {
             prefix: None,
             atom: None,
         }
