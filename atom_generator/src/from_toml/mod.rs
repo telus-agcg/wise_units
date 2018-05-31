@@ -1,86 +1,44 @@
-use handlebars::{Handlebars, Helper, Output, RenderContext, RenderError};
+//! This module handles reading .toml files into a `RustAtomList` struct, where
+//! the struct is what's used for generating the code for which this crate
+//! exists.
+//!
+//! There are two sources of atom/unit data for which code can be generated:
+//!
+//! * `Atoms.toml`, defined within the `wise_units` project
+//! * `CustomAtoms.toml`, defined within third-party crates who wish to
+//!   defined their own units (in addition to those in `Atoms.toml`).
+//!
+//! In both cases, this module:
+//!
+//! * Reads the file
+//! * Deserializes the TOML into `wise_units-atom_generator` `toml_structs`
+//!   structs * Transforms the `toml_structs` into
+//!   `wise_units-atom_generator` `rust_structs` structs * Transforms those
+//!   into a `RustAtomList` struct.
+//!
+//! NOTE: Code generated for "special" units can *not* be automatically deduced
+//! from the UCUM.xml file; thus, any new special units that get added to the
+//! UCUM spec must be manually updated in the relevant functions below, and
+//! support for custom special units does not yet exist.
+//!
+
 use heck::CamelCase;
-use rust_structs::{PestSymbolList, RustAtomList, RustClassificationList, RustFunctionSet,
-                   RustMapperList, RustPropertyList, RustUnit};
-use std::fs;
-use std::path::PathBuf;
-use toml_structs::{TomlAtom, TomlAtomList};
+use rust_structs::{RustAtom, RustFunctionSet};
+use toml_structs::{TomlAtom, TomlBaseUnit, TomlUnit};
 
-lazy_static! {
-    pub static ref HANDLEBARS: Handlebars = {
-        fn register_template(template_name: &str, extension: &str, handlebars: &mut Handlebars) {
-            let file = format!(
-                "../atom_generator/src/templates/{}.{}.hbs",
-                template_name, extension
-            );
-            let pb = PathBuf::from(file);
+pub(crate) mod atoms;
+pub(crate) mod custom_atoms;
 
-            if let Err(e) = handlebars.register_template_file(template_name, pb.clone()) {
-                println!("file: {:?}", fs::canonicalize(&pb));
-                panic!("{}", e);
-            }
-        }
-
-        let mut handlebars = Handlebars::new();
-        handlebars.register_escape_fn(::handlebars::no_escape);
-        handlebars.register_helper("camelCase", Box::new(camel_case_helper));
-
-        register_template("atom", "rs", &mut handlebars);
-        register_template("classification", "rs", &mut handlebars);
-        register_template("property", "rs", &mut handlebars);
-        register_template("symbol", "pest", &mut handlebars);
-        register_template("mapper", "rs", &mut handlebars);
-
-        handlebars
-    };
-}
-
-pub fn build_rust_atoms(atom_list: &TomlAtomList) -> RustAtomList {
-    let mut units = build_rust_base_units(atom_list);
-    units.append(&mut build_rust_units(atom_list));
-
-    RustAtomList { atoms: units }
-}
-
-pub fn build_classification_file_body(atom_list: &RustAtomList) -> String {
-    let classification_list = RustClassificationList::from(atom_list);
-
-    HANDLEBARS
-        .render("classification", &classification_list)
-        .unwrap()
-}
-
-pub fn build_property_file_body(atom_list: &RustAtomList) -> String {
-    let property_list = RustPropertyList::from(atom_list);
-
-    HANDLEBARS.render("property", &property_list).unwrap()
-}
-
-pub fn build_atom_file_body(atom_list: &RustAtomList) -> String {
-    HANDLEBARS.render("atom", atom_list).unwrap()
-}
-
-pub fn build_symbol_file_body(atom_list: &RustAtomList) -> String {
-    let symbol_list = PestSymbolList::from(atom_list);
-
-    HANDLEBARS.render("symbol", &symbol_list).unwrap()
-}
-
-pub fn build_mapper_file_body(atom_list: &RustAtomList) -> String {
-    let mapper_list = RustMapperList::from(atom_list);
-
-    HANDLEBARS.render("mapper", &mapper_list).unwrap()
-}
-
-fn build_rust_base_units(atom_list: &TomlAtomList) -> Vec<RustUnit> {
-    atom_list
-        .base_units
+/// Transforms a `Vec<TomlBaseUnit>` to a `Vec<RustAtom>`.
+///
+fn transform_base_units(atom_list_base_units: &[TomlBaseUnit]) -> Vec<RustAtom> {
+    atom_list_base_units
         .iter()
-        .map(|bu| RustUnit {
+        .map(|bu| RustAtom {
             type_name: bu.type_name(),
             classification: "Si".to_string(),
             dim: Some(bu.dim.clone()),
-            definition_signature: "1.0, \"1\", None".to_string(),
+            definition_signature: "Ok(Definition::default())".to_string(),
             primary_code: bu.primary_code.clone(),
             print_symbol: Some(bu.print_symbol.clone()),
             property: bu.property.clone(),
@@ -93,9 +51,10 @@ fn build_rust_base_units(atom_list: &TomlAtomList) -> Vec<RustUnit> {
         .collect()
 }
 
-fn build_rust_units(atom_list: &TomlAtomList) -> Vec<RustUnit> {
-    atom_list
-        .units
+/// Transforms a `Vec<TomlUnit>` to a `Vec<RustAtom>`.
+///
+fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
+    atom_list_units
         .iter()
         .map(|u| {
             let definition_signature = if u.is_special {
@@ -108,25 +67,27 @@ fn build_rust_units(atom_list: &TomlAtomList) -> Vec<RustUnit> {
                 let function_set_string = build_function_set_string(&function_set);
 
                 format!(
-                    "{:?}, \"{}\", Some({})",
+                    "Definition::new({:?}, \"{}\", Some({}))",
                     function.value,
                     function.unit.clone(),
                     function_set_string
                 )
             } else if &u.primary_code == "[pi]" {
                 format!(
-                    "::std::f64::consts::PI, \"{}\", None",
+                    "Definition::new(::std::f64::consts::PI, \"{}\", None)",
                     u.definition.unit.clone()
                 )
+            } else if u.definition.value == 1.0 && &u.definition.unit == "1" {
+                "Ok(Definition::default())".to_string()
             } else {
                 format!(
-                    "{:?}, \"{}\", None",
+                    "Definition::new({:?}, \"{}\", None)",
                     u.definition.value,
                     u.definition.unit.clone()
                 )
             };
 
-            RustUnit {
+            RustAtom {
                 type_name: u.type_name(),
                 classification: u.classification.clone().to_camel_case(),
                 dim: None,
@@ -144,13 +105,9 @@ fn build_rust_units(atom_list: &TomlAtomList) -> Vec<RustUnit> {
         .collect()
 }
 
-fn build_function_set_string(rust_function_set: &RustFunctionSet) -> String {
-    format!(
-        "FunctionSet {{ convert_from: {}, convert_to: {} }}",
-        rust_function_set.convert_from, rust_function_set.convert_to
-    )
-}
-
+/// Determines which function to generate for converting *from* the unit with
+/// `primary_code` to its base unit.
+///
 fn build_scalar_function(primary_code: &str) -> String {
     match primary_code {
         "B"               => "|value: f64| 10_f64.powf(value)",
@@ -178,6 +135,13 @@ fn build_scalar_function(primary_code: &str) -> String {
     }.to_string()
 }
 
+/// Determines which function to generate for converting *to* the unit with
+/// `primary_code` from its base unit. These are only for "special" units and
+/// as far as I can tell can *not* be automatically deduced from the UCUM.xml
+/// file; thus any new special units that get added to the UCUM spec must be
+/// manually updated here, and support for custom special units does not yet
+/// exist.
+///
 fn build_magnitude_function(primary_code: &str) -> String {
     match primary_code {
         "B"               => "|value: f64| value.log10()",
@@ -205,16 +169,9 @@ fn build_magnitude_function(primary_code: &str) -> String {
     }.to_string()
 }
 
-fn camel_case_helper(
-    h: &Helper,
-    _: &Handlebars,
-    _rc: &mut RenderContext,
-    out: &mut Output,
-) -> Result<(), RenderError> {
-    let param = h.param(0).unwrap().value();
-    let rendered = param.to_string().to_camel_case();
-
-    out.write(rendered.as_ref())?;
-
-    Ok(())
+fn build_function_set_string(rust_function_set: &RustFunctionSet) -> String {
+    format!(
+        "FunctionSet {{ convert_from: {}, convert_to: {} }}",
+        rust_function_set.convert_from, rust_function_set.convert_to
+    )
 }

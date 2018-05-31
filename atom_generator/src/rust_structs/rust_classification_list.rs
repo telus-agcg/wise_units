@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use std::iter::FromIterator;
 
 #[derive(Debug, Serialize)]
-pub struct RustClassificationList {
+pub(crate) struct RustClassificationList {
     pub type_names: Vec<String>,
 }
 

@@ -20,7 +20,7 @@ impl Definition {
     ) -> Result<Self, Error> {
         let terms = super::parse(expression)?;
 
-        Ok(Definition {
+        Ok(Self {
             value,
             terms,
             function_set,
@@ -57,8 +57,6 @@ impl Definition {
     }
 
     pub fn calculate_scalar(&self, other_value: f64) -> f64 {
-        debug!("calculate_scalar()");
-
         match self.function_set {
             None => {
                 if self.is_unity() {
@@ -76,8 +74,6 @@ impl Definition {
     }
 
     pub fn calculate_magnitude(&self, other_value: f64) -> f64 {
-        debug!("calculate_magnitude()");
-
         match self.function_set {
             None => {
                 if self.is_unity() {
@@ -96,5 +92,15 @@ impl Definition {
 
     pub fn is_unity(&self) -> bool {
         self.terms.len() == 1 && self.terms[0].is_unity()
+    }
+}
+
+impl Default for Definition {
+    fn default() -> Self {
+        Self {
+            value: 1.0,
+            terms: vec![term!()],
+            function_set: None,
+        }
     }
 }

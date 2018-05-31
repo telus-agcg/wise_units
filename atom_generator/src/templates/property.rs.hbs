@@ -3,59 +3,71 @@
 // This is generated at compile time.
 //-----------------------------------------------------------------------------
 
-use atom::Atom;
-use std::fmt;
+pub mod property {
+    use atom::Atom;
+    use std::fmt;
 
-/// Property categorizes the unit by use. Not much mention of it in the UCUM
-/// HTML spec, but is used throughout the
-/// [XML description](http://unitsofmeasure.org/ucum-essence.xml).
-///
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Property {
-    {{~ #each properties }}
-    {{ @key }},{{ /each }}
-}
+    /// Property categorizes the unit by use. Not much mention of it in the UCUM
+    /// HTML spec, but is used throughout the
+    /// [XML description](http://unitsofmeasure.org/ucum-essence.xml).
+    ///
+    #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+    pub enum Property {
+        {{~ #each properties }}
+        {{ @key }},{{ /each }}
+    }
 
-impl Property {
-    pub fn atoms(&self) -> Vec<Atom> {
-        match self {
-            {{~ #each properties }}
-            Property::{{ @key }} => {
-                vec![
-                    {{~ #each this.atom_type_names }}
-                    Atom::{{ this }},{{ /each }}
-                ]
-            },{{ /each }}
+    impl Property {
+        /// All `Atom`s that match the `Property` variant.
+        ///
+        /// ```
+        /// extern crate wise_units_parser;
+        /// use wise_units_parser::Atom;
+        /// use wise_units_parser::property::Property;
+        ///
+        /// assert_eq!(Property::Acidity.atoms(), vec![Atom::PH]);
+        /// ```
+        ///
+        pub fn atoms(&self) -> Vec<Atom> {
+            match self {
+                {{~ #each properties }}
+                Property::{{ @key }} => {
+                    vec![
+                        {{~ #each this.atom_type_names }}
+                        Atom::{{ this }},{{ /each }}
+                    ]
+                },{{ /each }}
+            }
         }
     }
-}
 
-impl Default for Property {
-    fn default() -> Property {
-        Property::Unclassified
+    impl Default for Property {
+        fn default() -> Self {
+            Property::Unclassified
+        }
     }
-}
 
-impl fmt::Display for Property {
-    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        let string = match *self {
-            {{~ #each properties as |key value| }}
-            Property::{{ key }} => {
-                "{{ value.description }}"
-            },{{ /each }}
-        };
+    impl fmt::Display for Property {
+        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+            let string = match *self {
+                {{~ #each properties as |key value| }}
+                Property::{{ key }} => {
+                    "{{ value.description }}"
+                },{{ /each }}
+            };
 
-        write!(formatter, "{}", string)
+            write!(formatter, "{}", string)
+        }
     }
-}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    #[cfg(test)]
+    mod tests {
+        use super::*;
 
-    #[test]
-    fn validate_display() {
-        let a = format!("{}", Property::Acceleration);
-        assert_eq!(a, "acceleration".to_string());
+        #[test]
+        fn validate_display() {
+            let a = format!("{}", Property::Acceleration);
+            assert_eq!(a, "acceleration".to_string());
+        }
     }
 }

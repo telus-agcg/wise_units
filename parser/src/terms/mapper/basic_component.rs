@@ -11,9 +11,9 @@ pub(super) struct BasicComponent {
     pub terms: Vec<Term>,
 }
 
-impl BasicComponent {
-    pub(super) fn new() -> Self {
-        BasicComponent {
+impl Default for BasicComponent {
+    fn default() -> Self {
+        Self {
             atom: None,
             prefix: None,
             factor: 1,

@@ -1,17 +1,17 @@
 use super::RustAtomList;
 use heck::CamelCase;
-use std::collections::HashMap;
 use std::collections::hash_map::Entry;
+use std::collections::HashMap;
 
 type PropertyTypeName = String;
 
 #[derive(Debug, Serialize)]
-pub struct RustPropertyList {
+pub(crate) struct RustPropertyList {
     pub properties: HashMap<PropertyTypeName, RustProperty>,
 }
 
 #[derive(Debug, Serialize)]
-pub struct RustProperty {
+pub(crate) struct RustProperty {
     pub atom_type_names: Vec<String>,
     pub description: String,
 }

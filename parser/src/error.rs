@@ -8,7 +8,7 @@ pub enum Error {
     IncompatibleUnitTypes { lhs: String, rhs: String },
 
     #[fail(display = "Unable to parse expression: {}", expression)]
-    ParsingError { expression: String },
+    UnableToParse { expression: String },
 
     #[fail(display = "Unknown unit string: {}", _0)]
     UnknownUnitString(String),
@@ -16,7 +16,7 @@ pub enum Error {
 
 impl<'i, R: ::pest::RuleType> ::std::convert::From<pest::Error<'i, R>> for Error {
     fn from(pest_error: pest::Error<'i, R>) -> Self {
-        Error::ParsingError {
+        Error::UnableToParse {
             expression: pest_error.to_string(),
         }
     }
@@ -24,7 +24,7 @@ impl<'i, R: ::pest::RuleType> ::std::convert::From<pest::Error<'i, R>> for Error
 
 impl ::std::convert::From<::std::num::ParseIntError> for Error {
     fn from(error: ::std::num::ParseIntError) -> Self {
-        Error::ParsingError {
+        Error::UnableToParse {
             expression: error.to_string(),
         }
     }

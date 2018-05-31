@@ -2,7 +2,7 @@ use super::{TomlAtom, TomlDefinition};
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TomlUnit {
+pub(crate) struct TomlUnit {
     #[serde(rename = "Code")]
     pub primary_code: String,
 

@@ -1,7 +1,6 @@
-pub mod mapper;
-mod symbol;
-pub mod symbol_parser;
+include!(concat!(env!("OUT_DIR"), "/mapper.rs"));
+include!(concat!(env!("OUT_DIR"), "/symbol_parser.rs"));
 
-pub use self::mapper::map;
+pub mod symbol;
+
 pub use self::symbol::Symbol;
-pub use self::symbol_parser::SymbolParser;

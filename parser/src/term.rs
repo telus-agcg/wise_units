@@ -22,7 +22,7 @@ pub struct Term {
 
 impl Term {
     pub fn new(prefix: Option<Prefix>, atom: Option<Atom>) -> Self {
-        Term {
+        Self {
             atom,
             prefix,
             factor: 1,
@@ -46,16 +46,11 @@ impl Term {
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         debug!("calculate_scalar()");
         let e = self.exponent;
-
-        debug!("calculate_scalar() calling atom.calculate_scalar");
         let atom_scalar = self.atom.map_or(1.0, |a| a.calculate_scalar(value));
-        debug!("calculate_scalar() done with atom.calculate_scalar");
 
         // TODO: Interesting that this change causes tests to pass now.
         // let prefix_scalar = self.prefix.map_or(1.0, |p| p.magnitude());
-        debug!("calculate_scalar() calling prefix.calculate_scalar");
         let prefix_scalar = self.prefix.map_or(1.0, |p| p.scalar());
-        debug!("calculate_scalar() done with prefix.calculate_scalar");
 
         (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(e)
     }
@@ -108,6 +103,18 @@ impl Composable for Vec<Term> {
         }
 
         composition
+    }
+}
+
+impl ::std::default::Default for Term {
+    fn default() -> Self {
+        Self {
+            prefix: None,
+            atom: None,
+            factor: 1,
+            exponent: 1,
+            annotation: None,
+        }
     }
 }
 

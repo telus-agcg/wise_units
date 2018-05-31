@@ -1,6 +1,6 @@
 use dimension::Dimension;
-use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
+use std::collections::BTreeMap;
 use std::fmt;
 use std::iter::IntoIterator;
 
@@ -9,7 +9,7 @@ pub struct Composition(BTreeMap<Dimension, i32>);
 
 impl Composition {
     pub fn new(dimension: Dimension, exponent: i32) -> Self {
-        let mut c = Composition::default();
+        let mut c = Self::default();
         c.insert(dimension, exponent);
 
         c

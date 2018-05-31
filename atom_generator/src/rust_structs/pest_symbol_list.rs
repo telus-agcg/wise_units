@@ -1,7 +1,7 @@
 use super::RustAtomList;
 
 #[derive(Debug, Serialize)]
-pub struct PestSymbolList {
+pub(crate) struct PestSymbolList {
     pub primary_rule_names: Vec<PestSymbol>,
     pub secondary_rule_names: Vec<PestSymbol>,
 }
@@ -48,7 +48,7 @@ fn sort_symbols(symbols: &mut Vec<PestSymbol>) {
 }
 
 #[derive(Debug, Serialize)]
-pub struct PestSymbol {
+pub(crate) struct PestSymbol {
     pub rule_name: String,
     pub code: String,
 }

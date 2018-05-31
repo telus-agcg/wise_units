@@ -6,9 +6,9 @@ pub(super) struct AstTerm {
     pub terms: Vec<Term>,
 }
 
-impl AstTerm {
-    pub(super) fn new() -> Self {
-        AstTerm {
+impl Default for AstTerm {
+    fn default() -> Self {
+        Self {
             component: None,
             terms: vec![],
         }
