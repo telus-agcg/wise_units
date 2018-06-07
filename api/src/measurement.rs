@@ -3,7 +3,7 @@ use std::fmt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 use unit::Unit;
-use wise_units_parsing::{Composable, Error};
+use wise_units_parser::{Composable, Error};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -122,7 +122,7 @@ impl Measurement {
     /// `"m2/s"`.
     ///
     pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
-        let other_terms = ::wise_units_parsing::parse(expression)?;
+        let other_terms = ::wise_units_parser::parse(expression)?;
         let other_unit = Unit { terms: other_terms };
 
         if self.unit == other_unit {
@@ -384,14 +384,14 @@ impl<'a> Div for &'a mut Measurement {
 mod tests {
     use super::*;
     use unit::Unit;
-    use wise_units_parsing::{Atom, Term};
+    use wise_units_parser::{Atom, Term};
 
     #[test]
     fn validate_new() {
         let m = Measurement::new(1.0, "m").unwrap();
 
         let expected_unit = Unit {
-            terms: vec![Term::new(Some(Atom::Meter), None)],
+            terms: vec![term!(Meter)],
         };
 
         assert_eq!(m.value, 1.0);
@@ -507,7 +507,7 @@ mod tests {
         let terms = r.unit.terms;
         assert_eq!(terms.len(), 2);
 
-        let first_term = Term::new(Some(::wise_units_parsing::Atom::Meter), None);
+        let first_term = term!(Meter);
         assert_eq!(terms[0], first_term);
         assert_eq!(terms[1], first_term);
     }
@@ -522,11 +522,10 @@ mod tests {
         let terms = r.unit.terms;
         assert_eq!(terms.len(), 2);
 
-        let first_term = Term::new(Some(::wise_units_parsing::Atom::Meter), None);
+        let first_term = term!(Meter);
         assert_eq!(terms[0], first_term);
 
-        let mut last_term = Term::new(Some(::wise_units_parsing::Atom::Meter), None);
-        last_term.exponent = -1;
+        let last_term = term!(Meter, exponent: -1);
         assert_eq!(terms[1], last_term);
     }
 
@@ -547,11 +546,9 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Measurement;
-        use atom::Atom;
-        use prefix::Prefix;
         use serde_json;
-        use term::Term;
         use unit::Unit;
+        use wise_units_parser::{Atom, Prefix, Term};
 
         #[test]
         fn validate_serialization_empty_terms() {
@@ -590,14 +587,8 @@ mod tests {
             }"#.replace("\n", "")
                 .replace(" ", "");
 
-            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
-            term1.factor = 100;
-            term1.exponent = 456;
-            term1.annotation = Some("stuff".to_string());
-
-            let mut term2 = Term::new(Some(Atom::Gram), None);
-            term2.factor = 1;
-            term2.exponent = -4;
+            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: Some("stuff".to_string()));
+            let term2 = term!(Gram, exponent: -4);
 
             let unit = Unit {
                 terms: vec![term1, term2],
@@ -651,14 +642,8 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
-            let mut term1 = Term::new(Some(Atom::Meter), Some(Prefix::Centi));
-            term1.factor = 100;
-            term1.exponent = 456;
-            term1.annotation = Some("stuff".to_string());
-
-            let mut term2 = Term::new(Some(Atom::Gram), None);
-            term2.factor = 1;
-            term2.exponent = -4;
+            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: Some("stuff".to_string()));
+            let term2 = term!(Gram, exponent: 4);
 
             let unit = Unit {
                 terms: vec![term1, term2],

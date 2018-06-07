@@ -1,7 +1,7 @@
 use decomposable::Decomposable;
-use std::collections::BTreeMap;
 use std::collections::btree_map::Entry;
-use wise_units_parsing::Term;
+use std::collections::BTreeMap;
+use wise_units_parser::Term;
 
 type Exponent = i32;
 
