@@ -13,16 +13,16 @@ use self::basic_component::BasicComponent;
 use self::component::Component;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
-use error::Error;
+use parser::error::Error;
 use pest::iterators::{Pair, Pairs};
 use pest::Parser;
-use symbols::mapper as symbol_mapper;
-use symbols::symbol_parser::Rule as SymbolRule;
-use symbols::symbol_parser::SymbolParser;
-use term::Term;
-use terms::term_parser::Rule;
+use parser::symbols::mapper as symbol_mapper;
+use parser::symbols::symbol_parser::Rule as SymbolRule;
+use parser::symbols::symbol_parser::SymbolParser;
+use parser::term::Term;
+use parser::terms::term_parser::Rule;
 
-pub fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
+pub (crate) fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
     fn visit_pairs(pair: Pair<Rule>) -> Result<Vec<Term>, Error> {
         let main_term = match pair.as_rule() {
             Rule::main_term => visit_main_term(pair)?,
@@ -303,11 +303,9 @@ fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use atom::Atom;
+    use parser::{Atom, Prefix, Term};
+    use parser::terms::term_parser::{Rule, TermParser};
     use pest::Parser;
-    use prefix::Prefix;
-    use term::Term;
-    use terms::term_parser::{Rule, TermParser};
 
     macro_rules! validate_interpret {
         ($test_name:ident, $input:expr, $($terms:expr),+) => {

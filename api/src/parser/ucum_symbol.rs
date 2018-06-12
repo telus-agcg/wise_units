@@ -1,6 +1,4 @@
-use classification::Classification;
-use definition::Definition;
-use property::Property;
+use parser::{Classification, Definition, Property};
 
 pub trait UcumSymbol: Send + Sync + Copy + Clone {
     fn classification(&self) -> Classification;

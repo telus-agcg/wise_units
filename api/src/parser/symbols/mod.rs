@@ -1,6 +1,9 @@
 include!(concat!(env!("OUT_DIR"), "/mapper.rs"));
 include!(concat!(env!("OUT_DIR"), "/symbol_parser.rs"));
 
-pub mod symbol;
+pub (super) mod symbol;
 
-pub use self::symbol::Symbol;
+#[cfg(test)]
+mod symbol_parser_test;
+
+pub (super) use self::symbol::Symbol;

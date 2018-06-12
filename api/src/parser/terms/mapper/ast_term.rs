@@ -1,5 +1,5 @@
-use term::Term;
-use terms::mapper::component::Component;
+use parser::Term;
+use parser::terms::mapper::Component;
 
 pub(super) struct AstTerm {
     pub component: Option<Component>,

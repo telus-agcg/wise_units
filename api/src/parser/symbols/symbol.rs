@@ -1,12 +1,13 @@
-use atom::Atom;
-use prefix::Prefix;
+use parser::{Atom, Prefix};
 
-pub(super) struct SimpleUnit {
+// Technically there should never be a symbol without an atom.
+#[derive(Debug)]
+pub (crate) struct Symbol {
     pub prefix: Option<Prefix>,
     pub atom: Option<Atom>,
 }
 
-impl Default for SimpleUnit {
+impl Default for Symbol {
     fn default() -> Self {
         Self {
             prefix: None,
