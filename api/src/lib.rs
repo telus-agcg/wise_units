@@ -53,11 +53,9 @@ mod macros;
 pub mod measurement;
 pub mod unit;
 
-mod decomposable;
+mod decomposer;
 mod measurable;
 mod parser;
-mod reduction_decomposer;
-mod simple_decomposer;
 
 pub use measurable::Measurable;
 pub use measurement::Measurement;
