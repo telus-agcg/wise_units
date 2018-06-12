@@ -1,4 +1,4 @@
-use decomposable::Decomposable;
+use super::Decomposable;
 use parser::Term;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
@@ -19,24 +19,8 @@ impl Decomposable for ReductionDecomposer {
     fn numerator(&self) -> String {
         let result = self.0
             .iter()
-            .filter(|&(_, v)| v.is_positive())
-            .map(|(k, v)| {
-                if *v == 1 {
-                    k.to_string()
-                } else {
-                    format!("{}{}", k, v)
-                }
-            })
-            .filter(|s| !s.is_empty())
-            .fold(String::new(), |mut acc, num_string| {
-                let new_string = if acc.is_empty() {
-                    num_string.to_string()
-                } else {
-                    format!(".{}", num_string)
-                };
-                acc.push_str(&new_string);
-                acc
-            });
+            .filter_map(|(k, v)| extract_numerator(k, *v))
+            .fold(String::new(), |acc, num_string| super::build_string(acc, num_string));
 
         if result.is_empty() {
             "1".to_string()
@@ -48,25 +32,8 @@ impl Decomposable for ReductionDecomposer {
     fn denominator(&self) -> String {
         self.0
             .iter()
-            .filter(|&(_, v)| v.is_negative())
-            .map(|(k, v)| {
-                if v.abs() == 1 {
-                    k.to_string()
-                } else {
-                    let v = -v;
-                    format!("{}{}", k, v)
-                }
-            })
-            .filter(|s| !s.is_empty())
-            .fold(String::new(), |mut acc, num_string| {
-                let new_string = if acc.is_empty() {
-                    num_string.to_string()
-                } else {
-                    format!(".{}", num_string)
-                };
-                acc.push_str(&new_string);
-                acc
-            })
+            .filter_map(|(k, v)| extract_denominator(k, *v))
+            .fold(String::new(), |acc, num_string| super::build_string(acc, num_string))
     }
 }
 
@@ -103,6 +70,42 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
     set
 }
 
+fn extract_numerator(key: &str, value: i32) -> Option<String> {
+    if !value.is_positive() {
+        return None;
+    }
+
+    let new_string = if value == 1 {
+        key.to_string()
+    } else {
+        format!("{}{}", key, value)
+    };
+
+    if new_string.is_empty() {
+        None
+    } else {
+        Some(new_string)
+    }
+}
+
+fn extract_denominator(key: &str, value: i32) -> Option<String> {
+    if !value.is_negative() {
+        return None;
+    }
+
+    let new_string = if value == -1 {
+        key.to_string()
+    } else {
+        format!("{}{}", key, -value)
+    };
+
+    if new_string.is_empty() {
+        None
+    } else {
+        Some(new_string)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     macro_rules! validate_expression {
@@ -117,11 +120,12 @@ mod tests {
     }
 
     use super::ReductionDecomposer;
-    use decomposable::Decomposable;
+    use super::super::Decomposable;
     use std::str::FromStr;
     use unit::Unit;
 
     validate_expression!(validate_expression_pri_m, "m", "m");
+    validate_expression!(validate_expression_pri_m2_per_m, "m2/m", "m");
     validate_expression!(validate_expression_sec_m, "M", "m");
     validate_expression!(validate_expression_sec_km, "KM", "km");
     validate_expression!(validate_expression_pri_km_slash_pri_10m, "km/10m", "km/10m");

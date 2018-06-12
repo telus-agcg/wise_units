@@ -1,6 +1,4 @@
-use decomposable::Decomposable;
-use reduction_decomposer::ReductionDecomposer;
-use simple_decomposer::SimpleDecomposer;
+use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
