@@ -7,15 +7,8 @@
 // generate them using underscores (to make them pass the clippy lint).
 #[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
 pub mod atom {
-    use classification::Classification;
-    use composable::Composable;
-    use composition::Composition;
-    use definition::Definition;
-    use dimension::Dimension;
-    use function_set::FunctionSet;
-    use property::Property;
+    use parser::{Classification, Composable, Composition, Definition, Dimension, FunctionSet, Property, UcumSymbol};
     use std::fmt;
-    use ucum_symbol::UcumSymbol;
 
     // TODO: Implement PartialEq
     #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]

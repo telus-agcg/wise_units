@@ -4,10 +4,14 @@ version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
 [dependencies]
+failure = "0.1"
+failure_derive = "0.1"
+log = "0.4"
+pest = "^1.0"
+pest_derive = "^1.0"
 serde = { version = "1.0", optional = true, default-features = false }
 serde_derive = { version = "1.0", optional = true, default-features = false }
 stdweb = { version = "0.4", optional = true, default-features = false }
-wise_units-parser = { path = "../parser" }
 
 [dev-dependencies]
 approx = "0.1"

@@ -1,7 +1,7 @@
 use decomposable::Decomposable;
+use parser::Term;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
-use wise_units_parser::Term;
 
 type Exponent = i32;
 
@@ -30,7 +30,7 @@ impl Decomposable for ReductionDecomposer {
             .filter(|s| !s.is_empty())
             .fold(String::new(), |mut acc, num_string| {
                 let new_string = if acc.is_empty() {
-                    format!("{}", num_string)
+                    num_string.to_string()
                 } else {
                     format!(".{}", num_string)
                 };
@@ -60,7 +60,7 @@ impl Decomposable for ReductionDecomposer {
             .filter(|s| !s.is_empty())
             .fold(String::new(), |mut acc, num_string| {
                 let new_string = if acc.is_empty() {
-                    format!("{}", num_string)
+                    num_string.to_string()
                 } else {
                     format!(".{}", num_string)
                 };

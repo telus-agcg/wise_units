@@ -1,6 +1,4 @@
-use atom::Atom;
-use prefix::Prefix;
-use term::Term;
+use parser::{Atom, Prefix, Term};
 
 pub(super) struct BasicComponent {
     pub atom: Option<Atom>,

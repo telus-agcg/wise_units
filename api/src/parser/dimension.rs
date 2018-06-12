@@ -32,7 +32,7 @@ impl fmt::Display for Dimension {
 
 #[cfg(test)]
 mod tests {
-    use dimension::Dimension;
+    use super::Dimension;
 
     #[test]
     fn validate_display() {

@@ -1,4 +1,4 @@
-use composition::Composition;
+use parser::Composition;
 
 /// The main purpose of `Composable` is to get you to be able to determine
 /// compatibility with other unit-like structs/enums. You solely need to define

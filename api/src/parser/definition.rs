@@ -1,7 +1,4 @@
-use error::Error;
-use function_set::FunctionSet;
-use term::Term;
-use ucum_symbol::UcumSymbol;
+use parser::{Error, FunctionSet, Term, UcumSymbol};
 
 #[derive(Debug)]
 pub struct Definition {

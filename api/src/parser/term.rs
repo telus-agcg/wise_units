@@ -1,9 +1,5 @@
-use atom::Atom;
-use composable::Composable;
-use composition::Composition;
-use prefix::Prefix;
+use parser::{Atom, Composable, Composition, Prefix, UcumSymbol};
 use std::fmt;
-use ucum_symbol::UcumSymbol;
 
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an
@@ -148,12 +144,7 @@ fn extract_term_string(term: &Term) -> String {
 
 #[cfg(test)]
 mod tests {
-    use atom::Atom;
-    use composable::Composable;
-    use composition::Composition;
-    use dimension::Dimension;
-    use prefix::Prefix;
-    use term::Term;
+    use super::super::{Atom, Composable, Composition, Dimension, Prefix, Term};
 
     macro_rules! validate_display {
         ($test_name:ident, $term:expr, $output:expr) => {
@@ -370,8 +361,7 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Term;
-        use atom::Atom;
-        use prefix::Prefix;
+        use parser::{Atom, Prefix};
         use serde_json;
 
         #[test]

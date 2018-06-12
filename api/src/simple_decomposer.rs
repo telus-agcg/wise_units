@@ -1,5 +1,5 @@
 use decomposable::Decomposable;
-use wise_units_parser::Term;
+use parser::Term;
 
 pub struct SimpleDecomposer<'a>(&'a [Term]);
 
@@ -18,7 +18,7 @@ impl<'a> Decomposable for SimpleDecomposer<'a> {
             .filter(|term_string| !term_string.is_empty())
             .fold(String::new(), |mut acc, term_string| {
                 let new_string = if acc.is_empty() {
-                    format!("{}", term_string)
+                    term_string.to_string()
                 } else {
                     format!(".{}", term_string)
                 };
@@ -62,7 +62,7 @@ impl<'a> Decomposable for SimpleDecomposer<'a> {
             .filter(|term_string| !term_string.is_empty())
             .fold(String::new(), |mut acc, term_string| {
                 let new_string = if acc.is_empty() {
-                    format!("{}", term_string)
+                    term_string.to_string()
                 } else {
                     format!(".{}", term_string)
                 };

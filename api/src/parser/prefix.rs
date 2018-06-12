@@ -1,7 +1,5 @@
-use definition::Definition;
+use parser::{Classification, Definition, Term};
 use std::fmt;
-use term::Term;
-use Classification;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
