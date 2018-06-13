@@ -3,13 +3,13 @@
 // This is generated at compile time.
 //-----------------------------------------------------------------------------
 
-pub (super) mod mapper {
+pub(super) mod mapper {
     use parser::{Atom, Error, Prefix};
     use parser::symbols::Symbol;
     use parser::symbols::symbol_parser::Rule;
     use pest::iterators::Pair;
 
-    pub (in super::super) fn map(pair: Pair<Rule>) -> Result<Symbol, Error> {
+    pub(in super::super) fn map(pair: Pair<Rule>) -> Result<Symbol, Error> {
         fn visit_pairs(pair: Pair<Rule>) -> Result<Symbol, Error> {
             let symbol = match pair.as_rule() {
                 Rule::symbol => visit_symbol(pair)?,

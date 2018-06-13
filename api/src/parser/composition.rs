@@ -1,8 +1,8 @@
+use super::Dimension;
 use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 use std::fmt;
 use std::iter::IntoIterator;
-use super::Dimension;
 
 #[derive(Debug, PartialEq)]
 pub struct Composition(BTreeMap<Dimension, i32>);
@@ -62,8 +62,8 @@ impl IntoIterator for Composition {
 
 #[cfg(test)]
 mod tests {
-    use super::Composition;
     use super::super::Dimension;
+    use super::Composition;
     use std::collections::BTreeMap;
 
     #[test]

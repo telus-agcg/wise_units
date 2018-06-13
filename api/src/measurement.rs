@@ -382,9 +382,9 @@ impl<'a> Div for &'a mut Measurement {
 
 #[cfg(test)]
 mod tests {
+    use super::super::parser::{Atom, Term};
     use super::*;
     use unit::Unit;
-    use super::super::parser::{Atom, Term};
 
     #[test]
     fn validate_new() {

@@ -59,5 +59,6 @@ mod parser;
 
 pub use measurable::Measurable;
 pub use measurement::Measurement;
-pub use parser::{Atom, Classification, Composable, Composition, Dimension, Error, Prefix, Property, Term};
+pub use parser::{Atom, Classification, Composable, Composition, Dimension, Error, Prefix,
+                 Property, Term};
 pub use unit::Unit;

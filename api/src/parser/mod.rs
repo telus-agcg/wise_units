@@ -2,7 +2,7 @@ include!(concat!(env!("OUT_DIR"), "/classification.rs"));
 include!(concat!(env!("OUT_DIR"), "/property.rs"));
 include!(concat!(env!("OUT_DIR"), "/atom.rs"));
 
-pub (self) mod symbols;
+pub(self) mod symbols;
 
 #[cfg(test)]
 mod atom_test;
@@ -31,10 +31,9 @@ pub use self::symbols::symbol_parser::SymbolParser;
 pub use self::term::Term;
 pub use self::ucum_symbol::UcumSymbol;
 
-
-use pest::Parser;
 use self::terms::term_parser::Rule;
 use self::terms::term_parser::TermParser;
+use pest::Parser;
 
 pub fn parse(expression: &str) -> Result<Vec<Term>, Error> {
     match TermParser::parse(Rule::main_term, expression) {
