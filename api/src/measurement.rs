@@ -1,9 +1,9 @@
 use measurable::Measurable;
+use parser::{Composable, Error};
 use std::fmt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
 use unit::Unit;
-use wise_units_parser::{Composable, Error};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -112,7 +112,7 @@ impl Measurement {
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
         let unit = Unit::from_str(expression)?;
 
-        let m = Measurement { value, unit };
+        let m = Self { value, unit };
 
         Ok(m)
     }
@@ -121,8 +121,8 @@ impl Measurement {
     /// using a str of characters that represents the other unit type: ex.
     /// `"m2/s"`.
     ///
-    pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Measurement, Error> {
-        let other_terms = ::wise_units_parser::parse(expression)?;
+    pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Self, Error> {
+        let other_terms = super::parser::parse(expression)?;
         let other_unit = Unit { terms: other_terms };
 
         if self.unit == other_unit {
@@ -139,7 +139,7 @@ impl Measurement {
             return Err(e);
         }
 
-        let new_measurement = Measurement {
+        let new_measurement = Self {
             value: self.converted_scalar(&other_unit),
             unit: other_unit,
         };
@@ -184,10 +184,10 @@ impl Measurement {
     /// Multiplies the `Measurement`'s scalar by `scalar` and returns a new
     /// `Measurement`.
     ///
-    pub fn mul_scalar(&self, scalar: f64) -> Measurement {
+    pub fn mul_scalar(&self, scalar: f64) -> Self {
         let new_value = self.value * scalar;
 
-        Measurement {
+        Self {
             value: new_value,
             unit: self.unit.clone(),
         }
@@ -196,10 +196,10 @@ impl Measurement {
     /// Divides the `Measurement`'s scalar by `scalar` and returns a new
     /// `Measurement`.
     ///
-    pub fn div_scalar(&self, scalar: f64) -> Measurement {
+    pub fn div_scalar(&self, scalar: f64) -> Self {
         let new_value = self.value / scalar;
 
-        Measurement {
+        Self {
             value: new_value,
             unit: self.unit.clone(),
         }
@@ -225,14 +225,14 @@ impl PartialEq for Measurement {
 }
 
 impl Add for Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Result<Self, Error>;
 
-    fn add(self, other: Measurement) -> Self::Output {
+    fn add(self, other: Self) -> Self::Output {
         let unit = self.unit_string();
         let other_converted = other.convert_to(&unit)?;
         let new_value = self.value + other_converted.value;
 
-        Measurement::new(new_value, &unit)
+        Self::new(new_value, &unit)
     }
 }
 
@@ -261,14 +261,14 @@ impl<'a> Add for &'a mut Measurement {
 }
 
 impl Sub for Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Result<Self, Error>;
 
-    fn sub(self, other: Measurement) -> Self::Output {
+    fn sub(self, other: Self) -> Self::Output {
         let unit = self.unit_string();
         let other_converted = other.convert_to(&unit)?;
         let new_value = self.value - other_converted.value;
 
-        Measurement::new(new_value, &unit)
+        Self::new(new_value, &unit)
     }
 }
 
@@ -297,13 +297,13 @@ impl<'a> Sub for &'a mut Measurement {
 }
 
 impl Mul for Measurement {
-    type Output = Measurement;
+    type Output = Self;
 
-    fn mul(self, other: Measurement) -> Self::Output {
+    fn mul(self, other: Self) -> Self::Output {
         let new_value = self.value * other.value;
         let new_unit = self.unit * other.unit;
 
-        Measurement {
+        Self {
             value: new_value,
             unit: new_unit,
         }
@@ -339,13 +339,13 @@ impl<'a> Mul for &'a mut Measurement {
 }
 
 impl Div for Measurement {
-    type Output = Measurement;
+    type Output = Self;
 
-    fn div(self, other: Measurement) -> Self::Output {
+    fn div(self, other: Self) -> Self::Output {
         let new_value = self.value / other.value;
         let new_unit = self.unit / other.unit;
 
-        Measurement {
+        Self {
             value: new_value,
             unit: new_unit,
         }
@@ -382,9 +382,9 @@ impl<'a> Div for &'a mut Measurement {
 
 #[cfg(test)]
 mod tests {
+    use super::super::parser::{Atom, Term};
     use super::*;
     use unit::Unit;
-    use wise_units_parser::{Atom, Term};
 
     #[test]
     fn validate_new() {
@@ -546,9 +546,9 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Measurement;
+        use parser::{Atom, Prefix, Term};
         use serde_json;
         use unit::Unit;
-        use wise_units_parser::{Atom, Prefix, Term};
 
         #[test]
         fn validate_serialization_empty_terms() {
@@ -643,7 +643,7 @@ mod tests {
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
             let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: Some("stuff".to_string()));
-            let term2 = term!(Gram, exponent: 4);
+            let term2 = term!(Gram, exponent: -4);
 
             let unit = Unit {
                 terms: vec![term1, term2],

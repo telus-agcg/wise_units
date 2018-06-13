@@ -1,11 +1,9 @@
-use decomposable::Decomposable;
-use reduction_decomposer::ReductionDecomposer;
-use simple_decomposer::SimpleDecomposer;
+use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
+use parser::{Composable, Composition, Error, Term, UcumSymbol};
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
-use wise_units_parser::{Composable, Composition, Error, Term, UcumSymbol};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
@@ -79,7 +77,7 @@ impl Unit {
     /// Allows for dividing a Unit by a factor; results in dividing this Unit's
     /// associated Terms' factors by `other_factor`.
     ///
-    pub fn div_u32(&self, other_factor: u32) -> Unit {
+    pub fn div_u32(&self, other_factor: u32) -> Self {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
         for term in &self.terms {
@@ -88,13 +86,13 @@ impl Unit {
             new_terms.push(new_term);
         }
 
-        Unit { terms: new_terms }
+        Self { terms: new_terms }
     }
 
     /// Allows for multiplying a Unit by a factor; results in multiplying this
     /// Unit's associated Terms' factors by `other_factor`.
     ///
-    pub fn mul_u32(&self, other_factor: u32) -> Unit {
+    pub fn mul_u32(&self, other_factor: u32) -> Self {
         let mut new_terms = Vec::with_capacity(self.terms.len());
 
         for term in &self.terms {
@@ -107,7 +105,7 @@ impl Unit {
     }
 
     pub fn is_valid(expression: &str) -> bool {
-        Unit::from_str(expression).is_ok()
+        Self::from_str(expression).is_ok()
     }
 }
 
@@ -127,16 +125,16 @@ impl FromStr for Unit {
     type Err = Error;
 
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let terms = ::wise_units_parser::parse(expression)?;
+        let terms = super::parser::parse(expression)?;
 
-        Ok(Unit { terms })
+        Ok(Self { terms })
     }
 }
 
 impl Div for Unit {
-    type Output = Unit;
+    type Output = Self;
 
-    fn div(self, other: Unit) -> Self::Output {
+    fn div(self, other: Self) -> Self::Output {
         let mut new_terms = self.terms;
 
         let mut other_terms: Vec<Term> = other
@@ -150,7 +148,7 @@ impl Div for Unit {
 
         new_terms.append(&mut other_terms);
 
-        Unit { terms: new_terms }
+        Self { terms: new_terms }
     }
 }
 
@@ -187,13 +185,13 @@ impl<'a> Div for &'a mut Unit {
 }
 
 impl Mul for Unit {
-    type Output = Unit;
+    type Output = Self;
 
     fn mul(self, other: Unit) -> Self::Output {
         let mut new_terms = self.terms.clone();
         new_terms.extend(other.terms.clone());
 
-        Unit { terms: new_terms }
+        Self { terms: new_terms }
     }
 }
 
@@ -220,7 +218,7 @@ impl<'a> Mul for &'a mut Unit {
 }
 
 impl PartialOrd for Unit {
-    fn partial_cmp(&self, other: &Unit) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if self.is_compatible_with(other) {
             let other_scalar = other.scalar();
             let my_scalar = self.scalar();
@@ -253,8 +251,8 @@ mod tests {
         };
     }
 
+    use super::super::parser::{Composition, Dimension};
     use super::*;
-    use wise_units_parser::{Composition, Dimension};
 
     #[test]
     fn validate_from_str_error() {
@@ -559,8 +557,8 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Unit;
+        use parser::{Atom, Prefix, Term};
         use serde_json;
-        use wise_units_parser::{Atom, Prefix, Term};
 
         #[test]
         fn validate_serialization_empty_terms() {

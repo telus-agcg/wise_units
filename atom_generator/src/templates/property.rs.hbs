@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 
 pub mod property {
-    use atom::Atom;
+    use parser::Atom;
     use std::fmt;
 
     /// Property categorizes the unit by use. Not much mention of it in the UCUM
@@ -21,9 +21,8 @@ pub mod property {
         /// All `Atom`s that match the `Property` variant.
         ///
         /// ```
-        /// extern crate wise_units_parser;
-        /// use wise_units_parser::Atom;
-        /// use wise_units_parser::property::Property;
+        /// extern crate wise_units;
+        /// use wise_units::{Atom, Property};
         ///
         /// assert_eq!(Property::Acidity.atoms(), vec![Atom::PH]);
         /// ```
