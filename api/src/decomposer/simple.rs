@@ -14,7 +14,9 @@ impl<'a> Decomposable for SimpleDecomposer<'a> {
         let result = self.0
             .iter()
             .filter_map(|ref term| extract_numerator(term))
-            .fold(String::new(), |acc, term_string| super::build_string(acc, term_string));
+            .fold(String::new(), |acc, term_string| {
+                super::build_string(acc, term_string)
+            });
 
         if result.is_empty() {
             "1".to_string()
@@ -27,13 +29,15 @@ impl<'a> Decomposable for SimpleDecomposer<'a> {
         self.0
             .iter()
             .filter_map(|ref term| extract_denominator(term))
-            .fold(String::new(), |acc, term_string| super::build_string(acc, term_string))
+            .fold(String::new(), |acc, term_string| {
+                super::build_string(acc, term_string)
+            })
     }
 }
 
 fn extract_numerator(term: &Term) -> Option<String> {
     if !term.exponent.is_positive() {
-        return None
+        return None;
     }
 
     let s = term.to_string();
@@ -89,8 +93,8 @@ mod tests {
         };
     }
 
-    use super::SimpleDecomposer;
     use super::super::Decomposable;
+    use super::SimpleDecomposer;
     use std::str::FromStr;
     use unit::Unit;
 
@@ -100,8 +104,24 @@ mod tests {
     validate_expression!(validate_expression_pri_km, "km", "km");
     validate_expression!(validate_expression_sec_km, "KM", "km");
     validate_expression!(validate_expression_pri_km_slash_pri_s2, "km/s2", "km/s2");
-    validate_expression!(validate_expression_pri_im_slash_pri_60s2, "km/60s2", "km/60s2");
-    validate_expression!(validate_expression_sec_100km_slash_pri_60s, "100KM/60s2", "100km/60s2");
-    validate_expression!(validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us, "[acr_us].[IN_I]/[acr_us]", "[acr_us].[in_i]/[acr_us]");
-    validate_expression!(validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us2, "[acr_us].[IN_I]/[acr_us]2", "[acr_us].[in_i]/[acr_us]2");
+    validate_expression!(
+        validate_expression_pri_im_slash_pri_60s2,
+        "km/60s2",
+        "km/60s2"
+    );
+    validate_expression!(
+        validate_expression_sec_100km_slash_pri_60s,
+        "100KM/60s2",
+        "100km/60s2"
+    );
+    validate_expression!(
+        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us,
+        "[acr_us].[IN_I]/[acr_us]",
+        "[acr_us].[in_i]/[acr_us]"
+    );
+    validate_expression!(
+        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us2,
+        "[acr_us].[IN_I]/[acr_us]2",
+        "[acr_us].[in_i]/[acr_us]2"
+    );
 }

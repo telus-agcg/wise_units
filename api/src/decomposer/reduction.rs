@@ -20,7 +20,9 @@ impl Decomposable for ReductionDecomposer {
         let result = self.0
             .iter()
             .filter_map(|(k, v)| extract_numerator(k, *v))
-            .fold(String::new(), |acc, num_string| super::build_string(acc, num_string));
+            .fold(String::new(), |acc, num_string| {
+                super::build_string(acc, num_string)
+            });
 
         if result.is_empty() {
             "1".to_string()
@@ -33,7 +35,9 @@ impl Decomposable for ReductionDecomposer {
         self.0
             .iter()
             .filter_map(|(k, v)| extract_denominator(k, *v))
-            .fold(String::new(), |acc, num_string| super::build_string(acc, num_string))
+            .fold(String::new(), |acc, num_string| {
+                super::build_string(acc, num_string)
+            })
     }
 }
 
@@ -119,8 +123,8 @@ mod tests {
         };
     }
 
-    use super::ReductionDecomposer;
     use super::super::Decomposable;
+    use super::ReductionDecomposer;
     use std::str::FromStr;
     use unit::Unit;
 

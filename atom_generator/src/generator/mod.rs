@@ -60,7 +60,8 @@ fn generate_symbol_grammar_file(rust_atom_list: &RustAtomList) {
 
 fn generate_symbol_parser_file() {
     let grammar_file_path = build_file_path("symbol.pest");
-    let file_body = self::symbol_parser::generate_file_body(grammar_file_path.display().to_string());
+    let file_body =
+        self::symbol_parser::generate_file_body(grammar_file_path.display().to_string());
     let file_path = build_file_path("symbol_parser.rs");
     write_project_file(file_path, &file_body);
 }

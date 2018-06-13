@@ -1,9 +1,9 @@
 use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
+use parser::{Composable, Composition, Error, Term, UcumSymbol};
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
-use parser::{Composable, Composition, Error, Term, UcumSymbol};
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq)]
@@ -251,8 +251,8 @@ mod tests {
         };
     }
 
-    use super::*;
     use super::super::parser::{Composition, Dimension};
+    use super::*;
 
     #[test]
     fn validate_from_str_error() {

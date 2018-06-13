@@ -3,7 +3,7 @@
 #[cfg(test)]
 mod atom_test {
     use parser::{Atom, Classification, Composable, Composition, Dimension, Prefix, Term,
-                     UcumSymbol};
+                 UcumSymbol};
 
     macro_rules! validate_definition {
         (
@@ -739,15 +739,16 @@ mod atom_test {
 
         #[test]
         fn validate_serialization() {
-            let j =
-                serde_json::to_string(&Atom::BushelUS).expect("Couldn't convert Atom to JSON String");
+            let j = serde_json::to_string(&Atom::BushelUS)
+                .expect("Couldn't convert Atom to JSON String");
 
             assert_eq!("\"BushelUS\"", j);
         }
 
         #[test]
         fn validate_deserialization() {
-            let k = serde_json::from_str("\"BushelUS\"").expect("Couldn't convert JSON String to Atom");
+            let k =
+                serde_json::from_str("\"BushelUS\"").expect("Couldn't convert JSON String to Atom");
 
             assert_eq!(Atom::BushelUS, k);
         }
