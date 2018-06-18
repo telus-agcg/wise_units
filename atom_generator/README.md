@@ -63,18 +63,18 @@ just like any other `wise_units` unit.
 ## Atom Rules
 
 1. Before you do anything, get familiar with http://unitsofmeasure.org/ucum.html.
-  * All attributes of your unit must comply with UCUM syntax for that attribute.
+    * All attributes of your unit must comply with UCUM syntax for that attribute.
 1. Refrain from defining every "unit" you think of--or at least criticize doing
    so.
-   * Consider using UCUM _annotations_ to give context to your unit instead of
-     defining a new one (ex. `g{HGB}` = "gram of HGB"; a "gram" is a gram,
-     regardless of what substance it measures).
-   * The [SI](https://www.bipm.org/en/publications/si-brochure/) (and probably
-     other sources) differentiates between a "quantity" and a "unit", where a
-     quantity describes the measurement of something, but not in terms of a unit:
-     ex. _m<sub>n</sub>_ represents the quantity "mass of a neutron", but does not
-     imply which units it's measured in. Quantities should *NOT* be defined as
-     custom units.
+    * Consider using UCUM _annotations_ to give context to your unit instead of
+      defining a new one (ex. `g{HGB}` = "gram of HGB"; a "gram" is a gram,
+      regardless of what substance it measures).
+    * The [SI](https://www.bipm.org/en/publications/si-brochure/) (and probably
+      other sources) differentiates between a "quantity" and a "unit", where a
+      quantity describes the measurement of something, but not in terms of a unit:
+      ex. _m<sub>n</sub>_ represents the quantity "mass of a neutron", but does not
+      imply which units it's measured in. Quantities should *NOT* be defined as
+      custom units.
    * Each unit you add, enlarges the size of the resulting binary and slightly
      degrades performance, so again, scrutinize what you're doing before doing
      so.
@@ -84,91 +84,91 @@ just like any other `wise_units` unit.
 When adding units to `CustomAtoms.toml`, follow these rules:
 
 1. `Code`
-   * is required.
-   * must generate Rust code that is unique with respect to other `Code`s; put
-     differently, it must *not* generate Rust code that conflicts with an
-     already-defined `Code`.
+    * is required.
+    * must generate Rust code that is unique with respect to other `Code`s; put
+      differently, it must *not* generate Rust code that conflicts with an
+      already-defined `Code`.
 1. `CODE`
-   * is optional.
-   * same as `Code`, but for case-sensitive environments.
+    * is optional.
+    * same as `Code`, but for case-sensitive environments.
 1. `dim` (dimension)
-   * is required.
-   * must be one of:
-     * `A` (plane angle)
-     * `C` (temperature)
-     * `F` (luminous intensity)
-     * `L` (length)
-     * `M` (mass)
-     * `Q` (electric charge)
-     * `T` (time)
+    * is required.
+    * must be one of:
+        * `A` (plane angle)
+        * `C` (temperature)
+        * `F` (luminous intensity)
+        * `L` (length)
+        * `M` (mass)
+        * `Q` (electric charge)
+        * `T` (time)
 1. `class` (classification)
-   * is required.
-   * must be one of:
-     * `apoth`
-     * `avoirdupois`
-     * `brit-length`
-     * `brit-volumes`
-     * `cgs`
-     * `chemical`
-     * `clinical`
-     * `const`
-     * `dimless`
-     * `heat`
-     * `infotech`
-     * `intcust`
-     * `iso1000`
-     * `levels`
-     * `misc`
-     * `si`
-     * `troy`
-     * `typeset`
-     * `us-lengths`
-     * `us-volumes`
-   * ...although most of those should already be covered by UCUM unit definitions,
-     so you should probably end up with `dimless` or `misc` unless you have a
-     good reason to be adding to one of those.
+    * is required.
+    * must be one of:
+        * `apoth`
+        * `avoirdupois`
+        * `brit-length`
+        * `brit-volumes`
+        * `cgs`
+        * `chemical`
+        * `clinical`
+        * `const`
+        * `dimless`
+        * `heat`
+        * `infotech`
+        * `intcust`
+        * `iso1000`
+        * `levels`
+        * `misc`
+        * `si`
+        * `troy`
+        * `typeset`
+        * `us-lengths`
+        * `us-volumes`
+    * ...although most of those should already be covered by UCUM unit definitions,
+      so you should probably end up with `dimless` or `misc` unless you have a
+      good reason to be adding to one of those.
 1. `names`
-   * is required.
-   * can be any number of strings, although typically it's just a single string.
+    * is required.
+    * can be any number of strings, although typically it's just a single string.
 1. `property`
-   * is required.
-   * there are about 100 of these types defined in
-     [the UCUM XML document](http://unitsofmeasure.org/ucum-essence.xml) so pick
-     one of those.
-   * common values are:
-     * `arbitrary`
-     * `area`
-     * `dry volume`
-     * `energy`
-     * `fluid volume`
-     * `fraction`
-     * `length`
-     * `mass`
-     * `number`
-     * `plane angle`
-     * `pressure`
-     * `temperature`
-     * `time`
-     * `velocity`
-     * `volume`
-     * `unclassified`
+    * is required.
+    * there are about 100 of these types defined in
+      [the UCUM XML document](http://unitsofmeasure.org/ucum-essence.xml) so pick
+      one of those.
+    * common values are:
+        * `arbitrary`
+        * `area`
+        * `dry volume`
+        * `energy`
+        * `fluid volume`
+        * `fraction`
+        * `length`
+        * `mass`
+        * `number`
+        * `plane angle`
+        * `pressure`
+        * `temperature`
+        * `time`
+        * `velocity`
+        * `volume`
+        * `unclassified`
 1. `unit.value`
-   * is requried.
-   * `Unit`
-     * is required.
-     * is the unit string that makes up your unit: ex `m2`.
-   * `UNIT`
-     * is optional.
-     * same as `Unit`, but for case-sensitive environments.
-   * `value`
-     * is required.
-     * is the quantity of `Unit` that defines this unit.
+    * is requried.
+    * `Unit`
+        * is required.
+        * is the unit string that makes up your unit: ex `m2`.
+    * `UNIT`
+        * is optional.
+        * same as `Unit`, but for case-sensitive environments.
+    * `value`
+        * is required.
+        * is the quantity of `Unit` that defines this unit.
 1. `printSymbol`
-   * is optional.
+    * is optional.
 1. `isMetric`
-   * is optional; defaults to `no`.
+    * is optional; defaults to `no`.
 1. `isArbitrary`
-   * is optional; defaults to `no`.
+    * is optional; defaults to `no`.
 1. `isSpecial`
-   * is optional; defaults to `no`.
-   * (actually defining custom special units is not yet supported)
+    * is optional; defaults to `no`.
+    * (actually defining custom special units is not yet supported)
