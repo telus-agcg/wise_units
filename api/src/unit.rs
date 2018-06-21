@@ -1,12 +1,12 @@
 use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
-use parser::{Composable, Composition, Error, Term, UcumSymbol};
+use parser::{Composable, Composition, Error, Term};
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct Unit {
     pub terms: Vec<Term>,
 }
@@ -129,6 +129,21 @@ impl FromStr for Unit {
         let terms = super::parser::parse(expression)?;
 
         Ok(Self { terms })
+    }
+}
+
+/// `Unit`s are `PartialEq` if
+///
+/// a) they are compatible
+/// b) their `scalar()` values are equal
+///
+impl PartialEq for Unit {
+    fn eq(&self, other: &Self) -> bool {
+        if !self.is_compatible_with(other) {
+            return false;
+        }
+
+        self.scalar() == other.scalar()
     }
 }
 
