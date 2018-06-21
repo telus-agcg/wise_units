@@ -31,12 +31,8 @@ impl Term {
         self.factor == 1 && self.exponent == 1 && self.atom.is_none() && self.prefix.is_none()
     }
 
-    pub fn scalar(&self) -> f64 {
-        self.calculate_scalar(1.0)
     }
 
-    pub fn magnitude(&self) -> f64 {
-        self.calculate_magnitude(self.scalar())
     }
 
     pub fn calculate_scalar(&self, value: f64) -> f64 {
