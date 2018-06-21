@@ -224,6 +224,25 @@ mod tests {
         };
     }
 
+    macro_rules! validate_magnitude {
+        ($test_name:ident, $input_string:expr, $expected_value:expr) => {
+            #[test]
+            fn $test_name() {
+                let unit = Unit::from_str($input_string).unwrap();
+                assert_relative_eq!(unit.magnitude(), $expected_value);
+                assert_ulps_eq!(unit.magnitude(), $expected_value);
+            }
+        };
+    }
+
+    macro_rules! validate_magnitudes {
+        ($($test_name: ident, $input_string: expr, $expected_value: expr);+ $(;)*) => {
+            $(
+                validate_magnitude!($test_name, $input_string, $expected_value);
+            )+
+        };
+    }
+
     use super::super::parser::{Composition, Dimension};
     use super::*;
 
@@ -264,6 +283,51 @@ mod tests {
         validate_scalar_slash_1, "/1", 1.0;
         validate_scalar_slash_m, "/m", 1.0;
         validate_scalar_slash_annotation, "/{tot}", 1.0;
+
+        validate_scalar_liter, "l", 0.001;
+        validate_scalar_liter_caps, "L", 0.001;
+        validate_scalar_pi, "[pi]", ::std::f64::consts::PI;
+        validate_scalar_ten_pi, "10[pi]", 10.0 * ::std::f64::consts::PI;
+        validate_scalar_hectare, "har", 10_000.0;
+        validate_scalar_week, "wk", 604_800.0;
+        validate_scalar_kilogram, "kg", 1000.0;
+        validate_scalar_fahrenheit, "[degF]", 255.927_777_777_777_8;
+    );
+
+    validate_magnitudes!(
+        validate_magnitude_m, "m", 1.0;
+        validate_magnitude_km, "km", 1000.0;
+        validate_magnitude_m_minus_1, "m-1", 1.0;
+        validate_magnitude_10m, "10m", 10.0;
+        validate_magnitude_10km, "10km", 10_000.0;
+        validate_magnitude_10km_minus_1, "10km-1", 0.000_1;
+        validate_magnitude_10km_minus_1_m2, "10km-1.m2", 0.000_1;
+        validate_magnitude_km_slash_m2_dot_cm, "km/m2.cm", 100_000.0;
+        validate_magnitude_km_minus_1_slash_m2_dot_cm, "km-1/m2.cm", 0.1;
+        validate_magnitude_m_slash_s2, "m/s2", 1.0;
+        validate_magnitude_slash_1, "/1", 1.0;
+        validate_magnitude_slash_m, "/m", 1.0;
+        validate_magnitude_slash_annotation, "/{tot}", 1.0;
+
+        validate_magnitude_m2, "m2", 1.0;
+        validate_magnitude_m3, "m3", 1.0;
+        validate_magnitude_liter, "l", 1.0;
+        validate_magnitude_liter_caps, "L", 1.0;
+        validate_magnitude_8m_slash_4s, "8m/4s", 2.0;
+        validate_magnitude_8m_slash_4s2, "8m/4s2", 0.5;
+
+        validate_magnitude_pi, "[pi]", 1.0;
+        validate_magnitude_ten_pi, "10[pi]", 10.0;
+
+        // TODO: This doesn't parse (AGDEV-33099)
+        // validate_magnitude_decare, "dar", 0.1;
+        validate_magnitude_dekare, "daar", 10.0;
+        validate_magnitude_hectare, "har", 100.0;
+        validate_magnitude_kilare, "kar", 1000.0;
+
+        validate_magnitude_week, "wk", 1.0;
+        validate_magnitude_kilogram, "kg", 1000.0;
+        validate_magnitude_fahrenheit, "[degF]", 1.000_000_000_000_056_8;
     );
 
     #[test]

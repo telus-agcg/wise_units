@@ -164,22 +164,23 @@ mod tests {
         };
     }
 
-    macro_rules! validate_scalar {
+    macro_rules! validate_calculate_scalar {
         ($test_name:ident, $term:expr, $expected_value:expr) => {
             #[test]
             fn $test_name() {
                 let term = $term;
-                assert_relative_eq!(term.scalar(), $expected_value);
+                assert_relative_eq!(term.calculate_scalar(1.0), $expected_value);
             }
         };
     }
 
-    macro_rules! validate_magnitude {
+    macro_rules! validate_calculate_magnitude {
         ($test_name:ident, $term:expr, $expected_value:expr) => {
             #[test]
             fn $test_name() {
                 let term = $term;
-                assert_relative_eq!(term.magnitude(), $expected_value);
+                let scalar = term.calculate_scalar(1.0);
+                assert_relative_eq!(term.calculate_magnitude(scalar), $expected_value);
             }
         };
     }
@@ -203,79 +204,79 @@ mod tests {
     }
 
     // scalar tests
-    validate_scalar!(validate_scalar_meter, term!(Meter), 1.0);
-    validate_scalar!(validate_scalar_kilometer, term!(Kilo, Meter), 1000.0);
-    validate_scalar!(
-        validate_scalar_meter_eminus1,
+    validate_calculate_scalar!(validate_calculate_scalar_meter, term!(Meter), 1.0);
+    validate_calculate_scalar!(validate_calculate_scalar_kilometer, term!(Kilo, Meter), 1000.0);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_meter_eminus1,
         term!(Meter, exponent: -1),
         1.0
     );
-    validate_scalar!(validate_scalar_meter_factor, term!(Meter, factor: 10), 10.0);
-    validate_scalar!(
-        validate_scalar_kilometer_factor,
+    validate_calculate_scalar!(validate_calculate_scalar_meter_factor, term!(Meter, factor: 10), 10.0);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_kilometer_factor,
         term!(Kilo, Meter, factor: 10),
         10_000.0
     );
-    validate_scalar!(
-        validate_scalar_kilometer_factor_exponent,
+    validate_calculate_scalar!(
+        validate_calculate_scalar_kilometer_factor_exponent,
         term!(Kilo, Meter, exponent: -1, factor: 10),
         0.0001
     );
-    validate_scalar!(validate_scalar_liter, term!(Liter), 0.001);
-    validate_scalar!(
-        validate_scalar_pi,
+    validate_calculate_scalar!(validate_calculate_scalar_liter, term!(Liter), 0.001);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_pi,
         term!(TheNumberPi),
         ::std::f64::consts::PI
     );
-    validate_scalar!(
-        validate_scalar_pi_factor,
+    validate_calculate_scalar!(
+        validate_calculate_scalar_pi_factor,
         term!(TheNumberPi, factor: 10),
         ::std::f64::consts::PI * 10.0
     );
-    validate_scalar!(validate_scalar_hectare, term!(Hecto, Are), 10_000.0);
-    validate_scalar!(validate_scalar_week, term!(Week), 604_800.0);
-    validate_scalar!(validate_scalar_kilogram, term!(Kilo, Gram), 1000.0);
-    validate_scalar!(
-        validate_scalar_fahrenheit,
+    validate_calculate_scalar!(validate_calculate_scalar_hectare, term!(Hecto, Are), 10_000.0);
+    validate_calculate_scalar!(validate_calculate_scalar_week, term!(Week), 604_800.0);
+    validate_calculate_scalar!(validate_calculate_scalar_kilogram, term!(Kilo, Gram), 1000.0);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_fahrenheit,
         term!(DegreeFahrenheit),
         255.927_777_777_777_8
     );
 
     // magnitude tests
-    validate_magnitude!(validate_magnitude_meter, term!(Meter), 1.0);
-    validate_magnitude!(validate_magnitude_kilometer, term!(Kilo, Meter), 1000.0);
-    validate_magnitude!(
-        validate_magnitude_meter_eminus1,
+    validate_calculate_magnitude!(validate_calculate_magnitude_meter, term!(Meter), 1.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_kilometer, term!(Kilo, Meter), 1000.0);
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_meter_eminus1,
         term!(Meter, exponent: -1),
         1.0
     );
-    validate_magnitude!(
-        validate_magnitude_meter_factor,
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_meter_factor,
         term!(Meter, factor: 10),
         10.0
     );
-    validate_magnitude!(
-        validate_magnitude_kilometer_factor,
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_kilometer_factor,
         term!(Kilo, Meter, factor: 10),
         10_000.0
     );
-    validate_magnitude!(
-        validate_magnitude_kilometer_factor_exponent,
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_kilometer_factor_exponent,
         term!(Kilo, Meter, exponent: -1, factor: 10),
         0.000_1
     );
-    validate_magnitude!(validate_magnitude_liter, term!(Liter), 1.0);
-    validate_magnitude!(validate_magnitude_pi, term!(TheNumberPi), 1.0);
-    validate_magnitude!(
-        validate_magnitude_pi_factor,
+    validate_calculate_magnitude!(validate_calculate_magnitude_liter, term!(Liter), 1.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_pi, term!(TheNumberPi), 1.0);
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_pi_factor,
         term!(TheNumberPi, factor: 10),
         10.0
     );
-    validate_magnitude!(validate_magnitude_hectare, term!(Hecto, Are), 100.0);
-    validate_magnitude!(validate_magnitude_week, term!(Week), 1.0);
-    validate_magnitude!(validate_magnitude_kilogram, term!(Kilo, Gram), 1000.0);
-    validate_magnitude!(
-        validate_magnitude_fahrenheit,
+    validate_calculate_magnitude!(validate_calculate_magnitude_hectare, term!(Hecto, Are), 100.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_week, term!(Week), 1.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_kilogram, term!(Kilo, Gram), 1000.0);
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_fahrenheit,
         term!(DegreeFahrenheit),
         1.000_000_000_000_056_8
     );
