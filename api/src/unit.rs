@@ -73,35 +73,8 @@ impl Unit {
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
-
-    /// Allows for dividing a Unit by a factor; results in dividing this Unit's
-    /// associated Terms' factors by `other_factor`.
     ///
-    pub fn div_u32(&self, other_factor: u32) -> Self {
-        let mut new_terms = Vec::with_capacity(self.terms.len());
-
-        for term in &self.terms {
-            let mut new_term = term.clone();
-            new_term.factor /= other_factor;
-            new_terms.push(new_term);
-        }
-
-        Self { terms: new_terms }
-    }
-
-    /// Allows for multiplying a Unit by a factor; results in multiplying this
-    /// Unit's associated Terms' factors by `other_factor`.
     ///
-    pub fn mul_u32(&self, other_factor: u32) -> Self {
-        let mut new_terms = Vec::with_capacity(self.terms.len());
-
-        for term in &self.terms {
-            let mut new_term = term.clone();
-            new_term.factor *= other_factor;
-            new_terms.push(new_term);
-        }
-
-        Unit { terms: new_terms }
     }
 
     pub fn is_valid(expression: &str) -> bool {
@@ -518,15 +491,6 @@ mod tests {
     }
 
     #[test]
-    fn validate_div_u32() {
-        let unit = Unit::from_str("2m").unwrap();
-        assert_eq!(unit.div_u32(2).to_string().as_str(), "m");
-
-        let unit = Unit::from_str("2m").unwrap();
-        assert_eq!(unit.div_u32(4).to_string().as_str(), "0m");
-    }
-
-    #[test]
     fn validate_div() {
         let unit = Unit::from_str("m").unwrap();
         let other = Unit::from_str("km").unwrap();
@@ -535,12 +499,6 @@ mod tests {
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
         assert_eq!(unit.div(other).to_string().as_str(), "10m/20m");
-    }
-
-    #[test]
-    fn validate_mul_u32() {
-        let unit = Unit::from_str("2m").unwrap();
-        assert_eq!(unit.mul_u32(2).to_string().as_str(), "4m");
     }
 
     #[test]
