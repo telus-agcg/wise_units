@@ -40,23 +40,17 @@ impl Term {
     }
 
     pub fn calculate_scalar(&self, value: f64) -> f64 {
-        debug!("calculate_scalar()");
         let e = self.exponent;
         let atom_scalar = self.atom.map_or(1.0, |a| a.calculate_scalar(value));
-
-        // TODO: Interesting that this change causes tests to pass now.
-        // let prefix_scalar = self.prefix.map_or(1.0, |p| p.magnitude());
-        let prefix_scalar = self.prefix.map_or(1.0, |p| p.scalar());
+        let prefix_scalar = self.prefix.map_or(1.0, |p| p.value());
 
         (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(e)
     }
 
     pub fn calculate_magnitude(&self, value: f64) -> f64 {
-        debug!("calculate_magnitude()");
         let e = self.exponent;
-
         let atom_magnitude = self.atom.map_or(1.0, |a| a.calculate_magnitude(value));
-        let prefix_magnitude = self.prefix.map_or(1.0, |p| p.scalar());
+        let prefix_magnitude = self.prefix.map_or(1.0, |p| p.value());
 
         (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(e)
     }
