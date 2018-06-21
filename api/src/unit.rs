@@ -18,11 +18,39 @@ js_serializable!(Unit);
 js_deserializable!(Unit);
 
 impl Unit {
+    /// The UCUM defines "special units" as:
+    ///
+    /// > units that imply a measurement on a scale other than a ratio scale
+    ///
+    /// Each atom in `Atoms.toml` has the `isSpecial` attribute; a `Unit` is special if any of its
+    /// `Term`s has an `Atom` that is special.
+    ///
     pub fn is_special(&self) -> bool {
-        self.terms.iter().any(|term| match term.atom {
-            Some(ref atom) => atom.is_special(),
-            None => false,
-        })
+        self.terms.iter().any(|term| term.is_special())
+    }
+
+    /// The UCUM defines "metric units" using four points. First:
+    ///
+    /// > Only metric unit atoms may be combined with a prefix.
+    ///
+    /// Second:
+    ///
+    /// > To be metric or not to be metric is a predicate assigned to each unit atom where that unit
+    /// > atom is defined.
+    ///
+    /// Third:
+    ///
+    /// > All base units are metric. No non-metric unit can be part of the basis.
+    ///
+    /// Fourth:
+    ///
+    /// > A unit must be a quantity on a ratio scale in order to be metric.
+    ///
+    /// This library laxes the first rule and allows any atom/unit to use `Prefix`es. Also this
+    /// method only returns `true` when *all* of its `Term`s are metric.
+    ///
+    pub fn is_metric(&self) -> bool {
+        self.terms.iter().all(|term| term.is_metric())
     }
 
     /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.

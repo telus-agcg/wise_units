@@ -27,12 +27,53 @@ impl Term {
         }
     }
 
+    pub fn is_special(&self) -> bool {
+        match self.atom {
+            Some(ref a) => a.is_special(),
+            None => false
+        }
+    }
+
+    /// The UCUM defines "arbitrary units" using three points. First:
+    ///
+    /// > units whose meaning entirely depends on the measurement procedure (assay). These units
+    /// > have no general meaning in relation with any other unit in the SI.
+    ///
+    /// Second:
+    ///
+    /// > An arbitrary unit has no further definition in the semantic framework of The Unified Code
+    /// > for Units of Measure.
+    ///
+    /// Third:
+    ///
+    /// > Arbitrary units are not “of any specific dimension” and are not “commensurable with” any
+    /// > other unit.
+    ///
+    pub fn is_arbitrary(&self) -> bool {
+        match self.atom {
+            Some(ref a) => a.is_arbitrary(),
+            None => false
+        }
+    }
+
+    /// A `Term` is metric if it has some `Atom` that is metric.
+    ///
+    pub fn is_metric(&self) -> bool {
+        match self.atom {
+            Some(ref a) => a.is_metric(),
+            None => false
+        }
+    }
+
+    /// A `Term` is a unity `Term` if represents "1", which technically means here:
+    ///
+    /// * its `factor` is 1
+    /// * its `exponent` is 1
+    /// * it has no `Atom`
+    /// * it has no `Prefix`
+    ///
     pub fn is_unity(&self) -> bool {
         self.factor == 1 && self.exponent == 1 && self.atom.is_none() && self.prefix.is_none()
-    }
-
-    }
-
     }
 
     pub fn calculate_scalar(&self, value: f64) -> f64 {
