@@ -17,6 +17,25 @@ js_serializable!(Unit);
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 js_deserializable!(Unit);
 
+/// A `Unit` is the piece of data that represents a *valid* UCUM unit or custom-defined unit. A
+/// `Unit` is defined as a number of `Term`s and thus all methods defined on `Unit` rely on values
+/// from its `Terms`.
+///
+/// The easiest way to create a new `Unit` is via its implementation of `std::str::FromStr`. This
+/// parses the given `&str` and returns a `wise_units::parser::Error` if it fails to parse:
+///
+/// ```rust
+/// use wise_units::Unit;
+/// use std::str::FromStr;
+///
+/// let m = Unit::from_str("m2").unwrap();
+/// assert_eq!(m.scalar(), 1.0);
+///
+/// let bad_unit = Unit::from_str("not_a_unit");
+/// assert!(bad_unit.is_err());
+/// ```
+///
+///
 impl Unit {
     /// The UCUM defines "special units" as:
     ///
@@ -61,22 +80,93 @@ impl Unit {
         self.terms.len() == 1 && self.terms[0].is_unity()
     }
 
-    /// Use this when calculating the scalar when *not* part of a Measurable.
+    /// This gives the scalar value of `self` in terms of `self`'s base-unit(s). It takes account
+    /// for each of `self`'s `Term`'s `factor` and `exponent`.
+    ///
+    /// ```rust
+    /// use wise_units::Unit;
+    /// use std::str::FromStr;
+    ///
+    /// // A "km" is 1000 meters.
+    /// let unit = Unit::from_str("km").unwrap();
+    /// assert_eq!(unit.scalar(), 1000.0);
+    ///
+    /// // A "10km" is 10_000 meters.
+    /// let unit = Unit::from_str("10km").unwrap();
+    /// assert_eq!(unit.scalar(), 10_000.0);
+    ///
+    /// // A "km-1" is 0.001 meters.
+    /// let unit = Unit::from_str("km-1").unwrap();
+    /// assert_eq!(unit.scalar(), 0.001);
+    ///
+    /// // A "10km-1" is 0.000_1 meters.
+    /// let unit = Unit::from_str("10km-1").unwrap();
+    /// assert_eq!(unit.scalar(), 0.000_1);
+    ///
+    /// // A "km/h" is 0.2777777777777778 meters/second.
+    /// let unit = Unit::from_str("km/h").unwrap();
+    /// assert_eq!(unit.scalar(), 0.277_777_777_777_777_8);
+    ///
     pub fn scalar(&self) -> f64 {
         self.calculate_scalar(1.0)
     }
 
+    /// The scalar value of `self` in terms of `self`'s actual unit(s).
+    ///
+    /// ```rust
+    /// use wise_units::Unit;
+    /// use std::str::FromStr;
+    ///
+    /// // A "km" is 1000 meters.
+    /// let unit = Unit::from_str("km").unwrap();
+    /// assert_eq!(unit.magnitude(), 1000.0);
+    ///
+    /// // A "10km" is 10_000 meters.
+    /// let unit = Unit::from_str("10km").unwrap();
+    /// assert_eq!(unit.magnitude(), 10_000.0);
+    ///
+    /// // A "km-1" is 0.001 meters.
+    /// let unit = Unit::from_str("km-1").unwrap();
+    /// assert_eq!(unit.magnitude(), 0.001);
+    ///
+    /// // A "10km-1" is 0.000_1 meters.
+    /// let unit = Unit::from_str("10km-1").unwrap();
+    /// assert_eq!(unit.magnitude(), 0.000_1);
+    ///
+    /// // A "km/h" is 1000 meters/hour.
+    /// let unit = Unit::from_str("km/h").unwrap();
+    /// assert_eq!(unit.magnitude(), 1000.0);
+    ///
+    /// // A "m3" is 1 cubic meters.
+    /// let unit = Unit::from_str("m3").unwrap();
+    /// assert_eq!(unit.magnitude(), 1.0);
+    ///
+    /// // A "L" is 1 liter.
+    /// let unit = Unit::from_str("L").unwrap();
+    /// assert_eq!(unit.magnitude(), 1.0);
+    ///
+    /// // A "10m/5s" is 2 "meters per second".
+    /// let unit = Unit::from_str("10m/5s").unwrap();
+    /// assert_eq!(unit.magnitude(), 2.0);
+    ///
+    /// // A "10m/5s2" is 0.4 "meters per second".
+    /// let unit = Unit::from_str("10m/5s2").unwrap();
+    /// assert_eq!(unit.magnitude(), 0.4);
+    ///
     pub fn magnitude(&self) -> f64 {
         self.calculate_magnitude(self.scalar())
     }
 
-    /// Use this when calculating the scalar when it's part of a Measurable.
+    /// Calculates `value` count of `self` in terms of `self`'s base-unit.
+    ///
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         self.terms
             .iter()
             .fold(1.0, |acc, term| acc * term.calculate_scalar(value))
     }
 
+    /// Calculates `value` count of `self` in terms of `self`'s unit.
+    ///
     pub fn calculate_magnitude(&self, value: f64) -> f64 {
         self.terms
             .iter()
@@ -89,6 +179,14 @@ impl Unit {
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
     ///
+    /// ```rust
+    /// use wise_units::Unit;
+    /// use std::str::FromStr;
+    ///
+    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
+    /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
+    /// ```
+    ///
     pub fn expression(&self) -> String {
         SimpleDecomposer::new(&self.terms).expression()
     }
@@ -96,13 +194,17 @@ impl Unit {
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
-    /// This always returns a String that is parsable back into the same Unit.
+    ///
+    /// ```rust
+    /// use wise_units::Unit;
+    /// use std::str::FromStr;
+    ///
+    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
+    /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");
+    /// ```
     ///
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
-    }
-    ///
-    ///
     }
 
     pub fn is_valid(expression: &str) -> bool {
@@ -111,6 +213,12 @@ impl Unit {
 }
 
 impl Composable for Unit {
+    fn composition(&self) -> Composition {
+        self.terms.composition()
+    }
+}
+
+impl<'a> Composable for &'a Unit {
     fn composition(&self) -> Composition {
         self.terms.composition()
     }
@@ -147,6 +255,9 @@ impl PartialEq for Unit {
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl Div
+//-----------------------------------------------------------------------------
 impl Div for Unit {
     type Output = Self;
 
@@ -200,6 +311,9 @@ impl<'a> Div for &'a mut Unit {
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl Mul
+//-----------------------------------------------------------------------------
 impl Mul for Unit {
     type Output = Self;
 

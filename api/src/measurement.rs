@@ -1,3 +1,4 @@
+use convertible::Convertible;
 use measurable::Measurable;
 use parser::{Composable, Error};
 use std::fmt;
@@ -12,7 +13,7 @@ use unit::Unit;
 /// # Examples
 ///
 /// ```
-/// use wise_units::Measurement;
+/// use wise_units::{Convertible, Measurement};
 ///
 /// let one_km = Measurement::new(1.0, "km").unwrap();
 /// let in_meters = one_km.convert_to("m").unwrap();
@@ -29,6 +30,29 @@ use unit::Unit;
 pub struct Measurement {
     pub value: f64,
     pub unit: Unit,
+}
+
+impl Measurement {
+    pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
+        let unit = Unit::from_str(expression)?;
+
+        let m = Self { value, unit };
+
+        Ok(m)
+    }
+
+    fn converted_scalar(&self, other_unit: &Unit) -> f64 {
+        if self.is_special() && other_unit.is_special() {
+            let ts = self.unit.calculate_scalar(self.value);
+            other_unit.calculate_magnitude(ts)
+        } else if self.is_special() {
+            self.unit.calculate_scalar(self.value)
+        } else if other_unit.is_special() {
+            other_unit.calculate_magnitude(self.value)
+        } else {
+            self.scalar() / other_unit.calculate_scalar(1.0)
+        }
+    }
 }
 
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
@@ -108,22 +132,17 @@ impl Measurable for Measurement {
     }
 }
 
-impl Measurement {
-    pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
-        let unit = Unit::from_str(expression)?;
-
-        let m = Self { value, unit };
-
-        Ok(m)
-    }
-
-    /// Converts the Measurement to another unit type. That type is specified
-    /// using a str of characters that represents the other unit type: ex.
-    /// `"m2/s"`.
-    ///
-    pub fn convert_to<'a>(&self, expression: &'a str) -> Result<Self, Error> {
-        let other_terms = super::parser::parse(expression)?;
-        let other_unit = Unit { terms: other_terms };
+//-----------------------------------------------------------------------------
+// impl Convertible
+//-----------------------------------------------------------------------------
+/// This implementation of `Convertible` lets you pass in a `&str` for the `Unit`,
+/// which will parse the chars and convert accordingly. If `expression` is invalid,
+/// you'll get an `Error`. If `self`'s `Unit` and `other_unit` are incompatible,
+/// you'll get an `Error`.
+///
+impl<'a> Convertible<&'a str> for Measurement {
+    fn convert_to(&self, expression: &'a str) -> Result<Self, Error> {
+        let other_unit = Unit::from_str(expression)?;
 
         if self.unit == other_unit {
             return Ok(self.clone());
@@ -146,93 +165,74 @@ impl Measurement {
 
         Ok(new_measurement)
     }
+}
 
-    /// The Measurement's Unit as a String.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// use wise_units::Measurement;
-    /// let km = Measurement::new(1.0, "km").unwrap();
-    /// assert_eq!(km.unit_string(), "km".to_string());
-    /// ```
-    ///
-    pub fn unit_string(&self) -> String {
-        self.unit.to_string()
-    }
-
-    /// Really this is just to comply with Unitwise's API; not really sure how
-    /// useful it is.
-    ///
-    pub fn to_f64(&self) -> f64 {
-        self.value
-    }
-
-    fn converted_scalar(&self, other_unit: &Unit) -> f64 {
-        if self.is_special() && other_unit.is_special() {
-            let ts = self.unit.calculate_scalar(self.value);
-            other_unit.calculate_magnitude(ts)
-        } else if self.is_special() {
-            self.unit.calculate_scalar(self.value)
-        } else if other_unit.is_special() {
-            other_unit.calculate_magnitude(self.value)
-        } else {
-            self.scalar() / other_unit.calculate_scalar(1.0)
+/// This implementation of `Convertible` skips any string parsing and gets right to
+/// converting to `other_unit`. If `self`'s `Unit` and `other_unit` are incompatible,
+/// you'll get an `Error`.
+///
+impl<'a> Convertible<&'a Unit> for Measurement {
+    fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Error> {
+        // Short-circuit if `other_unit` is the same.
+        if self.unit == *other_unit {
+            return Ok(self.clone());
         }
-    }
 
-    /// Multiplies the `Measurement`'s scalar by `scalar` and returns a new
-    /// `Measurement`.
-    ///
-    pub fn mul_scalar(&self, scalar: f64) -> Self {
-        let new_value = self.value * scalar;
+        let my_unit = &self.unit;
 
-        Self {
-            value: new_value,
-            unit: self.unit.clone(),
+        if !my_unit.is_compatible_with(&other_unit) {
+            let e = Error::IncompatibleUnitTypes {
+                lhs: self.unit.expression(),
+                rhs: other_unit.expression(),
+            };
+            return Err(e);
         }
-    }
 
-    /// Divides the `Measurement`'s scalar by `scalar` and returns a new
-    /// `Measurement`.
-    ///
-    pub fn div_scalar(&self, scalar: f64) -> Self {
-        let new_value = self.value / scalar;
+        let new_measurement = Self {
+            value: self.converted_scalar(&other_unit),
+            unit: other_unit.clone(),
+        };
 
-        Self {
-            value: new_value,
-            unit: self.unit.clone(),
-        }
+        Ok(new_measurement)
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl Display
+//-----------------------------------------------------------------------------
 impl fmt::Display for Measurement {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}{}", self.value, self.unit)
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl PartialEq
+//-----------------------------------------------------------------------------
+
+/// `Measurement`s are `PartialEq` if
+///
+/// a) their `Unit`s are compatible
+/// b) their `scalar()` values are equal
+///
 impl PartialEq for Measurement {
     fn eq(&self, other: &Self) -> bool {
-        let my_unit_string = self.unit_string();
-
-        if let Ok(converted_other) = other.convert_to(&my_unit_string) {
-            self.to_string() == converted_other.to_string()
-        } else {
-            false
+        if !self.unit.is_compatible_with(&other.unit) {
+            return false;
         }
+
+        self.scalar() == other.scalar()
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl Add
+//-----------------------------------------------------------------------------
 impl Add for Measurement {
     type Output = Result<Self, Error>;
 
     fn add(self, other: Self) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value + other_converted.value;
-
-        Self::new(new_value, &unit)
+        add_measurements(&self, &other)
     }
 }
 
@@ -240,11 +240,7 @@ impl<'a> Add for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
     fn add(self, other: &'a Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value + other_converted.value;
-
-        Measurement::new(new_value, &unit)
+        add_measurements(&self, &other)
     }
 }
 
@@ -252,23 +248,28 @@ impl<'a> Add for &'a mut Measurement {
     type Output = Result<Measurement, Error>;
 
     fn add(self, other: &'a mut Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value + other_converted.value;
-
-        Measurement::new(new_value, &unit)
+        add_measurements(&self, &other)
     }
 }
 
+fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
+    let rhs_converted = rhs.convert_to(&lhs.unit)?;
+    let new_value = lhs.value + rhs_converted.value;
+
+    Ok(Measurement {
+        value: new_value,
+        unit: lhs.unit.clone()
+    })
+}
+
+//-----------------------------------------------------------------------------
+// impl Sub
+//-----------------------------------------------------------------------------
 impl Sub for Measurement {
     type Output = Result<Self, Error>;
 
     fn sub(self, other: Self) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value - other_converted.value;
-
-        Self::new(new_value, &unit)
+        sub_measurements(&self, &other)
     }
 }
 
@@ -276,11 +277,7 @@ impl<'a> Sub for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
     fn sub(self, other: &'a Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value - other_converted.value;
-
-        Measurement::new(new_value, &unit)
+        sub_measurements(&self, &other)
     }
 }
 
@@ -288,25 +285,28 @@ impl<'a> Sub for &'a mut Measurement {
     type Output = Result<Measurement, Error>;
 
     fn sub(self, other: &'a mut Measurement) -> Self::Output {
-        let unit = self.unit_string();
-        let other_converted = other.convert_to(&unit)?;
-        let new_value = self.value + -other_converted.value;
-
-        Measurement::new(new_value, &unit)
+        sub_measurements(&self, &other)
     }
 }
 
+fn sub_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
+    let rhs_converted = rhs.convert_to(&lhs.unit)?;
+    let new_value = lhs.value - rhs_converted.value;
+
+    Ok(Measurement {
+        value: new_value,
+        unit: lhs.unit.clone()
+    })
+}
+
+//-----------------------------------------------------------------------------
+// impl Mul
+//-----------------------------------------------------------------------------
 impl Mul for Measurement {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self::Output {
-        let new_value = self.value * other.value;
-        let new_unit = self.unit * other.unit;
-
-        Self {
-            value: new_value,
-            unit: new_unit,
-        }
+        mul_measurements(&self, &other)
     }
 }
 
@@ -314,13 +314,7 @@ impl<'a> Mul for &'a Measurement {
     type Output = Measurement;
 
     fn mul(self, other: &'a Measurement) -> Self::Output {
-        let new_value = self.value * other.value;
-        let new_unit = &self.unit * &other.unit;
-
-        Measurement {
-            value: new_value,
-            unit: new_unit,
-        }
+        mul_measurements(&self, other)
     }
 }
 
@@ -328,27 +322,44 @@ impl<'a> Mul for &'a mut Measurement {
     type Output = Measurement;
 
     fn mul(self, other: &'a mut Measurement) -> Self::Output {
-        let new_value = self.value * other.value;
-        let new_unit = &self.unit * &other.unit;
+        mul_measurements(&self, other)
+    }
+}
 
-        Measurement {
+fn mul_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
+    let new_value = lhs.value * rhs.value;
+    let new_unit = &lhs.unit * &rhs.unit;
+
+    Measurement {
+        value: new_value,
+        unit: new_unit,
+    }
+}
+
+/// Multiplies the `Measurement`'s scalar by `other` and returns a new
+/// `Measurement`.
+///
+impl Mul<f64> for Measurement {
+    type Output = Self;
+
+    fn mul(self, other: f64) -> Self::Output {
+        let new_value = self.value * other;
+
+        Self {
             value: new_value,
-            unit: new_unit,
+            unit: self.unit.clone(),
         }
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl Div
+//-----------------------------------------------------------------------------
 impl Div for Measurement {
     type Output = Self;
 
     fn div(self, other: Self) -> Self::Output {
-        let new_value = self.value / other.value;
-        let new_unit = self.unit / other.unit;
-
-        Self {
-            value: new_value,
-            unit: new_unit,
-        }
+        div_measurements(&self, &other)
     }
 }
 
@@ -356,13 +367,7 @@ impl<'a> Div for &'a Measurement {
     type Output = Measurement;
 
     fn div(self, other: &'a Measurement) -> Self::Output {
-        let new_value = self.value / other.value;
-        let new_unit = &self.unit / &other.unit;
-
-        Measurement {
-            value: new_value,
-            unit: new_unit,
-        }
+        div_measurements(&self, other)
     }
 }
 
@@ -370,12 +375,32 @@ impl<'a> Div for &'a mut Measurement {
     type Output = Measurement;
 
     fn div(self, other: &'a mut Measurement) -> Self::Output {
-        let new_value = self.value / other.value;
-        let new_unit = &self.unit / &other.unit;
+        div_measurements(&self, other)
+    }
+}
 
-        Measurement {
+fn div_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
+    let new_value = lhs.value / rhs.value;
+    let new_unit = &lhs.unit / &rhs.unit;
+
+    Measurement {
+        value: new_value,
+        unit: new_unit,
+    }
+}
+
+/// Divides the `Measurement`'s scalar by `other` and returns a new
+/// `Measurement`.
+///
+impl Div<f64> for Measurement {
+    type Output = Self;
+
+    fn div(self, other: f64) -> Self::Output {
+        let new_value = self.value / other;
+
+        Self {
             value: new_value,
-            unit: new_unit,
+            unit: self.unit.clone(),
         }
     }
 }
@@ -399,148 +424,356 @@ mod tests {
     }
 
     #[test]
-    fn validate_convert_to_meter_to_meter() {
-        let meter = Measurement::new(1.0, "m").unwrap();
-        let other = meter.convert_to("m").unwrap();
-        assert_eq!(other, meter);
-    }
-
-    #[test]
-    fn validate_convert_to_meter_to_2meter() {
-        let meter = Measurement::new(1.0, "m").unwrap();
-        let mut other = meter.convert_to("m").unwrap();
-        other.value = 2.0;
-        assert_ne!(other, meter);
-    }
-
-    #[test]
-    fn validate_convert_to_meter_to_km() {
-        let meter = Measurement::new(1.0, "m").unwrap();
-        let other = meter.convert_to("km").unwrap();
-        assert_eq!(other, meter);
-    }
-
-    #[test]
-    fn validate_convert_to_meter_to_2km() {
-        let meter = Measurement::new(1.0, "m").unwrap();
-        let mut other = meter.convert_to("km").unwrap();
-        other.value = 2.0;
-        assert_ne!(other, meter);
-    }
-
-    #[test]
-    fn validate_display() {
-        assert_eq!(
-            Measurement::new(1.1, "m").unwrap().to_string(),
-            "1.1m".to_string()
-        );
-        assert_eq!(
-            Measurement::new(1.1, "m2").unwrap().to_string(),
-            "1.1m2".to_string()
-        );
-        assert_eq!(
-            Measurement::new(1.1, "km2").unwrap().to_string(),
-            "1.1km2".to_string()
-        );
-        assert_eq!(
-            Measurement::new(1.1, "km2/s").unwrap().to_string(),
-            "1.1km2/s".to_string()
-        );
-        assert_eq!(
-            Measurement::new(1.1, "km2/rad.s").unwrap().to_string(),
-            "1.1km2/rad.s".to_string()
-        );
-    }
-
-    #[test]
-    fn validate_eq_same_unit() {
-        let m1 = Measurement::new(1.0, "m").unwrap();
-        let m2 = Measurement::new(1.0, "m").unwrap();
-        assert_eq!(&m1, &m2);
-
-        let m2 = Measurement::new(1.1, "m").unwrap();
-        assert_ne!(m1, m2);
-    }
-
-    #[test]
-    fn validate_eq_unit_with_prefix() {
-        let m = Measurement::new(1000.0, "m").unwrap();
-        let km = Measurement::new(1.0, "km").unwrap();
-        assert_eq!(&m, &km);
-
-        let km = Measurement::new(1.1, "km").unwrap();
-        assert_ne!(&m, &km);
-    }
-
-    #[test]
-    fn validate_eq_different_unit() {
+    fn validate_scalar() {
         let m = Measurement::new(1.0, "m").unwrap();
-        let s = Measurement::new(1.0, "s").unwrap();
-        assert_ne!(&m, &s);
+        assert_ulps_eq!(m.scalar(), 1.0);
+
+        let m = Measurement::new(2.3, "m").unwrap();
+        assert_ulps_eq!(m.scalar(), 2.3);
+
+        let m = Measurement::new(1.0, "km").unwrap();
+        assert_ulps_eq!(m.scalar(), 1000.0);
+
+        let m = Measurement::new(2.3, "km").unwrap();
+        assert_ulps_eq!(m.scalar(), 2300.0);
+
+        let m = Measurement::new(1.0, "g/L").unwrap();
+        assert_ulps_eq!(m.scalar(), 1000.0);
+
+        let m = Measurement::new(2.3, "g/L").unwrap();
+        assert_ulps_eq!(m.scalar(), 2300.0);
+
+        let m = Measurement::new(20.0, "Cel").unwrap();
+        assert_ulps_eq!(m.scalar(), 293.15);
     }
 
     #[test]
-    fn validate_add() {
-        let m1 = Measurement::new(1.0, "m").unwrap();
-        let m2 = Measurement::new(2.0, "m").unwrap();
-        let m3 = Measurement::new(3.0, "m").unwrap();
-        assert_eq!((&m1 + &m2).unwrap(), m3);
-        assert_eq!((m1 + m2).unwrap(), m3);
+    fn validate_magnitude() {
+        let m = Measurement::new(1.0, "m").unwrap();
+        assert_ulps_eq!(m.magnitude(), 1.0);
+
+        let m = Measurement::new(2.3, "m").unwrap();
+        assert_ulps_eq!(m.magnitude(), 2.3);
+
+        let m = Measurement::new(1.0, "km").unwrap();
+        assert_ulps_eq!(m.magnitude(), 1000.0);
+
+        let m = Measurement::new(2.3, "km").unwrap();
+        assert_ulps_eq!(m.magnitude(), 2300.0);
+
+        let m = Measurement::new(1.0, "g/L").unwrap();
+        assert_ulps_eq!(m.magnitude(), 1.0);
+
+        let m = Measurement::new(2.3, "g/L").unwrap();
+        assert_ulps_eq!(m.magnitude(), 2.3);
+
+        let m = Measurement::new(20.0, "g/10L").unwrap();
+        assert_ulps_eq!(m.magnitude(), 2.0);
+
+        let m = Measurement::new(20.0, "Cel").unwrap();
+        assert_ulps_eq!(m.magnitude(), 20.0);
     }
 
-    #[test]
-    fn validate_sub() {
-        let m1 = Measurement::new(1.0, "m").unwrap();
-        let m2 = Measurement::new(2.0, "m").unwrap();
-        let m3 = Measurement::new(-1.0, "m").unwrap();
-        assert_eq!((&m1 - &m2).unwrap(), m3);
-        assert_eq!((m1 - m2).unwrap(), m3);
+    // TODO: moar tests
+    mod convertible {
+        use super::*;
+
+        #[test]
+        fn validate_convert_to_meter_to_meter() {
+            let meter = Measurement::new(1.0, "m").unwrap();
+            let other = meter.convert_to("m").unwrap();
+            assert_eq!(other, meter);
+            assert_eq!(other.value, 1.0);
+
+            let other = meter.convert_to(&meter.unit).unwrap();
+            assert_eq!(other, meter);
+            assert_eq!(other.value, 1.0);
+        }
+
+        #[test]
+        fn validate_convert_to_meter_to_2meter() {
+            let meter = Measurement::new(1.0, "m").unwrap();
+            let mut other = meter.convert_to("m").unwrap();
+            other.value = 2.0;
+            assert_ne!(other, meter);
+        }
+
+        #[test]
+        fn validate_convert_to_meter_to_km() {
+            let meter = Measurement::new(1000.0, "m").unwrap();
+            let other = meter.convert_to("km").unwrap();
+            assert_eq!(other, meter);
+            assert_eq!(other.value, 1.0);
+
+            let other = meter.convert_to(&other.unit).unwrap();
+            assert_eq!(other, meter);
+            assert_eq!(other.value, 1.0);
+        }
+
+        #[test]
+        fn validate_convert_to_meter_to_2km() {
+            let meter = Measurement::new(1.0, "m").unwrap();
+            let mut other = meter.convert_to("km").unwrap();
+            other.value = 2.0;
+            assert_ne!(other, meter);
+        }
     }
 
-    // TODO: This doesn't make sense to me, but is in parity with Unitwise.
-    #[test]
-    fn validate_mul() {
-        let m1 = Measurement::new(2.0, "m").unwrap();
-        let m2 = Measurement::new(3.0, "m").unwrap();
-        let r = &m1 * &m2;
+    mod display {
+        use super::*;
 
-        let terms = r.unit.terms;
-        assert_eq!(terms.len(), 2);
-
-        let first_term = term!(Meter);
-        assert_eq!(terms[0], first_term);
-        assert_eq!(terms[1], first_term);
+        #[test]
+        fn validate_display() {
+            assert_eq!(
+                Measurement::new(1.1, "m").unwrap().to_string(),
+                "1.1m".to_string()
+            );
+            assert_eq!(
+                Measurement::new(1.1, "m2").unwrap().to_string(),
+                "1.1m2".to_string()
+            );
+            assert_eq!(
+                Measurement::new(1.1, "km2").unwrap().to_string(),
+                "1.1km2".to_string()
+            );
+            assert_eq!(
+                Measurement::new(1.1, "km2/s").unwrap().to_string(),
+                "1.1km2/s".to_string()
+            );
+            assert_eq!(
+                Measurement::new(1.1, "km2/rad.s").unwrap().to_string(),
+                "1.1km2/rad.s".to_string()
+            );
+        }
     }
 
-    // TODO: This doesn't make sense to me, but is in parity with Unitwise.
-    #[test]
-    fn validate_div() {
-        let m1 = Measurement::new(10.0, "m").unwrap();
-        let m2 = Measurement::new(2.0, "m").unwrap();
-        let r = &m1 / &m2;
+    mod partial_eq {
+        use super::*;
 
-        let terms = r.unit.terms;
-        assert_eq!(terms.len(), 2);
+        #[test]
+        fn validate_eq_same_unit() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(1.0, "m").unwrap();
+            assert!(&m1 == &m2);
 
-        let first_term = term!(Meter);
-        assert_eq!(terms[0], first_term);
+            let m2 = Measurement::new(1.1, "m").unwrap();
+            assert!(m1 != m2);
+        }
 
-        let last_term = term!(Meter, exponent: -1);
-        assert_eq!(terms[1], last_term);
+        #[test]
+        fn validate_eq_unit_with_prefix() {
+            let m = Measurement::new(1000.0, "m").unwrap();
+            let km = Measurement::new(1.0, "km").unwrap();
+            assert!(&m == &km);
+
+            let km = Measurement::new(1.1, "km").unwrap();
+            assert!(&m != &km);
+        }
+
+        #[test]
+        fn validate_eq_unit_with_derived() {
+            let m2 = Measurement::new(10_000.0, "m2").unwrap();
+            let har = Measurement::new(1.0, "har").unwrap();
+            assert!(m2 == har);
+
+            let har = Measurement::new(1.1, "har").unwrap();
+            assert!(m2 != har);
+        }
+
+        #[test]
+        fn validate_eq_incompatible_unit() {
+            let m = Measurement::new(1.0, "m").unwrap();
+            let s = Measurement::new(1.0, "s").unwrap();
+            assert!(&m != &s);
+        }
     }
 
-    #[test]
-    fn validate_mul_scalar() {
-        let m1 = Measurement::new(10.0, "m").unwrap();
-        let m2 = Measurement::new(200.0, "m").unwrap();
-        assert_eq!(m1.mul_scalar(20.0), m2);
+    mod add {
+        use super::*;
+
+        #[test]
+        fn validate_add_owned() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(3.0, "m").unwrap();
+
+            assert_eq!((m1 + m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_add_borrowed() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(3.0, "m").unwrap();
+
+            assert_eq!((&m1 + &m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_add_mut_borrowed() {
+            let mut m1 = Measurement::new(1.0, "m").unwrap();
+            let mut m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(3.0, "m").unwrap();
+
+            assert_eq!((&mut m1 + &mut m2).unwrap(), expected);
+        }
     }
 
-    #[test]
-    fn validate_div_scalar() {
-        let m1 = Measurement::new(10.0, "m").unwrap();
-        let m2 = Measurement::new(2.0, "m").unwrap();
-        assert_eq!(m1.div_scalar(5.0), m2);
+    mod sub {
+        use super::*;
+
+        #[test]
+        fn validate_sub_owned() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(-1.0, "m").unwrap();
+
+            assert_eq!((m1 - m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_sub_borrowed() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(-1.0, "m").unwrap();
+
+            assert_eq!((&m1 - &m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_sub_mut_borrowed() {
+            let mut m1 = Measurement::new(1.0, "m").unwrap();
+            let mut m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(-1.0, "m").unwrap();
+
+            assert_eq!((&mut m1 - &mut m2).unwrap(), expected);
+        }
+    }
+
+    mod mul {
+        use super::*;
+
+        #[test]
+        fn validate_mul_owned() {
+            let m1 = Measurement::new(2.0, "m").unwrap();
+            let m2 = Measurement::new(3.0, "m").unwrap();
+            let r = m1 * m2;
+
+            assert_eq!(r.value, 6.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+            assert_eq!(terms[1], first_term);
+        }
+
+        #[test]
+        fn validate_mul_borrowed() {
+            let m1 = Measurement::new(2.0, "m").unwrap();
+            let m2 = Measurement::new(3.0, "m").unwrap();
+            let r = &m1 * &m2;
+
+            assert_eq!(r.value, 6.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+            assert_eq!(terms[1], first_term);
+        }
+
+        #[test]
+        fn validate_mul_mut_borrowed() {
+            let mut m1 = Measurement::new(2.0, "m").unwrap();
+            let mut m2 = Measurement::new(3.0, "m").unwrap();
+            let r = &mut m1 * &mut m2;
+
+            assert_eq!(r.value, 6.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+            assert_eq!(terms[1], first_term);
+        }
+
+        #[test]
+        fn validate_mul_integer() {
+            let m = Measurement::new(10.0, "m").unwrap();
+            let expected = Measurement::new(200.0, "m").unwrap();
+
+            assert_eq!(m.mul(20.0), expected);
+        }
+    }
+
+    mod div {
+        use super::*;
+
+        #[test]
+        fn validate_div_owned() {
+            let m1 = Measurement::new(10.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let r = m1 / m2;
+
+            assert_eq!(r.value, 5.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+
+            let last_term = term!(Meter, exponent: -1);
+            assert_eq!(terms[1], last_term);
+        }
+
+        #[test]
+        fn validate_div_borrowed() {
+            let m1 = Measurement::new(10.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let r = &m1 / &m2;
+
+            assert_eq!(r.value, 5.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+
+            let last_term = term!(Meter, exponent: -1);
+            assert_eq!(terms[1], last_term);
+        }
+
+        #[test]
+        fn validate_div_mut_borrowed() {
+            let mut m1 = Measurement::new(10.0, "m").unwrap();
+            let mut m2 = Measurement::new(2.0, "m").unwrap();
+            let r = &mut m1 / &mut m2;
+
+            assert_eq!(r.value, 5.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+
+            let last_term = term!(Meter, exponent: -1);
+            assert_eq!(terms[1], last_term);
+        }
+
+        #[test]
+        fn validate_div_scalar() {
+            let m = Measurement::new(10.0, "m").unwrap();
+            let expected = Measurement::new(2.0, "m").unwrap();
+
+            assert_eq!(m.div(5.0), expected);
+        }
     }
 
     #[cfg(feature = "with_serde")]
