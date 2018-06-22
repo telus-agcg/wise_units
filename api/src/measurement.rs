@@ -1,6 +1,7 @@
 use convertible::Convertible;
 use measurable::Measurable;
 use parser::{Composable, Error};
+use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
@@ -26,7 +27,7 @@ use unit::Unit;
 /// ```
 ///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialOrd)]
+#[derive(Clone, Debug)]
 pub struct Measurement {
     pub value: f64,
     pub unit: Unit,
@@ -209,7 +210,6 @@ impl fmt::Display for Measurement {
 //-----------------------------------------------------------------------------
 // impl PartialEq
 //-----------------------------------------------------------------------------
-
 /// `Measurement`s are `PartialEq` if
 ///
 /// a) their `Unit`s are compatible
@@ -222,6 +222,22 @@ impl PartialEq for Measurement {
         }
 
         self.scalar() == other.scalar()
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl PartialEq
+//-----------------------------------------------------------------------------
+impl PartialOrd for Measurement {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        if !self.unit.is_compatible_with(&other.unit) {
+            return None;
+        }
+
+        let other_scalar = other.scalar();
+        let my_scalar = self.scalar();
+
+        my_scalar.partial_cmp(&other_scalar)
     }
 }
 

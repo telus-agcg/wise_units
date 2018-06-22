@@ -264,6 +264,22 @@ impl PartialEq for Unit {
 }
 
 //-----------------------------------------------------------------------------
+// impl PartialOrd
+//-----------------------------------------------------------------------------
+impl PartialOrd for Unit {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        if !self.is_compatible_with(other) {
+            return None;
+        }
+
+        let other_scalar = other.scalar();
+        let my_scalar = self.scalar();
+
+        my_scalar.partial_cmp(&other_scalar)
+    }
+}
+
+//-----------------------------------------------------------------------------
 // impl Div
 //-----------------------------------------------------------------------------
 impl Div for Unit {
@@ -367,22 +383,6 @@ fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     }
 
     terms
-}
-
-//-----------------------------------------------------------------------------
-// impl PartialOrd
-//-----------------------------------------------------------------------------
-impl PartialOrd for Unit {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        if !self.is_compatible_with(other) {
-            return None;
-        }
-
-        let other_scalar = other.scalar();
-        let my_scalar = self.scalar();
-
-        my_scalar.partial_cmp(&other_scalar)
-    }
 }
 
 #[cfg(test)]
