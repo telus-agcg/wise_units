@@ -35,7 +35,6 @@ js_deserializable!(Unit);
 /// assert!(bad_unit.is_err());
 /// ```
 ///
-///
 impl Unit {
     /// The UCUM defines "special units" as:
     ///

@@ -1,5 +1,4 @@
 use convertible::Convertible;
-use measurable::Measurable;
 use parser::{Composable, Error};
 use std::cmp::Ordering;
 use std::fmt;
@@ -19,11 +18,7 @@ use unit::Unit;
 /// let one_km = Measurement::new(1.0, "km").unwrap();
 /// let in_meters = one_km.convert_to("m").unwrap();
 ///
-/// // Since we can't assert float values, check that the difference is
-/// // negligible.
-/// let value_difference = (in_meters.value - 1_000.0).abs();
-///
-/// assert!(value_difference < 0.000_001);
+/// assert!(in_meters.value == 1000.0);
 /// ```
 ///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
@@ -33,13 +28,89 @@ pub struct Measurement {
     pub unit: Unit,
 }
 
+#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
+js_serializable!(Measurement);
+
+#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
+js_deserializable!(Measurement);
+
 impl Measurement {
+    /// Creates a new `Measurement` by parsing `expression` into a `Unit`.
+    ///
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
         let unit = Unit::from_str(expression)?;
 
         let m = Self { value, unit };
 
         Ok(m)
+    }
+
+    /// Checks if the associated Unit is "special". "Special" units are ones
+    /// that must be converted using a function in combination with some other
+    /// non-special units. For example, Celsius is special since it must be
+    /// first converted to Kelvin before converting to the requested unit.
+    ///
+    pub fn is_special(&self) -> bool {
+        self.unit.is_special()
+    }
+
+    /// This scalar is the Measurement's value combined with any scalars that
+    /// are part of the Unit's designation.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use wise_units::Measurement;
+    ///
+    /// let five_meters = Measurement::new(5.0, "m").unwrap();
+    /// assert_eq!(five_meters.scalar(), 5.0);
+    ///
+    /// let five_meters_squared = Measurement::new(5.0, "m2").unwrap();
+    /// assert_eq!(five_meters_squared.scalar(), 5.0);
+    ///
+    /// let five_three_meters = Measurement::new(5.0, "[pi].m").unwrap();
+    /// assert_eq!(five_three_meters.scalar(), 15.707_963_267_948_966);
+    ///
+    /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
+    /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
+    /// ```
+    ///
+    pub fn scalar(&self) -> f64 {
+        if self.is_special() {
+            self.unit.calculate_scalar(self.value)
+        } else {
+            self.value * self.unit.calculate_scalar(1.0)
+        }
+    }
+
+    /// This magnitude is the Measurement's value combined with any magnitude
+    /// that is part of the Unit's designation.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use wise_units::Measurement;
+    ///
+    /// let five_meters = Measurement::new(5.0, "m").unwrap();
+    /// assert_eq!(five_meters.magnitude(), 5.0);
+    ///
+    /// let five_meters_squared = Measurement::new(5.0, "m2").unwrap();
+    /// assert_eq!(five_meters_squared.magnitude(), 5.0);
+    ///
+    /// let five_three_meters = Measurement::new(5.0, "[pi].m").unwrap();
+    /// assert_eq!(five_three_meters.magnitude(), 5.0);
+    ///
+    /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
+    /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
+    /// ```
+    ///
+    pub fn magnitude(&self) -> f64 {
+        if self.is_special() {
+            let scalar = self.scalar();
+            self.unit.calculate_magnitude(scalar)
+        } else {
+            self.value * self.unit.calculate_magnitude(1.0)
+        }
     }
 
     fn converted_scalar(&self, other_unit: &Unit) -> f64 {
@@ -56,83 +127,6 @@ impl Measurement {
     }
 }
 
-#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
-js_serializable!(Measurement);
-
-#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
-js_deserializable!(Measurement);
-
-impl Measurable for Measurement {
-    fn get_unit(&self) -> &Unit {
-        &self.unit
-    }
-
-    fn get_value(&self) -> f64 {
-        self.value
-    }
-
-    /// This scalar is the Measurement's value combined with any scalars that
-    /// are part of the Unit's designation.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use wise_units::Measurable;
-    /// use wise_units::Measurement;
-    ///
-    /// let five_meters = Measurement::new(5.0, "m").unwrap();
-    /// assert_eq!(five_meters.scalar(), 5.0);
-    ///
-    /// let five_meters_squared = Measurement::new(5.0, "m2").unwrap();
-    /// assert_eq!(five_meters_squared.scalar(), 5.0);
-    ///
-    /// let five_three_meters = Measurement::new(5.0, "[pi].m").unwrap();
-    /// assert_eq!(five_three_meters.scalar(), 15.707_963_267_948_966);
-    ///
-    /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
-    /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
-    /// ```
-    ///
-    fn scalar(&self) -> f64 {
-        if self.is_special() {
-            self.unit.calculate_scalar(self.value)
-        } else {
-            self.value * self.unit.calculate_scalar(1.0)
-        }
-    }
-
-    /// This magnitude is the Measurement's value combined with any magnitude
-    /// that is part of the Unit's designation.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use wise_units::Measurable;
-    /// use wise_units::Measurement;
-    ///
-    /// let five_meters = Measurement::new(5.0, "m").unwrap();
-    /// assert_eq!(five_meters.magnitude(), 5.0);
-    ///
-    /// let five_meters_squared = Measurement::new(5.0, "m2").unwrap();
-    /// assert_eq!(five_meters_squared.magnitude(), 5.0);
-    ///
-    /// let five_three_meters = Measurement::new(5.0, "[pi].m").unwrap();
-    /// assert_eq!(five_three_meters.magnitude(), 5.0);
-    ///
-    /// let sixty_five_f = Measurement::new(65.0, "[degF]").unwrap();
-    /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
-    /// ```
-    ///
-    fn magnitude(&self) -> f64 {
-        if self.is_special() {
-            let scalar = self.scalar();
-            self.unit.calculate_magnitude(scalar)
-        } else {
-            self.value * self.unit.calculate_magnitude(1.0)
-        }
-    }
-}
-
 //-----------------------------------------------------------------------------
 // impl Convertible
 //-----------------------------------------------------------------------------
@@ -145,26 +139,7 @@ impl<'a> Convertible<&'a str> for Measurement {
     fn convert_to(&self, expression: &'a str) -> Result<Self, Error> {
         let other_unit = Unit::from_str(expression)?;
 
-        if self.unit == other_unit {
-            return Ok(self.clone());
-        }
-
-        let my_unit = &self.unit;
-
-        if !my_unit.is_compatible_with(&other_unit) {
-            let e = Error::IncompatibleUnitTypes {
-                lhs: self.unit.expression(),
-                rhs: expression.to_owned(),
-            };
-            return Err(e);
-        }
-
-        let new_measurement = Self {
-            value: self.converted_scalar(&other_unit),
-            unit: other_unit,
-        };
-
-        Ok(new_measurement)
+        convert_measurement(&self, &other_unit)
     }
 }
 
@@ -174,28 +149,34 @@ impl<'a> Convertible<&'a str> for Measurement {
 ///
 impl<'a> Convertible<&'a Unit> for Measurement {
     fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Error> {
-        // Short-circuit if `other_unit` is the same.
-        if self.unit == *other_unit {
-            return Ok(self.clone());
-        }
-
-        let my_unit = &self.unit;
-
-        if !my_unit.is_compatible_with(&other_unit) {
-            let e = Error::IncompatibleUnitTypes {
-                lhs: self.unit.expression(),
-                rhs: other_unit.expression(),
-            };
-            return Err(e);
-        }
-
-        let new_measurement = Self {
-            value: self.converted_scalar(&other_unit),
-            unit: other_unit.clone(),
-        };
-
-        Ok(new_measurement)
+        convert_measurement(&self, other_unit)
     }
+}
+
+fn convert_measurement(lhs: &Measurement, dest_unit: &Unit) -> Result<Measurement, Error> {
+    // Short-circuit if `dest_unit` is the same as the Measurement's Unit. Check
+    // the expression() here because comparing the units (via PartialEq) really
+    // only compares the scalar values of each.
+    if lhs.unit.expression() == dest_unit.expression() {
+        return Ok(lhs.clone());
+    }
+
+    let source_unit = &lhs.unit;
+
+    if !source_unit.is_compatible_with(&dest_unit) {
+        let e = Error::IncompatibleUnitTypes {
+            lhs: source_unit.expression(),
+            rhs: dest_unit.expression(),
+        };
+        return Err(e);
+    }
+
+    let new_measurement = Measurement {
+        value: lhs.converted_scalar(&dest_unit),
+        unit: dest_unit.clone(),
+    };
+
+    Ok(new_measurement)
 }
 
 //-----------------------------------------------------------------------------
@@ -210,6 +191,9 @@ impl fmt::Display for Measurement {
 //-----------------------------------------------------------------------------
 // impl PartialEq
 //-----------------------------------------------------------------------------
+// TODO: ...or should PartialEq do what its derived form does (compare all
+// attributes of the struct), then define a Commensurability trait or something
+// that does this here?
 /// `Measurement`s are `PartialEq` if
 ///
 /// a) their `Unit`s are compatible

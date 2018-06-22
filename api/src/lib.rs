@@ -49,11 +49,9 @@ pub mod measurement;
 pub mod unit;
 
 mod decomposer;
-mod measurable;
 mod parser;
 
 pub use convertible::Convertible;
-pub use measurable::Measurable;
 pub use measurement::Measurement;
 pub use parser::{Atom, Classification, Composable, Composition, Dimension, Error, Prefix,
                  Property, Term};

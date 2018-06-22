@@ -1,3 +1,6 @@
+/// This is a struct to allow for representing functions that special units use for converting to
+/// and from their base unit.
+///
 #[derive(Debug, PartialEq)]
 pub struct FunctionSet {
     // AKA "calculate_magnitude"
