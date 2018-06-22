@@ -206,12 +206,11 @@ impl Unit {
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
-
-    pub fn is_valid(expression: &str) -> bool {
-        Self::from_str(expression).is_ok()
-    }
 }
 
+//-----------------------------------------------------------------------------
+// impl Composable
+//-----------------------------------------------------------------------------
 impl Composable for Unit {
     fn composition(&self) -> Composition {
         self.terms.composition()
@@ -224,12 +223,18 @@ impl<'a> Composable for &'a Unit {
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl Display
+//-----------------------------------------------------------------------------
 impl fmt::Display for Unit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.expression())
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl FromStr
+//-----------------------------------------------------------------------------
 impl FromStr for Unit {
     type Err = Error;
 
@@ -240,6 +245,9 @@ impl FromStr for Unit {
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl PartialEq
+//-----------------------------------------------------------------------------
 /// `Unit`s are `PartialEq` if
 ///
 /// a) they are compatible
@@ -261,21 +269,20 @@ impl PartialEq for Unit {
 impl Div for Unit {
     type Output = Self;
 
-    fn div(self, other: Self) -> Self::Output {
-        let mut new_terms = self.terms;
+    fn div(self, other: Unit) -> Self::Output {
+        let terms = divide_terms(&self.terms, &other.terms);
 
-        let mut other_terms: Vec<Term> = other
-            .terms
-            .into_iter()
-            .map(|mut term| {
-                term.exponent = -term.exponent;
-                term
-            })
-            .collect();
+        Self { terms }
+    }
+}
 
-        new_terms.append(&mut other_terms);
+impl<'a> Div<&'a Unit> for Unit {
+    type Output = Self;
 
-        Self { terms: new_terms }
+    fn div(self, other: &'a Unit) -> Self::Output {
+        let terms = divide_terms(&self.terms, &other.terms);
+
+        Self { terms }
     }
 }
 
@@ -283,15 +290,9 @@ impl<'a> Div for &'a Unit {
     type Output = Unit;
 
     fn div(self, other: &'a Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
+        let terms = divide_terms(&self.terms, &other.terms);
 
-        for other_term in &other.terms {
-            let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -other_term.exponent;
-            new_terms.push(new_other_term);
-        }
-
-        Unit { terms: new_terms }
+        Unit { terms }
     }
 }
 
@@ -299,16 +300,26 @@ impl<'a> Div for &'a mut Unit {
     type Output = Unit;
 
     fn div(self, other: &'a mut Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
+        let terms = divide_terms(&self.terms, &other.terms);
 
-        for other_term in &other.terms {
-            let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -other_term.exponent;
-            new_terms.push(new_other_term);
-        }
-
-        Unit { terms: new_terms }
+        Unit { terms }
     }
+}
+
+fn divide_terms(lhs: &Vec<Term>, rhs: &Vec<Term>) -> Vec<Term> {
+    let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
+
+    for term in lhs.iter() {
+        terms.push(term.clone());
+    }
+
+    for term in rhs.iter() {
+        let mut new_other_term = term.clone();
+        new_other_term.exponent = -new_other_term.exponent;
+        terms.push(new_other_term);
+    }
+
+    terms
 }
 
 //-----------------------------------------------------------------------------
@@ -318,10 +329,9 @@ impl Mul for Unit {
     type Output = Self;
 
     fn mul(self, other: Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
-        new_terms.extend(other.terms.clone());
+        let terms = multiply_terms(&self.terms, &other.terms);
 
-        Self { terms: new_terms }
+        Self { terms }
     }
 }
 
@@ -329,10 +339,9 @@ impl<'a> Mul for &'a Unit {
     type Output = Unit;
 
     fn mul(self, other: &'a Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
-        new_terms.extend(other.terms.clone());
+        let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit { terms: new_terms }
+        Unit { terms }
     }
 }
 
@@ -340,23 +349,39 @@ impl<'a> Mul for &'a mut Unit {
     type Output = Unit;
 
     fn mul(self, other: &'a mut Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
-        new_terms.extend(other.terms.clone());
+        let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit { terms: new_terms }
+        Unit { terms }
     }
 }
 
+fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
+    let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
+
+    for term in lhs.iter() {
+        terms.push(term.clone());
+    }
+
+    for term in rhs.iter() {
+        terms.push(term.clone());
+    }
+
+    terms
+}
+
+//-----------------------------------------------------------------------------
+// impl PartialOrd
+//-----------------------------------------------------------------------------
 impl PartialOrd for Unit {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        if self.is_compatible_with(other) {
-            let other_scalar = other.scalar();
-            let my_scalar = self.scalar();
-
-            my_scalar.partial_cmp(&other_scalar)
-        } else {
-            None
+        if !self.is_compatible_with(other) {
+            return None;
         }
+
+        let other_scalar = other.scalar();
+        let my_scalar = self.scalar();
+
+        my_scalar.partial_cmp(&other_scalar)
     }
 }
 

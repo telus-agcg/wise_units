@@ -44,7 +44,6 @@ mod atom_test {
         ($test_name:ident, $variant:ident, $value:expr) => {
             #[test]
             fn $test_name() {
-                ::simple_logger::init().ok();
                 let atom = Atom::$variant;
                 assert_relative_eq!(atom.scalar(), $value);
                 assert_ulps_eq!(atom.scalar(), $value);

@@ -1,9 +1,8 @@
 #[macro_use]
 extern crate approx;
-extern crate simple_logger;
 extern crate wise_units;
 
-use wise_units::Measurement;
+use wise_units::{Convertible, Measurement};
 
 macro_rules! validate_conversion {
     (
@@ -16,7 +15,6 @@ macro_rules! validate_conversion {
     ) => {
         #[test]
         fn $convert_from_test_name() {
-            simple_logger::init().ok();
             let subject = Measurement::new($measurement_value, $measurement_unit).unwrap();
             let converted = subject.convert_to($convert_to_unit).unwrap();
             assert_relative_eq!(converted.value, $expected_value);
@@ -25,7 +23,6 @@ macro_rules! validate_conversion {
 
         #[test]
         fn $convert_to_test_name() {
-            simple_logger::init().ok();
             let subject = Measurement::new($expected_value, $convert_to_unit).unwrap();
             let converted = subject.convert_to($measurement_unit).unwrap();
             assert_ulps_eq!(converted.value, $measurement_value);

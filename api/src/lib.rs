@@ -12,9 +12,6 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 
-#[macro_use]
-extern crate log;
-
 // Only include macros for testing
 #[cfg(test)]
 #[macro_use(consumes_to, fails_with, parses_to)]
@@ -39,9 +36,6 @@ extern crate serde_derive;
 
 #[cfg(all(test, feature = "with_serde"))]
 extern crate serde_json;
-
-#[cfg(test)]
-extern crate simple_logger;
 
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 #[macro_use]
