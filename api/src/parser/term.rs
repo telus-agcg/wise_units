@@ -30,29 +30,30 @@ impl Term {
     pub fn is_special(&self) -> bool {
         match self.atom {
             Some(ref a) => a.is_special(),
-            None => false
+            None => false,
         }
     }
 
     /// The UCUM defines "arbitrary units" using three points. First:
     ///
-    /// > units whose meaning entirely depends on the measurement procedure (assay). These units
-    /// > have no general meaning in relation with any other unit in the SI.
+    /// > units whose meaning entirely depends on the measurement procedure
+    /// (assay). These units > have no general meaning in relation with any
+    /// other unit in the SI.
     ///
     /// Second:
     ///
-    /// > An arbitrary unit has no further definition in the semantic framework of The Unified Code
-    /// > for Units of Measure.
+    /// > An arbitrary unit has no further definition in the semantic framework
+    /// of The Unified Code > for Units of Measure.
     ///
     /// Third:
     ///
-    /// > Arbitrary units are not “of any specific dimension” and are not “commensurable with” any
-    /// > other unit.
+    /// > Arbitrary units are not “of any specific dimension” and are not
+    /// “commensurable with” any > other unit.
     ///
     pub fn is_arbitrary(&self) -> bool {
         match self.atom {
             Some(ref a) => a.is_arbitrary(),
-            None => false
+            None => false,
         }
     }
 
@@ -61,11 +62,12 @@ impl Term {
     pub fn is_metric(&self) -> bool {
         match self.atom {
             Some(ref a) => a.is_metric(),
-            None => false
+            None => false,
         }
     }
 
-    /// A `Term` is a unity `Term` if represents "1", which technically means here:
+    /// A `Term` is a unity `Term` if represents "1", which technically means
+    /// here:
     ///
     /// * its `factor` is 1
     /// * its `exponent` is 1
@@ -236,13 +238,21 @@ mod tests {
 
     // scalar tests
     validate_calculate_scalar!(validate_calculate_scalar_meter, term!(Meter), 1.0);
-    validate_calculate_scalar!(validate_calculate_scalar_kilometer, term!(Kilo, Meter), 1000.0);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_kilometer,
+        term!(Kilo, Meter),
+        1000.0
+    );
     validate_calculate_scalar!(
         validate_calculate_scalar_meter_eminus1,
         term!(Meter, exponent: -1),
         1.0
     );
-    validate_calculate_scalar!(validate_calculate_scalar_meter_factor, term!(Meter, factor: 10), 10.0);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_meter_factor,
+        term!(Meter, factor: 10),
+        10.0
+    );
     validate_calculate_scalar!(
         validate_calculate_scalar_kilometer_factor,
         term!(Kilo, Meter, factor: 10),
@@ -264,9 +274,17 @@ mod tests {
         term!(TheNumberPi, factor: 10),
         ::std::f64::consts::PI * 10.0
     );
-    validate_calculate_scalar!(validate_calculate_scalar_hectare, term!(Hecto, Are), 10_000.0);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_hectare,
+        term!(Hecto, Are),
+        10_000.0
+    );
     validate_calculate_scalar!(validate_calculate_scalar_week, term!(Week), 604_800.0);
-    validate_calculate_scalar!(validate_calculate_scalar_kilogram, term!(Kilo, Gram), 1000.0);
+    validate_calculate_scalar!(
+        validate_calculate_scalar_kilogram,
+        term!(Kilo, Gram),
+        1000.0
+    );
     validate_calculate_scalar!(
         validate_calculate_scalar_fahrenheit,
         term!(DegreeFahrenheit),
@@ -275,7 +293,11 @@ mod tests {
 
     // magnitude tests
     validate_calculate_magnitude!(validate_calculate_magnitude_meter, term!(Meter), 1.0);
-    validate_calculate_magnitude!(validate_calculate_magnitude_kilometer, term!(Kilo, Meter), 1000.0);
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_kilometer,
+        term!(Kilo, Meter),
+        1000.0
+    );
     validate_calculate_magnitude!(
         validate_calculate_magnitude_meter_eminus1,
         term!(Meter, exponent: -1),
@@ -303,9 +325,17 @@ mod tests {
         term!(TheNumberPi, factor: 10),
         10.0
     );
-    validate_calculate_magnitude!(validate_calculate_magnitude_hectare, term!(Hecto, Are), 100.0);
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_hectare,
+        term!(Hecto, Are),
+        100.0
+    );
     validate_calculate_magnitude!(validate_calculate_magnitude_week, term!(Week), 1.0);
-    validate_calculate_magnitude!(validate_calculate_magnitude_kilogram, term!(Kilo, Gram), 1000.0);
+    validate_calculate_magnitude!(
+        validate_calculate_magnitude_kilogram,
+        term!(Kilo, Gram),
+        1000.0
+    );
     validate_calculate_magnitude!(
         validate_calculate_magnitude_fahrenheit,
         term!(DegreeFahrenheit),

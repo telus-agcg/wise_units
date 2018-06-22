@@ -1,9 +1,10 @@
 use parser::Classification;
 use std::fmt;
 
-/// A `Prefix` is essentially a multiplier for an `Atom` within a `Term`; ex. the "c" in "cm"
-/// modifies meter by 0.01. The UCUM spec says these should only pertain to metric units, but that
-/// rule is not adhered to in `wise_units`.
+/// A `Prefix` is essentially a multiplier for an `Atom` within a `Term`; ex.
+/// the "c" in "cm" modifies meter by 0.01. The UCUM spec says these should
+/// only pertain to metric units, but that rule is not adhered to in
+/// `wise_units`.
 ///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]

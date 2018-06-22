@@ -17,16 +17,17 @@ js_serializable!(Unit);
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 js_deserializable!(Unit);
 
-/// A `Unit` is the piece of data that represents a *valid* UCUM unit or custom-defined unit. A
-/// `Unit` is defined as a number of `Term`s and thus all methods defined on `Unit` rely on values
-/// from its `Terms`.
+/// A `Unit` is the piece of data that represents a *valid* UCUM unit or
+/// custom-defined unit. A `Unit` is defined as a number of `Term`s and thus
+/// all methods defined on `Unit` rely on values from its `Terms`.
 ///
-/// The easiest way to create a new `Unit` is via its implementation of `std::str::FromStr`. This
-/// parses the given `&str` and returns a `wise_units::parser::Error` if it fails to parse:
+/// The easiest way to create a new `Unit` is via its implementation of
+/// `std::str::FromStr`. This parses the given `&str` and returns a
+/// `wise_units::parser::Error` if it fails to parse:
 ///
 /// ```rust
-/// use wise_units::Unit;
 /// use std::str::FromStr;
+/// use wise_units::Unit;
 ///
 /// let m = Unit::from_str("m2").unwrap();
 /// assert_eq!(m.scalar(), 1.0);
@@ -40,8 +41,8 @@ impl Unit {
     ///
     /// > units that imply a measurement on a scale other than a ratio scale
     ///
-    /// Each atom in `Atoms.toml` has the `isSpecial` attribute; a `Unit` is special if any of its
-    /// `Term`s has an `Atom` that is special.
+    /// Each atom in `Atoms.toml` has the `isSpecial` attribute; a `Unit` is
+    /// special if any of its `Term`s has an `Atom` that is special.
     ///
     pub fn is_special(&self) -> bool {
         self.terms.iter().any(|term| term.is_special())
@@ -53,19 +54,21 @@ impl Unit {
     ///
     /// Second:
     ///
-    /// > To be metric or not to be metric is a predicate assigned to each unit atom where that unit
-    /// > atom is defined.
+    /// > To be metric or not to be metric is a predicate assigned to each unit
+    /// atom where that unit > atom is defined.
     ///
     /// Third:
     ///
-    /// > All base units are metric. No non-metric unit can be part of the basis.
+    /// > All base units are metric. No non-metric unit can be part of the
+    /// basis.
     ///
     /// Fourth:
     ///
     /// > A unit must be a quantity on a ratio scale in order to be metric.
     ///
-    /// This library laxes the first rule and allows any atom/unit to use `Prefix`es. Also this
-    /// method only returns `true` when *all* of its `Term`s are metric.
+    /// This library laxes the first rule and allows any atom/unit to use
+    /// `Prefix`es. Also this method only returns `true` when *all* of its
+    /// `Term`s are metric.
     ///
     pub fn is_metric(&self) -> bool {
         self.terms.iter().all(|term| term.is_metric())
@@ -79,8 +82,9 @@ impl Unit {
         self.terms.len() == 1 && self.terms[0].is_unity()
     }
 
-    /// This gives the scalar value of `self` in terms of `self`'s base-unit(s). It takes account
-    /// for each of `self`'s `Term`'s `factor` and `exponent`.
+    /// This gives the scalar value of `self` in terms of `self`'s
+    /// base-unit(s). It takes account for each of `self`'s `Term`'s
+    /// `factor` and `exponent`.
     ///
     /// ```rust
     /// use wise_units::Unit;
@@ -179,8 +183,8 @@ impl Unit {
     /// render the same result.
     ///
     /// ```rust
-    /// use wise_units::Unit;
     /// use std::str::FromStr;
+    /// use wise_units::Unit;
     ///
     /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
     /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
@@ -195,8 +199,8 @@ impl Unit {
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
     ///
     /// ```rust
-    /// use wise_units::Unit;
     /// use std::str::FromStr;
+    /// use wise_units::Unit;
     ///
     /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
     /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");

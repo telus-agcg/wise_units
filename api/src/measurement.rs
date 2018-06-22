@@ -130,10 +130,10 @@ impl Measurement {
 //-----------------------------------------------------------------------------
 // impl Convertible
 //-----------------------------------------------------------------------------
-/// This implementation of `Convertible` lets you pass in a `&str` for the `Unit`,
-/// which will parse the chars and convert accordingly. If `expression` is invalid,
-/// you'll get an `Error`. If `self`'s `Unit` and `other_unit` are incompatible,
-/// you'll get an `Error`.
+/// This implementation of `Convertible` lets you pass in a `&str` for the
+/// `Unit`, which will parse the chars and convert accordingly. If `expression`
+/// is invalid, you'll get an `Error`. If `self`'s `Unit` and `other_unit` are
+/// incompatible, you'll get an `Error`.
 ///
 impl<'a> Convertible<&'a str> for Measurement {
     fn convert_to(&self, expression: &'a str) -> Result<Self, Error> {
@@ -143,9 +143,9 @@ impl<'a> Convertible<&'a str> for Measurement {
     }
 }
 
-/// This implementation of `Convertible` skips any string parsing and gets right to
-/// converting to `other_unit`. If `self`'s `Unit` and `other_unit` are incompatible,
-/// you'll get an `Error`.
+/// This implementation of `Convertible` skips any string parsing and gets
+/// right to converting to `other_unit`. If `self`'s `Unit` and `other_unit`
+/// are incompatible, you'll get an `Error`.
 ///
 impl<'a> Convertible<&'a Unit> for Measurement {
     fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Error> {
@@ -258,7 +258,7 @@ fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement,
 
     Ok(Measurement {
         value: new_value,
-        unit: lhs.unit.clone()
+        unit: lhs.unit.clone(),
     })
 }
 
@@ -295,7 +295,7 @@ fn sub_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement,
 
     Ok(Measurement {
         value: new_value,
-        unit: lhs.unit.clone()
+        unit: lhs.unit.clone(),
     })
 }
 
