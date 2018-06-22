@@ -12,7 +12,7 @@ pub mod atom {
 
     // TODO: Implement PartialEq
     #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-    #[derive(Clone, Copy, Debug, PartialEq)]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
     pub enum Atom {
         {{~ #each atoms }}
         {{ type_name }},{{ /each }}

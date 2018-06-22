@@ -4,6 +4,12 @@ use std::collections::BTreeMap;
 use std::fmt;
 use std::iter::IntoIterator;
 
+/// A `Composition` represents the makeup of a `Unit`'s dimensions; only
+/// dimensions and each `Unit`s `Term`'s exponent. For example, "m" would
+/// effectively have the composition string of "L"; "m2" would be "L2"; "1/m2"
+/// would be "L-2". This continues on when a Unit has multiple `Term`s (ex.
+/// "mL/(kg.d)").
+///
 #[derive(Debug, PartialEq)]
 pub struct Composition(BTreeMap<Dimension, i32>);
 
@@ -15,6 +21,9 @@ impl Composition {
         c
     }
 
+    /// Convenience wrapper for updating the internal `BTreeMap` that contains
+    /// the data.
+    ///
     pub fn insert(&mut self, dimension: Dimension, exponent: i32) {
         match self.0.entry(dimension) {
             Entry::Vacant(entry) => {

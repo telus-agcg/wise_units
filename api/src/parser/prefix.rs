@@ -1,8 +1,13 @@
-use parser::{Classification, Definition, Term};
+use parser::Classification;
 use std::fmt;
 
+/// A `Prefix` is essentially a multiplier for an `Atom` within a `Term`; ex.
+/// the "c" in "cm" modifies meter by 0.01. The UCUM spec says these should
+/// only pertain to metric units, but that rule is not adhered to in
+/// `wise_units`.
+///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Prefix {
     Atto,
     Centi,
@@ -35,11 +40,10 @@ impl Prefix {
         Classification::Si
     }
 
-    pub fn definition(&self) -> Definition {
-        let term = term!();
-        let terms = vec![term];
-
-        let value = match *self {
+    /// The numeric value that each `Prefix` represents.
+    ///
+    pub fn value(&self) -> f64 {
+        match *self {
             Prefix::Atto => 1.0e-18,
             Prefix::Centi => 1.0e-2,
             Prefix::Deci => 1.0e-1,
@@ -64,12 +68,6 @@ impl Prefix {
             Prefix::Yotta => 1.0e24,
             Prefix::Zepto => 1.0e-21,
             Prefix::Zetta => 1.0e21,
-        };
-
-        Definition {
-            value,
-            terms,
-            function_set: None,
         }
     }
 
@@ -168,36 +166,6 @@ impl Prefix {
 
         Some(code)
     }
-
-    pub fn is_metric(&self) -> bool {
-        true
-    }
-
-    pub fn is_arbitrary(&self) -> bool {
-        false
-    }
-
-    pub fn is_special(&self) -> bool {
-        false
-    }
-
-    pub fn scalar(&self) -> f64 {
-        self.calculate_scalar(1.0)
-    }
-
-    pub fn magnitude(&self) -> f64 {
-        self.calculate_magnitude(1.0)
-    }
-
-    // TODO: It seems really silly to have to depend on a Definition when all
-    // Prefixes really do is just multiple an Atom by some scalar value.
-    pub fn calculate_scalar(&self, magnitude: f64) -> f64 {
-        self.definition().calculate_scalar(magnitude)
-    }
-
-    pub fn calculate_magnitude(&self, scalar: f64) -> f64 {
-        self.definition().calculate_magnitude(scalar)
-    }
 }
 
 impl fmt::Display for Prefix {
@@ -212,50 +180,50 @@ impl fmt::Display for Prefix {
 mod tests {
     use super::Prefix;
 
-    macro_rules! validate_scalar {
+    macro_rules! validate_value {
         ($test_name:ident, $variant:ident, $value:expr) => {
             #[test]
             fn $test_name() {
                 let prefix = Prefix::$variant;
-                assert_relative_eq!(prefix.scalar(), $value);
-                assert_ulps_eq!(prefix.scalar(), $value);
+                assert_relative_eq!(prefix.value(), $value);
+                assert_ulps_eq!(prefix.value(), $value);
             }
         };
     }
 
-    macro_rules! validate_scalars {
+    macro_rules! validate_values {
         ($($test_name: ident, $variant: ident, $value: expr);+ $(;)*) => {
             $(
-                validate_scalar!($test_name, $variant, $value);
+                validate_value!($test_name, $variant, $value);
             )+
         };
     }
 
-    validate_scalars!(
-        validate_scalar_atto, Atto, 1.0e-18;
-        validate_scalar_centi, Centi, 1.0e-2;
-        validate_scalar_deci, Deci, 1.0e-1;
-        validate_scalar_deka, Deka, 1.0e1;
-        validate_scalar_exa, Exa, 1.0e18;
-        validate_scalar_femto, Femto, 1.0e-15;
-        validate_scalar_gibi, Gibi, 1_073_741_824.0;
-        validate_scalar_giga, Giga, 1.0e9;
-        validate_scalar_hecto, Hecto, 1.0e2;
-        validate_scalar_kibi, Kibi, 1024.0;
-        validate_scalar_kilo, Kilo, 1.0e3;
-        validate_scalar_mebi, Mebi, 1_048_576.0;
-        validate_scalar_mega, Mega, 1.0e6;
-        validate_scalar_micro, Micro, 1.0e-6;
-        validate_scalar_milli, Milli, 1.0e-3;
-        validate_scalar_nano, Nano, 1.0e-9;
-        validate_scalar_peta, Peta, 1.0e15;
-        validate_scalar_pico, Pico, 1.0e-12;
-        validate_scalar_tebi, Tebi, 1_099_511_627_776.0;
-        validate_scalar_tera, Tera, 1.0e12;
-        validate_scalar_yocto, Yocto, 1.0e-24;
-        validate_scalar_yotta, Yotta, 1.0e24;
-        validate_scalar_zepto, Zepto, 1.0e-21;
-        validate_scalar_zetta, Zetta, 1.0e21;
+    validate_values!(
+        validate_value_atto, Atto, 1.0e-18;
+        validate_value_centi, Centi, 1.0e-2;
+        validate_value_deci, Deci, 1.0e-1;
+        validate_value_deka, Deka, 1.0e1;
+        validate_value_exa, Exa, 1.0e18;
+        validate_value_femto, Femto, 1.0e-15;
+        validate_value_gibi, Gibi, 1_073_741_824.0;
+        validate_value_giga, Giga, 1.0e9;
+        validate_value_hecto, Hecto, 1.0e2;
+        validate_value_kibi, Kibi, 1024.0;
+        validate_value_kilo, Kilo, 1.0e3;
+        validate_value_mebi, Mebi, 1_048_576.0;
+        validate_value_mega, Mega, 1.0e6;
+        validate_value_micro, Micro, 1.0e-6;
+        validate_value_milli, Milli, 1.0e-3;
+        validate_value_nano, Nano, 1.0e-9;
+        validate_value_peta, Peta, 1.0e15;
+        validate_value_pico, Pico, 1.0e-12;
+        validate_value_tebi, Tebi, 1_099_511_627_776.0;
+        validate_value_tera, Tera, 1.0e12;
+        validate_value_yocto, Yocto, 1.0e-24;
+        validate_value_yotta, Yotta, 1.0e24;
+        validate_value_zepto, Zepto, 1.0e-21;
+        validate_value_zetta, Zetta, 1.0e21;
     );
 
     #[test]

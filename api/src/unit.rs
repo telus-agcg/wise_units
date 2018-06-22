@@ -1,12 +1,13 @@
 use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
-use parser::{Composable, Composition, Error, Term, UcumSymbol};
+use field_eq::FieldEq;
+use parser::{Composable, Composition, Error, Term};
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug)]
 pub struct Unit {
     pub terms: Vec<Term>,
 }
@@ -17,12 +18,61 @@ js_serializable!(Unit);
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 js_deserializable!(Unit);
 
+/// A `Unit` is the piece of data that represents a *valid* UCUM unit or
+/// custom-defined unit. A `Unit` is defined as a number of `Term`s and thus
+/// all methods defined on `Unit` rely on values from its `Terms`.
+///
+/// The easiest way to create a new `Unit` is via its implementation of
+/// `std::str::FromStr`. This parses the given `&str` and returns a
+/// `wise_units::parser::Error` if it fails to parse:
+///
+/// ```rust
+/// use std::str::FromStr;
+/// use wise_units::Unit;
+///
+/// let m = Unit::from_str("m2").unwrap();
+/// assert_eq!(m.scalar(), 1.0);
+///
+/// let bad_unit = Unit::from_str("not_a_unit");
+/// assert!(bad_unit.is_err());
+/// ```
+///
 impl Unit {
+    /// The UCUM defines "special units" as:
+    ///
+    /// > units that imply a measurement on a scale other than a ratio scale
+    ///
+    /// Each atom in `Atoms.toml` has the `isSpecial` attribute; a `Unit` is
+    /// special if any of its `Term`s has an `Atom` that is special.
+    ///
     pub fn is_special(&self) -> bool {
-        self.terms.iter().any(|term| match term.atom {
-            Some(ref atom) => atom.is_special(),
-            None => false,
-        })
+        self.terms.iter().any(|term| term.is_special())
+    }
+
+    /// The UCUM defines "metric units" using four points. First:
+    ///
+    /// > Only metric unit atoms may be combined with a prefix.
+    ///
+    /// Second:
+    ///
+    /// > To be metric or not to be metric is a predicate assigned to each unit
+    /// atom where that unit > atom is defined.
+    ///
+    /// Third:
+    ///
+    /// > All base units are metric. No non-metric unit can be part of the
+    /// basis.
+    ///
+    /// Fourth:
+    ///
+    /// > A unit must be a quantity on a ratio scale in order to be metric.
+    ///
+    /// This library laxes the first rule and allows any atom/unit to use
+    /// `Prefix`es. Also this method only returns `true` when *all* of its
+    /// `Term`s are metric.
+    ///
+    pub fn is_metric(&self) -> bool {
+        self.terms.iter().all(|term| term.is_metric())
     }
 
     /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.
@@ -33,22 +83,94 @@ impl Unit {
         self.terms.len() == 1 && self.terms[0].is_unity()
     }
 
-    /// Use this when calculating the scalar when *not* part of a Measurable.
+    /// This gives the scalar value of `self` in terms of `self`'s
+    /// base-unit(s). It takes account for each of `self`'s `Term`'s
+    /// `factor` and `exponent`.
+    ///
+    /// ```rust
+    /// use wise_units::Unit;
+    /// use std::str::FromStr;
+    ///
+    /// // A "km" is 1000 meters.
+    /// let unit = Unit::from_str("km").unwrap();
+    /// assert_eq!(unit.scalar(), 1000.0);
+    ///
+    /// // A "10km" is 10_000 meters.
+    /// let unit = Unit::from_str("10km").unwrap();
+    /// assert_eq!(unit.scalar(), 10_000.0);
+    ///
+    /// // A "km-1" is 0.001 meters.
+    /// let unit = Unit::from_str("km-1").unwrap();
+    /// assert_eq!(unit.scalar(), 0.001);
+    ///
+    /// // A "10km-1" is 0.000_1 meters.
+    /// let unit = Unit::from_str("10km-1").unwrap();
+    /// assert_eq!(unit.scalar(), 0.000_1);
+    ///
+    /// // A "km/h" is 0.2777777777777778 meters/second.
+    /// let unit = Unit::from_str("km/h").unwrap();
+    /// assert_eq!(unit.scalar(), 0.277_777_777_777_777_8);
+    ///
     pub fn scalar(&self) -> f64 {
         self.calculate_scalar(1.0)
     }
 
+    /// The scalar value of `self` in terms of `self`'s actual unit(s).
+    ///
+    /// ```rust
+    /// use wise_units::Unit;
+    /// use std::str::FromStr;
+    ///
+    /// // A "km" is 1000 meters.
+    /// let unit = Unit::from_str("km").unwrap();
+    /// assert_eq!(unit.magnitude(), 1000.0);
+    ///
+    /// // A "10km" is 10_000 meters.
+    /// let unit = Unit::from_str("10km").unwrap();
+    /// assert_eq!(unit.magnitude(), 10_000.0);
+    ///
+    /// // A "km-1" is 0.001 meters.
+    /// let unit = Unit::from_str("km-1").unwrap();
+    /// assert_eq!(unit.magnitude(), 0.001);
+    ///
+    /// // A "10km-1" is 0.000_1 meters.
+    /// let unit = Unit::from_str("10km-1").unwrap();
+    /// assert_eq!(unit.magnitude(), 0.000_1);
+    ///
+    /// // A "km/h" is 1000 meters/hour.
+    /// let unit = Unit::from_str("km/h").unwrap();
+    /// assert_eq!(unit.magnitude(), 1000.0);
+    ///
+    /// // A "m3" is 1 cubic meters.
+    /// let unit = Unit::from_str("m3").unwrap();
+    /// assert_eq!(unit.magnitude(), 1.0);
+    ///
+    /// // A "L" is 1 liter.
+    /// let unit = Unit::from_str("L").unwrap();
+    /// assert_eq!(unit.magnitude(), 1.0);
+    ///
+    /// // A "10m/5s" is 2 "meters per second".
+    /// let unit = Unit::from_str("10m/5s").unwrap();
+    /// assert_eq!(unit.magnitude(), 2.0);
+    ///
+    /// // A "10m/5s2" is 0.4 "meters per second".
+    /// let unit = Unit::from_str("10m/5s2").unwrap();
+    /// assert_eq!(unit.magnitude(), 0.4);
+    ///
     pub fn magnitude(&self) -> f64 {
         self.calculate_magnitude(self.scalar())
     }
 
-    /// Use this when calculating the scalar when it's part of a Measurable.
+    /// Calculates `value` count of `self` in terms of `self`'s base-unit.
+    ///
     pub fn calculate_scalar(&self, value: f64) -> f64 {
         self.terms
             .iter()
             .fold(1.0, |acc, term| acc * term.calculate_scalar(value))
     }
 
+    /// Calculates `value` count of `self` in terms of `self`'s unit.
+    ///
     pub fn calculate_magnitude(&self, value: f64) -> f64 {
         self.terms
             .iter()
@@ -61,6 +183,14 @@ impl Unit {
     /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
     /// render the same result.
     ///
+    /// ```rust
+    /// use std::str::FromStr;
+    /// use wise_units::Unit;
+    ///
+    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
+    /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
+    /// ```
+    ///
     pub fn expression(&self) -> String {
         SimpleDecomposer::new(&self.terms).expression()
     }
@@ -68,59 +198,47 @@ impl Unit {
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
-    /// This always returns a String that is parsable back into the same Unit.
+    ///
+    /// ```rust
+    /// use std::str::FromStr;
+    /// use wise_units::Unit;
+    ///
+    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
+    /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");
+    /// ```
     ///
     pub fn expression_reduced(&self) -> String {
         ReductionDecomposer::new(&self.terms).expression()
     }
-
-    /// Allows for dividing a Unit by a factor; results in dividing this Unit's
-    /// associated Terms' factors by `other_factor`.
-    ///
-    pub fn div_u32(&self, other_factor: u32) -> Self {
-        let mut new_terms = Vec::with_capacity(self.terms.len());
-
-        for term in &self.terms {
-            let mut new_term = term.clone();
-            new_term.factor /= other_factor;
-            new_terms.push(new_term);
-        }
-
-        Self { terms: new_terms }
-    }
-
-    /// Allows for multiplying a Unit by a factor; results in multiplying this
-    /// Unit's associated Terms' factors by `other_factor`.
-    ///
-    pub fn mul_u32(&self, other_factor: u32) -> Self {
-        let mut new_terms = Vec::with_capacity(self.terms.len());
-
-        for term in &self.terms {
-            let mut new_term = term.clone();
-            new_term.factor *= other_factor;
-            new_terms.push(new_term);
-        }
-
-        Unit { terms: new_terms }
-    }
-
-    pub fn is_valid(expression: &str) -> bool {
-        Self::from_str(expression).is_ok()
-    }
 }
 
+//-----------------------------------------------------------------------------
+// impl Composable
+//-----------------------------------------------------------------------------
 impl Composable for Unit {
     fn composition(&self) -> Composition {
         self.terms.composition()
     }
 }
 
+impl<'a> Composable for &'a Unit {
+    fn composition(&self) -> Composition {
+        self.terms.composition()
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl Display
+//-----------------------------------------------------------------------------
 impl fmt::Display for Unit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.expression())
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl FromStr
+//-----------------------------------------------------------------------------
 impl FromStr for Unit {
     type Err = Error;
 
@@ -131,24 +249,145 @@ impl FromStr for Unit {
     }
 }
 
+//-----------------------------------------------------------------------------
+// impl FieldEq
+//-----------------------------------------------------------------------------
+/// This is for comparing `Unit`s to see if they have the exact same `Term`s.
+///
+/// ```rust
+/// use std::str::FromStr;
+/// use wise_units::{FieldEq, Unit};
+///
+/// // Both of these are defined in the same terms.
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert!(unit.field_eq(&other));
+///
+/// // These are never equal.
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(!unit.field_eq(&other));
+///
+/// // These scalar values are equal, but since the units are in different
+/// // terms, they are not `field_eq`.
+/// let unit = Unit::from_str("1000m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(!unit.field_eq(&other));
+/// ```
+///
+impl<'a> FieldEq<'a> for Unit {
+    fn field_eq(&self, other: &'a Unit) -> bool {
+        self.terms == other.terms
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl PartialEq
+//-----------------------------------------------------------------------------
+/// `Unit`s are `PartialEq` if
+///
+/// a) they are compatible
+/// b) their `scalar()` values are equal
+///
+/// ```rust
+/// use wise_units::Unit;
+/// use std::str::FromStr;
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert!(unit == other);
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(unit != other);
+///
+/// let unit = Unit::from_str("1000m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(unit == other);
+/// ```
+///
+impl PartialEq for Unit {
+    fn eq(&self, other: &Self) -> bool {
+        if !self.is_compatible_with(other) {
+            return false;
+        }
+
+        self.scalar() == other.scalar()
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl PartialOrd
+//-----------------------------------------------------------------------------
+/// This allows for comparing `Units`s based on their reduced scalar values.
+///
+/// ```rust
+/// use wise_units::Unit;
+/// use std::cmp::Ordering;
+/// use std::str::FromStr;
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Equal);
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Less);
+/// assert!(unit < other);
+///
+/// let unit = Unit::from_str("km").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Greater);
+/// assert!(unit > other);
+///
+/// let unit = Unit::from_str("1000m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Equal);
+///
+/// let unit = Unit::from_str("999m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Less);
+/// assert!(unit < other);
+///
+/// let unit = Unit::from_str("1001m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Greater);
+/// assert!(unit > other);
+/// ```
+///
+impl PartialOrd for Unit {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        if !self.is_compatible_with(other) {
+            return None;
+        }
+
+        let other_scalar = other.scalar();
+        let my_scalar = self.scalar();
+
+        my_scalar.partial_cmp(&other_scalar)
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl Div
+//-----------------------------------------------------------------------------
 impl Div for Unit {
     type Output = Self;
 
     fn div(self, other: Self) -> Self::Output {
-        let mut new_terms = self.terms;
+        let terms = divide_terms(&self.terms, &other.terms);
 
-        let mut other_terms: Vec<Term> = other
-            .terms
-            .into_iter()
-            .map(|mut term| {
-                term.exponent = -term.exponent;
-                term
-            })
-            .collect();
+        Self { terms }
+    }
+}
 
-        new_terms.append(&mut other_terms);
+impl<'a> Div<&'a Unit> for Unit {
+    type Output = Self;
 
-        Self { terms: new_terms }
+    fn div(self, other: &'a Self) -> Self::Output {
+        let terms = divide_terms(&self.terms, &other.terms);
+
+        Self { terms }
     }
 }
 
@@ -156,15 +395,9 @@ impl<'a> Div for &'a Unit {
     type Output = Unit;
 
     fn div(self, other: &'a Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
+        let terms = divide_terms(&self.terms, &other.terms);
 
-        for other_term in &other.terms {
-            let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -other_term.exponent;
-            new_terms.push(new_other_term);
-        }
-
-        Unit { terms: new_terms }
+        Unit { terms }
     }
 }
 
@@ -172,26 +405,38 @@ impl<'a> Div for &'a mut Unit {
     type Output = Unit;
 
     fn div(self, other: &'a mut Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
+        let terms = divide_terms(&self.terms, &other.terms);
 
-        for other_term in &other.terms {
-            let mut new_other_term = other_term.clone();
-            new_other_term.exponent = -other_term.exponent;
-            new_terms.push(new_other_term);
-        }
-
-        Unit { terms: new_terms }
+        Unit { terms }
     }
 }
 
+fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
+    let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
+
+    for term in lhs.iter() {
+        terms.push(term.clone());
+    }
+
+    for term in rhs.iter() {
+        let mut new_other_term = term.clone();
+        new_other_term.exponent = -new_other_term.exponent;
+        terms.push(new_other_term);
+    }
+
+    terms
+}
+
+//-----------------------------------------------------------------------------
+// impl Mul
+//-----------------------------------------------------------------------------
 impl Mul for Unit {
     type Output = Self;
 
-    fn mul(self, other: Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
-        new_terms.extend(other.terms.clone());
+    fn mul(self, other: Self) -> Self::Output {
+        let terms = multiply_terms(&self.terms, &other.terms);
 
-        Self { terms: new_terms }
+        Self { terms }
     }
 }
 
@@ -199,10 +444,9 @@ impl<'a> Mul for &'a Unit {
     type Output = Unit;
 
     fn mul(self, other: &'a Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
-        new_terms.extend(other.terms.clone());
+        let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit { terms: new_terms }
+        Unit { terms }
     }
 }
 
@@ -210,24 +454,24 @@ impl<'a> Mul for &'a mut Unit {
     type Output = Unit;
 
     fn mul(self, other: &'a mut Unit) -> Self::Output {
-        let mut new_terms = self.terms.clone();
-        new_terms.extend(other.terms.clone());
+        let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit { terms: new_terms }
+        Unit { terms }
     }
 }
 
-impl PartialOrd for Unit {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        if self.is_compatible_with(other) {
-            let other_scalar = other.scalar();
-            let my_scalar = self.scalar();
+fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
+    let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
 
-            my_scalar.partial_cmp(&other_scalar)
-        } else {
-            None
-        }
+    for term in lhs.iter() {
+        terms.push(term.clone());
     }
+
+    for term in rhs.iter() {
+        terms.push(term.clone());
+    }
+
+    terms
 }
 
 #[cfg(test)]
@@ -251,8 +495,28 @@ mod tests {
         };
     }
 
+    macro_rules! validate_magnitude {
+        ($test_name:ident, $input_string:expr, $expected_value:expr) => {
+            #[test]
+            fn $test_name() {
+                let unit = Unit::from_str($input_string).unwrap();
+                assert_relative_eq!(unit.magnitude(), $expected_value);
+                assert_ulps_eq!(unit.magnitude(), $expected_value);
+            }
+        };
+    }
+
+    macro_rules! validate_magnitudes {
+        ($($test_name: ident, $input_string: expr, $expected_value: expr);+ $(;)*) => {
+            $(
+                validate_magnitude!($test_name, $input_string, $expected_value);
+            )+
+        };
+    }
+
     use super::super::parser::{Composition, Dimension};
     use super::*;
+    use field_eq::FieldEq;
 
     #[test]
     fn validate_from_str_error() {
@@ -291,52 +555,52 @@ mod tests {
         validate_scalar_slash_1, "/1", 1.0;
         validate_scalar_slash_m, "/m", 1.0;
         validate_scalar_slash_annotation, "/{tot}", 1.0;
+
+        validate_scalar_liter, "l", 0.001;
+        validate_scalar_liter_caps, "L", 0.001;
+        validate_scalar_pi, "[pi]", ::std::f64::consts::PI;
+        validate_scalar_ten_pi, "10[pi]", 10.0 * ::std::f64::consts::PI;
+        validate_scalar_hectare, "har", 10_000.0;
+        validate_scalar_week, "wk", 604_800.0;
+        validate_scalar_kilogram, "kg", 1000.0;
+        validate_scalar_fahrenheit, "[degF]", 255.927_777_777_777_8;
     );
 
-    #[test]
-    fn validate_magnitude() {
-        let unit = Unit::from_str("m").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
+    validate_magnitudes!(
+        validate_magnitude_m, "m", 1.0;
+        validate_magnitude_km, "km", 1000.0;
+        validate_magnitude_m_minus_1, "m-1", 1.0;
+        validate_magnitude_10m, "10m", 10.0;
+        validate_magnitude_10km, "10km", 10_000.0;
+        validate_magnitude_10km_minus_1, "10km-1", 0.000_1;
+        validate_magnitude_10km_minus_1_m2, "10km-1.m2", 0.000_1;
+        validate_magnitude_km_slash_m2_dot_cm, "km/m2.cm", 100_000.0;
+        validate_magnitude_km_minus_1_slash_m2_dot_cm, "km-1/m2.cm", 0.1;
+        validate_magnitude_m_slash_s2, "m/s2", 1.0;
+        validate_magnitude_slash_1, "/1", 1.0;
+        validate_magnitude_slash_m, "/m", 1.0;
+        validate_magnitude_slash_annotation, "/{tot}", 1.0;
 
-        let unit = Unit::from_str("km").unwrap();
-        assert_eq!(unit.magnitude(), 1000.0);
+        validate_magnitude_m2, "m2", 1.0;
+        validate_magnitude_m3, "m3", 1.0;
+        validate_magnitude_liter, "l", 1.0;
+        validate_magnitude_liter_caps, "L", 1.0;
+        validate_magnitude_8m_slash_4s, "8m/4s", 2.0;
+        validate_magnitude_8m_slash_4s2, "8m/4s2", 0.5;
 
-        let unit = Unit::from_str("km/10m").unwrap();
-        assert_eq!(unit.magnitude(), 100.0);
+        validate_magnitude_pi, "[pi]", 1.0;
+        validate_magnitude_ten_pi, "10[pi]", 10.0;
 
-        let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
+        // TODO: This doesn't parse (AGDEV-33099)
+        // validate_magnitude_decare, "dar", 0.1;
+        validate_magnitude_dekare, "daar", 10.0;
+        validate_magnitude_hectare, "har", 100.0;
+        validate_magnitude_kilare, "kar", 1000.0;
 
-        let unit = Unit::from_str("10m").unwrap();
-        assert_eq!(unit.magnitude(), 10.0);
-
-        let unit = Unit::from_str("10km").unwrap();
-        assert_eq!(unit.magnitude(), 10_000.0);
-
-        let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.magnitude(), 0.0001);
-
-        let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.magnitude(), 0.001);
-
-        let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.magnitude(), 100_000.0);
-
-        let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.magnitude(), 0.1);
-
-        let unit = Unit::from_str("m/s2").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("/1").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("/m").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("/{tot}").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-    }
+        validate_magnitude_week, "wk", 1.0;
+        validate_magnitude_kilogram, "kg", 1000.0;
+        validate_magnitude_fahrenheit, "[degF]", 1.000_000_000_000_056_8;
+    );
 
     #[test]
     fn validate_composition() {
@@ -518,12 +782,18 @@ mod tests {
     }
 
     #[test]
-    fn validate_div_u32() {
-        let unit = Unit::from_str("2m").unwrap();
-        assert_eq!(unit.div_u32(2).to_string().as_str(), "m");
+    fn validate_field_eq() {
+        let unit = Unit::from_str("ar").unwrap();
+        let other = Unit::from_str("ar").unwrap();
+        assert!(unit.field_eq(&other));
 
-        let unit = Unit::from_str("2m").unwrap();
-        assert_eq!(unit.div_u32(4).to_string().as_str(), "0m");
+        let unit = Unit::from_str("ar").unwrap();
+        let other = Unit::from_str("har").unwrap();
+        assert!(!unit.field_eq(&other));
+
+        let unit = Unit::from_str("100ar").unwrap();
+        let other = Unit::from_str("har").unwrap();
+        assert!(!unit.field_eq(&other));
     }
 
     #[test]
@@ -535,12 +805,6 @@ mod tests {
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
         assert_eq!(unit.div(other).to_string().as_str(), "10m/20m");
-    }
-
-    #[test]
-    fn validate_mul_u32() {
-        let unit = Unit::from_str("2m").unwrap();
-        assert_eq!(unit.mul_u32(2).to_string().as_str(), "4m");
     }
 
     #[test]

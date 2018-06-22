@@ -5,17 +5,17 @@ use std::collections::BTreeMap;
 
 type Exponent = i32;
 
-pub struct ReductionDecomposer(BTreeMap<String, Exponent>);
+pub struct Decomposer(BTreeMap<String, Exponent>);
 
-impl ReductionDecomposer {
+impl Decomposer {
     pub fn new(terms: &[Term]) -> Self {
         let set = build_set(terms);
 
-        ReductionDecomposer(set)
+        Decomposer(set)
     }
 }
 
-impl Decomposable for ReductionDecomposer {
+impl Decomposable for Decomposer {
     fn numerator(&self) -> String {
         let result = self.0
             .iter()
@@ -117,14 +117,14 @@ mod tests {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();
-                let decomposer = ReductionDecomposer::new(&unit.terms);
+                let decomposer = Decomposer::new(&unit.terms);
                 assert_eq!(decomposer.expression(), $expected_expression);
             }
         };
     }
 
     use super::super::Decomposable;
-    use super::ReductionDecomposer;
+    use super::Decomposer;
     use std::str::FromStr;
     use unit::Unit;
 

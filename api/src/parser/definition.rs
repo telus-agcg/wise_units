@@ -1,5 +1,9 @@
-use parser::{Error, FunctionSet, Term, UcumSymbol};
+use parser::{Error, FunctionSet, Term};
 
+/// A `Definition` is a slimmed-down version of a `Measurement` that is used to
+/// define `Atom`s in terms of other `Atom`s (ex. an `"[in_i]"` has a
+/// `Definition` of 2.54 cm).
+///
 #[derive(Debug)]
 pub struct Definition {
     pub value: f64,
@@ -22,35 +26,6 @@ impl Definition {
             terms,
             function_set,
         })
-    }
-
-    pub fn is_special(&self) -> bool {
-        self.terms.iter().any(|term| match term.atom {
-            Some(ref atom) => atom.is_special(),
-            None => false,
-        })
-    }
-
-    pub fn scalar(&self) -> f64 {
-        match self.function_set {
-            None => self.value * self.calculate_scalar(1.0),
-            Some(ref f) => {
-                let result = (f.convert_to)(self.value);
-
-                self.calculate_scalar(result)
-            }
-        }
-    }
-
-    pub fn magnitude(&self) -> f64 {
-        match self.function_set {
-            None => self.value * self.calculate_magnitude(1.0),
-            Some(ref f) => {
-                let result = (f.convert_from)(self.value);
-
-                self.calculate_magnitude(result)
-            }
-        }
     }
 
     pub fn calculate_scalar(&self, other_value: f64) -> f64 {

@@ -2,529 +2,126 @@
 extern crate criterion;
 extern crate wise_units;
 
+mod common;
+
 use criterion::Criterion;
-use std::ops::{Div, Mul};
 use std::str::FromStr;
-use wise_units::Unit;
-
-// is_special
-
-// fn is_special_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.is_special());
-// }
-
-// fn is_special_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.is_special());
-// }
-
-// fn is_special_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.is_special());
-// }
-
-// fn is_special_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.is_special());
-// }
-
-// fn is_special_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.is_special());
-// }
-
-// fn is_special_derived_unit_with_factor_and_exponent(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.is_special());
-// }
-
-// fn is_special_derived_unit_with_factor_and_exponent_and_denominator(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.is_special());
-// }
-
-// // is_unity
-
-// fn is_unity_true(c: &mut Criterion) {
-//     let unit = Unit::from_str("1").unwrap();
-//     b.iter(|| unit.is_unity());
-// }
-
-// fn is_unity_false(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.is_unity());
-// }
-
-// // scalar
-
-// fn scalar_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.scalar());
-// }
-
-// fn scalar_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.scalar());
-// }
-
-// fn scalar_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.scalar());
-// }
-
-// fn scalar_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.scalar());
-// }
-
-// fn scalar_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.scalar());
-// }
-
-// fn scalar_derived_unit_with_factor_and_exponent(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.scalar());
-// }
-
-// fn scalar_derived_unit_with_factor_and_exponent_and_denominator(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.scalar());
-// }
-
-// // magnitude
-
-// fn magnitude_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.magnitude());
-// }
-
-// fn magnitude_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.magnitude());
-// }
-
-// fn magnitude_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.magnitude());
-// }
-
-// fn magnitude_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.magnitude());
-// }
-
-// fn magnitude_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.magnitude());
-// }
-
-// fn magnitude_derived_unit_with_factor_and_exponent(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.magnitude());
-// }
-
-// fn magnitude_derived_unit_with_factor_and_exponent_and_denominator(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.magnitude());
-// }
-
-// // composition
-
-// fn composition_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.composition());
-// }
-
-// fn composition_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.composition());
-// }
-
-// fn composition_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.composition());
-// }
-
-// fn composition_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.composition());
-// }
-
-// fn composition_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.composition());
-// }
-
-// fn composition_derived_unit_with_factor_and_exponent(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.composition());
-// }
-
-// fn composition_derived_unit_with_factor_and_exponent_and_denominator(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.composition());
-// }
-
-// // is_compatible_with
-
-// fn is_compatible_with_base_unit_and_base_unit_true(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("km").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_base_unit_and_base_unit_false(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("s").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_base_unit_and_derived_unit_true(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("a").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_base_unit_and_derived_unit_false(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("[foz_us]").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_and_derived_unit_true(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     let other = Unit::from_str("[in_i]3").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_and_derived_unit_false(c: &mut Criterion)
-// {     let unit = Unit::from_str("[gal_us]").unwrap();
-//     let other = Unit::from_str("[ft_us]2").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_number_other_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     let other = Unit::from_str("10*10").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_number_not_other_number(c: &mut
-// Criterion) {     let unit = Unit::from_str("mole").unwrap();
-//     let other = Unit::from_str("[qt_us]").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_special_and_other_special_true(c: &mut
-// Criterion) {     let unit = Unit::from_str("C").unwrap();
-//     let other = Unit::from_str("[degF]").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_special_and_other_special_false(c: &mut
-// Criterion) {     let unit = Unit::from_str("C").unwrap();
-//     let other = Unit::from_str("[p'diop]").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_with_factor_and_exponent_true(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     let other = Unit::from_str("100[pt_us]3").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// fn is_compatible_with_derived_unit_with_factor_and_exponent_false(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     let other = Unit::from_str("100[pt_us]2").unwrap();
-//     b.iter(|| unit.is_compatible_with(&other));
-// }
-
-// // expression
-
-// fn expression_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.expression());
-// }
-
-// fn expression_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.expression());
-// }
-
-// fn expression_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.expression());
-// }
-
-// fn expression_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.expression());
-// }
-
-// fn expression_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.expression());
-// }
-
-// fn expression_derived_unit_with_factor_and_exponent(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.expression());
-// }
-
-// fn expression_derived_unit_with_factor_and_exponent_and_denominator(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.expression());
-// }
-
-// // expression_reduced
-
-// fn expression_reduced_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.expression_reduced());
-// }
-
-// fn expression_reduced_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.expression_reduced());
-// }
-
-// fn expression_reduced_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.expression_reduced());
-// }
-
-// fn expression_reduced_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.expression_reduced());
-// }
-
-// fn expression_reduced_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.expression_reduced());
-// }
-
-// fn expression_reduced_derived_unit_with_factor_and_exponent(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.expression_reduced());
-// }
-
-// fn expression_reduced_derived_unit_with_factor_and_exponent_and_denominator(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.expression_reduced());
-// }
-
-// // div_u32
-
-// fn div_u32_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.div_u32(3));
-// }
-
-// fn div_u32_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.div_u32(3));
-// }
-
-// fn div_u32_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.div_u32(3));
-// }
-
-// fn div_u32_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.div_u32(3));
-// }
-
-// fn div_u32_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.div_u32(3));
-// }
-
-// fn div_u32_derived_unit_with_factor_and_exponent(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.div_u32(3));
-// }
-
-// fn div_u32_derived_unit_with_factor_and_exponent_and_denominator(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.div_u32(3));
-// }
-
-// // div
-
-// fn div_base_unit_and_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("m").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_base_unit_and_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("[acr_us]").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_derived_unit_and_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     let other = Unit::from_str("s").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_derived_unit_and_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     let other = Unit::from_str("[acr_us]").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_derived_unit_number_and_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     let other = Unit::from_str("s").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_derived_unit_number_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     let other = Unit::from_str("[ft_i]").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_derived_unit_with_factor_and_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     let other = Unit::from_str("m").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_derived_unit_with_factor_and_exponent_and_derived_unit(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     let other = Unit::from_str("[ft_i]").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// fn div_derived_unit_with_factor_and_exponent_and_denominator_and_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     let other = Unit::from_str("[ft_i]").unwrap();
-//     b.iter(|| unit / other);
-// }
-
-// // mul_u32
-
-// fn mul_u32_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     b.iter(|| unit.mul_u32(3));
-// }
-
-// fn mul_u32_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     b.iter(|| unit.mul_u32(3));
-// }
-
-// fn mul_u32_derived_unit_number(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     b.iter(|| unit.mul_u32(3));
-// }
-
-// fn mul_u32_derived_unit_special(c: &mut Criterion) {
-//     let unit = Unit::from_str("C").unwrap();
-//     b.iter(|| unit.mul_u32(3));
-// }
-
-// fn mul_u32_derived_unit_with_factor(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]").unwrap();
-//     b.iter(|| unit.mul_u32(3));
-// }
-
-// fn mul_u32_derived_unit_with_factor_and_exponent(c: &mut Criterion) {
-//     let unit = Unit::from_str("10[gal_us]3").unwrap();
-//     b.iter(|| unit.mul_u32(3));
-// }
-
-// fn mul_u32_derived_unit_with_factor_and_exponent_and_denominator(c: &mut
-// Criterion) {     let unit = Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-//     b.iter(|| unit.mul_u32(3));
-// }
-
-// // mul
-
-// fn mul_base_unit_and_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("m").unwrap();
-//     b.iter(|| unit * other);
-// }
-
-// fn mul_base_unit_and_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("m").unwrap();
-//     let other = Unit::from_str("[acr_us]").unwrap();
-//     b.iter(|| unit * other);
-// }
-
-// fn mul_derived_unit_and_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     let other = Unit::from_str("s").unwrap();
-//     b.iter(|| unit * other);
-// }
-
-// fn mul_derived_unit_and_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("[gal_us]").unwrap();
-//     let other = Unit::from_str("[acr_us]").unwrap();
-//     b.iter(|| unit * other);
-// }
-
-// fn mul_derived_unit_number_and_base_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     let other = Unit::from_str("s").unwrap();
-//     b.iter(|| unit * other);
-// }
-
-// fn mul_derived_unit_number_derived_unit(c: &mut Criterion) {
-//     let unit = Unit::from_str("mole").unwrap();
-//     let other = Unit::from_str("[ft_i]").unwrap();
-//     b.iter(|| unit * other);
-// }
-
-// fn mul_derived_unit_with_factor_and_base_unit(c: &mut Criterion) {
-//     let unit = &Unit::from_str("10[gal_us]").unwrap();
-//     let other = &Unit::from_str("m").unwrap();
-//     b.iter(|| unit * other);
-// }
-
-fn mul_derived_unit_with_factor_and_exponent_and_derived_unit(c: &mut Criterion) {
-    let unit = &Unit::from_str("10[gal_us]3").unwrap();
-    let other = &Unit::from_str("[ft_i]").unwrap();
-
-    c.bench_function(
-        "multiply derived unit with factor and exponent with a derived unit",
-        |b| {
-            b.iter(|| unit * other);
+use wise_units::{Composable, Unit};
+
+macro_rules! bench_over_inputs_method {
+    ($function_name:ident, $test_name:expr, $method_name:ident) => {
+        fn $function_name(c: &mut Criterion) {
+            c.bench_function_over_inputs(
+                $test_name,
+                |b, &unit_string| {
+                    let unit = Unit::from_str(unit_string).unwrap();
+
+                    b.iter(|| unit.$method_name());
+                },
+                &common::UNIT_STRINGS,
+            );
+        }
+    };
+}
+
+macro_rules! bench_over_inputs_math {
+    ($function_name:ident, $test_name:expr, $method_name:tt) => {
+        fn $function_name(c: &mut Criterion) {
+            c.bench_function_over_inputs($test_name, |b, &(lhs_string, rhs_string)| {
+                let lhs = &Unit::from_str(lhs_string).unwrap();
+                let rhs = &Unit::from_str(rhs_string).unwrap();
+
+                b.iter(|| lhs $method_name rhs);
+            }, &common::UNIT_PAIRS);
+        }
+    };
+}
+
+bench_over_inputs_method!(is_special_group, "Unit::is_special()", is_special);
+bench_over_inputs_method!(is_metric_group, "Unit::is_metric()", is_metric);
+bench_over_inputs_method!(is_unity_group, "Unit::is_unity()", is_unity);
+
+bench_over_inputs_method!(scalar_group, "Unit::scalar()", scalar);
+bench_over_inputs_method!(magnitude_group, "Unit::magnitude()", magnitude);
+bench_over_inputs_method!(expression_group, "Unit::expression()", expression);
+bench_over_inputs_method!(
+    expression_reduced_group,
+    "Unit::expression_reduced()",
+    expression_reduced
+);
+
+//-----------------------------------------------------------------------------
+// impl Composable
+//-----------------------------------------------------------------------------
+bench_over_inputs_method!(composition_group, "Unit::composition()", composition);
+
+fn is_compatible_with_group(c: &mut Criterion) {
+    c.bench_function_over_inputs(
+        "Unit::is_compatible_with",
+        |b, &(lhs_string, rhs_string)| {
+            let lhs = &Unit::from_str(lhs_string).unwrap();
+            let rhs = &Unit::from_str(rhs_string).unwrap();
+
+            b.iter(|| lhs.is_compatible_with(rhs));
         },
+        &common::UNIT_PAIRS,
     );
 }
 
-fn mul_derived_unit_with_factor_and_exponent_and_denominator_and_derived_unit(c: &mut Criterion) {
-    let unit = &Unit::from_str("10[gal_us]3/[acr_us]").unwrap();
-    let other = &Unit::from_str("[ft_i]").unwrap();
+//-----------------------------------------------------------------------------
+// impl Display
+//-----------------------------------------------------------------------------
+bench_over_inputs_method!(display_group, "Unit::to_string()", to_string);
 
-    c.bench_function(
-        "multiple derive unit with factor & exponent & denominator with derived unit",
-        |b| {
-            b.iter(|| unit * other);
+//-----------------------------------------------------------------------------
+// impl FromStr
+//-----------------------------------------------------------------------------
+fn from_str_group(c: &mut Criterion) {
+    c.bench_function_over_inputs(
+        "Unit::from_str",
+        |b, &unit_string| {
+            b.iter(|| Unit::from_str(unit_string));
         },
+        &common::UNIT_STRINGS,
     );
 }
 
-// decompose
+//-----------------------------------------------------------------------------
+// impl PartialEq
+//-----------------------------------------------------------------------------
+bench_over_inputs_math!(partial_eq_group, "Unit::partial_eq", ==);
 
-fn decompose_10km2_per_100second(c: &mut Criterion) {
-    c.bench_function("decompose 10km2/100s", |b| {
-        b.iter(|| Unit::from_str("10km2/100s").unwrap());
-    });
-}
+//-----------------------------------------------------------------------------
+// impl PartialOrd
+//-----------------------------------------------------------------------------
+bench_over_inputs_math!(partial_ord_gt_group, "Unit::partial_ord(>)", >);
+
+//-----------------------------------------------------------------------------
+// impl Mul
+//-----------------------------------------------------------------------------
+bench_over_inputs_math!(mul_group, "Unit::mul", *);
+
+//-----------------------------------------------------------------------------
+// impl Div
+//-----------------------------------------------------------------------------
+bench_over_inputs_math!(div_group, "Unit::div", /);
 
 criterion_group!(
     unit_benches,
-    mul_derived_unit_with_factor_and_exponent_and_derived_unit,
-    mul_derived_unit_with_factor_and_exponent_and_denominator_and_derived_unit,
-    decompose_10km2_per_100second
+    is_special_group,
+    is_metric_group,
+    is_unity_group,
+    scalar_group,
+    magnitude_group,
+    expression_group,
+    expression_reduced_group,
+    composition_group,
+    is_compatible_with_group,
+    display_group,
+    from_str_group,
+    partial_eq_group,
+    mul_group,
+    div_group,
+    partial_ord_gt_group,
 );
 criterion_main!(unit_benches);

@@ -12,9 +12,6 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 
-#[macro_use]
-extern crate log;
-
 // Only include macros for testing
 #[cfg(test)]
 #[macro_use(consumes_to, fails_with, parses_to)]
@@ -40,9 +37,6 @@ extern crate serde_derive;
 #[cfg(all(test, feature = "with_serde"))]
 extern crate serde_json;
 
-#[cfg(test)]
-extern crate simple_logger;
-
 #[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
 #[macro_use]
 extern crate stdweb;
@@ -50,14 +44,16 @@ extern crate stdweb;
 #[macro_use]
 mod macros;
 
+pub mod convertible;
+pub mod field_eq;
 pub mod measurement;
 pub mod unit;
 
 mod decomposer;
-mod measurable;
 mod parser;
 
-pub use measurable::Measurable;
+pub use convertible::Convertible;
+pub use field_eq::FieldEq;
 pub use measurement::Measurement;
 pub use parser::{Atom, Classification, Composable, Composition, Dimension, Error, Prefix,
                  Property, Term};
