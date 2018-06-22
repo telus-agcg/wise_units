@@ -7,7 +7,7 @@ use std::fmt;
 /// `wise_units`.
 ///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Prefix {
     Atto,
     Centi,

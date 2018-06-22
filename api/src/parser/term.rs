@@ -7,7 +7,7 @@ use std::fmt;
 /// annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
 ///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Term {
     pub atom: Option<Atom>,
     pub prefix: Option<Prefix>,

@@ -1,4 +1,5 @@
 use convertible::Convertible;
+use field_eq::FieldEq;
 use parser::{Composable, Error};
 use std::cmp::Ordering;
 use std::fmt;
@@ -154,10 +155,8 @@ impl<'a> Convertible<&'a Unit> for Measurement {
 }
 
 fn convert_measurement(lhs: &Measurement, dest_unit: &Unit) -> Result<Measurement, Error> {
-    // Short-circuit if `dest_unit` is the same as the Measurement's Unit. Check
-    // the expression() here because comparing the units (via PartialEq) really
-    // only compares the scalar values of each.
-    if lhs.unit.expression() == dest_unit.expression() {
+    // Short-circuit if `dest_unit` is the same as the Measurement's Unit.
+    if lhs.unit.field_eq(dest_unit) {
         return Ok(lhs.clone());
     }
 
@@ -189,15 +188,69 @@ impl fmt::Display for Measurement {
 }
 
 //-----------------------------------------------------------------------------
+// impl FieldEq
+//-----------------------------------------------------------------------------
+/// This is for comparing `Measurement`s to see if they have both the same
+/// `value` *and* the same underlying `Unit` defined in the exact same terms.
+///
+/// ```rust
+/// use wise_units::{FieldEq, Measurement};
+///
+/// // Both of these have the same value and are defined in the same terms.
+/// let measurement = Measurement::new(1.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "m").unwrap();
+/// assert!(measurement.field_eq(&other));
+///
+/// // These have the same magnitude, but otherwise are never equal.
+/// let measurement = Measurement::new(1.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert!(!measurement.field_eq(&other));
+///
+/// // These scalar values are equal, but since the units are in different
+/// // terms, they are not `field_eq`.
+/// let measurement = Measurement::new(1.0, "1000m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert!(!measurement.field_eq(&other));
+///
+/// // Neither the values nor unit terms are equal, thus are not `field_eq` here.
+/// let measurement = Measurement::new(1000.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert!(!measurement.field_eq(&other));
+/// ```
+///
+impl<'a> FieldEq<'a> for Measurement {
+    fn field_eq(&self, other: &'a Measurement) -> bool {
+        self.value == other.value && self.unit.field_eq(&other.unit)
+    }
+}
+
+//-----------------------------------------------------------------------------
 // impl PartialEq
 //-----------------------------------------------------------------------------
-// TODO: ...or should PartialEq do what its derived form does (compare all
-// attributes of the struct), then define a Commensurability trait or something
-// that does this here?
 /// `Measurement`s are `PartialEq` if
 ///
 /// a) their `Unit`s are compatible
 /// b) their `scalar()` values are equal
+///
+/// ```rust
+/// use wise_units::Measurement;
+///
+/// let measurement = Measurement::new(1.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "m").unwrap();
+/// assert!(measurement == other);
+///
+/// let measurement = Measurement::new(1.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert!(measurement != other);
+///
+/// let measurement = Measurement::new(1.0, "1000m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert!(measurement == other);
+///
+/// let measurement = Measurement::new(1000.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert!(measurement == other);
+/// ```
 ///
 impl PartialEq for Measurement {
     fn eq(&self, other: &Self) -> bool {
@@ -210,8 +263,58 @@ impl PartialEq for Measurement {
 }
 
 //-----------------------------------------------------------------------------
-// impl PartialEq
+// impl PartialOrd
 //-----------------------------------------------------------------------------
+/// This allows for comparing `Measurement`s based on their reduced scalar
+/// values.
+///
+/// ```rust
+/// use wise_units::Measurement;
+/// use std::cmp::Ordering;
+///
+/// let measurement = Measurement::new(1.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "m").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Equal);
+///
+/// let measurement = Measurement::new(1.0, "m").unwrap();
+/// let other = Measurement::new(2.0, "m").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Less);
+/// assert!(measurement < other);
+///
+/// let measurement = Measurement::new(2.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "m").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Greater);
+/// assert!(measurement > other);
+///
+/// let measurement = Measurement::new(1000.0, "m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Equal);
+///
+/// let measurement = Measurement::new(1000.0, "m").unwrap();
+/// let other = Measurement::new(2.0, "km").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Less);
+/// assert!(measurement < other);
+///
+/// let measurement = Measurement::new(1000.1, "m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Greater);
+/// assert!(measurement > other);
+///
+/// let measurement = Measurement::new(1.0, "1000m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Equal);
+///
+/// let measurement = Measurement::new(1.0, "1000m").unwrap();
+/// let other = Measurement::new(2.0, "km").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Less);
+/// assert!(measurement < other);
+///
+/// let measurement = Measurement::new(1.1, "1000m").unwrap();
+/// let other = Measurement::new(1.0, "km").unwrap();
+/// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Greater);
+/// assert!(measurement > other);
+/// ```
+///
 impl PartialOrd for Measurement {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if !self.unit.is_compatible_with(&other.unit) {
@@ -544,6 +647,29 @@ mod tests {
                 Measurement::new(1.1, "km2/rad.s").unwrap().to_string(),
                 "1.1km2/rad.s".to_string()
             );
+        }
+    }
+
+    mod field_eq {
+        use super::*;
+
+        #[test]
+        fn validate_field_eq() {
+            let measurement = Measurement::new(1.0, "ar").unwrap();
+            let other = Measurement::new(1.0, "ar").unwrap();
+            assert!(measurement.field_eq(&other));
+
+            let measurement = Measurement::new(1.0, "ar").unwrap();
+            let other = Measurement::new(1.0, "har").unwrap();
+            assert!(!measurement.field_eq(&other));
+
+            let measurement = Measurement::new(1.0, "100ar").unwrap();
+            let other = Measurement::new(1.0, "har").unwrap();
+            assert!(!measurement.field_eq(&other));
+
+            let measurement = Measurement::new(100.0, "ar").unwrap();
+            let other = Measurement::new(1.0, "har").unwrap();
+            assert!(!measurement.field_eq(&other));
         }
     }
 

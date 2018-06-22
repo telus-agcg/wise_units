@@ -45,6 +45,7 @@ extern crate stdweb;
 mod macros;
 
 pub mod convertible;
+pub mod field_eq;
 pub mod measurement;
 pub mod unit;
 
@@ -52,6 +53,7 @@ mod decomposer;
 mod parser;
 
 pub use convertible::Convertible;
+pub use field_eq::FieldEq;
 pub use measurement::Measurement;
 pub use parser::{Atom, Classification, Composable, Composition, Dimension, Error, Prefix,
                  Property, Term};

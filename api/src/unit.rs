@@ -1,4 +1,5 @@
 use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
+use field_eq::FieldEq;
 use parser::{Composable, Composition, Error, Term};
 use std::cmp::Ordering;
 use std::fmt;
@@ -249,12 +250,61 @@ impl FromStr for Unit {
 }
 
 //-----------------------------------------------------------------------------
+// impl FieldEq
+//-----------------------------------------------------------------------------
+/// This is for comparing `Unit`s to see if they have the exact same `Term`s.
+///
+/// ```rust
+/// use std::str::FromStr;
+/// use wise_units::{FieldEq, Unit};
+///
+/// // Both of these are defined in the same terms.
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert!(unit.field_eq(&other));
+///
+/// // These are never equal.
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(!unit.field_eq(&other));
+///
+/// // These scalar values are equal, but since the units are in different
+/// // terms, they are not `field_eq`.
+/// let unit = Unit::from_str("1000m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(!unit.field_eq(&other));
+/// ```
+///
+impl<'a> FieldEq<'a> for Unit {
+    fn field_eq(&self, other: &'a Unit) -> bool {
+        self.terms == other.terms
+    }
+}
+
+//-----------------------------------------------------------------------------
 // impl PartialEq
 //-----------------------------------------------------------------------------
 /// `Unit`s are `PartialEq` if
 ///
 /// a) they are compatible
 /// b) their `scalar()` values are equal
+///
+/// ```rust
+/// use wise_units::Unit;
+/// use std::str::FromStr;
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert!(unit == other);
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(unit != other);
+///
+/// let unit = Unit::from_str("1000m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert!(unit == other);
+/// ```
 ///
 impl PartialEq for Unit {
     fn eq(&self, other: &Self) -> bool {
@@ -269,6 +319,42 @@ impl PartialEq for Unit {
 //-----------------------------------------------------------------------------
 // impl PartialOrd
 //-----------------------------------------------------------------------------
+/// This allows for comparing `Units`s based on their reduced scalar values.
+///
+/// ```rust
+/// use wise_units::Unit;
+/// use std::cmp::Ordering;
+/// use std::str::FromStr;
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Equal);
+///
+/// let unit = Unit::from_str("m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Less);
+/// assert!(unit < other);
+///
+/// let unit = Unit::from_str("km").unwrap();
+/// let other = Unit::from_str("m").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Greater);
+/// assert!(unit > other);
+///
+/// let unit = Unit::from_str("1000m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Equal);
+///
+/// let unit = Unit::from_str("999m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Less);
+/// assert!(unit < other);
+///
+/// let unit = Unit::from_str("1001m").unwrap();
+/// let other = Unit::from_str("km").unwrap();
+/// assert_eq!(unit.partial_cmp(&other).unwrap(), Ordering::Greater);
+/// assert!(unit > other);
+/// ```
+///
 impl PartialOrd for Unit {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if !self.is_compatible_with(other) {
@@ -430,6 +516,7 @@ mod tests {
 
     use super::super::parser::{Composition, Dimension};
     use super::*;
+    use field_eq::FieldEq;
 
     #[test]
     fn validate_from_str_error() {
@@ -514,51 +601,6 @@ mod tests {
         validate_magnitude_kilogram, "kg", 1000.0;
         validate_magnitude_fahrenheit, "[degF]", 1.000_000_000_000_056_8;
     );
-
-    #[test]
-    fn validate_magnitude() {
-        let unit = Unit::from_str("m").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("km").unwrap();
-        assert_eq!(unit.magnitude(), 1000.0);
-
-        let unit = Unit::from_str("km/10m").unwrap();
-        assert_eq!(unit.magnitude(), 100.0);
-
-        let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("10m").unwrap();
-        assert_eq!(unit.magnitude(), 10.0);
-
-        let unit = Unit::from_str("10km").unwrap();
-        assert_eq!(unit.magnitude(), 10_000.0);
-
-        let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.magnitude(), 0.0001);
-
-        let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.magnitude(), 0.001);
-
-        let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.magnitude(), 100_000.0);
-
-        let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.magnitude(), 0.1);
-
-        let unit = Unit::from_str("m/s2").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("/1").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("/m").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-
-        let unit = Unit::from_str("/{tot}").unwrap();
-        assert_eq!(unit.magnitude(), 1.0);
-    }
 
     #[test]
     fn validate_composition() {
@@ -737,6 +779,21 @@ mod tests {
 
         let unit = Unit::from_str("km3/nm2").unwrap();
         assert_eq!(unit.to_string().as_str(), "km3/nm2");
+    }
+
+    #[test]
+    fn validate_field_eq() {
+        let unit = Unit::from_str("ar").unwrap();
+        let other = Unit::from_str("ar").unwrap();
+        assert!(unit.field_eq(&other));
+
+        let unit = Unit::from_str("ar").unwrap();
+        let other = Unit::from_str("har").unwrap();
+        assert!(!unit.field_eq(&other));
+
+        let unit = Unit::from_str("100ar").unwrap();
+        let other = Unit::from_str("har").unwrap();
+        assert!(!unit.field_eq(&other));
     }
 
     #[test]
