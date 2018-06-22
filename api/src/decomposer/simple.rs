@@ -1,19 +1,19 @@
 use super::Decomposable;
 use parser::Term;
 
-pub struct SimpleDecomposer<'a>(&'a [Term]);
+pub struct Decomposer<'a>(&'a [Term]);
 
-impl<'a> SimpleDecomposer<'a> {
+impl<'a> Decomposer<'a> {
     pub fn new(terms: &'a [Term]) -> Self {
-        SimpleDecomposer(terms)
+        Decomposer(terms)
     }
 }
 
-impl<'a> Decomposable for SimpleDecomposer<'a> {
+impl<'a> Decomposable for Decomposer<'a> {
     fn numerator(&self) -> String {
         let result = self.0
             .iter()
-            .filter_map(|ref term| extract_numerator(term))
+            .filter_map(|term| extract_numerator(term))
             .fold(String::new(), |acc, term_string| {
                 super::build_string(acc, term_string)
             });
@@ -28,7 +28,7 @@ impl<'a> Decomposable for SimpleDecomposer<'a> {
     fn denominator(&self) -> String {
         self.0
             .iter()
-            .filter_map(|ref term| extract_denominator(term))
+            .filter_map(|term| extract_denominator(term))
             .fold(String::new(), |acc, term_string| {
                 super::build_string(acc, term_string)
             })
@@ -87,14 +87,14 @@ mod tests {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();
-                let decomposer = SimpleDecomposer::new(&unit.terms);
+                let decomposer = Decomposer::new(&unit.terms);
                 assert_eq!(decomposer.expression(), $expected_expression);
             }
         };
     }
 
     use super::super::Decomposable;
-    use super::SimpleDecomposer;
+    use super::Decomposer;
     use std::str::FromStr;
     use unit::Unit;
 

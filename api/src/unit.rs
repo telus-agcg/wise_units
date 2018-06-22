@@ -288,7 +288,7 @@ impl PartialOrd for Unit {
 impl Div for Unit {
     type Output = Self;
 
-    fn div(self, other: Unit) -> Self::Output {
+    fn div(self, other: Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
         Self { terms }
@@ -298,7 +298,7 @@ impl Div for Unit {
 impl<'a> Div<&'a Unit> for Unit {
     type Output = Self;
 
-    fn div(self, other: &'a Unit) -> Self::Output {
+    fn div(self, other: &'a Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
         Self { terms }
@@ -325,7 +325,7 @@ impl<'a> Div for &'a mut Unit {
     }
 }
 
-fn divide_terms(lhs: &Vec<Term>, rhs: &Vec<Term>) -> Vec<Term> {
+fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
 
     for term in lhs.iter() {
@@ -347,7 +347,7 @@ fn divide_terms(lhs: &Vec<Term>, rhs: &Vec<Term>) -> Vec<Term> {
 impl Mul for Unit {
     type Output = Self;
 
-    fn mul(self, other: Unit) -> Self::Output {
+    fn mul(self, other: Self) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
         Self { terms }

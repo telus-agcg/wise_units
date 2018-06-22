@@ -139,7 +139,7 @@ impl<'a> Convertible<&'a str> for Measurement {
     fn convert_to(&self, expression: &'a str) -> Result<Self, Error> {
         let other_unit = Unit::from_str(expression)?;
 
-        convert_measurement(&self, &other_unit)
+        convert_measurement(self, &other_unit)
     }
 }
 
@@ -149,7 +149,7 @@ impl<'a> Convertible<&'a str> for Measurement {
 ///
 impl<'a> Convertible<&'a Unit> for Measurement {
     fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Error> {
-        convert_measurement(&self, other_unit)
+        convert_measurement(self, other_unit)
     }
 }
 
@@ -172,7 +172,7 @@ fn convert_measurement(lhs: &Measurement, dest_unit: &Unit) -> Result<Measuremen
     }
 
     let new_measurement = Measurement {
-        value: lhs.converted_scalar(&dest_unit),
+        value: lhs.converted_scalar(dest_unit),
         unit: dest_unit.clone(),
     };
 
@@ -240,7 +240,7 @@ impl<'a> Add for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
     fn add(self, other: &'a Measurement) -> Self::Output {
-        add_measurements(&self, &other)
+        add_measurements(self, other)
     }
 }
 
@@ -248,7 +248,7 @@ impl<'a> Add for &'a mut Measurement {
     type Output = Result<Measurement, Error>;
 
     fn add(self, other: &'a mut Measurement) -> Self::Output {
-        add_measurements(&self, &other)
+        add_measurements(self, other)
     }
 }
 
@@ -277,7 +277,7 @@ impl<'a> Sub for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
     fn sub(self, other: &'a Measurement) -> Self::Output {
-        sub_measurements(&self, &other)
+        sub_measurements(self, other)
     }
 }
 
@@ -285,7 +285,7 @@ impl<'a> Sub for &'a mut Measurement {
     type Output = Result<Measurement, Error>;
 
     fn sub(self, other: &'a mut Measurement) -> Self::Output {
-        sub_measurements(&self, &other)
+        sub_measurements(self, other)
     }
 }
 
@@ -314,7 +314,7 @@ impl<'a> Mul for &'a Measurement {
     type Output = Measurement;
 
     fn mul(self, other: &'a Measurement) -> Self::Output {
-        mul_measurements(&self, other)
+        mul_measurements(self, other)
     }
 }
 
@@ -322,7 +322,7 @@ impl<'a> Mul for &'a mut Measurement {
     type Output = Measurement;
 
     fn mul(self, other: &'a mut Measurement) -> Self::Output {
-        mul_measurements(&self, other)
+        mul_measurements(self, other)
     }
 }
 
@@ -367,7 +367,7 @@ impl<'a> Div for &'a Measurement {
     type Output = Measurement;
 
     fn div(self, other: &'a Measurement) -> Self::Output {
-        div_measurements(&self, other)
+        div_measurements(self, other)
     }
 }
 
@@ -375,7 +375,7 @@ impl<'a> Div for &'a mut Measurement {
     type Output = Measurement;
 
     fn div(self, other: &'a mut Measurement) -> Self::Output {
-        div_measurements(&self, other)
+        div_measurements(self, other)
     }
 }
 
