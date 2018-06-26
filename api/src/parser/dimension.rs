@@ -1,3 +1,4 @@
+use std::convert::AsRef;
 use std::fmt;
 
 /// UCUM depends on dimensional analysis to reflect the meaning of units. It
@@ -18,14 +19,20 @@ pub enum Dimension {
 
 impl fmt::Display for Dimension {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.write_str(self.as_ref())
+    }
+}
+
+impl AsRef<str> for Dimension {
+    fn as_ref(&self) -> &str {
         match *self {
-            Dimension::ElectricCharge => write!(f, "Q"),
-            Dimension::Length => write!(f, "L"),
-            Dimension::LuminousIntensity => write!(f, "F"),
-            Dimension::Mass => write!(f, "M"),
-            Dimension::PlaneAngle => write!(f, "A"),
-            Dimension::Temperature => write!(f, "C"),
-            Dimension::Time => write!(f, "T"),
+            Dimension::ElectricCharge    => "Q",
+            Dimension::Length            => "L",
+            Dimension::LuminousIntensity => "F",
+            Dimension::Mass              => "M",
+            Dimension::PlaneAngle        => "A",
+            Dimension::Temperature       => "C",
+            Dimension::Time              => "T",
         }
     }
 }

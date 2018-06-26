@@ -50,10 +50,10 @@ impl Default for Composition {
 
 impl fmt::Display for Composition {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut expressions = Vec::<String>::new();
+        let mut expressions = Vec::<String>::with_capacity(self.0.len());
 
         for (key, value) in &self.0 {
-            expressions.push(format!("{}{}", key, value));
+            expressions.push(format!("{}{}", key.as_ref(), value));
         }
 
         write!(f, "{}", expressions.join("."))
