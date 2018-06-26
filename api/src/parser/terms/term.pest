@@ -1,0 +1,56 @@
+// <main-term>
+main_term = ${ soi ~ (slash ~ term | term) ~ eoi }
+
+// <term>
+term = {
+    component ~ "." ~ term | component ~ slash ~ term | component
+}
+
+slash = { "/" }
+
+// <component>
+component = { factor ~ basic_component | basic_component }
+
+basic_component = {
+    annotatable ~ annotation |
+        annotatable |
+        annotation |
+        factor |
+        "(" ~ term ~ ")"
+}
+
+// <annotation>
+annotation = { "{" ~ ('!'..'z')* ~ "}" }
+
+// <annotatable>
+annotatable = { simple_unit ~ exponent | simple_unit }
+
+// <simple-unit>
+simple_unit = {
+    "10^"
+        | "10*"
+        | the_unity
+        | symbol_char+
+}
+
+the_unity = _{ "1" ~ !factor }
+
+symbol_char = _{
+    "!" // 33
+        | '#'..'\'' // 35-39
+        | "*"       // 42
+        | ","       // 44
+        | ':'..'<'  // 58-60
+        | '>'..'z'  // 62-90
+        | "^"       // 94
+        | "|"       // 124
+        | "~"       // 126
+}
+
+exponent = { sign? ~ digits }
+factor = { '0'..'9'+ ~ !not_factor  }
+not_factor = _{ "*" | "^" }
+digits = { '0'..'9'+ }
+sign = { "-" | "+" }
+
+// vim:ft=rust

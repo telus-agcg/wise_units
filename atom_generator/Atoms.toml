@@ -1,0 +1,4504 @@
+version = '2.1'
+revision = '$Revision: 442 $'
+revision-date = '$Date: 2017-11-21 19:04:52 -0500 (Tue, 21 Nov 2017) $'
+
+[[prefix]]
+Code = 'Y'
+CODE = 'YA'
+names = ['yotta']
+printSymbol = 'Y'
+value = 1e24
+
+[[prefix]]
+Code = 'Z'
+CODE = 'ZA'
+names = ['zetta']
+printSymbol = 'Z'
+value = 1e21
+
+[[prefix]]
+Code = 'E'
+CODE = 'EX'
+names = ['exa']
+printSymbol = 'E'
+value = 1e18
+
+[[prefix]]
+Code = 'P'
+CODE = 'PT'
+names = ['peta']
+printSymbol = 'P'
+value = 1e15
+
+[[prefix]]
+Code = 'T'
+CODE = 'TR'
+names = ['tera']
+printSymbol = 'T'
+value = 1e12
+
+[[prefix]]
+Code = 'G'
+CODE = 'GA'
+names = ['giga']
+printSymbol = 'G'
+value = 1e9
+
+[[prefix]]
+Code = 'M'
+CODE = 'MA'
+names = ['mega']
+printSymbol = 'M'
+value = 1e6
+
+[[prefix]]
+Code = 'k'
+CODE = 'K'
+names = ['kilo']
+printSymbol = 'k'
+value = 1e3
+
+[[prefix]]
+Code = 'h'
+CODE = 'H'
+names = ['hecto']
+printSymbol = 'h'
+value = 1e2
+
+[[prefix]]
+Code = 'da'
+CODE = 'DA'
+names = ['deka']
+printSymbol = 'da'
+value = 1e1
+
+[[prefix]]
+Code = 'd'
+CODE = 'D'
+names = ['deci']
+printSymbol = 'd'
+value = 1e-1
+
+[[prefix]]
+Code = 'c'
+CODE = 'C'
+names = ['centi']
+printSymbol = 'c'
+value = 1e-2
+
+[[prefix]]
+Code = 'm'
+CODE = 'M'
+names = ['milli']
+printSymbol = 'm'
+value = 1e-3
+
+[[prefix]]
+Code = 'u'
+CODE = 'U'
+names = ['micro']
+printSymbol = 'μ'
+value = 1e-6
+
+[[prefix]]
+Code = 'n'
+CODE = 'N'
+names = ['nano']
+printSymbol = 'n'
+value = 1e-9
+
+[[prefix]]
+Code = 'p'
+CODE = 'P'
+names = ['pico']
+printSymbol = 'p'
+value = 1e-12
+
+[[prefix]]
+Code = 'f'
+CODE = 'F'
+names = ['femto']
+printSymbol = 'f'
+value = 1e-15
+
+[[prefix]]
+Code = 'a'
+CODE = 'A'
+names = ['atto']
+printSymbol = 'a'
+value = 1e-18
+
+[[prefix]]
+Code = 'z'
+CODE = 'ZO'
+names = ['zepto']
+printSymbol = 'z'
+value = 1e-21
+
+[[prefix]]
+Code = 'y'
+CODE = 'YO'
+names = ['yocto']
+printSymbol = 'y'
+value = 1e-24
+
+[[base-unit]]
+Code = 'm'
+CODE = 'M'
+dim = 'L'
+names = ['meter']
+printSymbol = 'm'
+property = 'length'
+
+[[base-unit]]
+Code = 's'
+CODE = 'S'
+dim = 'T'
+names = ['second']
+printSymbol = 's'
+property = 'time'
+
+[[base-unit]]
+Code = 'g'
+CODE = 'G'
+dim = 'M'
+names = ['gram']
+printSymbol = 'g'
+property = 'mass'
+
+[[base-unit]]
+Code = 'rad'
+CODE = 'RAD'
+dim = 'A'
+names = ['radian']
+printSymbol = 'rad'
+property = 'plane angle'
+
+[[base-unit]]
+Code = 'K'
+CODE = 'K'
+dim = 'C'
+names = ['kelvin']
+printSymbol = 'K'
+property = 'temperature'
+
+[[base-unit]]
+Code = 'C'
+CODE = 'C'
+dim = 'Q'
+names = ['coulomb']
+printSymbol = 'C'
+property = 'electric charge'
+
+[[base-unit]]
+Code = 'cd'
+CODE = 'CD'
+dim = 'F'
+names = ['candela']
+printSymbol = 'cd'
+property = 'luminous intensity'
+
+[[unit]]
+Code = '10*'
+CODE = '10*'
+isMetric = 'no'
+class = 'dimless'
+names = ['the number ten for arbitrary powers']
+printSymbol = '10'
+property = 'number'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 10
+
+[[unit]]
+Code = '10^'
+CODE = '10^'
+isMetric = 'no'
+class = 'dimless'
+names = ['the number ten for arbitrary powers']
+printSymbol = '10'
+property = 'number'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 10
+
+[[unit]]
+Code = '[pi]'
+CODE = '[PI]'
+isMetric = 'no'
+class = 'dimless'
+names = ['the number pi']
+printSymbol = 'π'
+property = 'number'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 3.1415926535897932384626433832795028841971693993751058209749445923
+
+[[unit]]
+Code = '%'
+CODE = '%'
+isMetric = 'no'
+class = 'dimless'
+names = ['percent']
+printSymbol = '%'
+property = 'fraction'
+
+  [unit.value]
+  Unit = '10*-2'
+  UNIT = '10*-2'
+  value = 1
+
+[[unit]]
+Code = '[ppth]'
+CODE = '[PPTH]'
+isMetric = 'no'
+class = 'dimless'
+names = ['parts per thousand']
+printSymbol = 'ppth'
+property = 'fraction'
+
+  [unit.value]
+  Unit = '10*-3'
+  UNIT = '10*-3'
+  value = 1
+
+[[unit]]
+Code = '[ppm]'
+CODE = '[PPM]'
+isMetric = 'no'
+class = 'dimless'
+names = ['parts per million']
+printSymbol = 'ppm'
+property = 'fraction'
+
+  [unit.value]
+  Unit = '10*-6'
+  UNIT = '10*-6'
+  value = 1
+
+[[unit]]
+Code = '[ppb]'
+CODE = '[PPB]'
+isMetric = 'no'
+class = 'dimless'
+names = ['parts per billion']
+printSymbol = 'ppb'
+property = 'fraction'
+
+  [unit.value]
+  Unit = '10*-9'
+  UNIT = '10*-9'
+  value = 1
+
+[[unit]]
+Code = '[pptr]'
+CODE = '[PPTR]'
+isMetric = 'no'
+class = 'dimless'
+names = ['parts per trillion']
+printSymbol = 'pptr'
+property = 'fraction'
+
+  [unit.value]
+  Unit = '10*-12'
+  UNIT = '10*-12'
+  value = 1
+
+[[unit]]
+Code = 'mol'
+CODE = 'MOL'
+isMetric = 'yes'
+class = 'si'
+names = ['mole']
+printSymbol = 'mol'
+property = 'amount of substance'
+
+  [unit.value]
+  Unit = '10*23'
+  UNIT = '10*23'
+  value = 6.0221367
+
+[[unit]]
+Code = 'sr'
+CODE = 'SR'
+isMetric = 'yes'
+class = 'si'
+names = ['steradian']
+printSymbol = 'sr'
+property = 'solid angle'
+
+  [unit.value]
+  Unit = 'rad2'
+  UNIT = 'RAD2'
+  value = 1
+
+[[unit]]
+Code = 'Hz'
+CODE = 'HZ'
+isMetric = 'yes'
+class = 'si'
+names = ['hertz']
+printSymbol = 'Hz'
+property = 'frequency'
+
+  [unit.value]
+  Unit = 's-1'
+  UNIT = 'S-1'
+  value = 1
+
+[[unit]]
+Code = 'N'
+CODE = 'N'
+isMetric = 'yes'
+class = 'si'
+names = ['newton']
+printSymbol = 'N'
+property = 'force'
+
+  [unit.value]
+  Unit = 'kg.m/s2'
+  UNIT = 'KG.M/S2'
+  value = 1
+
+[[unit]]
+Code = 'Pa'
+CODE = 'PAL'
+isMetric = 'yes'
+class = 'si'
+names = ['pascal']
+printSymbol = 'Pa'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'N/m2'
+  UNIT = 'N/M2'
+  value = 1
+
+[[unit]]
+Code = 'J'
+CODE = 'J'
+isMetric = 'yes'
+class = 'si'
+names = ['joule']
+printSymbol = 'J'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'N.m'
+  UNIT = 'N.M'
+  value = 1
+
+[[unit]]
+Code = 'W'
+CODE = 'W'
+isMetric = 'yes'
+class = 'si'
+names = ['watt']
+printSymbol = 'W'
+property = 'power'
+
+  [unit.value]
+  Unit = 'J/s'
+  UNIT = 'J/S'
+  value = 1
+
+[[unit]]
+Code = 'A'
+CODE = 'A'
+isMetric = 'yes'
+class = 'si'
+names = ['ampère']
+printSymbol = 'A'
+property = 'electric current'
+
+  [unit.value]
+  Unit = 'C/s'
+  UNIT = 'C/S'
+  value = 1
+
+[[unit]]
+Code = 'V'
+CODE = 'V'
+isMetric = 'yes'
+class = 'si'
+names = ['volt']
+printSymbol = 'V'
+property = 'electric potential'
+
+  [unit.value]
+  Unit = 'J/C'
+  UNIT = 'J/C'
+  value = 1
+
+[[unit]]
+Code = 'F'
+CODE = 'F'
+isMetric = 'yes'
+class = 'si'
+names = ['farad']
+printSymbol = 'F'
+property = 'electric capacitance'
+
+  [unit.value]
+  Unit = 'C/V'
+  UNIT = 'C/V'
+  value = 1
+
+[[unit]]
+Code = 'Ohm'
+CODE = 'OHM'
+isMetric = 'yes'
+class = 'si'
+names = ['ohm']
+printSymbol = 'Ω'
+property = 'electric resistance'
+
+  [unit.value]
+  Unit = 'V/A'
+  UNIT = 'V/A'
+  value = 1
+
+[[unit]]
+Code = 'S'
+CODE = 'SIE'
+isMetric = 'yes'
+class = 'si'
+names = ['siemens']
+printSymbol = 'S'
+property = 'electric conductance'
+
+  [unit.value]
+  Unit = 'Ohm-1'
+  UNIT = 'OHM-1'
+  value = 1
+
+[[unit]]
+Code = 'Wb'
+CODE = 'WB'
+isMetric = 'yes'
+class = 'si'
+names = ['weber']
+printSymbol = 'Wb'
+property = 'magnetic flux'
+
+  [unit.value]
+  Unit = 'V.s'
+  UNIT = 'V.S'
+  value = 1
+
+[[unit]]
+Code = 'Cel'
+CODE = 'CEL'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'si'
+names = ['degree Celsius']
+printSymbol = '°C'
+property = 'temperature'
+
+  [unit.value]
+  Unit = 'cel(1 K)'
+  UNIT = 'CEL(1 K)'
+
+  [unit.value.function]
+  name = 'Cel'
+  value = 1
+  Unit = 'K'
+
+[[unit]]
+Code = 'T'
+CODE = 'T'
+isMetric = 'yes'
+class = 'si'
+names = ['tesla']
+printSymbol = 'T'
+property = 'magnetic flux density'
+
+  [unit.value]
+  Unit = 'Wb/m2'
+  UNIT = 'WB/M2'
+  value = 1
+
+[[unit]]
+Code = 'H'
+CODE = 'H'
+isMetric = 'yes'
+class = 'si'
+names = ['henry']
+printSymbol = 'H'
+property = 'inductance'
+
+  [unit.value]
+  Unit = 'Wb/A'
+  UNIT = 'WB/A'
+  value = 1
+
+[[unit]]
+Code = 'lm'
+CODE = 'LM'
+isMetric = 'yes'
+class = 'si'
+names = ['lumen']
+printSymbol = 'lm'
+property = 'luminous flux'
+
+  [unit.value]
+  Unit = 'cd.sr'
+  UNIT = 'CD.SR'
+  value = 1
+
+[[unit]]
+Code = 'lx'
+CODE = 'LX'
+isMetric = 'yes'
+class = 'si'
+names = ['lux']
+printSymbol = 'lx'
+property = 'illuminance'
+
+  [unit.value]
+  Unit = 'lm/m2'
+  UNIT = 'LM/M2'
+  value = 1
+
+[[unit]]
+Code = 'Bq'
+CODE = 'BQ'
+isMetric = 'yes'
+class = 'si'
+names = ['becquerel']
+printSymbol = 'Bq'
+property = 'radioactivity'
+
+  [unit.value]
+  Unit = 's-1'
+  UNIT = 'S-1'
+  value = 1
+
+[[unit]]
+Code = 'Gy'
+CODE = 'GY'
+isMetric = 'yes'
+class = 'si'
+names = ['gray']
+printSymbol = 'Gy'
+property = 'energy dose'
+
+  [unit.value]
+  Unit = 'J/kg'
+  UNIT = 'J/KG'
+  value = 1
+
+[[unit]]
+Code = 'Sv'
+CODE = 'SV'
+isMetric = 'yes'
+class = 'si'
+names = ['sievert']
+printSymbol = 'Sv'
+property = 'dose equivalent'
+
+  [unit.value]
+  Unit = 'J/kg'
+  UNIT = 'J/KG'
+  value = 1
+
+[[unit]]
+Code = 'gon'
+CODE = 'GON'
+isMetric = 'no'
+class = 'iso1000'
+names = ['gon', 'grade']
+printSymbol = '□<sup>g</sup>'
+property = 'plane angle'
+
+  [unit.value]
+  Unit = 'deg'
+  UNIT = 'DEG'
+  value = 0.9
+
+[[unit]]
+Code = 'deg'
+CODE = 'DEG'
+isMetric = 'no'
+class = 'iso1000'
+names = ['degree']
+printSymbol = '°'
+property = 'plane angle'
+
+  [unit.value]
+  Unit = '[pi].rad/360'
+  UNIT = '[PI].RAD/360'
+  value = 2
+
+[[unit]]
+Code = "'"
+CODE = "'"
+isMetric = 'no'
+class = 'iso1000'
+names = ['minute']
+printSymbol = "'"
+property = 'plane angle'
+
+  [unit.value]
+  Unit = 'deg/60'
+  UNIT = 'DEG/60'
+  value = 1
+
+[[unit]]
+Code = "''"
+CODE = "''"
+isMetric = 'no'
+class = 'iso1000'
+names = ['second']
+printSymbol = "''"
+property = 'plane angle'
+
+  [unit.value]
+  Unit = "'/60"
+  UNIT = "'/60"
+  value = 1
+
+[[unit]]
+Code = 'l'
+CODE = 'L'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['liter']
+printSymbol = 'l'
+property = 'volume'
+
+  [unit.value]
+  Unit = 'dm3'
+  UNIT = 'DM3'
+  value = 1
+
+[[unit]]
+Code = 'L'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['liter']
+printSymbol = 'L'
+property = 'volume'
+
+  [unit.value]
+  Unit = 'l'
+  value = 1
+
+[[unit]]
+Code = 'ar'
+CODE = 'AR'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['are']
+printSymbol = 'a'
+property = 'area'
+
+  [unit.value]
+  Unit = 'm2'
+  UNIT = 'M2'
+  value = 100
+
+[[unit]]
+Code = 'min'
+CODE = 'MIN'
+isMetric = 'no'
+class = 'iso1000'
+names = ['minute']
+printSymbol = 'min'
+property = 'time'
+
+  [unit.value]
+  Unit = 's'
+  UNIT = 'S'
+  value = 60
+
+[[unit]]
+Code = 'h'
+CODE = 'HR'
+isMetric = 'no'
+class = 'iso1000'
+names = ['hour']
+printSymbol = 'h'
+property = 'time'
+
+  [unit.value]
+  Unit = 'min'
+  UNIT = 'MIN'
+  value = 60
+
+[[unit]]
+Code = 'd'
+CODE = 'D'
+isMetric = 'no'
+class = 'iso1000'
+names = ['day']
+printSymbol = 'd'
+property = 'time'
+
+  [unit.value]
+  Unit = 'h'
+  UNIT = 'HR'
+  value = 24
+
+[[unit]]
+Code = 'a_t'
+CODE = 'ANN_T'
+isMetric = 'no'
+class = 'iso1000'
+names = ['tropical year']
+printSymbol = 'a<sub>t</sub>'
+property = 'time'
+
+  [unit.value]
+  Unit = 'd'
+  UNIT = 'D'
+  value = 365.24219
+
+[[unit]]
+Code = 'a_j'
+CODE = 'ANN_J'
+isMetric = 'no'
+class = 'iso1000'
+names = ['mean Julian year']
+printSymbol = 'a<sub>j</sub>'
+property = 'time'
+
+  [unit.value]
+  Unit = 'd'
+  UNIT = 'D'
+  value = 365.25
+
+[[unit]]
+Code = 'a_g'
+CODE = 'ANN_G'
+isMetric = 'no'
+class = 'iso1000'
+names = ['mean Gregorian year']
+printSymbol = 'a<sub>g</sub>'
+property = 'time'
+
+  [unit.value]
+  Unit = 'd'
+  UNIT = 'D'
+  value = 365.2425
+
+[[unit]]
+Code = 'a'
+CODE = 'ANN'
+isMetric = 'no'
+class = 'iso1000'
+names = ['year']
+printSymbol = 'a'
+property = 'time'
+
+  [unit.value]
+  Unit = 'a_j'
+  UNIT = 'ANN_J'
+  value = 1
+
+[[unit]]
+Code = 'wk'
+CODE = 'WK'
+isMetric = 'no'
+class = 'iso1000'
+names = ['week']
+printSymbol = 'wk'
+property = 'time'
+
+  [unit.value]
+  Unit = 'd'
+  UNIT = 'D'
+  value = 7
+
+[[unit]]
+Code = 'mo_s'
+CODE = 'MO_S'
+isMetric = 'no'
+class = 'iso1000'
+names = ['synodal month']
+printSymbol = 'mo<sub>s</sub>'
+property = 'time'
+
+  [unit.value]
+  Unit = 'd'
+  UNIT = 'D'
+  value = 29.53059
+
+[[unit]]
+Code = 'mo_j'
+CODE = 'MO_J'
+isMetric = 'no'
+class = 'iso1000'
+names = ['mean Julian month']
+printSymbol = 'mo<sub>j</sub>'
+property = 'time'
+
+  [unit.value]
+  Unit = 'a_j/12'
+  UNIT = 'ANN_J/12'
+  value = 1
+
+[[unit]]
+Code = 'mo_g'
+CODE = 'MO_G'
+isMetric = 'no'
+class = 'iso1000'
+names = ['mean Gregorian month']
+printSymbol = 'mo<sub>g</sub>'
+property = 'time'
+
+  [unit.value]
+  Unit = 'a_g/12'
+  UNIT = 'ANN_G/12'
+  value = 1
+
+[[unit]]
+Code = 'mo'
+CODE = 'MO'
+isMetric = 'no'
+class = 'iso1000'
+names = ['month']
+printSymbol = 'mo'
+property = 'time'
+
+  [unit.value]
+  Unit = 'mo_j'
+  UNIT = 'MO_J'
+  value = 1
+
+[[unit]]
+Code = 't'
+CODE = 'TNE'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['tonne']
+printSymbol = 't'
+property = 'mass'
+
+  [unit.value]
+  Unit = 'kg'
+  UNIT = 'KG'
+  value = 1e3
+
+[[unit]]
+Code = 'bar'
+CODE = 'BAR'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['bar']
+printSymbol = 'bar'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'Pa'
+  UNIT = 'PAL'
+  value = 1e5
+
+[[unit]]
+Code = 'u'
+CODE = 'AMU'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['unified atomic mass unit']
+printSymbol = 'u'
+property = 'mass'
+
+  [unit.value]
+  Unit = 'g'
+  UNIT = 'G'
+  value = 1.6605402e-24
+
+[[unit]]
+Code = 'eV'
+CODE = 'EV'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['electronvolt']
+printSymbol = 'eV'
+property = 'energy'
+
+  [unit.value]
+  Unit = '[e].V'
+  UNIT = '[E].V'
+  value = 1
+
+[[unit]]
+Code = 'AU'
+CODE = 'ASU'
+isMetric = 'no'
+class = 'iso1000'
+names = ['astronomic unit']
+printSymbol = 'AU'
+property = 'length'
+
+  [unit.value]
+  Unit = 'Mm'
+  UNIT = 'MAM'
+  value = 149597.870691
+
+[[unit]]
+Code = 'pc'
+CODE = 'PRS'
+isMetric = 'yes'
+class = 'iso1000'
+names = ['parsec']
+printSymbol = 'pc'
+property = 'length'
+
+  [unit.value]
+  Unit = 'm'
+  UNIT = 'M'
+  value = 3.085678e16
+
+[[unit]]
+Code = '[c]'
+CODE = '[C]'
+isMetric = 'yes'
+class = 'const'
+names = ['velocity of light']
+printSymbol = '<i>c</i>'
+property = 'velocity'
+
+  [unit.value]
+  Unit = 'm/s'
+  UNIT = 'M/S'
+  value = 299792458
+
+[[unit]]
+Code = '[h]'
+CODE = '[H]'
+isMetric = 'yes'
+class = 'const'
+names = ['Planck constant']
+printSymbol = '<i>h</i>'
+property = 'action'
+
+  [unit.value]
+  Unit = 'J.s'
+  UNIT = 'J.S'
+  value = 6.6260755e-34
+
+[[unit]]
+Code = '[k]'
+CODE = '[K]'
+isMetric = 'yes'
+class = 'const'
+names = ['Boltzmann constant']
+printSymbol = '<i>k</i>'
+property = '(unclassified)'
+
+  [unit.value]
+  Unit = 'J/K'
+  UNIT = 'J/K'
+  value = 1.380658e-23
+
+[[unit]]
+Code = '[eps_0]'
+CODE = '[EPS_0]'
+isMetric = 'yes'
+class = 'const'
+names = ['permittivity of vacuum']
+printSymbol = '<i>ε<sub><r>0</r></sub></i>'
+property = 'electric permittivity'
+
+  [unit.value]
+  Unit = 'F/m'
+  UNIT = 'F/M'
+  value = 8.854187817e-12
+
+[[unit]]
+Code = '[mu_0]'
+CODE = '[MU_0]'
+isMetric = 'yes'
+class = 'const'
+names = ['permeability of vacuum']
+printSymbol = '<i>μ<sub><r>0</r></sub></i>'
+property = 'magnetic permeability'
+
+  [unit.value]
+  Unit = '4.[pi].10*-7.N/A2'
+  UNIT = '4.[PI].10*-7.N/A2'
+  value = 1
+
+[[unit]]
+Code = '[e]'
+CODE = '[E]'
+isMetric = 'yes'
+class = 'const'
+names = ['elementary charge']
+printSymbol = '<i>e</i>'
+property = 'electric charge'
+
+  [unit.value]
+  Unit = 'C'
+  UNIT = 'C'
+  value = 1.60217733e-19
+
+[[unit]]
+Code = '[m_e]'
+CODE = '[M_E]'
+isMetric = 'yes'
+class = 'const'
+names = ['electron mass']
+printSymbol = '<i>m<sub><r>e</r></sub></i>'
+property = 'mass'
+
+  [unit.value]
+  Unit = 'g'
+  UNIT = 'g'
+  value = 9.1093897e-28
+
+[[unit]]
+Code = '[m_p]'
+CODE = '[M_P]'
+isMetric = 'yes'
+class = 'const'
+names = ['proton mass']
+printSymbol = '<i>m<sub><r>p</r></sub></i>'
+property = 'mass'
+
+  [unit.value]
+  Unit = 'g'
+  UNIT = 'g'
+  value = 1.6726231e-24
+
+[[unit]]
+Code = '[G]'
+CODE = '[GC]'
+isMetric = 'yes'
+class = 'const'
+names = ['Newtonian constant of gravitation']
+printSymbol = '<i>G</i>'
+property = '(unclassified)'
+
+  [unit.value]
+  Unit = 'm3.kg-1.s-2'
+  UNIT = 'M3.KG-1.S-2'
+  value = 6.67259e-11
+
+[[unit]]
+Code = '[g]'
+CODE = '[G]'
+isMetric = 'yes'
+class = 'const'
+names = ['standard acceleration of free fall']
+printSymbol = '<i>g<sub>n</sub></i>'
+property = 'acceleration'
+
+  [unit.value]
+  Unit = 'm/s2'
+  UNIT = 'M/S2'
+  value = 980665e-5
+
+[[unit]]
+Code = 'atm'
+CODE = 'ATM'
+isMetric = 'no'
+class = 'const'
+names = ['standard atmosphere']
+printSymbol = 'atm'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'Pa'
+  UNIT = 'PAL'
+  value = 101325
+
+[[unit]]
+Code = '[ly]'
+CODE = '[LY]'
+isMetric = 'yes'
+class = 'const'
+names = ['light-year']
+printSymbol = 'l.y.'
+property = 'length'
+
+  [unit.value]
+  Unit = '[c].a_j'
+  UNIT = '[C].ANN_J'
+  value = 1
+
+[[unit]]
+Code = 'gf'
+CODE = 'GF'
+isMetric = 'yes'
+class = 'const'
+names = ['gram-force']
+printSymbol = 'gf'
+property = 'force'
+
+  [unit.value]
+  Unit = 'g.[g]'
+  UNIT = 'G.[G]'
+  value = 1
+
+[[unit]]
+Code = '[lbf_av]'
+CODE = '[LBF_AV]'
+isMetric = 'no'
+class = 'const'
+names = ['pound force']
+printSymbol = 'lbf'
+property = 'force'
+
+  [unit.value]
+  Unit = '[lb_av].[g]'
+  UNIT = '[LB_AV].[G]'
+  value = 1
+
+[[unit]]
+Code = 'Ky'
+CODE = 'KY'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Kayser']
+printSymbol = 'K'
+property = 'lineic number'
+
+  [unit.value]
+  Unit = 'cm-1'
+  UNIT = 'CM-1'
+  value = 1
+
+[[unit]]
+Code = 'Gal'
+CODE = 'GL'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Gal']
+printSymbol = 'Gal'
+property = 'acceleration'
+
+  [unit.value]
+  Unit = 'cm/s2'
+  UNIT = 'CM/S2'
+  value = 1
+
+[[unit]]
+Code = 'dyn'
+CODE = 'DYN'
+isMetric = 'yes'
+class = 'cgs'
+names = ['dyne']
+printSymbol = 'dyn'
+property = 'force'
+
+  [unit.value]
+  Unit = 'g.cm/s2'
+  UNIT = 'G.CM/S2'
+  value = 1
+
+[[unit]]
+Code = 'erg'
+CODE = 'ERG'
+isMetric = 'yes'
+class = 'cgs'
+names = ['erg']
+printSymbol = 'erg'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'dyn.cm'
+  UNIT = 'DYN.CM'
+  value = 1
+
+[[unit]]
+Code = 'P'
+CODE = 'P'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Poise']
+printSymbol = 'P'
+property = 'dynamic viscosity'
+
+  [unit.value]
+  Unit = 'dyn.s/cm2'
+  UNIT = 'DYN.S/CM2'
+  value = 1
+
+[[unit]]
+Code = 'Bi'
+CODE = 'BI'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Biot']
+printSymbol = 'Bi'
+property = 'electric current'
+
+  [unit.value]
+  Unit = 'A'
+  UNIT = 'A'
+  value = 10
+
+[[unit]]
+Code = 'St'
+CODE = 'ST'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Stokes']
+printSymbol = 'St'
+property = 'kinematic viscosity'
+
+  [unit.value]
+  Unit = 'cm2/s'
+  UNIT = 'CM2/S'
+  value = 1
+
+[[unit]]
+Code = 'Mx'
+CODE = 'MX'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Maxwell']
+printSymbol = 'Mx'
+property = 'flux of magnetic induction'
+
+  [unit.value]
+  Unit = 'Wb'
+  UNIT = 'WB'
+  value = 1e-8
+
+[[unit]]
+Code = 'G'
+CODE = 'GS'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Gauss']
+printSymbol = 'Gs'
+property = 'magnetic flux density'
+
+  [unit.value]
+  Unit = 'T'
+  UNIT = 'T'
+  value = 1e-4
+
+[[unit]]
+Code = 'Oe'
+CODE = 'OE'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Oersted']
+printSymbol = 'Oe'
+property = 'magnetic field intensity'
+
+  [unit.value]
+  Unit = '/[pi].A/m'
+  UNIT = '/[PI].A/M'
+  value = 250
+
+[[unit]]
+Code = 'Gb'
+CODE = 'GB'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Gilbert']
+printSymbol = 'Gb'
+property = 'magnetic tension'
+
+  [unit.value]
+  Unit = 'Oe.cm'
+  UNIT = 'OE.CM'
+  value = 1
+
+[[unit]]
+Code = 'sb'
+CODE = 'SB'
+isMetric = 'yes'
+class = 'cgs'
+names = ['stilb']
+printSymbol = 'sb'
+property = 'lum. intensity density'
+
+  [unit.value]
+  Unit = 'cd/cm2'
+  UNIT = 'CD/CM2'
+  value = 1
+
+[[unit]]
+Code = 'Lmb'
+CODE = 'LMB'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Lambert']
+printSymbol = 'L'
+property = 'brightness'
+
+  [unit.value]
+  Unit = 'cd/cm2/[pi]'
+  UNIT = 'CD/CM2/[PI]'
+  value = 1
+
+[[unit]]
+Code = 'ph'
+CODE = 'PHT'
+isMetric = 'yes'
+class = 'cgs'
+names = ['phot']
+printSymbol = 'ph'
+property = 'illuminance'
+
+  [unit.value]
+  Unit = 'lx'
+  UNIT = 'LX'
+  value = 1e-4
+
+[[unit]]
+Code = 'Ci'
+CODE = 'CI'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Curie']
+printSymbol = 'Ci'
+property = 'radioactivity'
+
+  [unit.value]
+  Unit = 'Bq'
+  UNIT = 'BQ'
+  value = 37e9
+
+[[unit]]
+Code = 'R'
+CODE = 'ROE'
+isMetric = 'yes'
+class = 'cgs'
+names = ['Roentgen']
+printSymbol = 'R'
+property = 'ion dose'
+
+  [unit.value]
+  Unit = 'C/kg'
+  UNIT = 'C/KG'
+  value = 2.58e-4
+
+[[unit]]
+Code = 'RAD'
+CODE = '[RAD]'
+isMetric = 'yes'
+class = 'cgs'
+names = ['radiation absorbed dose']
+printSymbol = 'RAD'
+property = 'energy dose'
+
+  [unit.value]
+  Unit = 'erg/g'
+  UNIT = 'ERG/G'
+  value = 100
+
+[[unit]]
+Code = 'REM'
+CODE = '[REM]'
+isMetric = 'yes'
+class = 'cgs'
+names = ['radiation equivalent man']
+printSymbol = 'REM'
+property = 'dose equivalent'
+
+  [unit.value]
+  Unit = 'RAD'
+  UNIT = '[RAD]'
+  value = 1
+
+[[unit]]
+Code = '[in_i]'
+CODE = '[IN_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['inch']
+printSymbol = 'in'
+property = 'length'
+
+  [unit.value]
+  Unit = 'cm'
+  UNIT = 'CM'
+  value = 254e-2
+
+[[unit]]
+Code = '[ft_i]'
+CODE = '[FT_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['foot']
+printSymbol = 'ft'
+property = 'length'
+
+  [unit.value]
+  Unit = '[in_i]'
+  UNIT = '[IN_I]'
+  value = 12
+
+[[unit]]
+Code = '[yd_i]'
+CODE = '[YD_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['yard']
+printSymbol = 'yd'
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_i]'
+  UNIT = '[FT_I]'
+  value = 3
+
+[[unit]]
+Code = '[mi_i]'
+CODE = '[MI_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['mile']
+printSymbol = 'mi'
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_i]'
+  UNIT = '[FT_I]'
+  value = 5280
+
+[[unit]]
+Code = '[fth_i]'
+CODE = '[FTH_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['fathom']
+printSymbol = 'fth'
+property = 'depth of water'
+
+  [unit.value]
+  Unit = '[ft_i]'
+  UNIT = '[FT_I]'
+  value = 6
+
+[[unit]]
+Code = '[nmi_i]'
+CODE = '[NMI_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['nautical mile']
+printSymbol = 'n.mi'
+property = 'length'
+
+  [unit.value]
+  Unit = 'm'
+  UNIT = 'M'
+  value = 1852
+
+[[unit]]
+Code = '[kn_i]'
+CODE = '[KN_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['knot']
+printSymbol = 'knot'
+property = 'velocity'
+
+  [unit.value]
+  Unit = '[nmi_i]/h'
+  UNIT = '[NMI_I]/H'
+  value = 1
+
+[[unit]]
+Code = '[sin_i]'
+CODE = '[SIN_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['square inch']
+property = 'area'
+
+  [unit.value]
+  Unit = '[in_i]2'
+  UNIT = '[IN_I]2'
+  value = 1
+
+[[unit]]
+Code = '[sft_i]'
+CODE = '[SFT_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['square foot']
+property = 'area'
+
+  [unit.value]
+  Unit = '[ft_i]2'
+  UNIT = '[FT_I]2'
+  value = 1
+
+[[unit]]
+Code = '[syd_i]'
+CODE = '[SYD_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['square yard']
+property = 'area'
+
+  [unit.value]
+  Unit = '[yd_i]2'
+  UNIT = '[YD_I]2'
+  value = 1
+
+[[unit]]
+Code = '[cin_i]'
+CODE = '[CIN_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['cubic inch']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[in_i]3'
+  UNIT = '[IN_I]3'
+  value = 1
+
+[[unit]]
+Code = '[cft_i]'
+CODE = '[CFT_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['cubic foot']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[ft_i]3'
+  UNIT = '[FT_I]3'
+  value = 1
+
+[[unit]]
+Code = '[cyd_i]'
+CODE = '[CYD_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['cubic yard']
+printSymbol = 'cu.yd'
+property = 'volume'
+
+  [unit.value]
+  Unit = '[yd_i]3'
+  UNIT = '[YD_I]3'
+  value = 1
+
+[[unit]]
+Code = '[bf_i]'
+CODE = '[BF_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['board foot']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[in_i]3'
+  UNIT = '[IN_I]3'
+  value = 144
+
+[[unit]]
+Code = '[cr_i]'
+CODE = '[CR_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['cord']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[ft_i]3'
+  UNIT = '[FT_I]3'
+  value = 128
+
+[[unit]]
+Code = '[mil_i]'
+CODE = '[MIL_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['mil']
+printSymbol = 'mil'
+property = 'length'
+
+  [unit.value]
+  Unit = '[in_i]'
+  UNIT = '[IN_I]'
+  value = 1e-3
+
+[[unit]]
+Code = '[cml_i]'
+CODE = '[CML_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['circular mil']
+printSymbol = 'circ.mil'
+property = 'area'
+
+  [unit.value]
+  Unit = '[pi]/4.[mil_i]2'
+  UNIT = '[PI]/4.[MIL_I]2'
+  value = 1
+
+[[unit]]
+Code = '[hd_i]'
+CODE = '[HD_I]'
+isMetric = 'no'
+class = 'intcust'
+names = ['hand']
+printSymbol = 'hd'
+property = 'height of horses'
+
+  [unit.value]
+  Unit = '[in_i]'
+  UNIT = '[IN_I]'
+  value = 4
+
+[[unit]]
+Code = '[ft_us]'
+CODE = '[FT_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['foot']
+printSymbol = 'ft<sub>us</sub>'
+property = 'length'
+
+  [unit.value]
+  Unit = 'm/3937'
+  UNIT = 'M/3937'
+  value = 1200
+
+[[unit]]
+Code = '[yd_us]'
+CODE = '[YD_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['yard']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_us]'
+  UNIT = '[FT_US]'
+  value = 3
+
+[[unit]]
+Code = '[in_us]'
+CODE = '[IN_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['inch']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_us]/12'
+  UNIT = '[FT_US]/12'
+  value = 1
+
+[[unit]]
+Code = '[rd_us]'
+CODE = '[RD_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['rod']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_us]'
+  UNIT = '[FT_US]'
+  value = 16.5
+
+[[unit]]
+Code = '[ch_us]'
+CODE = '[CH_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ["Gunter's chain", "Surveyor's chain"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[rd_us]'
+  UNIT = '[RD_US]'
+  value = 4
+
+[[unit]]
+Code = '[lk_us]'
+CODE = '[LK_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ["link for Gunter's chain"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[ch_us]/100'
+  UNIT = '[CH_US]/100'
+  value = 1
+
+[[unit]]
+Code = '[rch_us]'
+CODE = '[RCH_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ["Ramden's chain", "Engineer's chain"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_us]'
+  UNIT = '[FT_US]'
+  value = 100
+
+[[unit]]
+Code = '[rlk_us]'
+CODE = '[RLK_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ["link for Ramden's chain"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[rch_us]/100'
+  UNIT = '[RCH_US]/100'
+  value = 1
+
+[[unit]]
+Code = '[fth_us]'
+CODE = '[FTH_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['fathom']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_us]'
+  UNIT = '[FT_US]'
+  value = 6
+
+[[unit]]
+Code = '[fur_us]'
+CODE = '[FUR_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['furlong']
+property = 'length'
+
+  [unit.value]
+  Unit = '[rd_us]'
+  UNIT = '[RD_US]'
+  value = 40
+
+[[unit]]
+Code = '[mi_us]'
+CODE = '[MI_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['mile']
+property = 'length'
+
+  [unit.value]
+  Unit = '[fur_us]'
+  UNIT = '[FUR_US]'
+  value = 8
+
+[[unit]]
+Code = '[acr_us]'
+CODE = '[ACR_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['acre']
+property = 'area'
+
+  [unit.value]
+  Unit = '[rd_us]2'
+  UNIT = '[RD_US]2'
+  value = 160
+
+[[unit]]
+Code = '[srd_us]'
+CODE = '[SRD_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['square rod']
+property = 'area'
+
+  [unit.value]
+  Unit = '[rd_us]2'
+  UNIT = '[RD_US]2'
+  value = 1
+
+[[unit]]
+Code = '[smi_us]'
+CODE = '[SMI_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['square mile']
+property = 'area'
+
+  [unit.value]
+  Unit = '[mi_us]2'
+  UNIT = '[MI_US]2'
+  value = 1
+
+[[unit]]
+Code = '[sct]'
+CODE = '[SCT]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['section']
+property = 'area'
+
+  [unit.value]
+  Unit = '[mi_us]2'
+  UNIT = '[MI_US]2'
+  value = 1
+
+[[unit]]
+Code = '[twp]'
+CODE = '[TWP]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['township']
+property = 'area'
+
+  [unit.value]
+  Unit = '[sct]'
+  UNIT = '[SCT]'
+  value = 36
+
+[[unit]]
+Code = '[mil_us]'
+CODE = '[MIL_US]'
+isMetric = 'no'
+class = 'us-lengths'
+names = ['mil']
+property = 'length'
+
+  [unit.value]
+  Unit = '[in_us]'
+  UNIT = '[IN_US]'
+  value = 1e-3
+
+[[unit]]
+Code = '[in_br]'
+CODE = '[IN_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['inch']
+property = 'length'
+
+  [unit.value]
+  Unit = 'cm'
+  UNIT = 'CM'
+  value = 2.539998
+
+[[unit]]
+Code = '[ft_br]'
+CODE = '[FT_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['foot']
+property = 'length'
+
+  [unit.value]
+  Unit = '[in_br]'
+  UNIT = '[IN_BR]'
+  value = 12
+
+[[unit]]
+Code = '[rd_br]'
+CODE = '[RD_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['rod']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_br]'
+  UNIT = '[FT_BR]'
+  value = 16.5
+
+[[unit]]
+Code = '[ch_br]'
+CODE = '[CH_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ["Gunter's chain"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[rd_br]'
+  UNIT = '[RD_BR]'
+  value = 4
+
+[[unit]]
+Code = '[lk_br]'
+CODE = '[LK_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ["link for Gunter's chain"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[ch_br]/100'
+  UNIT = '[CH_BR]/100'
+  value = 1
+
+[[unit]]
+Code = '[fth_br]'
+CODE = '[FTH_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['fathom']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_br]'
+  UNIT = '[FT_BR]'
+  value = 6
+
+[[unit]]
+Code = '[pc_br]'
+CODE = '[PC_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['pace']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_br]'
+  UNIT = '[FT_BR]'
+  value = 2.5
+
+[[unit]]
+Code = '[yd_br]'
+CODE = '[YD_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['yard']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_br]'
+  UNIT = '[FT_BR]'
+  value = 3
+
+[[unit]]
+Code = '[mi_br]'
+CODE = '[MI_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['mile']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_br]'
+  UNIT = '[FT_BR]'
+  value = 5280
+
+[[unit]]
+Code = '[nmi_br]'
+CODE = '[NMI_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['nautical mile']
+property = 'length'
+
+  [unit.value]
+  Unit = '[ft_br]'
+  UNIT = '[FT_BR]'
+  value = 6080
+
+[[unit]]
+Code = '[kn_br]'
+CODE = '[KN_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['knot']
+property = 'velocity'
+
+  [unit.value]
+  Unit = '[nmi_br]/h'
+  UNIT = '[NMI_BR]/H'
+  value = 1
+
+[[unit]]
+Code = '[acr_br]'
+CODE = '[ACR_BR]'
+isMetric = 'no'
+class = 'brit-length'
+names = ['acre']
+property = 'area'
+
+  [unit.value]
+  Unit = '[yd_br]2'
+  UNIT = '[YD_BR]2'
+  value = 4840
+
+[[unit]]
+Code = '[gal_us]'
+CODE = '[GAL_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ["Queen Anne's wine gallon"]
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[in_i]3'
+  UNIT = '[IN_I]3'
+  value = 231
+
+[[unit]]
+Code = '[bbl_us]'
+CODE = '[BBL_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['barrel']
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[gal_us]'
+  UNIT = '[GAL_US]'
+  value = 42
+
+[[unit]]
+Code = '[qt_us]'
+CODE = '[QT_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['quart']
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[gal_us]/4'
+  UNIT = '[GAL_US]/4'
+  value = 1
+
+[[unit]]
+Code = '[pt_us]'
+CODE = '[PT_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['pint']
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[qt_us]/2'
+  UNIT = '[QT_US]/2'
+  value = 1
+
+[[unit]]
+Code = '[gil_us]'
+CODE = '[GIL_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['gill']
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[pt_us]/4'
+  UNIT = '[PT_US]/4'
+  value = 1
+
+[[unit]]
+Code = '[foz_us]'
+CODE = '[FOZ_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['fluid ounce']
+printSymbol = 'oz fl'
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[gil_us]/4'
+  UNIT = '[GIL_US]/4'
+  value = 1
+
+[[unit]]
+Code = '[fdr_us]'
+CODE = '[FDR_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['fluid dram']
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[foz_us]/8'
+  UNIT = '[FOZ_US]/8'
+  value = 1
+
+[[unit]]
+Code = '[min_us]'
+CODE = '[MIN_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['minim']
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[fdr_us]/60'
+  UNIT = '[FDR_US]/60'
+  value = 1
+
+[[unit]]
+Code = '[crd_us]'
+CODE = '[CRD_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['cord']
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = '[ft_i]3'
+  UNIT = '[FT_I]3'
+  value = 128
+
+[[unit]]
+Code = '[bu_us]'
+CODE = '[BU_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['bushel']
+property = 'dry volume'
+
+  [unit.value]
+  Unit = '[in_i]3'
+  UNIT = '[IN_I]3'
+  value = 2150.42
+
+[[unit]]
+Code = '[gal_wi]'
+CODE = '[GAL_WI]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['historical winchester gallon']
+property = 'dry volume'
+
+  [unit.value]
+  Unit = '[bu_us]/8'
+  UNIT = '[BU_US]/8'
+  value = 1
+
+[[unit]]
+Code = '[pk_us]'
+CODE = '[PK_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['peck']
+property = 'dry volume'
+
+  [unit.value]
+  Unit = '[bu_us]/4'
+  UNIT = '[BU_US]/4'
+  value = 1
+
+[[unit]]
+Code = '[dqt_us]'
+CODE = '[DQT_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['dry quart']
+property = 'dry volume'
+
+  [unit.value]
+  Unit = '[pk_us]/8'
+  UNIT = '[PK_US]/8'
+  value = 1
+
+[[unit]]
+Code = '[dpt_us]'
+CODE = '[DPT_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['dry pint']
+property = 'dry volume'
+
+  [unit.value]
+  Unit = '[dqt_us]/2'
+  UNIT = '[DQT_US]/2'
+  value = 1
+
+[[unit]]
+Code = '[tbs_us]'
+CODE = '[TBS_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['tablespoon']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[foz_us]/2'
+  UNIT = '[FOZ_US]/2'
+  value = 1
+
+[[unit]]
+Code = '[tsp_us]'
+CODE = '[TSP_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['teaspoon']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[tbs_us]/3'
+  UNIT = '[TBS_US]/3'
+  value = 1
+
+[[unit]]
+Code = '[cup_us]'
+CODE = '[CUP_US]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['cup']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[tbs_us]'
+  UNIT = '[TBS_US]'
+  value = 16
+
+[[unit]]
+Code = '[foz_m]'
+CODE = '[FOZ_M]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['metric fluid ounce']
+printSymbol = 'oz fl'
+property = 'fluid volume'
+
+  [unit.value]
+  Unit = 'mL'
+  UNIT = 'ML'
+  value = 30
+
+[[unit]]
+Code = '[cup_m]'
+CODE = '[CUP_M]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['metric cup']
+property = 'volume'
+
+  [unit.value]
+  Unit = 'mL'
+  UNIT = 'ML'
+  value = 240
+
+[[unit]]
+Code = '[tsp_m]'
+CODE = '[TSP_M]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['metric teaspoon']
+property = 'volume'
+
+  [unit.value]
+  Unit = 'mL'
+  UNIT = 'mL'
+  value = 5
+
+[[unit]]
+Code = '[tbs_m]'
+CODE = '[TBS_M]'
+isMetric = 'no'
+class = 'us-volumes'
+names = ['metric tablespoon']
+property = 'volume'
+
+  [unit.value]
+  Unit = 'mL'
+  UNIT = 'mL'
+  value = 15
+
+[[unit]]
+Code = '[gal_br]'
+CODE = '[GAL_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['gallon']
+property = 'volume'
+
+  [unit.value]
+  Unit = 'l'
+  UNIT = 'L'
+  value = 4.54609
+
+[[unit]]
+Code = '[pk_br]'
+CODE = '[PK_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['peck']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[gal_br]'
+  UNIT = '[GAL_BR]'
+  value = 2
+
+[[unit]]
+Code = '[bu_br]'
+CODE = '[BU_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['bushel']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[pk_br]'
+  UNIT = '[PK_BR]'
+  value = 4
+
+[[unit]]
+Code = '[qt_br]'
+CODE = '[QT_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['quart']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[gal_br]/4'
+  UNIT = '[GAL_BR]/4'
+  value = 1
+
+[[unit]]
+Code = '[pt_br]'
+CODE = '[PT_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['pint']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[qt_br]/2'
+  UNIT = '[QT_BR]/2'
+  value = 1
+
+[[unit]]
+Code = '[gil_br]'
+CODE = '[GIL_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['gill']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[pt_br]/4'
+  UNIT = '[PT_BR]/4'
+  value = 1
+
+[[unit]]
+Code = '[foz_br]'
+CODE = '[FOZ_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['fluid ounce']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[gil_br]/5'
+  UNIT = '[GIL_BR]/5'
+  value = 1
+
+[[unit]]
+Code = '[fdr_br]'
+CODE = '[FDR_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['fluid dram']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[foz_br]/8'
+  UNIT = '[FOZ_BR]/8'
+  value = 1
+
+[[unit]]
+Code = '[min_br]'
+CODE = '[MIN_BR]'
+isMetric = 'no'
+class = 'brit-volumes'
+names = ['minim']
+property = 'volume'
+
+  [unit.value]
+  Unit = '[fdr_br]/60'
+  UNIT = '[FDR_BR]/60'
+  value = 1
+
+[[unit]]
+Code = '[gr]'
+CODE = '[GR]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['grain']
+property = 'mass'
+
+  [unit.value]
+  Unit = 'mg'
+  UNIT = 'MG'
+  value = 64.79891
+
+[[unit]]
+Code = '[lb_av]'
+CODE = '[LB_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['pound']
+printSymbol = 'lb'
+property = 'mass'
+
+  [unit.value]
+  Unit = '[gr]'
+  UNIT = '[GR]'
+  value = 7000
+
+[[unit]]
+Code = '[oz_av]'
+CODE = '[OZ_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['ounce']
+printSymbol = 'oz'
+property = 'mass'
+
+  [unit.value]
+  Unit = '[lb_av]/16'
+  UNIT = '[LB_AV]/16'
+  value = 1
+
+[[unit]]
+Code = '[dr_av]'
+CODE = '[DR_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['dram']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[oz_av]/16'
+  UNIT = '[OZ_AV]/16'
+  value = 1
+
+[[unit]]
+Code = '[scwt_av]'
+CODE = '[SCWT_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['short hundredweight', 'U.S. hundredweight']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[lb_av]'
+  UNIT = '[LB_AV]'
+  value = 100
+
+[[unit]]
+Code = '[lcwt_av]'
+CODE = '[LCWT_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['long hunderdweight', 'British hundredweight']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[lb_av]'
+  UNIT = '[LB_AV]'
+  value = 112
+
+[[unit]]
+Code = '[ston_av]'
+CODE = '[STON_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['short ton', 'U.S. ton']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[scwt_av]'
+  UNIT = '[SCWT_AV]'
+  value = 20
+
+[[unit]]
+Code = '[lton_av]'
+CODE = '[LTON_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['long ton', 'British ton']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[lcwt_av]'
+  UNIT = '[LCWT_AV]'
+  value = 20
+
+[[unit]]
+Code = '[stone_av]'
+CODE = '[STONE_AV]'
+isMetric = 'no'
+class = 'avoirdupois'
+names = ['stone', 'British stone']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[lb_av]'
+  UNIT = '[LB_AV]'
+  value = 14
+
+[[unit]]
+Code = '[pwt_tr]'
+CODE = '[PWT_TR]'
+isMetric = 'no'
+class = 'troy'
+names = ['pennyweight']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[gr]'
+  UNIT = '[GR]'
+  value = 24
+
+[[unit]]
+Code = '[oz_tr]'
+CODE = '[OZ_TR]'
+isMetric = 'no'
+class = 'troy'
+names = ['ounce']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[pwt_tr]'
+  UNIT = '[PWT_TR]'
+  value = 20
+
+[[unit]]
+Code = '[lb_tr]'
+CODE = '[LB_TR]'
+isMetric = 'no'
+class = 'troy'
+names = ['pound']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[oz_tr]'
+  UNIT = '[OZ_TR]'
+  value = 12
+
+[[unit]]
+Code = '[sc_ap]'
+CODE = '[SC_AP]'
+isMetric = 'no'
+class = 'apoth'
+names = ['scruple']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[gr]'
+  UNIT = '[GR]'
+  value = 20
+
+[[unit]]
+Code = '[dr_ap]'
+CODE = '[DR_AP]'
+isMetric = 'no'
+class = 'apoth'
+names = ['dram', 'drachm']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[sc_ap]'
+  UNIT = '[SC_AP]'
+  value = 3
+
+[[unit]]
+Code = '[oz_ap]'
+CODE = '[OZ_AP]'
+isMetric = 'no'
+class = 'apoth'
+names = ['ounce']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[dr_ap]'
+  UNIT = '[DR_AP]'
+  value = 8
+
+[[unit]]
+Code = '[lb_ap]'
+CODE = '[LB_AP]'
+isMetric = 'no'
+class = 'apoth'
+names = ['pound']
+property = 'mass'
+
+  [unit.value]
+  Unit = '[oz_ap]'
+  UNIT = '[OZ_AP]'
+  value = 12
+
+[[unit]]
+Code = '[oz_m]'
+CODE = '[OZ_M]'
+isMetric = 'no'
+class = 'apoth'
+names = ['metric ounce']
+property = 'mass'
+
+  [unit.value]
+  Unit = 'g'
+  UNIT = 'g'
+  value = 28
+
+[[unit]]
+Code = '[lne]'
+CODE = '[LNE]'
+isMetric = 'no'
+class = 'typeset'
+names = ['line']
+property = 'length'
+
+  [unit.value]
+  Unit = '[in_i]/12'
+  UNIT = '[IN_I]/12'
+  value = 1
+
+[[unit]]
+Code = '[pnt]'
+CODE = '[PNT]'
+isMetric = 'no'
+class = 'typeset'
+names = ['point']
+property = 'length'
+
+  [unit.value]
+  Unit = '[lne]/6'
+  UNIT = '[LNE]/6'
+  value = 1
+
+[[unit]]
+Code = '[pca]'
+CODE = '[PCA]'
+isMetric = 'no'
+class = 'typeset'
+names = ['pica']
+property = 'length'
+
+  [unit.value]
+  Unit = '[pnt]'
+  UNIT = '[PNT]'
+  value = 12
+
+[[unit]]
+Code = '[pnt_pr]'
+CODE = '[PNT_PR]'
+isMetric = 'no'
+class = 'typeset'
+names = ["Printer's point"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[in_i]'
+  UNIT = '[IN_I]'
+  value = 0.013837
+
+[[unit]]
+Code = '[pca_pr]'
+CODE = '[PCA_PR]'
+isMetric = 'no'
+class = 'typeset'
+names = ["Printer's pica"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[pnt_pr]'
+  UNIT = '[PNT_PR]'
+  value = 12
+
+[[unit]]
+Code = '[pied]'
+CODE = '[PIED]'
+isMetric = 'no'
+class = 'typeset'
+names = ['pied', 'French foot']
+property = 'length'
+
+  [unit.value]
+  Unit = 'cm'
+  UNIT = 'CM'
+  value = 32.48
+
+[[unit]]
+Code = '[pouce]'
+CODE = '[POUCE]'
+isMetric = 'no'
+class = 'typeset'
+names = ['pouce', 'French inch']
+property = 'length'
+
+  [unit.value]
+  Unit = '[pied]/12'
+  UNIT = '[PIED]/12'
+  value = 1
+
+[[unit]]
+Code = '[ligne]'
+CODE = '[LIGNE]'
+isMetric = 'no'
+class = 'typeset'
+names = ['ligne', 'French line']
+property = 'length'
+
+  [unit.value]
+  Unit = '[pouce]/12'
+  UNIT = '[POUCE]/12'
+  value = 1
+
+[[unit]]
+Code = '[didot]'
+CODE = '[DIDOT]'
+isMetric = 'no'
+class = 'typeset'
+names = ['didot', "Didot's point"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[ligne]/6'
+  UNIT = '[LIGNE]/6'
+  value = 1
+
+[[unit]]
+Code = '[cicero]'
+CODE = '[CICERO]'
+isMetric = 'no'
+class = 'typeset'
+names = ['cicero', "Didot's pica"]
+property = 'length'
+
+  [unit.value]
+  Unit = '[didot]'
+  UNIT = '[DIDOT]'
+  value = 12
+
+[[unit]]
+Code = '[degF]'
+CODE = '[DEGF]'
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'heat'
+names = ['degree Fahrenheit']
+printSymbol = '°F'
+property = 'temperature'
+
+  [unit.value]
+  Unit = 'degf(5 K/9)'
+  UNIT = 'DEGF(5 K/9)'
+
+  [unit.value.function]
+  name = 'degF'
+  value = 5
+  Unit = 'K/9'
+
+[[unit]]
+Code = '[degR]'
+CODE = '[degR]'
+isMetric = 'no'
+class = 'heat'
+names = ['degree Rankine']
+printSymbol = '°R'
+property = 'temperature'
+
+  [unit.value]
+  value = 5
+  Unit = 'K/9'
+  UNIT = 'K/9'
+
+[[unit]]
+Code = '[degRe]'
+CODE = '[degRe]'
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'heat'
+names = ['degree Réaumur']
+printSymbol = '°Ré'
+property = 'temperature'
+
+  [unit.value]
+  Unit = 'degre(5 K/4)'
+  UNIT = 'DEGRE(5 K/4)'
+
+  [unit.value.function]
+  name = 'degRe'
+  value = 5
+  Unit = 'K/4'
+
+[[unit]]
+Code = 'cal_[15]'
+CODE = 'CAL_[15]'
+isMetric = 'yes'
+class = 'heat'
+names = ['calorie at 15 °C']
+printSymbol = 'cal<sub>15°C</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'J'
+  UNIT = 'J'
+  value = 4.18580
+
+[[unit]]
+Code = 'cal_[20]'
+CODE = 'CAL_[20]'
+isMetric = 'yes'
+class = 'heat'
+names = ['calorie at 20 °C']
+printSymbol = 'cal<sub>20°C</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'J'
+  UNIT = 'J'
+  value = 4.18190
+
+[[unit]]
+Code = 'cal_m'
+CODE = 'CAL_M'
+isMetric = 'yes'
+class = 'heat'
+names = ['mean calorie']
+printSymbol = 'cal<sub>m</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'J'
+  UNIT = 'J'
+  value = 4.19002
+
+[[unit]]
+Code = 'cal_IT'
+CODE = 'CAL_IT'
+isMetric = 'yes'
+class = 'heat'
+names = ['international table calorie']
+printSymbol = 'cal<sub>IT</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'J'
+  UNIT = 'J'
+  value = 4.1868
+
+[[unit]]
+Code = 'cal_th'
+CODE = 'CAL_TH'
+isMetric = 'yes'
+class = 'heat'
+names = ['thermochemical calorie']
+printSymbol = 'cal<sub>th</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'J'
+  UNIT = 'J'
+  value = 4.184
+
+[[unit]]
+Code = 'cal'
+CODE = 'CAL'
+isMetric = 'yes'
+class = 'heat'
+names = ['calorie']
+printSymbol = 'cal'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'cal_th'
+  UNIT = 'CAL_TH'
+  value = 1
+
+[[unit]]
+Code = '[Cal]'
+CODE = '[CAL]'
+isMetric = 'no'
+class = 'heat'
+names = ['nutrition label Calories']
+printSymbol = 'Cal'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'kcal_th'
+  UNIT = 'KCAL_TH'
+  value = 1
+
+[[unit]]
+Code = '[Btu_39]'
+CODE = '[BTU_39]'
+isMetric = 'no'
+class = 'heat'
+names = ['British thermal unit at 39 °F']
+printSymbol = 'Btu<sub>39°F</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'kJ'
+  UNIT = 'kJ'
+  value = 1.05967
+
+[[unit]]
+Code = '[Btu_59]'
+CODE = '[BTU_59]'
+isMetric = 'no'
+class = 'heat'
+names = ['British thermal unit at 59 °F']
+printSymbol = 'Btu<sub>59°F</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'kJ'
+  UNIT = 'kJ'
+  value = 1.05480
+
+[[unit]]
+Code = '[Btu_60]'
+CODE = '[BTU_60]'
+isMetric = 'no'
+class = 'heat'
+names = ['British thermal unit at 60 °F']
+printSymbol = 'Btu<sub>60°F</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'kJ'
+  UNIT = 'kJ'
+  value = 1.05468
+
+[[unit]]
+Code = '[Btu_m]'
+CODE = '[BTU_M]'
+isMetric = 'no'
+class = 'heat'
+names = ['mean British thermal unit']
+printSymbol = 'Btu<sub>m</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'kJ'
+  UNIT = 'kJ'
+  value = 1.05587
+
+[[unit]]
+Code = '[Btu_IT]'
+CODE = '[BTU_IT]'
+isMetric = 'no'
+class = 'heat'
+names = ['international table British thermal unit']
+printSymbol = 'Btu<sub>IT</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'kJ'
+  UNIT = 'kJ'
+  value = 1.05505585262
+
+[[unit]]
+Code = '[Btu_th]'
+CODE = '[BTU_TH]'
+isMetric = 'no'
+class = 'heat'
+names = ['thermochemical British thermal unit']
+printSymbol = 'Btu<sub>th</sub>'
+property = 'energy'
+
+  [unit.value]
+  Unit = 'kJ'
+  UNIT = 'kJ'
+  value = 1.054350
+
+[[unit]]
+Code = '[Btu]'
+CODE = '[BTU]'
+isMetric = 'no'
+class = 'heat'
+names = ['British thermal unit']
+printSymbol = 'btu'
+property = 'energy'
+
+  [unit.value]
+  Unit = '[Btu_th]'
+  UNIT = '[BTU_TH]'
+  value = 1
+
+[[unit]]
+Code = '[HP]'
+CODE = '[HP]'
+isMetric = 'no'
+class = 'heat'
+names = ['horsepower']
+property = 'power'
+
+  [unit.value]
+  Unit = '[ft_i].[lbf_av]/s'
+  UNIT = '[FT_I].[LBF_AV]/S'
+  value = 550
+
+[[unit]]
+Code = 'tex'
+CODE = 'TEX'
+isMetric = 'yes'
+class = 'heat'
+names = ['tex']
+printSymbol = 'tex'
+property = 'linear mass density (of textile thread)'
+
+  [unit.value]
+  value = 1
+  Unit = 'g/km'
+  UNIT = 'G/KM'
+
+[[unit]]
+Code = '[den]'
+CODE = '[DEN]'
+isMetric = 'no'
+class = 'heat'
+names = ['Denier']
+printSymbol = 'den'
+property = 'linear mass density (of textile thread)'
+
+  [unit.value]
+  value = 1
+  Unit = 'g/9/km'
+  UNIT = 'G/9/KM'
+
+[[unit]]
+Code = 'm[H2O]'
+CODE = 'M[H2O]'
+isMetric = 'yes'
+class = 'clinical'
+names = ['meter of water column']
+printSymbol = 'm H<sub><r>2</r></sub>O'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'kPa'
+  UNIT = 'KPAL'
+  value = 980665e-5
+
+[[unit]]
+Code = 'm[Hg]'
+CODE = 'M[HG]'
+isMetric = 'yes'
+class = 'clinical'
+names = ['meter of mercury column']
+printSymbol = 'm Hg'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'kPa'
+  UNIT = 'KPAL'
+  value = 133.3220
+
+[[unit]]
+Code = "[in_i'H2O]"
+CODE = "[IN_I'H2O]"
+isMetric = 'no'
+class = 'clinical'
+names = ['inch of water column']
+printSymbol = 'in H<sub><r>2</r></sub>O'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'm[H2O].[in_i]/m'
+  UNIT = 'M[H2O].[IN_I]/M'
+  value = 1
+
+[[unit]]
+Code = "[in_i'Hg]"
+CODE = "[IN_I'HG]"
+isMetric = 'no'
+class = 'clinical'
+names = ['inch of mercury column']
+printSymbol = 'in Hg'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'm[Hg].[in_i]/m'
+  UNIT = 'M[HG].[IN_I]/M'
+  value = 1
+
+[[unit]]
+Code = '[PRU]'
+CODE = '[PRU]'
+isMetric = 'no'
+class = 'clinical'
+names = ['peripheral vascular resistance unit']
+printSymbol = 'P.R.U.'
+property = 'fluid resistance'
+
+  [unit.value]
+  Unit = 'mm[Hg].s/ml'
+  UNIT = 'MM[HG].S/ML'
+  value = 1
+
+[[unit]]
+Code = "[wood'U]"
+CODE = "[WOOD'U]"
+isMetric = 'no'
+class = 'clinical'
+names = ['Wood unit']
+printSymbol = 'Wood U.'
+property = 'fluid resistance'
+
+  [unit.value]
+  Unit = 'mm[Hg].min/L'
+  UNIT = 'MM[HG].MIN/L'
+  value = 1
+
+[[unit]]
+Code = '[diop]'
+CODE = '[DIOP]'
+isMetric = 'no'
+class = 'clinical'
+names = ['diopter']
+printSymbol = 'dpt'
+property = 'refraction of a lens'
+
+  [unit.value]
+  Unit = '/m'
+  UNIT = '/M'
+  value = 1
+
+[[unit]]
+Code = "[p'diop]"
+CODE = "[P'DIOP]"
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'clinical'
+names = ['prism diopter']
+printSymbol = 'PD'
+property = 'refraction of a prism'
+
+  [unit.value]
+  Unit = '100tan(1 rad)'
+  UNIT = '100TAN(1 RAD)'
+
+  [unit.value.function]
+  name = 'tanTimes100'
+  value = 1
+  Unit = 'rad'
+
+[[unit]]
+Code = '%[slope]'
+CODE = '%[SLOPE]'
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'clinical'
+names = ['percent of slope']
+printSymbol = '%'
+property = 'slope'
+
+  [unit.value]
+  Unit = '100tan(1 rad)'
+  UNIT = '100TAN(1 RAD)'
+
+  [unit.value.function]
+  name = '100tan'
+  value = 1
+  Unit = 'deg'
+
+[[unit]]
+Code = '[mesh_i]'
+CODE = '[MESH_I]'
+isMetric = 'no'
+class = 'clinical'
+names = ['mesh']
+property = 'lineic number'
+
+  [unit.value]
+  Unit = '/[in_i]'
+  UNIT = '/[IN_I]'
+  value = 1
+
+[[unit]]
+Code = '[Ch]'
+CODE = '[CH]'
+isMetric = 'no'
+class = 'clinical'
+names = ['Charrière', 'french']
+printSymbol = 'Ch'
+property = 'gauge of catheters'
+
+  [unit.value]
+  Unit = 'mm/3'
+  UNIT = 'MM/3'
+  value = 1
+
+[[unit]]
+Code = '[drp]'
+CODE = '[DRP]'
+isMetric = 'no'
+class = 'clinical'
+names = ['drop']
+printSymbol = 'drp'
+property = 'volume'
+
+  [unit.value]
+  Unit = 'ml/20'
+  UNIT = 'ML/20'
+  value = 1
+
+[[unit]]
+Code = "[hnsf'U]"
+CODE = "[HNSF'U]"
+isMetric = 'no'
+class = 'clinical'
+names = ['Hounsfield unit']
+printSymbol = 'HF'
+property = 'x-ray attenuation'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[MET]'
+CODE = '[MET]'
+isMetric = 'no'
+class = 'clinical'
+names = ['metabolic equivalent']
+printSymbol = 'MET'
+property = 'metabolic cost of physical activity'
+
+  [unit.value]
+  Unit = 'mL/min/kg'
+  UNIT = 'ML/MIN/KG'
+  value = 3.5
+
+[[unit]]
+Code = "[hp'_X]"
+CODE = "[HP'_X]"
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of decimal series (retired)']
+printSymbol = 'X'
+property = 'homeopathic potency (retired)'
+
+  [unit.value]
+  Unit = 'hpX(1 1)'
+  UNIT = 'HPX(1 1)'
+
+  [unit.value.function]
+  name = 'hpX'
+  value = 1
+  Unit = '1'
+
+[[unit]]
+Code = "[hp'_C]"
+CODE = "[HP'_C]"
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of centesimal series (retired)']
+printSymbol = 'C'
+property = 'homeopathic potency (retired)'
+
+  [unit.value]
+  Unit = 'hpC(1 1)'
+  UNIT = 'HPC(1 1)'
+
+  [unit.value.function]
+  name = 'hpC'
+  value = 1
+  Unit = '1'
+
+[[unit]]
+Code = "[hp'_M]"
+CODE = "[HP'_M]"
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of millesimal series (retired)']
+printSymbol = 'M'
+property = 'homeopathic potency (retired)'
+
+  [unit.value]
+  Unit = 'hpM(1 1)'
+  UNIT = 'HPM(1 1)'
+
+  [unit.value.function]
+  name = 'hpM'
+  value = 1
+  Unit = '1'
+
+[[unit]]
+Code = "[hp'_Q]"
+CODE = "[HP'_Q]"
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of quintamillesimal series (retired)']
+printSymbol = 'Q'
+property = 'homeopathic potency (retired)'
+
+  [unit.value]
+  Unit = 'hpQ(1 1)'
+  UNIT = 'HPQ(1 1)'
+
+  [unit.value.function]
+  name = 'hpQ'
+  value = 1
+  Unit = '1'
+
+[[unit]]
+Code = '[hp_X]'
+CODE = '[HP_X]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of decimal hahnemannian series']
+printSymbol = 'X'
+property = 'homeopathic potency (Hahnemann)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[hp_C]'
+CODE = '[HP_C]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of centesimal hahnemannian series']
+printSymbol = 'C'
+property = 'homeopathic potency (Hahnemann)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[hp_M]'
+CODE = '[HP_M]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of millesimal hahnemannian series']
+printSymbol = 'M'
+property = 'homeopathic potency (Hahnemann)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[hp_Q]'
+CODE = '[HP_Q]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of quintamillesimal hahnemannian series']
+printSymbol = 'Q'
+property = 'homeopathic potency (Hahnemann)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[kp_X]'
+CODE = '[KP_X]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of decimal korsakovian series']
+printSymbol = 'X'
+property = 'homeopathic potency (Korsakov)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[kp_C]'
+CODE = '[KP_C]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of centesimal korsakovian series']
+printSymbol = 'C'
+property = 'homeopathic potency (Korsakov)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[kp_M]'
+CODE = '[KP_M]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of millesimal korsakovian series']
+printSymbol = 'M'
+property = 'homeopathic potency (Korsakov)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[kp_Q]'
+CODE = '[KP_Q]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'clinical'
+names = ['homeopathic potency of quintamillesimal korsakovian series']
+printSymbol = 'Q'
+property = 'homeopathic potency (Korsakov)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = 'eq'
+CODE = 'EQ'
+isMetric = 'yes'
+class = 'chemical'
+names = ['equivalents']
+printSymbol = 'eq'
+property = 'amount of substance'
+
+  [unit.value]
+  Unit = 'mol'
+  UNIT = 'MOL'
+  value = 1
+
+[[unit]]
+Code = 'osm'
+CODE = 'OSM'
+isMetric = 'yes'
+class = 'chemical'
+names = ['osmole']
+printSymbol = 'osm'
+property = 'amount of substance (dissolved particles)'
+
+  [unit.value]
+  Unit = 'mol'
+  UNIT = 'MOL'
+  value = 1
+
+[[unit]]
+Code = '[pH]'
+CODE = '[PH]'
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'chemical'
+names = ['pH']
+printSymbol = 'pH'
+property = 'acidity'
+
+  [unit.value]
+  Unit = 'pH(1 mol/l)'
+  UNIT = 'PH(1 MOL/L)'
+
+  [unit.value.function]
+  name = 'pH'
+  value = 1
+  Unit = 'mol/l'
+
+[[unit]]
+Code = 'g%'
+CODE = 'G%'
+isMetric = 'yes'
+class = 'chemical'
+names = ['gram percent']
+printSymbol = 'g%'
+property = 'mass concentration'
+
+  [unit.value]
+  Unit = 'g/dl'
+  UNIT = 'G/DL'
+  value = 1
+
+[[unit]]
+Code = '[S]'
+CODE = '[S]'
+isMetric = 'no'
+class = 'chemical'
+names = ['Svedberg unit']
+printSymbol = 'S'
+property = 'sedimentation coefficient'
+
+  [unit.value]
+  Unit = '10*-13.s'
+  UNIT = '10*-13.S'
+  value = 1
+
+[[unit]]
+Code = '[HPF]'
+CODE = '[HPF]'
+isMetric = 'no'
+class = 'chemical'
+names = ['high power field']
+printSymbol = 'HPF'
+property = 'view area in microscope'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[LPF]'
+CODE = '[LPF]'
+isMetric = 'no'
+class = 'chemical'
+names = ['low power field']
+printSymbol = 'LPF'
+property = 'view area in microscope'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 100
+
+[[unit]]
+Code = 'kat'
+CODE = 'KAT'
+isMetric = 'yes'
+class = 'chemical'
+names = ['katal']
+printSymbol = 'kat'
+property = 'catalytic activity'
+
+  [unit.value]
+  Unit = 'mol/s'
+  UNIT = 'MOL/S'
+  value = 1
+
+[[unit]]
+Code = 'U'
+CODE = 'U'
+isMetric = 'yes'
+class = 'chemical'
+names = ['Unit']
+printSymbol = 'U'
+property = 'catalytic activity'
+
+  [unit.value]
+  Unit = 'umol/min'
+  UNIT = 'UMOL/MIN'
+  value = 1
+
+[[unit]]
+Code = '[iU]'
+CODE = '[IU]'
+isMetric = 'yes'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['international unit']
+printSymbol = 'IU'
+property = 'arbitrary'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[IU]'
+CODE = '[IU]'
+isMetric = 'yes'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['international unit']
+printSymbol = 'i.U.'
+property = 'arbitrary'
+
+  [unit.value]
+  Unit = '[iU]'
+  UNIT = '[IU]'
+  value = 1
+
+[[unit]]
+Code = "[arb'U]"
+CODE = "[ARB'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['arbitary unit']
+printSymbol = 'arb. U'
+property = 'arbitrary'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[USP'U]"
+CODE = "[USP'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['United States Pharmacopeia unit']
+printSymbol = 'U.S.P.'
+property = 'arbitrary'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[GPL'U]"
+CODE = "[GPL'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['GPL unit']
+property = 'biologic activity of anticardiolipin IgG'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[MPL'U]"
+CODE = "[MPL'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['MPL unit']
+property = 'biologic activity of anticardiolipin IgM'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[APL'U]"
+CODE = "[APL'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['APL unit']
+property = 'biologic activity of anticardiolipin IgA'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[beth'U]"
+CODE = "[BETH'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Bethesda unit']
+property = 'biologic activity of factor VIII inhibitor'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[anti'Xa'U]"
+CODE = "[ANTI'XA'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['anti factor Xa unit']
+property = 'biologic activity of factor Xa inhibitor (heparin)'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[todd'U]"
+CODE = "[TODD'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Todd unit']
+property = 'biologic activity antistreptolysin O'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[dye'U]"
+CODE = "[DYE'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Dye unit']
+property = 'biologic activity of amylase'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[smgy'U]"
+CODE = "[SMGY'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Somogyi unit']
+property = 'biologic activity of amylase'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[bdsk'U]"
+CODE = "[BDSK'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Bodansky unit']
+property = 'biologic activity of phosphatase'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[ka'U]"
+CODE = "[KA'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['King-Armstrong unit']
+property = 'biologic activity of phosphatase'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[knk'U]"
+CODE = "[KNK'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Kunkel unit']
+property = 'arbitrary biologic activity'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[mclg'U]"
+CODE = "[MCLG'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Mac Lagan unit']
+property = 'arbitrary biologic activity'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[tb'U]"
+CODE = "[TB'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['tuberculin unit']
+property = 'biologic activity of tuberculin'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[CCID_50]'
+CODE = '[CCID_50]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['50% cell culture infectious dose']
+printSymbol = 'CCID<sub>50</sub>'
+property = 'biologic activity (infectivity) of an infectious agent preparation'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[TCID_50]'
+CODE = '[TCID_50]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['50% tissue culture infectious dose']
+printSymbol = 'TCID<sub>50</sub>'
+property = 'biologic activity (infectivity) of an infectious agent preparation'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[EID_50]'
+CODE = '[EID_50]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['50% embryo infectious dose']
+printSymbol = 'EID<sub>50</sub>'
+property = 'biologic activity (infectivity) of an infectious agent preparation'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[PFU]'
+CODE = '[PFU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['plaque forming units']
+printSymbol = 'PFU'
+property = 'amount of an infectious agent'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[FFU]'
+CODE = '[FFU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['focus forming units']
+printSymbol = 'FFU'
+property = 'amount of an infectious agent'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[CFU]'
+CODE = '[CFU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['colony forming units']
+printSymbol = 'CFU'
+property = 'amount of a proliferating organism'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[IR]'
+CODE = '[IR]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['index of reactivity']
+printSymbol = 'IR'
+property = 'amount of an allergen callibrated through in-vivo testing using the Stallergenes® method.'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[BAU]'
+CODE = '[BAU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['bioequivalent allergen unit']
+printSymbol = 'BAU'
+property = 'amount of an allergen callibrated through in-vivo testing based on the ID50EAL method of (intradermal dilution for 50mm sum of erythema diameters'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[AU]'
+CODE = '[AU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['allergen unit']
+printSymbol = 'AU'
+property = 'procedure defined amount of an allergen using some reference standard'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[Amb'a'1'U]"
+CODE = "[AMB'A'1'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['allergen unit for Ambrosia artemisiifolia']
+printSymbol = 'Amb a 1 U'
+property = 'procedure defined amount of the major allergen of ragweed.'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[PNU]'
+CODE = '[PNU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['protein nitrogen unit']
+printSymbol = 'PNU'
+property = 'procedure defined amount of a protein substance'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[Lf]'
+CODE = '[LF]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Limit of flocculation']
+printSymbol = 'Lf'
+property = 'procedure defined amount of an antigen substance'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = "[D'ag'U]"
+CODE = "[D'AG'U]"
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['D-antigen unit']
+property = 'procedure defined amount of a poliomyelitis d-antigen substance'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[FEU]'
+CODE = '[FEU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['fibrinogen equivalent unit']
+property = 'amount of fibrinogen broken down into the measured d-dimers'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[ELU]'
+CODE = '[ELU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['ELISA unit']
+property = 'arbitrary ELISA unit'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = '[EU]'
+CODE = '[EU]'
+isMetric = 'no'
+isArbitrary = 'yes'
+class = 'chemical'
+names = ['Ehrlich unit']
+property = 'Ehrlich unit'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = 'Np'
+CODE = 'NEP'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['neper']
+printSymbol = 'Np'
+property = 'level'
+
+  [unit.value]
+  Unit = 'ln(1 1)'
+  UNIT = 'LN(1 1)'
+
+  [unit.value.function]
+  name = 'ln'
+  value = 1
+  Unit = '1'
+
+[[unit]]
+Code = 'B'
+CODE = 'B'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel']
+printSymbol = 'B'
+property = 'level'
+
+  [unit.value]
+  Unit = 'lg(1 1)'
+  UNIT = 'LG(1 1)'
+
+  [unit.value.function]
+  name = 'lg'
+  value = 1
+  Unit = '1'
+
+[[unit]]
+Code = 'B[SPL]'
+CODE = 'B[SPL]'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel sound pressure']
+printSymbol = 'B(SPL)'
+property = 'pressure level'
+
+  [unit.value]
+  Unit = '2lg(2 10*-5.Pa)'
+  UNIT = '2LG(2 10*-5.PAL)'
+
+  [unit.value.function]
+  name = 'lgTimes2'
+  value = 2
+  Unit = '10*-5.Pa'
+
+[[unit]]
+Code = 'B[V]'
+CODE = 'B[V]'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel volt']
+printSymbol = 'B(V)'
+property = 'electric potential level'
+
+  [unit.value]
+  Unit = '2lg(1 V)'
+  UNIT = '2LG(1 V)'
+
+  [unit.value.function]
+  name = 'lgTimes2'
+  value = 1
+  Unit = 'V'
+
+[[unit]]
+Code = 'B[mV]'
+CODE = 'B[MV]'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel millivolt']
+printSymbol = 'B(mV)'
+property = 'electric potential level'
+
+  [unit.value]
+  Unit = '2lg(1 mV)'
+  UNIT = '2LG(1 MV)'
+
+  [unit.value.function]
+  name = 'lgTimes2'
+  value = 1
+  Unit = 'mV'
+
+[[unit]]
+Code = 'B[uV]'
+CODE = 'B[UV]'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel microvolt']
+printSymbol = 'B(μV)'
+property = 'electric potential level'
+
+  [unit.value]
+  Unit = '2lg(1 uV)'
+  UNIT = '2LG(1 UV)'
+
+  [unit.value.function]
+  name = 'lgTimes2'
+  value = 1
+  Unit = 'uV'
+
+[[unit]]
+Code = 'B[10.nV]'
+CODE = 'B[10.NV]'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel 10 nanovolt']
+printSymbol = 'B(10 nV)'
+property = 'electric potential level'
+
+  [unit.value]
+  Unit = '2lg(10 nV)'
+  UNIT = '2LG(10 NV)'
+
+  [unit.value.function]
+  name = 'lgTimes2'
+  value = 10
+  Unit = 'nV'
+
+[[unit]]
+Code = 'B[W]'
+CODE = 'B[W]'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel watt']
+printSymbol = 'B(W)'
+property = 'power level'
+
+  [unit.value]
+  Unit = 'lg(1 W)'
+  UNIT = 'LG(1 W)'
+
+  [unit.value.function]
+  name = 'lg'
+  value = 1
+  Unit = 'W'
+
+[[unit]]
+Code = 'B[kW]'
+CODE = 'B[KW]'
+isMetric = 'yes'
+isSpecial = 'yes'
+class = 'levels'
+names = ['bel kilowatt']
+printSymbol = 'B(kW)'
+property = 'power level'
+
+  [unit.value]
+  Unit = 'lg(1 kW)'
+  UNIT = 'LG(1 KW)'
+
+  [unit.value.function]
+  name = 'lg'
+  value = 1
+  Unit = 'kW'
+
+[[unit]]
+Code = 'st'
+CODE = 'STR'
+isMetric = 'yes'
+class = 'misc'
+names = ['stere']
+printSymbol = 'st'
+property = 'volume'
+
+  [unit.value]
+  Unit = 'm3'
+  UNIT = 'M3'
+  value = 1
+
+[[unit]]
+Code = 'Ao'
+CODE = 'AO'
+isMetric = 'no'
+class = 'misc'
+names = ['Ångström']
+printSymbol = 'Å'
+property = 'length'
+
+  [unit.value]
+  Unit = 'nm'
+  UNIT = 'NM'
+  value = 0.1
+
+[[unit]]
+Code = 'b'
+CODE = 'BRN'
+isMetric = 'no'
+class = 'misc'
+names = ['barn']
+printSymbol = 'b'
+property = 'action area'
+
+  [unit.value]
+  Unit = 'fm2'
+  UNIT = 'FM2'
+  value = 100
+
+[[unit]]
+Code = 'att'
+CODE = 'ATT'
+isMetric = 'no'
+class = 'misc'
+names = ['technical atmosphere']
+printSymbol = 'at'
+property = 'pressure'
+
+  [unit.value]
+  Unit = 'kgf/cm2'
+  UNIT = 'KGF/CM2'
+  value = 1
+
+[[unit]]
+Code = 'mho'
+CODE = 'MHO'
+isMetric = 'yes'
+class = 'misc'
+names = ['mho']
+printSymbol = 'mho'
+property = 'electric conductance'
+
+  [unit.value]
+  Unit = 'S'
+  UNIT = 'S'
+  value = 1
+
+[[unit]]
+Code = '[psi]'
+CODE = '[PSI]'
+isMetric = 'no'
+class = 'misc'
+names = ['pound per sqare inch']
+printSymbol = 'psi'
+property = 'pressure'
+
+  [unit.value]
+  Unit = '[lbf_av]/[in_i]2'
+  UNIT = '[LBF_AV]/[IN_I]2'
+  value = 1
+
+[[unit]]
+Code = 'circ'
+CODE = 'CIRC'
+isMetric = 'no'
+class = 'misc'
+names = ['circle']
+printSymbol = 'circ'
+property = 'plane angle'
+
+  [unit.value]
+  Unit = '[pi].rad'
+  UNIT = '[PI].RAD'
+  value = 2
+
+[[unit]]
+Code = 'sph'
+CODE = 'SPH'
+isMetric = 'no'
+class = 'misc'
+names = ['spere']
+printSymbol = 'sph'
+property = 'solid angle'
+
+  [unit.value]
+  Unit = '[pi].sr'
+  UNIT = '[PI].SR'
+  value = 4
+
+[[unit]]
+Code = '[car_m]'
+CODE = '[CAR_M]'
+isMetric = 'no'
+class = 'misc'
+names = ['metric carat']
+printSymbol = 'ct<sub>m</sub>'
+property = 'mass'
+
+  [unit.value]
+  Unit = 'g'
+  UNIT = 'G'
+  value = 2e-1
+
+[[unit]]
+Code = '[car_Au]'
+CODE = '[CAR_AU]'
+isMetric = 'no'
+class = 'misc'
+names = ['carat of gold alloys']
+printSymbol = 'ct<sub><r>Au</r></sub>'
+property = 'mass fraction'
+
+  [unit.value]
+  Unit = '/24'
+  UNIT = '/24'
+  value = 1
+
+[[unit]]
+Code = '[smoot]'
+CODE = '[SMOOT]'
+isMetric = 'no'
+class = 'misc'
+names = ['Smoot']
+property = 'length'
+
+  [unit.value]
+  Unit = '[in_i]'
+  UNIT = '[IN_I]'
+  value = 67
+
+[[unit]]
+Code = '[m/s2/Hz^(1/2)]'
+CODE = '[M/S2/HZ^(1/2)]'
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'misc'
+names = ['meter per square seconds per square root of hertz']
+property = 'amplitude spectral density'
+
+  [unit.value]
+  Unit = 'sqrt(1 m2/s4/Hz)'
+  UNIT = 'SQRT(1 M2/S4/HZ)'
+
+  [unit.value.function]
+  name = 'sqrt'
+  value = 1
+  Unit = 'm2/s4/Hz'
+
+[[unit]]
+Code = 'bit_s'
+CODE = 'BIT_S'
+isMetric = 'no'
+isSpecial = 'yes'
+class = 'infotech'
+names = ['bit']
+printSymbol = 'bit<sub>s</sub>'
+property = 'amount of information'
+
+  [unit.value]
+  Unit = 'ld(1 1)'
+  UNIT = 'ld(1 1)'
+
+  [unit.value.function]
+  name = 'ld'
+  value = 1
+  Unit = '1'
+
+[[unit]]
+Code = 'bit'
+CODE = 'BIT'
+isMetric = 'yes'
+class = 'infotech'
+names = ['bit']
+printSymbol = 'bit'
+property = 'amount of information'
+
+  [unit.value]
+  Unit = '1'
+  UNIT = '1'
+  value = 1
+
+[[unit]]
+Code = 'By'
+CODE = 'BY'
+isMetric = 'yes'
+class = 'infotech'
+names = ['byte']
+printSymbol = 'B'
+property = 'amount of information'
+
+  [unit.value]
+  Unit = 'bit'
+  UNIT = 'bit'
+  value = 8
+
+[[unit]]
+Code = 'Bd'
+CODE = 'BD'
+isMetric = 'yes'
+class = 'infotech'
+names = ['baud']
+printSymbol = 'Bd'
+property = 'signal transmission rate'
+
+  [unit.value]
+  Unit = '/s'
+  UNIT = '/s'
+  value = 1
+
+[[prefix]]
+Code = 'Ki'
+CODE = 'KIB'
+names = ['kibi']
+printSymbol = 'Ki'
+value = 1024
+
+[[prefix]]
+Code = 'Mi'
+CODE = 'MIB'
+names = ['mebi']
+printSymbol = 'Mi'
+value = 1048576
+
+[[prefix]]
+Code = 'Gi'
+CODE = 'GIB'
+names = ['gibi']
+printSymbol = 'Gi'
+value = 1073741824
+
+[[prefix]]
+Code = 'Ti'
+CODE = 'TIB'
+names = ['tebi']
+printSymbol = 'Ti'
+value = 1099511627776
