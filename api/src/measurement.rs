@@ -105,11 +105,7 @@ impl UcumUnit for Measurement {
     /// ```
     ///
     fn scalar(&self) -> f64 {
-        if self.is_special() {
-            self.unit.reduce_value(self.value)
-        } else {
-            self.value * self.unit.reduce_value(1.0)
-        }
+        self.reduce_value(self.value)
     }
 
     /// This magnitude is the Measurement's value combined with any magnitude
@@ -134,11 +130,28 @@ impl UcumUnit for Measurement {
     /// ```
     ///
     fn magnitude(&self) -> f64 {
+        self.calculate_magnitude(self.value)
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl Reducible
+//-----------------------------------------------------------------------------
+impl Reducible for Measurement {
+    fn reduce_value(&self, value: f64) -> f64 {
+        if self.is_special() {
+            self.unit.reduce_value(value)
+        } else {
+            value * self.unit.reduce_value(1.0)
+        }
+    }
+
+    fn calculate_magnitude(&self, value: f64) -> f64 {
         if self.is_special() {
             let scalar = self.scalar();
             self.unit.calculate_magnitude(scalar)
         } else {
-            self.value * self.unit.calculate_magnitude(1.0)
+            value * self.unit.calculate_magnitude(1.0)
         }
     }
 }
