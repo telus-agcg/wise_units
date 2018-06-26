@@ -45,9 +45,7 @@ pub(crate) fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
     }
 
     match pairs.next() {
-        Some(pair) => {
-            Ok(visit_pairs(pair)?)
-        }
+        Some(pair) => Ok(visit_pairs(pair)?),
         None => Ok(vec![]),
     }
 }
@@ -149,7 +147,11 @@ fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
         }
     }
 
-    Ok(Annotatable { prefix, atom, exponent })
+    Ok(Annotatable {
+        prefix,
+        atom,
+        exponent,
+    })
 }
 
 fn visit_annotation(pair: Pair<Rule>) -> Result<String, Error> {
@@ -238,8 +240,7 @@ fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
             Rule::term => {
-                let mut new_terms: Vec<Term> = visit_term(inner_pair)?
-                    .finish();
+                let mut new_terms: Vec<Term> = visit_term(inner_pair)?.finish();
 
                 if has_slash {
                     flip_terms_exponents(&mut new_terms);
@@ -276,8 +277,7 @@ fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
                 has_slash = true;
             }
             Rule::term => {
-                let mut new_terms: Vec<Term> = visit_term(inner_pair)?
-                    .finish();
+                let mut new_terms: Vec<Term> = visit_term(inner_pair)?.finish();
 
                 if has_slash {
                     flip_terms_exponents(&mut new_terms);

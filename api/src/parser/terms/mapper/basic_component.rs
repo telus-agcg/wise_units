@@ -1,5 +1,5 @@
-use parser::{Atom, Prefix, Term};
 use parser::terms::mapper::Finishable;
+use parser::{Atom, Prefix, Term};
 
 pub(super) struct BasicComponent {
     pub atom: Option<Atom>,

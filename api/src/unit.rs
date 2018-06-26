@@ -214,7 +214,7 @@ impl Reducible for Unit {
 //-----------------------------------------------------------------------------
 impl Composable for Unit {
     fn composition(&self) -> Composition {
-        let term_slice: &[Term] = &self;
+        let term_slice: &[Term] = self;
 
         term_slice.composition()
     }
@@ -222,7 +222,7 @@ impl Composable for Unit {
 
 impl<'a> Composable for &'a Unit {
     fn composition(&self) -> Composition {
-        let term_slice: &[Term] = &self;
+        let term_slice: &[Term] = self;
 
         term_slice.composition()
     }
@@ -253,7 +253,7 @@ impl fmt::Display for Unit {
 //-----------------------------------------------------------------------------
 impl ::std::convert::From<Vec<Term>> for Unit {
     fn from(terms: Vec<Term>) -> Self {
-        Unit { terms }
+        Self { terms }
     }
 }
 
@@ -266,7 +266,7 @@ impl FromStr for Unit {
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
         let terms = super::parser::parse(expression)?;
 
-        Ok(Unit::from(terms))
+        Ok(Self::from(terms))
     }
 }
 
@@ -297,7 +297,7 @@ impl FromStr for Unit {
 /// ```
 ///
 impl<'a> FieldEq<'a> for Unit {
-    fn field_eq(&self, other: &'a Unit) -> bool {
+    fn field_eq(&self, other: &'a Self) -> bool {
         self.terms == other.terms
     }
 }
@@ -398,7 +398,7 @@ impl ::std::ops::Div for Unit {
     fn div(self, other: Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
-        Unit::from(terms)
+        Self::from(terms)
     }
 }
 
@@ -408,7 +408,7 @@ impl<'a> ::std::ops::Div<&'a Unit> for Unit {
     fn div(self, other: &'a Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
-        Unit::from(terms)
+        Self::from(terms)
     }
 }
 
@@ -426,7 +426,7 @@ impl<'a> ::std::ops::Div for &'a mut Unit {
     type Output = Unit;
 
     fn div(self, other: &'a mut Unit) -> Self::Output {
-        let terms = divide_terms(&self, &other);
+        let terms = divide_terms(self, other);
 
         Unit::from(terms)
     }
@@ -457,7 +457,7 @@ impl ::std::ops::Mul for Unit {
     fn mul(self, other: Self) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit::from(terms)
+        Self::from(terms)
     }
 }
 
@@ -535,9 +535,9 @@ mod tests {
         };
     }
 
-    use field_eq::FieldEq;
     use super::super::parser::{Composition, Dimension};
     use super::*;
+    use field_eq::FieldEq;
     use std::ops::{Div, Mul};
 
     #[test]

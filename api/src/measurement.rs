@@ -234,7 +234,7 @@ impl fmt::Display for Measurement {
 /// ```
 ///
 impl<'a> FieldEq<'a> for Measurement {
-    fn field_eq(&self, other: &'a Measurement) -> bool {
+    fn field_eq(&self, other: &'a Self) -> bool {
         self.value == other.value && self.unit.field_eq(&other.unit)
     }
 }
