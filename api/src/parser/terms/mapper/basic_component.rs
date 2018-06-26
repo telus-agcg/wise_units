@@ -1,4 +1,5 @@
 use parser::{Atom, Prefix, Term};
+use parser::terms::mapper::Finishable;
 
 pub(super) struct BasicComponent {
     pub atom: Option<Atom>,
@@ -22,8 +23,8 @@ impl Default for BasicComponent {
     }
 }
 
-impl Into<Vec<Term>> for BasicComponent {
-    fn into(mut self) -> Vec<Term> {
+impl Finishable for BasicComponent {
+    fn finish(self) -> Vec<Term> {
         let mut terms: Vec<Term> = Vec::with_capacity(self.terms.len() + 1);
 
         let self_term = Term {
@@ -35,7 +36,10 @@ impl Into<Vec<Term>> for BasicComponent {
         };
 
         terms.push(self_term);
-        terms.append(&mut self.terms);
+
+        for term in self.terms {
+            terms.push(term);
+        }
 
         terms
     }

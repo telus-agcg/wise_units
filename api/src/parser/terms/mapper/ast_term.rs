@@ -1,4 +1,4 @@
-use parser::terms::mapper::Component;
+use parser::terms::mapper::{Component, Finishable};
 use parser::Term;
 
 pub(super) struct AstTerm {
@@ -6,25 +6,25 @@ pub(super) struct AstTerm {
     pub terms: Vec<Term>,
 }
 
-impl Default for AstTerm {
-    fn default() -> Self {
-        Self {
-            component: None,
-            terms: vec![],
-        }
-    }
-}
-
-impl Into<Vec<Term>> for AstTerm {
-    fn into(mut self) -> Vec<Term> {
-        let mut terms: Vec<Term> = Vec::with_capacity(self.terms.len() + 1);
-
+impl Finishable for AstTerm {
+    fn finish(self) -> Vec<Term> {
         if let Some(component) = self.component {
-            terms.append(&mut component.into());
+            let component_terms: Vec<Term> = component.finish();
+
+            let mut total_terms: Vec<Term> =
+                Vec::with_capacity(self.terms.len() + component_terms.len());
+
+            for term in component_terms {
+                total_terms.push(term);
+            }
+
+            for term in self.terms {
+                total_terms.push(term);
+            }
+
+            total_terms
+        } else {
+            self.terms
         }
-
-        terms.append(&mut self.terms);
-
-        terms
     }
 }

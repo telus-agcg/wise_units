@@ -6,12 +6,3 @@ pub(crate) struct Symbol {
     pub prefix: Option<Prefix>,
     pub atom: Option<Atom>,
 }
-
-impl Default for Symbol {
-    fn default() -> Self {
-        Self {
-            prefix: None,
-            atom: None,
-        }
-    }
-}

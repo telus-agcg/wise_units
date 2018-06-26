@@ -31,7 +31,8 @@ pub(super) mod mapper {
     }
 
     fn visit_symbol(pair: Pair<Rule>) -> Result<Symbol, Error> {
-        let mut symbol = Symbol::default();
+        let mut prefix: Option<Prefix> = None;
+        let mut atom: Option<Atom> = None;
 
         for inner_pair in pair.into_inner() {
             match inner_pair.as_rule() {
@@ -40,18 +41,16 @@ pub(super) mod mapper {
                         .into_inner()
                         .next()
                         .expect("Unable to get next prefix");
-                    let prefix = visit_prefix(&next)?;
+                    prefix = Some(visit_prefix(&next)?);
 
-                    symbol.prefix = Some(prefix);
                 }
                 Rule::pri_atom | Rule::sec_atom => {
                     let next = inner_pair
                         .into_inner()
                         .next()
                         .expect("Unable to get next atom");
-                    let atom = visit_atom(&next)?;
 
-                    symbol.atom = Some(atom);
+                    atom = Some(visit_atom(&next)?);
                 }
                 _ => {
                     let error = Error::UnableToParse {
@@ -63,7 +62,7 @@ pub(super) mod mapper {
             }
         }
 
-        Ok(symbol)
+        Ok(Symbol { prefix, atom })
     }
 
     fn visit_atom(pair: &Pair<Rule>) -> Result<Atom, Error> {
