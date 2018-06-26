@@ -56,7 +56,7 @@ bench_over_inputs_method!(composition_group, "Unit::composition()", composition)
 
 fn is_compatible_with_group(c: &mut Criterion) {
     c.bench_function_over_inputs(
-        "Unit::is_compatible_with",
+        "Unit::is_compatible_with()",
         |b, &(lhs_string, rhs_string)| {
             let lhs = &Unit::from_str(lhs_string).unwrap();
             let rhs = &Unit::from_str(rhs_string).unwrap();
@@ -77,7 +77,7 @@ bench_over_inputs_method!(display_group, "Unit::to_string()", to_string);
 //-----------------------------------------------------------------------------
 fn from_str_group(c: &mut Criterion) {
     c.bench_function_over_inputs(
-        "Unit::from_str",
+        "Unit::from_str()",
         |b, &unit_string| {
             b.iter(|| Unit::from_str(unit_string));
         },
@@ -88,7 +88,7 @@ fn from_str_group(c: &mut Criterion) {
 //-----------------------------------------------------------------------------
 // impl PartialEq
 //-----------------------------------------------------------------------------
-bench_over_inputs_math!(partial_eq_group, "Unit::partial_eq", ==);
+bench_over_inputs_math!(partial_eq_group, "Unit::partial_eq()", ==);
 
 //-----------------------------------------------------------------------------
 // impl PartialOrd
@@ -98,12 +98,12 @@ bench_over_inputs_math!(partial_ord_gt_group, "Unit::partial_ord(>)", >);
 //-----------------------------------------------------------------------------
 // impl Mul
 //-----------------------------------------------------------------------------
-bench_over_inputs_math!(mul_group, "Unit::mul", *);
+bench_over_inputs_math!(mul_group, "Unit::mul()", *);
 
 //-----------------------------------------------------------------------------
 // impl Div
 //-----------------------------------------------------------------------------
-bench_over_inputs_math!(div_group, "Unit::div", /);
+bench_over_inputs_math!(div_group, "Unit::div()", /);
 
 criterion_group!(
     unit_benches,

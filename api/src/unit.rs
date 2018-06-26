@@ -2,11 +2,7 @@ use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
 use field_eq::FieldEq;
 use parser::{Composable, Composition, Error, Term};
 use reducible::Reducible;
-use std::borrow::Borrow;
-use std::cmp::Ordering;
-use std::convert::From;
 use std::fmt;
-use std::ops::{Div, Mul};
 use std::str::FromStr;
 use ucum_unit::UcumUnit;
 
@@ -218,7 +214,7 @@ impl Reducible for Unit {
 //-----------------------------------------------------------------------------
 impl Composable for Unit {
     fn composition(&self) -> Composition {
-        let term_slice: &[Term] = self.terms.borrow();
+        let term_slice: &[Term] = &self;
 
         term_slice.composition()
     }
@@ -226,9 +222,20 @@ impl Composable for Unit {
 
 impl<'a> Composable for &'a Unit {
     fn composition(&self) -> Composition {
-        let term_slice: &[Term] = self.terms.borrow();
+        let term_slice: &[Term] = &self;
 
         term_slice.composition()
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl Deref
+//-----------------------------------------------------------------------------
+impl ::std::ops::Deref for Unit {
+    type Target = [Term];
+
+    fn deref(&self) -> &[Term] {
+        self.terms.as_slice()
     }
 }
 
@@ -244,7 +251,7 @@ impl fmt::Display for Unit {
 //-----------------------------------------------------------------------------
 // impl From
 //-----------------------------------------------------------------------------
-impl From<Vec<Term>> for Unit {
+impl ::std::convert::From<Vec<Term>> for Unit {
     fn from(terms: Vec<Term>) -> Self {
         Unit { terms }
     }
@@ -370,7 +377,7 @@ impl PartialEq for Unit {
 /// ```
 ///
 impl PartialOrd for Unit {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<::std::cmp::Ordering> {
         if !self.is_compatible_with(other) {
             return None;
         }
@@ -385,7 +392,7 @@ impl PartialOrd for Unit {
 //-----------------------------------------------------------------------------
 // impl Div
 //-----------------------------------------------------------------------------
-impl Div for Unit {
+impl ::std::ops::Div for Unit {
     type Output = Self;
 
     fn div(self, other: Self) -> Self::Output {
@@ -395,7 +402,7 @@ impl Div for Unit {
     }
 }
 
-impl<'a> Div<&'a Unit> for Unit {
+impl<'a> ::std::ops::Div<&'a Unit> for Unit {
     type Output = Self;
 
     fn div(self, other: &'a Self) -> Self::Output {
@@ -405,7 +412,7 @@ impl<'a> Div<&'a Unit> for Unit {
     }
 }
 
-impl<'a> Div for &'a Unit {
+impl<'a> ::std::ops::Div for &'a Unit {
     type Output = Unit;
 
     fn div(self, other: &'a Unit) -> Self::Output {
@@ -415,11 +422,11 @@ impl<'a> Div for &'a Unit {
     }
 }
 
-impl<'a> Div for &'a mut Unit {
+impl<'a> ::std::ops::Div for &'a mut Unit {
     type Output = Unit;
 
     fn div(self, other: &'a mut Unit) -> Self::Output {
-        let terms = divide_terms(&self.terms, &other.terms);
+        let terms = divide_terms(&self, &other);
 
         Unit::from(terms)
     }
@@ -444,7 +451,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
 //-----------------------------------------------------------------------------
 // impl Mul
 //-----------------------------------------------------------------------------
-impl Mul for Unit {
+impl ::std::ops::Mul for Unit {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self::Output {
@@ -454,7 +461,7 @@ impl Mul for Unit {
     }
 }
 
-impl<'a> Mul for &'a Unit {
+impl<'a> ::std::ops::Mul for &'a Unit {
     type Output = Unit;
 
     fn mul(self, other: &'a Unit) -> Self::Output {
@@ -464,7 +471,7 @@ impl<'a> Mul for &'a Unit {
     }
 }
 
-impl<'a> Mul for &'a mut Unit {
+impl<'a> ::std::ops::Mul for &'a mut Unit {
     type Output = Unit;
 
     fn mul(self, other: &'a mut Unit) -> Self::Output {
@@ -528,9 +535,10 @@ mod tests {
         };
     }
 
+    use field_eq::FieldEq;
     use super::super::parser::{Composition, Dimension};
     use super::*;
-    use field_eq::FieldEq;
+    use std::ops::{Div, Mul};
 
     #[test]
     fn validate_from_str_error() {
