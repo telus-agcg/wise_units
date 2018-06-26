@@ -3,6 +3,31 @@ use parser::{definition::Definition, Classification};
 use std::fmt;
 use unit::Unit;
 
+const ATTO: f64 = 1.0e-18;
+const CENTI: f64 = 1.0e-2;
+const DECI: f64 = 1.0e-1;
+const DEKA: f64 = 1.0e1;
+const EXA: f64 = 1.0e18;
+const FEMTO: f64 = 1.0e-15;
+const GIBI: f64 = 1_073_741_824.0;
+const GIGA: f64 = 1.0e9;
+const HECTO: f64 = 1.0e2;
+const KIBI: f64 = 1024.0;
+const KILO: f64 = 1.0e3;
+const MEBI: f64 = 1_048_576.0;
+const MEGA: f64 = 1.0e6;
+const MICRO: f64 = 1.0e-6;
+const MILLI: f64 = 1.0e-3;
+const NANO: f64 = 1.0e-9;
+const PETA: f64 = 1.0e15;
+const PICO: f64 = 1.0e-12;
+const TEBI: f64 = 1_099_511_627_776.0;
+const TERA: f64 = 1.0e12;
+const YOCTO: f64 = 1.0e-24;
+const YOTTA: f64 = 1.0e24;
+const ZEPTO: f64 = 1.0e-21;
+const ZETTA: f64 = 1.0e21;
+
 /// A `Prefix` is essentially a multiplier for an `Atom` within a `Term`; ex.
 /// the "c" in "cm" modifies meter by 0.01. The UCUM spec says these should
 /// only pertain to metric units, but that rule is not adhered to in
@@ -142,47 +167,43 @@ impl UcumSymbol for Prefix {
     ///
     fn definition_value(&self) -> f64 {
         match *self {
-            Prefix::Atto => 1.0e-18,
-            Prefix::Centi => 1.0e-2,
-            Prefix::Deci => 1.0e-1,
-            Prefix::Deka => 1.0e1,
-            Prefix::Exa => 1.0e18,
-            Prefix::Femto => 1.0e-15,
-            Prefix::Gibi => 1_073_741_824.0,
-            Prefix::Giga => 1.0e9,
-            Prefix::Hecto => 1.0e2,
-            Prefix::Kibi => 1024.0,
-            Prefix::Kilo => 1.0e3,
-            Prefix::Mebi => 1_048_576.0,
-            Prefix::Mega => 1.0e6,
-            Prefix::Micro => 1.0e-6,
-            Prefix::Milli => 1.0e-3,
-            Prefix::Nano => 1.0e-9,
-            Prefix::Peta => 1.0e15,
-            Prefix::Pico => 1.0e-12,
-            Prefix::Tebi => 1_099_511_627_776.0,
-            Prefix::Tera => 1.0e12,
-            Prefix::Yocto => 1.0e-24,
-            Prefix::Yotta => 1.0e24,
-            Prefix::Zepto => 1.0e-21,
-            Prefix::Zetta => 1.0e21,
+            Prefix::Atto => ATTO,
+            Prefix::Centi => CENTI,
+            Prefix::Deci => DECI,
+            Prefix::Deka => DEKA,
+            Prefix::Exa => EXA,
+            Prefix::Femto => FEMTO,
+            Prefix::Gibi => GIBI,
+            Prefix::Giga => GIGA,
+            Prefix::Hecto => HECTO,
+            Prefix::Kibi => KIBI,
+            Prefix::Kilo => KILO,
+            Prefix::Mebi => MEBI,
+            Prefix::Mega => MEGA,
+            Prefix::Micro => MICRO,
+            Prefix::Milli => MILLI,
+            Prefix::Nano => NANO,
+            Prefix::Peta => PETA,
+            Prefix::Pico => PICO,
+            Prefix::Tebi => TEBI,
+            Prefix::Tera => TERA,
+            Prefix::Yocto => YOCTO,
+            Prefix::Yotta => YOTTA,
+            Prefix::Zepto => ZEPTO,
+            Prefix::Zetta => ZETTA,
         }
     }
 
     fn definition_unit(&self) -> Unit {
         let definition = Definition::default();
 
-        Unit {
-            terms: definition.terms().to_vec(),
-        }
+        Unit::from(definition.terms().to_vec())
     }
 }
 
 impl fmt::Display for Prefix {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            _ => write!(f, "{}", self.primary_code()),
-        }
+        write!(f, "{}", self.primary_code())
     }
 }
 
