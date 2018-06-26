@@ -1,20 +1,21 @@
-use parser::{Error, FunctionSet, Term};
+use parser::{Error, Term, function_set::FunctionSet};
+use reducible::Reducible;
 
 /// A `Definition` is a slimmed-down version of a `Measurement` that is used to
 /// define `Atom`s in terms of other `Atom`s (ex. an `"[in_i]"` has a
 /// `Definition` of 2.54 cm).
 ///
 #[derive(Debug)]
-pub struct Definition {
-    pub value: f64,
-    pub terms: Vec<Term>,
+pub(crate) struct Definition {
+    value: f64,
+    terms: Vec<Term>,
 
     /// Conversion functions only required for special (non-ratio based) atoms.
-    pub function_set: Option<FunctionSet>,
+    function_set: Option<FunctionSet>,
 }
 
 impl Definition {
-    pub fn new(
+    pub(crate) fn new(
         value: f64,
         expression: &str,
         function_set: Option<FunctionSet>,
@@ -28,7 +29,21 @@ impl Definition {
         })
     }
 
-    pub fn calculate_scalar(&self, other_value: f64) -> f64 {
+    pub fn value(&self) -> f64 {
+        self.value
+    }
+
+    pub fn terms(&self) -> &[Term] {
+        &self.terms
+    }
+
+    pub fn is_unity(&self) -> bool {
+        self.terms.len() == 1 && self.terms[0].is_unity()
+    }
+}
+
+impl Reducible for Definition {
+    fn reduce_value(&self, other_value: f64) -> f64 {
         match self.function_set {
             None => {
                 if self.is_unity() {
@@ -36,7 +51,7 @@ impl Definition {
                 } else {
                     let terms_scalar = self.terms
                         .iter()
-                        .fold(1.0, |acc, term| acc * term.calculate_scalar(other_value));
+                        .fold(1.0, |acc, term| acc * term.reduce_value(other_value));
 
                     self.value * terms_scalar
                 }
@@ -45,7 +60,7 @@ impl Definition {
         }
     }
 
-    pub fn calculate_magnitude(&self, other_value: f64) -> f64 {
+    fn calculate_magnitude(&self, other_value: f64) -> f64 {
         match self.function_set {
             None => {
                 if self.is_unity() {
@@ -60,10 +75,6 @@ impl Definition {
             }
             Some(ref f) => (f.convert_from)(other_value),
         }
-    }
-
-    pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1 && self.terms[0].is_unity()
     }
 }
 

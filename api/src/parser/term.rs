@@ -1,5 +1,8 @@
-use parser::{Atom, Composable, Composition, Prefix, UcumSymbol};
+use parser::{Atom, Composable, Composition, Prefix};
+use parser::ucum_symbol::UcumSymbol;
+use reducible::Reducible;
 use std::fmt;
+use ucum_unit::UcumUnit;
 
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an
@@ -27,7 +30,21 @@ impl Term {
         }
     }
 
-    pub fn is_special(&self) -> bool {
+    /// A `Term` is a unity `Term` if represents "1", which technically means
+    /// here:
+    ///
+    /// * its `factor` is 1
+    /// * its `exponent` is 1
+    /// * it has no `Atom`
+    /// * it has no `Prefix`
+    ///
+    pub fn is_unity(&self) -> bool {
+        self.factor == 1 && self.exponent == 1 && self.atom.is_none() && self.prefix.is_none()
+    }
+}
+
+impl UcumUnit for Term {
+    fn is_special(&self) -> bool {
         match self.atom {
             Some(ref a) => a.is_special(),
             None => false,
@@ -50,7 +67,7 @@ impl Term {
     /// > Arbitrary units are not “of any specific dimension” and are not
     /// “commensurable with” any > other unit.
     ///
-    pub fn is_arbitrary(&self) -> bool {
+    fn is_arbitrary(&self) -> bool {
         match self.atom {
             Some(ref a) => a.is_arbitrary(),
             None => false,
@@ -59,39 +76,35 @@ impl Term {
 
     /// A `Term` is metric if it has some `Atom` that is metric.
     ///
-    pub fn is_metric(&self) -> bool {
+    fn is_metric(&self) -> bool {
         match self.atom {
             Some(ref a) => a.is_metric(),
             None => false,
         }
     }
 
-    /// A `Term` is a unity `Term` if represents "1", which technically means
-    /// here:
-    ///
-    /// * its `factor` is 1
-    /// * its `exponent` is 1
-    /// * it has no `Atom`
-    /// * it has no `Prefix`
-    ///
-    pub fn is_unity(&self) -> bool {
-        self.factor == 1 && self.exponent == 1 && self.atom.is_none() && self.prefix.is_none()
+    fn scalar(&self) -> f64 {
+        self.reduce_value(1.0)
     }
 
-    pub fn calculate_scalar(&self, value: f64) -> f64 {
-        let e = self.exponent;
-        let atom_scalar = self.atom.map_or(1.0, |a| a.calculate_scalar(value));
-        let prefix_scalar = self.prefix.map_or(1.0, |p| p.value());
+    fn magnitude(&self) -> f64 {
+        self.calculate_magnitude(self.scalar())
+    }
+}
 
-        (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(e)
+impl Reducible for Term {
+    fn reduce_value(&self, value: f64) -> f64 {
+        let atom_scalar = self.atom.map_or(1.0, |a| a.reduce_value(value));
+        let prefix_scalar = self.prefix.map_or(1.0, |p| p.definition_value());
+
+        (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(self.exponent)
     }
 
-    pub fn calculate_magnitude(&self, value: f64) -> f64 {
-        let e = self.exponent;
+    fn calculate_magnitude(&self, value: f64) -> f64 {
         let atom_magnitude = self.atom.map_or(1.0, |a| a.calculate_magnitude(value));
-        let prefix_magnitude = self.prefix.map_or(1.0, |p| p.value());
+        let prefix_magnitude = self.prefix.map_or(1.0, |p| p.definition_value());
 
-        (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(e)
+        (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(self.exponent)
     }
 }
 
@@ -119,11 +132,11 @@ impl Composable for Term {
     }
 }
 
-impl Composable for Vec<Term> {
+impl<'a> Composable for &'a [Term] {
     fn composition(&self) -> Composition {
         let mut composition = Composition::default();
 
-        for term in self {
+        for term in self.iter() {
             let term_composition = term.composition();
 
             for (term_dimension, term_exponent) in term_composition {
@@ -178,6 +191,7 @@ fn extract_term_string(term: &Term) -> String {
 #[cfg(test)]
 mod tests {
     use super::super::{Atom, Composable, Composition, Dimension, Prefix, Term};
+    use reducible::Reducible;
 
     macro_rules! validate_display {
         ($test_name:ident, $term:expr, $output:expr) => {
@@ -197,12 +211,12 @@ mod tests {
         };
     }
 
-    macro_rules! validate_calculate_scalar {
+    macro_rules! validate_reduce_value {
         ($test_name:ident, $term:expr, $expected_value:expr) => {
             #[test]
             fn $test_name() {
                 let term = $term;
-                assert_relative_eq!(term.calculate_scalar(1.0), $expected_value);
+                assert_relative_eq!(term.reduce_value(1.0), $expected_value);
             }
         };
     }
@@ -212,7 +226,7 @@ mod tests {
             #[test]
             fn $test_name() {
                 let term = $term;
-                let scalar = term.calculate_scalar(1.0);
+                let scalar = term.reduce_value(1.0);
                 assert_relative_eq!(term.calculate_magnitude(scalar), $expected_value);
             }
         };
@@ -237,56 +251,56 @@ mod tests {
     }
 
     // scalar tests
-    validate_calculate_scalar!(validate_calculate_scalar_meter, term!(Meter), 1.0);
-    validate_calculate_scalar!(
-        validate_calculate_scalar_kilometer,
+    validate_reduce_value!(validate_reduce_value_meter, term!(Meter), 1.0);
+    validate_reduce_value!(
+        validate_reduce_value_kilometer,
         term!(Kilo, Meter),
         1000.0
     );
-    validate_calculate_scalar!(
-        validate_calculate_scalar_meter_eminus1,
+    validate_reduce_value!(
+        validate_reduce_value_meter_eminus1,
         term!(Meter, exponent: -1),
         1.0
     );
-    validate_calculate_scalar!(
-        validate_calculate_scalar_meter_factor,
+    validate_reduce_value!(
+        validate_reduce_value_meter_factor,
         term!(Meter, factor: 10),
         10.0
     );
-    validate_calculate_scalar!(
-        validate_calculate_scalar_kilometer_factor,
+    validate_reduce_value!(
+        validate_reduce_value_kilometer_factor,
         term!(Kilo, Meter, factor: 10),
         10_000.0
     );
-    validate_calculate_scalar!(
-        validate_calculate_scalar_kilometer_factor_exponent,
+    validate_reduce_value!(
+        validate_reduce_value_kilometer_factor_exponent,
         term!(Kilo, Meter, exponent: -1, factor: 10),
         0.0001
     );
-    validate_calculate_scalar!(validate_calculate_scalar_liter, term!(Liter), 0.001);
-    validate_calculate_scalar!(
-        validate_calculate_scalar_pi,
+    validate_reduce_value!(validate_reduce_value_liter, term!(Liter), 0.001);
+    validate_reduce_value!(
+        validate_reduce_value_pi,
         term!(TheNumberPi),
         ::std::f64::consts::PI
     );
-    validate_calculate_scalar!(
-        validate_calculate_scalar_pi_factor,
+    validate_reduce_value!(
+        validate_reduce_value_pi_factor,
         term!(TheNumberPi, factor: 10),
         ::std::f64::consts::PI * 10.0
     );
-    validate_calculate_scalar!(
-        validate_calculate_scalar_hectare,
+    validate_reduce_value!(
+        validate_reduce_value_hectare,
         term!(Hecto, Are),
         10_000.0
     );
-    validate_calculate_scalar!(validate_calculate_scalar_week, term!(Week), 604_800.0);
-    validate_calculate_scalar!(
-        validate_calculate_scalar_kilogram,
+    validate_reduce_value!(validate_reduce_value_week, term!(Week), 604_800.0);
+    validate_reduce_value!(
+        validate_reduce_value_kilogram,
         term!(Kilo, Gram),
         1000.0
     );
-    validate_calculate_scalar!(
-        validate_calculate_scalar_fahrenheit,
+    validate_reduce_value!(
+        validate_reduce_value_fahrenheit,
         term!(DegreeFahrenheit),
         255.927_777_777_777_8
     );

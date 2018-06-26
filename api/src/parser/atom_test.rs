@@ -4,38 +4,22 @@
 mod atom_test {
     use parser::{Atom, Classification, Composable, Composition, Dimension, Prefix, Term,
                  UcumSymbol};
+    use ucum_unit::UcumUnit;
 
     macro_rules! validate_definition {
         (
             $test_name:ident,
             $atom_name:ident,
             $expected_value:expr,
-            with_function_set,
             $($expected_term:expr),+
         ) => {
             #[test]
             fn $test_name() {
                 let atom = Atom::$atom_name;
+                let expected = vec![$($expected_term),+];
 
-                assert_eq!(atom.definition().value, $expected_value);
-                assert_eq!(atom.definition().terms, vec![$($expected_term),+]);
-                assert!(atom.definition().function_set.is_some());
-            }
-        };
-
-        (
-            $test_name:ident,
-            $atom_name:ident,
-            $expected_value:expr,
-            $($expected_term:expr),+
-        ) => {
-            #[test]
-            fn $test_name() {
-                let atom = Atom::$atom_name;
-
-                assert_eq!(atom.definition().value, $expected_value);
-                assert_eq!(atom.definition().terms, vec![$($expected_term),+]);
-                assert_eq!(atom.definition().function_set, None);
+                assert_eq!(atom.definition().value(), $expected_value);
+                assert_eq!(atom.definition().terms(), expected.as_slice());
             }
         };
     }
@@ -223,8 +207,8 @@ mod atom_test {
         let terms = vec![term!()];
 
         for base_atom in base_atoms {
-            assert_eq!(base_atom.definition().value, 1.0);
-            assert_eq!(base_atom.definition().terms, terms);
+            assert_eq!(base_atom.definition().value(), 1.0);
+            assert_eq!(base_atom.definition().terms(), terms.as_slice());
         }
     }
 
@@ -254,14 +238,12 @@ mod atom_test {
         validate_definition_degree_celsius,
         DegreeCelsius,
         1.0,
-        with_function_set,
         term!(Kelvin)
     );
     validate_definition!(
         validate_definition_degree_fahrenheit,
         DegreeFahrenheit,
         5.0,
-        with_function_set,
         term!(Kelvin),
         term!(factor: 9, exponent: -1)
     );
@@ -269,7 +251,6 @@ mod atom_test {
         validate_definition_degree_reaumur,
         DegreeReaumur,
         5.0,
-        with_function_set,
         term!(Kelvin),
         term!(factor: 4, exponent: -1)
     );
@@ -340,7 +321,6 @@ mod atom_test {
         validate_definition_ph,
         PH,
         1.0,
-        with_function_set,
         term!(Mole),
         term!(Liter, exponent: -1)
     );
@@ -355,14 +335,12 @@ mod atom_test {
         validate_definition_prism_diopter,
         PrismDiopter,
         1.0,
-        with_function_set,
         term!(Radian)
     );
     validate_definition!(
         validate_definition_bel_watt,
         BelWatt,
         1.0,
-        with_function_set,
         term!(Watt)
     );
     validate_definition!(

@@ -7,8 +7,11 @@
 // generate them using underscores (to make them pass the clippy lint).
 #[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
 pub mod atom {
-    use parser::{Classification, Composable, Composition, Definition, Dimension, FunctionSet, Property, UcumSymbol};
+    use parser::{Classification, Composable, Composition, definition::Definition, Dimension, function_set::FunctionSet, Property, UcumSymbol};
+    use reducible::Reducible;
     use std::fmt;
+    use unit::Unit;
+    use ucum_unit::UcumUnit;
 
     // TODO: Implement PartialEq
     #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
@@ -16,6 +19,24 @@ pub mod atom {
     pub enum Atom {
         {{~ #each atoms }}
         {{ type_name }},{{ /each }}
+    }
+
+    impl Atom {
+        pub(crate) fn definition(self) -> Definition {
+            let result = match self {
+                {{~ #each atoms }}
+                Atom::{{ type_name }} => {{ definition_signature }},{{ /each }}
+            };
+
+            result.expect("BUG! Bad Atom -> Definition mapping!")
+        }
+
+        pub fn property(self) -> Property {
+            match self {
+                {{~ #each atoms }}
+                Atom::{{ type_name }} => Property::{{ camelCase property }},{{ /each }}
+            }
+        }
     }
 
     impl UcumSymbol for Atom {
@@ -26,13 +47,56 @@ pub mod atom {
             }
         }
 
-        fn definition(&self) -> Definition {
-            let result = match *self {
+        fn names(&self) -> Vec<&'static str> {
+            match *self {
                 {{~ #each atoms }}
-                Atom::{{ type_name }} => {{ definition_signature }},{{ /each }}
-            };
+                Atom::{{ type_name }} => vec![{{ #each names }}"{{ this }}",{{ /each}}],{{ /each }}
+            }
+        }
 
-            result.expect("BUG! Bad Atom -> Definition mapping!")
+        fn primary_code(&self) -> &'static str {
+            match *self {
+                {{~ #each atoms }}
+                Atom::{{ type_name }} => "{{ primary_code }}",{{ /each }}
+            }
+        }
+
+        fn print_symbol(&self) -> Option<&'static str> {
+            match *self {
+                {{~ #each atoms }}
+                {{~ #if print_symbol }}
+                Atom::{{ type_name }} => Some("{{ print_symbol }}"),
+                {{~ /if}}{{ /each }}
+                _ => None,
+            }
+        }
+
+        fn secondary_code(&self) -> Option<&'static str> {
+            match *self {
+                {{~ #each atoms }}
+                {{~ #if secondary_code }}
+                Atom::{{ type_name }} => Some("{{ secondary_code }}"),
+                {{~ /if ~}}{{ /each }}
+                _ => None,
+            }
+        }
+
+        fn definition_value(&self) -> f64 {
+            self.definition().value()
+        }
+
+        fn definition_unit(&self) -> Unit {
+            self.definition().terms().to_vec().into()
+        }
+    }
+
+    impl UcumUnit for Atom {
+        fn scalar(&self) -> f64 {
+            self.reduce_value(1.0)
+        }
+
+        fn magnitude(&self) -> f64 {
+            self.calculate_magnitude(self.scalar())
         }
 
         fn is_arbitrary(&self) -> bool {
@@ -64,58 +128,11 @@ pub mod atom {
                 _ => false,
             }
         }
+    }
 
-        fn names(&self) -> Vec<&'static str> {
-            match *self {
-                {{~ #each atoms }}
-                Atom::{{ type_name }} => vec![{{ #each names }}"{{ this }}",{{ /each}}],{{ /each }}
-            }
-        }
-
-        fn primary_code(&self) -> &'static str {
-            match *self {
-                {{~ #each atoms }}
-                Atom::{{ type_name }} => "{{ primary_code }}",{{ /each }}
-            }
-        }
-
-        fn print_symbol(&self) -> Option<&'static str> {
-            match *self {
-                {{~ #each atoms }}
-                {{~ #if print_symbol }}
-                Atom::{{ type_name }} => Some("{{ print_symbol }}"),
-                {{~ /if}}{{ /each }}
-                _ => None,
-            }
-        }
-
-        fn property(&self) -> Property {
-            match *self {
-                {{~ #each atoms }}
-                Atom::{{ type_name }} => Property::{{ camelCase property }},{{ /each }}
-            }
-        }
-
-        fn secondary_code(&self) -> Option<&'static str> {
-            match *self {
-                {{~ #each atoms }}
-                {{~ #if secondary_code }}
-                Atom::{{ type_name }} => Some("{{ secondary_code }}"),
-                {{~ /if ~}}{{ /each }}
-                _ => None,
-            }
-        }
-
-        fn scalar(&self) -> f64 {
-            self.calculate_scalar(1.0)
-        }
-
-        fn magnitude(&self) -> f64 {
-            self.calculate_magnitude(self.scalar())
-        }
-
-        fn calculate_scalar(&self, value: f64) -> f64 {
-            self.definition().calculate_scalar(value)
+    impl Reducible for Atom {
+        fn reduce_value(&self, value: f64) -> f64 {
+            self.definition().reduce_value(value)
         }
 
         fn calculate_magnitude(&self, value: f64) -> f64 {
@@ -137,7 +154,7 @@ pub mod atom {
                 Atom::Meter => Composition::new(Dimension::Length, 1),
                 Atom::Radian => Composition::new(Dimension::PlaneAngle, 1),
                 Atom::Second => Composition::new(Dimension::Time, 1),
-                _ => self.definition().terms.composition(),
+                _ => self.definition().terms().composition(),
             }
         }
     }

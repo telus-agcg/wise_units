@@ -1,10 +1,12 @@
 use convertible::Convertible;
 use field_eq::FieldEq;
 use parser::{Composable, Error};
+use reducible::Reducible;
 use std::cmp::Ordering;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Sub};
 use std::str::FromStr;
+use ucum_unit::UcumUnit;
 use unit::Unit;
 
 /// A Measurement is the prime interface for consumers of the library. It
@@ -46,13 +48,39 @@ impl Measurement {
         Ok(m)
     }
 
+    fn converted_scalar(&self, other_unit: &Unit) -> f64 {
+        if self.is_special() && other_unit.is_special() {
+            let ts = self.unit.reduce_value(self.value);
+            other_unit.calculate_magnitude(ts)
+        } else if self.is_special() {
+            self.unit.reduce_value(self.value)
+        } else if other_unit.is_special() {
+            other_unit.calculate_magnitude(self.value)
+        } else {
+            self.scalar() / other_unit.reduce_value(1.0)
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+// impl UcumUnit
+//-----------------------------------------------------------------------------
+impl UcumUnit for Measurement {
     /// Checks if the associated Unit is "special". "Special" units are ones
     /// that must be converted using a function in combination with some other
     /// non-special units. For example, Celsius is special since it must be
     /// first converted to Kelvin before converting to the requested unit.
     ///
-    pub fn is_special(&self) -> bool {
+    fn is_special(&self) -> bool {
         self.unit.is_special()
+    }
+
+    fn is_arbitrary(&self) -> bool {
+        self.unit.is_arbitrary()
+    }
+
+    fn is_metric(&self) -> bool {
+        self.unit.is_metric()
     }
 
     /// This scalar is the Measurement's value combined with any scalars that
@@ -61,7 +89,7 @@ impl Measurement {
     /// # Examples
     ///
     /// ```
-    /// use wise_units::Measurement;
+    /// use wise_units::{Measurement, UcumUnit};
     ///
     /// let five_meters = Measurement::new(5.0, "m").unwrap();
     /// assert_eq!(five_meters.scalar(), 5.0);
@@ -76,11 +104,11 @@ impl Measurement {
     /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
     /// ```
     ///
-    pub fn scalar(&self) -> f64 {
+    fn scalar(&self) -> f64 {
         if self.is_special() {
-            self.unit.calculate_scalar(self.value)
+            self.unit.reduce_value(self.value)
         } else {
-            self.value * self.unit.calculate_scalar(1.0)
+            self.value * self.unit.reduce_value(1.0)
         }
     }
 
@@ -90,7 +118,7 @@ impl Measurement {
     /// # Examples
     ///
     /// ```
-    /// use wise_units::Measurement;
+    /// use wise_units::{Measurement, UcumUnit};
     ///
     /// let five_meters = Measurement::new(5.0, "m").unwrap();
     /// assert_eq!(five_meters.magnitude(), 5.0);
@@ -105,25 +133,12 @@ impl Measurement {
     /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
     /// ```
     ///
-    pub fn magnitude(&self) -> f64 {
+    fn magnitude(&self) -> f64 {
         if self.is_special() {
             let scalar = self.scalar();
             self.unit.calculate_magnitude(scalar)
         } else {
             self.value * self.unit.calculate_magnitude(1.0)
-        }
-    }
-
-    fn converted_scalar(&self, other_unit: &Unit) -> f64 {
-        if self.is_special() && other_unit.is_special() {
-            let ts = self.unit.calculate_scalar(self.value);
-            other_unit.calculate_magnitude(ts)
-        } else if self.is_special() {
-            self.unit.calculate_scalar(self.value)
-        } else if other_unit.is_special() {
-            other_unit.calculate_magnitude(self.value)
-        } else {
-            self.scalar() / other_unit.calculate_scalar(1.0)
         }
     }
 }

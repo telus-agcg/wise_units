@@ -1,10 +1,14 @@
 use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
 use field_eq::FieldEq;
 use parser::{Composable, Composition, Error, Term};
+use reducible::Reducible;
+use std::borrow::Borrow;
 use std::cmp::Ordering;
+use std::convert::From;
 use std::fmt;
 use std::ops::{Div, Mul};
 use std::str::FromStr;
+use ucum_unit::UcumUnit;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug)]
@@ -28,7 +32,7 @@ js_deserializable!(Unit);
 ///
 /// ```rust
 /// use std::str::FromStr;
-/// use wise_units::Unit;
+/// use wise_units::{UcumUnit, Unit};
 ///
 /// let m = Unit::from_str("m2").unwrap();
 /// assert_eq!(m.scalar(), 1.0);
@@ -38,6 +42,42 @@ js_deserializable!(Unit);
 /// ```
 ///
 impl Unit {
+    /// Turns the Unit's Terms into Strings and combines them accordingly.
+    /// This always returns a String that is parsable back into the same Unit.
+    ///
+    /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
+    /// render the same result.
+    ///
+    /// ```rust
+    /// use std::str::FromStr;
+    /// use wise_units::Unit;
+    ///
+    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
+    /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
+    /// ```
+    ///
+    pub fn expression(&self) -> String {
+        SimpleDecomposer::new(&self.terms).expression()
+    }
+
+    /// If the unit terms are a fraction and can be reduced, this returns those
+    /// as a string. Ex. terms that would normally render
+    /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
+    ///
+    /// ```rust
+    /// use std::str::FromStr;
+    /// use wise_units::Unit;
+    ///
+    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
+    /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");
+    /// ```
+    ///
+    pub fn expression_reduced(&self) -> String {
+        ReductionDecomposer::new(&self.terms).expression()
+    }
+}
+
+impl UcumUnit for Unit {
     /// The UCUM defines "special units" as:
     ///
     /// > units that imply a measurement on a scale other than a ratio scale
@@ -45,7 +85,7 @@ impl Unit {
     /// Each atom in `Atoms.toml` has the `isSpecial` attribute; a `Unit` is
     /// special if any of its `Term`s has an `Atom` that is special.
     ///
-    pub fn is_special(&self) -> bool {
+    fn is_special(&self) -> bool {
         self.terms.iter().any(|term| term.is_special())
     }
 
@@ -71,16 +111,12 @@ impl Unit {
     /// `Prefix`es. Also this method only returns `true` when *all* of its
     /// `Term`s are metric.
     ///
-    pub fn is_metric(&self) -> bool {
+    fn is_metric(&self) -> bool {
         self.terms.iter().all(|term| term.is_metric())
     }
 
-    /// Checks if this unit is really just a wrapper around `Atom::TheUnity`.
-    /// This is helpful for knowing, internally, when to stop recursively
-    /// calling some functions.
-    ///
-    pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1 && self.terms[0].is_unity()
+    fn is_arbitrary(&self) -> bool {
+        self.terms.iter().all(|term| term.is_arbitrary())
     }
 
     /// This gives the scalar value of `self` in terms of `self`'s
@@ -88,7 +124,7 @@ impl Unit {
     /// `factor` and `exponent`.
     ///
     /// ```rust
-    /// use wise_units::Unit;
+    /// use wise_units::{UcumUnit, Unit};
     /// use std::str::FromStr;
     ///
     /// // A "km" is 1000 meters.
@@ -111,14 +147,14 @@ impl Unit {
     /// let unit = Unit::from_str("km/h").unwrap();
     /// assert_eq!(unit.scalar(), 0.277_777_777_777_777_8);
     ///
-    pub fn scalar(&self) -> f64 {
-        self.calculate_scalar(1.0)
+    fn scalar(&self) -> f64 {
+        self.reduce_value(1.0)
     }
 
     /// The scalar value of `self` in terms of `self`'s actual unit(s).
     ///
     /// ```rust
-    /// use wise_units::Unit;
+    /// use wise_units::{UcumUnit, Unit};
     /// use std::str::FromStr;
     ///
     /// // A "km" is 1000 meters.
@@ -157,58 +193,27 @@ impl Unit {
     /// let unit = Unit::from_str("10m/5s2").unwrap();
     /// assert_eq!(unit.magnitude(), 0.4);
     ///
-    pub fn magnitude(&self) -> f64 {
+    fn magnitude(&self) -> f64 {
         self.calculate_magnitude(self.scalar())
     }
+}
 
-    /// Calculates `value` count of `self` in terms of `self`'s base-unit.
-    ///
-    pub fn calculate_scalar(&self, value: f64) -> f64 {
+//-----------------------------------------------------------------------------
+// impl Reducible
+//-----------------------------------------------------------------------------
+impl Reducible for Unit {
+    fn reduce_value(&self, value: f64) -> f64 {
         self.terms
             .iter()
-            .fold(1.0, |acc, term| acc * term.calculate_scalar(value))
+            .fold(1.0, |acc, term| acc * term.reduce_value(value))
     }
 
     /// Calculates `value` count of `self` in terms of `self`'s unit.
     ///
-    pub fn calculate_magnitude(&self, value: f64) -> f64 {
+    fn calculate_magnitude(&self, value: f64) -> f64 {
         self.terms
             .iter()
             .fold(1.0, |acc, term| acc * term.calculate_magnitude(value))
-    }
-
-    /// Turns the Unit's Terms into Strings and combines them accordingly.
-    /// This always returns a String that is parsable back into the same Unit.
-    ///
-    /// Ex. terms that would normally render `[acr_us].[in_i]/[acr_us]` would
-    /// render the same result.
-    ///
-    /// ```rust
-    /// use std::str::FromStr;
-    /// use wise_units::Unit;
-    ///
-    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
-    /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
-    /// ```
-    ///
-    pub fn expression(&self) -> String {
-        SimpleDecomposer::new(&self.terms).expression()
-    }
-
-    /// If the unit terms are a fraction and can be reduced, this returns those
-    /// as a string. Ex. terms that would normally render
-    /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
-    ///
-    /// ```rust
-    /// use std::str::FromStr;
-    /// use wise_units::Unit;
-    ///
-    /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
-    /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");
-    /// ```
-    ///
-    pub fn expression_reduced(&self) -> String {
-        ReductionDecomposer::new(&self.terms).expression()
     }
 }
 
@@ -217,13 +222,17 @@ impl Unit {
 //-----------------------------------------------------------------------------
 impl Composable for Unit {
     fn composition(&self) -> Composition {
-        self.terms.composition()
+        let term_slice: &[Term] = self.terms.borrow();
+
+        term_slice.composition()
     }
 }
 
 impl<'a> Composable for &'a Unit {
     fn composition(&self) -> Composition {
-        self.terms.composition()
+        let term_slice: &[Term] = self.terms.borrow();
+
+        term_slice.composition()
     }
 }
 
@@ -237,6 +246,15 @@ impl fmt::Display for Unit {
 }
 
 //-----------------------------------------------------------------------------
+// impl From
+//-----------------------------------------------------------------------------
+impl From<Vec<Term>> for Unit {
+    fn from(terms: Vec<Term>) -> Self {
+        Unit { terms }
+    }
+}
+
+//-----------------------------------------------------------------------------
 // impl FromStr
 //-----------------------------------------------------------------------------
 impl FromStr for Unit {
@@ -245,7 +263,7 @@ impl FromStr for Unit {
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
         let terms = super::parser::parse(expression)?;
 
-        Ok(Self { terms })
+        Ok(Unit::from(terms))
     }
 }
 
@@ -377,7 +395,7 @@ impl Div for Unit {
     fn div(self, other: Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
-        Self { terms }
+        Unit::from(terms)
     }
 }
 
@@ -387,7 +405,7 @@ impl<'a> Div<&'a Unit> for Unit {
     fn div(self, other: &'a Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
-        Self { terms }
+        Unit::from(terms)
     }
 }
 
@@ -397,7 +415,7 @@ impl<'a> Div for &'a Unit {
     fn div(self, other: &'a Unit) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
-        Unit { terms }
+        Unit::from(terms)
     }
 }
 
@@ -407,7 +425,7 @@ impl<'a> Div for &'a mut Unit {
     fn div(self, other: &'a mut Unit) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
-        Unit { terms }
+        Unit::from(terms)
     }
 }
 
@@ -436,7 +454,7 @@ impl Mul for Unit {
     fn mul(self, other: Self) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
-        Self { terms }
+        Unit::from(terms)
     }
 }
 
@@ -446,7 +464,7 @@ impl<'a> Mul for &'a Unit {
     fn mul(self, other: &'a Unit) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit { terms }
+        Unit::from(terms)
     }
 }
 
@@ -456,7 +474,7 @@ impl<'a> Mul for &'a mut Unit {
     fn mul(self, other: &'a mut Unit) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit { terms }
+        Unit::from(terms)
     }
 }
 
@@ -528,17 +546,6 @@ mod tests {
     fn validate_is_special() {
         let unit = Unit::from_str("m").unwrap();
         assert!(!unit.is_special());
-    }
-
-    #[test]
-    fn validate_is_unity() {
-        // Dimless unit
-        let unit = Unit::from_str("[ppth]").unwrap();
-        assert!(!unit.is_unity());
-
-        // Regular unit
-        let unit = Unit::from_str("m").unwrap();
-        assert!(!unit.is_unity());
     }
 
     validate_scalars!(

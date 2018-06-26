@@ -50,7 +50,9 @@ pub mod measurement;
 pub mod unit;
 
 mod decomposer;
+mod reducible;
 mod parser;
+mod ucum_unit;
 
 pub use convertible::Convertible;
 pub use field_eq::FieldEq;
@@ -58,3 +60,4 @@ pub use measurement::Measurement;
 pub use parser::{Atom, Classification, Composable, Composition, Dimension, Error, Prefix,
                  Property, Term};
 pub use unit::Unit;
+pub use ucum_unit::UcumUnit;
