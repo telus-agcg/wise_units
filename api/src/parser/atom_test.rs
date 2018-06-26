@@ -2,8 +2,9 @@
 //!
 #[cfg(test)]
 mod atom_test {
-    use parser::{Atom, Classification, Composable, Composition, Dimension, Prefix, Term,
-                 UcumSymbol};
+    use parser::{
+        Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol,
+    };
     use ucum_unit::UcumUnit;
 
     macro_rules! validate_definition {
@@ -337,12 +338,7 @@ mod atom_test {
         1.0,
         term!(Radian)
     );
-    validate_definition!(
-        validate_definition_bel_watt,
-        BelWatt,
-        1.0,
-        term!(Watt)
-    );
+    validate_definition!(validate_definition_bel_watt, BelWatt, 1.0, term!(Watt));
     validate_definition!(
         validate_definition_quart_us,
         QuartUS,

@@ -308,8 +308,8 @@ impl<'a> FieldEq<'a> for Unit {
 /// b) their `scalar()` values are equal
 ///
 /// ```rust
-/// use wise_units::Unit;
 /// use std::str::FromStr;
+/// use wise_units::Unit;
 ///
 /// let unit = Unit::from_str("m").unwrap();
 /// let other = Unit::from_str("m").unwrap();
@@ -340,9 +340,9 @@ impl PartialEq for Unit {
 /// This allows for comparing `Units`s based on their reduced scalar values.
 ///
 /// ```rust
-/// use wise_units::Unit;
 /// use std::cmp::Ordering;
 /// use std::str::FromStr;
+/// use wise_units::Unit;
 ///
 /// let unit = Unit::from_str("m").unwrap();
 /// let other = Unit::from_str("m").unwrap();

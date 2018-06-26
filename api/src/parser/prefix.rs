@@ -1,5 +1,5 @@
-use parser::{definition::Definition, Classification};
 use parser::ucum_symbol::UcumSymbol;
+use parser::{definition::Definition, Classification};
 use std::fmt;
 use unit::Unit;
 
@@ -35,9 +35,6 @@ pub enum Prefix {
     Yotta,
     Zepto,
     Zetta,
-}
-
-impl Prefix {
 }
 
 impl UcumSymbol for Prefix {
@@ -175,7 +172,9 @@ impl UcumSymbol for Prefix {
     fn definition_unit(&self) -> Unit {
         let definition = Definition::default();
 
-        Unit { terms: definition.terms().to_vec() }
+        Unit {
+            terms: definition.terms().to_vec(),
+        }
     }
 }
 

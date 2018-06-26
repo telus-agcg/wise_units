@@ -284,8 +284,8 @@ impl PartialEq for Measurement {
 /// values.
 ///
 /// ```rust
-/// use wise_units::Measurement;
 /// use std::cmp::Ordering;
+/// use wise_units::Measurement;
 ///
 /// let measurement = Measurement::new(1.0, "m").unwrap();
 /// let other = Measurement::new(1.0, "m").unwrap();

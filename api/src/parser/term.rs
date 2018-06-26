@@ -1,5 +1,5 @@
-use parser::{Atom, Composable, Composition, Prefix};
 use parser::ucum_symbol::UcumSymbol;
+use parser::{Atom, Composable, Composition, Prefix};
 use reducible::Reducible;
 use std::fmt;
 use ucum_unit::UcumUnit;
@@ -252,11 +252,7 @@ mod tests {
 
     // scalar tests
     validate_reduce_value!(validate_reduce_value_meter, term!(Meter), 1.0);
-    validate_reduce_value!(
-        validate_reduce_value_kilometer,
-        term!(Kilo, Meter),
-        1000.0
-    );
+    validate_reduce_value!(validate_reduce_value_kilometer, term!(Kilo, Meter), 1000.0);
     validate_reduce_value!(
         validate_reduce_value_meter_eminus1,
         term!(Meter, exponent: -1),
@@ -288,17 +284,9 @@ mod tests {
         term!(TheNumberPi, factor: 10),
         ::std::f64::consts::PI * 10.0
     );
-    validate_reduce_value!(
-        validate_reduce_value_hectare,
-        term!(Hecto, Are),
-        10_000.0
-    );
+    validate_reduce_value!(validate_reduce_value_hectare, term!(Hecto, Are), 10_000.0);
     validate_reduce_value!(validate_reduce_value_week, term!(Week), 604_800.0);
-    validate_reduce_value!(
-        validate_reduce_value_kilogram,
-        term!(Kilo, Gram),
-        1000.0
-    );
+    validate_reduce_value!(validate_reduce_value_kilogram, term!(Kilo, Gram), 1000.0);
     validate_reduce_value!(
         validate_reduce_value_fahrenheit,
         term!(DegreeFahrenheit),

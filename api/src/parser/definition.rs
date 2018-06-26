@@ -1,4 +1,4 @@
-use parser::{Error, Term, function_set::FunctionSet};
+use parser::{function_set::FunctionSet, Error, Term};
 use reducible::Reducible;
 
 /// A `Definition` is a slimmed-down version of a `Measurement` that is used to
