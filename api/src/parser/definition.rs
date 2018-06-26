@@ -49,11 +49,7 @@ impl Reducible for Definition {
                 if self.is_unity() {
                     self.value
                 } else {
-                    let terms_scalar = self.terms
-                        .iter()
-                        .fold(1.0, |acc, term| acc * term.reduce_value(other_value));
-
-                    self.value * terms_scalar
+                    self.value * self.terms.reduce_value(other_value)
                 }
             }
             Some(ref f) => (f.convert_to)(other_value),
@@ -66,11 +62,7 @@ impl Reducible for Definition {
                 if self.is_unity() {
                     self.value
                 } else {
-                    let terms_magnitude = self.terms
-                        .iter()
-                        .fold(1.0, |acc, term| acc * term.calculate_magnitude(other_value));
-
-                    self.value * terms_magnitude
+                    self.value * self.terms.calculate_magnitude(other_value)
                 }
             }
             Some(ref f) => (f.convert_from)(other_value),

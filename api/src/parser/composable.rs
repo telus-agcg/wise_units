@@ -10,9 +10,6 @@ pub trait Composable {
     fn composition(&self) -> Composition;
 
     fn is_compatible_with<T: Composable>(&self, other_unit: &T) -> bool {
-        let me = self.composition();
-        let other_comp = other_unit.composition();
-
-        me == other_comp
+        self.composition() == other_unit.composition()
     }
 }
