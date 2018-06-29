@@ -4,10 +4,19 @@
 
 ### Added
 
+* Added implementations of `Add`, `Sub`, `Mul`, `Div` for `&'a Measurement` and
+  `&'a Unit` where the right-hand side is an owned version of the same type.
+* Added implementations of `Mul`, `Div` for `&'a Measurement` where the
+  right-hand side is an `f64`.
+
 ### Changed
 
+* Removed implementations of `Add`, `Sub`, `Mul`, `Div` for `&'a mut Measurement`
+  and `&'a mut Unit`. Those seem like edge-cases and thus code bloat at this
+  point.
 * `Convertible` trait now uses associated types for the output type and the
   error type, letting definers use their own.
+* 
 
 ## [0.2.0] - 2018-06-26
 
