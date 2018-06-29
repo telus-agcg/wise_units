@@ -165,7 +165,10 @@ impl Reducible for Measurement {
 /// incompatible, you'll get an `Error`.
 ///
 impl<'a> Convertible<&'a str> for Measurement {
-    fn convert_to(&self, expression: &'a str) -> Result<Self, Error> {
+    type Output = Self;
+    type ConversionError = Error;
+
+    fn convert_to(&self, expression: &'a str) -> Result<Self, Self::ConversionError> {
         let other_unit = Unit::from_str(expression)?;
 
         convert_measurement(self, &other_unit)
@@ -177,7 +180,10 @@ impl<'a> Convertible<&'a str> for Measurement {
 /// are incompatible, you'll get an `Error`.
 ///
 impl<'a> Convertible<&'a Unit> for Measurement {
-    fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Error> {
+    type Output = Self;
+    type ConversionError = Error;
+
+    fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Self::ConversionError> {
         convert_measurement(self, other_unit)
     }
 }

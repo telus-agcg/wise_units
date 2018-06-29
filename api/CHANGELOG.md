@@ -4,6 +4,15 @@
 
 ### Added
 
+### Changed
+
+* `Convertible` trait now uses associated types for the output type and the
+  error type, letting definers use their own.
+
+## [0.2.0] - 2018-06-26
+
+### Added
+
 * [AGDEV-30315] Add serde support using "with_serde" feature flag.
 * [AGDEV-30253] Add stdweb support using "with_stdweb" feature flag. Just adds
   `js_serializable!` and `js_deserializable!` for both `Measurement` and `Unit`.
