@@ -165,7 +165,10 @@ impl Reducible for Measurement {
 /// incompatible, you'll get an `Error`.
 ///
 impl<'a> Convertible<&'a str> for Measurement {
-    fn convert_to(&self, expression: &'a str) -> Result<Self, Error> {
+    type Output = Self;
+    type ConversionError = Error;
+
+    fn convert_to(&self, expression: &'a str) -> Result<Self, Self::ConversionError> {
         let other_unit = Unit::from_str(expression)?;
 
         convert_measurement(self, &other_unit)
@@ -177,7 +180,10 @@ impl<'a> Convertible<&'a str> for Measurement {
 /// are incompatible, you'll get an `Error`.
 ///
 impl<'a> Convertible<&'a Unit> for Measurement {
-    fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Error> {
+    type Output = Self;
+    type ConversionError = Error;
+
+    fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Self::ConversionError> {
         convert_measurement(self, other_unit)
     }
 }
@@ -359,11 +365,29 @@ impl PartialOrd for Measurement {
 //-----------------------------------------------------------------------------
 // impl Add
 //-----------------------------------------------------------------------------
+fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
+    let rhs_converted = rhs.convert_to(&lhs.unit)?;
+    let new_value = lhs.value + rhs_converted.value;
+
+    Ok(Measurement {
+        value: new_value,
+        unit: lhs.unit.clone(),
+    })
+}
+
 impl Add for Measurement {
     type Output = Result<Self, Error>;
 
     fn add(self, other: Self) -> Self::Output {
         add_measurements(&self, &other)
+    }
+}
+
+impl<'a> Add<&'a Measurement> for Measurement {
+    type Output = Result<Self, Error>;
+
+    fn add(self, other: &'a Measurement) -> Self::Output {
+        add_measurements(&self, other)
     }
 }
 
@@ -375,17 +399,20 @@ impl<'a> Add for &'a Measurement {
     }
 }
 
-impl<'a> Add for &'a mut Measurement {
+impl<'a> Add<Measurement> for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
-    fn add(self, other: &'a mut Measurement) -> Self::Output {
-        add_measurements(self, other)
+    fn add(self, other: Measurement) -> Self::Output {
+        add_measurements(self, &other)
     }
 }
 
-fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
+//-----------------------------------------------------------------------------
+// impl Sub
+//-----------------------------------------------------------------------------
+fn sub_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
     let rhs_converted = rhs.convert_to(&lhs.unit)?;
-    let new_value = lhs.value + rhs_converted.value;
+    let new_value = lhs.value - rhs_converted.value;
 
     Ok(Measurement {
         value: new_value,
@@ -393,13 +420,18 @@ fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement,
     })
 }
 
-//-----------------------------------------------------------------------------
-// impl Sub
-//-----------------------------------------------------------------------------
 impl Sub for Measurement {
     type Output = Result<Self, Error>;
 
     fn sub(self, other: Self) -> Self::Output {
+        sub_measurements(&self, &other)
+    }
+}
+
+impl<'a> Sub<&'a Measurement> for Measurement {
+    type Output = Result<Self, Error>;
+
+    fn sub(self, other: &'a Measurement) -> Self::Output {
         sub_measurements(&self, &other)
     }
 }
@@ -412,32 +444,40 @@ impl<'a> Sub for &'a Measurement {
     }
 }
 
-impl<'a> Sub for &'a mut Measurement {
+impl<'a> Sub<Measurement> for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
-    fn sub(self, other: &'a mut Measurement) -> Self::Output {
-        sub_measurements(self, other)
+    fn sub(self, other: Measurement) -> Self::Output {
+        sub_measurements(self, &other)
     }
-}
-
-fn sub_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
-    let rhs_converted = rhs.convert_to(&lhs.unit)?;
-    let new_value = lhs.value - rhs_converted.value;
-
-    Ok(Measurement {
-        value: new_value,
-        unit: lhs.unit.clone(),
-    })
 }
 
 //-----------------------------------------------------------------------------
 // impl Mul
 //-----------------------------------------------------------------------------
+fn mul_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
+    let new_value = lhs.value * rhs.value;
+    let new_unit = &lhs.unit * &rhs.unit;
+
+    Measurement {
+        value: new_value,
+        unit: new_unit,
+    }
+}
+
 impl Mul for Measurement {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self::Output {
         mul_measurements(&self, &other)
+    }
+}
+
+impl<'a> Mul<&'a Measurement> for Measurement {
+    type Output = Self;
+
+    fn mul(self, other: &'a Measurement) -> Self::Output {
+        mul_measurements(&self, other)
     }
 }
 
@@ -449,21 +489,11 @@ impl<'a> Mul for &'a Measurement {
     }
 }
 
-impl<'a> Mul for &'a mut Measurement {
+impl<'a> Mul<Measurement> for &'a Measurement {
     type Output = Measurement;
 
-    fn mul(self, other: &'a mut Measurement) -> Self::Output {
-        mul_measurements(self, other)
-    }
-}
-
-fn mul_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
-    let new_value = lhs.value * rhs.value;
-    let new_unit = &lhs.unit * &rhs.unit;
-
-    Measurement {
-        value: new_value,
-        unit: new_unit,
+    fn mul(self, other: Measurement) -> Self::Output {
+        mul_measurements(self, &other)
     }
 }
 
@@ -483,9 +513,32 @@ impl Mul<f64> for Measurement {
     }
 }
 
+impl<'a> Mul<f64> for &'a Measurement {
+    type Output = Measurement;
+
+    fn mul(self, other: f64) -> Self::Output {
+        let new_value = self.value * other;
+
+        Measurement {
+            value: new_value,
+            unit: self.unit.clone(),
+        }
+    }
+}
+
 //-----------------------------------------------------------------------------
 // impl Div
 //-----------------------------------------------------------------------------
+fn div_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
+    let new_value = lhs.value / rhs.value;
+    let new_unit = &lhs.unit / &rhs.unit;
+
+    Measurement {
+        value: new_value,
+        unit: new_unit,
+    }
+}
+
 impl Div for Measurement {
     type Output = Self;
 
@@ -502,21 +555,19 @@ impl<'a> Div for &'a Measurement {
     }
 }
 
-impl<'a> Div for &'a mut Measurement {
+impl<'a> Div<&'a Measurement> for Measurement {
     type Output = Measurement;
 
-    fn div(self, other: &'a mut Measurement) -> Self::Output {
-        div_measurements(self, other)
+    fn div(self, other: &'a Measurement) -> Self::Output {
+        div_measurements(&self, other)
     }
 }
 
-fn div_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
-    let new_value = lhs.value / rhs.value;
-    let new_unit = &lhs.unit / &rhs.unit;
+impl<'a> Div<Measurement> for &'a Measurement {
+    type Output = Measurement;
 
-    Measurement {
-        value: new_value,
-        unit: new_unit,
+    fn div(self, other: Measurement) -> Self::Output {
+        div_measurements(self, &other)
     }
 }
 
@@ -530,6 +581,19 @@ impl Div<f64> for Measurement {
         let new_value = self.value / other;
 
         Self {
+            value: new_value,
+            unit: self.unit.clone(),
+        }
+    }
+}
+
+impl<'a> Div<f64> for &'a Measurement {
+    type Output = Measurement;
+
+    fn div(self, other: f64) -> Self::Output {
+        let new_value = self.value / other;
+
+        Measurement {
             value: new_value,
             unit: self.unit.clone(),
         }
@@ -764,12 +828,21 @@ mod tests {
         }
 
         #[test]
-        fn validate_add_mut_borrowed() {
-            let mut m1 = Measurement::new(1.0, "m").unwrap();
-            let mut m2 = Measurement::new(2.0, "m").unwrap();
+        fn validate_add_owned_and_borrowed() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
             let expected = Measurement::new(3.0, "m").unwrap();
 
-            assert_eq!((&mut m1 + &mut m2).unwrap(), expected);
+            assert_eq!((m1 + &m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_add_borrowed_and_owned() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(3.0, "m").unwrap();
+
+            assert_eq!((&m1 + m2).unwrap(), expected);
         }
     }
 
@@ -795,12 +868,21 @@ mod tests {
         }
 
         #[test]
-        fn validate_sub_mut_borrowed() {
-            let mut m1 = Measurement::new(1.0, "m").unwrap();
-            let mut m2 = Measurement::new(2.0, "m").unwrap();
+        fn validate_sub_owned_and_borrowed() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
             let expected = Measurement::new(-1.0, "m").unwrap();
 
-            assert_eq!((&mut m1 - &mut m2).unwrap(), expected);
+            assert_eq!((m1 - &m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_sub_borrowed_and_owned() {
+            let m1 = Measurement::new(1.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let expected = Measurement::new(-1.0, "m").unwrap();
+
+            assert_eq!((&m1 - m2).unwrap(), expected);
         }
     }
 
@@ -840,10 +922,26 @@ mod tests {
         }
 
         #[test]
-        fn validate_mul_mut_borrowed() {
-            let mut m1 = Measurement::new(2.0, "m").unwrap();
-            let mut m2 = Measurement::new(3.0, "m").unwrap();
-            let r = &mut m1 * &mut m2;
+        fn validate_mul_owned_and_borrowed() {
+            let m1 = Measurement::new(2.0, "m").unwrap();
+            let m2 = Measurement::new(3.0, "m").unwrap();
+            let r = m1 * &m2;
+
+            assert_eq!(r.value, 6.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+            assert_eq!(terms[1], first_term);
+        }
+
+        #[test]
+        fn validate_mul_borrowed_and_owned() {
+            let m1 = Measurement::new(2.0, "m").unwrap();
+            let m2 = Measurement::new(3.0, "m").unwrap();
+            let r = &m1 * m2;
 
             assert_eq!(r.value, 6.0);
 
@@ -904,10 +1002,28 @@ mod tests {
         }
 
         #[test]
-        fn validate_div_mut_borrowed() {
-            let mut m1 = Measurement::new(10.0, "m").unwrap();
-            let mut m2 = Measurement::new(2.0, "m").unwrap();
-            let r = &mut m1 / &mut m2;
+        fn validate_div_owned_and_borrowed() {
+            let m1 = Measurement::new(10.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let r = m1 / &m2;
+
+            assert_eq!(r.value, 5.0);
+
+            let terms = r.unit.terms;
+            assert_eq!(terms.len(), 2);
+
+            let first_term = term!(Meter);
+            assert_eq!(terms[0], first_term);
+
+            let last_term = term!(Meter, exponent: -1);
+            assert_eq!(terms[1], last_term);
+        }
+
+        #[test]
+        fn validate_div_borrowed_and_owned() {
+            let m1 = Measurement::new(10.0, "m").unwrap();
+            let m2 = Measurement::new(2.0, "m").unwrap();
+            let r = &m1 / m2;
 
             assert_eq!(r.value, 5.0);
 

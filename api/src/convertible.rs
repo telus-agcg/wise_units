@@ -1,9 +1,9 @@
-use measurement::Measurement;
-use parser::Error;
-
-/// Intended strictly for `Measurement`s, it allows for converting using
+/// Intended for `Measurement`s, it allows for converting using
 /// various types to construct the destination `Unit`.
 ///
 pub trait Convertible<RHS> {
-    fn convert_to(&self, unit: RHS) -> Result<Measurement, Error>;
+    type Output;
+    type ConversionError;
+
+    fn convert_to(&self, unit: RHS) -> Result<Self::Output, Self::ConversionError>;
 }

@@ -3,6 +3,7 @@ use field_eq::FieldEq;
 use parser::{Composable, Composition, Error, Term};
 use reducible::Reducible;
 use std::fmt;
+use std::ops::{Div, Mul};
 use std::str::FromStr;
 use ucum_unit::UcumUnit;
 
@@ -392,46 +393,6 @@ impl PartialOrd for Unit {
 //-----------------------------------------------------------------------------
 // impl Div
 //-----------------------------------------------------------------------------
-impl ::std::ops::Div for Unit {
-    type Output = Self;
-
-    fn div(self, other: Self) -> Self::Output {
-        let terms = divide_terms(&self.terms, &other.terms);
-
-        Self::from(terms)
-    }
-}
-
-impl<'a> ::std::ops::Div<&'a Unit> for Unit {
-    type Output = Self;
-
-    fn div(self, other: &'a Self) -> Self::Output {
-        let terms = divide_terms(&self.terms, &other.terms);
-
-        Self::from(terms)
-    }
-}
-
-impl<'a> ::std::ops::Div for &'a Unit {
-    type Output = Unit;
-
-    fn div(self, other: &'a Unit) -> Self::Output {
-        let terms = divide_terms(&self.terms, &other.terms);
-
-        Unit::from(terms)
-    }
-}
-
-impl<'a> ::std::ops::Div for &'a mut Unit {
-    type Output = Unit;
-
-    fn div(self, other: &'a mut Unit) -> Self::Output {
-        let terms = divide_terms(self, other);
-
-        Unit::from(terms)
-    }
-}
-
 fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
 
@@ -448,10 +409,50 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     terms
 }
 
+impl Div for Unit {
+    type Output = Self;
+
+    fn div(self, other: Self) -> Self::Output {
+        let terms = divide_terms(&self.terms, &other.terms);
+
+        Self::from(terms)
+    }
+}
+
+impl<'a> Div<&'a Unit> for Unit {
+    type Output = Self;
+
+    fn div(self, other: &'a Self) -> Self::Output {
+        let terms = divide_terms(&self.terms, &other.terms);
+
+        Self::from(terms)
+    }
+}
+
+impl<'a> Div for &'a Unit {
+    type Output = Unit;
+
+    fn div(self, other: &'a Unit) -> Self::Output {
+        let terms = divide_terms(&self.terms, &other.terms);
+
+        Unit::from(terms)
+    }
+}
+
+impl<'a> Div<Unit> for &'a Unit {
+    type Output = Unit;
+
+    fn div(self, other: Unit) -> Self::Output {
+        let terms = divide_terms(self, &other);
+
+        Unit::from(terms)
+    }
+}
+
 //-----------------------------------------------------------------------------
 // impl Mul
 //-----------------------------------------------------------------------------
-impl ::std::ops::Mul for Unit {
+impl Mul for Unit {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self::Output {
@@ -461,7 +462,7 @@ impl ::std::ops::Mul for Unit {
     }
 }
 
-impl<'a> ::std::ops::Mul for &'a Unit {
+impl<'a> Mul<&'a Unit> for Unit {
     type Output = Unit;
 
     fn mul(self, other: &'a Unit) -> Self::Output {
@@ -471,10 +472,20 @@ impl<'a> ::std::ops::Mul for &'a Unit {
     }
 }
 
-impl<'a> ::std::ops::Mul for &'a mut Unit {
+impl<'a> Mul for &'a Unit {
     type Output = Unit;
 
-    fn mul(self, other: &'a mut Unit) -> Self::Output {
+    fn mul(self, other: &'a Unit) -> Self::Output {
+        let terms = multiply_terms(&self.terms, &other.terms);
+
+        Unit::from(terms)
+    }
+}
+
+impl<'a> Mul<Unit> for &'a Unit {
+    type Output = Unit;
+
+    fn mul(self, other: Unit) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
         Unit::from(terms)
