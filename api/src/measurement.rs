@@ -31,12 +31,6 @@ pub struct Measurement {
     pub unit: Unit,
 }
 
-#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
-js_serializable!(Measurement);
-
-#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
-js_deserializable!(Measurement);
-
 impl Measurement {
     /// Creates a new `Measurement` by parsing `expression` into a `Unit`.
     ///
