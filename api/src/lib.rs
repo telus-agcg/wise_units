@@ -1,9 +1,3 @@
-// Turn on proc_macro if we're on nightly AND using the with_stdweb feature.
-#![cfg_attr(
-    all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"),
-    feature(proc_macro)
-)]
-
 #[cfg(test)]
 #[macro_use]
 extern crate approx;
@@ -36,10 +30,6 @@ extern crate serde_derive;
 
 #[cfg(all(test, feature = "with_serde"))]
 extern crate serde_json;
-
-#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
-#[macro_use]
-extern crate stdweb;
 
 #[macro_use]
 mod macros;

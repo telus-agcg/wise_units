@@ -1,5 +1,13 @@
 # Change Log
 
+## [x.x.x] - yyyy-mm-dd
+
+### Added
+
+### Changed
+
+* *Removed* `stdweb` support. This was overkill from the start.
+
 ## [0.2.0] - 2018-06-26
 
 ### Added

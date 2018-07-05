@@ -13,12 +13,6 @@ pub struct Unit {
     pub terms: Vec<Term>,
 }
 
-#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
-js_serializable!(Unit);
-
-#[cfg(all(any(target_arch = "wasm32", target_os = "emscripten"), feature = "with_stdweb"))]
-js_deserializable!(Unit);
-
 /// A `Unit` is the piece of data that represents a *valid* UCUM unit or
 /// custom-defined unit. A `Unit` is defined as a number of `Term`s and thus
 /// all methods defined on `Unit` rely on values from its `Terms`.
