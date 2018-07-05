@@ -1,4 +1,4 @@
-use handlebars::{Handlebars, Helper, Output, RenderContext, RenderError};
+use handlebars::{Context, Handlebars, Helper, Output, RenderContext, RenderError};
 use heck::CamelCase;
 
 use super::atom;
@@ -40,6 +40,7 @@ lazy_static! {
 fn camel_case_helper(
     h: &Helper,
     _: &Handlebars,
+    _: &Context,
     _rc: &mut RenderContext,
     out: &mut Output,
 ) -> Result<(), RenderError> {
