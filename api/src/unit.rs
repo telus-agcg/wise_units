@@ -457,12 +457,12 @@ impl Mul for Unit {
 }
 
 impl<'a> Mul<&'a Unit> for Unit {
-    type Output = Unit;
+    type Output = Self;
 
-    fn mul(self, other: &'a Unit) -> Self::Output {
+    fn mul(self, other: &'a Self) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit::from(terms)
+        Self::from(terms)
     }
 }
 
