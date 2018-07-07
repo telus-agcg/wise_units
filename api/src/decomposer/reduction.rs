@@ -4,20 +4,20 @@ use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 
 type Exponent = i32;
+type InnerCollection = BTreeMap<String, Exponent>;
 
-pub struct Decomposer(BTreeMap<String, Exponent>);
+pub struct Decomposer;
 
-impl Decomposer {
-    pub fn new(terms: &[Term]) -> Self {
-        let set = build_set(terms);
+impl<'a> Decomposable<'a> for Decomposer {
+    type Terms = &'a [Term];
+    type Collection = InnerCollection;
 
-        Decomposer(set)
+    fn terms_to_collection(&self, terms: &[Term]) -> InnerCollection {
+        build_set(terms)
     }
-}
 
-impl Decomposable for Decomposer {
-    fn numerator(&self) -> String {
-        let result = self.0
+    fn numerator(&self, collection: &Self::Collection) -> String {
+        let result = collection
             .iter()
             .filter_map(|(k, v)| extract_numerator(k, *v))
             .fold(String::new(), |acc, num_string| {
@@ -31,8 +31,8 @@ impl Decomposable for Decomposer {
         }
     }
 
-    fn denominator(&self) -> String {
-        self.0
+    fn denominator(&self, collection: &Self::Collection) -> String {
+        collection
             .iter()
             .filter_map(|(k, v)| extract_denominator(k, *v))
             .fold(String::new(), |acc, num_string| {
@@ -112,13 +112,13 @@ fn extract_denominator(key: &str, value: i32) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    macro_rules! validate_expression {
+    macro_rules! validate_decompose {
         ($test_name:ident, $input_string:expr, $expected_expression:expr) => {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();
-                let decomposer = Decomposer::new(&unit.terms);
-                assert_eq!(decomposer.expression(), $expected_expression);
+                let decomposer = Decomposer;
+                assert_eq!(decomposer.decompose(&unit.terms), $expected_expression);
             }
         };
     }
@@ -128,24 +128,24 @@ mod tests {
     use std::str::FromStr;
     use unit::Unit;
 
-    validate_expression!(validate_expression_pri_m, "m", "m");
-    validate_expression!(validate_expression_pri_m2_per_m, "m2/m", "m");
-    validate_expression!(validate_expression_sec_m, "M", "m");
-    validate_expression!(validate_expression_sec_km, "KM", "km");
-    validate_expression!(validate_expression_pri_km_slash_pri_10m, "km/10m", "km/10m");
-    validate_expression!(validate_expression_pri_km_slash_pri_s2, "km/s2", "km/s2");
-    validate_expression!(
-        validate_expression_pri_km_slash_pri_60s2,
+    validate_decompose!(validate_decompose_pri_m, "m", "m");
+    validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m");
+    validate_decompose!(validate_decompose_sec_m, "M", "m");
+    validate_decompose!(validate_decompose_sec_km, "KM", "km");
+    validate_decompose!(validate_decompose_pri_km_slash_pri_10m, "km/10m", "km/10m");
+    validate_decompose!(validate_decompose_pri_km_slash_pri_s2, "km/s2", "km/s2");
+    validate_decompose!(
+        validate_decompose_pri_km_slash_pri_60s2,
         "km/60s2",
         "km/60s2"
     );
-    validate_expression!(
-        validate_expression_sec_100km_slash_pri_60s,
+    validate_decompose!(
+        validate_decompose_sec_100km_slash_pri_60s,
         "100KM/60s2",
         "100km/60s2"
     );
-    validate_expression!(
-        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us,
+    validate_decompose!(
+        validate_decompose_pri_acr_us_sec_in_i_slash_pri_acr_us,
         "[acr_us].[IN_I]/[acr_us]",
         "[in_i]"
     );

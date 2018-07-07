@@ -48,7 +48,9 @@ impl Unit {
     /// ```
     ///
     pub fn expression(&self) -> String {
-        SimpleDecomposer::new(&self.terms).expression()
+        let sd = SimpleDecomposer;
+
+        sd.decompose(&self.terms)
     }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
@@ -64,7 +66,9 @@ impl Unit {
     /// ```
     ///
     pub fn expression_reduced(&self) -> String {
-        ReductionDecomposer::new(&self.terms).expression()
+        let rd = ReductionDecomposer;
+
+        rd.decompose(&self.terms)
     }
 }
 
