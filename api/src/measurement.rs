@@ -380,7 +380,7 @@ impl Add for Measurement {
 impl<'a> Add<&'a Measurement> for Measurement {
     type Output = Result<Self, Error>;
 
-    fn add(self, other: &'a Measurement) -> Self::Output {
+    fn add(self, other: &'a Self) -> Self::Output {
         add_measurements(&self, other)
     }
 }
@@ -425,8 +425,8 @@ impl Sub for Measurement {
 impl<'a> Sub<&'a Measurement> for Measurement {
     type Output = Result<Self, Error>;
 
-    fn sub(self, other: &'a Measurement) -> Self::Output {
-        sub_measurements(&self, &other)
+    fn sub(self, other: &'a Self) -> Self::Output {
+        sub_measurements(&self, other)
     }
 }
 
@@ -470,7 +470,7 @@ impl Mul for Measurement {
 impl<'a> Mul<&'a Measurement> for Measurement {
     type Output = Self;
 
-    fn mul(self, other: &'a Measurement) -> Self::Output {
+    fn mul(self, other: &'a Self) -> Self::Output {
         mul_measurements(&self, other)
     }
 }
@@ -550,9 +550,9 @@ impl<'a> Div for &'a Measurement {
 }
 
 impl<'a> Div<&'a Measurement> for Measurement {
-    type Output = Measurement;
+    type Output = Self;
 
-    fn div(self, other: &'a Measurement) -> Self::Output {
+    fn div(self, other: &'a Self) -> Self::Output {
         div_measurements(&self, other)
     }
 }

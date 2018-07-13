@@ -4,9 +4,17 @@
 
 ### Added
 
+* `Decomposable` is now public.
+* `UcumSymbol` is now public.
+
 ### Changed
 
 * *Removed* `stdweb` support. This was overkill from the start.
+* Renamed `Decomposable::expression()` to `Decomposable::decompose()` to be more
+  conventional.
+* `Decomposable::decompose()` now takes a value to let the caller decide what to
+  pass in.
+* `Decomposable` now defines associated types for more `impl` flexibility.
 
 ## [0.2.0] - 2018-06-26
 
@@ -24,7 +32,6 @@
   point.
 * `Convertible` trait now uses associated types for the output type and the
   error type, letting definers use their own.
-* 
 
 ## [0.2.0] - 2018-06-26
 

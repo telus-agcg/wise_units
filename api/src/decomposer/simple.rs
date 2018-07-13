@@ -1,17 +1,18 @@
 use super::Decomposable;
 use parser::Term;
 
-pub struct Decomposer<'a>(&'a [Term]);
+pub struct Decomposer;
 
-impl<'a> Decomposer<'a> {
-    pub fn new(terms: &'a [Term]) -> Self {
-        Decomposer(terms)
+impl<'a> Decomposable<'a> for Decomposer {
+    type Terms = &'a [Term];
+    type Collection = &'a [Term];
+
+    fn terms_to_collection(&self, terms: Self::Terms) -> Self::Collection {
+        terms
     }
-}
 
-impl<'a> Decomposable for Decomposer<'a> {
-    fn numerator(&self) -> String {
-        let result = self.0
+    fn numerator(&self, terms: &Self::Collection) -> String {
+        let result = terms
             .iter()
             .filter_map(|term| extract_numerator(term))
             .fold(String::new(), |acc, term_string| {
@@ -25,8 +26,8 @@ impl<'a> Decomposable for Decomposer<'a> {
         }
     }
 
-    fn denominator(&self) -> String {
-        self.0
+    fn denominator(&self, terms: &Self::Collection) -> String {
+        terms
             .iter()
             .filter_map(|term| extract_denominator(term))
             .fold(String::new(), |acc, term_string| {
@@ -73,6 +74,8 @@ fn extract_denominator(term: &Term) -> Option<String> {
         }
     }
 
+    term_string.shrink_to_fit();
+
     if term_string.is_empty() {
         None
     } else {
@@ -82,13 +85,13 @@ fn extract_denominator(term: &Term) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    macro_rules! validate_expression {
+    macro_rules! validate_decompose {
         ($test_name:ident, $input_string:expr, $expected_expression:expr) => {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();
-                let decomposer = Decomposer::new(&unit.terms);
-                assert_eq!(decomposer.expression(), $expected_expression);
+                let decomposer = Decomposer;
+                assert_eq!(decomposer.decompose(&unit.terms), $expected_expression);
             }
         };
     }
@@ -98,29 +101,29 @@ mod tests {
     use std::str::FromStr;
     use unit::Unit;
 
-    validate_expression!(validate_expression_pri_m, "m", "m");
-    validate_expression!(validate_expression_pri_m2_per_m, "m2/m", "m2/m");
-    validate_expression!(validate_expression_sec_m, "M", "m");
-    validate_expression!(validate_expression_pri_km, "km", "km");
-    validate_expression!(validate_expression_sec_km, "KM", "km");
-    validate_expression!(validate_expression_pri_km_slash_pri_s2, "km/s2", "km/s2");
-    validate_expression!(
-        validate_expression_pri_im_slash_pri_60s2,
+    validate_decompose!(validate_decompose_pri_m, "m", "m");
+    validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m2/m");
+    validate_decompose!(validate_decompose_sec_m, "M", "m");
+    validate_decompose!(validate_decompose_pri_km, "km", "km");
+    validate_decompose!(validate_decompose_sec_km, "KM", "km");
+    validate_decompose!(validate_decompose_pri_km_slash_pri_s2, "km/s2", "km/s2");
+    validate_decompose!(
+        validate_decompose_pri_im_slash_pri_60s2,
         "km/60s2",
         "km/60s2"
     );
-    validate_expression!(
-        validate_expression_sec_100km_slash_pri_60s,
+    validate_decompose!(
+        validate_decompose_sec_100km_slash_pri_60s,
         "100KM/60s2",
         "100km/60s2"
     );
-    validate_expression!(
-        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us,
+    validate_decompose!(
+        validate_decompose_pri_acr_us_sec_in_i_slash_pri_acr_us,
         "[acr_us].[IN_I]/[acr_us]",
         "[acr_us].[in_i]/[acr_us]"
     );
-    validate_expression!(
-        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us2,
+    validate_decompose!(
+        validate_decompose_pri_acr_us_sec_in_i_slash_pri_acr_us2,
         "[acr_us].[IN_I]/[acr_us]2",
         "[acr_us].[in_i]/[acr_us]2"
     );

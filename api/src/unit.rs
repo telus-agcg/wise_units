@@ -48,7 +48,9 @@ impl Unit {
     /// ```
     ///
     pub fn expression(&self) -> String {
-        SimpleDecomposer::new(&self.terms).expression()
+        let sd = SimpleDecomposer;
+
+        sd.decompose(&self.terms)
     }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
@@ -64,7 +66,9 @@ impl Unit {
     /// ```
     ///
     pub fn expression_reduced(&self) -> String {
-        ReductionDecomposer::new(&self.terms).expression()
+        let rd = ReductionDecomposer;
+
+        rd.decompose(&self.terms)
     }
 }
 
@@ -457,12 +461,12 @@ impl Mul for Unit {
 }
 
 impl<'a> Mul<&'a Unit> for Unit {
-    type Output = Unit;
+    type Output = Self;
 
-    fn mul(self, other: &'a Unit) -> Self::Output {
+    fn mul(self, other: &'a Self) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
-        Unit::from(terms)
+        Self::from(terms)
     }
 }
 
