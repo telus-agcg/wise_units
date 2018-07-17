@@ -16,6 +16,6 @@ fn build_string(acc: Option<String>, term_string: String) -> Option<String> {
 
             Some(a)
         }
-        None => Some(term_string)
+        None => Some(term_string),
     }
 }

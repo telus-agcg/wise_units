@@ -20,9 +20,7 @@ impl<'a> Decomposable<'a> for Decomposer {
         let result = collection
             .iter()
             .filter_map(|(k, v)| extract_numerator(k, *v))
-            .fold(None, |acc, num_string| {
-                super::build_string(acc, num_string)
-            });
+            .fold(None, |acc, num_string| super::build_string(acc, num_string));
 
         if result.is_none() {
             Some("1".to_string())
@@ -35,9 +33,7 @@ impl<'a> Decomposable<'a> for Decomposer {
         collection
             .iter()
             .filter_map(|(k, v)| extract_denominator(k, *v))
-            .fold(None, |acc, num_string| {
-                super::build_string(acc, num_string)
-            })
+            .fold(None, |acc, num_string| super::build_string(acc, num_string))
     }
 }
 
