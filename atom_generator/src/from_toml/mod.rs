@@ -77,7 +77,7 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
                     "Definition::new(::std::f64::consts::PI, \"{}\", None)",
                     u.definition.unit.clone()
                 )
-            } else if u.definition.value == 1.0 && &u.definition.unit == "1" {
+            } else if u.definition.value.eq(&1.0_f64) && &u.definition.unit == "1" {
                 "Ok(Definition::default())".to_string()
             } else {
                 format!(
