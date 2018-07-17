@@ -15,6 +15,11 @@
 * `Decomposable::decompose()` now takes a value to let the caller decide what to
   pass in.
 * `Decomposable` now defines associated types for more `impl` flexibility.
+* Extracted some of `Decomposable::decompose()` to a new method,
+  `Decomposable::format_output()`, which let's consumers customize the formatted
+  output.
+* `Decomposable::numerator()` and `Decomposable::denominator()` now return
+  `Option<String>` instead of `String`.
 
 ## [0.2.0] - 2018-06-26
 

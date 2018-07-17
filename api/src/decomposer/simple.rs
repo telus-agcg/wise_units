@@ -11,26 +11,26 @@ impl<'a> Decomposable<'a> for Decomposer {
         terms
     }
 
-    fn numerator(&self, terms: &Self::Collection) -> String {
+    fn numerator(&self, terms: &Self::Collection) -> Option<String> {
         let result = terms
             .iter()
             .filter_map(|term| extract_numerator(term))
-            .fold(String::new(), |acc, term_string| {
+            .fold(None, |acc, term_string| {
                 super::build_string(acc, term_string)
             });
 
-        if result.is_empty() {
-            "1".to_string()
+        if result.is_none() {
+            Some("1".to_string())
         } else {
             result
         }
     }
 
-    fn denominator(&self, terms: &Self::Collection) -> String {
+    fn denominator(&self, terms: &Self::Collection) -> Option<String> {
         terms
             .iter()
             .filter_map(|term| extract_denominator(term))
-            .fold(String::new(), |acc, term_string| {
+            .fold(None, |acc, term_string| {
                 super::build_string(acc, term_string)
             })
     }

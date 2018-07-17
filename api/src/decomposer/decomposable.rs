@@ -9,18 +9,23 @@ pub trait Decomposable<'a> {
     ///
     fn decompose(&self, terms: Self::Terms) -> String {
         let collection = self.terms_to_collection(terms);
-
         let numerator = self.numerator(&collection);
         let denominator = self.denominator(&collection);
 
-        if denominator.is_empty() {
-            numerator
+        self.format_output(numerator, denominator)
+    }
+
+    fn format_output(&self, numerator: Option<String>, denominator: Option<String>) -> String {
+        let n = numerator.unwrap_or_default();
+
+        if let Some(d) = denominator {
+            format!("{}/{}", n, d)
         } else {
-            format!("{}/{}", numerator, denominator)
+            n
         }
     }
 
-    fn numerator(&self, collection: &Self::Collection) -> String;
-    fn denominator(&self, collection: &Self::Collection) -> String;
     fn terms_to_collection(&self, terms: Self::Terms) -> Self::Collection;
+    fn numerator(&self, collection: &Self::Collection) -> Option<String>;
+    fn denominator(&self, collection: &Self::Collection) -> Option<String>;
 }

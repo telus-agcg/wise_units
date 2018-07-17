@@ -16,26 +16,26 @@ impl<'a> Decomposable<'a> for Decomposer {
         build_set(terms)
     }
 
-    fn numerator(&self, collection: &Self::Collection) -> String {
+    fn numerator(&self, collection: &Self::Collection) -> Option<String> {
         let result = collection
             .iter()
             .filter_map(|(k, v)| extract_numerator(k, *v))
-            .fold(String::new(), |acc, num_string| {
+            .fold(None, |acc, num_string| {
                 super::build_string(acc, num_string)
             });
 
-        if result.is_empty() {
-            "1".to_string()
+        if result.is_none() {
+            Some("1".to_string())
         } else {
             result
         }
     }
 
-    fn denominator(&self, collection: &Self::Collection) -> String {
+    fn denominator(&self, collection: &Self::Collection) -> Option<String> {
         collection
             .iter()
             .filter_map(|(k, v)| extract_denominator(k, *v))
-            .fold(String::new(), |acc, num_string| {
+            .fold(None, |acc, num_string| {
                 super::build_string(acc, num_string)
             })
     }
