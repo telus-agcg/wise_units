@@ -85,6 +85,13 @@ impl Term {
             }
         }
     }
+
+    pub fn factor_as_u32(&self) -> u32 {
+        match self.factor {
+            Some(f) => f,
+            None => 1
+        }
+    }
 }
 
 impl UcumUnit for Term {
