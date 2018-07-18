@@ -43,25 +43,28 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
     for term in terms {
         let mut key = String::new();
 
-        if term.factor != 1 {
-            key.push_str(&term.factor.to_string())
-        };
-
-        if let Some(prefix) = term.prefix {
-            key.push_str(&prefix.to_string());
-        }
+        term.factor_and_is_not_one(|factor| key.push_str(&factor.to_string()));
 
         if let Some(atom) = term.atom {
+            if let Some(prefix) = term.prefix {
+                key.push_str(&prefix.to_string());
+            }
+
             key.push_str(&atom.to_string());
         }
 
         if !key.is_empty() {
+            let exponent = match term.exponent {
+                Some(exponent) => exponent,
+                None => 1
+            };
+
             match set.entry(key) {
                 Entry::Vacant(entry) => {
-                    entry.insert(term.exponent);
+                    entry.insert(exponent);
                 }
                 Entry::Occupied(mut entry) => {
-                    *entry.get_mut() += term.exponent;
+                    *entry.get_mut() += exponent;
                 }
             }
         }

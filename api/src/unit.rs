@@ -400,7 +400,8 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
 
     for term in rhs.iter() {
         let mut new_other_term = term.clone();
-        new_other_term.exponent = -new_other_term.exponent;
+        new_other_term.invert_exponent();
+
         terms.push(new_other_term);
     }
 

@@ -9,6 +9,9 @@
 
 ### Changed
 
+* `Term::factor` and `Term::exponent` are now wrapped in an `Option` (the same
+  goes for their related `parser::terms::mapper` components) to save unnecessary
+  allocations.
 * *Removed* `stdweb` support. This was overkill from the start.
 * Renamed `Decomposable::expression()` to `Decomposable::decompose()` to be more
   conventional.
