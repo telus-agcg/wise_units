@@ -545,8 +545,8 @@ mod tests {
             let expected_json = r#"{
                                     "atom": null,
                                     "prefix": null,
-                                    "factor": 1,
-                                    "exponent": 1,
+                                    "factor": null,
+                                    "exponent": null,
                                     "annotation": null
                                    }"#.replace("\n", "")
                 .replace(" ", "");
@@ -580,8 +580,8 @@ mod tests {
             let json = r#"{
                             "atom": null,
                             "prefix": null,
-                            "factor": 1,
-                            "exponent": 1,
+                            "factor": null,
+                            "exponent": null,
                             "annotation": null
                            }"#;
 
