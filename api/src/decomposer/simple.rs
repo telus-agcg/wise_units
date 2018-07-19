@@ -11,76 +11,72 @@ impl<'a> Decomposable<'a> for Decomposer {
         terms
     }
 
-    fn numerator(&self, terms: &Self::Collection) -> String {
-        let result = terms
-            .iter()
-            .filter_map(|term| extract_numerator(term))
-            .fold(String::new(), |acc, term_string| {
-                super::build_string(acc, term_string)
-            });
+    fn numerator(&self, terms: &Self::Collection) -> Option<String> {
+        let result = string_from_collection(terms, extract_numerator);
 
-        if result.is_empty() {
-            "1".to_string()
+        if result.is_none() {
+            Some("1".to_string())
         } else {
             result
         }
     }
 
-    fn denominator(&self, terms: &Self::Collection) -> String {
-        terms
-            .iter()
-            .filter_map(|term| extract_denominator(term))
-            .fold(String::new(), |acc, term_string| {
-                super::build_string(acc, term_string)
-            })
+    fn denominator(&self, terms: &Self::Collection) -> Option<String> {
+        string_from_collection(terms, extract_denominator)
     }
 }
 
+fn string_from_collection<F>(terms: &[Term], func: F) -> Option<String>
+    where F: Fn(&Term) -> Option<String>
+{
+    terms
+        .iter()
+        .filter_map(|term| func(term))
+        .fold(None, |acc, term_string| {
+            super::build_string(acc, term_string)
+        })
+}
+
+/// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not positive.
+///
 fn extract_numerator(term: &Term) -> Option<String> {
-    if !term.exponent.is_positive() {
+    if !term.exponent_is_positive() {
         return None;
     }
 
-    let s = term.to_string();
-
-    if s.is_empty() {
-        None
-    } else {
-        Some(s)
-    }
+    Some(term.to_string())
 }
 
+/// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not negative.
+///
 fn extract_denominator(term: &Term) -> Option<String> {
-    if !term.exponent.is_negative() {
+    if !term.exponent_is_negative() {
         return None;
     }
 
     let mut term_string = String::new();
 
-    if term.factor != 1 {
-        term_string.push_str(&term.factor.to_string())
-    };
-
-    if let Some(prefix) = term.prefix {
-        term_string.push_str(&prefix.to_string());
-    }
+    term.factor_and_is_not_one(|factor| term_string.push_str(&factor.to_string()));
 
     if let Some(atom) = term.atom {
-        if term.exponent.abs() == 1 {
-            term_string.push_str(&atom.to_string());
-        } else {
-            let v = -term.exponent;
-            term_string.push_str(&format!("{}{}", atom, v));
+        if let Some(prefix) = term.prefix {
+            term_string.push_str(&prefix.to_string());
+        }
+
+        if let Some(exponent) = term.exponent {
+            let ex_abs = exponent.abs();
+
+            if ex_abs == 1 {
+                term_string.push_str(&atom.to_string());
+            } else {
+                term_string.push_str(&format!("{}{}", atom, ex_abs));
+            }
         }
     }
 
     term_string.shrink_to_fit();
 
-    if term_string.is_empty() {
-        None
-    } else {
-        Some(term_string)
-    }
+    Some(term_string)
 }
 
 #[cfg(test)]

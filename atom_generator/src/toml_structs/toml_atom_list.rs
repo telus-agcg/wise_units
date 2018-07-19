@@ -17,7 +17,7 @@ impl FromStr for TomlAtomList {
     type Err = ::toml::de::Error;
 
     fn from_str(toml: &str) -> Result<Self, Self::Err> {
-        let toml_atom_list: TomlAtomList = ::toml::from_str(&toml)?;
+        let toml_atom_list: TomlAtomList = ::toml::from_str(toml)?;
 
         Ok(toml_atom_list)
     }

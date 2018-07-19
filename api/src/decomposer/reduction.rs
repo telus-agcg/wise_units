@@ -16,29 +16,28 @@ impl<'a> Decomposable<'a> for Decomposer {
         build_set(terms)
     }
 
-    fn numerator(&self, collection: &Self::Collection) -> String {
-        let result = collection
-            .iter()
-            .filter_map(|(k, v)| extract_numerator(k, *v))
-            .fold(String::new(), |acc, num_string| {
-                super::build_string(acc, num_string)
-            });
+    fn numerator(&self, collection: &Self::Collection) -> Option<String> {
+        let result = string_from_collection(collection, extract_numerator);
 
-        if result.is_empty() {
-            "1".to_string()
+        if result.is_none() {
+            Some("1".to_string())
         } else {
             result
         }
     }
 
-    fn denominator(&self, collection: &Self::Collection) -> String {
-        collection
-            .iter()
-            .filter_map(|(k, v)| extract_denominator(k, *v))
-            .fold(String::new(), |acc, num_string| {
-                super::build_string(acc, num_string)
-            })
+    fn denominator(&self, collection: &Self::Collection) -> Option<String> {
+        string_from_collection(collection, extract_denominator)
     }
+}
+
+fn string_from_collection<F>(collection: &InnerCollection, func: F) -> Option<String>
+    where F: Fn(&str, i32) -> Option<String>
+{
+    collection
+        .iter()
+        .filter_map(|(k, v)| func(k, *v))
+        .fold(None, super::build_string)
 }
 
 fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
@@ -47,25 +46,28 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
     for term in terms {
         let mut key = String::new();
 
-        if term.factor != 1 {
-            key.push_str(&term.factor.to_string())
-        };
-
-        if let Some(prefix) = term.prefix {
-            key.push_str(&prefix.to_string());
-        }
+        term.factor_and_is_not_one(|factor| key.push_str(&factor.to_string()));
 
         if let Some(atom) = term.atom {
+            if let Some(prefix) = term.prefix {
+                key.push_str(&prefix.to_string());
+            }
+
             key.push_str(&atom.to_string());
         }
 
         if !key.is_empty() {
+            let exponent = match term.exponent {
+                Some(exponent) => exponent,
+                None => 1
+            };
+
             match set.entry(key) {
                 Entry::Vacant(entry) => {
-                    entry.insert(term.exponent);
+                    entry.insert(exponent);
                 }
                 Entry::Occupied(mut entry) => {
-                    *entry.get_mut() += term.exponent;
+                    *entry.get_mut() += exponent;
                 }
             }
         }

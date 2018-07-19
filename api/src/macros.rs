@@ -6,7 +6,7 @@
 #[macro_export]
 macro_rules! term {
     (@params $term:expr, $attribute_name:ident: $attribute_value:expr) => {
-        $term.$attribute_name = $attribute_value;
+        $term.$attribute_name = Some($attribute_value);
     };
 
     ($prefix:ident, $atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {

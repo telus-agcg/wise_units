@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
 [dependencies]
-handlebars = "1.0.0-beta.2"
+handlebars = "1.0"
 heck = "0.3"
 lazy_static = "1.0"
 log = "0.4"

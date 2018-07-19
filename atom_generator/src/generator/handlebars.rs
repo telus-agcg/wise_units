@@ -1,4 +1,4 @@
-use handlebars::{Context, Handlebars, Helper, Output, RenderContext, RenderError};
+use handlebars::Handlebars;
 use heck::CamelCase;
 
 use super::atom;
@@ -37,17 +37,4 @@ lazy_static! {
     };
 }
 
-fn camel_case_helper(
-    h: &Helper,
-    _: &Handlebars,
-    _: &Context,
-    _rc: &mut RenderContext,
-    out: &mut Output,
-) -> Result<(), RenderError> {
-    let param = h.param(0).unwrap().value();
-    let rendered = param.to_string().to_camel_case();
-
-    out.write(rendered.as_ref())?;
-
-    Ok(())
-}
+handlebars_helper!(camel_case_helper: |word: str| word.to_camel_case());

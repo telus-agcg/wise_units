@@ -400,7 +400,8 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
 
     for term in rhs.iter() {
         let mut new_other_term = term.clone();
-        new_other_term.exponent = -new_other_term.exponent;
+        new_other_term.invert_exponent();
+
         terms.push(new_other_term);
     }
 
@@ -873,7 +874,7 @@ mod tests {
         }"#.replace("\n", "")
                 .replace(" ", "");
 
-            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: Some("stuff".to_string()));
+            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, factor: 1, exponent: -4);
 
             let unit = Unit {
@@ -916,7 +917,7 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
-            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: Some("stuff".to_string()));
+            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, exponent: -4);
 
             let expected_unit = Unit {
