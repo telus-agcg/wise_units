@@ -17,10 +17,7 @@ impl<'a> Decomposable<'a> for Decomposer {
     }
 
     fn numerator(&self, collection: &Self::Collection) -> Option<String> {
-        let result = collection
-            .iter()
-            .filter_map(|(k, v)| extract_numerator(k, *v))
-            .fold(None, |acc, num_string| super::build_string(acc, num_string));
+        let result = string_from_collection(collection, extract_numerator);
 
         if result.is_none() {
             Some("1".to_string())
@@ -30,11 +27,17 @@ impl<'a> Decomposable<'a> for Decomposer {
     }
 
     fn denominator(&self, collection: &Self::Collection) -> Option<String> {
-        collection
-            .iter()
-            .filter_map(|(k, v)| extract_denominator(k, *v))
-            .fold(None, |acc, num_string| super::build_string(acc, num_string))
+        string_from_collection(collection, extract_denominator)
     }
+}
+
+fn string_from_collection<F>(collection: &InnerCollection, func: F) -> Option<String>
+    where F: Fn(&str, i32) -> Option<String>
+{
+    collection
+        .iter()
+        .filter_map(|(k, v)| func(k, *v))
+        .fold(None, super::build_string)
 }
 
 fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {

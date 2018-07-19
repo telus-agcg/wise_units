@@ -12,12 +12,7 @@ impl<'a> Decomposable<'a> for Decomposer {
     }
 
     fn numerator(&self, terms: &Self::Collection) -> Option<String> {
-        let result = terms
-            .iter()
-            .filter_map(|term| extract_numerator(term))
-            .fold(None, |acc, term_string| {
-                super::build_string(acc, term_string)
-            });
+        let result = string_from_collection(terms, extract_numerator);
 
         if result.is_none() {
             Some("1".to_string())
@@ -27,13 +22,19 @@ impl<'a> Decomposable<'a> for Decomposer {
     }
 
     fn denominator(&self, terms: &Self::Collection) -> Option<String> {
-        terms
-            .iter()
-            .filter_map(|term| extract_denominator(term))
-            .fold(None, |acc, term_string| {
-                super::build_string(acc, term_string)
-            })
+        string_from_collection(terms, extract_denominator)
     }
+}
+
+fn string_from_collection<F>(terms: &[Term], func: F) -> Option<String>
+    where F: Fn(&Term) -> Option<String>
+{
+    terms
+        .iter()
+        .filter_map(|term| func(term))
+        .fold(None, |acc, term_string| {
+            super::build_string(acc, term_string)
+        })
 }
 
 /// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not positive.
