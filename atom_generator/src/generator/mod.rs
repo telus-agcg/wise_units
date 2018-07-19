@@ -41,19 +41,19 @@ fn generate_classification_file(rust_atom_list: &RustAtomList) {
 }
 
 fn generate_property_file(rust_atom_list: &RustAtomList) {
-    let file_body = self::property::generate_file_body(&rust_atom_list);
+    let file_body = self::property::generate_file_body(rust_atom_list);
     let file_path = build_file_path("property.rs");
     write_project_file(&file_path, &file_body);
 }
 
 fn generate_atom_file(rust_atom_list: &RustAtomList) {
-    let file_body = self::atom::generate_file_body(&rust_atom_list);
+    let file_body = self::atom::generate_file_body(rust_atom_list);
     let file_path = build_file_path("atom.rs");
     write_project_file(&file_path, &file_body);
 }
 
 fn generate_symbol_grammar_file(rust_atom_list: &RustAtomList) {
-    let file_body = self::symbol_grammar::generate_file_body(&rust_atom_list);
+    let file_body = self::symbol_grammar::generate_file_body(rust_atom_list);
     let file_path = build_file_path("symbol.pest");
     write_project_file(&file_path, &file_body);
 }
@@ -67,7 +67,7 @@ fn generate_symbol_parser_file() {
 }
 
 fn generate_mapper_file(rust_atom_list: &RustAtomList) {
-    let file_body = self::mapper::generate_file_body(&rust_atom_list);
+    let file_body = self::mapper::generate_file_body(rust_atom_list);
     let file_path = build_file_path("mapper.rs");
     write_project_file(&file_path, &file_body);
 }

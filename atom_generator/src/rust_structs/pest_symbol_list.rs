@@ -24,8 +24,8 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
         let mut secondary_rule_names = atom_list
             .atoms
             .iter()
-            .filter(|ref a| a.secondary_code.is_some())
-            .map(|ref a| {
+            .filter(|a| a.secondary_code.is_some())
+            .map(|a| {
                 let s = a.type_name.clone();
                 let code = a.secondary_code.clone().unwrap();
 
@@ -43,8 +43,8 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
 }
 
 fn sort_symbols(symbols: &mut Vec<PestSymbol>) {
-    symbols.sort_by(|ref a, ref b| a.code.cmp(&b.code));
-    symbols.sort_by(|ref a, ref b| b.code.len().cmp(&a.code.len()));
+    symbols.sort_by(|a, b| a.code.cmp(&b.code));
+    symbols.sort_by(|a, b| b.code.len().cmp(&a.code.len()));
 }
 
 #[derive(Debug, Serialize)]
