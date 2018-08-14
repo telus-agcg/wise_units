@@ -1,5 +1,4 @@
 use super::Dimension;
-use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 use std::fmt;
 use std::iter::IntoIterator;
@@ -25,14 +24,10 @@ impl Composition {
     /// the data.
     ///
     pub fn insert(&mut self, dimension: Dimension, exponent: i32) {
-        match self.0.entry(dimension) {
-            Entry::Vacant(entry) => {
-                entry.insert(exponent);
-            }
-            Entry::Occupied(mut entry) => {
-                *entry.get_mut() += exponent;
-            }
-        }
+        self.0.entry(dimension)
+            .and_modify(|entry| *entry += exponent)
+            .or_insert(exponent);
+
     }
 
     pub fn is_empty(&self) -> bool {
