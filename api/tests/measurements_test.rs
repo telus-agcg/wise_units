@@ -39,15 +39,50 @@ validate_conversion!(
     2.2369362920544025
 );
 
-// TODO: AGDEV-32407
-// validate_conversion!(
-//     validate_conversion_lb_per_acre_to_lb_per_m2_forward,
-//     validate_conversion_lb_per_acre_to_lb_per_m2_back,
-//     1.0,
-//     "[lb_av]/[acr_us]",
-//     "[lb_av]/m2",
-//     0.000_247_104_393_046_627_9
-// );
+validate_conversion!(
+    validate_conversion_lb_per_acre_to_lb_per_m2_forward,
+    validate_conversion_lb_per_acre_to_lb_per_m2_back,
+    1.0,
+    "[lb_av]/[acr_us]",
+    "[lb_av]/m2",
+    0.000_247_104_393_046_627_9
+);
+
+validate_conversion!(
+    validate_conversion_lb_per_acre_to_lb_per_ft2_forward,
+    validate_conversion_lb_per_acre_to_lb_per_ft2_back,
+    1.0,
+    "[lb_av]/[acr_us]",
+    "[lb_av]/[ft_i]2",
+    2.295_674_931_138_659e-05
+);
+
+validate_conversion!(
+    validate_conversion_lb_to_ston_forward,
+    validate_conversion_lb_to_ston_back,
+    1.0,
+    "[lb_av]",
+    "[ston_av]",
+    0.000_5
+);
+
+validate_conversion!(
+    validate_conversion_m_per_s_to_ft_per_hour_forward,
+    validate_conversion_m_per_s_to_ft_per_hour_back,
+    1.0,
+    "m/s",
+    "[ft_i]/h",
+    11_811.023_622_047_243
+);
+
+validate_conversion!(
+    validate_conversion_lb_to_oz_forward,
+    validate_conversion_lb_to_oz_back,
+    1.0,
+    "[lb_av]",
+    "[oz_av]",
+    16.0
+);
 
 validate_conversion!(
     validate_conversion_lb_acre_per_har_to_kg_forward,
