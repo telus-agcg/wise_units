@@ -10,6 +10,8 @@ type Exponent = i32;
 /// would be "L-2". This continues on when a Unit has multiple `Term`s (ex.
 /// "mL/(kg.d)").
 ///
+/// For more info, see https://en.wikipedia.org/wiki/Dimensional_analysis.
+///
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Composition {
     electric_charge:    Option<Exponent>,
@@ -231,34 +233,42 @@ impl fmt::Display for Composition {
         let mut expressions = Vec::<String>::new();
 
         if let Some(value) = self.electric_charge {
-            expressions.push(format!("Q{}", value));
+            push_display_expression(&mut expressions, value, "Q");
         }
 
         if let Some(value) = self.length {
-            expressions.push(format!("L{}", value));
+            push_display_expression(&mut expressions, value, "L");
         }
 
         if let Some(value) = self.luminous_intensity {
-            expressions.push(format!("F{}", value));
+            push_display_expression(&mut expressions, value, "F");
         }
 
         if let Some(value) = self.mass {
-            expressions.push(format!("M{}", value));
+            push_display_expression(&mut expressions, value, "M");
         }
 
         if let Some(value) = self.plane_angle {
-            expressions.push(format!("A{}", value));
+            push_display_expression(&mut expressions, value, "A");
         }
 
         if let Some(value) = self.temperature {
-            expressions.push(format!("C{}", value));
+            push_display_expression(&mut expressions, value, "C");
         }
 
         if let Some(value) = self.time {
-            expressions.push(format!("T{}", value));
+            push_display_expression(&mut expressions, value, "T");
         }
 
         write!(f, "{}", expressions.join("."))
+    }
+}
+
+fn push_display_expression(expressions: &mut Vec<String>, value: i32, dimension_str: &str) {
+    if value == 1 {
+        expressions.push(dimension_str.to_string())
+    } else {
+        expressions.push(format!("{}{}", dimension_str, value));
     }
 }
 
@@ -428,6 +438,65 @@ mod tests {
         };
 
         assert!(!composition.is_empty());
+    }
+
+    #[test]
+    fn validate_display() {
+        use std::convert::AsRef;
+
+        let subject = Composition::default();
+        assert_eq!(&subject.to_string(), "");
+
+        let subject = Composition::new(Dimension::ElectricCharge, 1);
+        assert_eq!(&subject.to_string(), Dimension::ElectricCharge.as_ref());
+
+        let subject = Composition::new(Dimension::ElectricCharge, 2);
+        assert_eq!(&subject.to_string(), "Q2");
+
+        let subject = Composition::new(Dimension::Length, 1);
+        assert_eq!(&subject.to_string(), Dimension::Length.as_ref());
+
+        let subject = Composition::new(Dimension::Length, 2);
+        assert_eq!(&subject.to_string(), "L2");
+
+        let subject = Composition::new(Dimension::LuminousIntensity, 1);
+        assert_eq!(&subject.to_string(), Dimension::LuminousIntensity.as_ref());
+
+        let subject = Composition::new(Dimension::LuminousIntensity, 2);
+        assert_eq!(&subject.to_string(), "F2");
+
+        let subject = Composition::new(Dimension::Mass, 1);
+        assert_eq!(&subject.to_string(), Dimension::Mass.as_ref());
+
+        let subject = Composition::new(Dimension::Mass, 2);
+        assert_eq!(&subject.to_string(), "M2");
+
+        let subject = Composition::new(Dimension::PlaneAngle, 1);
+        assert_eq!(&subject.to_string(), Dimension::PlaneAngle.as_ref());
+
+        let subject = Composition::new(Dimension::PlaneAngle, 2);
+        assert_eq!(&subject.to_string(), "A2");
+
+        let subject = Composition::new(Dimension::Temperature, 1);
+        assert_eq!(&subject.to_string(), Dimension::Temperature.as_ref());
+
+        let subject = Composition::new(Dimension::Temperature, 2);
+        assert_eq!(&subject.to_string(), "C2");
+
+        let subject = Composition::new(Dimension::Time, 1);
+        assert_eq!(&subject.to_string(), Dimension::Time.as_ref());
+
+        let subject = Composition::new(Dimension::Time, 2);
+        assert_eq!(&subject.to_string(), "T2");
+
+        let mut subject = Composition::new(Dimension::ElectricCharge, -2);
+        subject.insert(Dimension::Length, -3);
+        subject.insert(Dimension::LuminousIntensity, -4);
+        subject.insert(Dimension::Mass, 1);
+        subject.insert(Dimension::PlaneAngle, 2);
+        subject.insert(Dimension::Temperature, 3);
+        subject.insert(Dimension::Time, 4);
+        assert_eq!(&subject.to_string(), "Q-2.L-3.F-4.M.A2.C3.T4");
     }
 
     #[test]
