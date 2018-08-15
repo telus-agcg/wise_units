@@ -345,7 +345,7 @@ mod tests {
     validate_reduce_value!(validate_reduce_value_meter, term!(Meter), 1.0);
     validate_reduce_value!(validate_reduce_value_kilometer, term!(Kilo, Meter), 1000.0);
     validate_reduce_value!(
-        validate_reduce_value_meter_eminus1,
+        validate_reduce_value_meter_minus1,
         term!(Meter, exponent: -1),
         1.0
     );
@@ -392,7 +392,7 @@ mod tests {
         1000.0
     );
     validate_calculate_magnitude!(
-        validate_calculate_magnitude_meter_eminus1,
+        validate_calculate_magnitude_meter_minus1,
         term!(Meter, exponent: -1),
         1.0
     );
