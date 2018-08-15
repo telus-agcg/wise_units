@@ -395,7 +395,7 @@ mod tests {
         }
 
         #[test]
-        fn validate_mul_integer() {
+        fn validate_mul_f64() {
             let m = Measurement::new(10.0, "m").unwrap();
             let expected = Measurement::new(200.0, "m").unwrap();
 
@@ -480,7 +480,7 @@ mod tests {
         }
 
         #[test]
-        fn validate_div_scalar() {
+        fn validate_div_f64() {
             let m = Measurement::new(10.0, "m").unwrap();
             let expected = Measurement::new(2.0, "m").unwrap();
 
