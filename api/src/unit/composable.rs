@@ -72,6 +72,8 @@ mod tests {
 
     valdiate_composition!(validate_composition_m_per_s_exponent,    "m/s2",  Length: 1,  Time: -2);
 
+    valdiate_composition!(validate_composition_lb_av_dot_acr_us_per_har, "[lb_av].[acr_us]/har", Mass: 1);
+
     valdiate_composition!(validate_composition_dimensionless_pi,    "[pi]");
     valdiate_composition!(validate_composition_dimensionless_ppth,  "[ppth]");
     valdiate_composition!(validate_composition_per_1,               "/1");

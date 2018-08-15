@@ -204,32 +204,30 @@ impl Reducible for Vec<Term> {
 // impl Composable
 //-----------------------------------------------------------------------------
 impl Composable for Term {
+    /// Combines the `Composition` from the `Term`'s `Atom` with its own `exponent` to build a
+    /// `Composition`. If the `Term` has no `Atom`, it has no dimension, thus will have an empty
+    /// `Composition`.
+    ///
+    /// TODO: https://agrian.atlassian.net/browse/DEV-971
+    ///
     fn composition(&self) -> Composition {
         match self.atom {
             Some(atom) => {
-                let composition = atom.composition();
+                let atom_composition = atom.composition();
 
                 match self.exponent {
-                    Some(exponent) => {
-                        if exponent == 1 { return composition };
+                    Some(term_exponent) => {
+                        if term_exponent == 1 {
+                            return atom_composition;
+                        } else {
+                            atom_composition * term_exponent
+                        }
                     }
-                    None => return composition,
+                    None => return atom_composition,
                 }
-
-                let mut new_composition = Composition::default();
-
-                for (dim, comp_exponent) in composition {
-                    let atom_exp = if comp_exponent == 1 { 0 } else { comp_exponent };
-
-                    if let Some(term_exponent) = self.exponent {
-                        let new_exponent = atom_exp + term_exponent;
-
-                        new_composition.insert(dim, new_exponent);
-                    };
-                }
-
-                new_composition
             }
+            // If there's no Atom in the Term, there's no dimension--even if there's an exponent on
+            // the Term.
             None => Composition::default(),
         }
     }
@@ -237,17 +235,10 @@ impl Composable for Term {
 
 impl<'a> Composable for &'a [Term] {
     fn composition(&self) -> Composition {
-        let mut composition = Composition::default();
-
-        for term in self.iter() {
-            let term_composition = term.composition();
-
-            for (term_dimension, term_exponent) in term_composition {
-                composition.insert(term_dimension, term_exponent);
-            }
-        }
-
-        composition
+        self.iter()
+            .fold(Composition::default(), |acc, term| {
+                acc * term.composition()
+            })
     }
 }
 

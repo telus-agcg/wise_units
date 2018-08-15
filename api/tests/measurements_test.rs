@@ -50,6 +50,15 @@ validate_conversion!(
 // );
 
 validate_conversion!(
+    validate_conversion_lb_acre_per_har_to_kg_forward,
+    validate_conversion_lb_acre_per_har_to_kg_back,
+    1.0,
+    "[lb_av].[acr_us]/har",
+    "kg",
+    0.183_563_053_820_094_75
+);
+
+validate_conversion!(
     validate_conversion_unity_to_10power_forward,
     validate_conversion_unity_to_10power_back,
     500.0,
