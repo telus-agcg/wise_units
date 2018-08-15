@@ -216,14 +216,8 @@ impl Composable for Term {
                 let atom_composition = atom.composition();
 
                 match self.exponent {
-                    Some(term_exponent) => {
-                        if term_exponent == 1 {
-                            return atom_composition;
-                        } else {
-                            atom_composition * term_exponent
-                        }
-                    }
-                    None => return atom_composition,
+                    Some(term_exponent) => atom_composition * term_exponent,
+                    None => atom_composition,
                 }
             }
             // If there's no Atom in the Term, there's no dimension--even if there's an exponent on
@@ -236,9 +230,7 @@ impl Composable for Term {
 impl<'a> Composable for &'a [Term] {
     fn composition(&self) -> Composition {
         self.iter()
-            .fold(Composition::default(), |acc, term| {
-                acc * term.composition()
-            })
+            .fold(Composition::default(), |acc, term| acc * term.composition())
     }
 }
 
