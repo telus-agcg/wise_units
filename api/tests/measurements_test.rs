@@ -85,6 +85,24 @@ validate_conversion!(
 );
 
 validate_conversion!(
+    validate_conversion_g_per_cm3_to_mg_per_l_forward,
+    validate_conversion_g_per_cm3_to_mg_per_l_back,
+    1.0,
+    "g/cm3",
+    "mg/L",
+    1_000_000.0
+);
+
+validate_conversion!(
+    validate_conversion_meq_per_100cm3_to_meq_per_l_forward,
+    validate_conversion_meq_per_100cm3_to_meq_per_l_back,
+    1.0,
+    "meq/100cm3",
+    "meq/L",
+    0.001
+);
+
+validate_conversion!(
     validate_conversion_lb_acre_per_har_to_kg_forward,
     validate_conversion_lb_acre_per_har_to_kg_back,
     1.0,
