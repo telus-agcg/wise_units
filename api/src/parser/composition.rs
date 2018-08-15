@@ -38,7 +38,7 @@ macro_rules! insert_exponent {
 
                 set_exponent(new_exponent)
             }
-            None => Some($exponent)
+            None => Some($exponent),
         }
     };
 }
@@ -71,7 +71,9 @@ impl Composition {
     }
 
     pub fn insert(&mut self, dimension: Dimension, exponent: i32) {
-        if exponent == 0 { return; }
+        if exponent == 0 {
+            return;
+        }
 
         match dimension {
             Dimension::ElectricCharge    => self.insert_electric_charge(exponent),

@@ -27,8 +27,16 @@ mod tests {
     use unit::Unit;
 
     macro_rules! build_composition {
-        (@params $composition:expr, $expected_dimension_variant:ident, $expected_dimension_value:expr) => {
-            $composition.insert(Dimension::$expected_dimension_variant, $expected_dimension_value);
+        (
+            @params
+            $composition:expr,
+            $expected_dimension_variant:ident,
+            $expected_dimension_value:expr
+        ) => {
+            $composition.insert(
+                Dimension::$expected_dimension_variant,
+                $expected_dimension_value,
+            );
         };
     }
 
@@ -74,10 +82,10 @@ mod tests {
 
     valdiate_composition!(validate_composition_lb_av_dot_acr_us_per_har, "[lb_av].[acr_us]/har", Mass: 1);
 
-    valdiate_composition!(validate_composition_dimensionless_pi,    "[pi]");
-    valdiate_composition!(validate_composition_dimensionless_ppth,  "[ppth]");
-    valdiate_composition!(validate_composition_per_1,               "/1");
-    valdiate_composition!(validate_composition_per_annotation,      "/{tot}");
+    valdiate_composition!(validate_composition_dimensionless_pi, "[pi]");
+    valdiate_composition!(validate_composition_dimensionless_ppth, "[ppth]");
+    valdiate_composition!(validate_composition_per_1, "/1");
+    valdiate_composition!(validate_composition_per_annotation, "/{tot}");
 
     #[test]
     fn validate_is_compatible_with() {

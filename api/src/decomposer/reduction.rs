@@ -32,7 +32,8 @@ impl<'a> Decomposable<'a> for Decomposer {
 }
 
 fn string_from_collection<F>(collection: &InnerCollection, func: F) -> Option<String>
-    where F: Fn(&str, i32) -> Option<String>
+where
+    F: Fn(&str, i32) -> Option<String>,
 {
     collection
         .iter()
@@ -59,7 +60,7 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
         if !key.is_empty() {
             let exponent = match term.exponent {
                 Some(exponent) => exponent,
-                None => 1
+                None => 1,
             };
 
             match set.entry(key) {

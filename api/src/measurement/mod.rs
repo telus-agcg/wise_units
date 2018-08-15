@@ -121,7 +121,8 @@ mod tests {
             }"#.replace("\n", "")
                 .replace(" ", "");
 
-            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
+            let term1 =
+                term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, exponent: -4);
 
             let unit = Unit {
@@ -176,7 +177,8 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
-            let term1 = term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
+            let term1 =
+                term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, exponent: -4);
 
             let unit = Unit {

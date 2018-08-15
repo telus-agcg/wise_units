@@ -27,7 +27,8 @@ impl<'a> Decomposable<'a> for Decomposer {
 }
 
 fn string_from_collection<F>(terms: &[Term], func: F) -> Option<String>
-    where F: Fn(&Term) -> Option<String>
+where
+    F: Fn(&Term) -> Option<String>,
 {
     terms
         .iter()

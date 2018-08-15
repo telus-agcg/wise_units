@@ -125,9 +125,9 @@ impl UcumUnit for Unit {
 
 #[cfg(test)]
 mod tests {
-    use unit::Unit;
-    use ucum_unit::UcumUnit;
     use std::str::FromStr;
+    use ucum_unit::UcumUnit;
+    use unit::Unit;
 
     macro_rules! validate_scalar {
         ($test_name:ident, $input_string:expr, $expected_value:expr) => {

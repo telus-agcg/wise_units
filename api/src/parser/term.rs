@@ -39,10 +39,10 @@ impl Term {
     /// * it has no `Prefix`
     ///
     pub fn is_unity(&self) -> bool {
-        self.factor.is_none() &&
-            self.exponent.is_none() &&
-            self.atom.is_none() &&
-            self.prefix.is_none()
+        self.factor.is_none()
+            && self.exponent.is_none()
+            && self.atom.is_none()
+            && self.prefix.is_none()
     }
 
     /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since
@@ -63,7 +63,7 @@ impl Term {
         match self.exponent {
             Some(e) => e.is_positive(),
             // None is analogous to an exponent of 1.
-            None => true
+            None => true,
         }
     }
 
@@ -74,7 +74,7 @@ impl Term {
         match self.exponent {
             Some(e) => e.is_negative(),
             // None is analogous to an exponent of 1.
-            None => false
+            None => false,
         }
     }
 
@@ -89,7 +89,7 @@ impl Term {
     pub fn factor_as_u32(&self) -> u32 {
         match self.factor {
             Some(f) => f,
-            None => 1
+            None => 1,
         }
     }
 }
@@ -150,7 +150,7 @@ fn combine_term_values(
     calculated_atom: f64,
     calculated_prefix: f64,
     factor: Option<u32>,
-    exponent: Option<i32>
+    exponent: Option<i32>,
 ) -> f64 {
     let a_p_product = calculated_atom * calculated_prefix;
 
@@ -163,12 +163,10 @@ fn combine_term_values(
                 None => product,
             }
         }
-        None => {
-            match exponent {
-                Some(e) => a_p_product.powi(e),
-                None => a_p_product
-            }
-        }
+        None => match exponent {
+            Some(e) => a_p_product.powi(e),
+            None => a_p_product,
+        },
     }
 }
 
