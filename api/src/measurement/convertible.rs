@@ -63,42 +63,64 @@ mod tests {
     use super::*;
 
     #[test]
-    fn validate_convert_to_meter_to_meter() {
+    fn validate_convert_to_meter_to_meter_str() {
         let meter = Measurement::new(1.0, "m").unwrap();
-        let other = meter.convert_to("m").unwrap();
-        assert_eq!(other, meter);
-        assert_eq!(other.value, 1.0);
-
-        let other = meter.convert_to(&meter.unit).unwrap();
-        assert_eq!(other, meter);
-        assert_eq!(other.value, 1.0);
+        let converted = meter.convert_to("m").unwrap();
+        assert_eq!(converted, meter);
+        assert_eq!(converted.value, 1.0);
     }
 
     #[test]
-    fn validate_convert_to_meter_to_2meter() {
+    fn validate_convert_to_meter_to_2meter_str() {
         let meter = Measurement::new(1.0, "m").unwrap();
-        let mut other = meter.convert_to("m").unwrap();
-        other.value = 2.0;
-        assert_ne!(other, meter);
+        let converted = meter.convert_to("2m").unwrap();
+        assert_eq!(converted.value, 0.5);
     }
 
     #[test]
-    fn validate_convert_to_meter_to_km() {
+    fn validate_convert_to_meter_to_km_str() {
         let meter = Measurement::new(1000.0, "m").unwrap();
-        let other = meter.convert_to("km").unwrap();
-        assert_eq!(other, meter);
-        assert_eq!(other.value, 1.0);
-
-        let other = meter.convert_to(&other.unit).unwrap();
-        assert_eq!(other, meter);
-        assert_eq!(other.value, 1.0);
+        let converted = meter.convert_to("km").unwrap();
+        assert_eq!(converted.value, 1.0);
     }
 
     #[test]
-    fn validate_convert_to_meter_to_2km() {
+    fn validate_convert_to_meter_to_2km_str() {
+        let meter = Measurement::new(1000.0, "m").unwrap();
+        let converted = meter.convert_to("2km").unwrap();
+        assert_eq!(converted.value, 0.5);
+    }
+
+    #[test]
+    fn validate_convert_to_meter_to_meter_unit() {
         let meter = Measurement::new(1.0, "m").unwrap();
-        let mut other = meter.convert_to("km").unwrap();
-        other.value = 2.0;
-        assert_ne!(other, meter);
+        let unit = Unit::from_str("m").unwrap();
+        let converted = meter.convert_to(&unit).unwrap();
+        assert_eq!(converted, meter);
+        assert_eq!(converted.value, 1.0);
+    }
+
+    #[test]
+    fn validate_convert_to_meter_to_2meter_unit() {
+        let meter = Measurement::new(1.0, "m").unwrap();
+        let unit = Unit::from_str("2m").unwrap();
+        let converted = meter.convert_to(&unit).unwrap();
+        assert_eq!(converted.value, 0.5);
+    }
+
+    #[test]
+    fn validate_convert_to_meter_to_km_unit() {
+        let meter = Measurement::new(1000.0, "m").unwrap();
+        let unit = Unit::from_str("km").unwrap();
+        let converted = meter.convert_to(&unit).unwrap();
+        assert_eq!(converted.value, 1.0);
+    }
+
+    #[test]
+    fn validate_convert_to_meter_to_2km_unit() {
+        let meter = Measurement::new(1000.0, "m").unwrap();
+        let unit = Unit::from_str("2km").unwrap();
+        let converted = meter.convert_to(&unit).unwrap();
+        assert_eq!(converted.value, 0.5);
     }
 }
