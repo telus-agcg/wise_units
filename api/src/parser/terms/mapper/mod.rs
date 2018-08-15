@@ -88,10 +88,10 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<Option<i32>, Error> {
                 let new_digits = visit_digits(inner_pair)?;
 
                 match e {
-                  Some(exponent) => {
-                    e = Some(exponent * new_digits);
-                  }
-                  None => e = Some(new_digits)
+                    Some(exponent) => {
+                        e = Some(exponent * new_digits);
+                    }
+                    None => e = Some(new_digits),
                 }
             }
             _ => {
