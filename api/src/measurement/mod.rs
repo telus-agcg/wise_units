@@ -45,6 +45,9 @@ impl Measurement {
         Ok(m)
     }
 
+    /// The value of the `Measurement` in terms of `other_unit`. Only used for
+    /// converting, and does not check the compatibility of units.
+    ///
     fn converted_scalar(&self, other_unit: &Unit) -> f64 {
         if self.is_special() && other_unit.is_special() {
             let ts = self.unit.reduce_value(self.value);
@@ -61,6 +64,7 @@ impl Measurement {
 
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
     use super::super::parser::{Atom, Term};
     use super::*;
     use unit::Unit;
@@ -75,6 +79,37 @@ mod tests {
 
         assert_eq!(m.value, 1.0);
         assert_eq!(m.unit, expected_unit);
+    }
+
+    #[test]
+    fn validate_converted_scalar() {
+        // No special units
+        let m = Measurement::new(1.0, "m").unwrap();
+        let unit = Unit::from_str("m").unwrap();
+        assert_eq!(m.converted_scalar(&unit), 1.0);
+
+        let m = Measurement::new(1.0, "m").unwrap();
+        let unit = Unit::from_str("km").unwrap();
+        assert_eq!(m.converted_scalar(&unit), 0.001);
+
+        let m = Measurement::new(1000.0, "m").unwrap();
+        let unit = Unit::from_str("km").unwrap();
+        assert_eq!(m.converted_scalar(&unit), 1.0);
+
+        // Measurement unit is not special, but other_unit is
+        let m = Measurement::new(1.0, "K").unwrap();
+        let unit = Unit::from_str("Cel").unwrap();
+        assert_eq!(m.converted_scalar(&unit), -272.15);
+
+        // Measurement unit is special, but other_unit is not
+        let m = Measurement::new(1.0, "Cel").unwrap();
+        let unit = Unit::from_str("K").unwrap();
+        assert_eq!(m.converted_scalar(&unit), 274.15);
+
+        // Measurement unit and other_unit are special
+        let m = Measurement::new(1.0, "Cel").unwrap();
+        let unit = Unit::from_str("[degF]").unwrap();
+        assert_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
     }
 
     #[cfg(feature = "with_serde")]
