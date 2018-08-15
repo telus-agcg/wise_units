@@ -1,4 +1,6 @@
+use parser::Composable;
 use unit::Unit;
+use ucum_unit::UcumUnit;
 
 //-----------------------------------------------------------------------------
 // impl PartialOrd

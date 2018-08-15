@@ -6,6 +6,7 @@ pub mod from;
 pub mod from_str;
 pub mod ops;
 pub mod partial_eq;
+pub mod partial_ord;
 pub mod reducible;
 pub mod ucum_unit;
 
