@@ -22,14 +22,15 @@ pub struct Composition {
 }
 
 macro_rules! mul_exponent {
-    ($self_:ident, $method:ident, $exponent:expr, $new_composition:ident) => {
-        if let Some(self_exponent) = $self_.$method {
+    ($composition:ident, $method:ident, $exponent:expr, $new_composition:ident) => {
+        if let Some(self_exponent) = $composition.$method {
             let new_exponent = self_exponent * $exponent;
 
             $new_composition.$method = set_exponent(new_exponent);
         }
     };
 }
+
 macro_rules! insert_exponent {
     ($composition:expr, $method:ident, $exponent:expr) => {
         match $composition.$method {
@@ -55,19 +56,99 @@ macro_rules! add_dimension {
 
 impl Composition {
     pub fn new(dimension: Dimension, exponent: i32) -> Self {
-        let mut c = Composition::default();
-
         match dimension {
-            Dimension::ElectricCharge    => c.electric_charge = Some(exponent),
-            Dimension::Length            => c.length = Some(exponent),
-            Dimension::LuminousIntensity => c.luminous_intensity = Some(exponent),
-            Dimension::Mass              => c.mass = Some(exponent),
-            Dimension::PlaneAngle        => c.plane_angle = Some(exponent),
-            Dimension::Temperature       => c.temperature = Some(exponent),
-            Dimension::Time              => c.time = Some(exponent),
+            Dimension::ElectricCharge    => Self::new_electric_charge(exponent),
+            Dimension::Length            => Self::new_length(exponent),
+            Dimension::LuminousIntensity => Self::new_luminous_intensity(exponent),
+            Dimension::Mass              => Self::new_mass(exponent),
+            Dimension::PlaneAngle        => Self::new_plane_angle(exponent),
+            Dimension::Temperature       => Self::new_temperature(exponent),
+            Dimension::Time              => Self::new_time(exponent),
         }
+    }
 
-        c
+    fn new_electric_charge(exponent: i32) -> Self {
+        Composition {
+            electric_charge: Some(exponent),
+            length: None,
+            luminous_intensity: None,
+            mass: None,
+            plane_angle: None,
+            temperature: None,
+            time: None,
+        }
+    }
+
+    fn new_length(exponent: i32) -> Self {
+        Composition {
+            electric_charge: None,
+            length: Some(exponent),
+            luminous_intensity: None,
+            mass: None,
+            plane_angle: None,
+            temperature: None,
+            time: None,
+        }
+    }
+
+    fn new_luminous_intensity(exponent: i32) -> Self {
+        Composition {
+            electric_charge: None,
+            length: None,
+            luminous_intensity: Some(exponent),
+            mass: None,
+            plane_angle: None,
+            temperature: None,
+            time: None,
+        }
+    }
+
+    fn new_mass(exponent: i32) -> Self {
+        Composition {
+            electric_charge: None,
+            length: None,
+            luminous_intensity: None,
+            mass: Some(exponent),
+            plane_angle: None,
+            temperature: None,
+            time: None,
+        }
+    }
+
+    fn new_plane_angle(exponent: i32) -> Self {
+        Composition {
+            electric_charge: None,
+            length: None,
+            luminous_intensity: None,
+            mass: None,
+            plane_angle: Some(exponent),
+            temperature: None,
+            time: None,
+        }
+    }
+
+    fn new_temperature(exponent: i32) -> Self {
+        Composition {
+            electric_charge: None,
+            length: None,
+            luminous_intensity: None,
+            mass: None,
+            plane_angle: None,
+            temperature: Some(exponent),
+            time: None,
+        }
+    }
+
+    fn new_time(exponent: i32) -> Self {
+        Composition {
+            electric_charge: None,
+            length: None,
+            luminous_intensity: None,
+            mass: None,
+            plane_angle: None,
+            temperature: None,
+            time: Some(exponent),
+        }
     }
 
     pub fn insert(&mut self, dimension: Dimension, exponent: i32) {
