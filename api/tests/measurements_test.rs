@@ -103,6 +103,69 @@ validate_conversion!(
 );
 
 validate_conversion!(
+    validate_conversion_percent_to_g_per_kg_forward,
+    validate_conversion_percent_to_g_per_kg_back,
+    1.0,
+    "%",
+    "g/kg",
+    10.0
+);
+
+validate_conversion!(
+    validate_conversion_percent_to_mg_per_kg_forward,
+    validate_conversion_percent_to_mg_per_kg_back,
+    1.0,
+    "%",
+    "mg/kg",
+    10_000.0
+);
+
+validate_conversion!(
+    validate_conversion_percent_to_ug_per_kg_forward,
+    validate_conversion_percent_to_ug_per_kg_back,
+    1.0,
+    "%",
+    "ug/kg",
+    10_000_000.0
+);
+
+validate_conversion!(
+    validate_conversion_ppm_to_in_per_ft_forward,
+    validate_conversion_ppm_to_in_per_ft_back,
+    1.0,
+    "[ppm]",
+    "[in_i]/[ft_i]",
+    1.2e-05
+);
+
+validate_conversion!(
+    validate_conversion_ppm_to_mg_per_kg_forward,
+    validate_conversion_ppm_to_mg_per_kg_back,
+    1.0,
+    "[ppm]",
+    "mg/kg",
+    1.0
+);
+
+validate_conversion!(
+    validate_conversion_ppm_to_ug_per_kg_forward,
+    validate_conversion_ppm_to_ug_per_kg_back,
+    1.0,
+    "[ppm]",
+    "ug/kg",
+    1000.0
+);
+
+validate_conversion!(
+    validate_conversion_ug_per_kg_to_in_per_ft_forward,
+    validate_conversion_ug_per_kg_to_in_per_ft_back,
+    1.0,
+    "ug/kg",
+    "[in_i]/[ft_i]",
+    1.2e-08
+);
+
+validate_conversion!(
     validate_conversion_lb_acre_per_har_to_kg_forward,
     validate_conversion_lb_acre_per_har_to_kg_back,
     1.0,
