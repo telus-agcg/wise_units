@@ -4,8 +4,8 @@ use parser::{Atom, Prefix, Term};
 pub(super) struct BasicComponent {
     pub atom: Option<Atom>,
     pub prefix: Option<Prefix>,
-    pub factor: u32,
-    pub exponent: i32,
+    pub factor: Option<u32>,
+    pub exponent: Option<i32>,
     pub annotation: Option<String>,
     pub terms: Vec<Term>,
 }
@@ -15,8 +15,8 @@ impl Default for BasicComponent {
         Self {
             atom: None,
             prefix: None,
-            factor: 1,
-            exponent: 1,
+            factor: None,
+            exponent: None,
             annotation: None,
             terms: vec![],
         }

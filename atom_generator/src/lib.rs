@@ -1,3 +1,4 @@
+#[macro_use(handlebars_helper)]
 extern crate handlebars;
 extern crate heck;
 #[macro_use]

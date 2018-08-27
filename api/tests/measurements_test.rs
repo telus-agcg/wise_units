@@ -39,15 +39,140 @@ validate_conversion!(
     2.2369362920544025
 );
 
-// TODO: AGDEV-32407
-// validate_conversion!(
-//     validate_conversion_lb_per_acre_to_lb_per_m2_forward,
-//     validate_conversion_lb_per_acre_to_lb_per_m2_back,
-//     1.0,
-//     "[lb_av]/[acr_us]",
-//     "[lb_av]/m2",
-//     0.000_247_104_393_046_627_9
-// );
+validate_conversion!(
+    validate_conversion_lb_per_acre_to_lb_per_m2_forward,
+    validate_conversion_lb_per_acre_to_lb_per_m2_back,
+    1.0,
+    "[lb_av]/[acr_us]",
+    "[lb_av]/m2",
+    0.000_247_104_393_046_627_9
+);
+
+validate_conversion!(
+    validate_conversion_lb_per_acre_to_lb_per_ft2_forward,
+    validate_conversion_lb_per_acre_to_lb_per_ft2_back,
+    1.0,
+    "[lb_av]/[acr_us]",
+    "[lb_av]/[ft_i]2",
+    2.295_674_931_138_659e-05
+);
+
+validate_conversion!(
+    validate_conversion_lb_to_ston_forward,
+    validate_conversion_lb_to_ston_back,
+    1.0,
+    "[lb_av]",
+    "[ston_av]",
+    0.000_5
+);
+
+validate_conversion!(
+    validate_conversion_m_per_s_to_ft_per_hour_forward,
+    validate_conversion_m_per_s_to_ft_per_hour_back,
+    1.0,
+    "m/s",
+    "[ft_i]/h",
+    11_811.023_622_047_243
+);
+
+validate_conversion!(
+    validate_conversion_lb_to_oz_forward,
+    validate_conversion_lb_to_oz_back,
+    1.0,
+    "[lb_av]",
+    "[oz_av]",
+    16.0
+);
+
+validate_conversion!(
+    validate_conversion_g_per_cm3_to_mg_per_l_forward,
+    validate_conversion_g_per_cm3_to_mg_per_l_back,
+    1.0,
+    "g/cm3",
+    "mg/L",
+    1_000_000.0
+);
+
+validate_conversion!(
+    validate_conversion_meq_per_100cm3_to_meq_per_l_forward,
+    validate_conversion_meq_per_100cm3_to_meq_per_l_back,
+    1.0,
+    "meq/100cm3",
+    "meq/L",
+    0.001
+);
+
+validate_conversion!(
+    validate_conversion_percent_to_g_per_kg_forward,
+    validate_conversion_percent_to_g_per_kg_back,
+    1.0,
+    "%",
+    "g/kg",
+    10.0
+);
+
+validate_conversion!(
+    validate_conversion_percent_to_mg_per_kg_forward,
+    validate_conversion_percent_to_mg_per_kg_back,
+    1.0,
+    "%",
+    "mg/kg",
+    10_000.0
+);
+
+validate_conversion!(
+    validate_conversion_percent_to_ug_per_kg_forward,
+    validate_conversion_percent_to_ug_per_kg_back,
+    1.0,
+    "%",
+    "ug/kg",
+    10_000_000.0
+);
+
+validate_conversion!(
+    validate_conversion_ppm_to_in_per_ft_forward,
+    validate_conversion_ppm_to_in_per_ft_back,
+    1.0,
+    "[ppm]",
+    "[in_i]/[ft_i]",
+    1.2e-05
+);
+
+validate_conversion!(
+    validate_conversion_ppm_to_mg_per_kg_forward,
+    validate_conversion_ppm_to_mg_per_kg_back,
+    1.0,
+    "[ppm]",
+    "mg/kg",
+    1.0
+);
+
+validate_conversion!(
+    validate_conversion_ppm_to_ug_per_kg_forward,
+    validate_conversion_ppm_to_ug_per_kg_back,
+    1.0,
+    "[ppm]",
+    "ug/kg",
+    1000.0
+);
+
+validate_conversion!(
+    validate_conversion_ug_per_kg_to_in_per_ft_forward,
+    validate_conversion_ug_per_kg_to_in_per_ft_back,
+    1.0,
+    "ug/kg",
+    "[in_i]/[ft_i]",
+    1.2e-08
+);
+
+validate_conversion!(
+    validate_conversion_lb_acre_per_har_to_kg_forward,
+    validate_conversion_lb_acre_per_har_to_kg_back,
+    1.0,
+    "[lb_av].[acr_us]/har",
+    "kg",
+    0.183_563_053_820_094_75
+);
 
 validate_conversion!(
     validate_conversion_unity_to_10power_forward,

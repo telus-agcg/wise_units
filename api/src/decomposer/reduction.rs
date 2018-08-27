@@ -4,41 +4,41 @@ use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 
 type Exponent = i32;
+type InnerCollection = BTreeMap<String, Exponent>;
 
-pub struct Decomposer(BTreeMap<String, Exponent>);
+pub struct Decomposer;
 
-impl Decomposer {
-    pub fn new(terms: &[Term]) -> Self {
-        let set = build_set(terms);
+impl<'a> Decomposable<'a> for Decomposer {
+    type Terms = &'a [Term];
+    type Collection = InnerCollection;
 
-        Decomposer(set)
+    fn terms_to_collection(&self, terms: &[Term]) -> InnerCollection {
+        build_set(terms)
     }
-}
 
-impl Decomposable for Decomposer {
-    fn numerator(&self) -> String {
-        let result = self.0
-            .iter()
-            .filter_map(|(k, v)| extract_numerator(k, *v))
-            .fold(String::new(), |acc, num_string| {
-                super::build_string(acc, num_string)
-            });
+    fn numerator(&self, collection: &Self::Collection) -> Option<String> {
+        let result = string_from_collection(collection, extract_numerator);
 
-        if result.is_empty() {
-            "1".to_string()
+        if result.is_none() {
+            Some("1".to_string())
         } else {
             result
         }
     }
 
-    fn denominator(&self) -> String {
-        self.0
-            .iter()
-            .filter_map(|(k, v)| extract_denominator(k, *v))
-            .fold(String::new(), |acc, num_string| {
-                super::build_string(acc, num_string)
-            })
+    fn denominator(&self, collection: &Self::Collection) -> Option<String> {
+        string_from_collection(collection, extract_denominator)
     }
+}
+
+fn string_from_collection<F>(collection: &InnerCollection, func: F) -> Option<String>
+where
+    F: Fn(&str, i32) -> Option<String>,
+{
+    collection
+        .iter()
+        .filter_map(|(k, v)| func(k, *v))
+        .fold(None, super::build_string)
 }
 
 fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
@@ -47,25 +47,28 @@ fn build_set(terms: &[Term]) -> BTreeMap<String, Exponent> {
     for term in terms {
         let mut key = String::new();
 
-        if term.factor != 1 {
-            key.push_str(&term.factor.to_string())
-        };
-
-        if let Some(prefix) = term.prefix {
-            key.push_str(&prefix.to_string());
-        }
+        term.factor_and_is_not_one(|factor| key.push_str(&factor.to_string()));
 
         if let Some(atom) = term.atom {
+            if let Some(prefix) = term.prefix {
+                key.push_str(&prefix.to_string());
+            }
+
             key.push_str(&atom.to_string());
         }
 
         if !key.is_empty() {
+            let exponent = match term.exponent {
+                Some(exponent) => exponent,
+                None => 1,
+            };
+
             match set.entry(key) {
                 Entry::Vacant(entry) => {
-                    entry.insert(term.exponent);
+                    entry.insert(exponent);
                 }
                 Entry::Occupied(mut entry) => {
-                    *entry.get_mut() += term.exponent;
+                    *entry.get_mut() += exponent;
                 }
             }
         }
@@ -112,13 +115,13 @@ fn extract_denominator(key: &str, value: i32) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    macro_rules! validate_expression {
+    macro_rules! validate_decompose {
         ($test_name:ident, $input_string:expr, $expected_expression:expr) => {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();
-                let decomposer = Decomposer::new(&unit.terms);
-                assert_eq!(decomposer.expression(), $expected_expression);
+                let decomposer = Decomposer;
+                assert_eq!(decomposer.decompose(&unit.terms), $expected_expression);
             }
         };
     }
@@ -128,24 +131,24 @@ mod tests {
     use std::str::FromStr;
     use unit::Unit;
 
-    validate_expression!(validate_expression_pri_m, "m", "m");
-    validate_expression!(validate_expression_pri_m2_per_m, "m2/m", "m");
-    validate_expression!(validate_expression_sec_m, "M", "m");
-    validate_expression!(validate_expression_sec_km, "KM", "km");
-    validate_expression!(validate_expression_pri_km_slash_pri_10m, "km/10m", "km/10m");
-    validate_expression!(validate_expression_pri_km_slash_pri_s2, "km/s2", "km/s2");
-    validate_expression!(
-        validate_expression_pri_km_slash_pri_60s2,
+    validate_decompose!(validate_decompose_pri_m, "m", "m");
+    validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m");
+    validate_decompose!(validate_decompose_sec_m, "M", "m");
+    validate_decompose!(validate_decompose_sec_km, "KM", "km");
+    validate_decompose!(validate_decompose_pri_km_slash_pri_10m, "km/10m", "km/10m");
+    validate_decompose!(validate_decompose_pri_km_slash_pri_s2, "km/s2", "km/s2");
+    validate_decompose!(
+        validate_decompose_pri_km_slash_pri_60s2,
         "km/60s2",
         "km/60s2"
     );
-    validate_expression!(
-        validate_expression_sec_100km_slash_pri_60s,
+    validate_decompose!(
+        validate_decompose_sec_100km_slash_pri_60s,
         "100KM/60s2",
         "100km/60s2"
     );
-    validate_expression!(
-        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us,
+    validate_decompose!(
+        validate_decompose_pri_acr_us_sec_in_i_slash_pri_acr_us,
         "[acr_us].[IN_I]/[acr_us]",
         "[in_i]"
     );

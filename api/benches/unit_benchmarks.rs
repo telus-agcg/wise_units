@@ -38,7 +38,6 @@ macro_rules! bench_over_inputs_math {
 }
 
 bench_over_inputs_method!(is_special_group, "Unit::is_special()", is_special);
-bench_over_inputs_method!(is_metric_group, "Unit::is_metric()", is_metric);
 
 bench_over_inputs_method!(scalar_group, "Unit::scalar()", scalar);
 bench_over_inputs_method!(magnitude_group, "Unit::magnitude()", magnitude);
@@ -108,7 +107,6 @@ bench_over_inputs_math!(div_group, "Unit::div()", /);
 criterion_group!(
     unit_benches,
     is_special_group,
-    is_metric_group,
     scalar_group,
     magnitude_group,
     expression_group,

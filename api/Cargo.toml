@@ -1,6 +1,6 @@
 [package]
 name = "wise_units"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
 [dependencies]
@@ -10,7 +10,6 @@ pest = "^1.0"
 pest_derive = "^1.0"
 serde = { version = "1.0", optional = true, default-features = false }
 serde_derive = { version = "1.0", optional = true, default-features = false }
-stdweb = { version = "0.4", optional = true, default-features = false }
 
 [dev-dependencies]
 approx = "0.2"
@@ -24,7 +23,6 @@ wise_units-atom_generator = { path = "../atom_generator" }
 
 [features]
 with_serde = ["serde", "serde_derive"]
-with_stdweb = ["stdweb", "with_serde"]
 
 [[bench]]
 name = "measurements_benchmarks"

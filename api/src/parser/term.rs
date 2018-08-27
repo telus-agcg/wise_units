@@ -14,8 +14,8 @@ use ucum_unit::UcumUnit;
 pub struct Term {
     pub atom: Option<Atom>,
     pub prefix: Option<Prefix>,
-    pub factor: u32,
-    pub exponent: i32,
+    pub factor: Option<u32>,
+    pub exponent: Option<i32>,
     pub annotation: Option<String>,
 }
 
@@ -24,8 +24,8 @@ impl Term {
         Self {
             atom,
             prefix,
-            factor: 1,
-            exponent: 1,
+            factor: None,
+            exponent: None,
             annotation: None,
         }
     }
@@ -39,7 +39,58 @@ impl Term {
     /// * it has no `Prefix`
     ///
     pub fn is_unity(&self) -> bool {
-        self.factor == 1 && self.exponent == 1 && self.atom.is_none() && self.prefix.is_none()
+        self.factor.is_none()
+            && self.exponent.is_none()
+            && self.atom.is_none()
+            && self.prefix.is_none()
+    }
+
+    /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since
+    /// `None` is analogous to an exponent of 1).
+    ///
+    pub fn invert_exponent(&mut self) {
+        self.exponent = match self.exponent {
+            Some(exponent) => Some(-exponent),
+            // None is analogous to an exponent of 1.
+            None => Some(-1),
+        };
+    }
+
+    /// If `self` has an `exponent`, it checks if its value is positive; if not, it returns `true`
+    /// (since `None` is analogous to an exponent of 1).
+    ///
+    pub fn exponent_is_positive(&self) -> bool {
+        match self.exponent {
+            Some(e) => e.is_positive(),
+            // None is analogous to an exponent of 1.
+            None => true,
+        }
+    }
+
+    /// If `self` has an `exponent`, it checks if its value is negative; if not, it returns `false`
+    /// (since `None` is analogous to an exponent of 1).
+    ///
+    pub fn exponent_is_negative(&self) -> bool {
+        match self.exponent {
+            Some(e) => e.is_negative(),
+            // None is analogous to an exponent of 1.
+            None => false,
+        }
+    }
+
+    pub fn factor_and_is_not_one<F: FnOnce(u32)>(&self, f: F) {
+        if let Some(factor) = self.factor {
+            if factor != 1 {
+                f(factor)
+            }
+        }
+    }
+
+    pub fn factor_as_u32(&self) -> u32 {
+        match self.factor {
+            Some(f) => f,
+            None => 1,
+        }
     }
 }
 
@@ -95,19 +146,43 @@ impl UcumUnit for Term {
 //-----------------------------------------------------------------------------
 // impl Reducible
 //-----------------------------------------------------------------------------
+fn combine_term_values(
+    calculated_atom: f64,
+    calculated_prefix: f64,
+    factor: Option<u32>,
+    exponent: Option<i32>,
+) -> f64 {
+    let a_p_product = calculated_atom * calculated_prefix;
+
+    match factor {
+        Some(f) => {
+            let product = a_p_product * f64::from(f);
+
+            match exponent {
+                Some(e) => product.powi(e),
+                None => product,
+            }
+        }
+        None => match exponent {
+            Some(e) => a_p_product.powi(e),
+            None => a_p_product,
+        },
+    }
+}
+
 impl Reducible for Term {
     fn reduce_value(&self, value: f64) -> f64 {
         let atom_scalar = self.atom.map_or(1.0, |a| a.reduce_value(value));
         let prefix_scalar = self.prefix.map_or(1.0, |p| p.definition_value());
 
-        (atom_scalar * prefix_scalar * f64::from(self.factor)).powi(self.exponent)
+        combine_term_values(atom_scalar, prefix_scalar, self.factor, self.exponent)
     }
 
     fn calculate_magnitude(&self, value: f64) -> f64 {
         let atom_magnitude = self.atom.map_or(1.0, |a| a.calculate_magnitude(value));
         let prefix_magnitude = self.prefix.map_or(1.0, |p| p.definition_value());
 
-        (atom_magnitude * prefix_magnitude * f64::from(self.factor)).powi(self.exponent)
+        combine_term_values(atom_magnitude, prefix_magnitude, self.factor, self.exponent)
     }
 }
 
@@ -127,24 +202,24 @@ impl Reducible for Vec<Term> {
 // impl Composable
 //-----------------------------------------------------------------------------
 impl Composable for Term {
+    /// Combines the `Composition` from the `Term`'s `Atom` with its own `exponent` to build a
+    /// `Composition`. If the `Term` has no `Atom`, it has no dimension, thus will have an empty
+    /// `Composition`.
+    ///
+    /// TODO: https://agrian.atlassian.net/browse/DEV-971
+    ///
     fn composition(&self) -> Composition {
         match self.atom {
             Some(atom) => {
-                let composition = atom.composition();
+                let atom_composition = atom.composition();
 
-                if self.exponent == 1 {
-                    return composition;
+                match self.exponent {
+                    Some(term_exponent) => atom_composition * term_exponent,
+                    None => atom_composition,
                 }
-
-                let mut new_composition = Composition::default();
-
-                for (dim, exp) in composition {
-                    let atom_exp = if exp == 1 { 0 } else { exp };
-                    new_composition.insert(dim, atom_exp + self.exponent);
-                }
-
-                new_composition
             }
+            // If there's no Atom in the Term, there's no dimension--even if there's an exponent on
+            // the Term.
             None => Composition::default(),
         }
     }
@@ -152,17 +227,8 @@ impl Composable for Term {
 
 impl<'a> Composable for &'a [Term] {
     fn composition(&self) -> Composition {
-        let mut composition = Composition::default();
-
-        for term in self.iter() {
-            let term_composition = term.composition();
-
-            for (term_dimension, term_exponent) in term_composition {
-                composition.insert(term_dimension, term_exponent);
-            }
-        }
-
-        composition
+        self.iter()
+            .fold(Composition::default(), |acc, term| acc * term.composition())
     }
 }
 
@@ -171,8 +237,8 @@ impl ::std::default::Default for Term {
         Self {
             prefix: None,
             atom: None,
-            factor: 1,
-            exponent: 1,
+            factor: None,
+            exponent: None,
             annotation: None,
         }
     }
@@ -187,19 +253,26 @@ impl fmt::Display for Term {
 fn extract_term_string(term: &Term) -> String {
     let mut term_string = String::new();
 
-    if term.factor != 1 {
-        term_string.push_str(&term.factor.to_string())
+    if let Some(factor) = term.factor {
+        if factor != 1 {
+            term_string.push_str(&factor.to_string())
+        }
     };
 
-    if let Some(prefix) = term.prefix {
-        term_string.push_str(&prefix.to_string());
-    }
-
     if let Some(atom) = term.atom {
-        if term.exponent == 1 {
-            term_string.push_str(&atom.to_string());
-        } else {
-            term_string.push_str(&format!("{}{}", atom, term.exponent));
+        if let Some(prefix) = term.prefix {
+            term_string.push_str(&prefix.to_string());
+        }
+
+        match term.exponent {
+            Some(exponent) => {
+                if exponent == 1 {
+                    term_string.push_str(&atom.to_string());
+                } else {
+                    term_string.push_str(&format!("{}{}", atom, exponent));
+                }
+            }
+            None => term_string.push_str(&atom.to_string()),
         }
     }
 
@@ -272,7 +345,7 @@ mod tests {
     validate_reduce_value!(validate_reduce_value_meter, term!(Meter), 1.0);
     validate_reduce_value!(validate_reduce_value_kilometer, term!(Kilo, Meter), 1000.0);
     validate_reduce_value!(
-        validate_reduce_value_meter_eminus1,
+        validate_reduce_value_meter_minus1,
         term!(Meter, exponent: -1),
         1.0
     );
@@ -319,7 +392,7 @@ mod tests {
         1000.0
     );
     validate_calculate_magnitude!(
-        validate_calculate_magnitude_meter_eminus1,
+        validate_calculate_magnitude_meter_minus1,
         term!(Meter, exponent: -1),
         1.0
     );
@@ -453,8 +526,8 @@ mod tests {
             let expected_json = r#"{
                                     "atom": null,
                                     "prefix": null,
-                                    "factor": 1,
-                                    "exponent": 1,
+                                    "factor": null,
+                                    "exponent": null,
                                     "annotation": null
                                    }"#.replace("\n", "")
                 .replace(" ", "");
@@ -488,8 +561,8 @@ mod tests {
             let json = r#"{
                             "atom": null,
                             "prefix": null,
-                            "factor": 1,
-                            "exponent": 1,
+                            "factor": null,
+                            "exponent": null,
                             "annotation": null
                            }"#;
 

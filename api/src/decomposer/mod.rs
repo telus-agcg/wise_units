@@ -1,18 +1,21 @@
-pub(super) mod decomposable;
+pub mod decomposable;
 pub(super) mod reduction;
 pub(super) mod simple;
 
-pub(super) use self::decomposable::Decomposable;
+pub use self::decomposable::Decomposable;
 pub(super) use self::reduction::Decomposer as ReductionDecomposer;
 pub(super) use self::simple::Decomposer as SimpleDecomposer;
 
-fn build_string(mut acc: String, term_string: String) -> String {
-    let new_string = if acc.is_empty() {
-        term_string
-    } else {
-        format!(".{}", term_string)
-    };
-    acc.push_str(&new_string);
+fn build_string(acc: Option<String>, term_string: String) -> Option<String> {
+    match acc {
+        Some(mut a) => {
+            let new_string = format!(".{}", term_string);
 
-    acc
+            a.push_str(&new_string);
+            a.shrink_to_fit();
+
+            Some(a)
+        }
+        None => Some(term_string),
+    }
 }

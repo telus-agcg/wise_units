@@ -1,5 +1,56 @@
 # Change Log
 
+## [0.3.0] - 2018-08-27
+
+### Added
+
+* `Decomposable` is now public.
+* `UcumSymbol` is now public.
+* Added `Term::factor_as_u32()`.
+* `Term` `factor` and `exponent` are now wrapped in an `Option` since many
+  `Term`s don't need these values.
+
+### Changed
+
+* [DEV-331] Fixed a number of conversion bugs. Redesigned `Composition` to get
+  there.
+* Refactored trait implementations for `Measurement` and `Unit` to sub-modules.
+  The files were getting too long.
+* `Term::factor` and `Term::exponent` are now wrapped in an `Option` (the same
+  goes for their related `parser::terms::mapper` components) to save unnecessary
+  allocations.
+* *Removed* `stdweb` support. This was overkill from the start.
+* Renamed `Decomposable::expression()` to `Decomposable::decompose()` to be more
+  conventional.
+* `Decomposable::decompose()` now takes a value to let the caller decide what to
+  pass in.
+* `Decomposable` now defines associated types for more `impl` flexibility.
+* Extracted some of `Decomposable::decompose()` to a new method,
+  `Decomposable::format_output()`, which let's consumers customize the formatted
+  output.
+* `Decomposable::numerator()` and `Decomposable::denominator()` now return
+  `Option<String>` instead of `String`.
+* Refactored a number of `Decomposable` implementation methods.
+* To match SI displaying, added a space for the implementation of `Display` for
+  `Measurement` in between the value and the unit.
+
+## [0.2.0] - 2018-06-26
+
+### Added
+
+* Added implementations of `Add`, `Sub`, `Mul`, `Div` for `&'a Measurement` and
+  `&'a Unit` where the right-hand side is an owned version of the same type.
+* Added implementations of `Mul`, `Div` for `&'a Measurement` where the
+  right-hand side is an `f64`.
+
+### Changed
+
+* Removed implementations of `Add`, `Sub`, `Mul`, `Div` for `&'a mut Measurement`
+  and `&'a mut Unit`. Those seem like edge-cases and thus code bloat at this
+  point.
+* `Convertible` trait now uses associated types for the output type and the
+  error type, letting definers use their own.
+
 ## [0.2.0] - 2018-06-26
 
 ### Added

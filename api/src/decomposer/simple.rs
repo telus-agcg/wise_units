@@ -1,94 +1,94 @@
 use super::Decomposable;
 use parser::Term;
 
-pub struct Decomposer<'a>(&'a [Term]);
+pub struct Decomposer;
 
-impl<'a> Decomposer<'a> {
-    pub fn new(terms: &'a [Term]) -> Self {
-        Decomposer(terms)
+impl<'a> Decomposable<'a> for Decomposer {
+    type Terms = &'a [Term];
+    type Collection = &'a [Term];
+
+    fn terms_to_collection(&self, terms: Self::Terms) -> Self::Collection {
+        terms
     }
-}
 
-impl<'a> Decomposable for Decomposer<'a> {
-    fn numerator(&self) -> String {
-        let result = self.0
-            .iter()
-            .filter_map(|term| extract_numerator(term))
-            .fold(String::new(), |acc, term_string| {
-                super::build_string(acc, term_string)
-            });
+    fn numerator(&self, terms: &Self::Collection) -> Option<String> {
+        let result = string_from_collection(terms, extract_numerator);
 
-        if result.is_empty() {
-            "1".to_string()
+        if result.is_none() {
+            Some("1".to_string())
         } else {
             result
         }
     }
 
-    fn denominator(&self) -> String {
-        self.0
-            .iter()
-            .filter_map(|term| extract_denominator(term))
-            .fold(String::new(), |acc, term_string| {
-                super::build_string(acc, term_string)
-            })
+    fn denominator(&self, terms: &Self::Collection) -> Option<String> {
+        string_from_collection(terms, extract_denominator)
     }
 }
 
+fn string_from_collection<F>(terms: &[Term], func: F) -> Option<String>
+where
+    F: Fn(&Term) -> Option<String>,
+{
+    terms
+        .iter()
+        .filter_map(|term| func(term))
+        .fold(None, |acc, term_string| {
+            super::build_string(acc, term_string)
+        })
+}
+
+/// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not positive.
+///
 fn extract_numerator(term: &Term) -> Option<String> {
-    if !term.exponent.is_positive() {
+    if !term.exponent_is_positive() {
         return None;
     }
 
-    let s = term.to_string();
-
-    if s.is_empty() {
-        None
-    } else {
-        Some(s)
-    }
+    Some(term.to_string())
 }
 
+/// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not negative.
+///
 fn extract_denominator(term: &Term) -> Option<String> {
-    if !term.exponent.is_negative() {
+    if !term.exponent_is_negative() {
         return None;
     }
 
     let mut term_string = String::new();
 
-    if term.factor != 1 {
-        term_string.push_str(&term.factor.to_string())
-    };
-
-    if let Some(prefix) = term.prefix {
-        term_string.push_str(&prefix.to_string());
-    }
+    term.factor_and_is_not_one(|factor| term_string.push_str(&factor.to_string()));
 
     if let Some(atom) = term.atom {
-        if term.exponent.abs() == 1 {
-            term_string.push_str(&atom.to_string());
-        } else {
-            let v = -term.exponent;
-            term_string.push_str(&format!("{}{}", atom, v));
+        if let Some(prefix) = term.prefix {
+            term_string.push_str(&prefix.to_string());
+        }
+
+        if let Some(exponent) = term.exponent {
+            let ex_abs = exponent.abs();
+
+            if ex_abs == 1 {
+                term_string.push_str(&atom.to_string());
+            } else {
+                term_string.push_str(&format!("{}{}", atom, ex_abs));
+            }
         }
     }
 
-    if term_string.is_empty() {
-        None
-    } else {
-        Some(term_string)
-    }
+    term_string.shrink_to_fit();
+
+    Some(term_string)
 }
 
 #[cfg(test)]
 mod tests {
-    macro_rules! validate_expression {
+    macro_rules! validate_decompose {
         ($test_name:ident, $input_string:expr, $expected_expression:expr) => {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($input_string).unwrap();
-                let decomposer = Decomposer::new(&unit.terms);
-                assert_eq!(decomposer.expression(), $expected_expression);
+                let decomposer = Decomposer;
+                assert_eq!(decomposer.decompose(&unit.terms), $expected_expression);
             }
         };
     }
@@ -98,29 +98,29 @@ mod tests {
     use std::str::FromStr;
     use unit::Unit;
 
-    validate_expression!(validate_expression_pri_m, "m", "m");
-    validate_expression!(validate_expression_pri_m2_per_m, "m2/m", "m2/m");
-    validate_expression!(validate_expression_sec_m, "M", "m");
-    validate_expression!(validate_expression_pri_km, "km", "km");
-    validate_expression!(validate_expression_sec_km, "KM", "km");
-    validate_expression!(validate_expression_pri_km_slash_pri_s2, "km/s2", "km/s2");
-    validate_expression!(
-        validate_expression_pri_im_slash_pri_60s2,
+    validate_decompose!(validate_decompose_pri_m, "m", "m");
+    validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m2/m");
+    validate_decompose!(validate_decompose_sec_m, "M", "m");
+    validate_decompose!(validate_decompose_pri_km, "km", "km");
+    validate_decompose!(validate_decompose_sec_km, "KM", "km");
+    validate_decompose!(validate_decompose_pri_km_slash_pri_s2, "km/s2", "km/s2");
+    validate_decompose!(
+        validate_decompose_pri_im_slash_pri_60s2,
         "km/60s2",
         "km/60s2"
     );
-    validate_expression!(
-        validate_expression_sec_100km_slash_pri_60s,
+    validate_decompose!(
+        validate_decompose_sec_100km_slash_pri_60s,
         "100KM/60s2",
         "100km/60s2"
     );
-    validate_expression!(
-        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us,
+    validate_decompose!(
+        validate_decompose_pri_acr_us_sec_in_i_slash_pri_acr_us,
         "[acr_us].[IN_I]/[acr_us]",
         "[acr_us].[in_i]/[acr_us]"
     );
-    validate_expression!(
-        validate_expression_pri_acr_us_sec_in_i_slash_pri_acr_us2,
+    validate_decompose!(
+        validate_decompose_pri_acr_us_sec_in_i_slash_pri_acr_us2,
         "[acr_us].[IN_I]/[acr_us]2",
         "[acr_us].[in_i]/[acr_us]2"
     );

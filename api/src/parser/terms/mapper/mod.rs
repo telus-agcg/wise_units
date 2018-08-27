@@ -59,8 +59,8 @@ fn visit_digits(pair: Pair<Rule>) -> Result<i32, Error> {
     })
 }
 
-fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
-    let mut e = 1;
+fn visit_exponent(pair: Pair<Rule>) -> Result<Option<i32>, Error> {
+    let mut e: Option<i32> = None;
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
@@ -71,7 +71,10 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
                 match string {
                     "+" => {}
                     "-" => {
-                        e = -e;
+                        e = match e {
+                            Some(exponent) => Some(-exponent),
+                            None => Some(-1),
+                        };
                     }
                     _ => {
                         let error = Error::UnableToParse {
@@ -82,7 +85,14 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<i32, Error> {
                 }
             }
             Rule::digits => {
-                e *= visit_digits(inner_pair)?;
+                let new_digits = visit_digits(inner_pair)?;
+
+                match e {
+                    Some(exponent) => {
+                        e = Some(exponent * new_digits);
+                    }
+                    None => e = Some(new_digits),
+                }
             }
             _ => {
                 let error = Error::UnableToParse {
@@ -125,7 +135,7 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
 fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
     let mut prefix: Option<Prefix> = None;
     let mut atom: Option<Atom> = None;
-    let mut exponent = 1_i32;
+    let mut exponent: Option<i32> = None;
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
@@ -187,7 +197,7 @@ fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
                 bc.annotation = Some(annotation);
             }
             Rule::factor => {
-                bc.factor = visit_factor(inner_pair)?;
+                bc.factor = Some(visit_factor(inner_pair)?);
             }
             Rule::term => {
                 let ast_term = visit_term(inner_pair)?;
@@ -207,13 +217,13 @@ fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
 }
 
 fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
-    let mut factor = 1_u32;
+    let mut factor: Option<u32> = None;
     let mut terms: Vec<Term> = vec![];
 
     for inner_pair in pair.into_inner() {
         match inner_pair.as_rule() {
             Rule::factor => {
-                factor = visit_factor(inner_pair)?;
+                factor = Some(visit_factor(inner_pair)?);
             }
             Rule::basic_component => {
                 let bc = visit_basic_component(inner_pair)?;
@@ -300,7 +310,7 @@ fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
 
 fn flip_terms_exponents(terms: &mut Vec<Term>) {
     for term in terms.iter_mut() {
-        term.exponent = -term.exponent;
+        term.invert_exponent();
     }
 }
 
