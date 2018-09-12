@@ -5,7 +5,7 @@
 
 // Because long numbers are generated, there's no way (that I know of) to
 // generate them using underscores (to make them pass the clippy lint).
-#[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
+#[cfg_attr(feature = "cargo-clippy", allow(clippy::unreadable_literal))]
 pub mod atom {
     use parser::{Classification, Composable, Composition, definition::Definition, Dimension, function_set::FunctionSet, Property, UcumSymbol};
     use reducible::Reducible;

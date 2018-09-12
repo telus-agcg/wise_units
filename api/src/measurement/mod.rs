@@ -124,7 +124,7 @@ mod tests {
             let unit = Unit { terms: vec![] };
             let measurement = Measurement {
                 value: 123.4,
-                unit: unit,
+                unit,
             };
             let expected_json = r#"{"value":123.4,"unit":{"terms":[]}}"#;
 
@@ -165,7 +165,7 @@ mod tests {
             };
             let measurement = Measurement {
                 value: 123.4,
-                unit: unit,
+                unit,
             };
 
             let j =
@@ -183,7 +183,7 @@ mod tests {
             let unit = Unit { terms: vec![] };
             let expected_measurement = Measurement {
                 value: 1.0,
-                unit: unit,
+                unit,
             };
 
             assert_eq!(expected_measurement, k);
@@ -221,7 +221,7 @@ mod tests {
             };
             let expected_measurement = Measurement {
                 value: 432.1,
-                unit: unit,
+                unit,
             };
 
             assert_eq!(expected_measurement, k);
