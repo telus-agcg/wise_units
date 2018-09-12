@@ -25,11 +25,7 @@ type Parts = (ComposableTerm, i32);
 
 impl From<Parts> for Term {
     fn from(parts: Parts) -> Self {
-        let e = if parts.1 == 1 {
-            None
-        } else {
-            Some(parts.1)
-        };
+        let e = if parts.1 == 1 { None } else { Some(parts.1) };
 
         Term {
             atom: parts.0.atom,
@@ -47,9 +43,7 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
     let map = reduce_to_map(terms);
 
     // Reconstructs the map into the Vec<Term>.
-    map.into_iter()
-        .map(|parts| Term::from(parts))
-        .collect()
+    map.into_iter().map(|parts| Term::from(parts)).collect()
 }
 
 /// Iterates through `terms`, finds `Term`s that have the same attributes that determine
@@ -57,7 +51,8 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 /// part of `reduce_terms()`.
 ///
 fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
-    terms.iter()
+    terms
+        .iter()
         .fold(BTreeMap::<ComposableTerm, i32>::new(), |mut map, term| {
             let exponent = term.exponent.unwrap_or(1);
             let key = ComposableTerm::from(term);

@@ -59,7 +59,7 @@ impl Unit {
     ///
     pub fn into_reduced(self) -> Unit {
         Unit {
-            terms: term_reducing::reduce_terms(&self.terms)
+            terms: term_reducing::reduce_terms(&self.terms),
         }
     }
 

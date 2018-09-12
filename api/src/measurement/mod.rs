@@ -64,9 +64,9 @@ impl Measurement {
 
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
     use super::super::parser::{Atom, Term};
     use super::*;
+    use std::str::FromStr;
     use unit::Unit;
 
     #[test]
