@@ -34,7 +34,7 @@ const ZETTA: f64 = 1.0e21;
 /// `wise_units`.
 ///
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Prefix {
     Atto,
     Centi,
