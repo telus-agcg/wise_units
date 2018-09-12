@@ -57,6 +57,22 @@ impl Term {
             && self.prefix.is_none()
     }
 
+    /// A `Term` is valueless if its fields don't contain data that turns the `Term` into something
+    /// with value:
+    ///
+    /// * it has no `factor`
+    /// * it has no `Atom`
+    /// * it has no `Prefix`
+    ///
+    /// A `Term` with _only_ an `exponent` doesn't really make any sense. A `Term` with an
+    /// `annotation` certainly makes sense, but does not impact the value of anything.
+    ///
+    pub fn is_valueless(&self) -> bool {
+        self.factor.is_none()
+            && self.atom.is_none()
+            && self.prefix.is_none()
+    }
+
     /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since
     /// `None` is analogous to an exponent of 1).
     ///

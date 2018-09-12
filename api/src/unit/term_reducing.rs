@@ -6,9 +6,16 @@ use std::collections::BTreeMap;
 ///
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 struct ComposableTerm {
-    atom: Option<Atom>,
-    prefix: Option<Prefix>,
     factor: Option<u32>,
+    prefix: Option<Prefix>,
+    atom: Option<Atom>,
+}
+
+impl ComposableTerm {
+    fn has_value(&self) -> bool {
+        self.atom.is_some()
+            || self.factor.is_some()
+    }
 }
 
 impl<'a> From<&'a Term> for ComposableTerm {
@@ -42,8 +49,13 @@ impl From<Parts> for Term {
 pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
     let map = reduce_to_map(terms);
 
-    // Reconstructs the map into the Vec<Term>.
-    map.into_iter().map(|parts| Term::from(parts)).collect()
+    // If everything is reduced away, the effective Unit should be "1".
+    if map.is_empty() {
+        vec![Term::new_unity()]
+    } else {
+        // Reconstructs the map into the Vec<Term>.
+        map.into_iter().map(|parts| Term::from(parts)).collect()
+    }
 }
 
 /// Iterates through `terms`, finds `Term`s that have the same attributes that determine
@@ -52,7 +64,7 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 ///
 fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
     terms
-        .iter()
+        .into_iter()
         .fold(BTreeMap::<ComposableTerm, i32>::new(), |mut map, term| {
             let exponent = term.exponent.unwrap_or(1);
             let key = ComposableTerm::from(term);
@@ -60,6 +72,10 @@ fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
             update_map(&mut map, key, exponent);
             map
         })
+        .into_iter()
+        // Filter out things that have no values
+        .filter(|(ct, exponent)| ct.has_value() && *exponent != 0)
+        .collect()
 }
 
 /// Logic for how to combine a new `key`/`exponent` pair in the `map`: if the `key` exists in
