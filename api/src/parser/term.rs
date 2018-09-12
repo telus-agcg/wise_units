@@ -30,16 +30,28 @@ impl Term {
         }
     }
 
+    /// Creates a new `Term` that's equivalent to the unit "1".
+    ///
+    pub fn new_unity() -> Self {
+        Self {
+            atom: None,
+            prefix: None,
+            factor: Some(1),
+            exponent: None,
+            annotation: None,
+        }
+    }
+
     /// A `Term` is a unity `Term` if represents "1", which technically means
     /// here:
     ///
     /// * its `factor` is 1
-    /// * its `exponent` is 1
+    /// * it has no `exponent`
     /// * it has no `Atom`
     /// * it has no `Prefix`
     ///
     pub fn is_unity(&self) -> bool {
-        self.factor.is_none()
+        self.factor == Some(1u32)
             && self.exponent.is_none()
             && self.atom.is_none()
             && self.prefix.is_none()
@@ -251,6 +263,8 @@ impl fmt::Display for Term {
 }
 
 fn extract_term_string(term: &Term) -> String {
+    if term.is_unity() { return String::from("1") };
+
     let mut term_string = String::new();
 
     if let Some(factor) = term.factor {
@@ -339,6 +353,12 @@ mod tests {
                 assert_eq!(term.composition(), $expected_value);
             }
         };
+    }
+
+    #[test]
+    fn validate_new_unity() {
+        let term = Term::new_unity();
+        assert_eq!(term.to_string(), "1");
     }
 
     // scalar tests
@@ -480,6 +500,7 @@ mod tests {
 
     // Display tests
     validate_display!(validate_display_empty, "");
+    validate_display!(validate_display_unity, Term::new_unity(), "1");
     validate_display!(validate_display_meter, term!(Meter), "m");
     validate_display!(
         validate_display_meter_exponent1,
