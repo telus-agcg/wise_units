@@ -1,10 +1,10 @@
 use parser::{Atom, Prefix, Term};
-use std::collections::hash_map::Entry;
-use std::collections::HashMap;
+use std::collections::btree_map::Entry;
+use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.
 ///
-#[derive(PartialEq, Eq, Hash)]
+#[derive(PartialEq, Eq, PartialOrd, Ord)]
 struct ComposableTerm {
     atom: Option<Atom>,
     prefix: Option<Prefix>,
@@ -56,9 +56,9 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 /// uniqueness (`atom`, `prefix`, `factor`), and sums those exponents. This is the destructuring
 /// part of `reduce_terms()`.
 ///
-fn reduce_to_map(terms: &[Term]) -> HashMap<ComposableTerm, i32> {
+fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
     terms.iter()
-        .fold(HashMap::<ComposableTerm, i32>::new(), |mut map, term| {
+        .fold(BTreeMap::<ComposableTerm, i32>::new(), |mut map, term| {
             let exponent = term.exponent.unwrap_or(1);
             let key = ComposableTerm::from(term);
 
@@ -70,7 +70,7 @@ fn reduce_to_map(terms: &[Term]) -> HashMap<ComposableTerm, i32> {
 /// Logic for how to combine a new `key`/`exponent` pair in the `map`: if the `key` exists in
 /// `map`, add the value + `exponent`; if it does not yet exist, insert it.
 ///
-fn update_map(map: &mut HashMap<ComposableTerm, i32>, key: ComposableTerm, exponent: i32) {
+fn update_map(map: &mut BTreeMap<ComposableTerm, i32>, key: ComposableTerm, exponent: i32) {
     match map.entry(key) {
         Entry::Vacant(entry) => {
             entry.insert(exponent);

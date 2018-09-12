@@ -14,7 +14,7 @@ pub mod atom {
     use ucum_unit::UcumUnit;
 
     #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
-    #[derive(Clone, Copy, Debug, Eq, Hash)]
+    #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
     pub enum Atom {
         {{~ #each atoms }}
         {{ type_name }},{{ /each }}

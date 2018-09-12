@@ -11,7 +11,7 @@ pub mod reducible;
 mod term_reducing;
 pub mod ucum_unit;
 
-use decomposer::{Decomposable, ReductionDecomposer, SimpleDecomposer};
+use decomposer::{Decomposable, SimpleDecomposer};
 use parser::Term;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
@@ -96,9 +96,10 @@ impl Unit {
     /// ```
     ///
     pub fn expression_reduced(&self) -> String {
-        let rd = ReductionDecomposer;
+        let reduced = term_reducing::reduce_terms(&self.terms);
+        let sd = SimpleDecomposer;
 
-        rd.decompose(&self.terms)
+        sd.decompose(&reduced)
     }
 }
 
@@ -131,13 +132,13 @@ mod tests {
         assert_eq!(unit.expression_reduced().as_str(), "1/10km");
 
         let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/km.m2");
+        assert_eq!(unit.expression_reduced().as_str(), "1/m2.km");
 
         let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "km/cm.m2");
+        assert_eq!(unit.expression_reduced().as_str(), "km/m2.cm");
 
         let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/cm.km.m2");
+        assert_eq!(unit.expression_reduced().as_str(), "1/m2.cm.km");
 
         let unit = Unit::from_str("m/s2").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "m/s2");
