@@ -400,7 +400,8 @@ mod tests {
             );
 
             validate_op!(
-                Measurement::new(2.0, "m/m/m/m").unwrap() * Measurement::new(3.0, "m/m/m/m").unwrap(),
+                Measurement::new(2.0, "m/m/m/m").unwrap()
+                    * Measurement::new(3.0, "m/m/m/m").unwrap(),
                 Measurement::new(6.0, "1")
             );
 
@@ -479,7 +480,8 @@ mod tests {
                 Measurement::new(5.0, "1")
             );
             validate_op!(
-                Measurement::new(10.0, "m.m.m.m").unwrap() / Measurement::new(2.0, "m.m.m.m").unwrap(),
+                Measurement::new(10.0, "m.m.m.m").unwrap()
+                    / Measurement::new(2.0, "m.m.m.m").unwrap(),
                 Measurement::new(5.0, "1")
             );
 

@@ -68,9 +68,7 @@ impl Term {
     /// `annotation` certainly makes sense, but does not impact the value of anything.
     ///
     pub fn is_valueless(&self) -> bool {
-        self.factor.is_none()
-            && self.atom.is_none()
-            && self.prefix.is_none()
+        self.factor.is_none() && self.atom.is_none() && self.prefix.is_none()
     }
 
     /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since
@@ -279,7 +277,9 @@ impl fmt::Display for Term {
 }
 
 fn extract_term_string(term: &Term) -> String {
-    if term.is_unity() { return String::from("1") };
+    if term.is_unity() {
+        return String::from("1");
+    };
 
     let mut term_string = String::new();
 

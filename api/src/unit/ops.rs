@@ -1,5 +1,5 @@
-use parser::Term;
 use super::term_reducing;
+use parser::Term;
 use std::ops::{Div, Mul};
 use unit::Unit;
 

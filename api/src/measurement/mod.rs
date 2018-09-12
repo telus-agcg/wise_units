@@ -122,10 +122,7 @@ mod tests {
         #[test]
         fn validate_serialization_empty_terms() {
             let unit = Unit { terms: vec![] };
-            let measurement = Measurement {
-                value: 123.4,
-                unit,
-            };
+            let measurement = Measurement { value: 123.4, unit };
             let expected_json = r#"{"value":123.4,"unit":{"terms":[]}}"#;
 
             let j =
@@ -163,10 +160,7 @@ mod tests {
             let unit = Unit {
                 terms: vec![term1, term2],
             };
-            let measurement = Measurement {
-                value: 123.4,
-                unit,
-            };
+            let measurement = Measurement { value: 123.4, unit };
 
             let j =
                 serde_json::to_string(&measurement).expect("Couldn't convert Unit to JSON String");
@@ -181,10 +175,7 @@ mod tests {
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
             let unit = Unit { terms: vec![] };
-            let expected_measurement = Measurement {
-                value: 1.0,
-                unit,
-            };
+            let expected_measurement = Measurement { value: 1.0, unit };
 
             assert_eq!(expected_measurement, k);
         }
@@ -219,10 +210,7 @@ mod tests {
             let unit = Unit {
                 terms: vec![term1, term2],
             };
-            let expected_measurement = Measurement {
-                value: 432.1,
-                unit,
-            };
+            let expected_measurement = Measurement { value: 432.1, unit };
 
             assert_eq!(expected_measurement, k);
         }
