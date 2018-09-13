@@ -254,14 +254,6 @@ mod tests {
         validate("100m2/m", "100m2/m");
         validate("m2.m2", "m4");
         validate("m2.m2/s.s", "m4/s2");
-
-        // expected.expression() -> "" right now--returns "1" if the unit was reduced to 1.
-        // DEV-2399
-        let unit = Unit::from_str("m2.s/s.m2").unwrap();
-        let actual = unit.into_reduced();
-        let expected = Unit::from_str("1").unwrap();
-
-        assert_eq!(&actual, &expected);
-        assert_eq!(actual.expression(), "1");
+        validate("m2.s/s.m2", "1");
     }
 }
