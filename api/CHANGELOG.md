@@ -8,6 +8,7 @@
 * `unit::term_reducing` for reducing a `Unit`'s `Term`s. This, in conjunction
   with the still-existing `SimpleDecomposer`, now replaces the
   `ReductionDecomposer`.
+* `Term::has_value()`
 
 ### Changed
 

@@ -67,8 +67,8 @@ impl Term {
     /// A `Term` with _only_ an `exponent` doesn't really make any sense. A `Term` with an
     /// `annotation` certainly makes sense, but does not impact the value of anything.
     ///
-    pub fn is_valueless(&self) -> bool {
-        self.factor.is_none() && self.atom.is_none() && self.prefix.is_none()
+    pub fn has_value(&self) -> bool {
+        self.factor.is_some() || self.atom.is_some()
     }
 
     /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since
