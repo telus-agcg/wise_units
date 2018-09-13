@@ -205,7 +205,7 @@ mod atom_test {
             Atom::Radian,
             Atom::Second,
         ];
-        let terms = vec![term!()];
+        let terms = vec![Term::new_unity()];
 
         for base_atom in base_atoms {
             assert_eq!(base_atom.definition().value(), 1.0);

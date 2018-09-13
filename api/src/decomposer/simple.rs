@@ -41,7 +41,7 @@ where
 /// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not positive.
 ///
 fn extract_numerator(term: &Term) -> Option<String> {
-    if !term.exponent_is_positive() {
+    if !term.has_value() || !term.exponent_is_positive() {
         return None;
     }
 
@@ -51,7 +51,7 @@ fn extract_numerator(term: &Term) -> Option<String> {
 /// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not negative.
 ///
 fn extract_denominator(term: &Term) -> Option<String> {
-    if !term.exponent_is_negative() {
+    if !term.has_value() || !term.exponent_is_negative() {
         return None;
     }
 

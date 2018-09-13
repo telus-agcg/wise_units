@@ -244,7 +244,54 @@ impl<'a> Div<f64> for &'a Measurement {
 #[cfg(test)]
 mod tests {
     use measurement::Measurement;
-    use parser::{Atom, Term};
+
+    macro_rules! validate_op {
+        ($result:expr, $expected:expr) => {
+            let expected = $expected.unwrap();
+            assert_eq!(
+                $result,
+                expected,
+                "expected Measurements to be equal;\nresult: {:?};\nunit string: {}",
+                $result,
+                $result.unit.to_string()
+            );
+
+            // Verify the length of the Terms is the same after div vs. after creation.
+            assert_eq!(
+                $result.unit.terms.len(),
+                expected.unit.terms.len(),
+                "Expected Measurement Term lengths to be equal:\n{:?}\n{:?}",
+                $result,
+                expected
+            );
+        };
+    }
+
+    macro_rules! validate_ownership_and_borrowing {
+        ($lhs:expr, $method:ident, $rhs:expr, $expected:expr) => {
+            fn validate_borrowed_borrowed(lhs: &Measurement, rhs: &Measurement) {
+                let result = lhs.$method(rhs);
+                validate_op!(result, $expected);
+            }
+            fn validate_borrowed_owned(lhs: &Measurement, rhs: Measurement) {
+                let result = lhs.$method(rhs);
+                validate_op!(result, $expected);
+            }
+            fn validate_owned_borrowed(lhs: Measurement, rhs: &Measurement) {
+                let result = lhs.$method(rhs);
+                validate_op!(result, $expected);
+            }
+            fn validate_owned_owned(lhs: Measurement, rhs: Measurement) {
+                let result = lhs.$method(rhs);
+                validate_op!(result, $expected);
+            }
+
+            validate_borrowed_borrowed(&$lhs, &$rhs);
+            validate_borrowed_owned(&$lhs, $rhs.clone());
+            validate_owned_borrowed($lhs.clone(), &$rhs);
+            validate_owned_owned($lhs, $rhs);
+        };
+    }
 
     mod add {
         use super::*;
@@ -331,67 +378,72 @@ mod tests {
         use std::ops::Mul;
 
         #[test]
-        fn validate_mul_owned() {
-            let m1 = Measurement::new(2.0, "m").unwrap();
-            let m2 = Measurement::new(3.0, "m").unwrap();
-            let r = m1 * m2;
-
-            assert_eq!(r.value, 6.0);
-
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
-
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-            assert_eq!(terms[1], first_term);
+        fn validate_ownership_and_borrowing() {
+            validate_ownership_and_borrowing!(
+                Measurement::new(2.0, "m").unwrap(),
+                mul,
+                Measurement::new(3.0, "m").unwrap(),
+                Measurement::new(6.0, "m2")
+            );
         }
 
         #[test]
-        fn validate_mul_borrowed() {
-            let m1 = Measurement::new(2.0, "m").unwrap();
-            let m2 = Measurement::new(3.0, "m").unwrap();
-            let r = &m1 * &m2;
+        fn validate_mul_reductions() {
+            validate_op!(
+                Measurement::new(2.0, "1").unwrap() * Measurement::new(3.0, "1").unwrap(),
+                Measurement::new(6.0, "1")
+            );
 
-            assert_eq!(r.value, 6.0);
+            validate_op!(
+                Measurement::new(2.0, "m/s").unwrap() * Measurement::new(3.0, "s/m").unwrap(),
+                Measurement::new(6.0, "1")
+            );
 
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
+            validate_op!(
+                Measurement::new(2.0, "m/m/m/m").unwrap()
+                    * Measurement::new(3.0, "m/m/m/m").unwrap(),
+                Measurement::new(6.0, "1")
+            );
 
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-            assert_eq!(terms[1], first_term);
-        }
+            validate_op!(
+                Measurement::new(2.0, "m.m").unwrap() * Measurement::new(3.0, "/m2").unwrap(),
+                Measurement::new(6.0, "1")
+            );
 
-        #[test]
-        fn validate_mul_owned_and_borrowed() {
-            let m1 = Measurement::new(2.0, "m").unwrap();
-            let m2 = Measurement::new(3.0, "m").unwrap();
-            let r = m1 * &m2;
+            validate_op!(
+                Measurement::new(2.0, "1").unwrap() * Measurement::new(3.0, "m").unwrap(),
+                Measurement::new(6.0, "m")
+            );
 
-            assert_eq!(r.value, 6.0);
+            validate_op!(
+                Measurement::new(2.0, "m").unwrap() * Measurement::new(3.0, "s").unwrap(),
+                Measurement::new(6.0, "m.s")
+            );
 
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
+            validate_op!(
+                Measurement::new(2.0, "m.m").unwrap() * Measurement::new(3.0, "m2").unwrap(),
+                Measurement::new(6.0, "m4")
+            );
 
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-            assert_eq!(terms[1], first_term);
-        }
+            validate_op!(
+                Measurement::new(2.0, "m.m").unwrap() * Measurement::new(3.0, "s2").unwrap(),
+                Measurement::new(6.0, "m2.s2")
+            );
 
-        #[test]
-        fn validate_mul_borrowed_and_owned() {
-            let m1 = Measurement::new(2.0, "m").unwrap();
-            let m2 = Measurement::new(3.0, "m").unwrap();
-            let r = &m1 * m2;
+            validate_op!(
+                Measurement::new(2.0, "m").unwrap() * Measurement::new(3.0, "s/m").unwrap(),
+                Measurement::new(6.0, "s")
+            );
 
-            assert_eq!(r.value, 6.0);
+            validate_op!(
+                Measurement::new(2.0, "10m2").unwrap() * Measurement::new(3.0, "10m").unwrap(),
+                Measurement::new(6.0, "10m3")
+            );
 
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
-
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-            assert_eq!(terms[1], first_term);
+            validate_op!(
+                Measurement::new(2.0, "10m2").unwrap() * Measurement::new(3.0, "5m").unwrap(),
+                Measurement::new(6.0, "10m2.5m")
+            );
         }
 
         #[test]
@@ -408,75 +460,61 @@ mod tests {
         use std::ops::Div;
 
         #[test]
-        fn validate_div_owned() {
-            let m1 = Measurement::new(10.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let r = m1 / m2;
-
-            assert_eq!(r.value, 5.0);
-
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
-
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-
-            let last_term = term!(Meter, exponent: -1);
-            assert_eq!(terms[1], last_term);
+        fn validate_ownership_and_borrowing() {
+            validate_ownership_and_borrowing!(
+                Measurement::new(10.0, "m").unwrap(),
+                div,
+                Measurement::new(2.0, "m").unwrap(),
+                Measurement::new(5.0, "1")
+            );
         }
 
         #[test]
-        fn validate_div_borrowed() {
-            let m1 = Measurement::new(10.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let r = &m1 / &m2;
+        fn validate_div_reductions() {
+            validate_op!(
+                Measurement::new(10.0, "1").unwrap() / Measurement::new(2.0, "1").unwrap(),
+                Measurement::new(5.0, "1")
+            );
+            validate_op!(
+                Measurement::new(10.0, "m.m").unwrap() / Measurement::new(2.0, "m2").unwrap(),
+                Measurement::new(5.0, "1")
+            );
+            validate_op!(
+                Measurement::new(10.0, "m.m.m.m").unwrap()
+                    / Measurement::new(2.0, "m.m.m.m").unwrap(),
+                Measurement::new(5.0, "1")
+            );
 
-            assert_eq!(r.value, 5.0);
+            validate_op!(
+                Measurement::new(10.0, "m2").unwrap() / Measurement::new(2.0, "m").unwrap(),
+                Measurement::new(5.0, "m")
+            );
+            validate_op!(
+                Measurement::new(10.0, "m").unwrap() / Measurement::new(2.0, "s").unwrap(),
+                Measurement::new(5.0, "m/s")
+            );
+            validate_op!(
+                Measurement::new(10.0, "m2/s").unwrap() / Measurement::new(2.0, "m").unwrap(),
+                Measurement::new(5.0, "m/s")
+            );
 
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
+            validate_op!(
+                Measurement::new(10.0, "1").unwrap() / Measurement::new(2.0, "m").unwrap(),
+                Measurement::new(5.0, "/m")
+            );
+            validate_op!(
+                Measurement::new(10.0, "m").unwrap() / Measurement::new(2.0, "/m").unwrap(),
+                Measurement::new(5.0, "m2")
+            );
 
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-
-            let last_term = term!(Meter, exponent: -1);
-            assert_eq!(terms[1], last_term);
-        }
-
-        #[test]
-        fn validate_div_owned_and_borrowed() {
-            let m1 = Measurement::new(10.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let r = m1 / &m2;
-
-            assert_eq!(r.value, 5.0);
-
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
-
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-
-            let last_term = term!(Meter, exponent: -1);
-            assert_eq!(terms[1], last_term);
-        }
-
-        #[test]
-        fn validate_div_borrowed_and_owned() {
-            let m1 = Measurement::new(10.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let r = &m1 / m2;
-
-            assert_eq!(r.value, 5.0);
-
-            let terms = r.unit.terms;
-            assert_eq!(terms.len(), 2);
-
-            let first_term = term!(Meter);
-            assert_eq!(terms[0], first_term);
-
-            let last_term = term!(Meter, exponent: -1);
-            assert_eq!(terms[1], last_term);
+            validate_op!(
+                Measurement::new(10.0, "10m2").unwrap() / Measurement::new(2.0, "10m").unwrap(),
+                Measurement::new(5.0, "10m")
+            );
+            validate_op!(
+                Measurement::new(10.0, "10m2").unwrap() / Measurement::new(2.0, "5m").unwrap(),
+                Measurement::new(5.0, "10m2/5m")
+            );
         }
 
         #[test]

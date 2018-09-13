@@ -74,7 +74,7 @@ impl Default for Definition {
     fn default() -> Self {
         Self {
             value: 1.0,
-            terms: vec![term!()],
+            terms: vec![Term::new_unity()],
             function_set: None,
         }
     }

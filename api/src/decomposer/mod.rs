@@ -1,9 +1,7 @@
 pub mod decomposable;
-pub(super) mod reduction;
 pub(super) mod simple;
 
 pub use self::decomposable::Decomposable;
-pub(super) use self::reduction::Decomposer as ReductionDecomposer;
 pub(super) use self::simple::Decomposer as SimpleDecomposer;
 
 fn build_string(acc: Option<String>, term_string: String) -> Option<String> {

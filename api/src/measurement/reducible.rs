@@ -23,8 +23,8 @@ impl Reducible for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use reducible::Reducible;
     use measurement::Measurement;
+    use reducible::Reducible;
 
     macro_rules! validate_reduce_value {
         ($test_name:ident, $measurement_value:expr, $unit_str:expr, $expected_value:expr) => {
@@ -49,18 +49,8 @@ mod tests {
     // reduce_value tests
     validate_reduce_value!(validate_reduce_value_m, 1.0, "m", 1.0);
     validate_reduce_value!(validate_reduce_value_km, 1.0, "km", 1000.0);
-    validate_reduce_value!(
-        validate_reduce_value_meter_minus1,
-        1.0,
-        "m-1",
-        1.0
-    );
-    validate_reduce_value!(
-        validate_reduce_value_meter_factor,
-        1.0,
-        "10m",
-        10.0
-    );
+    validate_reduce_value!(validate_reduce_value_meter_minus1, 1.0, "m-1", 1.0);
+    validate_reduce_value!(validate_reduce_value_meter_factor, 1.0, "10m", 10.0);
     validate_reduce_value!(
         validate_reduce_value_kilometer_factor,
         1.0,
@@ -98,24 +88,9 @@ mod tests {
 
     // magnitude tests
     validate_calculate_magnitude!(validate_calculate_magnitude_meter, 1.0, "m", 1.0);
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_kilometer,
-        1.0,
-        "km",
-        1000.0
-    );
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_meter_minus1,
-        1.0,
-        "m-1",
-        1.0
-    );
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_meter_factor,
-        1.0,
-        "10m",
-        10.0
-    );
+    validate_calculate_magnitude!(validate_calculate_magnitude_kilometer, 1.0, "km", 1000.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_meter_minus1, 1.0, "m-1", 1.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_meter_factor, 1.0, "10m", 10.0);
     validate_calculate_magnitude!(
         validate_calculate_magnitude_kilometer_factor,
         1.0,
@@ -130,25 +105,10 @@ mod tests {
     );
     validate_calculate_magnitude!(validate_calculate_magnitude_liter, 1.0, "L", 1.0);
     validate_calculate_magnitude!(validate_calculate_magnitude_pi, 1.0, "[pi]", 1.0);
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_pi_factor,
-        1.0,
-        "10[pi]",
-        10.0
-    );
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_hectare,
-        1.0,
-        "har",
-        100.0
-    );
+    validate_calculate_magnitude!(validate_calculate_magnitude_pi_factor, 1.0, "10[pi]", 10.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_hectare, 1.0, "har", 100.0);
     validate_calculate_magnitude!(validate_calculate_magnitude_week, 1.0, "wk", 1.0);
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_kilogram,
-        1.0,
-        "kg",
-        1000.0
-    );
+    validate_calculate_magnitude!(validate_calculate_magnitude_kilogram, 1.0, "kg", 1000.0);
     validate_calculate_magnitude!(
         validate_calculate_magnitude_fahrenheit,
         1.0,

@@ -46,32 +46,16 @@ mod tests {
     // reduce_value tests
     validate_reduce_value!(validate_reduce_value_m, "m", 1.0);
     validate_reduce_value!(validate_reduce_value_km, "km", 1000.0);
-    validate_reduce_value!(
-        validate_reduce_value_meter_minus1,
-        "m-1",
-        1.0
-    );
-    validate_reduce_value!(
-        validate_reduce_value_meter_factor,
-        "10m",
-        10.0
-    );
-    validate_reduce_value!(
-        validate_reduce_value_kilometer_factor,
-        "10km",
-        10_000.0
-    );
+    validate_reduce_value!(validate_reduce_value_meter_minus1, "m-1", 1.0);
+    validate_reduce_value!(validate_reduce_value_meter_factor, "10m", 10.0);
+    validate_reduce_value!(validate_reduce_value_kilometer_factor, "10km", 10_000.0);
     validate_reduce_value!(
         validate_reduce_value_kilometer_factor_exponent,
         "10km-1",
         0.0001
     );
     validate_reduce_value!(validate_reduce_value_liter, "L", 0.001);
-    validate_reduce_value!(
-        validate_reduce_value_pi,
-        "[pi]",
-        ::std::f64::consts::PI
-    );
+    validate_reduce_value!(validate_reduce_value_pi, "[pi]", ::std::f64::consts::PI);
     validate_reduce_value!(
         validate_reduce_value_pi_factor,
         "10[pi]",
@@ -88,21 +72,9 @@ mod tests {
 
     // magnitude tests
     validate_calculate_magnitude!(validate_calculate_magnitude_meter, "m", 1.0);
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_kilometer,
-        "km",
-        1000.0
-    );
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_meter_minus1,
-        "m-1",
-        1.0
-    );
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_meter_factor,
-        "10m",
-        10.0
-    );
+    validate_calculate_magnitude!(validate_calculate_magnitude_kilometer, "km", 1000.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_meter_minus1, "m-1", 1.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_meter_factor, "10m", 10.0);
     validate_calculate_magnitude!(
         validate_calculate_magnitude_kilometer_factor,
         "10km",
@@ -115,22 +87,10 @@ mod tests {
     );
     validate_calculate_magnitude!(validate_calculate_magnitude_liter, "L", 1.0);
     validate_calculate_magnitude!(validate_calculate_magnitude_pi, "[pi]", 1.0);
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_pi_factor,
-        "10[pi]",
-        10.0
-    );
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_hectare,
-        "har",
-        100.0
-    );
+    validate_calculate_magnitude!(validate_calculate_magnitude_pi_factor, "10[pi]", 10.0);
+    validate_calculate_magnitude!(validate_calculate_magnitude_hectare, "har", 100.0);
     validate_calculate_magnitude!(validate_calculate_magnitude_week, "wk", 1.0);
-    validate_calculate_magnitude!(
-        validate_calculate_magnitude_kilogram,
-        "kg",
-        1000.0
-    );
+    validate_calculate_magnitude!(validate_calculate_magnitude_kilogram, "kg", 1000.0);
     validate_calculate_magnitude!(
         validate_calculate_magnitude_fahrenheit,
         "[degF]",
