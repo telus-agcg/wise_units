@@ -275,6 +275,7 @@ fn push_display_expression(expressions: &mut Vec<String>, value: i32, dimension_
 // impl Mul
 /// Used for combining two `Compositions`.
 ///
+#[cfg_attr(feature = "cargo-clippy", allow(suspicious_arithmetic_impl))]
 impl Mul for Composition {
     type Output = Self;
 

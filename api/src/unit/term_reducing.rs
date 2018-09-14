@@ -53,7 +53,7 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
         vec![Term::new_unity()]
     } else {
         // Reconstructs the map into the Vec<Term>.
-        map.into_iter().map(|parts| Term::from(parts)).collect()
+        map.into_iter().map(Term::from).collect()
     }
 }
 
