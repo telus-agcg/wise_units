@@ -1,3 +1,4 @@
+pub mod composable;
 pub mod convertible;
 pub mod field_eq;
 pub mod ops;
