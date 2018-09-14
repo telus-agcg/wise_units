@@ -1,5 +1,5 @@
-use parser::{Composable, Composition};
 use measurement::Measurement;
+use parser::{Composable, Composition};
 
 //-----------------------------------------------------------------------------
 // impl Composable
@@ -18,8 +18,8 @@ impl<'a> Composable for &'a Measurement {
 
 #[cfg(test)]
 mod tests {
-    use parser::Composable;
     use measurement::Measurement;
+    use parser::Composable;
 
     // The method is really just a convenience wrapper to check the Measurement's Unit, so most of
     // the testing can be done on Unit.
