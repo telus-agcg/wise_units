@@ -1,3 +1,6 @@
+#![warn(box_pointers, missing_copy_implementations, trivial_casts, trivial_numeric_casts)]
+#![forbid(unused_extern_crates, unused_imports)]
+
 #[cfg(test)]
 #[macro_use]
 extern crate approx;
