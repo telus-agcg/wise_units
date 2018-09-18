@@ -22,13 +22,12 @@ impl<'a> From<&'a RustAtomList> for RustPropertyList {
         for atom in &atom_list.atoms {
             let key = atom.property.to_camel_case();
 
-            properties.entry(key)
-                .and_modify(|entry| entry.atom_type_names.push(atom.type_name.clone()) )
-                .or_insert_with(|| {
-                    RustProperty {
-                        atom_type_names: vec![atom.type_name.clone()],
-                        description: atom.property.clone(),
-                    }
+            properties
+                .entry(key)
+                .and_modify(|entry| entry.atom_type_names.push(atom.type_name.clone()))
+                .or_insert_with(|| RustProperty {
+                    atom_type_names: vec![atom.type_name.clone()],
+                    description: atom.property.clone(),
                 });
         }
 
