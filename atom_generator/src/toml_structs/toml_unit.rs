@@ -9,13 +9,22 @@ pub(crate) struct TomlUnit {
     #[serde(rename = "CODE")]
     pub secondary_code: Option<String>,
 
-    #[serde(deserialize_with = "super::de_bool", default = "super::de_bool_default")]
+    #[serde(
+        deserialize_with = "super::de_bool",
+        default = "super::de_bool_default"
+    )]
     pub is_metric: bool,
 
-    #[serde(deserialize_with = "super::de_bool", default = "super::de_bool_default")]
+    #[serde(
+        deserialize_with = "super::de_bool",
+        default = "super::de_bool_default"
+    )]
     pub is_arbitrary: bool,
 
-    #[serde(deserialize_with = "super::de_bool", default = "super::de_bool_default")]
+    #[serde(
+        deserialize_with = "super::de_bool",
+        default = "super::de_bool_default"
+    )]
     pub is_special: bool,
 
     #[serde(rename = "class")]

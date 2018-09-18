@@ -7,7 +7,7 @@ pub mod classification {
     /// Classification signifies the system of units from which a unit is defined
     /// in.
     ///
-    #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
     pub enum Classification {
         {{~ #each type_names as |type_name| }}
         {{ type_name }},{{ /each }}

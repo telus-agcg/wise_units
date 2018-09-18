@@ -180,7 +180,7 @@ mod tests {
                     "annotation": null
                 }]
         }"#.replace("\n", "")
-                .replace(" ", "");
+            .replace(" ", "");
 
             let term1 =
                 term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());

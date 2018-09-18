@@ -1,10 +1,9 @@
 use parser::{Atom, Prefix, Term};
-use std::collections::btree_map::Entry;
 use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.
 ///
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 struct ComposableTerm {
     factor: Option<u32>,
     prefix: Option<Prefix>,
@@ -68,25 +67,14 @@ fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
             let exponent = term.exponent.unwrap_or(1);
             let key = ComposableTerm::from(term);
 
-            update_map(&mut map, key, exponent);
+            map.entry(key)
+                .and_modify(|entry| *entry += exponent)
+                .or_insert(exponent);
+
             map
         })
         .into_iter()
         // Filter out things that have no values
         .filter(|(ct, exponent)| ct.has_value() && *exponent != 0)
         .collect()
-}
-
-/// Logic for how to combine a new `key`/`exponent` pair in the `map`: if the `key` exists in
-/// `map`, add the value + `exponent`; if it does not yet exist, insert it.
-///
-fn update_map(map: &mut BTreeMap<ComposableTerm, i32>, key: ComposableTerm, exponent: i32) {
-    match map.entry(key) {
-        Entry::Vacant(entry) => {
-            entry.insert(exponent);
-        }
-        Entry::Occupied(mut entry) => {
-            *entry.get_mut() += exponent;
-        }
-    }
 }
