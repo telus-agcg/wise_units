@@ -1,10 +1,10 @@
+#![forbid(unused_imports)]
+#![deny(unused_extern_crates)]
 #![warn(
     missing_copy_implementations,
     trivial_casts,
     trivial_numeric_casts,
-    unused_extern_crates
 )]
-#![forbid(unused_imports)]
 
 #[macro_use(handlebars_helper)]
 extern crate handlebars;

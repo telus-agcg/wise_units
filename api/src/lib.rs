@@ -1,10 +1,11 @@
+#![forbid(unused_imports)]
+#![deny(unused_extern_crates)]
 #![warn(
     box_pointers,
     missing_copy_implementations,
     trivial_casts,
-    trivial_numeric_casts
+    trivial_numeric_casts,
 )]
-#![forbid(unused_extern_crates, unused_imports)]
 
 #[cfg(test)]
 #[macro_use]
@@ -28,9 +29,6 @@ extern crate pest_derive;
 #[cfg(test)]
 #[macro_use]
 extern crate pretty_assertions;
-
-#[cfg(feature = "with_serde")]
-extern crate serde;
 
 #[cfg(feature = "with_serde")]
 #[cfg_attr(feature = "with_serde", macro_use)]

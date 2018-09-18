@@ -16,7 +16,7 @@ approx = "0.2"
 criterion = "0.2"
 lazy_static = "1.0"
 pretty_assertions = "*"
-serde_json = { version = "1.0", default-features = false }
+serde_json = "1.0"
 
 [build-dependencies]
 wise_units-atom_generator = { path = "../atom_generator" }
