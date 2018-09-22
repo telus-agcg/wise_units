@@ -15,6 +15,10 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 
+#[cfg(test)]
+#[macro_use]
+extern crate lazy_static;
+
 // Only include macros for testing
 #[cfg(test)]
 #[macro_use(consumes_to, fails_with, parses_to)]
@@ -40,6 +44,7 @@ extern crate serde_json;
 #[macro_use]
 mod macros;
 
+pub mod as_fraction;
 pub mod convertible;
 pub mod decomposer;
 pub mod field_eq;

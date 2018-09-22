@@ -5,6 +5,7 @@
 ### Added
 
 - [DEV-1013] Inlined most of the public API methods.
+- [DEV-241] Add `AsFraction` and implement for `Unit`.
 
 ### Changed
 
@@ -35,6 +36,14 @@
   a `Vec<Term>` with 1 `Term` whose attributes were all `None`; now that same
   `Term` has a `factor` of `Some(1)`. It's possible that a `Unit` with 0 `Term`s
   may still be interpreted similarly (haven't looked into this yet).
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
 
 ## [0.3.0] - 2018-08-27
 

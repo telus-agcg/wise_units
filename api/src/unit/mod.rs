@@ -1,3 +1,4 @@
+pub mod as_fraction;
 pub mod composable;
 pub mod deref;
 pub mod display;
@@ -40,6 +41,14 @@ pub struct Unit {
 /// ```
 ///
 impl Unit {
+    /// Creates a new `Unit` that's equivalent to "1".
+    ///
+    pub fn new_unity() -> Self {
+        let unity_term = Term::new_unity();
+
+        Unit { terms: vec![unity_term] }
+    }
+
     /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.
     ///
     /// ```
