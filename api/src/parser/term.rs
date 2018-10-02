@@ -282,13 +282,21 @@ fn extract_term_string(term: &Term) -> String {
     };
 
     let mut term_string = String::new();
+    extract_term_string_factor(&mut term_string, term.factor);
+    extract_term_string_atom(&mut term_string, term);
 
-    if let Some(factor) = term.factor {
+    term_string
+}
+
+fn extract_term_string_factor(term_string: &mut String, term_factor: Option<u32>) {
+    if let Some(factor) = term_factor {
         if factor != 1 {
             term_string.push_str(&factor.to_string())
         }
-    };
+    }
+}
 
+fn extract_term_string_atom(term_string: &mut String, term: &Term) {
     if let Some(atom) = term.atom {
         if let Some(prefix) = term.prefix {
             term_string.push_str(&prefix.to_string());
@@ -305,8 +313,6 @@ fn extract_term_string(term: &Term) -> String {
             None => term_string.push_str(&atom.to_string()),
         }
     }
-
-    term_string
 }
 
 #[cfg(test)]
