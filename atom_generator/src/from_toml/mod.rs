@@ -47,8 +47,7 @@ fn transform_base_units(atom_list_base_units: &[TomlBaseUnit]) -> Vec<RustAtom> 
             is_arbitrary: false,
             is_metric: true,
             is_special: false,
-        })
-        .collect()
+        }).collect()
 }
 
 /// Transforms a `Vec<TomlUnit>` to a `Vec<RustAtom>`.
@@ -101,8 +100,7 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
                 is_metric: u.is_metric,
                 is_special: u.is_special,
             }
-        })
-        .collect()
+        }).collect()
 }
 
 /// Determines which function to generate for converting *from* the unit with

@@ -1,3 +1,4 @@
+use super::term_reducing;
 use parser::Term;
 use std::ops::{Div, Mul};
 use unit::Unit;
@@ -19,7 +20,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
         terms.push(new_other_term);
     }
 
-    terms
+    term_reducing::reduce_terms(&terms)
 }
 
 impl Div for Unit {
@@ -116,7 +117,7 @@ fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
         terms.push(term.clone());
     }
 
-    terms
+    term_reducing::reduce_terms(&terms)
 }
 
 #[cfg(test)]

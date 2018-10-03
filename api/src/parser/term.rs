@@ -30,19 +30,45 @@ impl Term {
         }
     }
 
+    /// Creates a new `Term` that's equivalent to the unit "1".
+    ///
+    pub fn new_unity() -> Self {
+        Self {
+            atom: None,
+            prefix: None,
+            factor: Some(1),
+            exponent: None,
+            annotation: None,
+        }
+    }
+
     /// A `Term` is a unity `Term` if represents "1", which technically means
     /// here:
     ///
     /// * its `factor` is 1
-    /// * its `exponent` is 1
+    /// * it has no `exponent`
     /// * it has no `Atom`
     /// * it has no `Prefix`
     ///
     pub fn is_unity(&self) -> bool {
-        self.factor.is_none()
+        self.factor == Some(1u32)
             && self.exponent.is_none()
             && self.atom.is_none()
             && self.prefix.is_none()
+    }
+
+    /// A `Term` is valueless if its fields don't contain data that turns the `Term` into something
+    /// with value:
+    ///
+    /// * it has no `factor`
+    /// * it has no `Atom`
+    /// * it has no `Prefix`
+    ///
+    /// A `Term` with _only_ an `exponent` doesn't really make any sense. A `Term` with an
+    /// `annotation` certainly makes sense, but does not impact the value of anything.
+    ///
+    pub fn has_value(&self) -> bool {
+        self.factor.is_some() || self.atom.is_some()
     }
 
     /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since
@@ -251,14 +277,26 @@ impl fmt::Display for Term {
 }
 
 fn extract_term_string(term: &Term) -> String {
-    let mut term_string = String::new();
+    if term.is_unity() {
+        return String::from("1");
+    };
 
-    if let Some(factor) = term.factor {
+    let mut term_string = String::new();
+    extract_term_string_factor(&mut term_string, term.factor);
+    extract_term_string_atom(&mut term_string, term);
+
+    term_string
+}
+
+fn extract_term_string_factor(term_string: &mut String, term_factor: Option<u32>) {
+    if let Some(factor) = term_factor {
         if factor != 1 {
             term_string.push_str(&factor.to_string())
         }
-    };
+    }
+}
 
+fn extract_term_string_atom(term_string: &mut String, term: &Term) {
     if let Some(atom) = term.atom {
         if let Some(prefix) = term.prefix {
             term_string.push_str(&prefix.to_string());
@@ -275,8 +313,6 @@ fn extract_term_string(term: &Term) -> String {
             None => term_string.push_str(&atom.to_string()),
         }
     }
-
-    term_string
 }
 
 #[cfg(test)]
@@ -339,6 +375,12 @@ mod tests {
                 assert_eq!(term.composition(), $expected_value);
             }
         };
+    }
+
+    #[test]
+    fn validate_new_unity() {
+        let term = Term::new_unity();
+        assert_eq!(term.to_string(), "1");
     }
 
     // scalar tests
@@ -480,6 +522,7 @@ mod tests {
 
     // Display tests
     validate_display!(validate_display_empty, "");
+    validate_display!(validate_display_unity, Term::new_unity(), "1");
     validate_display!(validate_display_meter, term!(Meter), "m");
     validate_display!(
         validate_display_meter_exponent1,
@@ -530,7 +573,7 @@ mod tests {
                                     "exponent": null,
                                     "annotation": null
                                    }"#.replace("\n", "")
-                .replace(" ", "");
+            .replace(" ", "");
 
             let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");
 
@@ -549,7 +592,7 @@ mod tests {
                                     "exponent": -456,
                                     "annotation": "stuff"
                                    }"#.replace("\n", "")
-                .replace(" ", "");
+            .replace(" ", "");
 
             let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");
 

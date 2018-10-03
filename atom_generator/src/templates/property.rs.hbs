@@ -11,7 +11,7 @@ pub mod property {
     /// HTML spec, but is used throughout the
     /// [XML description](http://unitsofmeasure.org/ucum-essence.xml).
     ///
-    #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
+    #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
     pub enum Property {
         {{~ #each properties }}
         {{ @key }},{{ /each }}
@@ -27,7 +27,7 @@ pub mod property {
         /// assert_eq!(Property::Acidity.atoms(), vec![Atom::PH]);
         /// ```
         ///
-        pub fn atoms(&self) -> Vec<Atom> {
+        pub fn atoms(self) -> Vec<Atom> {
             match self {
                 {{~ #each properties }}
                 Property::{{ @key }} => {

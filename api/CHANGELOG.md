@@ -1,5 +1,25 @@
 # Change Log
 
+## [0.4.0] - 2018-10-02
+
+### Added
+
+* Implemented `Composable` for `Measurement` to allow checking compatibility
+  of `Measurement`s.
+* `Unit::into_reduced()`
+* `unit::term_reducing` for reducing a `Unit`'s `Term`s. This, in conjunction
+  with the still-existing `SimpleDecomposer`, now replaces the
+  `ReductionDecomposer`.
+* `Term::has_value()`
+
+### Changed
+
+* [DEV-236] `Unit`s are now reduced after being multiplied or divided.
+* A `Unit` that's supposed to represent the unity ("1") used to be a `Unit` with
+  a `Vec<Term>` with 1 `Term` whose attributes were all `None`; now that same
+  `Term` has a `factor` of `Some(1)`. It's possible that a `Unit` with 0 `Term`s
+  may still be interpreted similarly (haven't looked into this yet).
+
 ## [0.3.0] - 2018-08-27
 
 ### Added
