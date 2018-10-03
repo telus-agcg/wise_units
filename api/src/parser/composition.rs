@@ -23,12 +23,14 @@ pub struct Composition {
     time:               Option<Exponent>,
 }
 
-macro_rules! mul_exponent {
-    ($composition:ident, $method:ident, $exponent:expr, $new_composition:ident) => {
-        if let Some(self_exponent) = $composition.$method {
-            let new_exponent = self_exponent * $exponent;
+macro_rules! def_mul_exponent {
+    ($meth_name:ident, $composition_method:ident) => {
+        fn $meth_name(original_value: Option<i32>, exponent: i32, new_composition: &mut Composition) {
+            if let Some(self_exponent) = original_value {
+                let new_exponent = self_exponent * exponent;
 
-            $new_composition.$method = set_exponent(new_exponent);
+                new_composition.$composition_method = set_exponent(new_exponent);
+            }
         }
     };
 }
@@ -46,12 +48,14 @@ macro_rules! insert_exponent {
     };
 }
 
-macro_rules! add_dimension {
-    ($composition:ident, $method:ident, $rhs_composition:expr) => {
-        if let Some(self_value) = $composition.$method {
-            insert_exponent!($rhs_composition, $method, self_value)
-        } else {
-            $rhs_composition.$method
+macro_rules! def_add_dimension {
+    ($meth_name:ident, $composition_method:ident) => {
+        fn $meth_name(original_value: Option<i32>, rhs_composition: Composition, new_composition: &mut Composition) {
+            new_composition.$composition_method = if let Some(self_value) = original_value {
+                insert_exponent!(rhs_composition, $composition_method, self_value)
+            } else {
+                rhs_composition.$composition_method
+            }
         }
     };
 }
@@ -232,43 +236,25 @@ impl fmt::Display for Composition {
 
         let mut expressions = Vec::<String>::new();
 
-        if let Some(value) = self.electric_charge {
-            push_display_expression(&mut expressions, value, "Q");
-        }
-
-        if let Some(value) = self.length {
-            push_display_expression(&mut expressions, value, "L");
-        }
-
-        if let Some(value) = self.luminous_intensity {
-            push_display_expression(&mut expressions, value, "F");
-        }
-
-        if let Some(value) = self.mass {
-            push_display_expression(&mut expressions, value, "M");
-        }
-
-        if let Some(value) = self.plane_angle {
-            push_display_expression(&mut expressions, value, "A");
-        }
-
-        if let Some(value) = self.temperature {
-            push_display_expression(&mut expressions, value, "C");
-        }
-
-        if let Some(value) = self.time {
-            push_display_expression(&mut expressions, value, "T");
-        }
+        push_display_expression(self.electric_charge, &mut expressions, "Q");
+        push_display_expression(self.length, &mut expressions, "L");
+        push_display_expression(self.luminous_intensity, &mut expressions, "F");
+        push_display_expression(self.mass, &mut expressions, "M");
+        push_display_expression(self.plane_angle, &mut expressions, "A");
+        push_display_expression(self.temperature, &mut expressions, "C");
+        push_display_expression(self.time, &mut expressions, "T");
 
         write!(f, "{}", expressions.join("."))
     }
 }
 
-fn push_display_expression(expressions: &mut Vec<String>, value: i32, dimension_str: &str) {
-    if value == 1 {
-        expressions.push(dimension_str.to_string())
-    } else {
-        expressions.push(format!("{}{}", dimension_str, value));
+fn push_display_expression(composition_value: Option<i32>, expressions: &mut Vec<String>, dimension_str: &str) {
+    if let Some(value) = composition_value {
+        if value == 1 {
+            expressions.push(dimension_str.to_string())
+        } else {
+            expressions.push(format!("{}{}", dimension_str, value));
+        }
     }
 }
 
@@ -282,17 +268,25 @@ impl Mul for Composition {
     fn mul(self, rhs: Self) -> Self::Output {
         let mut new_composition = Composition::default();
 
-        new_composition.electric_charge = add_dimension!(self, electric_charge, rhs);
-        new_composition.length = add_dimension!(self, length, rhs);
-        new_composition.luminous_intensity = add_dimension!(self, luminous_intensity, rhs);
-        new_composition.mass = add_dimension!(self, mass, rhs);
-        new_composition.plane_angle = add_dimension!(self, plane_angle, rhs);
-        new_composition.temperature = add_dimension!(self, temperature, rhs);
-        new_composition.time = add_dimension!(self, time, rhs);
+        add_electric_charge(self.electric_charge, rhs, &mut new_composition);
+        add_length(self.length, rhs, &mut new_composition);
+        add_luminous_intensity(self.luminous_intensity, rhs, &mut new_composition);
+        add_mass(self.mass, rhs, &mut new_composition);
+        add_plane_angle(self.plane_angle, rhs, &mut new_composition);
+        add_temperature(self.temperature, rhs, &mut new_composition);
+        add_time(self.time, rhs, &mut new_composition);
 
         new_composition
     }
 }
+
+def_add_dimension!(add_electric_charge, electric_charge);
+def_add_dimension!(add_length, length);
+def_add_dimension!(add_luminous_intensity, luminous_intensity);
+def_add_dimension!(add_mass, mass);
+def_add_dimension!(add_plane_angle, plane_angle);
+def_add_dimension!(add_temperature, temperature);
+def_add_dimension!(add_time, time);
 
 /// Used essentially for calculating the `Composition` of a `Term`. When a `Term` has an exponent
 /// set, the `Term`'s `Atom`'s `Composition` must be multiplied by it. For example, if a `Term`
@@ -319,17 +313,25 @@ impl Mul<i32> for Composition {
     fn mul(self, rhs: i32) -> Self::Output {
         let mut new_composition = Composition::default();
 
-        mul_exponent!(self, electric_charge, rhs, new_composition);
-        mul_exponent!(self, length, rhs, new_composition);
-        mul_exponent!(self, luminous_intensity, rhs, new_composition);
-        mul_exponent!(self, mass, rhs, new_composition);
-        mul_exponent!(self, plane_angle, rhs, new_composition);
-        mul_exponent!(self, temperature, rhs, new_composition);
-        mul_exponent!(self, time, rhs, new_composition);
+        mul_electric_charge(self.electric_charge, rhs, &mut new_composition);
+        mul_length(self.length, rhs, &mut new_composition);
+        mul_luminous_intensity(self.luminous_intensity, rhs, &mut new_composition);
+        mul_mass(self.mass, rhs, &mut new_composition);
+        mul_plane_angle(self.plane_angle, rhs, &mut new_composition);
+        mul_temperature(self.temperature, rhs, &mut new_composition);
+        mul_time(self.time, rhs, &mut new_composition);
 
         new_composition
     }
 }
+
+def_mul_exponent!(mul_electric_charge, electric_charge);
+def_mul_exponent!(mul_length, length);
+def_mul_exponent!(mul_luminous_intensity, luminous_intensity);
+def_mul_exponent!(mul_mass, mass);
+def_mul_exponent!(mul_plane_angle, plane_angle);
+def_mul_exponent!(mul_temperature, temperature);
+def_mul_exponent!(mul_time, time);
 
 /// Used internally for disallowing setting any of the dimensions' exponents to 0 (it should
 /// be `None` in that case).
