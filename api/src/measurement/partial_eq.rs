@@ -28,6 +28,7 @@ use ucum_unit::UcumUnit;
 /// ```
 ///
 impl PartialEq for Measurement {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         if !self.unit.is_compatible_with(&other.unit) {
             return false;

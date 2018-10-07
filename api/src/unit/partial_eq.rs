@@ -28,6 +28,7 @@ use unit::Unit;
 /// ```
 ///
 impl PartialEq for Unit {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         if !self.is_compatible_with(other) {
             return false;

@@ -42,6 +42,7 @@ use unit::Unit;
 /// ```
 ///
 impl PartialOrd for Unit {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<::std::cmp::Ordering> {
         if !self.is_compatible_with(other) {
             return None;

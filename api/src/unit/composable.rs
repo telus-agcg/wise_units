@@ -5,6 +5,7 @@ use unit::Unit;
 // impl Composable
 //-----------------------------------------------------------------------------
 impl Composable for Unit {
+    #[inline]
     fn composition(&self) -> Composition {
         let term_slice: &[Term] = self;
 
@@ -13,6 +14,7 @@ impl Composable for Unit {
 }
 
 impl<'a> Composable for &'a Unit {
+    #[inline]
     fn composition(&self) -> Composition {
         let term_slice: &[Term] = self;
 

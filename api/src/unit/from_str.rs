@@ -8,6 +8,7 @@ use unit::Unit;
 impl FromStr for Unit {
     type Err = Error;
 
+    #[inline]
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
         let terms = ::parser::parse(expression)?;
 

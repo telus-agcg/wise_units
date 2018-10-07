@@ -19,6 +19,7 @@ fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement,
 impl Add for Measurement {
     type Output = Result<Self, Error>;
 
+    #[inline]
     fn add(self, other: Self) -> Self::Output {
         add_measurements(&self, &other)
     }
@@ -27,6 +28,7 @@ impl Add for Measurement {
 impl<'a> Add<&'a Measurement> for Measurement {
     type Output = Result<Self, Error>;
 
+    #[inline]
     fn add(self, other: &'a Self) -> Self::Output {
         add_measurements(&self, other)
     }
@@ -35,6 +37,7 @@ impl<'a> Add<&'a Measurement> for Measurement {
 impl<'a> Add for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
+    #[inline]
     fn add(self, other: &'a Measurement) -> Self::Output {
         add_measurements(self, other)
     }
@@ -43,6 +46,7 @@ impl<'a> Add for &'a Measurement {
 impl<'a> Add<Measurement> for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
+    #[inline]
     fn add(self, other: Measurement) -> Self::Output {
         add_measurements(self, &other)
     }
@@ -64,6 +68,7 @@ fn sub_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement,
 impl Sub for Measurement {
     type Output = Result<Self, Error>;
 
+    #[inline]
     fn sub(self, other: Self) -> Self::Output {
         sub_measurements(&self, &other)
     }
@@ -72,6 +77,7 @@ impl Sub for Measurement {
 impl<'a> Sub<&'a Measurement> for Measurement {
     type Output = Result<Self, Error>;
 
+    #[inline]
     fn sub(self, other: &'a Self) -> Self::Output {
         sub_measurements(&self, other)
     }
@@ -80,6 +86,7 @@ impl<'a> Sub<&'a Measurement> for Measurement {
 impl<'a> Sub for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
+    #[inline]
     fn sub(self, other: &'a Measurement) -> Self::Output {
         sub_measurements(self, other)
     }
@@ -88,6 +95,7 @@ impl<'a> Sub for &'a Measurement {
 impl<'a> Sub<Measurement> for &'a Measurement {
     type Output = Result<Measurement, Error>;
 
+    #[inline]
     fn sub(self, other: Measurement) -> Self::Output {
         sub_measurements(self, &other)
     }
@@ -109,6 +117,7 @@ fn mul_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
 impl Mul for Measurement {
     type Output = Self;
 
+    #[inline]
     fn mul(self, other: Self) -> Self::Output {
         mul_measurements(&self, &other)
     }
@@ -117,6 +126,7 @@ impl Mul for Measurement {
 impl<'a> Mul<&'a Measurement> for Measurement {
     type Output = Self;
 
+    #[inline]
     fn mul(self, other: &'a Self) -> Self::Output {
         mul_measurements(&self, other)
     }
@@ -125,6 +135,7 @@ impl<'a> Mul<&'a Measurement> for Measurement {
 impl<'a> Mul for &'a Measurement {
     type Output = Measurement;
 
+    #[inline]
     fn mul(self, other: &'a Measurement) -> Self::Output {
         mul_measurements(self, other)
     }
@@ -133,6 +144,7 @@ impl<'a> Mul for &'a Measurement {
 impl<'a> Mul<Measurement> for &'a Measurement {
     type Output = Measurement;
 
+    #[inline]
     fn mul(self, other: Measurement) -> Self::Output {
         mul_measurements(self, &other)
     }
@@ -144,6 +156,7 @@ impl<'a> Mul<Measurement> for &'a Measurement {
 impl Mul<f64> for Measurement {
     type Output = Self;
 
+    #[inline]
     fn mul(self, other: f64) -> Self::Output {
         let new_value = self.value * other;
 
@@ -157,6 +170,7 @@ impl Mul<f64> for Measurement {
 impl<'a> Mul<f64> for &'a Measurement {
     type Output = Measurement;
 
+    #[inline]
     fn mul(self, other: f64) -> Self::Output {
         let new_value = self.value * other;
 
@@ -183,6 +197,7 @@ fn div_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
 impl Div for Measurement {
     type Output = Self;
 
+    #[inline]
     fn div(self, other: Self) -> Self::Output {
         div_measurements(&self, &other)
     }
@@ -191,6 +206,7 @@ impl Div for Measurement {
 impl<'a> Div for &'a Measurement {
     type Output = Measurement;
 
+    #[inline]
     fn div(self, other: &'a Measurement) -> Self::Output {
         div_measurements(self, other)
     }
@@ -199,6 +215,7 @@ impl<'a> Div for &'a Measurement {
 impl<'a> Div<&'a Measurement> for Measurement {
     type Output = Self;
 
+    #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
         div_measurements(&self, other)
     }
@@ -207,6 +224,7 @@ impl<'a> Div<&'a Measurement> for Measurement {
 impl<'a> Div<Measurement> for &'a Measurement {
     type Output = Measurement;
 
+    #[inline]
     fn div(self, other: Measurement) -> Self::Output {
         div_measurements(self, &other)
     }
@@ -218,6 +236,7 @@ impl<'a> Div<Measurement> for &'a Measurement {
 impl Div<f64> for Measurement {
     type Output = Self;
 
+    #[inline]
     fn div(self, other: f64) -> Self::Output {
         let new_value = self.value / other;
 
@@ -231,6 +250,7 @@ impl Div<f64> for Measurement {
 impl<'a> Div<f64> for &'a Measurement {
     type Output = Measurement;
 
+    #[inline]
     fn div(self, other: f64) -> Self::Output {
         let new_value = self.value / other;
 

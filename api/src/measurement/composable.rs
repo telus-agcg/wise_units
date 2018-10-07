@@ -5,12 +5,14 @@ use parser::{Composable, Composition};
 // impl Composable
 //-----------------------------------------------------------------------------
 impl Composable for Measurement {
+    #[inline]
     fn composition(&self) -> Composition {
         self.unit.composition()
     }
 }
 
 impl<'a> Composable for &'a Measurement {
+    #[inline]
     fn composition(&self) -> Composition {
         self.unit.composition()
     }

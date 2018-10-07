@@ -57,6 +57,7 @@ impl Unit {
     /// assert_eq!(m1.into_reduced(), m2);
     /// ```
     ///
+    #[inline]
     pub fn into_reduced(self) -> Unit {
         Unit {
             terms: term_reducing::reduce_terms(&self.terms),
@@ -77,6 +78,7 @@ impl Unit {
     /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
     /// ```
     ///
+    #[inline]
     pub fn expression(&self) -> String {
         let sd = SimpleDecomposer;
 
@@ -95,6 +97,7 @@ impl Unit {
     /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");
     /// ```
     ///
+    #[inline]
     pub fn expression_reduced(&self) -> String {
         let reduced = term_reducing::reduce_terms(&self.terms);
         let sd = SimpleDecomposer;

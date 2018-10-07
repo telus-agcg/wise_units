@@ -41,6 +41,7 @@ impl UcumUnit for Measurement {
     /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
     /// ```
     ///
+    #[inline]
     fn scalar(&self) -> f64 {
         self.reduce_value(self.value)
     }
@@ -66,6 +67,7 @@ impl UcumUnit for Measurement {
     /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
     /// ```
     ///
+    #[inline]
     fn magnitude(&self) -> f64 {
         self.calculate_magnitude(self.value)
     }

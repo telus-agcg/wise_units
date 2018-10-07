@@ -38,6 +38,7 @@ pub struct Measurement {
 impl Measurement {
     /// Creates a new `Measurement` by parsing `expression` into a `Unit`.
     ///
+    #[inline]
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
         let unit = Unit::from_str(expression)?;
 

@@ -33,6 +33,7 @@ use self::terms::term_parser::Rule;
 use self::terms::term_parser::TermParser;
 use pest::Parser;
 
+#[inline]
 pub fn parse(expression: &str) -> Result<Vec<Term>, Error> {
     match TermParser::parse(Rule::main_term, expression) {
         Ok(pairs) => Ok(terms::mapper::map(pairs)?),
