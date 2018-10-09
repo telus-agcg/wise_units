@@ -26,6 +26,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
 impl Div for Unit {
     type Output = Self;
 
+    #[inline]
     fn div(self, other: Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
@@ -36,6 +37,7 @@ impl Div for Unit {
 impl<'a> Div<&'a Unit> for Unit {
     type Output = Self;
 
+    #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
@@ -46,6 +48,7 @@ impl<'a> Div<&'a Unit> for Unit {
 impl<'a> Div for &'a Unit {
     type Output = Unit;
 
+    #[inline]
     fn div(self, other: &'a Unit) -> Self::Output {
         let terms = divide_terms(&self.terms, &other.terms);
 
@@ -56,6 +59,7 @@ impl<'a> Div for &'a Unit {
 impl<'a> Div<Unit> for &'a Unit {
     type Output = Unit;
 
+    #[inline]
     fn div(self, other: Unit) -> Self::Output {
         let terms = divide_terms(self, &other);
 
@@ -69,6 +73,7 @@ impl<'a> Div<Unit> for &'a Unit {
 impl Mul for Unit {
     type Output = Self;
 
+    #[inline]
     fn mul(self, other: Self) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
@@ -79,6 +84,7 @@ impl Mul for Unit {
 impl<'a> Mul<&'a Unit> for Unit {
     type Output = Self;
 
+    #[inline]
     fn mul(self, other: &'a Self) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
@@ -89,6 +95,7 @@ impl<'a> Mul<&'a Unit> for Unit {
 impl<'a> Mul for &'a Unit {
     type Output = Unit;
 
+    #[inline]
     fn mul(self, other: &'a Unit) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 
@@ -99,6 +106,7 @@ impl<'a> Mul for &'a Unit {
 impl<'a> Mul<Unit> for &'a Unit {
     type Output = Unit;
 
+    #[inline]
     fn mul(self, other: Unit) -> Self::Output {
         let terms = multiply_terms(&self.terms, &other.terms);
 

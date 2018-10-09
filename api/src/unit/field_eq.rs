@@ -28,6 +28,7 @@ use unit::Unit;
 /// ```
 ///
 impl<'a> FieldEq<'a> for Unit {
+    #[inline]
     fn field_eq(&self, other: &'a Self) -> bool {
         self.terms == other.terms
     }

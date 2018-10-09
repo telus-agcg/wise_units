@@ -72,6 +72,7 @@ impl UcumUnit for Unit {
     /// let unit = Unit::from_str("km/h").unwrap();
     /// assert_eq!(unit.scalar(), 0.277_777_777_777_777_8);
     ///
+    #[inline]
     fn scalar(&self) -> f64 {
         self.reduce_value(1.0)
     }
@@ -118,6 +119,7 @@ impl UcumUnit for Unit {
     /// let unit = Unit::from_str("10m/5s2").unwrap();
     /// assert_eq!(unit.magnitude(), 0.4);
     ///
+    #[inline]
     fn magnitude(&self) -> f64 {
         self.calculate_magnitude(self.scalar())
     }

@@ -57,6 +57,7 @@ use ucum_unit::UcumUnit;
 /// ```
 ///
 impl PartialOrd for Measurement {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if !self.unit.is_compatible_with(&other.unit) {
             return None;

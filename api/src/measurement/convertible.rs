@@ -14,6 +14,7 @@ impl<'a> Convertible<&'a str> for Measurement {
     type Output = Self;
     type ConversionError = Error;
 
+    #[inline]
     fn convert_to(&self, expression: &'a str) -> Result<Self, Self::ConversionError> {
         let other_unit = Unit::from_str(expression)?;
 
@@ -29,6 +30,7 @@ impl<'a> Convertible<&'a Unit> for Measurement {
     type Output = Self;
     type ConversionError = Error;
 
+    #[inline]
     fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Self::ConversionError> {
         convert_measurement(self, other_unit)
     }

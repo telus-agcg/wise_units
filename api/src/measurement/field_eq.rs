@@ -30,6 +30,7 @@ use measurement::Measurement;
 /// ```
 ///
 impl<'a> FieldEq<'a> for Measurement {
+    #[inline]
     fn field_eq(&self, other: &'a Self) -> bool {
         self.value == other.value && self.unit.field_eq(&other.unit)
     }
