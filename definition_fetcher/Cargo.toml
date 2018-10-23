@@ -5,8 +5,6 @@ authors = ["Steve Loveless <steve@agrian.com>"]
 
 [dependencies]
 reqwest = "0.8"
-serde = "1"
-serde_derive = "1"
 serde-transcode = "1.0"
 simple_logger = "0.5"
 toml = "0.4"
