@@ -9,6 +9,9 @@
 
 ### Changed
 
+- [DEV-3155] Change `Term`'s implementation of `Display` to include its
+  `annotation`.
+
 ### Deprecated
 
 ### Removed

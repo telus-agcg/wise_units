@@ -8,13 +8,17 @@ impl fmt::Display for Term {
 }
 
 fn extract_term_string(term: &Term) -> String {
-    if term.is_unity() {
+    if term.is_unity() && term.annotation.is_none() {
         return String::from("1");
     };
 
     let mut term_string = String::new();
     extract_term_string_factor(&mut term_string, term.factor);
     extract_term_string_atom(&mut term_string, term);
+
+    if let Some(ref annotation) = term.annotation {
+        term_string.push_str(&format!("{{{}}}", annotation));
+    }
 
     term_string
 }
@@ -69,7 +73,25 @@ mod tests {
     }
 
     validate_display!(validate_display_empty, "");
+    validate_display!(
+        validate_display_empty_annotation,
+        {
+            let mut t = Term::new(None, None);
+            t.annotation = Some("seed".to_string());
+            t
+        },
+        "{seed}"
+    );
     validate_display!(validate_display_unity, Term::new_unity(), "1");
+    validate_display!(
+        validate_display_unity_annotation,
+        {
+            let mut t = Term::new_unity();
+            t.annotation = Some("seed".to_string());
+            t
+        },
+        "{seed}"
+    );
     validate_display!(validate_display_meter, term!(Meter), "m");
     validate_display!(
         validate_display_meter_exponent1,
@@ -77,9 +99,19 @@ mod tests {
         "m-1"
     );
     validate_display!(
+        validate_display_meter_exponent1_annotation,
+        term!(Meter, exponent: -1, annotation: "seed".to_string()),
+        "m-1{seed}"
+    );
+    validate_display!(
         validate_display_meter_exponent_factor,
         term!(Meter, exponent: -1, factor: 5),
         "5m-1"
+    );
+    validate_display!(
+        validate_display_meter_exponent_factor_annotation,
+        term!(Meter, exponent: -1, factor: 5, annotation: "seed".to_string()),
+        "5m-1{seed}"
     );
     validate_display!(
         validate_display_meter_exponent2,
@@ -101,5 +133,10 @@ mod tests {
         validate_display_kilometer_factor_exponent,
         term!(Kilo, Meter, factor: 10, exponent: -1),
         "10km-1"
+    );
+    validate_display!(
+        validate_display_kilometer_factor_exponent_annotation,
+        term!(Kilo, Meter, factor: 10, exponent: -1, annotation: "seed".to_string()),
+        "10km-1{seed}"
     );
 }
