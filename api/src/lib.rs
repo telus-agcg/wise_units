@@ -3,6 +3,7 @@
 #![warn(
     box_pointers,
     missing_copy_implementations,
+    rust_2018_idioms,
     trivial_casts,
     trivial_numeric_casts,
 )]
@@ -49,9 +50,9 @@ pub mod convertible;
 pub mod decomposer;
 pub mod field_eq;
 pub mod measurement;
+pub mod parser;
 pub mod unit;
 
-mod parser;
 mod reducible;
 mod ucum_unit;
 

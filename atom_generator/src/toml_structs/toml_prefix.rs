@@ -1,15 +1,15 @@
 #[derive(Debug, Deserialize)]
 pub(crate) struct TomlPrefix {
     #[serde(rename = "Code")]
-    pub primary_code: String,
+    pub(crate) primary_code: String,
 
     #[serde(rename = "printSymbol")]
-    pub print_symbol: String,
+    pub(crate) print_symbol: String,
 
-    pub names: Vec<String>,
+    pub(crate) names: Vec<String>,
 
     #[serde(rename = "CODE")]
-    pub secondary_code: String,
+    pub(crate) secondary_code: String,
 
-    pub value: f64,
+    pub(crate) value: f64,
 }

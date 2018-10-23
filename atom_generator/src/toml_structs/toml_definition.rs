@@ -1,20 +1,20 @@
 #[derive(Debug, Deserialize, Clone)]
 pub(crate) struct TomlDefinition {
     #[serde(default = "default_value")]
-    pub value: f64,
+    pub(crate) value: f64,
 
     #[serde(rename = "Unit")]
-    pub unit: String,
+    pub(crate) unit: String,
 
-    pub function: Option<TomlFunction>,
+    pub(crate) function: Option<TomlFunction>,
 }
 
 #[derive(Debug, Deserialize, Clone)]
 pub(crate) struct TomlFunction {
-    pub name: String,
-    pub value: f64,
+    pub(crate) name: String,
+    pub(crate) value: f64,
     #[serde(rename = "Unit")]
-    pub unit: String,
+    pub(crate) unit: String,
 }
 
 fn default_value() -> f64 {

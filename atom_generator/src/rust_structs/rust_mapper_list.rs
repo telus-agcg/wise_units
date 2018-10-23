@@ -5,7 +5,7 @@ type AtomTypeName = String;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustMapperList {
-    pub mappings: HashMap<AtomTypeName, RustMappingValue>,
+    pub(crate) mappings: HashMap<AtomTypeName, RustMappingValue>,
 }
 
 impl<'a> From<&'a RustAtomList> for RustMapperList {
@@ -35,6 +35,6 @@ impl<'a> From<&'a RustAtomList> for RustMapperList {
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustMappingValue {
-    pub primary_rule_name: String,
-    pub secondary_rule_name: Option<String>,
+    pub(crate) primary_rule_name: String,
+    pub(crate) secondary_rule_name: Option<String>,
 }

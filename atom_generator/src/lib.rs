@@ -2,6 +2,7 @@
 #![deny(unused_extern_crates)]
 #![warn(
     missing_copy_implementations,
+    rust_2018_idioms,
     trivial_casts,
     trivial_numeric_casts,
 )]

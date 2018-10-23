@@ -29,15 +29,15 @@ impl Definition {
         })
     }
 
-    pub fn value(&self) -> f64 {
+    pub(crate) fn value(&self) -> f64 {
         self.value
     }
 
-    pub fn terms(&self) -> &[Term] {
+    pub(crate) fn terms(&self) -> &[Term] {
         &self.terms
     }
 
-    pub fn is_unity(&self) -> bool {
+    pub(crate) fn is_unity(&self) -> bool {
         self.terms.len() == 1 && self.terms[0].is_unity()
     }
 }

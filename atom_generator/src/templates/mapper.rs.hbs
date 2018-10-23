@@ -9,8 +9,8 @@ pub(super) mod mapper {
     use parser::symbols::symbol_parser::Rule;
     use pest::iterators::Pair;
 
-    pub(in super::super) fn map(pair: Pair<Rule>) -> Result<Symbol, Error> {
-        fn visit_pairs(pair: Pair<Rule>) -> Result<Symbol, Error> {
+    pub(in super::super) fn map(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {
+        fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {
             let symbol = match pair.as_rule() {
                 Rule::symbol => visit_symbol(pair)?,
                 _ => {
@@ -30,7 +30,7 @@ pub(super) mod mapper {
         Ok(symbol)
     }
 
-    fn visit_symbol(pair: Pair<Rule>) -> Result<Symbol, Error> {
+    fn visit_symbol(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {
         let mut prefix: Option<Prefix> = None;
         let mut atom: Option<Atom> = None;
 
@@ -65,7 +65,7 @@ pub(super) mod mapper {
         Ok(Symbol { prefix, atom })
     }
 
-    fn visit_atom(pair: &Pair<Rule>) -> Result<Atom, Error> {
+    fn visit_atom(pair: &Pair<'_, Rule>) -> Result<Atom, Error> {
         let atom = match pair.as_rule() {
             {{~ #each mappings }}
             Rule::{{ primary_rule_name }} {{~ #if secondary_rule_name }} | Rule::{{ secondary_rule_name }} {{~ /if }} => Atom::{{ @key }},{{ /each }}
@@ -75,7 +75,7 @@ pub(super) mod mapper {
         Ok(atom)
     }
 
-    fn visit_prefix(pair: &Pair<Rule>) -> Result<Prefix, Error> {
+    fn visit_prefix(pair: &Pair<'_, Rule>) -> Result<Prefix, Error> {
         let prefix = match pair.as_rule() {
             Rule::pri_atto | Rule::sec_atto => Prefix::Atto,
             Rule::pri_centi | Rule::sec_centi => Prefix::Centi,

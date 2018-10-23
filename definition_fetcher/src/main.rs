@@ -1,3 +1,7 @@
+#![warn(
+    rust_2018_idioms,
+)]
+
 extern crate reqwest;
 extern crate serde;
 extern crate serde_transcode;

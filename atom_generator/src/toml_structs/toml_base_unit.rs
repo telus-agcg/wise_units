@@ -3,19 +3,19 @@ use toml_structs::TomlAtom;
 #[derive(Debug, Deserialize)]
 pub(crate) struct TomlBaseUnit {
     #[serde(rename = "Code")]
-    pub primary_code: String,
+    pub(crate) primary_code: String,
 
     #[serde(rename = "CODE")]
-    pub secondary_code: String,
+    pub(crate) secondary_code: String,
 
-    pub dim: String,
+    pub(crate) dim: String,
 
-    pub names: Vec<String>,
+    pub(crate) names: Vec<String>,
 
     #[serde(rename = "printSymbol")]
-    pub print_symbol: String,
+    pub(crate) print_symbol: String,
 
-    pub property: String,
+    pub(crate) property: String,
 }
 
 impl<'a> TomlAtom for &'a TomlBaseUnit {
