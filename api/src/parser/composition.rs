@@ -229,7 +229,7 @@ impl Default for Composition {
 
 // impl Display
 impl fmt::Display for Composition {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         if self.is_empty() {
             return write!(f, "");
         }

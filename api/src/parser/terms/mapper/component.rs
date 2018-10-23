@@ -2,8 +2,8 @@ use parser::terms::mapper::Finishable;
 use parser::Term;
 
 pub(super) struct Component {
-    pub factor: Option<u32>,
-    pub terms: Vec<Term>,
+    pub(super) factor: Option<u32>,
+    pub(super) terms: Vec<Term>,
 }
 
 impl Finishable for Component {

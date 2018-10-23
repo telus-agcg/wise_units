@@ -18,7 +18,7 @@ pub enum Dimension {
 }
 
 impl fmt::Display for Dimension {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.write_str(self.as_ref())
     }
 }

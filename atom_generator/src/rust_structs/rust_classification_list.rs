@@ -4,7 +4,7 @@ use std::iter::FromIterator;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustClassificationList {
-    pub type_names: Vec<String>,
+    pub(crate) type_names: Vec<String>,
 }
 
 impl<'a> From<&'a RustAtomList> for RustClassificationList {

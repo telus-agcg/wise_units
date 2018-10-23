@@ -3,8 +3,8 @@
 // This is generated at compile time.
 //-----------------------------------------------------------------------------
 
-pub(super) mod symbol_parser {
+pub(crate) mod symbol_parser {
     #[derive(Parser)]
     #[grammar = "{{ grammar_file_path }}"]
-    pub struct SymbolParser;
+    pub(crate) struct SymbolParser;
 }

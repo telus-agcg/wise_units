@@ -4,8 +4,8 @@
 #[derive(Debug, PartialEq)]
 pub(crate) struct FunctionSet {
     // AKA "calculate_magnitude"
-    pub convert_from: fn(value: f64) -> f64,
+    pub(crate) convert_from: fn(value: f64) -> f64,
 
     // AKA "reduce_value"
-    pub convert_to: fn(value: f64) -> f64,
+    pub(crate) convert_to: fn(value: f64) -> f64,
 }

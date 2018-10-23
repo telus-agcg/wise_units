@@ -4,38 +4,38 @@ use super::{TomlAtom, TomlDefinition};
 #[serde(rename_all = "camelCase")]
 pub(crate) struct TomlUnit {
     #[serde(rename = "Code")]
-    pub primary_code: String,
+    pub(crate) primary_code: String,
 
     #[serde(rename = "CODE")]
-    pub secondary_code: Option<String>,
+    pub(crate) secondary_code: Option<String>,
 
     #[serde(
         deserialize_with = "super::de_bool",
         default = "super::de_bool_default"
     )]
-    pub is_metric: bool,
+    pub(crate) is_metric: bool,
 
     #[serde(
         deserialize_with = "super::de_bool",
         default = "super::de_bool_default"
     )]
-    pub is_arbitrary: bool,
+    pub(crate) is_arbitrary: bool,
 
     #[serde(
         deserialize_with = "super::de_bool",
         default = "super::de_bool_default"
     )]
-    pub is_special: bool,
+    pub(crate) is_special: bool,
 
     #[serde(rename = "class")]
-    pub classification: String,
+    pub(crate) classification: String,
 
-    pub names: Vec<String>,
-    pub print_symbol: Option<String>,
-    pub property: String,
+    pub(crate) names: Vec<String>,
+    pub(crate) print_symbol: Option<String>,
+    pub(crate) property: String,
 
     #[serde(rename = "value")]
-    pub definition: TomlDefinition,
+    pub(crate) definition: TomlDefinition,
 }
 
 impl<'a> TomlAtom for &'a TomlUnit {

@@ -1,7 +1,7 @@
 use super::Decomposable;
 use parser::Term;
 
-pub struct Decomposer;
+pub(crate) struct Decomposer;
 
 impl<'a> Decomposable<'a> for Decomposer {
     type Terms = &'a [Term];

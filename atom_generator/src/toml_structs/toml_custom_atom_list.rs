@@ -4,10 +4,10 @@ use std::str::FromStr;
 #[derive(Debug, Deserialize)]
 pub(crate) struct TomlCustomAtomList {
     #[serde(rename = "base-unit")]
-    pub base_units: Option<Vec<TomlBaseUnit>>,
+    pub(crate) base_units: Option<Vec<TomlBaseUnit>>,
 
     #[serde(rename = "unit")]
-    pub units: Option<Vec<TomlUnit>>,
+    pub(crate) units: Option<Vec<TomlUnit>>,
 }
 
 impl FromStr for TomlCustomAtomList {

@@ -6,13 +6,13 @@ type PropertyTypeName = String;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustPropertyList {
-    pub properties: HashMap<PropertyTypeName, RustProperty>,
+    pub(crate) properties: HashMap<PropertyTypeName, RustProperty>,
 }
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustProperty {
-    pub atom_type_names: Vec<String>,
-    pub description: String,
+    pub(crate) atom_type_names: Vec<String>,
+    pub(crate) description: String,
 }
 
 impl<'a> From<&'a RustAtomList> for RustPropertyList {

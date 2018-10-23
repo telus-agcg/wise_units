@@ -2,7 +2,10 @@
 #![deny(unused_extern_crates)]
 #![warn(
     box_pointers,
+    future_incompatible,
     missing_copy_implementations,
+    nonstandard_style,
+    rust_2018_idioms,
     trivial_casts,
     trivial_numeric_casts,
 )]
@@ -49,9 +52,9 @@ pub mod convertible;
 pub mod decomposer;
 pub mod field_eq;
 pub mod measurement;
+pub mod parser;
 pub mod unit;
 
-mod parser;
 mod reducible;
 mod ucum_unit;
 
