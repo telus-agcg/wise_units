@@ -1,5 +1,5 @@
-use reducible::Reducible;
 use super::Term;
+use reducible::Reducible;
 use ucum_unit::UcumUnit;
 
 impl UcumUnit for Term {
@@ -50,4 +50,3 @@ impl UcumUnit for Term {
         self.calculate_magnitude(self.scalar())
     }
 }
-

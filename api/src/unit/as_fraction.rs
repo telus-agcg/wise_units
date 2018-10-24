@@ -7,7 +7,9 @@ impl AsFraction for Unit {
     type Denominator = Unit;
 
     fn numerator(&self) -> Self::Numerator {
-        let positive_terms: Vec<Term> = self.terms.iter()
+        let positive_terms: Vec<Term> = self
+            .terms
+            .iter()
             .filter(|term| term.exponent.unwrap_or(1).is_positive())
             .map(|term| term.clone())
             .collect();
@@ -16,15 +18,16 @@ impl AsFraction for Unit {
     }
 
     fn denominator(&self) -> Option<Self::Denominator> {
-        let negative_terms: Vec<Term> = self.terms.iter()
+        let negative_terms: Vec<Term> = self
+            .terms
+            .iter()
             .filter(|term| term.exponent.unwrap_or(1).is_negative())
             .map(|term| {
                 let mut new_term = term.clone();
                 // Flip the sign
                 new_term.exponent = term.exponent.map(|e| -e);
                 new_term
-            })
-            .collect();
+            }).collect();
 
         if negative_terms.is_empty() {
             None
@@ -37,16 +40,14 @@ impl AsFraction for Unit {
 #[cfg(test)]
 mod tests {
     use as_fraction::AsFraction;
-    use unit::Unit;
     use std::str::FromStr;
+    use unit::Unit;
 
     lazy_static! {
         static ref METER: Unit = Unit::from_str("m").unwrap();
         static ref SECOND: Unit = Unit::from_str("s").unwrap();
-
         static ref GRAM_METER: Unit = Unit::from_str("g.m").unwrap();
         static ref METER_PER_SECOND: Unit = Unit::from_str("m/s").unwrap();
-
         static ref PER_SECOND: Unit = Unit::from_str("/s").unwrap();
         static ref PER_GRAM_METER: Unit = Unit::from_str("/g.m").unwrap();
     }

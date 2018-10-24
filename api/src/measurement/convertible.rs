@@ -1,7 +1,7 @@
 use convertible::Convertible;
 use field_eq::FieldEq;
 use measurement::Measurement;
-use parser::{IsCompatibleWith, Error};
+use parser::{Error, IsCompatibleWith};
 use std::str::FromStr;
 use unit::Unit;
 

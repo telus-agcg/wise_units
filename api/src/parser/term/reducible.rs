@@ -1,6 +1,6 @@
-use reducible::Reducible;
 use super::Term;
 use parser::ucum_symbol::UcumSymbol;
+use reducible::Reducible;
 
 impl Reducible for Term {
     fn reduce_value(&self, value: f64) -> f64 {
