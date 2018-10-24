@@ -1,5 +1,6 @@
 mod composable;
 mod display;
+mod is_compatible_with;
 mod reducible;
 mod ucum_unit;
 

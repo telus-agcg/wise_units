@@ -1,9 +1,11 @@
-use parser::{Composable, Composition, Term};
+use parser::{Composable, Composition, DefaultCompatibility, Term};
 use unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
+impl<'a> DefaultCompatibility for &'a Unit {}
+
 impl<'a> Composable for &'a Unit {
     #[inline]
     fn composition(self) -> Composition {
@@ -16,7 +18,7 @@ impl<'a> Composable for &'a Unit {
 #[cfg(test)]
 mod tests {
     use measurement::Measurement;
-    use parser::{Atom, Composable, Composition, Dimension, IsCompatibleWith, Prefix, Term};
+    use parser::{Composable, Composition, Dimension, IsCompatibleWith};
     use std::str::FromStr;
     use unit::Unit;
 
@@ -126,15 +128,5 @@ mod tests {
 
         let km_per_10m = Measurement::new(1.0, "km/10m").unwrap();
         assert!(!meter.is_compatible_with(&km_per_10m));
-    }
-
-    #[test]
-    fn validate_is_compatible_with_term() {
-        let meter = Unit::from_str("m").unwrap();
-        let km = term!(Kilo, Meter);
-        assert!(meter.is_compatible_with(&km));
-
-        let gram = term!(Gram);
-        assert!(!meter.is_compatible_with(&gram));
     }
 }

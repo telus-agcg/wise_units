@@ -8,12 +8,16 @@ pub trait IsCompatibleWith<RHS=Self> {
     fn is_compatible_with(self, rhs: RHS) -> bool;
 }
 
-/// Implements `IsCompatibleWith` for all types that are `Composable`.
+/// Marker trait to allow for auto-implementing `IsCompatibleWith` using the default implemntation.
+///
+pub trait DefaultCompatibility {}
+
+/// Implements `IsCompatibleWith` for all types that are `Composable` and `DefaultCompatibility`.
 ///
 impl<T, U> IsCompatibleWith<U> for T
 where
-    T: Composable,
-    U: Composable,
+    T: Composable + DefaultCompatibility,
+    U: Composable + DefaultCompatibility,
 {
     #[inline]
     fn is_compatible_with(self, rhs: U) -> bool {

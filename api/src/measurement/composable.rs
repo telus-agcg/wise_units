@@ -1,9 +1,11 @@
 use measurement::Measurement;
-use parser::{Composable, Composition};
+use parser::{Composable, Composition, DefaultCompatibility};
 
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
+impl<'a> DefaultCompatibility for &'a Measurement {}
+
 impl<'a> Composable for &'a Measurement {
     #[inline]
     fn composition(self) -> Composition {

@@ -8,8 +8,8 @@
 #[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
 pub mod atom {
     use parser::{
-        Classification, Composable, Composition, definition::Definition, Dimension, function_set::FunctionSet,
-        IsCompatibleWith, Property, UcumSymbol
+        Classification, Composable, Composition, DefaultCompatibility, definition::Definition,
+        Dimension, function_set::FunctionSet, IsCompatibleWith, Property, UcumSymbol,
     };
     use reducible::Reducible;
     use std::fmt;
@@ -145,6 +145,8 @@ pub mod atom {
             }
         }
     }
+
+    impl DefaultCompatibility for Atom {}
 
     impl Composable for Atom {
         fn composition(self) -> Composition {

@@ -24,7 +24,7 @@ pub use self::composable::Composable;
 pub use self::composition::Composition;
 pub use self::dimension::Dimension;
 pub use self::error::Error;
-pub use self::is_compatible_with::IsCompatibleWith;
+pub use self::is_compatible_with::{DefaultCompatibility, IsCompatibleWith};
 pub use self::prefix::Prefix;
 pub use self::property::Property;
 pub use self::term::Term;
