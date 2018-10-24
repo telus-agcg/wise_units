@@ -11,7 +11,7 @@ impl AsFraction for Unit {
             .terms
             .iter()
             .filter(|term| term.exponent.unwrap_or(1).is_positive())
-            .map(|term| term.clone())
+            .cloned()
             .collect();
 
         Unit::from(positive_terms)
