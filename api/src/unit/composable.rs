@@ -4,18 +4,9 @@ use unit::Unit;
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
-impl Composable for Unit {
-    #[inline]
-    fn composition(&self) -> Composition {
-        let term_slice: &[Term] = self;
-
-        term_slice.composition()
-    }
-}
-
 impl<'a> Composable for &'a Unit {
     #[inline]
-    fn composition(&self) -> Composition {
+    fn composition(self) -> Composition {
         let term_slice: &[Term] = self;
 
         term_slice.composition()
@@ -24,7 +15,8 @@ impl<'a> Composable for &'a Unit {
 
 #[cfg(test)]
 mod tests {
-    use parser::{Composable, Composition, Dimension};
+    use measurement::Measurement;
+    use parser::{Atom, Composable, Composition, Dimension, IsCompatibleWith, Prefix, Term};
     use std::str::FromStr;
     use unit::Unit;
 
@@ -90,7 +82,7 @@ mod tests {
     valdiate_composition!(validate_composition_per_annotation, "/{tot}");
 
     #[test]
-    fn validate_is_compatible_with() {
+    fn validate_is_compatible_with_unit() {
         let meter = Unit::from_str("m").unwrap();
         let km = Unit::from_str("km").unwrap();
         assert!(meter.is_compatible_with(&km));
@@ -124,5 +116,25 @@ mod tests {
 
         let km_cubed_per_nanometer_squared = Unit::from_str("km3/nm2").unwrap();
         assert!(meter.is_compatible_with(&km_cubed_per_nanometer_squared));
+    }
+
+    #[test]
+    fn validate_is_compatible_with_measurement() {
+        let meter = Unit::from_str("m").unwrap();
+        let km = Measurement::new(1.0, "km").unwrap();
+        assert!(meter.is_compatible_with(&km));
+
+        let km_per_10m = Measurement::new(1.0, "km/10m").unwrap();
+        assert!(!meter.is_compatible_with(&km_per_10m));
+    }
+
+    #[test]
+    fn validate_is_compatible_with_term() {
+        let meter = Unit::from_str("m").unwrap();
+        let km = term!(Kilo, Meter);
+        assert!(meter.is_compatible_with(&km));
+
+        let gram = term!(Gram);
+        assert!(!meter.is_compatible_with(&gram));
     }
 }

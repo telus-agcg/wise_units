@@ -1,5 +1,5 @@
 use measurement::Measurement;
-use parser::Composable;
+use parser::IsCompatibleWith;
 use std::cmp::Ordering;
 use ucum_unit::UcumUnit;
 

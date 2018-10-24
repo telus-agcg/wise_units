@@ -1,14 +1,14 @@
 use super::Term;
 use parser::{Composable, Composition};
 
-impl Composable for Term {
+impl<'a> Composable for &'a Term {
     /// Combines the `Composition` from the `Term`'s `Atom` with its own `exponent` to build a
     /// `Composition`. If the `Term` has no `Atom`, it has no dimension, thus will have an empty
     /// `Composition`.
     ///
     /// TODO: https://agrian.atlassian.net/browse/DEV-971
     ///
-    fn composition(&self) -> Composition {
+    fn composition(self) -> Composition {
         match self.atom {
             Some(atom) => {
                 let atom_composition = atom.composition();
@@ -26,7 +26,7 @@ impl Composable for Term {
 }
 
 impl<'a> Composable for &'a [Term] {
-    fn composition(&self) -> Composition {
+    fn composition(self) -> Composition {
         self.iter()
             .fold(Composition::default(), |acc, term| acc * term.composition())
     }

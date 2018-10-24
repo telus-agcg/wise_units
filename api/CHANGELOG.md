@@ -11,6 +11,14 @@
 
 - [DEV-3155] Change `Term`'s implementation of `Display` to include its
   `annotation`.
+- [DEV-3155] Changed the `Composable` trait definition to deal only with `self`
+  (which makes implementations cleaner).
+- [DEV-3155] Refactored out `Composable::is_compatible_with()` into a new trait,
+  `IsCompatibleWith`, and blanket-implemented that for all types that implement
+  `Composable`. Not only does this clean up code, but also now lets you compare
+  `Measurement`s and `Unit`s. Library consumers that call `is_compatible_with`
+  will need to change `use wise_units::parser::Composable` to
+  `use wise_units::parser::IsCompatibleWith`.
 
 ### Deprecated
 

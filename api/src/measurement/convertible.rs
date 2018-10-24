@@ -1,7 +1,7 @@
 use convertible::Convertible;
 use field_eq::FieldEq;
 use measurement::Measurement;
-use parser::{Composable, Error};
+use parser::{IsCompatibleWith, Error};
 use std::str::FromStr;
 use unit::Unit;
 
@@ -44,7 +44,7 @@ fn convert_measurement(lhs: &Measurement, dest_unit: &Unit) -> Result<Measuremen
 
     let source_unit = &lhs.unit;
 
-    if !source_unit.is_compatible_with(&dest_unit) {
+    if !source_unit.is_compatible_with(dest_unit) {
         let e = Error::IncompatibleUnitTypes {
             lhs: source_unit.expression(),
             rhs: dest_unit.expression(),

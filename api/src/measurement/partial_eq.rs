@@ -1,5 +1,5 @@
 use measurement::Measurement;
-use parser::Composable;
+use parser::IsCompatibleWith;
 use ucum_unit::UcumUnit;
 
 /// `Measurement`s are `PartialEq` if
