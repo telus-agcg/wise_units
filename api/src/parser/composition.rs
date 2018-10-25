@@ -25,7 +25,11 @@ pub struct Composition {
 
 macro_rules! def_mul_exponent {
     ($meth_name:ident, $composition_method:ident) => {
-        fn $meth_name(original_value: Option<i32>, exponent: i32, new_composition: &mut Composition) {
+        fn $meth_name(
+            original_value: Option<i32>,
+            exponent: i32,
+            new_composition: &mut Composition,
+        ) {
             if let Some(self_exponent) = original_value {
                 let new_exponent = self_exponent * exponent;
 
@@ -50,7 +54,11 @@ macro_rules! insert_exponent {
 
 macro_rules! def_add_dimension {
     ($meth_name:ident, $composition_method:ident) => {
-        fn $meth_name(original_value: Option<i32>, rhs_composition: Composition, new_composition: &mut Composition) {
+        fn $meth_name(
+            original_value: Option<i32>,
+            rhs_composition: Composition,
+            new_composition: &mut Composition,
+        ) {
             new_composition.$composition_method = if let Some(self_value) = original_value {
                 insert_exponent!(rhs_composition, $composition_method, self_value)
             } else {
@@ -248,7 +256,11 @@ impl fmt::Display for Composition {
     }
 }
 
-fn push_display_expression(composition_value: Option<i32>, expressions: &mut Vec<String>, dimension_str: &str) {
+fn push_display_expression(
+    composition_value: Option<i32>,
+    expressions: &mut Vec<String>,
+    dimension_str: &str,
+) {
     if let Some(value) = composition_value {
         if value == 1 {
             expressions.push(dimension_str.to_string())

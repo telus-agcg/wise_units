@@ -7,7 +7,10 @@
 // generate them using underscores (to make them pass the clippy lint).
 #[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
 pub mod atom {
-    use parser::{Classification, Composable, Composition, definition::Definition, Dimension, function_set::FunctionSet, Property, UcumSymbol};
+    use parser::{
+        Classification, Composable, Composition, DefaultCompatibility, definition::Definition,
+        Dimension, function_set::FunctionSet, IsCompatibleWith, Property, UcumSymbol,
+    };
     use reducible::Reducible;
     use std::fmt;
     use unit::Unit;
@@ -143,9 +146,11 @@ pub mod atom {
         }
     }
 
+    impl DefaultCompatibility for Atom {}
+
     impl Composable for Atom {
-        fn composition(&self) -> Composition {
-            match *self {
+        fn composition(self) -> Composition {
+            match self {
                 Atom::Candela => Composition::new(Dimension::LuminousIntensity, 1),
                 Atom::Coulomb => Composition::new(Dimension::ElectricCharge, 1),
                 Atom::Gram => Composition::new(Dimension::Mass, 1),
@@ -160,7 +165,7 @@ pub mod atom {
 
     impl PartialEq for Atom {
         fn eq(&self, other: &Self) -> bool {
-            if !self.is_compatible_with(other) {
+            if !self.is_compatible_with(*other) {
                 return false;
             }
 

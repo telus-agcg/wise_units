@@ -1,4 +1,4 @@
-use parser::Composable;
+use parser::IsCompatibleWith;
 use ucum_unit::UcumUnit;
 use unit::Unit;
 

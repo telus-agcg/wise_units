@@ -46,7 +46,9 @@ impl Unit {
     pub fn new_unity() -> Self {
         let unity_term = Term::new_unity();
 
-        Unit { terms: vec![unity_term] }
+        Unit {
+            terms: vec![unity_term],
+        }
     }
 
     /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.

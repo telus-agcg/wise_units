@@ -1,21 +1,14 @@
-use parser::{Composable, Composition, Term};
+use parser::{Composable, Composition, DefaultCompatibility, Term};
 use unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
-impl Composable for Unit {
-    #[inline]
-    fn composition(&self) -> Composition {
-        let term_slice: &[Term] = self;
-
-        term_slice.composition()
-    }
-}
+impl<'a> DefaultCompatibility for &'a Unit {}
 
 impl<'a> Composable for &'a Unit {
     #[inline]
-    fn composition(&self) -> Composition {
+    fn composition(self) -> Composition {
         let term_slice: &[Term] = self;
 
         term_slice.composition()
@@ -24,7 +17,8 @@ impl<'a> Composable for &'a Unit {
 
 #[cfg(test)]
 mod tests {
-    use parser::{Composable, Composition, Dimension};
+    use measurement::Measurement;
+    use parser::{Composable, Composition, Dimension, IsCompatibleWith};
     use std::str::FromStr;
     use unit::Unit;
 
@@ -90,7 +84,7 @@ mod tests {
     valdiate_composition!(validate_composition_per_annotation, "/{tot}");
 
     #[test]
-    fn validate_is_compatible_with() {
+    fn validate_is_compatible_with_unit() {
         let meter = Unit::from_str("m").unwrap();
         let km = Unit::from_str("km").unwrap();
         assert!(meter.is_compatible_with(&km));
@@ -124,5 +118,15 @@ mod tests {
 
         let km_cubed_per_nanometer_squared = Unit::from_str("km3/nm2").unwrap();
         assert!(meter.is_compatible_with(&km_cubed_per_nanometer_squared));
+    }
+
+    #[test]
+    fn validate_is_compatible_with_measurement() {
+        let meter = Unit::from_str("m").unwrap();
+        let km = Measurement::new(1.0, "km").unwrap();
+        assert!(meter.is_compatible_with(&km));
+
+        let km_per_10m = Measurement::new(1.0, "km/10m").unwrap();
+        assert!(!meter.is_compatible_with(&km_per_10m));
     }
 }
