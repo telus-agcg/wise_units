@@ -58,12 +58,12 @@ pub mod unit;
 mod reducible;
 mod ucum_unit;
 
-pub use convertible::Convertible;
-pub use field_eq::FieldEq;
-pub use measurement::Measurement;
-pub use parser::{
-    Atom, Classification, Composable, Composition, Dimension, Error, Prefix, Property, Term,
-    UcumSymbol,
+pub use crate::convertible::Convertible;
+pub use crate::field_eq::FieldEq;
+pub use crate::measurement::Measurement;
+pub use crate::parser::{
+    Atom, Classification, Composable, Composition, Dimension, Error, IsCompatibleWith, Prefix,
+    Property, Term, UcumSymbol,
 };
-pub use ucum_unit::UcumUnit;
-pub use unit::Unit;
+pub use crate::ucum_unit::UcumUnit;
+pub use crate::unit::Unit;

@@ -4,9 +4,9 @@
 //-----------------------------------------------------------------------------
 
 pub(super) mod mapper {
-    use parser::{Atom, Error, Prefix};
-    use parser::symbols::Symbol;
-    use parser::symbols::symbol_parser::Rule;
+    use crate::parser::{Atom, Error, Prefix};
+    use crate::parser::symbols::Symbol;
+    use crate::parser::symbols::symbol_parser::Rule;
     use pest::iterators::Pair;
 
     pub(in super::super) fn map(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {

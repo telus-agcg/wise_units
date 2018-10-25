@@ -1,5 +1,5 @@
-use parser::{Composable, Composition, DefaultCompatibility, Term};
-use unit::Unit;
+use crate::parser::{Composable, Composition, DefaultCompatibility, Term};
+use crate::unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl Composable
@@ -17,10 +17,10 @@ impl<'a> Composable for &'a Unit {
 
 #[cfg(test)]
 mod tests {
-    use measurement::Measurement;
-    use parser::{Composable, Composition, Dimension, IsCompatibleWith};
+    use crate::measurement::Measurement;
+    use crate::parser::{Composable, Composition, Dimension, IsCompatibleWith};
     use std::str::FromStr;
-    use unit::Unit;
+    use crate::unit::Unit;
 
     macro_rules! build_composition {
         (

@@ -1,6 +1,6 @@
-use parser::Error;
+use crate::parser::Error;
 use std::str::FromStr;
-use unit::Unit;
+use crate::unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl FromStr
@@ -10,7 +10,7 @@ impl FromStr for Unit {
 
     #[inline]
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let terms = ::parser::parse(expression)?;
+        let terms = crate::parser::parse(expression)?;
 
         Ok(Self::from(terms))
     }
@@ -19,7 +19,7 @@ impl FromStr for Unit {
 #[cfg(test)]
 mod tests {
     use std::str::FromStr;
-    use unit::Unit;
+    use crate::unit::Unit;
 
     #[test]
     fn validate_from_str_error() {

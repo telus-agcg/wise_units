@@ -1,6 +1,6 @@
 use super::Term;
-use reducible::Reducible;
-use ucum_unit::UcumUnit;
+use crate::reducible::Reducible;
+use crate::ucum_unit::UcumUnit;
 
 impl UcumUnit for Term {
     fn is_special(&self) -> bool {

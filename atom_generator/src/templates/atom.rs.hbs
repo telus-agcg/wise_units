@@ -7,14 +7,14 @@
 // generate them using underscores (to make them pass the clippy lint).
 #[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
 pub mod atom {
-    use parser::{
+    use crate::parser::{
         Classification, Composable, Composition, DefaultCompatibility, definition::Definition,
         Dimension, function_set::FunctionSet, IsCompatibleWith, Property, UcumSymbol,
     };
-    use reducible::Reducible;
+    use crate::reducible::Reducible;
+    use crate::unit::Unit;
+    use crate::ucum_unit::UcumUnit;
     use std::fmt;
-    use unit::Unit;
-    use ucum_unit::UcumUnit;
 
     #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
     #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]

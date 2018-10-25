@@ -7,11 +7,11 @@ pub mod partial_ord;
 pub mod reducible;
 pub mod ucum_unit;
 
-use parser::Error;
-use reducible::Reducible;
+use crate::parser::Error;
+use crate::reducible::Reducible;
 use std::str::FromStr;
-use ucum_unit::UcumUnit;
-use unit::Unit;
+use crate::ucum_unit::UcumUnit;
+use crate::unit::Unit;
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -69,7 +69,7 @@ mod tests {
     use super::super::parser::{Atom, Term};
     use super::*;
     use std::str::FromStr;
-    use unit::Unit;
+    use crate::unit::Unit;
 
     #[test]
     fn validate_new() {

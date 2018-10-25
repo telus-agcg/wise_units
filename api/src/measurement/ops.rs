@@ -1,6 +1,6 @@
-use convertible::Convertible;
-use measurement::Measurement;
-use parser::Error;
+use crate::convertible::Convertible;
+use crate::measurement::Measurement;
+use crate::parser::Error;
 use std::ops::{Add, Div, Mul, Sub};
 
 //-----------------------------------------------------------------------------
@@ -263,7 +263,7 @@ impl<'a> Div<f64> for &'a Measurement {
 
 #[cfg(test)]
 mod tests {
-    use measurement::Measurement;
+    use crate::measurement::Measurement;
 
     macro_rules! validate_op {
         ($result:expr, $expected:expr) => {

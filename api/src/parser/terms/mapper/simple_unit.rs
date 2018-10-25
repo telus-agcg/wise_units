@@ -1,4 +1,4 @@
-use parser::{Atom, Prefix};
+use crate::parser::{Atom, Prefix};
 
 pub(super) struct SimpleUnit {
     pub(super) prefix: Option<Prefix>,

@@ -2,7 +2,7 @@
 //!
 #[cfg(test)]
 mod symbol_parser_test {
-    use parser::symbols::symbol_parser::{Rule, SymbolParser};
+    use crate::parser::symbols::symbol_parser::{Rule, SymbolParser};
     use pest::Parser;
 
     #[test]

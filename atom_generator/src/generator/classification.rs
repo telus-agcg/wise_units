@@ -1,4 +1,4 @@
-use rust_structs::{RustAtomList, RustClassificationList};
+use crate::rust_structs::{RustAtomList, RustClassificationList};
 
 pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/classification.rs.hbs");
 

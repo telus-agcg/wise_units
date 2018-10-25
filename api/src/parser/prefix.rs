@@ -1,7 +1,7 @@
-use parser::ucum_symbol::UcumSymbol;
-use parser::{definition::Definition, Classification};
+use crate::parser::ucum_symbol::UcumSymbol;
+use crate::parser::{definition::Definition, Classification};
 use std::fmt;
-use unit::Unit;
+use crate::unit::Unit;
 
 const ATTO:  f64 = 1.0e-18;
 const CENTI: f64 = 1.0e-2;
@@ -210,7 +210,7 @@ impl fmt::Display for Prefix {
 #[cfg(test)]
 mod tests {
     use super::Prefix;
-    use parser::ucum_symbol::UcumSymbol;
+    use crate::parser::ucum_symbol::UcumSymbol;
 
     macro_rules! validate_value {
         ($test_name:ident, $variant:ident, $value:expr) => {

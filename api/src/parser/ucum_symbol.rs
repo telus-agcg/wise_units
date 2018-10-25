@@ -1,5 +1,5 @@
-use parser::Classification;
-use unit::Unit;
+use crate::parser::Classification;
+use crate::unit::Unit;
 
 pub trait UcumSymbol: Send + Sync + Copy + Clone {
     fn classification(&self) -> Classification;

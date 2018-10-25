@@ -1,5 +1,5 @@
-use measurement::Measurement;
-use parser::{Composable, Composition, DefaultCompatibility};
+use crate::measurement::Measurement;
+use crate::parser::{Composable, Composition, DefaultCompatibility};
 
 //-----------------------------------------------------------------------------
 // impl Composable
@@ -15,10 +15,10 @@ impl<'a> Composable for &'a Measurement {
 
 #[cfg(test)]
 mod tests {
-    use measurement::Measurement;
-    use parser::IsCompatibleWith;
+    use crate::measurement::Measurement;
+    use crate::parser::IsCompatibleWith;
     use std::str::FromStr;
-    use unit::Unit;
+    use crate::unit::Unit;
 
     #[test]
     fn validate_is_compatible_with_measurement() {

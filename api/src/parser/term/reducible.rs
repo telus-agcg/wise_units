@@ -1,6 +1,6 @@
 use super::Term;
-use parser::ucum_symbol::UcumSymbol;
-use reducible::Reducible;
+use crate::parser::ucum_symbol::UcumSymbol;
+use crate::reducible::Reducible;
 
 impl Reducible for Term {
     fn reduce_value(&self, value: f64) -> f64 {
@@ -56,8 +56,8 @@ fn combine_term_values(
 
 #[cfg(test)]
 mod tests {
-    use parser::{Atom, Prefix, Term};
-    use reducible::Reducible;
+    use crate::parser::{Atom, Prefix, Term};
+    use crate::reducible::Reducible;
 
     macro_rules! validate_reduce_value {
         ($test_name:ident, $term:expr, $expected_value:expr) => {

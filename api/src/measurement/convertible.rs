@@ -1,9 +1,9 @@
-use convertible::Convertible;
-use field_eq::FieldEq;
-use measurement::Measurement;
-use parser::{Error, IsCompatibleWith};
+use crate::convertible::Convertible;
+use crate::field_eq::FieldEq;
+use crate::measurement::Measurement;
+use crate::parser::{Error, IsCompatibleWith};
 use std::str::FromStr;
-use unit::Unit;
+use crate::unit::Unit;
 
 /// This implementation of `Convertible` lets you pass in a `&str` for the
 /// `Unit`, which will parse the chars and convert accordingly. If `expression`

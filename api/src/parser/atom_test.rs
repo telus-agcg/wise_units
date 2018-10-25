@@ -2,10 +2,10 @@
 //!
 #[cfg(test)]
 mod atom_test {
-    use parser::{
+    use crate::parser::{
         Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol,
     };
-    use ucum_unit::UcumUnit;
+    use crate::ucum_unit::UcumUnit;
 
     macro_rules! validate_definition {
         (

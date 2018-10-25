@@ -1,4 +1,4 @@
-use parser::{Atom, Prefix};
+use crate::parser::{Atom, Prefix};
 
 // Technically there should never be a symbol without an atom.
 #[derive(Debug)]

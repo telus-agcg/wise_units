@@ -1,6 +1,6 @@
-use as_fraction::AsFraction;
-use parser::Term;
-use unit::Unit;
+use crate::as_fraction::AsFraction;
+use crate::parser::Term;
+use crate::unit::Unit;
 
 impl AsFraction for Unit {
     type Numerator = Unit;
@@ -39,9 +39,9 @@ impl AsFraction for Unit {
 
 #[cfg(test)]
 mod tests {
-    use as_fraction::AsFraction;
+    use crate::as_fraction::AsFraction;
     use std::str::FromStr;
-    use unit::Unit;
+    use crate::unit::Unit;
 
     lazy_static! {
         static ref METER: Unit = Unit::from_str("m").unwrap();

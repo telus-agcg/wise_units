@@ -1,6 +1,6 @@
-use parser::IsCompatibleWith;
-use ucum_unit::UcumUnit;
-use unit::Unit;
+use crate::parser::IsCompatibleWith;
+use crate::ucum_unit::UcumUnit;
+use crate::unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl PartialOrd

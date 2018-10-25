@@ -1,6 +1,6 @@
-use measurement::Measurement;
-use reducible::Reducible;
-use ucum_unit::UcumUnit;
+use crate::measurement::Measurement;
+use crate::reducible::Reducible;
+use crate::ucum_unit::UcumUnit;
 
 impl Reducible for Measurement {
     fn reduce_value(&self, value: f64) -> f64 {
@@ -23,8 +23,8 @@ impl Reducible for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use measurement::Measurement;
-    use reducible::Reducible;
+    use crate::measurement::Measurement;
+    use crate::reducible::Reducible;
 
     macro_rules! validate_reduce_value {
         ($test_name:ident, $measurement_value:expr, $unit_str:expr, $expected_value:expr) => {

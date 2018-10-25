@@ -1,6 +1,6 @@
-use measurement::Measurement;
-use reducible::Reducible;
-use ucum_unit::UcumUnit;
+use crate::measurement::Measurement;
+use crate::reducible::Reducible;
+use crate::ucum_unit::UcumUnit;
 
 impl UcumUnit for Measurement {
     /// Checks if the associated Unit is "special". "Special" units are ones
@@ -75,8 +75,8 @@ impl UcumUnit for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use measurement::Measurement;
-    use ucum_unit::UcumUnit;
+    use crate::measurement::Measurement;
+    use crate::ucum_unit::UcumUnit;
 
     #[test]
     fn validate_scalar() {
