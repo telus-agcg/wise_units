@@ -1,4 +1,4 @@
-use rust_structs::RustAtomList;
+use crate::rust_structs::RustAtomList;
 
 pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/atom.rs.hbs");
 

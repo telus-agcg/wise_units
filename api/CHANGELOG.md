@@ -29,6 +29,9 @@
 
 ### Removed
 
+- In preparation for the Rust 2018 edition release before the end of the year,
+  updated to Rust 1.30.0 features, *making this the minimum supported version*.
+
 ### Fixed
 
 ### Security

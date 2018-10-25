@@ -1,4 +1,4 @@
-use parser::{Composable, IsCompatibleWith, Term};
+use crate::parser::{Composable, IsCompatibleWith, Term};
 
 /// In order to enforce compatibility on "non-units" (ex. `{each}`, `{total}`, `{heartbeats}`),
 /// `Term`s need to compare their annotations along with their `Composition`s. In practice, and
@@ -37,7 +37,7 @@ impl<'a, 'b> IsCompatibleWith<&'b Term> for &'a Term {
 
 #[cfg(test)]
 mod tests {
-    use parser::{Atom, IsCompatibleWith, Prefix, Term};
+    use crate::parser::{Atom, IsCompatibleWith, Prefix, Term};
 
     #[test]
     fn validate_no_annotations() {

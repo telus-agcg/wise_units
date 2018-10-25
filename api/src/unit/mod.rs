@@ -12,8 +12,8 @@ pub mod reducible;
 mod term_reducing;
 pub mod ucum_unit;
 
-use decomposer::{Decomposable, SimpleDecomposer};
-use parser::Term;
+use crate::decomposer::{Decomposable, SimpleDecomposer};
+use crate::parser::Term;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug)]

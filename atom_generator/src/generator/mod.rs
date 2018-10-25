@@ -16,7 +16,7 @@ pub(self) mod symbol_parser;
 
 pub(self) use self::handlebars::HANDLEBARS;
 
-use rust_structs::RustAtomList;
+use crate::rust_structs::RustAtomList;
 use std::env;
 use std::fs::File;
 use std::io::Write;

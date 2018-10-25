@@ -23,8 +23,8 @@
 //!
 
 use heck::CamelCase;
-use rust_structs::{RustAtom, RustFunctionSet};
-use toml_structs::{TomlAtom, TomlBaseUnit, TomlUnit};
+use crate::rust_structs::{RustAtom, RustFunctionSet};
+use crate::toml_structs::{TomlAtom, TomlBaseUnit, TomlUnit};
 
 pub(crate) mod atoms;
 pub(crate) mod custom_atoms;

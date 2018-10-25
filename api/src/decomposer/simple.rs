@@ -1,5 +1,5 @@
 use super::Decomposable;
-use parser::Term;
+use crate::parser::Term;
 
 pub(crate) struct Decomposer;
 
@@ -96,7 +96,7 @@ mod tests {
     use super::super::Decomposable;
     use super::Decomposer;
     use std::str::FromStr;
-    use unit::Unit;
+    use crate::unit::Unit;
 
     validate_decompose!(validate_decompose_pri_m, "m", "m");
     validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m2/m");

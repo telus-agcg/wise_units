@@ -1,6 +1,6 @@
-use measurement::Measurement;
-use parser::IsCompatibleWith;
-use ucum_unit::UcumUnit;
+use crate::measurement::Measurement;
+use crate::parser::IsCompatibleWith;
+use crate::ucum_unit::UcumUnit;
 
 /// `Measurement`s are `PartialEq` if
 ///

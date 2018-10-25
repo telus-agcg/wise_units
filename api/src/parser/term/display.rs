@@ -52,7 +52,7 @@ fn extract_term_string_atom(term_string: &mut String, term: &Term) {
 
 #[cfg(test)]
 mod tests {
-    use parser::{Atom, Prefix, Term};
+    use crate::parser::{Atom, Prefix, Term};
 
     macro_rules! validate_display {
         ($test_name:ident, $term:expr, $output:expr) => {

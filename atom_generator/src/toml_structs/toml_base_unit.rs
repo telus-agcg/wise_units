@@ -1,4 +1,4 @@
-use toml_structs::TomlAtom;
+use crate::toml_structs::TomlAtom;
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct TomlBaseUnit {

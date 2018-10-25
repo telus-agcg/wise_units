@@ -1,5 +1,5 @@
-use field_eq::FieldEq;
-use measurement::Measurement;
+use crate::field_eq::FieldEq;
+use crate::measurement::Measurement;
 
 /// This is for comparing `Measurement`s to see if they have both the same
 /// `value` *and* the same underlying `Unit` defined in the exact same terms.

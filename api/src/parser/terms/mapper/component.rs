@@ -1,5 +1,5 @@
-use parser::terms::mapper::Finishable;
-use parser::Term;
+use crate::parser::terms::mapper::Finishable;
+use crate::parser::Term;
 
 pub(super) struct Component {
     pub(super) factor: Option<u32>,

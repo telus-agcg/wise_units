@@ -1,5 +1,5 @@
 use super::Term;
-use parser::{Composable, Composition};
+use crate::parser::{Composable, Composition};
 
 impl<'a> Composable for &'a Term {
     /// Combines the `Composition` from the `Term`'s `Atom` with its own `exponent` to build a
@@ -34,7 +34,7 @@ impl<'a> Composable for &'a [Term] {
 
 #[cfg(test)]
 mod tests {
-    use parser::{Atom, Composable, Composition, Dimension, Prefix, Term};
+    use crate::parser::{Atom, Composable, Composition, Dimension, Prefix, Term};
 
     macro_rules! validate_composition {
         ($test_name:ident, $term:expr, $expected_value:expr) => {

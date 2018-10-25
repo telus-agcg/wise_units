@@ -1,5 +1,5 @@
-use parser::terms::mapper::{Component, Finishable};
-use parser::Term;
+use crate::parser::terms::mapper::{Component, Finishable};
+use crate::parser::Term;
 
 pub(super) struct AstTerm {
     pub(super) component: Option<Component>,

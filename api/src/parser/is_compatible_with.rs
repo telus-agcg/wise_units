@@ -1,4 +1,4 @@
-use parser::Composable;
+use crate::parser::Composable;
 
 /// A simple trait for defining how a type should be compared to another type to see if they're
 /// compatible. Typically this comparison is made via each type's `Composition`, but the trait

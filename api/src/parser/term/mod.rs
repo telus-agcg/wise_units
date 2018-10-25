@@ -4,7 +4,7 @@ mod is_compatible_with;
 mod reducible;
 mod ucum_unit;
 
-use parser::{Atom, Prefix};
+use crate::parser::{Atom, Prefix};
 
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an

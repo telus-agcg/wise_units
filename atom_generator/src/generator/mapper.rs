@@ -1,4 +1,4 @@
-use rust_structs::{RustAtomList, RustMapperList};
+use crate::rust_structs::{RustAtomList, RustMapperList};
 
 pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/mapper.rs.hbs");
 

@@ -1,4 +1,4 @@
-use rust_structs::{PestSymbolList, RustAtomList};
+use crate::rust_structs::{PestSymbolList, RustAtomList};
 
 pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/symbol.pest.hbs");
 

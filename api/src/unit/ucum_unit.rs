@@ -1,6 +1,6 @@
-use reducible::Reducible;
-use ucum_unit::UcumUnit;
-use unit::Unit;
+use crate::reducible::Reducible;
+use crate::ucum_unit::UcumUnit;
+use crate::unit::Unit;
 
 impl UcumUnit for Unit {
     /// The UCUM defines "special units" as:
@@ -128,8 +128,8 @@ impl UcumUnit for Unit {
 #[cfg(test)]
 mod tests {
     use std::str::FromStr;
-    use ucum_unit::UcumUnit;
-    use unit::Unit;
+    use crate::ucum_unit::UcumUnit;
+    use crate::unit::Unit;
 
     macro_rules! validate_scalar {
         ($test_name:ident, $input_string:expr, $expected_value:expr) => {
