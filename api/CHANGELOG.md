@@ -20,8 +20,8 @@
   `IsCompatibleWith`, and blanket-implemented that for all types that implement
   `Composable`. Not only does this clean up code, but also now lets you compare
   `Measurement`s and `Unit`s. Library consumers that call `is_compatible_with`
-  will need to change `use wise_units::parser::Composable` to
-  `use wise_units::parser::IsCompatibleWith`.
+  will need to change `use wise_units::Composable` to
+  `use wise_units::IsCompatibleWith`.
 - [DEV-3155] Changed `Term::is_compatible_with()` to account for the
   `annotation` attribute of each `Term` being compared.
 

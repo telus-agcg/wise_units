@@ -6,7 +6,7 @@ mod common;
 
 use criterion::Criterion;
 use std::str::FromStr;
-use wise_units::{Composable, UcumUnit, Unit};
+use wise_units::{Composable, IsCompatibleWith, UcumUnit, Unit};
 
 macro_rules! bench_over_inputs_method {
     ($function_name:ident, $test_name:expr, $method_name:ident) => {

@@ -62,8 +62,8 @@ pub use convertible::Convertible;
 pub use field_eq::FieldEq;
 pub use measurement::Measurement;
 pub use parser::{
-    Atom, Classification, Composable, Composition, Dimension, Error, Prefix, Property, Term,
-    UcumSymbol,
+    Atom, Classification, Composable, Composition, Dimension, Error, IsCompatibleWith, Prefix,
+    Property, Term, UcumSymbol,
 };
 pub use ucum_unit::UcumUnit;
 pub use unit::Unit;
