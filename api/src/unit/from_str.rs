@@ -26,4 +26,13 @@ mod tests {
         let unit = Unit::from_str("ZZZXXXXXXXXXXXXx");
         assert!(unit.is_err());
     }
+
+    #[test]
+    fn validate_annotation() {
+        let unit = Unit::from_str("{foo}").unwrap();
+        let term = unit.terms.first().unwrap();
+        let annotation = &term.annotation;
+
+        assert_eq!(annotation, &Some("foo".to_string()));
+    }
 }
