@@ -34,6 +34,9 @@
 
 ### Fixed
 
+- [DEV-3300] Parsing annotations now excludes curly braces in the resulting
+  string capture.
+
 ### Security
 
 ## [0.4.0] - 2018-10-02

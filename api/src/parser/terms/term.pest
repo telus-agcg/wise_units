@@ -12,15 +12,16 @@ slash = { "/" }
 component = { factor ~ basic_component | basic_component }
 
 basic_component = {
-    annotatable ~ annotation |
+    annotatable ~ annotation_group |
         annotatable |
-        annotation |
+        annotation_group |
         factor |
         "(" ~ term ~ ")"
 }
 
 // <annotation>
-annotation = { "{" ~ ('!'..'z')* ~ "}" }
+annotation_group = _{ "{" ~ annotation ~ "}" }
+annotation = { symbol_char+ }
 
 // <annotatable>
 annotatable = { simple_unit ~ exponent | simple_unit }
