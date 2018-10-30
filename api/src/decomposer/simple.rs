@@ -99,8 +99,8 @@ mod tests {
 
     use super::super::Decomposable;
     use super::Decomposer;
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     validate_decompose!(validate_decompose_pri_m, "m", "m");
     validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m2/m");

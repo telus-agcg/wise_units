@@ -1,7 +1,7 @@
 use crate::parser::ucum_symbol::UcumSymbol;
 use crate::parser::{definition::Definition, Classification};
-use std::fmt;
 use crate::unit::Unit;
+use std::fmt;
 
 const ATTO:  f64 = 1.0e-18;
 const CENTI: f64 = 1.0e-2;

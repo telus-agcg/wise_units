@@ -19,8 +19,8 @@ impl<'a> Composable for &'a Unit {
 mod tests {
     use crate::measurement::Measurement;
     use crate::parser::{Composable, Composition, Dimension, IsCompatibleWith};
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     macro_rules! build_composition {
         (

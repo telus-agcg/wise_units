@@ -1,5 +1,5 @@
-use std::fmt;
 use crate::unit::Unit;
+use std::fmt;
 
 //-----------------------------------------------------------------------------
 // impl Display
@@ -12,8 +12,8 @@ impl fmt::Display for Unit {
 
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     #[test]
     fn validate_display() {

@@ -9,9 +9,9 @@ pub mod ucum_unit;
 
 use crate::parser::Error;
 use crate::reducible::Reducible;
-use std::str::FromStr;
 use crate::ucum_unit::UcumUnit;
 use crate::unit::Unit;
+use std::str::FromStr;
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -68,8 +68,8 @@ impl Measurement {
 mod tests {
     use super::super::parser::{Atom, Term};
     use super::*;
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     #[test]
     fn validate_new() {

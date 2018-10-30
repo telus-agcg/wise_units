@@ -1,7 +1,7 @@
 use super::term_reducing;
 use crate::parser::Term;
-use std::ops::{Div, Mul};
 use crate::unit::Unit;
+use std::ops::{Div, Mul};
 
 //-----------------------------------------------------------------------------
 // impl Div

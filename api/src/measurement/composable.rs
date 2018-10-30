@@ -17,8 +17,8 @@ impl<'a> Composable for &'a Measurement {
 mod tests {
     use crate::measurement::Measurement;
     use crate::parser::IsCompatibleWith;
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     #[test]
     fn validate_is_compatible_with_measurement() {
