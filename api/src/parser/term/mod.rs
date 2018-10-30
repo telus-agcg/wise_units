@@ -70,7 +70,7 @@ impl Term {
     /// `annotation` certainly makes sense, but does not impact the value of anything.
     ///
     pub fn has_value(&self) -> bool {
-        self.factor.is_some() || self.atom.is_some()
+        self.factor.is_some() || self.atom.is_some() || self.annotation.is_some()
     }
 
     /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since

@@ -75,6 +75,10 @@ fn extract_denominator(term: &Term) -> Option<String> {
         }
     }
 
+    if let Some(ref annotation) = term.annotation {
+        term_string.push_str(&format!("{{{}}}", annotation));
+    }
+
     term_string.shrink_to_fit();
 
     Some(term_string)

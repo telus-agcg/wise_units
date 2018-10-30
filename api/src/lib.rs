@@ -33,10 +33,6 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
-#[cfg(test)]
-#[macro_use]
-extern crate pretty_assertions;
-
 #[cfg(feature = "with_serde")]
 #[cfg_attr(feature = "with_serde", macro_use)]
 extern crate serde_derive;
