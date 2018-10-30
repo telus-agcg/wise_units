@@ -40,8 +40,8 @@ impl AsFraction for Unit {
 #[cfg(test)]
 mod tests {
     use crate::as_fraction::AsFraction;
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     lazy_static! {
         static ref METER: Unit = Unit::from_str("m").unwrap();

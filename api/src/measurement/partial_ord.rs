@@ -1,7 +1,7 @@
 use crate::measurement::Measurement;
 use crate::parser::IsCompatibleWith;
-use std::cmp::Ordering;
 use crate::ucum_unit::UcumUnit;
+use std::cmp::Ordering;
 
 //-----------------------------------------------------------------------------
 // impl PartialOrd

@@ -1,6 +1,6 @@
 use crate::parser::Error;
-use std::str::FromStr;
 use crate::unit::Unit;
+use std::str::FromStr;
 
 //-----------------------------------------------------------------------------
 // impl FromStr
@@ -18,8 +18,8 @@ impl FromStr for Unit {
 
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     #[test]
     fn validate_from_str_error() {

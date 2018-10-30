@@ -19,8 +19,8 @@ impl Reducible for Unit {
 #[cfg(test)]
 mod tests {
     use crate::reducible::Reducible;
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     macro_rules! validate_reduce_value {
         ($test_name:ident, $unit_str:expr, $expected_value:expr) => {

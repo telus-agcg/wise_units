@@ -75,6 +75,10 @@ fn extract_denominator(term: &Term) -> Option<String> {
         }
     }
 
+    if let Some(ref annotation) = term.annotation {
+        term_string.push_str(&format!("{{{}}}", annotation));
+    }
+
     term_string.shrink_to_fit();
 
     Some(term_string)
@@ -95,8 +99,8 @@ mod tests {
 
     use super::super::Decomposable;
     use super::Decomposer;
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     validate_decompose!(validate_decompose_pri_m, "m", "m");
     validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m2/m");

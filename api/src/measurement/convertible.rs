@@ -2,8 +2,8 @@ use crate::convertible::Convertible;
 use crate::field_eq::FieldEq;
 use crate::measurement::Measurement;
 use crate::parser::{Error, IsCompatibleWith};
-use std::str::FromStr;
 use crate::unit::Unit;
+use std::str::FromStr;
 
 /// This implementation of `Convertible` lets you pass in a `&str` for the
 /// `Unit`, which will parse the chars and convert accordingly. If `expression`

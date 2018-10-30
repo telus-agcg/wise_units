@@ -37,8 +37,8 @@ impl<'a> FieldEq<'a> for Unit {
 #[cfg(test)]
 mod tests {
     use crate::field_eq::FieldEq;
-    use std::str::FromStr;
     use crate::unit::Unit;
+    use std::str::FromStr;
 
     #[test]
     fn validate_field_eq() {

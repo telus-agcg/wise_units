@@ -72,8 +72,7 @@ fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
                 .or_insert(exponent);
 
             map
-        })
-        .into_iter()
+        }).into_iter()
         // Filter out things that have no values
         .filter(|(ct, exponent)| ct.has_value() && *exponent != 0)
         .collect()
