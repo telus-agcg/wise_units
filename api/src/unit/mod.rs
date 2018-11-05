@@ -5,6 +5,7 @@ pub mod display;
 pub mod field_eq;
 pub mod from;
 pub mod from_str;
+pub mod is_compatible_with;
 pub mod ops;
 pub mod partial_eq;
 pub mod partial_ord;

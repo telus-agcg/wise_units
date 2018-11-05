@@ -1,7 +1,8 @@
 use crate::convertible::Convertible;
 use crate::field_eq::FieldEq;
 use crate::measurement::Measurement;
-use crate::parser::{Error, IsCompatibleWith};
+use crate::is_compatible_with::IsCompatibleWith;
+use crate::parser::Error;
 use crate::unit::Unit;
 use std::str::FromStr;
 

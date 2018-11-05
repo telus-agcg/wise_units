@@ -1,5 +1,5 @@
 use crate::measurement::Measurement;
-use crate::parser::IsCompatibleWith;
+use crate::is_compatible_with::IsCompatibleWith;
 use crate::ucum_unit::UcumUnit;
 
 /// `Measurement`s are `PartialEq` if

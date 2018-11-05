@@ -1,5 +1,6 @@
 use crate::measurement::Measurement;
-use crate::parser::{Composable, Composition, DefaultCompatibility};
+use crate::is_compatible_with::DefaultCompatibility;
+use crate::parser::{Composable, Composition};
 
 //-----------------------------------------------------------------------------
 // impl Composable
@@ -16,7 +17,7 @@ impl<'a> Composable for &'a Measurement {
 #[cfg(test)]
 mod tests {
     use crate::measurement::Measurement;
-    use crate::parser::IsCompatibleWith;
+    use crate::is_compatible_with::IsCompatibleWith;
     use crate::unit::Unit;
     use std::str::FromStr;
 

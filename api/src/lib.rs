@@ -47,6 +47,7 @@ pub mod as_fraction;
 pub mod convertible;
 pub mod decomposer;
 pub mod field_eq;
+pub mod is_compatible_with;
 pub mod measurement;
 pub mod parser;
 pub mod unit;
@@ -56,9 +57,10 @@ mod ucum_unit;
 
 pub use crate::convertible::Convertible;
 pub use crate::field_eq::FieldEq;
+pub use crate::is_compatible_with::IsCompatibleWith;
 pub use crate::measurement::Measurement;
 pub use crate::parser::{
-    Atom, Classification, Composable, Composition, Dimension, Error, IsCompatibleWith, Prefix,
+    Atom, Classification, Composable, Composition, Dimension, Error, Prefix,
     Property, Term, UcumSymbol,
 };
 pub use crate::ucum_unit::UcumUnit;
