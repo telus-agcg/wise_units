@@ -9,6 +9,9 @@
 - [DEV-3155] Added `DefaultCompatibility` marker trait to mark types that should
   implement the default behavior of `IsCompatibleWith`, effectively paving the
   way to be able to define a different behavior for `Term`.
+- [DEV-3327] Added `AnnotationComposable` and `AnnotationComposition` and
+  implemented for `&[Term]`. Allows for pessimistic comparing of `Term`s with
+  annotations.
 
 ### Changed
 

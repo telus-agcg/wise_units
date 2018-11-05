@@ -1,5 +1,5 @@
 use crate::is_compatible_with::IsCompatibleWith;
-use crate::parser::{Composable, Term};
+use crate::parser::{annotation_composition::AnnotationComposable, Composable, Term};
 
 /// In order to enforce compatibility on "non-units" (ex. `{each}`, `{total}`, `{heartbeats}`),
 /// `Term`s need to compare their annotations along with their `Composition`s. In practice, and
@@ -36,13 +36,23 @@ impl<'a, 'b> IsCompatibleWith<&'b Term> for &'a Term {
     }
 }
 
+impl<'a, 'b> IsCompatibleWith<&'b [Term]> for &'a [Term] {
+    fn is_compatible_with(self, rhs: &'b [Term]) -> bool {
+        let lhs_annotation_composition = self.annotation_composition();
+        let rhs_annotation_composition = rhs.annotation_composition();
+
+        self.composition() == rhs.composition()
+            && rhs_annotation_composition == lhs_annotation_composition
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::is_compatible_with::IsCompatibleWith;
     use crate::parser::{Atom, Prefix, Term};
 
     #[test]
-    fn validate_no_annotations() {
+    fn validate_term_no_annotations() {
         let lhs = term!(Meter);
         let rhs = term!(Kilo, Meter);
         assert!(lhs.is_compatible_with(&rhs));
@@ -55,7 +65,20 @@ mod tests {
     }
 
     #[test]
-    fn validate_with_annotations() {
+    fn validate_terms_no_annotations() {
+        let lhs = [term!(Meter)];
+        let rhs = [term!(Kilo, Meter)];
+        assert!(lhs.is_compatible_with(&rhs));
+
+        let rhs = [term!(Kilo, Meter, factor: 20)];
+        assert!(lhs.is_compatible_with(&rhs));
+
+        let rhs = [term!(Kilo, Meter, factor: 20, exponent: 2)];
+        assert!(!lhs.is_compatible_with(&rhs));
+    }
+
+    #[test]
+    fn validate_term_with_annotations() {
         let lhs = term!(Meter, annotation: "stuff".to_string());
         let rhs = term!(Kilo, Meter, annotation: "stuff".to_string());
         assert!(lhs.is_compatible_with(&rhs));
@@ -66,6 +89,21 @@ mod tests {
 
         // No annotation
         let rhs = term!(Kilo, Meter);
+        assert!(!lhs.is_compatible_with(&rhs));
+    }
+
+    #[test]
+    fn validate_terms_with_annotations() {
+        let lhs = [term!(Meter, annotation: "stuff".to_string())];
+        let rhs = [term!(Kilo, Meter, annotation: "stuff".to_string())];
+        assert!(lhs.is_compatible_with(&rhs));
+
+        // Different annotation
+        let rhs = [term!(Kilo, Meter, annotation: "pants".to_string())];
+        assert!(!lhs.is_compatible_with(&rhs));
+
+        // No annotation
+        let rhs = [term!(Kilo, Meter)];
         assert!(!lhs.is_compatible_with(&rhs));
     }
 }

@@ -4,6 +4,7 @@ include!(concat!(env!("OUT_DIR"), "/atom.rs"));
 
 pub(self) mod symbols;
 
+mod annotation_composition;
 #[cfg(test)]
 mod atom_test;
 mod composable;
@@ -17,6 +18,7 @@ mod term;
 mod terms;
 mod ucum_symbol;
 
+pub use self::annotation_composition::AnnotationComposition;
 pub use self::atom::Atom;
 pub use self::classification::Classification;
 pub use self::composable::Composable;

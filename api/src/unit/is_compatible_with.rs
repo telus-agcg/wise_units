@@ -1,7 +1,33 @@
-use crate::is_compatible_with::DefaultCompatibility;
+use crate::is_compatible_with::IsCompatibleWith;
+use crate::measurement::Measurement;
+use crate::parser::Term;
 use crate::unit::Unit;
 
-impl<'a> DefaultCompatibility for &'a Unit {}
+impl<'a, 'b> IsCompatibleWith<&'b [Term]> for &'a Unit {
+    fn is_compatible_with(self, rhs: &'b [Term]) -> bool {
+        let lhs_terms: &'a [Term] = &*self;
+
+        lhs_terms.is_compatible_with(rhs)
+    }
+}
+
+impl<'a, 'b> IsCompatibleWith<&'b Unit> for &'a Unit {
+    #[inline]
+    fn is_compatible_with(self, rhs: &'b Unit) -> bool {
+        let rhs_terms: &'b [Term] = &*rhs;
+
+        self.is_compatible_with(rhs_terms)
+    }
+}
+
+impl<'a, 'b> IsCompatibleWith<&'b Measurement> for &'a Unit {
+    #[inline]
+    fn is_compatible_with(self, rhs: &'b Measurement) -> bool {
+        let rhs_terms: &'b [Term] = &*rhs.unit;
+
+        (&*self).is_compatible_with(rhs_terms)
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -45,6 +71,32 @@ mod tests {
 
         let km_cubed_per_nanometer_squared = Unit::from_str("km3/nm2").unwrap();
         assert!(meter.is_compatible_with(&km_cubed_per_nanometer_squared));
+    }
+
+    #[test]
+    fn validate_is_compatible_with_units_with_annotations() {
+        fn verify_compatible(lhs: &Unit, rhs: &Unit) {
+            assert!(lhs.is_compatible_with(rhs));
+        }
+        fn verify_incompatible(lhs: &Unit, rhs: &Unit) {
+            assert!(!lhs.is_compatible_with(rhs));
+        }
+
+        let foo = Unit::from_str("{foo}").unwrap();
+        verify_compatible(&foo, &foo);
+
+        let bar = Unit::from_str("{bar}").unwrap();
+        verify_incompatible(&foo, &bar);
+
+        let unity = Unit::from_str("1").unwrap();
+        verify_incompatible(&foo, &unity);
+
+        let mfoo = Unit::from_str("m{foo}").unwrap();
+        let mfoo2_div_mfoo = Unit::from_str("m2{foo}/m{foo}").unwrap();
+        verify_compatible(&mfoo, &mfoo2_div_mfoo);
+
+        let mfoo2_div_mbar = Unit::from_str("m2{foo}/m{bar}").unwrap();
+        verify_incompatible(&mfoo, &mfoo2_div_mbar);
     }
 
     #[test]

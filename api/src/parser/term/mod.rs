@@ -1,3 +1,4 @@
+mod annotation_composable;
 mod composable;
 mod display;
 mod is_compatible_with;

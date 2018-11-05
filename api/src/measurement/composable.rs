@@ -1,12 +1,9 @@
 use crate::measurement::Measurement;
-use crate::is_compatible_with::DefaultCompatibility;
 use crate::parser::{Composable, Composition};
 
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
-impl<'a> DefaultCompatibility for &'a Measurement {}
-
 impl<'a> Composable for &'a Measurement {
     #[inline]
     fn composition(self) -> Composition {
@@ -14,32 +11,24 @@ impl<'a> Composable for &'a Measurement {
     }
 }
 
+// Since the composition of a Measurement is just the composition of its Unit,
+// most of the tests are with the Unit implementation.
+//
 #[cfg(test)]
 mod tests {
     use crate::measurement::Measurement;
-    use crate::is_compatible_with::IsCompatibleWith;
-    use crate::unit::Unit;
-    use std::str::FromStr;
+    use crate::parser::{Composable, Composition, Dimension};
 
     #[test]
-    fn validate_is_compatible_with_measurement() {
-        let subject = Measurement::new(1.0, "m").unwrap();
-        let other = Measurement::new(1.0, "km").unwrap();
+    fn validate_composition() {
+        let m = Measurement::new(1.0, "m").unwrap();
+        let expected = Composition::new(Dimension::Length, 1);
+        assert_eq!(m.composition(), expected);
 
-        assert!(subject.is_compatible_with(&other));
+        let m = Measurement::new(1.0, "m2/s").unwrap();
+        let mut expected = Composition::new(Dimension::Length, 2);
+        expected.insert(Dimension::Time, -1);
 
-        let other = Measurement::new(1.0, "kg").unwrap();
-        assert!(!subject.is_compatible_with(&other));
-    }
-
-    #[test]
-    fn validate_is_compatible_with_unit() {
-        let subject = Measurement::new(1.0, "m").unwrap();
-        let other = Unit::from_str("km").unwrap();
-
-        assert!(subject.is_compatible_with(&other));
-
-        let other = Unit::from_str("kg").unwrap();
-        assert!(!subject.is_compatible_with(&other));
+        assert_eq!(m.composition(), expected);
     }
 }
