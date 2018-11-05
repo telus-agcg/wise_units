@@ -1,6 +1,6 @@
 use crate::is_compatible_with::IsCompatibleWith;
-use crate::parser::Term;
 use crate::measurement::Measurement;
+use crate::parser::Term;
 use crate::unit::Unit;
 
 impl<'a, 'b> IsCompatibleWith<&'b Measurement> for &'a Measurement {
@@ -22,8 +22,8 @@ impl<'a, 'b> IsCompatibleWith<&'b Unit> for &'a Measurement {
 
 #[cfg(test)]
 mod tests {
-    use crate::measurement::Measurement;
     use crate::is_compatible_with::IsCompatibleWith;
+    use crate::measurement::Measurement;
     use crate::unit::Unit;
     use std::str::FromStr;
 

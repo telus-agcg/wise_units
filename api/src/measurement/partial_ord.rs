@@ -1,5 +1,5 @@
-use crate::measurement::Measurement;
 use crate::is_compatible_with::IsCompatibleWith;
+use crate::measurement::Measurement;
 use crate::ucum_unit::UcumUnit;
 use std::cmp::Ordering;
 

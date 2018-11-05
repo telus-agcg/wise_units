@@ -60,8 +60,8 @@ pub use crate::field_eq::FieldEq;
 pub use crate::is_compatible_with::IsCompatibleWith;
 pub use crate::measurement::Measurement;
 pub use crate::parser::{
-    Atom, Classification, Composable, Composition, Dimension, Error, Prefix,
-    Property, Term, UcumSymbol,
+    Atom, Classification, Composable, Composition, Dimension, Error, Prefix, Property, Term,
+    UcumSymbol,
 };
 pub use crate::ucum_unit::UcumUnit;
 pub use crate::unit::Unit;

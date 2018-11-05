@@ -31,9 +31,9 @@ impl<'a, 'b> IsCompatibleWith<&'b Measurement> for &'a Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::IsCompatibleWith;
     use crate::measurement::Measurement;
     use crate::unit::Unit;
+    use crate::IsCompatibleWith;
     use std::str::FromStr;
 
     #[test]
