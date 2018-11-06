@@ -4,9 +4,9 @@ use crate::parser::{Composable, Composition};
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
-impl<'a> Composable for &'a Measurement {
+impl Composable for Measurement {
     #[inline]
-    fn composition(self) -> Composition {
+    fn composition(&self) -> Composition {
         self.unit.composition()
     }
 }

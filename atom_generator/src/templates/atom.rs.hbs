@@ -150,7 +150,7 @@ pub mod atom {
     impl DefaultCompatibility for Atom {}
 
     impl Composable for Atom {
-        fn composition(self) -> Composition {
+        fn composition(&self) -> Composition {
             match self {
                 Atom::Candela => Composition::new(Dimension::LuminousIntensity, 1),
                 Atom::Coulomb => Composition::new(Dimension::ElectricCharge, 1),
