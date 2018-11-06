@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.5.1] - 2018-11-06
+
+### Changed
+
+- [DEV-3155] Reverted the change to the `Composable` trait definition to deal
+  only with `self`; this caused `cannot move out of borrowed content` errors
+  when trying to use the API normally.
+
 ## [0.5.0] - 2018-11-06
 
 ### Added
@@ -57,14 +65,6 @@
   a `Vec<Term>` with 1 `Term` whose attributes were all `None`; now that same
   `Term` has a `factor` of `Some(1)`. It's possible that a `Unit` with 0 `Term`s
   may still be interpreted similarly (haven't looked into this yet).
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [0.3.0] - 2018-08-27
 
