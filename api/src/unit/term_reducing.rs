@@ -3,16 +3,17 @@ use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.
 ///
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 struct ComposableTerm {
     factor: Option<u32>,
     prefix: Option<Prefix>,
     atom: Option<Atom>,
+    annotation: Option<String>,
 }
 
 impl ComposableTerm {
     fn has_value(&self) -> bool {
-        self.atom.is_some() || self.factor.is_some()
+        self.atom.is_some() || self.factor.is_some() || self.annotation.is_some()
     }
 }
 
@@ -22,6 +23,7 @@ impl<'a> From<&'a Term> for ComposableTerm {
             atom: term.atom,
             prefix: term.prefix,
             factor: term.factor,
+            annotation: term.annotation.clone(),
         }
     }
 }
@@ -37,7 +39,7 @@ impl From<Parts> for Term {
             prefix: parts.0.prefix,
             factor: parts.0.factor,
             exponent: e,
-            annotation: None,
+            annotation: parts.0.annotation,
         }
     }
 }
