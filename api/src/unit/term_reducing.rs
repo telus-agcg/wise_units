@@ -8,7 +8,7 @@ struct ComposableTerm {
     factor: Option<u32>,
     prefix: Option<Prefix>,
     atom: Option<Atom>,
-    annotation: Option<String>
+    annotation: Option<String>,
 }
 
 impl ComposableTerm {

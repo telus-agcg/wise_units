@@ -119,8 +119,8 @@ mod tests {
     mod with_serde {
         use super::super::Measurement;
         use crate::parser::{Atom, Prefix, Term};
-        use serde_json;
         use crate::unit::Unit;
+        use serde_json;
 
         #[test]
         fn validate_serialization_empty_terms() {
