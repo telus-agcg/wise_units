@@ -5,5 +5,5 @@ use crate::parser::Composition;
 /// provides a `Composition`, they can be compared for compatibility.
 ///
 pub trait Composable {
-    fn composition(self) -> Composition;
+    fn composition(&self) -> Composition;
 }
