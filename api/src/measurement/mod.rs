@@ -118,9 +118,9 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Measurement;
-        use parser::{Atom, Prefix, Term};
+        use crate::parser::{Atom, Prefix, Term};
         use serde_json;
-        use unit::Unit;
+        use crate::unit::Unit;
 
         #[test]
         fn validate_serialization_empty_terms() {

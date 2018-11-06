@@ -148,7 +148,7 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Term;
-        use parser::{Atom, Prefix};
+        use crate::parser::{Atom, Prefix};
         use serde_json;
 
         #[test]
