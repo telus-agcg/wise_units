@@ -26,13 +26,13 @@ impl fmt::Display for Dimension {
 impl AsRef<str> for Dimension {
     fn as_ref(&self) -> &str {
         match *self {
-            Dimension::ElectricCharge    => "Q",
-            Dimension::Length            => "L",
+            Dimension::ElectricCharge => "Q",
+            Dimension::Length => "L",
             Dimension::LuminousIntensity => "F",
-            Dimension::Mass              => "M",
-            Dimension::PlaneAngle        => "A",
-            Dimension::Temperature       => "C",
-            Dimension::Time              => "T",
+            Dimension::Mass => "M",
+            Dimension::PlaneAngle => "A",
+            Dimension::Temperature => "C",
+            Dimension::Time => "T",
         }
     }
 }

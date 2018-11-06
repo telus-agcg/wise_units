@@ -63,16 +63,17 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
     terms
         .into_iter()
-        .fold(BTreeMap::<ComposableTerm, i32>::new(), |mut map, term| {
-            let exponent = term.exponent.unwrap_or(1);
-            let key = ComposableTerm::from(term);
+        .map(|term| (ComposableTerm::from(term), term.exponent.unwrap_or(1)))
+        .fold(
+            BTreeMap::<ComposableTerm, i32>::new(),
+            |mut map, (key, exponent)| {
+                map.entry(key)
+                    .and_modify(|entry| *entry += exponent)
+                    .or_insert(exponent);
 
-            map.entry(key)
-                .and_modify(|entry| *entry += exponent)
-                .or_insert(exponent);
-
-            map
-        }).into_iter()
+                map
+            },
+        ).into_iter()
         // Filter out things that have no values
         .filter(|(ct, exponent)| ct.has_value() && *exponent != 0)
         .collect()

@@ -707,7 +707,7 @@ mod atom_test {
 
     #[cfg(feature = "with_serde")]
     mod with_serde {
-        use parser::Atom;
+        use crate::parser::Atom;
         use serde_json;
 
         #[test]

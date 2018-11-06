@@ -59,6 +59,18 @@ fn extract_denominator(term: &Term) -> Option<String> {
 
     term.factor_and_is_not_one(|factor| term_string.push_str(&factor.to_string()));
 
+    extract_denominator_atom(term, &mut term_string);
+
+    if let Some(ref annotation) = term.annotation {
+        term_string.push_str(&format!("{{{}}}", annotation));
+    }
+
+    term_string.shrink_to_fit();
+
+    Some(term_string)
+}
+
+fn extract_denominator_atom(term: &Term, term_string: &mut String) {
     if let Some(atom) = term.atom {
         if let Some(prefix) = term.prefix {
             term_string.push_str(&prefix.to_string());
@@ -74,14 +86,6 @@ fn extract_denominator(term: &Term) -> Option<String> {
             }
         }
     }
-
-    if let Some(ref annotation) = term.annotation {
-        term_string.push_str(&format!("{{{}}}", annotation));
-    }
-
-    term_string.shrink_to_fit();
-
-    Some(term_string)
 }
 
 #[cfg(test)]

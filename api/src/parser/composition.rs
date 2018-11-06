@@ -14,13 +14,13 @@ type Exponent = i32;
 ///
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Composition {
-    electric_charge:    Option<Exponent>,
-    length:             Option<Exponent>,
+    electric_charge: Option<Exponent>,
+    length: Option<Exponent>,
     luminous_intensity: Option<Exponent>,
-    mass:               Option<Exponent>,
-    plane_angle:        Option<Exponent>,
-    temperature:        Option<Exponent>,
-    time:               Option<Exponent>,
+    mass: Option<Exponent>,
+    plane_angle: Option<Exponent>,
+    temperature: Option<Exponent>,
+    time: Option<Exponent>,
 }
 
 macro_rules! def_mul_exponent {
@@ -71,13 +71,13 @@ macro_rules! def_add_dimension {
 impl Composition {
     pub fn new(dimension: Dimension, exponent: i32) -> Self {
         match dimension {
-            Dimension::ElectricCharge    => Self::new_electric_charge(exponent),
-            Dimension::Length            => Self::new_length(exponent),
+            Dimension::ElectricCharge => Self::new_electric_charge(exponent),
+            Dimension::Length => Self::new_length(exponent),
             Dimension::LuminousIntensity => Self::new_luminous_intensity(exponent),
-            Dimension::Mass              => Self::new_mass(exponent),
-            Dimension::PlaneAngle        => Self::new_plane_angle(exponent),
-            Dimension::Temperature       => Self::new_temperature(exponent),
-            Dimension::Time              => Self::new_time(exponent),
+            Dimension::Mass => Self::new_mass(exponent),
+            Dimension::PlaneAngle => Self::new_plane_angle(exponent),
+            Dimension::Temperature => Self::new_temperature(exponent),
+            Dimension::Time => Self::new_time(exponent),
         }
     }
 
@@ -171,13 +171,13 @@ impl Composition {
         }
 
         match dimension {
-            Dimension::ElectricCharge    => self.insert_electric_charge(exponent),
-            Dimension::Length            => self.insert_length(exponent),
+            Dimension::ElectricCharge => self.insert_electric_charge(exponent),
+            Dimension::Length => self.insert_length(exponent),
             Dimension::LuminousIntensity => self.insert_luminous_intensity(exponent),
-            Dimension::Mass              => self.insert_mass(exponent),
-            Dimension::PlaneAngle        => self.insert_plane_angle(exponent),
-            Dimension::Temperature       => self.insert_temperature(exponent),
-            Dimension::Time              => self.insert_time(exponent),
+            Dimension::Mass => self.insert_mass(exponent),
+            Dimension::PlaneAngle => self.insert_plane_angle(exponent),
+            Dimension::Temperature => self.insert_temperature(exponent),
+            Dimension::Time => self.insert_time(exponent),
         }
     }
 

@@ -7,9 +7,10 @@
 // generate them using underscores (to make them pass the clippy lint).
 #[cfg_attr(feature = "cargo-clippy", allow(unreadable_literal))]
 pub mod atom {
+    use crate::is_compatible_with::{DefaultCompatibility, IsCompatibleWith};
     use crate::parser::{
-        Classification, Composable, Composition, DefaultCompatibility, definition::Definition,
-        Dimension, function_set::FunctionSet, IsCompatibleWith, Property, UcumSymbol,
+        Classification, Composable, Composition, definition::Definition,
+        Dimension, function_set::FunctionSet, Property, UcumSymbol,
     };
     use crate::reducible::Reducible;
     use crate::unit::Unit;
