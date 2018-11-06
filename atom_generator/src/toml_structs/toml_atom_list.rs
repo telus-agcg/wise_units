@@ -4,13 +4,13 @@ use std::str::FromStr;
 #[derive(Debug, Deserialize)]
 pub(crate) struct TomlAtomList {
     #[serde(rename = "prefix")]
-    pub prefixes: Vec<TomlPrefix>,
+    pub(crate) prefixes: Vec<TomlPrefix>,
 
     #[serde(rename = "base-unit")]
-    pub base_units: Vec<TomlBaseUnit>,
+    pub(crate) base_units: Vec<TomlBaseUnit>,
 
     #[serde(rename = "unit")]
-    pub units: Vec<TomlUnit>,
+    pub(crate) units: Vec<TomlUnit>,
 }
 
 impl FromStr for TomlAtomList {

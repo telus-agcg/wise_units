@@ -1,13 +1,13 @@
-use parser::terms::mapper::Finishable;
-use parser::{Atom, Prefix, Term};
+use crate::parser::terms::mapper::Finishable;
+use crate::parser::{Atom, Prefix, Term};
 
 pub(super) struct BasicComponent {
-    pub atom: Option<Atom>,
-    pub prefix: Option<Prefix>,
-    pub factor: Option<u32>,
-    pub exponent: Option<i32>,
-    pub annotation: Option<String>,
-    pub terms: Vec<Term>,
+    pub(super) atom: Option<Atom>,
+    pub(super) prefix: Option<Prefix>,
+    pub(super) factor: Option<u32>,
+    pub(super) exponent: Option<i32>,
+    pub(super) annotation: Option<String>,
+    pub(super) terms: Vec<Term>,
 }
 
 impl Default for BasicComponent {

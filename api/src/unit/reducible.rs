@@ -1,5 +1,5 @@
-use reducible::Reducible;
-use unit::Unit;
+use crate::reducible::Reducible;
+use crate::unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl Reducible
@@ -18,9 +18,9 @@ impl Reducible for Unit {
 
 #[cfg(test)]
 mod tests {
-    use reducible::Reducible;
+    use crate::reducible::Reducible;
+    use crate::unit::Unit;
     use std::str::FromStr;
-    use unit::Unit;
 
     macro_rules! validate_reduce_value {
         ($test_name:ident, $unit_str:expr, $expected_value:expr) => {

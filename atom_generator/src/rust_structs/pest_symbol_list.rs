@@ -2,8 +2,8 @@ use super::RustAtomList;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct PestSymbolList {
-    pub primary_rule_names: Vec<PestSymbol>,
-    pub secondary_rule_names: Vec<PestSymbol>,
+    pub(crate) primary_rule_names: Vec<PestSymbol>,
+    pub(crate) secondary_rule_names: Vec<PestSymbol>,
 }
 
 impl<'a> From<&'a RustAtomList> for PestSymbolList {
@@ -47,12 +47,12 @@ fn sort_symbols(symbols: &mut Vec<PestSymbol>) {
 
 #[derive(Debug, Serialize)]
 pub(crate) struct PestSymbol {
-    pub rule_name: String,
-    pub code: String,
+    pub(crate) rule_name: String,
+    pub(crate) code: String,
 }
 
 impl PestSymbol {
-    pub fn new(rule_name: String, code: String) -> Self {
+    pub(crate) fn new(rule_name: String, code: String) -> Self {
         PestSymbol { rule_name, code }
     }
 }

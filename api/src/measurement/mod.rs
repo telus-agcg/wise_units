@@ -1,17 +1,18 @@
 pub mod composable;
 pub mod convertible;
 pub mod field_eq;
+pub mod is_compatible_with;
 pub mod ops;
 pub mod partial_eq;
 pub mod partial_ord;
 pub mod reducible;
 pub mod ucum_unit;
 
-use parser::Error;
-use reducible::Reducible;
+use crate::parser::Error;
+use crate::reducible::Reducible;
+use crate::ucum_unit::UcumUnit;
+use crate::unit::Unit;
 use std::str::FromStr;
-use ucum_unit::UcumUnit;
-use unit::Unit;
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -38,6 +39,7 @@ pub struct Measurement {
 impl Measurement {
     /// Creates a new `Measurement` by parsing `expression` into a `Unit`.
     ///
+    #[inline]
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
         let unit = Unit::from_str(expression)?;
 
@@ -67,8 +69,8 @@ impl Measurement {
 mod tests {
     use super::super::parser::{Atom, Term};
     use super::*;
+    use crate::unit::Unit;
     use std::str::FromStr;
-    use unit::Unit;
 
     #[test]
     fn validate_new() {
@@ -116,9 +118,9 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Measurement;
-        use parser::{Atom, Prefix, Term};
+        use crate::parser::{Atom, Prefix, Term};
+        use crate::unit::Unit;
         use serde_json;
-        use unit::Unit;
 
         #[test]
         fn validate_serialization_empty_terms() {

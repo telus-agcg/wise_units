@@ -1,6 +1,6 @@
-use parser::Composable;
-use ucum_unit::UcumUnit;
-use unit::Unit;
+use crate::is_compatible_with::IsCompatibleWith;
+use crate::ucum_unit::UcumUnit;
+use crate::unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl PartialOrd
@@ -42,6 +42,7 @@ use unit::Unit;
 /// ```
 ///
 impl PartialOrd for Unit {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<::std::cmp::Ordering> {
         if !self.is_compatible_with(other) {
             return None;

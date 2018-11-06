@@ -1,6 +1,6 @@
-use measurement::Measurement;
-use parser::Composable;
-use ucum_unit::UcumUnit;
+use crate::is_compatible_with::IsCompatibleWith;
+use crate::measurement::Measurement;
+use crate::ucum_unit::UcumUnit;
 
 /// `Measurement`s are `PartialEq` if
 ///
@@ -28,6 +28,7 @@ use ucum_unit::UcumUnit;
 /// ```
 ///
 impl PartialEq for Measurement {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         if !self.unit.is_compatible_with(&other.unit) {
             return false;

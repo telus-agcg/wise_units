@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 
 pub mod property {
-    use parser::Atom;
+    use crate::parser::Atom;
     use std::fmt;
 
     /// Property categorizes the unit by use. Not much mention of it in the UCUM
@@ -47,7 +47,7 @@ pub mod property {
     }
 
     impl fmt::Display for Property {
-        fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
             let string = match *self {
                 {{~ #each properties as |key value| }}
                 Property::{{ key }} => {

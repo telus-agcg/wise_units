@@ -1,18 +1,19 @@
-use parser::{Atom, Prefix, Term};
+use crate::parser::{Atom, Prefix, Term};
 use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.
 ///
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 struct ComposableTerm {
     factor: Option<u32>,
     prefix: Option<Prefix>,
     atom: Option<Atom>,
+    annotation: Option<String>,
 }
 
 impl ComposableTerm {
     fn has_value(&self) -> bool {
-        self.atom.is_some() || self.factor.is_some()
+        self.atom.is_some() || self.factor.is_some() || self.annotation.is_some()
     }
 }
 
@@ -22,6 +23,7 @@ impl<'a> From<&'a Term> for ComposableTerm {
             atom: term.atom,
             prefix: term.prefix,
             factor: term.factor,
+            annotation: term.annotation.clone(),
         }
     }
 }
@@ -37,7 +39,7 @@ impl From<Parts> for Term {
             prefix: parts.0.prefix,
             factor: parts.0.factor,
             exponent: e,
-            annotation: None,
+            annotation: parts.0.annotation,
         }
     }
 }
@@ -63,17 +65,17 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
     terms
         .into_iter()
-        .fold(BTreeMap::<ComposableTerm, i32>::new(), |mut map, term| {
-            let exponent = term.exponent.unwrap_or(1);
-            let key = ComposableTerm::from(term);
+        .map(|term| (ComposableTerm::from(term), term.exponent.unwrap_or(1)))
+        .fold(
+            BTreeMap::<ComposableTerm, i32>::new(),
+            |mut map, (key, exponent)| {
+                map.entry(key)
+                    .and_modify(|entry| *entry += exponent)
+                    .or_insert(exponent);
 
-            map.entry(key)
-                .and_modify(|entry| *entry += exponent)
-                .or_insert(exponent);
-
-            map
-        })
-        .into_iter()
+                map
+            },
+        ).into_iter()
         // Filter out things that have no values
         .filter(|(ct, exponent)| ct.has_value() && *exponent != 0)
         .collect()

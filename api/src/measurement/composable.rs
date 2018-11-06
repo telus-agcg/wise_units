@@ -1,33 +1,34 @@
-use measurement::Measurement;
-use parser::{Composable, Composition};
+use crate::measurement::Measurement;
+use crate::parser::{Composable, Composition};
 
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
-impl Composable for Measurement {
-    fn composition(&self) -> Composition {
-        self.unit.composition()
-    }
-}
-
 impl<'a> Composable for &'a Measurement {
-    fn composition(&self) -> Composition {
+    #[inline]
+    fn composition(self) -> Composition {
         self.unit.composition()
     }
 }
 
+// Since the composition of a Measurement is just the composition of its Unit,
+// most of the tests are with the Unit implementation.
+//
 #[cfg(test)]
 mod tests {
-    use measurement::Measurement;
-    use parser::Composable;
+    use crate::measurement::Measurement;
+    use crate::parser::{Composable, Composition, Dimension};
 
-    // The method is really just a convenience wrapper to check the Measurement's Unit, so most of
-    // the testing can be done on Unit.
     #[test]
-    fn validate_is_compatible_with() {
-        let subject = Measurement::new(1.0, "m").unwrap();
-        let other = Measurement::new(1.0, "m").unwrap();
+    fn validate_composition() {
+        let m = Measurement::new(1.0, "m").unwrap();
+        let expected = Composition::new(Dimension::Length, 1);
+        assert_eq!(m.composition(), expected);
 
-        assert!(subject.is_compatible_with(&other));
+        let m = Measurement::new(1.0, "m2/s").unwrap();
+        let mut expected = Composition::new(Dimension::Length, 2);
+        expected.insert(Dimension::Time, -1);
+
+        assert_eq!(m.composition(), expected);
     }
 }

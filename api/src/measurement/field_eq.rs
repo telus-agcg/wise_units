@@ -1,5 +1,5 @@
-use field_eq::FieldEq;
-use measurement::Measurement;
+use crate::field_eq::FieldEq;
+use crate::measurement::Measurement;
 
 /// This is for comparing `Measurement`s to see if they have both the same
 /// `value` *and* the same underlying `Unit` defined in the exact same terms.
@@ -30,6 +30,7 @@ use measurement::Measurement;
 /// ```
 ///
 impl<'a> FieldEq<'a> for Measurement {
+    #[inline]
     fn field_eq(&self, other: &'a Self) -> bool {
         self.value == other.value && self.unit.field_eq(&other.unit)
     }

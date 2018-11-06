@@ -1,5 +1,5 @@
-use parser::{function_set::FunctionSet, Error, Term};
-use reducible::Reducible;
+use crate::parser::{function_set::FunctionSet, Error, Term};
+use crate::reducible::Reducible;
 
 /// A `Definition` is a slimmed-down version of a `Measurement` that is used to
 /// define `Atom`s in terms of other `Atom`s (ex. an `"[in_i]"` has a
@@ -29,15 +29,15 @@ impl Definition {
         })
     }
 
-    pub fn value(&self) -> f64 {
+    pub(crate) fn value(&self) -> f64 {
         self.value
     }
 
-    pub fn terms(&self) -> &[Term] {
+    pub(crate) fn terms(&self) -> &[Term] {
         &self.terms
     }
 
-    pub fn is_unity(&self) -> bool {
+    pub(crate) fn is_unity(&self) -> bool {
         self.terms.len() == 1 && self.terms[0].is_unity()
     }
 }

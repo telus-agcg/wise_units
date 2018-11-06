@@ -1,7 +1,7 @@
-use parser::{Atom, Prefix};
+use crate::parser::{Atom, Prefix};
 
 pub(super) struct Annotatable {
-    pub prefix: Option<Prefix>,
-    pub atom: Option<Atom>,
-    pub exponent: Option<i32>,
+    pub(super) prefix: Option<Prefix>,
+    pub(super) atom: Option<Atom>,
+    pub(super) exponent: Option<i32>,
 }

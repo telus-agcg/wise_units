@@ -2,10 +2,10 @@
 //!
 #[cfg(test)]
 mod atom_test {
-    use parser::{
+    use crate::parser::{
         Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol,
     };
-    use ucum_unit::UcumUnit;
+    use crate::ucum_unit::UcumUnit;
 
     macro_rules! validate_definition {
         (
@@ -707,7 +707,7 @@ mod atom_test {
 
     #[cfg(feature = "with_serde")]
     mod with_serde {
-        use parser::Atom;
+        use crate::parser::Atom;
         use serde_json;
 
         #[test]

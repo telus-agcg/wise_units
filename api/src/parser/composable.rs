@@ -1,15 +1,9 @@
-use parser::Composition;
+use crate::parser::Composition;
 
-/// The main purpose of `Composable` is to get you to be able to determine
-/// compatibility with other unit-like structs/enums. You solely need to define
-/// how a thing is composed (using `composition()`, then you can compare
-/// `Composable`s with `is_compatible_with()`. Two things are compatible if
-/// they `Composition`s are equal.
+/// A simple trait for getting a type to define how its `Composition` should be built.  Typically
+/// `Composition`s are used to determine the compatibility with another type; so long as each type
+/// provides a `Composition`, they can be compared for compatibility.
 ///
 pub trait Composable {
-    fn composition(&self) -> Composition;
-
-    fn is_compatible_with<T: Composable>(&self, other_unit: &T) -> bool {
-        self.composition() == other_unit.composition()
-    }
+    fn composition(self) -> Composition;
 }

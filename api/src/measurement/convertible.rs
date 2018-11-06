@@ -1,9 +1,10 @@
-use convertible::Convertible;
-use field_eq::FieldEq;
-use measurement::Measurement;
-use parser::{Composable, Error};
+use crate::convertible::Convertible;
+use crate::field_eq::FieldEq;
+use crate::is_compatible_with::IsCompatibleWith;
+use crate::measurement::Measurement;
+use crate::parser::Error;
+use crate::unit::Unit;
 use std::str::FromStr;
-use unit::Unit;
 
 /// This implementation of `Convertible` lets you pass in a `&str` for the
 /// `Unit`, which will parse the chars and convert accordingly. If `expression`
@@ -14,6 +15,7 @@ impl<'a> Convertible<&'a str> for Measurement {
     type Output = Self;
     type ConversionError = Error;
 
+    #[inline]
     fn convert_to(&self, expression: &'a str) -> Result<Self, Self::ConversionError> {
         let other_unit = Unit::from_str(expression)?;
 
@@ -29,6 +31,7 @@ impl<'a> Convertible<&'a Unit> for Measurement {
     type Output = Self;
     type ConversionError = Error;
 
+    #[inline]
     fn convert_to(&self, other_unit: &'a Unit) -> Result<Self, Self::ConversionError> {
         convert_measurement(self, other_unit)
     }
@@ -42,7 +45,7 @@ fn convert_measurement(lhs: &Measurement, dest_unit: &Unit) -> Result<Measuremen
 
     let source_unit = &lhs.unit;
 
-    if !source_unit.is_compatible_with(&dest_unit) {
+    if !source_unit.is_compatible_with(dest_unit) {
         let e = Error::IncompatibleUnitTypes {
             lhs: source_unit.expression(),
             rhs: dest_unit.expression(),

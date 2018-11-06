@@ -1,4 +1,4 @@
-use rust_structs::{RustAtomList, RustPropertyList};
+use crate::rust_structs::{RustAtomList, RustPropertyList};
 
 pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/property.rs.hbs");
 

@@ -148,23 +148,20 @@ mod tests {
     }
 
     #[test]
-    fn validate_annotation() {
-        let pairs = TermParser::parse(Rule::annotation, "{d'io}");
+    fn validate_annotation_group() {
+        let pairs = TermParser::parse(Rule::annotation_group, "{d'io}");
         assert!(pairs.is_ok());
 
         parses_to! {
             parser: TermParser,
             input: "{tot'nit}",
-            rule: Rule::annotation,
+            rule: Rule::annotation_group,
             tokens: [
-                annotation(0, 9)
+                annotation(1, 8)
             ]
         };
 
-        let pairs = TermParser::parse(Rule::annotation, "{tot'nit}");
-        assert!(pairs.is_ok());
-
-        let pairs = TermParser::parse(Rule::annotation, "k");
+        let pairs = TermParser::parse(Rule::annotation_group, "k");
         assert!(pairs.is_err());
     }
 
@@ -178,6 +175,17 @@ mod tests {
 
         let pairs = TermParser::parse(Rule::basic_component, "{stuff}");
         assert!(pairs.is_ok());
+
+        parses_to! {
+            parser: TermParser,
+            input: "{tot'nit}",
+            rule: Rule::basic_component,
+            tokens: [
+                basic_component(0, 9, [
+                    annotation(1, 8)
+                ])
+            ]
+        };
 
         let pairs = TermParser::parse(Rule::basic_component, "234");
         assert!(pairs.is_ok());
@@ -222,7 +230,7 @@ mod tests {
                                 digits(4, 5)
                             ])
                         ]),
-                        annotation(5, 11)
+                        annotation(6, 10)
                    ])
                ])
             ]
@@ -246,7 +254,7 @@ mod tests {
                                 digits(4, 5)
                             ])
                         ]),
-                        annotation(5, 11)
+                        annotation(6, 10)
                    ])
                ])
             ]
@@ -274,7 +282,7 @@ mod tests {
                                     digits(4, 5)
                                 ])
                             ]),
-                            annotation(5, 11)
+                            annotation(6, 10)
                        ])
                     ]),
                     slash(11, 12),

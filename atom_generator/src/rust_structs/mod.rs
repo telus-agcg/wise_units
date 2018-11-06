@@ -16,7 +16,7 @@ use heck::SnakeCase;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustAtomList {
-    pub atoms: Vec<RustAtom>,
+    pub(crate) atoms: Vec<RustAtom>,
 }
 
 pub(self) fn build_pest_rule_name(prefix: &str, symbol: &str) -> String {

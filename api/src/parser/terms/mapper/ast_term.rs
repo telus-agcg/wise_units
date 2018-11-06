@@ -1,9 +1,9 @@
-use parser::terms::mapper::{Component, Finishable};
-use parser::Term;
+use crate::parser::terms::mapper::{Component, Finishable};
+use crate::parser::Term;
 
 pub(super) struct AstTerm {
-    pub component: Option<Component>,
-    pub terms: Vec<Term>,
+    pub(super) component: Option<Component>,
+    pub(super) terms: Vec<Term>,
 }
 
 impl Finishable for AstTerm {

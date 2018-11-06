@@ -1,6 +1,6 @@
-use parser::Composable;
-use ucum_unit::UcumUnit;
-use unit::Unit;
+use crate::is_compatible_with::IsCompatibleWith;
+use crate::ucum_unit::UcumUnit;
+use crate::unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl PartialEq
@@ -28,6 +28,7 @@ use unit::Unit;
 /// ```
 ///
 impl PartialEq for Unit {
+    #[inline]
     fn eq(&self, other: &Self) -> bool {
         if !self.is_compatible_with(other) {
             return false;

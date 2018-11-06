@@ -1,6 +1,6 @@
-use measurement::Measurement;
-use reducible::Reducible;
-use ucum_unit::UcumUnit;
+use crate::measurement::Measurement;
+use crate::reducible::Reducible;
+use crate::ucum_unit::UcumUnit;
 
 impl UcumUnit for Measurement {
     /// Checks if the associated Unit is "special". "Special" units are ones
@@ -41,6 +41,7 @@ impl UcumUnit for Measurement {
     /// assert!((sixty_five_f.scalar() - 291.483_333).abs() < 0.000_001);
     /// ```
     ///
+    #[inline]
     fn scalar(&self) -> f64 {
         self.reduce_value(self.value)
     }
@@ -66,6 +67,7 @@ impl UcumUnit for Measurement {
     /// assert!((sixty_five_f.magnitude() - 65.0).abs() < 0.000_001);
     /// ```
     ///
+    #[inline]
     fn magnitude(&self) -> f64 {
         self.calculate_magnitude(self.value)
     }
@@ -73,8 +75,8 @@ impl UcumUnit for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use measurement::Measurement;
-    use ucum_unit::UcumUnit;
+    use crate::measurement::Measurement;
+    use crate::ucum_unit::UcumUnit;
 
     #[test]
     fn validate_scalar() {

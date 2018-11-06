@@ -1,7 +1,7 @@
-use measurement::Measurement;
-use parser::Composable;
+use crate::is_compatible_with::IsCompatibleWith;
+use crate::measurement::Measurement;
+use crate::ucum_unit::UcumUnit;
 use std::cmp::Ordering;
-use ucum_unit::UcumUnit;
 
 //-----------------------------------------------------------------------------
 // impl PartialOrd
@@ -57,6 +57,7 @@ use ucum_unit::UcumUnit;
 /// ```
 ///
 impl PartialOrd for Measurement {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         if !self.unit.is_compatible_with(&other.unit) {
             return None;

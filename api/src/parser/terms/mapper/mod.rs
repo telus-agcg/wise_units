@@ -15,19 +15,19 @@ use self::component::Component;
 use self::finishable::Finishable;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
-use parser::atom::Atom;
-use parser::error::Error;
-use parser::prefix::Prefix;
-use parser::symbols::mapper as symbol_mapper;
-use parser::symbols::symbol_parser::Rule as SymbolRule;
-use parser::symbols::symbol_parser::SymbolParser;
-use parser::term::Term;
-use parser::terms::term_parser::Rule;
+use crate::parser::atom::Atom;
+use crate::parser::error::Error;
+use crate::parser::prefix::Prefix;
+use crate::parser::symbols::mapper as symbol_mapper;
+use crate::parser::symbols::symbol_parser::Rule as SymbolRule;
+use crate::parser::symbols::symbol_parser::SymbolParser;
+use crate::parser::term::Term;
+use crate::parser::terms::term_parser::Rule;
 use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 
-pub(crate) fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
-    fn visit_pairs(pair: Pair<Rule>) -> Result<Vec<Term>, Error> {
+pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
+    fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Vec<Term>, Error> {
         let main_term = match pair.as_rule() {
             Rule::main_term => visit_main_term(pair)?,
             _ => {
@@ -50,7 +50,7 @@ pub(crate) fn map(mut pairs: Pairs<Rule>) -> Result<Vec<Term>, Error> {
     }
 }
 
-fn visit_digits(pair: Pair<Rule>) -> Result<i32, Error> {
+fn visit_digits(pair: Pair<'_, Rule>) -> Result<i32, Error> {
     let span = pair.into_span();
     let string = span.as_str();
 
@@ -59,7 +59,7 @@ fn visit_digits(pair: Pair<Rule>) -> Result<i32, Error> {
     })
 }
 
-fn visit_exponent(pair: Pair<Rule>) -> Result<Option<i32>, Error> {
+fn visit_exponent(pair: Pair<'_, Rule>) -> Result<Option<i32>, Error> {
     let mut e: Option<i32> = None;
 
     for inner_pair in pair.into_inner() {
@@ -106,7 +106,7 @@ fn visit_exponent(pair: Pair<Rule>) -> Result<Option<i32>, Error> {
     Ok(e)
 }
 
-fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
+fn visit_simple_unit(pair: Pair<'_, Rule>) -> Result<SimpleUnit, Error> {
     let mut prefix: Option<Prefix> = None;
     let mut atom: Option<Atom> = None;
     let span = pair.into_span();
@@ -132,7 +132,7 @@ fn visit_simple_unit(pair: Pair<Rule>) -> Result<SimpleUnit, Error> {
     Ok(SimpleUnit { prefix, atom })
 }
 
-fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
+fn visit_annotatable(pair: Pair<'_, Rule>) -> Result<Annotatable, Error> {
     let mut prefix: Option<Prefix> = None;
     let mut atom: Option<Atom> = None;
     let mut exponent: Option<i32> = None;
@@ -164,13 +164,13 @@ fn visit_annotatable(pair: Pair<Rule>) -> Result<Annotatable, Error> {
     })
 }
 
-fn visit_annotation(pair: Pair<Rule>) -> Result<String, Error> {
+fn visit_annotation(pair: Pair<'_, Rule>) -> Result<String, Error> {
     let string = pair.into_span().as_str().to_string();
 
     Ok(string)
 }
 
-fn visit_factor(pair: Pair<Rule>) -> Result<u32, Error> {
+fn visit_factor(pair: Pair<'_, Rule>) -> Result<u32, Error> {
     let span = pair.into_span();
     let string = span.as_str();
 
@@ -179,7 +179,7 @@ fn visit_factor(pair: Pair<Rule>) -> Result<u32, Error> {
     })
 }
 
-fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
+fn visit_basic_component(pair: Pair<'_, Rule>) -> Result<BasicComponent, Error> {
     let mut bc = BasicComponent::default();
 
     for inner_pair in pair.into_inner() {
@@ -216,7 +216,7 @@ fn visit_basic_component(pair: Pair<Rule>) -> Result<BasicComponent, Error> {
     Ok(bc)
 }
 
-fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
+fn visit_component(pair: Pair<'_, Rule>) -> Result<Component, Error> {
     let mut factor: Option<u32> = None;
     let mut terms: Vec<Term> = vec![];
 
@@ -242,7 +242,7 @@ fn visit_component(pair: Pair<Rule>) -> Result<Component, Error> {
     Ok(Component { factor, terms })
 }
 
-fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
+fn visit_term(pair: Pair<'_, Rule>) -> Result<AstTerm, Error> {
     let mut has_slash = false;
     let mut component: Option<Component> = None;
     let mut terms: Vec<Term> = vec![];
@@ -277,7 +277,7 @@ fn visit_term(pair: Pair<Rule>) -> Result<AstTerm, Error> {
     Ok(AstTerm { component, terms })
 }
 
-fn visit_main_term(pair: Pair<Rule>) -> Result<MainTerm, Error> {
+fn visit_main_term(pair: Pair<'_, Rule>) -> Result<MainTerm, Error> {
     let mut terms: Vec<Term> = vec![];
     let mut has_slash = false;
 
@@ -317,8 +317,8 @@ fn flip_terms_exponents(terms: &mut Vec<Term>) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use parser::terms::term_parser::{Rule, TermParser};
-    use parser::{Atom, Prefix, Term};
+    use crate::parser::terms::term_parser::{Rule, TermParser};
+    use crate::parser::{Atom, Prefix, Term};
     use pest::Parser;
 
     macro_rules! validate_interpret {

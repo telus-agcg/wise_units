@@ -1,7 +1,7 @@
-use parser::Term;
+use crate::parser::Term;
 
 pub(super) struct MainTerm {
-    pub terms: Vec<Term>,
+    pub(super) terms: Vec<Term>,
 }
 
 impl Into<Vec<Term>> for MainTerm {

@@ -1,19 +1,19 @@
+use crate::unit::Unit;
 use std::fmt;
-use unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl Display
 //-----------------------------------------------------------------------------
 impl fmt::Display for Unit {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.expression())
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use crate::unit::Unit;
     use std::str::FromStr;
-    use unit::Unit;
 
     #[test]
     fn validate_display() {
@@ -23,11 +23,20 @@ mod tests {
         let unit = Unit::from_str("M").unwrap();
         assert_eq!(unit.to_string().as_str(), "m");
 
+        let unit = Unit::from_str("{stuff}").unwrap();
+        assert_eq!(unit.to_string().as_str(), "{stuff}");
+
+        let unit = Unit::from_str("m{stuff}").unwrap();
+        assert_eq!(unit.to_string().as_str(), "m{stuff}");
+
         let unit = Unit::from_str("km/10m").unwrap();
         assert_eq!(unit.to_string().as_str(), "km/10m");
 
         let unit = Unit::from_str("m-1").unwrap();
         assert_eq!(unit.to_string().as_str(), "1/m");
+
+        let unit = Unit::from_str("m-1{stuff}").unwrap();
+        assert_eq!(unit.to_string().as_str(), "1/m{stuff}");
 
         let unit = Unit::from_str("10m").unwrap();
         assert_eq!(unit.to_string().as_str(), "10m");
@@ -52,5 +61,8 @@ mod tests {
 
         let unit = Unit::from_str("km3/nm2").unwrap();
         assert_eq!(unit.to_string().as_str(), "km3/nm2");
+
+        let unit = Unit::from_str("km3{foo}/nm2{bar}").unwrap();
+        assert_eq!(unit.to_string().as_str(), "km3{foo}/nm2{bar}");
     }
 }

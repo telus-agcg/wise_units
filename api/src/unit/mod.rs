@@ -1,9 +1,11 @@
+pub mod as_fraction;
 pub mod composable;
 pub mod deref;
 pub mod display;
 pub mod field_eq;
 pub mod from;
 pub mod from_str;
+pub mod is_compatible_with;
 pub mod ops;
 pub mod partial_eq;
 pub mod partial_ord;
@@ -11,8 +13,8 @@ pub mod reducible;
 mod term_reducing;
 pub mod ucum_unit;
 
-use decomposer::{Decomposable, SimpleDecomposer};
-use parser::Term;
+use crate::decomposer::{Decomposable, SimpleDecomposer};
+use crate::parser::Term;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug)]
@@ -40,6 +42,16 @@ pub struct Unit {
 /// ```
 ///
 impl Unit {
+    /// Creates a new `Unit` that's equivalent to "1".
+    ///
+    pub fn new_unity() -> Self {
+        let unity_term = Term::new_unity();
+
+        Unit {
+            terms: vec![unity_term],
+        }
+    }
+
     /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.
     ///
     /// ```
@@ -57,6 +69,7 @@ impl Unit {
     /// assert_eq!(m1.into_reduced(), m2);
     /// ```
     ///
+    #[inline]
     pub fn into_reduced(self) -> Unit {
         Unit {
             terms: term_reducing::reduce_terms(&self.terms),
@@ -77,6 +90,7 @@ impl Unit {
     /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
     /// ```
     ///
+    #[inline]
     pub fn expression(&self) -> String {
         let sd = SimpleDecomposer;
 
@@ -95,6 +109,7 @@ impl Unit {
     /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");
     /// ```
     ///
+    #[inline]
     pub fn expression_reduced(&self) -> String {
         let reduced = term_reducing::reduce_terms(&self.terms);
         let sd = SimpleDecomposer;
@@ -150,7 +165,7 @@ mod tests {
     #[cfg(feature = "with_serde")]
     mod with_serde {
         use super::super::Unit;
-        use parser::{Atom, Prefix, Term};
+        use crate::parser::{Atom, Prefix, Term};
         use serde_json;
 
         #[test]

@@ -1,5 +1,5 @@
-use field_eq::FieldEq;
-use unit::Unit;
+use crate::field_eq::FieldEq;
+use crate::unit::Unit;
 
 //-----------------------------------------------------------------------------
 // impl FieldEq
@@ -28,6 +28,7 @@ use unit::Unit;
 /// ```
 ///
 impl<'a> FieldEq<'a> for Unit {
+    #[inline]
     fn field_eq(&self, other: &'a Self) -> bool {
         self.terms == other.terms
     }
@@ -35,9 +36,9 @@ impl<'a> FieldEq<'a> for Unit {
 
 #[cfg(test)]
 mod tests {
-    use field_eq::FieldEq;
+    use crate::field_eq::FieldEq;
+    use crate::unit::Unit;
     use std::str::FromStr;
-    use unit::Unit;
 
     #[test]
     fn validate_field_eq() {

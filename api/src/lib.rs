@@ -2,7 +2,10 @@
 #![deny(unused_extern_crates)]
 #![warn(
     box_pointers,
+    future_incompatible,
     missing_copy_implementations,
+    nonstandard_style,
+    rust_2018_idioms,
     trivial_casts,
     trivial_numeric_casts,
 )]
@@ -15,6 +18,10 @@ extern crate failure;
 #[macro_use]
 extern crate failure_derive;
 
+#[cfg(test)]
+#[macro_use]
+extern crate lazy_static;
+
 // Only include macros for testing
 #[cfg(test)]
 #[macro_use(consumes_to, fails_with, parses_to)]
@@ -26,10 +33,6 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
-#[cfg(test)]
-#[macro_use]
-extern crate pretty_assertions;
-
 #[cfg(feature = "with_serde")]
 #[cfg_attr(feature = "with_serde", macro_use)]
 extern crate serde_derive;
@@ -40,22 +43,25 @@ extern crate serde_json;
 #[macro_use]
 mod macros;
 
+pub mod as_fraction;
 pub mod convertible;
 pub mod decomposer;
 pub mod field_eq;
+pub mod is_compatible_with;
 pub mod measurement;
+pub mod parser;
 pub mod unit;
 
-mod parser;
 mod reducible;
 mod ucum_unit;
 
-pub use convertible::Convertible;
-pub use field_eq::FieldEq;
-pub use measurement::Measurement;
-pub use parser::{
+pub use crate::convertible::Convertible;
+pub use crate::field_eq::FieldEq;
+pub use crate::is_compatible_with::IsCompatibleWith;
+pub use crate::measurement::Measurement;
+pub use crate::parser::{
     Atom, Classification, Composable, Composition, Dimension, Error, Prefix, Property, Term,
     UcumSymbol,
 };
-pub use ucum_unit::UcumUnit;
-pub use unit::Unit;
+pub use crate::ucum_unit::UcumUnit;
+pub use crate::unit::Unit;
