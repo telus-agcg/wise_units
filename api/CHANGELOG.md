@@ -1,6 +1,6 @@
 # Change Log
 
-## [unreleased]
+## [0.5.0] - 2018-11-06
 
 ### Added
 
@@ -28,8 +28,6 @@
 - [DEV-3155] Changed `Term::is_compatible_with()` to account for the
   `annotation` attribute of each `Term` being compared.
 
-### Deprecated
-
 ### Removed
 
 - In preparation for the Rust 2018 edition release before the end of the year,
@@ -39,8 +37,6 @@
 
 - [DEV-3300] Parsing annotations now excludes curly braces in the resulting
   string capture.
-
-### Security
 
 ## [0.4.0] - 2018-10-02
 

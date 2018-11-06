@@ -1,6 +1,6 @@
 [package]
 name = "wise_units"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
 [dependencies]
@@ -12,7 +12,7 @@ serde = { version = "1.0", optional = true, default-features = false }
 serde_derive = { version = "1.0", optional = true, default-features = false }
 
 [dev-dependencies]
-approx = "0.2"
+approx = "0.3"
 criterion = "0.2"
 lazy_static = "1.0"
 serde_json = "1.0"

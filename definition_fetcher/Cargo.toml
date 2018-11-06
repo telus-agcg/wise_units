@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 
 [dependencies]
-reqwest = "0.8"
+reqwest = "0.9"
 serde-transcode = "1.0"
 simple_logger = "0.5"
 toml = "0.4"
