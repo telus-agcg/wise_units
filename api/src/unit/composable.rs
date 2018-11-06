@@ -4,9 +4,9 @@ use crate::unit::Unit;
 //-----------------------------------------------------------------------------
 // impl Composable
 //-----------------------------------------------------------------------------
-impl<'a> Composable for &'a Unit {
+impl Composable for Unit {
     #[inline]
-    fn composition(self) -> Composition {
+    fn composition(&self) -> Composition {
         let term_slice: &[Term] = self;
 
         term_slice.composition()
