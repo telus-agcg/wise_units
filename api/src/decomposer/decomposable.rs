@@ -16,12 +16,10 @@ pub trait Decomposable<'a> {
     }
 
     fn format_output(&self, numerator: Option<String>, denominator: Option<String>) -> String {
-        let n = numerator.unwrap_or_default();
-
         if let Some(d) = denominator {
-            format!("{}/{}", n, d)
+            format!("{}/{}", numerator.unwrap_or_default(), d)
         } else {
-            n
+            numerator.unwrap_or("1".to_string())
         }
     }
 

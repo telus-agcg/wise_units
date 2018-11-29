@@ -12,13 +12,7 @@ impl<'a> Decomposable<'a> for Decomposer {
     }
 
     fn numerator(&self, terms: &Self::Collection) -> Option<String> {
-        let result = string_from_collection(terms, extract_numerator);
-
-        if result.is_none() {
-            Some("1".to_string())
-        } else {
-            result
-        }
+        string_from_collection(terms, extract_numerator)
     }
 
     fn denominator(&self, terms: &Self::Collection) -> Option<String> {
@@ -106,6 +100,7 @@ mod tests {
     use crate::unit::Unit;
     use std::str::FromStr;
 
+    validate_decompose!(validate_decompose_pri_per_m, "/m", "/m");
     validate_decompose!(validate_decompose_pri_m, "m", "m");
     validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m2/m");
     validate_decompose!(validate_decompose_sec_m, "M", "m");
