@@ -105,8 +105,10 @@ impl<'a> Sub<Measurement> for &'a Measurement {
 // impl Mul
 //-----------------------------------------------------------------------------
 fn mul_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
-    let new_value = lhs.value * rhs.value;
-    let new_unit = &lhs.unit * &rhs.unit;
+    let converted_rhs = rhs.convert_to(&lhs.unit);
+    let actual_rhs = converted_rhs.as_ref().unwrap_or(rhs);
+    let new_value = lhs.value * actual_rhs.value;
+    let new_unit = &lhs.unit * &actual_rhs.unit;
 
     Measurement {
         value: new_value,
@@ -185,8 +187,10 @@ impl<'a> Mul<f64> for &'a Measurement {
 // impl Div
 //-----------------------------------------------------------------------------
 fn div_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
-    let new_value = lhs.value / rhs.value;
-    let new_unit = &lhs.unit / &rhs.unit;
+    let converted_rhs = rhs.convert_to(&lhs.unit);
+    let actual_rhs = converted_rhs.as_ref().unwrap_or(rhs);
+    let new_value = lhs.value / actual_rhs.value;
+    let new_unit = &lhs.unit / &actual_rhs.unit;
 
     Measurement {
         value: new_value,
@@ -431,6 +435,16 @@ mod tests {
             );
 
             validate_op!(
+                Measurement::new(2.0, "kg").unwrap() * Measurement::new(3000.0, "g").unwrap(),
+                Measurement::new(6.0, "kg2")
+            );
+
+            validate_op!(
+                Measurement::new(3.0, "g").unwrap() * Measurement::new(0.002, "kg").unwrap(),
+                Measurement::new(6.0, "g2")
+            );
+
+            validate_op!(
                 Measurement::new(2.0, "1").unwrap() * Measurement::new(3.0, "m").unwrap(),
                 Measurement::new(6.0, "m")
             );
@@ -497,6 +511,10 @@ mod tests {
             );
             validate_op!(
                 Measurement::new(10.0, "m.m").unwrap() / Measurement::new(2.0, "m2").unwrap(),
+                Measurement::new(5.0, "1")
+            );
+            validate_op!(
+                Measurement::new(10.0, "kg").unwrap() / Measurement::new(2000.0, "g").unwrap(),
                 Measurement::new(5.0, "1")
             );
             validate_op!(
