@@ -135,7 +135,7 @@ mod tests {
         assert_eq!(unit.expression_reduced().as_str(), "km/10m");
 
         let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/m");
+        assert_eq!(unit.expression_reduced().as_str(), "/m");
 
         let unit = Unit::from_str("10m").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "10m");
@@ -144,16 +144,16 @@ mod tests {
         assert_eq!(unit.expression_reduced().as_str(), "10km");
 
         let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/10km");
+        assert_eq!(unit.expression_reduced().as_str(), "/10km");
 
         let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/m2.km");
+        assert_eq!(unit.expression_reduced().as_str(), "/m2.km");
 
         let unit = Unit::from_str("km/m2.cm").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "km/m2.cm");
 
         let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/m2.cm.km");
+        assert_eq!(unit.expression_reduced().as_str(), "/m2.cm.km");
 
         let unit = Unit::from_str("m/s2").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "m/s2");
