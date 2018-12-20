@@ -47,7 +47,8 @@ fn transform_base_units(atom_list_base_units: &[TomlBaseUnit]) -> Vec<RustAtom> 
             is_arbitrary: false,
             is_metric: true,
             is_special: false,
-        }).collect()
+        })
+        .collect()
 }
 
 /// Transforms a `Vec<TomlUnit>` to a `Vec<RustAtom>`.
@@ -100,7 +101,8 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
                 is_metric: u.is_metric,
                 is_special: u.is_special,
             }
-        }).collect()
+        })
+        .collect()
 }
 
 /// Determines which function to generate for converting *from* the unit with
@@ -130,7 +132,8 @@ fn build_scalar_function(primary_code: &str) -> String {
         "[degRe]" => "|value: f64| (value / 0.8) + 273.15",
         "[p'diop]" => "|value: f64| value.tan() * 100.0",
         _ => panic!("Unknown primary code on special unit: {}", primary_code),
-    }.to_string()
+    }
+    .to_string()
 }
 
 /// Determines which function to generate for converting *to* the unit with
@@ -164,7 +167,8 @@ fn build_magnitude_function(primary_code: &str) -> String {
         "[degRe]" => "|value: f64| (value - 273.15) * 0.8",
         "[p'diop]" => "|value: f64| (value / 100.0).atan()",
         _ => panic!("Unknown primary code on special unit: {}", primary_code),
-    }.to_string()
+    }
+    .to_string()
 }
 
 fn build_function_set_string(rust_function_set: &RustFunctionSet) -> String {
