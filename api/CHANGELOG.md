@@ -4,6 +4,8 @@
 
 ### Added
 
+* [DEV-2508] Added `Unit::is_unity()`.
+
 ### Changed
 
 ### Deprecated
