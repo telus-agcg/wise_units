@@ -1,5 +1,22 @@
 # Change Log
 
+## [unreleased]
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+* `Unit::from_str("1")` didn't parse such that `unit.terms[0].is_unity()` returned `true`;
+  it now skips parsing and just returns a proper `Unit`.
+
+### Security
+
 ## [0.5.1] - 2018-11-06
 
 ### Changed
