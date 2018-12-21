@@ -279,15 +279,6 @@ mod tests {
                 $result,
                 $result.unit.to_string()
             );
-
-            // Verify the length of the Terms is the same after div vs. after creation.
-            assert_eq!(
-                $result.unit.terms.len(),
-                expected.unit.terms.len(),
-                "Expected Measurement Term lengths to be equal:\n{:?}\n{:?}",
-                $result,
-                expected
-            );
         };
     }
 

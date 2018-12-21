@@ -161,7 +161,8 @@ mod tests {
                                     "factor": null,
                                     "exponent": null,
                                     "annotation": null
-                                   }"#.replace("\n", "")
+                                   }"#
+            .replace("\n", "")
             .replace(" ", "");
 
             let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");
@@ -180,7 +181,8 @@ mod tests {
                                     "factor": 123,
                                     "exponent": -456,
                                     "annotation": "stuff"
-                                   }"#.replace("\n", "")
+                                   }"#
+            .replace("\n", "")
             .replace(" ", "");
 
             let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");

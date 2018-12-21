@@ -27,7 +27,8 @@ impl AsFraction for Unit {
                 // Flip the sign
                 new_term.exponent = term.exponent.map(|e| -e);
                 new_term
-            }).collect();
+            })
+            .collect();
 
         if negative_terms.is_empty() {
             None

@@ -52,6 +52,19 @@ impl Unit {
         }
     }
 
+    /// A `Unit` is a unity `Unit` if represents "1", which technically means
+    /// here:
+    ///
+    /// * it has 1 `Term`...
+    ///     * whose `factor` is 1
+    ///     * has no `exponent`
+    ///     * has no `Atom`
+    ///     * has no `Prefix`
+    ///
+    pub fn is_unity(&self) -> bool {
+        self.terms.len() == 1 && self.terms[0].is_unity()
+    }
+
     /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.
     ///
     /// ```
@@ -124,6 +137,24 @@ mod tests {
     use std::str::FromStr;
 
     #[test]
+    fn validate_is_unity() {
+        let unit = Unit::new_unity();
+        assert!(unit.is_unity());
+
+        let unit = Unit { terms: Vec::new() };
+        assert!(!unit.is_unity());
+
+        let unit = Unit::from_str("1").unwrap();
+        assert!(unit.is_unity());
+
+        let unit = Unit::from_str("m").unwrap();
+        assert!(!unit.is_unity());
+
+        let unit = Unit::from_str("m/m").unwrap();
+        assert!(!unit.is_unity());
+    }
+
+    #[test]
     fn validate_expression_reduced() {
         let unit = Unit::from_str("m").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "m");
@@ -194,7 +225,8 @@ mod tests {
                     "exponent": -4,
                     "annotation": null
                 }]
-        }"#.replace("\n", "")
+        }"#
+            .replace("\n", "")
             .replace(" ", "");
 
             let term1 =

@@ -153,7 +153,8 @@ mod tests {
                         "annotation": null
                     }]
                 }
-            }"#.replace("\n", "")
+            }"#
+            .replace("\n", "")
             .replace(" ", "");
 
             let term1 =

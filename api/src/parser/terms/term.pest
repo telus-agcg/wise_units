@@ -30,11 +30,8 @@ annotatable = { simple_unit ~ exponent | simple_unit }
 simple_unit = {
     "10^"
         | "10*"
-        | the_unity
         | symbol_char+
 }
-
-the_unity = _{ "1" ~ !factor }
 
 symbol_char = _{
     "!" // 33
