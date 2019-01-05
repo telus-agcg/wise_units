@@ -387,9 +387,7 @@ mod tests {
                     term(1, 2, [
                         component(1, 2, [
                             basic_component(1, 2, [
-                                annotatable(1, 2, [
-                                    simple_unit(1, 2)
-                               ])
+                                factor(1, 2)
                             ])
                         ])
                     ])

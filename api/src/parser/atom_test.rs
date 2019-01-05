@@ -363,19 +363,19 @@ mod atom_test {
         validate_definition_the_number_pi,
         TheNumberPi,
         3.141_592_653_589_793_238_462_643_383_279_502_884_197_169_399_375_105_820_974_944_592_3,
-        term!()
+        term!(factor: 1)
     );
     validate_definition!(
         validate_definition_the_number_ten_for_arbitrary_powers_caret,
         TheNumberTenForArbitraryPowersCaret,
         10.0,
-        term!()
+        term!(factor: 1)
     );
     validate_definition!(
         validate_definition_the_number_ten_for_arbitrary_powers_star,
         TheNumberTenForArbitraryPowersStar,
         10.0,
-        term!()
+        term!(factor: 1)
     );
 
     // Composition tests

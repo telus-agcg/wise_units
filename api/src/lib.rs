@@ -7,7 +7,7 @@
     nonstandard_style,
     rust_2018_idioms,
     trivial_casts,
-    trivial_numeric_casts,
+    trivial_numeric_casts
 )]
 
 #[cfg(test)]

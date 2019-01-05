@@ -16,7 +16,8 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
                 let code = a.primary_code.clone();
 
                 PestSymbol::new(super::build_pest_rule_name("pri", &s), code)
-            }).collect();
+            })
+            .collect();
 
         sort_symbols(&mut primary_rule_names);
 
@@ -29,7 +30,8 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
                 let code = a.secondary_code.clone().unwrap();
 
                 PestSymbol::new(super::build_pest_rule_name("sec", &s), code)
-            }).collect();
+            })
+            .collect();
 
         sort_symbols(&mut secondary_rule_names);
 

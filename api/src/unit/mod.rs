@@ -52,6 +52,19 @@ impl Unit {
         }
     }
 
+    /// A `Unit` is a unity `Unit` if represents "1", which technically means
+    /// here:
+    ///
+    /// * it has 1 `Term`...
+    ///     * whose `factor` is 1
+    ///     * has no `exponent`
+    ///     * has no `Atom`
+    ///     * has no `Prefix`
+    ///
+    pub fn is_unity(&self) -> bool {
+        self.terms.len() == 1 && self.terms[0].is_unity()
+    }
+
     /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.
     ///
     /// ```
@@ -124,6 +137,24 @@ mod tests {
     use std::str::FromStr;
 
     #[test]
+    fn validate_is_unity() {
+        let unit = Unit::new_unity();
+        assert!(unit.is_unity());
+
+        let unit = Unit { terms: Vec::new() };
+        assert!(!unit.is_unity());
+
+        let unit = Unit::from_str("1").unwrap();
+        assert!(unit.is_unity());
+
+        let unit = Unit::from_str("m").unwrap();
+        assert!(!unit.is_unity());
+
+        let unit = Unit::from_str("m/m").unwrap();
+        assert!(!unit.is_unity());
+    }
+
+    #[test]
     fn validate_expression_reduced() {
         let unit = Unit::from_str("m").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "m");
@@ -135,7 +166,7 @@ mod tests {
         assert_eq!(unit.expression_reduced().as_str(), "km/10m");
 
         let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/m");
+        assert_eq!(unit.expression_reduced().as_str(), "/m");
 
         let unit = Unit::from_str("10m").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "10m");
@@ -144,16 +175,16 @@ mod tests {
         assert_eq!(unit.expression_reduced().as_str(), "10km");
 
         let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/10km");
+        assert_eq!(unit.expression_reduced().as_str(), "/10km");
 
         let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/m2.km");
+        assert_eq!(unit.expression_reduced().as_str(), "/m2.km");
 
         let unit = Unit::from_str("km/m2.cm").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "km/m2.cm");
 
         let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "1/m2.cm.km");
+        assert_eq!(unit.expression_reduced().as_str(), "/m2.cm.km");
 
         let unit = Unit::from_str("m/s2").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "m/s2");
@@ -194,7 +225,8 @@ mod tests {
                     "exponent": -4,
                     "annotation": null
                 }]
-        }"#.replace("\n", "")
+        }"#
+            .replace("\n", "")
             .replace(" ", "");
 
             let term1 =
