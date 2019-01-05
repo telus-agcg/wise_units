@@ -101,6 +101,7 @@ mod tests {
     use std::str::FromStr;
 
     validate_decompose!(validate_decompose_pri_per_m, "/m", "/m");
+    validate_decompose!(validate_decompose_pri_1_per_m, "1/m", "1/m");
     validate_decompose!(validate_decompose_pri_m, "m", "m");
     validate_decompose!(validate_decompose_pri_m2_per_m, "m2/m", "m2/m");
     validate_decompose!(validate_decompose_sec_m, "M", "m");
