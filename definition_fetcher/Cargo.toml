@@ -10,5 +10,5 @@ simple_logger = "0.5"
 toml = "0.4"
 
 [dependencies.serde-xml-rs]
-version = "0.2"
+version = "0.3"
 git = "https://github.com/RReverser/serde-xml-rs"

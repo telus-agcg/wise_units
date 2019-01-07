@@ -1,5 +1,24 @@
 # Change Log
 
+## [unreleased]
+
+### Added
+
+* [DEV-4385] Added `invert::Invert` and `invert::IntoInverse` traits and
+  implemented for `Term`, `Vec<Term>`, and `Unit`.
+* Inline `Unit::numerator()` and `Unit::denominator()`.
+
+### Changed
+
+* [DEV-4385] `AsFraction`'s `Numerator` now returns `Option<Self::Numerator>` to
+  handle the case of a per- unit Unit.
+* Switched to Rust edition 2018.
+
+### Removed
+
+* [DEV-4385] Removed `Term::invert_exponent` in favor of the new implementations
+  of `Invert` and `IntoInverse`.
+
 ## [0.6.0] - 2019-01-04
 
 ### Added

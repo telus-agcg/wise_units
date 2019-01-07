@@ -1,6 +1,5 @@
 use super::term_reducing;
-use crate::parser::Term;
-use crate::unit::Unit;
+use crate::{IntoInverse, Term, Unit};
 use std::ops::{Div, Mul};
 
 //-----------------------------------------------------------------------------
@@ -14,10 +13,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     }
 
     for term in rhs.iter() {
-        let mut new_other_term = term.clone();
-        new_other_term.invert_exponent();
-
-        terms.push(new_other_term);
+        terms.push(term.into_inverse());
     }
 
     term_reducing::reduce_terms(&terms)

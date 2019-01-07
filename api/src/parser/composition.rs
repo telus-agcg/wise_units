@@ -273,7 +273,7 @@ fn push_display_expression(
 // impl Mul
 /// Used for combining two `Compositions`.
 ///
-#[cfg_attr(feature = "cargo-clippy", allow(suspicious_arithmetic_impl))]
+#[cfg_attr(feature = "cargo-clippy", allow(clippy::suspicious_arithmetic_impl))]
 impl Mul for Composition {
     type Output = Self;
 

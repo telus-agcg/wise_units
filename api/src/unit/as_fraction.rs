@@ -1,4 +1,5 @@
 use crate::as_fraction::AsFraction;
+use crate::invert::IntoInverse;
 use crate::parser::Term;
 use crate::unit::Unit;
 
@@ -6,7 +7,8 @@ impl AsFraction for Unit {
     type Numerator = Unit;
     type Denominator = Unit;
 
-    fn numerator(&self) -> Self::Numerator {
+    #[inline]
+    fn numerator(&self) -> Option<Self::Numerator> {
         let positive_terms: Vec<Term> = self
             .terms
             .iter()
@@ -14,20 +16,20 @@ impl AsFraction for Unit {
             .cloned()
             .collect();
 
-        Unit::from(positive_terms)
+        if positive_terms.is_empty() {
+            None
+        } else {
+            Some(Unit::from(positive_terms))
+        }
     }
 
+    #[inline]
     fn denominator(&self) -> Option<Self::Denominator> {
         let negative_terms: Vec<Term> = self
             .terms
             .iter()
             .filter(|term| term.exponent.unwrap_or(1).is_negative())
-            .map(|term| {
-                let mut new_term = term.clone();
-                // Flip the sign
-                new_term.exponent = term.exponent.map(|e| -e);
-                new_term
-            })
+            .map(|term| term.into_inverse())
             .collect();
 
         if negative_terms.is_empty() {
@@ -40,7 +42,6 @@ impl AsFraction for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::as_fraction::AsFraction;
     use crate::unit::Unit;
     use std::str::FromStr;
 
@@ -53,58 +54,67 @@ mod tests {
         static ref PER_GRAM_METER: Unit = Unit::from_str("/g.m").unwrap();
     }
 
-    #[test]
-    fn validate_numerator_one_numerator_term() {
-        let numerator = METER.numerator();
-        assert_eq!(&numerator, &*METER);
+    mod numerator {
+        use super::*;
+        use crate::as_fraction::AsFraction;
+
+        #[test]
+        fn validate_one_numerator_term() {
+            let numerator = METER.numerator().unwrap();
+            assert_eq!(&numerator, &*METER);
+        }
+
+        #[test]
+        fn validate_two_numerator_terms() {
+            let numerator = GRAM_METER.numerator().unwrap();
+            assert_eq!(&numerator, &*GRAM_METER);
+        }
+
+        #[test]
+        fn validate_one_numerator_term_one_denominator_term() {
+            let numerator = METER_PER_SECOND.numerator().unwrap();
+            assert_eq!(&numerator, &*METER);
+        }
+
+        #[test]
+        fn validate_one_denominator_term() {
+            let numerator = PER_SECOND.numerator();
+            assert!(numerator.is_none());
+        }
     }
 
-    #[test]
-    fn validate_numerator_two_numerator_terms() {
-        let numerator = GRAM_METER.numerator();
-        assert_eq!(&numerator, &*GRAM_METER);
-    }
+    mod denominator {
+        use super::*;
+        use crate::as_fraction::AsFraction;
 
-    #[test]
-    fn validate_numerator_one_numerator_term_one_denominator_term() {
-        let numerator = METER_PER_SECOND.numerator();
-        assert_eq!(&numerator, &*METER);
-    }
+        #[test]
+        fn validate_one_numerator_term() {
+            let denominator = METER.denominator();
+            assert!(denominator.is_none());
+        }
 
-    #[test]
-    fn validate_numerator_one_denominator_term() {
-        let numerator = PER_SECOND.numerator();
-        let unity = Unit::new_unity();
-        assert_eq!(&numerator, &unity);
-    }
+        #[test]
+        fn validate_two_numerator_terms() {
+            let denominator = GRAM_METER.denominator();
+            assert!(denominator.is_none());
+        }
 
-    #[test]
-    fn validate_denominator_one_numerator_term() {
-        let denominator = METER.denominator();
-        assert!(denominator.is_none());
-    }
+        #[test]
+        fn validate_one_numerator_term_one_denominator_term() {
+            let denominator = METER_PER_SECOND.denominator().unwrap();
+            assert_eq!(&denominator, &*SECOND);
+        }
 
-    #[test]
-    fn validate_denominator_two_numerator_terms() {
-        let denominator = GRAM_METER.denominator();
-        assert!(denominator.is_none());
-    }
+        #[test]
+        fn validate_one_denominator_term() {
+            let denominator = PER_SECOND.denominator().unwrap();
+            assert_eq!(&denominator, &*SECOND);
+        }
 
-    #[test]
-    fn validate_denominator_one_numerator_term_one_denominator_term() {
-        let denominator = METER_PER_SECOND.denominator().unwrap();
-        assert_eq!(&denominator, &*SECOND);
-    }
-
-    #[test]
-    fn validate_denominator_one_denominator_term() {
-        let denominator = PER_SECOND.denominator().unwrap();
-        assert_eq!(&denominator, &*SECOND);
-    }
-
-    #[test]
-    fn validate_denominator_two_denominator_terms() {
-        let denominator = PER_GRAM_METER.denominator().unwrap();
-        assert_eq!(&denominator, &*GRAM_METER);
+        #[test]
+        fn validate_two_denominator_terms() {
+            let denominator = PER_GRAM_METER.denominator().unwrap();
+            assert_eq!(&denominator, &*GRAM_METER);
+        }
     }
 }

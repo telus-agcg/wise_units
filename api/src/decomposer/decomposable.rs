@@ -19,7 +19,7 @@ pub trait Decomposable<'a> {
         if let Some(d) = denominator {
             format!("{}/{}", numerator.unwrap_or_default(), d)
         } else {
-            numerator.unwrap_or("1".to_string())
+            numerator.unwrap_or_else(|| "1".to_string())
         }
     }
 
