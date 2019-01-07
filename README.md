@@ -5,6 +5,11 @@
 A Rust library for measuring things in [UCUM](http://unitsofmeasure.org/ucum.html)
 terms. It's similar to Ruby's [unitwise](https://github.com/joshwlewis/unitwise).
 
+## Prerequisites
+
+* Rust 1.31
+    * Get it [here](https://rustup.rs/)
+
 ## Usage
 
 Add this to your `Cargo.toml`:

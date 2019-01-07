@@ -24,7 +24,7 @@ impl IntoInverse for Term {
 
 impl Invert for &mut Vec<Term> {
     fn invert(self) {
-        for mut term in self.into_iter() {
+        for term in self.into_iter() {
             term.invert()
         }
     }
