@@ -1,5 +1,12 @@
 # Change Log
 
+## [unreleased]
+
+### Changed
+
+* [DEV-4385] `AsFraction`'s `Numerator` now returns `Option<Self::Numerator>` to
+  handle the case of a per- unit Unit.
+
 ## [0.6.0] - 2019-01-04
 
 ### Added
