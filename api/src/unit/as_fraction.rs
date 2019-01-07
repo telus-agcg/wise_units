@@ -54,6 +54,15 @@ mod tests {
         static ref PER_GRAM_METER: Unit = Unit::from_str("/g.m").unwrap();
     }
 
+    #[test]
+    fn validate_as_fraction() {
+        use crate::as_fraction::AsFraction;
+        let (num, den) = Unit::from_str("m/s").unwrap().as_fraction();
+
+        assert!(num.is_some());
+        assert!(den.is_some());
+    }
+
     mod numerator {
         use super::*;
         use crate::as_fraction::AsFraction;

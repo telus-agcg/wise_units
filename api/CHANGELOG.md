@@ -14,6 +14,10 @@
   handle the case of a per- unit Unit.
 * Switched to Rust edition 2018.
 
+### Fixed
+
+* Fixed typo in method name: `AsFraction::as_fraction()`.
+
 ### Removed
 
 * [DEV-4385] Removed `Term::invert_exponent` in favor of the new implementations
