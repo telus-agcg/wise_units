@@ -47,6 +47,7 @@ pub mod as_fraction;
 pub mod convertible;
 pub mod decomposer;
 pub mod field_eq;
+pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
 pub mod parser;
@@ -57,6 +58,7 @@ mod ucum_unit;
 
 pub use crate::convertible::Convertible;
 pub use crate::field_eq::FieldEq;
+pub use crate::invert::{Invert, IntoInverse};
 pub use crate::is_compatible_with::IsCompatibleWith;
 pub use crate::measurement::Measurement;
 pub use crate::parser::{

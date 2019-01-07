@@ -15,6 +15,7 @@ use self::component::Component;
 use self::finishable::Finishable;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
+use crate::Invert;
 use crate::parser::atom::Atom;
 use crate::parser::error::Error;
 use crate::parser::prefix::Prefix;
@@ -253,7 +254,7 @@ fn visit_term(pair: Pair<'_, Rule>) -> Result<AstTerm, Error> {
                 let mut new_terms: Vec<Term> = visit_term(inner_pair)?.finish();
 
                 if has_slash {
-                    flip_terms_exponents(&mut new_terms);
+                    new_terms.invert();
                     has_slash = false;
                 }
 
@@ -290,7 +291,7 @@ fn visit_main_term(pair: Pair<'_, Rule>) -> Result<MainTerm, Error> {
                 let mut new_terms: Vec<Term> = visit_term(inner_pair)?.finish();
 
                 if has_slash {
-                    flip_terms_exponents(&mut new_terms);
+                    new_terms.invert();
                     has_slash = false;
                 }
 
@@ -306,12 +307,6 @@ fn visit_main_term(pair: Pair<'_, Rule>) -> Result<MainTerm, Error> {
     }
 
     Ok(MainTerm { terms })
-}
-
-fn flip_terms_exponents(terms: &mut Vec<Term>) {
-    for term in terms.iter_mut() {
-        term.invert_exponent();
-    }
 }
 
 #[cfg(test)]

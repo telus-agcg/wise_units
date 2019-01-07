@@ -2,10 +2,20 @@
 
 ## [unreleased]
 
+### Added
+
+* [DEV-4385] Added `invert::Invert` and `invert::IntoInverse` traits and
+  implemented for `Term`, `Vec<Term>`, and `Unit`.
+
 ### Changed
 
 * [DEV-4385] `AsFraction`'s `Numerator` now returns `Option<Self::Numerator>` to
   handle the case of a per- unit Unit.
+
+### Removed
+
+* [DEV-4385] Removed `Term::invert_exponent` in favor of the new implementations
+  of `Invert` and `IntoInverse`.
 
 ## [0.6.0] - 2019-01-04
 

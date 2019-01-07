@@ -1,6 +1,7 @@
 mod annotation_composable;
 mod composable;
 mod display;
+mod invert;
 mod is_compatible_with;
 mod reducible;
 mod ucum_unit;
@@ -72,17 +73,6 @@ impl Term {
     ///
     pub fn has_value(&self) -> bool {
         self.factor.is_some() || self.atom.is_some() || self.annotation.is_some()
-    }
-
-    /// If `self` has an `exponent`, it negates that value; if not, it sets it to `-1` (since
-    /// `None` is analogous to an exponent of 1).
-    ///
-    pub fn invert_exponent(&mut self) {
-        self.exponent = match self.exponent {
-            Some(exponent) => Some(-exponent),
-            // None is analogous to an exponent of 1.
-            None => Some(-1),
-        };
     }
 
     /// If `self` has an `exponent`, it checks if its value is positive; if not, it returns `true`
