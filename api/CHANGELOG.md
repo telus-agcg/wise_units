@@ -6,6 +6,7 @@
 
 * [DEV-4385] Added `invert::Invert` and `invert::IntoInverse` traits and
   implemented for `Term`, `Vec<Term>`, and `Unit`.
+* Inline `Unit::numerator()` and `Unit::denominator()`.
 
 ### Changed
 

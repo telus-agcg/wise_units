@@ -7,6 +7,7 @@ impl AsFraction for Unit {
     type Numerator = Unit;
     type Denominator = Unit;
 
+    #[inline]
     fn numerator(&self) -> Option<Self::Numerator> {
         let positive_terms: Vec<Term> = self
             .terms
@@ -22,6 +23,7 @@ impl AsFraction for Unit {
         }
     }
 
+    #[inline]
     fn denominator(&self) -> Option<Self::Denominator> {
         let negative_terms: Vec<Term> = self
             .terms
