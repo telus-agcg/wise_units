@@ -5,10 +5,10 @@ pub trait AsFraction {
     type Denominator;
     type Numerator;
 
-    fn as_faction(&self) -> (Self::Numerator, Option<Self::Denominator>) {
+    fn as_fraction(&self) -> (Option<Self::Numerator>, Option<Self::Denominator>) {
         (self.numerator(), self.denominator())
     }
 
-    fn numerator(&self) -> Self::Numerator;
+    fn numerator(&self) -> Option<Self::Numerator>;
     fn denominator(&self) -> Option<Self::Denominator>;
 }
