@@ -1,5 +1,5 @@
-use crate::invert::{IntoInverse, Invert};
 use super::Unit;
+use crate::invert::{IntoInverse, Invert};
 
 impl Invert for &mut Unit {
     #[inline]
@@ -13,7 +13,9 @@ impl IntoInverse for Unit {
     fn into_inverse(&self) -> Unit {
         let inverted_terms = self.terms.into_inverse();
 
-        Unit { terms: inverted_terms }
+        Unit {
+            terms: inverted_terms,
+        }
     }
 }
 

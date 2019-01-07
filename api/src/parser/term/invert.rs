@@ -1,15 +1,13 @@
-use crate::invert::{IntoInverse, Invert};
 use super::Term;
+use crate::invert::{IntoInverse, Invert};
 
 impl Invert for &mut Term {
     fn invert(self) {
         self.exponent = match self.exponent {
-            Some(e) => {
-                match e {
-                    -1 => None,
-                    _ => Some(-e)
-                }
-            }
+            Some(e) => match e {
+                -1 => None,
+                _ => Some(-e),
+            },
             None => Some(-1),
         };
     }
@@ -47,7 +45,7 @@ impl IntoInverse for Vec<Term> {
 #[cfg(test)]
 mod tests {
     mod term {
-        use crate::{Atom, Term, Invert, IntoInverse};
+        use crate::{Atom, IntoInverse, Invert, Term};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {
@@ -93,7 +91,7 @@ mod tests {
     }
 
     mod terms {
-        use crate::{Prefix, Atom, Term, IntoInverse, Invert};
+        use crate::{Atom, IntoInverse, Invert, Prefix, Term};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {
@@ -120,7 +118,10 @@ mod tests {
         fn validate_invert_numerator_and_denominator() {
             let mut terms = vec![term!(Meter, exponent: 2), term!(Second, exponent: -2)];
             terms.invert();
-            assert_eq!(terms, vec![term!(Meter, exponent: -2), term!(Second, exponent: 2)]);
+            assert_eq!(
+                terms,
+                vec![term!(Meter, exponent: -2), term!(Second, exponent: 2)]
+            );
         }
 
         #[test]
@@ -169,7 +170,10 @@ mod tests {
         fn validate_into_inverse_numerator_and_denominator() {
             let terms = vec![term!(Meter, exponent: 2), term!(Second, exponent: -2)];
             let new_terms = terms.into_inverse();
-            assert_eq!(new_terms, vec![term!(Meter, exponent: -2), term!(Second, exponent: 2)]);
+            assert_eq!(
+                new_terms,
+                vec![term!(Meter, exponent: -2), term!(Second, exponent: 2)]
+            );
         }
 
         #[test]
