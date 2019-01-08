@@ -1,37 +1,54 @@
 # Change Log
 
+## [unreleased]
+
+### Added
+
+### Changed
+
+- Updated implementations of `Div` and `Mul` for `Unit` to be more performant.
+- Updated implementation of `IntoInverse` for `Vec<Term>` to be more performant.
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
 ## [0.7.0] - 2019-01-07
 
 ### Added
 
-* [DEV-4385] Added `invert::Invert` and `invert::IntoInverse` traits and
+- [DEV-4385] Added `invert::Invert` and `invert::IntoInverse` traits and
   implemented for `Term`, `Vec<Term>`, and `Unit`.
-* Inline `Unit::numerator()` and `Unit::denominator()`.
+- Inline `Unit::numerator()` and `Unit::denominator()`.
 
 ### Changed
 
-* [DEV-4385] `AsFraction`'s `Numerator` now returns `Option<Self::Numerator>` to
+- [DEV-4385] `AsFraction`'s `Numerator` now returns `Option<Self::Numerator>` to
   handle the case of a per- unit Unit.
-* Switched to Rust edition 2018.
+- Switched to Rust edition 2018.
 
 ### Fixed
 
-* Fixed typo in method name: `AsFraction::as_fraction()`.
+- Fixed typo in method name: `AsFraction::as_fraction()`.
 
 ### Removed
 
-* [DEV-4385] Removed `Term::invert_exponent` in favor of the new implementations
+- [DEV-4385] Removed `Term::invert_exponent` in favor of the new implementations
   of `Invert` and `IntoInverse`.
 
 ## [0.6.0] - 2019-01-04
 
 ### Added
 
-* [DEV-2508] Added `Unit::is_unity()`.
+- [DEV-2508] Added `Unit::is_unity()`.
 
 ### Fixed
 
-* `Unit::from_str("1")` didn't parse such that `unit.terms[0].is_unity()` returned `true`;
+- `Unit::from_str("1")` didn't parse such that `unit.terms[0].is_unity()` returned `true`;
   it now skips parsing and just returns a proper `Unit`.
 
 ## [0.5.1] - 2018-11-06
