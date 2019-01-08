@@ -1,21 +1,11 @@
 # Change Log
 
-## [unreleased]
-
-### Added
+## [0.7.1] - 2019-01-08
 
 ### Changed
 
 - Updated implementations of `Div` and `Mul` for `Unit` to be more performant.
 - Updated implementation of `IntoInverse` for `Vec<Term>` to be more performant.
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [0.7.0] - 2019-01-07
 
