@@ -36,10 +36,7 @@ impl Finishable for BasicComponent {
         };
 
         terms.push(self_term);
-
-        for term in self.terms {
-            terms.push(term);
-        }
+        terms.extend_from_slice(&self.terms);
 
         terms
     }

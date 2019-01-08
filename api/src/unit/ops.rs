@@ -7,10 +7,7 @@ use std::ops::{Div, Mul};
 //-----------------------------------------------------------------------------
 fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
-
-    for term in lhs.iter() {
-        terms.push(term.clone());
-    }
+    terms.extend_from_slice(lhs);
 
     for term in rhs.iter() {
         terms.push(term.into_inverse());
@@ -113,13 +110,8 @@ impl<'a> Mul<Unit> for &'a Unit {
 fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
 
-    for term in lhs.iter() {
-        terms.push(term.clone());
-    }
-
-    for term in rhs.iter() {
-        terms.push(term.clone());
-    }
+    terms.extend_from_slice(lhs);
+    terms.extend_from_slice(rhs);
 
     term_reducing::reduce_terms(&terms)
 }
