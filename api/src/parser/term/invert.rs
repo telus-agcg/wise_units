@@ -1,6 +1,7 @@
 use super::Term;
 use crate::invert::{IntoInverse, Invert};
 
+// Term
 impl Invert for &mut Term {
     fn invert(self) {
         self.exponent = match self.exponent {
@@ -22,6 +23,7 @@ impl IntoInverse for Term {
     }
 }
 
+// Vec<Term>
 impl Invert for &mut Vec<Term> {
     fn invert(self) {
         for term in self.into_iter() {
@@ -32,13 +34,7 @@ impl Invert for &mut Vec<Term> {
 
 impl IntoInverse for Vec<Term> {
     fn into_inverse(&self) -> Self {
-        self.iter()
-            .map(|term| {
-                let mut new_term = term.clone();
-                new_term.invert();
-                new_term
-            })
-            .collect()
+        self.iter().map(|term| term.into_inverse()).collect()
     }
 }
 

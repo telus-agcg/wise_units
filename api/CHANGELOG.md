@@ -7,6 +7,7 @@
 ### Changed
 
 - Updated implementations of `Div` and `Mul` for `Unit` to be more performant.
+- Updated implementation of `IntoInverse` for `Vec<Term>` to be more performant.
 
 ### Deprecated
 
