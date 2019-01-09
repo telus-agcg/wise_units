@@ -1,5 +1,12 @@
 # Change Log
 
+## [unreleased]
+
+### Added
+
+- [DEV-4413] Added `IntoReduced` trait and implemented for `Measurement` and
+  `Unit`.
+
 ## [0.7.1] - 2019-01-08
 
 ### Changed

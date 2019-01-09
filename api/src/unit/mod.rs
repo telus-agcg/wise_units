@@ -5,6 +5,7 @@ pub mod display;
 pub mod field_eq;
 pub mod from;
 pub mod from_str;
+pub mod into_reduced;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod ops;
@@ -64,30 +65,6 @@ impl Unit {
     ///
     pub fn is_unity(&self) -> bool {
         self.terms.len() == 1 && self.terms[0].is_unity()
-    }
-
-    /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.
-    ///
-    /// ```
-    /// use std::str::FromStr;
-    /// use wise_units::Unit;
-    ///
-    /// // "m2" doesn't reduce down...
-    /// let m1 = Unit::from_str("m2").unwrap();
-    /// let m2 = Unit::from_str("m2").unwrap();
-    /// assert_eq!(m1.into_reduced(), m2);
-    ///
-    /// // ...but "m4/m2" does.
-    /// let m1 = Unit::from_str("m4/m2").unwrap();
-    /// let m2 = Unit::from_str("m2").unwrap();
-    /// assert_eq!(m1.into_reduced(), m2);
-    /// ```
-    ///
-    #[inline]
-    pub fn into_reduced(self) -> Unit {
-        Unit {
-            terms: term_reducing::reduce_terms(&self.terms),
-        }
     }
 
     /// Turns the Unit's Terms into Strings and combines them accordingly.
@@ -284,24 +261,5 @@ mod tests {
 
             assert_eq!(expected_unit, k);
         }
-    }
-
-    #[test]
-    fn into_reduced() {
-        fn validate(input: &str, expected: &str) {
-            let unit = Unit::from_str(input).unwrap();
-            let actual = unit.into_reduced();
-            let expected = Unit::from_str(expected).unwrap();
-
-            assert_eq!(&actual, &expected);
-            assert_eq!(actual.expression(), expected.expression());
-        }
-
-        validate("m", "m");
-        validate("m2/m", "m");
-        validate("100m2/m", "100m2/m");
-        validate("m2.m2", "m4");
-        validate("m2.m2/s.s", "m4/s2");
-        validate("m2.s/s.m2", "1");
     }
 }
