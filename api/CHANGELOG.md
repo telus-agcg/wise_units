@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Implemented `From<&[Term]> for Unit` and used in `prefix`.
+
 ### Changed
 
 - [DEV-4413] Changed `into_reduced::IntoReduced` to `reduce::ToReduced`, added
