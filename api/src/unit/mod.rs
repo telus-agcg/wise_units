@@ -5,7 +5,7 @@ pub mod display;
 pub mod field_eq;
 pub mod from;
 pub mod from_str;
-pub mod into_reduced;
+pub mod to_reduced;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod ops;

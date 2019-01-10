@@ -46,7 +46,7 @@ pub mod as_fraction;
 pub mod convertible;
 pub mod decomposer;
 pub mod field_eq;
-pub mod into_reduced;
+pub mod reduce;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
