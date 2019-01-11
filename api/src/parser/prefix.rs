@@ -197,7 +197,7 @@ impl UcumSymbol for Prefix {
     fn definition_unit(&self) -> Unit {
         let definition = Definition::default();
 
-        Unit::from(definition.terms().to_vec())
+        definition.terms().into()
     }
 }
 

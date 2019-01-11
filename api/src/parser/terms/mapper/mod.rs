@@ -15,6 +15,7 @@ use self::component::Component;
 use self::finishable::Finishable;
 use self::main_term::MainTerm;
 use self::simple_unit::SimpleUnit;
+use crate::invert::Invert;
 use crate::parser::atom::Atom;
 use crate::parser::error::Error;
 use crate::parser::prefix::Prefix;
@@ -23,7 +24,6 @@ use crate::parser::symbols::symbol_parser::Rule as SymbolRule;
 use crate::parser::symbols::symbol_parser::SymbolParser;
 use crate::parser::term::Term;
 use crate::parser::terms::term_parser::Rule;
-use crate::Invert;
 use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 

@@ -9,3 +9,11 @@ impl ::std::convert::From<Vec<Term>> for Unit {
         Self { terms }
     }
 }
+
+impl ::std::convert::From<&[Term]> for Unit {
+    fn from(terms: &[Term]) -> Self {
+        Self {
+            terms: terms.to_vec(),
+        }
+    }
+}

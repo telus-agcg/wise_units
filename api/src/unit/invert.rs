@@ -1,5 +1,5 @@
 use super::Unit;
-use crate::invert::{IntoInverse, Invert};
+use crate::invert::{Invert, ToInverse};
 
 impl Invert for &mut Unit {
     #[inline]
@@ -8,21 +8,17 @@ impl Invert for &mut Unit {
     }
 }
 
-impl IntoInverse for Unit {
+impl ToInverse for Unit {
     #[inline]
-    fn into_inverse(&self) -> Unit {
-        let inverted_terms = self.terms.into_inverse();
-
-        Unit {
-            terms: inverted_terms,
-        }
+    fn to_inverse(&self) -> Unit {
+        self.terms.to_inverse().into()
     }
 }
 
 #[cfg(test)]
 mod tests {
     mod invert {
-        use crate::{Invert, Unit};
+        use crate::{invert::Invert, Unit};
         use std::str::FromStr;
 
         #[test]
@@ -61,8 +57,48 @@ mod tests {
         }
     }
 
+    mod to_inverse {
+        use crate::{invert::ToInverse, Unit};
+        use std::str::FromStr;
+
+        #[test]
+        fn validate_numerator_no_exponent() {
+            let unit = Unit::from_str("m").unwrap();
+            let new_unit = unit.to_inverse();
+            assert_eq!(new_unit, Unit::from_str("m-1").unwrap());
+        }
+
+        #[test]
+        fn validate_numerator_with_exponent_1() {
+            let unit = Unit::from_str("m1").unwrap();
+            let new_unit = unit.to_inverse();
+            assert_eq!(new_unit, Unit::from_str("m-1").unwrap());
+        }
+
+        #[test]
+        fn validate_denominator_with_exponent_minus_1() {
+            let unit = Unit::from_str("m-1").unwrap();
+            let new_unit = unit.to_inverse();
+            assert_eq!(new_unit, Unit::from_str("m").unwrap());
+        }
+
+        #[test]
+        fn validate_numerator_and_denominator() {
+            let unit = Unit::from_str("m2/s2").unwrap();
+            let new_unit = unit.to_inverse();
+            assert_eq!(new_unit, Unit::from_str("s2/m2").unwrap());
+        }
+
+        #[test]
+        fn validate_numerators_and_denominators_mixed() {
+            let unit = Unit::from_str("m2/s2.g4/km4/har5").unwrap();
+            let new_unit = unit.to_inverse();
+            assert_eq!(new_unit, Unit::from_str("s2.g4.har5/m2.km4").unwrap());
+        }
+    }
+
     mod into_inverse {
-        use crate::{IntoInverse, Unit};
+        use crate::{invert::IntoInverse, Unit};
         use std::str::FromStr;
 
         #[test]

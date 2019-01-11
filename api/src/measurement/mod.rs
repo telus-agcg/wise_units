@@ -1,12 +1,12 @@
 pub mod composable;
 pub mod convertible;
 pub mod field_eq;
-pub mod to_reduced;
 pub mod is_compatible_with;
 pub mod ops;
 pub mod partial_eq;
 pub mod partial_ord;
 pub mod reducible;
+pub mod to_reduced;
 pub mod ucum_unit;
 
 use crate::parser::Error;
@@ -77,12 +77,8 @@ mod tests {
     fn validate_new() {
         let m = Measurement::new(1.0, "m").unwrap();
 
-        let expected_unit = Unit {
-            terms: vec![term!(Meter)],
-        };
-
         assert_eq!(m.value, 1.0);
-        assert_eq!(m.unit, expected_unit);
+        assert_eq!(m.unit, vec![term!(Meter)].into());
     }
 
     #[test]
@@ -120,13 +116,14 @@ mod tests {
     mod with_serde {
         use super::super::Measurement;
         use crate::parser::{Atom, Prefix, Term};
-        use crate::unit::Unit;
         use serde_json;
 
         #[test]
         fn validate_serialization_empty_terms() {
-            let unit = Unit { terms: vec![] };
-            let measurement = Measurement { value: 123.4, unit };
+            let measurement = Measurement {
+                value: 123.4,
+                unit: vec![].into(),
+            };
             let expected_json = r#"{"value":123.4,"unit":{"terms":[]}}"#;
 
             let j =
@@ -162,9 +159,7 @@ mod tests {
                 term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, exponent: -4);
 
-            let unit = Unit {
-                terms: vec![term1, term2],
-            };
+            let unit = vec![term1, term2].into();
             let measurement = Measurement { value: 123.4, unit };
 
             let j =
@@ -179,7 +174,7 @@ mod tests {
 
             let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
-            let unit = Unit { terms: vec![] };
+            let unit = vec![].into();
             let expected_measurement = Measurement { value: 1.0, unit };
 
             assert_eq!(expected_measurement, k);
@@ -212,9 +207,7 @@ mod tests {
                 term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, exponent: -4);
 
-            let unit = Unit {
-                terms: vec![term1, term2],
-            };
+            let unit = vec![term1, term2].into();
             let expected_measurement = Measurement { value: 432.1, unit };
 
             assert_eq!(expected_measurement, k);

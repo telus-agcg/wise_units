@@ -1,8 +1,8 @@
 use super::Unit;
 use crate::as_fraction::AsFraction;
-use crate::reduce::ToReduced;
 use crate::invert::IntoInverse;
 use crate::parser::{Composable, Composition};
+use crate::reduce::ToReduced;
 use crate::Term;
 
 type OptionCombos = Vec<Option<(Term, Composition)>>;
@@ -55,17 +55,14 @@ impl ToReduced for Unit {
                 let (new_numerators, new_denominators) =
                     build_unit_parts(&numerator.terms, &denominator.terms);
 
-                let mut new_terms: Vec<Term> = Vec::with_capacity(new_numerators.len() + new_denominators.len());
+                let mut new_terms: Vec<Term> =
+                    Vec::with_capacity(new_numerators.len() + new_denominators.len());
                 new_terms.extend_from_slice(&new_numerators);
                 new_terms.extend_from_slice(&new_denominators.into_inverse());
 
-                Unit {
-                    terms: super::term_reducing::reduce_terms(&new_terms),
-                }
+                super::term_reducing::reduce_terms(&new_terms).into()
             }
-            (_, _) => Unit {
-                terms: super::term_reducing::reduce_terms(&self.terms),
-            },
+            (_, _) => super::term_reducing::reduce_terms(&self.terms).into(),
         }
     }
 }
@@ -97,7 +94,10 @@ fn build_unit_parts(
         }
     }
 
-    (filter_results(new_numerator_combos), filter_results(new_denominator_combos))
+    (
+        filter_results(new_numerator_combos),
+        filter_results(new_denominator_combos),
+    )
 }
 
 /// Takes each `Term` and builds an `Option<(Term, Composition)>`, where each will be used to
@@ -167,8 +167,8 @@ mod tests {
 
     mod into_reduced {
         use super::*;
-        use std::str::FromStr;
         use crate::reduce::IntoReduced;
+        use std::str::FromStr;
 
         macro_rules! validate_reduction {
             ($test_name:ident, $input:expr, $expected:expr) => {
