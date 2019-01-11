@@ -44,7 +44,6 @@ mod macros;
 
 pub mod as_fraction;
 pub mod convertible;
-pub mod decomposer;
 pub mod field_eq;
 pub mod reduce;
 pub mod invert;

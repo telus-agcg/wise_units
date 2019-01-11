@@ -15,7 +15,6 @@ pub mod reducible;
 mod term_reducing;
 pub mod ucum_unit;
 
-use crate::decomposer::{Decomposable, SimpleDecomposer};
 use crate::parser::Term;
 
 #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
@@ -83,9 +82,7 @@ impl Unit {
     ///
     #[inline]
     pub fn expression(&self) -> String {
-        let sd = SimpleDecomposer;
-
-        sd.decompose(&self.terms)
+        self.to_string()
     }
 
     /// If the unit terms are a fraction and can be reduced, this returns those
@@ -103,9 +100,8 @@ impl Unit {
     #[inline]
     pub fn expression_reduced(&self) -> String {
         let reduced = term_reducing::reduce_terms(&self.terms);
-        let sd = SimpleDecomposer;
 
-        sd.decompose(&reduced)
+        Unit::from(reduced).to_string()
     }
 }
 

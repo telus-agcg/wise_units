@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+- Removed `decomposer::Deomposable` and turned the old `Simple` decomposer
+  struct into a function, `decomposer::decompose()`.
+
 ### Fixed
 
 ### Security
