@@ -5,7 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.0] -2019-01-09
+## [0.9.0] - 2019-01-10
+
+### Added
+
+- Implemented `From<&[Term]> for Unit` and used in `prefix`.
+
+### Changed
+
+- [DEV-4413] Changed `into_reduced::IntoReduced` to `reduce::ToReduced`, added
+  `reduced::IntoReduced` that consumes `self` (which is convention),
+  and auto-derived `IntoReduced` for all types that implement `ToReduced`.
+- [DEV-4385] Changed `invert::IntoInverse` to `invert::ToInverse`, added
+  `invert::IntoReduced` that consumes `self` (which is convention),
+  and auto-derived `IntoInverse` for all types that implement `ToInverse`.
+
+### Removed
+
+- Removed `decomposer::Deomposable` and turned the old `Simple` decomposer
+  struct into a function, `decomposer::decompose()`.
+
+## [0.8.0] - 2019-01-09
 
 ### Added
 

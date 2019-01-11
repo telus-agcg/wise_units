@@ -1,8 +1,8 @@
 use super::Unit;
 use crate::as_fraction::AsFraction;
-use crate::into_reduced::IntoReduced;
 use crate::invert::IntoInverse;
 use crate::parser::{Composable, Composition};
+use crate::reduce::ToReduced;
 use crate::Term;
 
 type OptionCombos = Vec<Option<(Term, Composition)>>;
@@ -15,57 +15,54 @@ type OptionCombos = Vec<Option<(Term, Composition)>>;
 /// _not_ be different if, for example, the `Unit` was something like `"m4/m2"`, where the scalar
 /// representation of the `Unit` is still the same after the reduction).
 ///
-impl IntoReduced for Unit {
+impl ToReduced for Unit {
     type Output = Self;
 
     /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.
     ///
     /// ```
     /// use std::str::FromStr;
-    /// use wise_units::into_reduced::IntoReduced;
+    /// use wise_units::reduce::ToReduced;
     /// use wise_units::Unit;
     ///
     /// // "m2" doesn't reduce down...
     /// let m1 = Unit::from_str("m2").unwrap();
     /// let m2 = Unit::from_str("m2").unwrap();
-    /// assert_eq!(m1.into_reduced(), m2);
+    /// assert_eq!(m1.to_reduced(), m2);
     ///
     /// // ...but "m4/m2" does.
     /// let m1 = Unit::from_str("m4/m2").unwrap();
     /// let m2 = Unit::from_str("m2").unwrap();
-    /// assert_eq!(m1.into_reduced(), m2);
+    /// assert_eq!(m1.to_reduced(), m2);
     ///
     /// // This also works for Units of the same dimension, but with different scalar
     /// // representations.
     /// let m1 = Unit::from_str("g.m2/har").unwrap();
     /// let m2 = Unit::from_str("g").unwrap();
-    /// assert_eq!(m1.into_reduced(), m2);
+    /// assert_eq!(m1.to_reduced(), m2);
     ///
     /// // It does not, however, work for reducing when units' dimensions are similar in magnitude.
     /// // This does not reduce down to "g.m2":
     /// let m1 = Unit::from_str("g.m4/har").unwrap();
     /// let m2 = Unit::from_str("g.m4/har").unwrap();
-    /// assert_eq!(m1.into_reduced(), m2);
+    /// assert_eq!(m1.to_reduced(), m2);
     /// ```
     ///
     #[inline]
-    fn into_reduced(&self) -> Self::Output {
+    fn to_reduced(&self) -> Self::Output {
         match self.as_fraction() {
             (Some(numerator), Some(denominator)) => {
                 let (new_numerators, new_denominators) =
                     build_unit_parts(&numerator.terms, &denominator.terms);
 
-                let mut new_terms: Vec<Term> = Vec::with_capacity(new_numerators.len() + new_denominators.len());
+                let mut new_terms: Vec<Term> =
+                    Vec::with_capacity(new_numerators.len() + new_denominators.len());
                 new_terms.extend_from_slice(&new_numerators);
                 new_terms.extend_from_slice(&new_denominators.into_inverse());
 
-                Unit {
-                    terms: super::term_reducing::reduce_terms(&new_terms),
-                }
+                super::term_reducing::reduce_terms(&new_terms).into()
             }
-            (_, _) => Unit {
-                terms: super::term_reducing::reduce_terms(&self.terms),
-            },
+            (_, _) => super::term_reducing::reduce_terms(&self.terms).into(),
         }
     }
 }
@@ -97,7 +94,10 @@ fn build_unit_parts(
         }
     }
 
-    (filter_results(new_numerator_combos), filter_results(new_denominator_combos))
+    (
+        filter_results(new_numerator_combos),
+        filter_results(new_denominator_combos),
+    )
 }
 
 /// Takes each `Term` and builds an `Option<(Term, Composition)>`, where each will be used to
@@ -124,40 +124,85 @@ fn filter_results(option_combos: OptionCombos) -> Vec<Term> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::str::FromStr;
 
-    macro_rules! validate_reduction {
-        ($test_name:ident, $input:expr, $expected:expr) => {
-            #[test]
-            fn $test_name() {
-                let unit = Unit::from_str($input).unwrap();
-                let actual = unit.into_reduced();
-                let expected = Unit::from_str($expected).unwrap();
+    mod to_reduced {
+        use super::*;
+        use std::str::FromStr;
 
-                assert_eq!(&actual, &expected);
-                assert_eq!(actual.expression(), expected.expression());
-            }
-        };
+        macro_rules! validate_reduction {
+            ($test_name:ident, $input:expr, $expected:expr) => {
+                #[test]
+                fn $test_name() {
+                    let unit = Unit::from_str($input).unwrap();
+                    let actual = unit.to_reduced();
+                    let expected = Unit::from_str($expected).unwrap();
+
+                    assert_eq!(&actual, &expected);
+                    assert_eq!(actual.expression(), expected.expression());
+                }
+            };
+        }
+
+        validate_reduction!(validate_m, "m", "m");
+        validate_reduction!(validate_m2_per_m, "m2/m", "m");
+        validate_reduction!(validate_100m2_per_m, "100m2/m", "100m2/m");
+        validate_reduction!(validate_m2_dot_m2, "m2.m2", "m4");
+        validate_reduction!(validate_m2_dot_m2_per_s_dot_s, "m2.m2/s.s", "m4/s2");
+        validate_reduction!(validate_m2_dot_s_per_s_dot_m2, "m2.s/s.m2", "1");
+
+        validate_reduction!(validate_lb_av_dot_har_per_m2, "[lb_av].har/m2", "[lb_av]");
+        validate_reduction!(validate_lb_av_dot_har_per_m2_dot_g, "[lb_av].har/m2.g", "1");
+
+        validate_reduction!(
+            validate_acr_us_per_m2_per_har,
+            "[acr_us]/m2/har",
+            "[acr_us]"
+        );
+        validate_reduction!(
+            validate_acr_us_per_m2_per_har_per_sft_i,
+            "[acr_us]/m2/har/[sft_i]",
+            "1"
+        );
     }
 
-    validate_reduction!(validate_m, "m", "m");
-    validate_reduction!(validate_m2_per_m, "m2/m", "m");
-    validate_reduction!(validate_100m2_per_m, "100m2/m", "100m2/m");
-    validate_reduction!(validate_m2_dot_m2, "m2.m2", "m4");
-    validate_reduction!(validate_m2_dot_m2_per_s_dot_s, "m2.m2/s.s", "m4/s2");
-    validate_reduction!(validate_m2_dot_s_per_s_dot_m2, "m2.s/s.m2", "1");
+    mod into_reduced {
+        use super::*;
+        use crate::reduce::IntoReduced;
+        use std::str::FromStr;
 
-    validate_reduction!(validate_lb_av_dot_har_per_m2, "[lb_av].har/m2", "[lb_av]");
-    validate_reduction!(validate_lb_av_dot_har_per_m2_dot_g, "[lb_av].har/m2.g", "1");
+        macro_rules! validate_reduction {
+            ($test_name:ident, $input:expr, $expected:expr) => {
+                #[test]
+                fn $test_name() {
+                    let unit = Unit::from_str($input).unwrap();
+                    let actual = unit.into_reduced();
+                    let expected = Unit::from_str($expected).unwrap();
 
-    validate_reduction!(
-        validate_acr_us_per_m2_per_har,
-        "[acr_us]/m2/har",
-        "[acr_us]"
-    );
-    validate_reduction!(
-        validate_acr_us_per_m2_per_har_per_sft_i,
-        "[acr_us]/m2/har/[sft_i]",
-        "1"
-    );
+                    assert_eq!(&actual, &expected);
+                    assert_eq!(actual.expression(), expected.expression());
+                }
+            };
+        }
+
+        validate_reduction!(validate_m, "m", "m");
+        validate_reduction!(validate_m2_per_m, "m2/m", "m");
+        validate_reduction!(validate_100m2_per_m, "100m2/m", "100m2/m");
+        validate_reduction!(validate_m2_dot_m2, "m2.m2", "m4");
+        validate_reduction!(validate_m2_dot_m2_per_s_dot_s, "m2.m2/s.s", "m4/s2");
+        validate_reduction!(validate_m2_dot_s_per_s_dot_m2, "m2.s/s.m2", "1");
+
+        validate_reduction!(validate_lb_av_dot_har_per_m2, "[lb_av].har/m2", "[lb_av]");
+        validate_reduction!(validate_lb_av_dot_har_per_m2_dot_g, "[lb_av].har/m2.g", "1");
+
+        validate_reduction!(
+            validate_acr_us_per_m2_per_har,
+            "[acr_us]/m2/har",
+            "[acr_us]"
+        );
+        validate_reduction!(
+            validate_acr_us_per_m2_per_har_per_sft_i,
+            "[acr_us]/m2/har/[sft_i]",
+            "1"
+        );
+    }
 }
