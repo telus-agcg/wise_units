@@ -1,5 +1,8 @@
 use super::Measurement;
-use crate::{Error, invert::{Invert, ToInverse}};
+use crate::{
+    invert::{Invert, ToInverse},
+    Error,
+};
 
 impl Invert for &mut Measurement {
     #[inline]
@@ -64,7 +67,10 @@ mod tests {
         fn validate_numerators_and_denominators_mixed() {
             let mut measurement = Measurement::new(10.0, "m2/s2.g4/km4/har5").unwrap();
             measurement.invert();
-            assert_eq!(measurement, Measurement::new(0.1, "s2.g4.har5/m2.km4").unwrap());
+            assert_eq!(
+                measurement,
+                Measurement::new(0.1, "s2.g4.har5/m2.km4").unwrap()
+            );
         }
     }
 
@@ -103,7 +109,10 @@ mod tests {
         fn validate_numerators_and_denominators_mixed() {
             let measurement = Measurement::new(10.0, "m2/s2.g4/km4/har5").unwrap();
             let new_measurement = measurement.to_inverse().unwrap();
-            assert_eq!(new_measurement, Measurement::new(0.1, "s2.g4.har5/m2.km4").unwrap());
+            assert_eq!(
+                new_measurement,
+                Measurement::new(0.1, "s2.g4.har5/m2.km4").unwrap()
+            );
         }
 
         #[test]
@@ -149,7 +158,10 @@ mod tests {
         fn validate_numerators_and_denominators_mixed() {
             let measurement = Measurement::new(10.0, "m2/s2.g4/km4/har5").unwrap();
             let new_measurement = measurement.into_inverse().unwrap();
-            assert_eq!(new_measurement, Measurement::new(0.1, "s2.g4.har5/m2.km4").unwrap());
+            assert_eq!(
+                new_measurement,
+                Measurement::new(0.1, "s2.g4.har5/m2.km4").unwrap()
+            );
         }
     }
 }
