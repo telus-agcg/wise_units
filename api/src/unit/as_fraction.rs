@@ -1,5 +1,5 @@
 use crate::as_fraction::AsFraction;
-use crate::invert::IntoInverse;
+use crate::invert::ToInverse;
 use crate::parser::Term;
 use crate::unit::Unit;
 
@@ -29,7 +29,7 @@ impl AsFraction for Unit {
             .terms
             .iter()
             .filter(|term| term.exponent.unwrap_or(1).is_negative())
-            .map(|term| term.into_inverse())
+            .map(|term| term.to_inverse())
             .collect();
 
         if negative_terms.is_empty() {

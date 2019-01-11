@@ -1,5 +1,5 @@
 use super::Term;
-use crate::invert::{IntoInverse, Invert};
+use crate::invert::{ToInverse, Invert};
 
 // Term
 impl Invert for &mut Term {
@@ -14,8 +14,8 @@ impl Invert for &mut Term {
     }
 }
 
-impl IntoInverse for Term {
-    fn into_inverse(&self) -> Self {
+impl ToInverse for Term {
+    fn to_inverse(&self) -> Self {
         let mut new_term = self.clone();
         new_term.invert();
 
@@ -32,16 +32,16 @@ impl Invert for &mut Vec<Term> {
     }
 }
 
-impl IntoInverse for Vec<Term> {
-    fn into_inverse(&self) -> Self {
-        self.iter().map(|term| term.into_inverse()).collect()
+impl ToInverse for Vec<Term> {
+    fn to_inverse(&self) -> Self {
+        self.iter().map(|term| term.to_inverse()).collect()
     }
 }
 
 #[cfg(test)]
 mod tests {
     mod term {
-        use crate::{Atom, IntoInverse, Invert, Term};
+        use crate::{Atom, invert::ToInverse, invert::Invert, Term};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {
@@ -65,29 +65,29 @@ mod tests {
         }
 
         #[test]
-        fn validate_into_inverse_numerator_no_exponent() {
+        fn validate_to_inverse_numerator_no_exponent() {
             let term = term!(Meter);
-            let new_term = term.into_inverse();
+            let new_term = term.to_inverse();
             assert_eq!(new_term, term!(Meter, exponent: -1));
         }
 
         #[test]
-        fn validate_into_inverse_numerator_with_exponent() {
+        fn validate_to_inverse_numerator_with_exponent() {
             let term = term!(Meter, exponent: 1);
-            let new_term = term.into_inverse();
+            let new_term = term.to_inverse();
             assert_eq!(new_term, term!(Meter, exponent: -1));
         }
 
         #[test]
-        fn validate_into_inverse_denominator_with_exponent_minus_1() {
+        fn validate_to_inverse_denominator_with_exponent_minus_1() {
             let term = term!(Meter, exponent: -1);
-            let new_term = term.into_inverse();
+            let new_term = term.to_inverse();
             assert_eq!(new_term, term!(Meter));
         }
     }
 
     mod terms {
-        use crate::{Atom, IntoInverse, Invert, Prefix, Term};
+        use crate::{Atom, invert::ToInverse, invert::Invert, Prefix, Term};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {
@@ -142,30 +142,30 @@ mod tests {
         }
 
         #[test]
-        fn validate_into_inverse_numerator_no_exponent() {
+        fn validate_to_inverse_numerator_no_exponent() {
             let terms = vec![term!(Meter)];
-            let new_terms = terms.into_inverse();
+            let new_terms = terms.to_inverse();
             assert_eq!(new_terms, vec![term!(Meter, exponent: -1)]);
         }
 
         #[test]
-        fn validate_into_inverse_numerator_with_exponent_1() {
+        fn validate_to_inverse_numerator_with_exponent_1() {
             let terms = vec![term!(Meter, exponent: 1)];
-            let new_terms = terms.into_inverse();
+            let new_terms = terms.to_inverse();
             assert_eq!(new_terms, vec![term!(Meter, exponent: -1)]);
         }
 
         #[test]
-        fn validate_into_inverse_denominator_with_exponent_minus_1() {
+        fn validate_to_inverse_denominator_with_exponent_minus_1() {
             let terms = vec![term!(Meter, exponent: -1)];
-            let new_terms = terms.into_inverse();
+            let new_terms = terms.to_inverse();
             assert_eq!(new_terms, vec![term!(Meter)]);
         }
 
         #[test]
-        fn validate_into_inverse_numerator_and_denominator() {
+        fn validate_to_inverse_numerator_and_denominator() {
             let terms = vec![term!(Meter, exponent: 2), term!(Second, exponent: -2)];
-            let new_terms = terms.into_inverse();
+            let new_terms = terms.to_inverse();
             assert_eq!(
                 new_terms,
                 vec![term!(Meter, exponent: -2), term!(Second, exponent: 2)]
@@ -173,7 +173,7 @@ mod tests {
         }
 
         #[test]
-        fn validate_into_inverse_numerators_and_denominators_mixed() {
+        fn validate_to_inverse_numerators_and_denominators_mixed() {
             let terms = vec![
                 term!(Meter, exponent: 2),
                 term!(Second, exponent: -2),
@@ -181,7 +181,7 @@ mod tests {
                 term!(Kilo, Meter, exponent: 4),
                 term!(Hecto, Are, exponent: -5),
             ];
-            let new_terms = terms.into_inverse();
+            let new_terms = terms.to_inverse();
 
             let result = vec![
                 term!(Meter, exponent: -2),

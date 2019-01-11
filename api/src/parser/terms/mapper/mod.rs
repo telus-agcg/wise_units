@@ -23,7 +23,7 @@ use crate::parser::symbols::symbol_parser::Rule as SymbolRule;
 use crate::parser::symbols::symbol_parser::SymbolParser;
 use crate::parser::term::Term;
 use crate::parser::terms::term_parser::Rule;
-use crate::Invert;
+use crate::invert::Invert;
 use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 

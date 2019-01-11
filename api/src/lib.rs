@@ -57,7 +57,6 @@ mod ucum_unit;
 
 pub use crate::convertible::Convertible;
 pub use crate::field_eq::FieldEq;
-pub use crate::invert::{IntoInverse, Invert};
 pub use crate::is_compatible_with::IsCompatibleWith;
 pub use crate::measurement::Measurement;
 pub use crate::parser::{

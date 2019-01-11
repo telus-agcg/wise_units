@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [DEV-4413] Changed `into_reduced::IntoReduced` to `reduce::ToReduced`, added
   `reduced::IntoReduced` that consumes `self` (which is convention),
   and auto-derived `IntoReduced` for all types that implement `ToReduced`.
+- [DEV-4385] Changed `invert::IntoInverse` to `invert::ToInverse`, added
+  `invert::IntoReduced` that consumes `self` (which is convention),
+  and auto-derived `IntoInverse` for all types that implement `ToInverse`.
 
 ### Deprecated
 
