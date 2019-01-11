@@ -34,8 +34,8 @@ where
 {
     terms
         .iter()
-        .filter_map(|term| func(term))
-        .fold(None, |acc, term_string| build_string(acc, term_string))
+        .filter_map(func)
+        .fold(None, build_string)
 }
 
 /// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not positive.
