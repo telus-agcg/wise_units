@@ -1,6 +1,7 @@
 pub mod composable;
 pub mod convertible;
 pub mod field_eq;
+pub mod invert;
 pub mod is_compatible_with;
 pub mod ops;
 pub mod partial_eq;
