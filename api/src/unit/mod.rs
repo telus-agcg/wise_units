@@ -5,7 +5,6 @@ pub mod display;
 pub mod field_eq;
 pub mod from;
 pub mod from_str;
-pub mod to_reduced;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod ops;
@@ -13,6 +12,7 @@ pub mod partial_eq;
 pub mod partial_ord;
 pub mod reducible;
 mod term_reducing;
+pub mod to_reduced;
 pub mod ucum_unit;
 
 use crate::parser::Term;

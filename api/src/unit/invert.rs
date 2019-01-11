@@ -1,5 +1,5 @@
 use super::Unit;
-use crate::invert::{ToInverse, Invert};
+use crate::invert::{Invert, ToInverse};
 
 impl Invert for &mut Unit {
     #[inline]

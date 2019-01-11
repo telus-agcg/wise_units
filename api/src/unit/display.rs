@@ -19,7 +19,6 @@ fn decompose(unit: &Unit) -> String {
     format_output(numerator, denominator)
 }
 
-
 fn format_output(numerator: Option<String>, denominator: Option<String>) -> String {
     match (numerator, denominator) {
         (Some(n), Some(d)) => [n, d].join("/"),
@@ -36,9 +35,7 @@ where
     terms
         .iter()
         .filter_map(|term| func(term))
-        .fold(None, |acc, term_string| {
-            build_string(acc, term_string)
-        })
+        .fold(None, |acc, term_string| build_string(acc, term_string))
 }
 
 /// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not positive.

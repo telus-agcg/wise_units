@@ -10,7 +10,7 @@ pub trait ToReduced {
 
 /// Defines an interface similar to `ToReduced`, but which consumes `self`.
 ///
-pub trait IntoReduced : ToReduced {
+pub trait IntoReduced: ToReduced {
     fn into_reduced(self) -> <Self as ToReduced>::Output;
 }
 

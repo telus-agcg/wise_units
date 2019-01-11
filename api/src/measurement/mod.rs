@@ -1,12 +1,12 @@
 pub mod composable;
 pub mod convertible;
 pub mod field_eq;
-pub mod to_reduced;
 pub mod is_compatible_with;
 pub mod ops;
 pub mod partial_eq;
 pub mod partial_ord;
 pub mod reducible;
+pub mod to_reduced;
 pub mod ucum_unit;
 
 use crate::parser::Error;
@@ -120,7 +120,10 @@ mod tests {
 
         #[test]
         fn validate_serialization_empty_terms() {
-            let measurement = Measurement { value: 123.4, unit: vec![].into() };
+            let measurement = Measurement {
+                value: 123.4,
+                unit: vec![].into(),
+            };
             let expected_json = r#"{"value":123.4,"unit":{"terms":[]}}"#;
 
             let j =

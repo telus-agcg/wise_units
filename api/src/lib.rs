@@ -45,11 +45,11 @@ mod macros;
 pub mod as_fraction;
 pub mod convertible;
 pub mod field_eq;
-pub mod reduce;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
 pub mod parser;
+pub mod reduce;
 pub mod unit;
 
 mod reducible;

@@ -12,6 +12,8 @@ impl ::std::convert::From<Vec<Term>> for Unit {
 
 impl ::std::convert::From<&[Term]> for Unit {
     fn from(terms: &[Term]) -> Self {
-        Self { terms: terms.to_vec() }
+        Self {
+            terms: terms.to_vec(),
+        }
     }
 }

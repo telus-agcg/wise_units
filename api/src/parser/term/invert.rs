@@ -1,5 +1,5 @@
 use super::Term;
-use crate::invert::{ToInverse, Invert};
+use crate::invert::{Invert, ToInverse};
 
 // Term
 impl Invert for &mut Term {
@@ -41,7 +41,7 @@ impl ToInverse for Vec<Term> {
 #[cfg(test)]
 mod tests {
     mod term {
-        use crate::{Atom, invert::ToInverse, invert::Invert, Term};
+        use crate::{invert::Invert, invert::ToInverse, Atom, Term};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {
@@ -87,7 +87,7 @@ mod tests {
     }
 
     mod terms {
-        use crate::{Atom, invert::ToInverse, invert::Invert, Prefix, Term};
+        use crate::{invert::Invert, invert::ToInverse, Atom, Prefix, Term};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {

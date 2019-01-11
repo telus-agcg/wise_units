@@ -1,7 +1,7 @@
 use super::Measurement;
 use crate::convertible::Convertible;
-use crate::reduce::ToReduced;
 use crate::parser::Error;
+use crate::reduce::ToReduced;
 
 impl ToReduced for Measurement {
     type Output = Result<Measurement, Error>;
