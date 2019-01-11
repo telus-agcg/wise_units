@@ -1,9 +1,4 @@
-use crate::convertible::Convertible;
-use crate::field_eq::FieldEq;
-use crate::is_compatible_with::IsCompatibleWith;
-use crate::measurement::Measurement;
-use crate::parser::Error;
-use crate::unit::Unit;
+use crate::{Convertible, Error, FieldEq, IsCompatibleWith, Measurement, Unit};
 use std::str::FromStr;
 
 /// This implementation of `Convertible` lets you pass in a `&str` for the

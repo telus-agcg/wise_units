@@ -9,8 +9,10 @@ impl Invert for &mut Unit {
 }
 
 impl ToInverse for Unit {
+    type Output = Self;
+
     #[inline]
-    fn to_inverse(&self) -> Unit {
+    fn to_inverse(&self) -> Self::Output {
         self.terms.to_inverse().into()
     }
 }

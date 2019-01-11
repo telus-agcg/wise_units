@@ -1,6 +1,6 @@
 use crate::convertible::Convertible;
+use crate::error::Error;
 use crate::measurement::Measurement;
-use crate::parser::Error;
 use std::ops::{Add, Div, Mul, Sub};
 
 //-----------------------------------------------------------------------------

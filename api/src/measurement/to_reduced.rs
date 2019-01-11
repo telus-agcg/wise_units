@@ -1,6 +1,6 @@
 use super::Measurement;
 use crate::convertible::Convertible;
-use crate::parser::Error;
+use crate::error::Error;
 use crate::reduce::ToReduced;
 
 impl ToReduced for Measurement {

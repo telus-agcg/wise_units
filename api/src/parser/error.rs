@@ -2,11 +2,8 @@ use pest;
 
 /// Errors when trying to convert between types that aren't commensurable.
 ///
-#[derive(Fail, Debug)]
+#[derive(Fail, Debug, PartialEq)]
 pub enum Error {
-    #[fail(display = "Units are not compatible: {}, {}", lhs, rhs)]
-    IncompatibleUnitTypes { lhs: String, rhs: String },
-
     #[fail(display = "Unable to parse expression: {}", expression)]
     UnableToParse { expression: String },
 
