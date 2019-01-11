@@ -15,7 +15,9 @@ impl Invert for &mut Term {
 }
 
 impl ToInverse for Term {
-    fn to_inverse(&self) -> Self {
+    type Output = Self;
+
+    fn to_inverse(&self) -> Self::Output {
         let mut new_term = self.clone();
         new_term.invert();
 
@@ -33,7 +35,9 @@ impl Invert for &mut Vec<Term> {
 }
 
 impl ToInverse for Vec<Term> {
-    fn to_inverse(&self) -> Self {
+    type Output = Self;
+
+    fn to_inverse(&self) -> Self::Output {
         self.iter().map(|term| term.to_inverse()).collect()
     }
 }

@@ -1,6 +1,7 @@
 pub mod composable;
 pub mod convertible;
 pub mod field_eq;
+pub mod invert;
 pub mod is_compatible_with;
 pub mod ops;
 pub mod partial_eq;
@@ -9,7 +10,7 @@ pub mod reducible;
 pub mod to_reduced;
 pub mod ucum_unit;
 
-use crate::parser::Error;
+use crate::error::Error;
 use crate::reducible::Reducible;
 use crate::ucum_unit::UcumUnit;
 use crate::unit::Unit;

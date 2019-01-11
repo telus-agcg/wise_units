@@ -29,7 +29,7 @@ pub struct Unit {
 ///
 /// The easiest way to create a new `Unit` is via its implementation of
 /// `std::str::FromStr`. This parses the given `&str` and returns a
-/// `wise_units::parser::Error` if it fails to parse:
+/// `wise_units::error::Error` if it fails to parse:
 ///
 /// ```rust
 /// use std::str::FromStr;

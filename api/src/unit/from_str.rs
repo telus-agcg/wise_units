@@ -1,5 +1,4 @@
-use crate::parser::Error;
-use crate::unit::Unit;
+use crate::{Error, Unit};
 use std::str::FromStr;
 
 //-----------------------------------------------------------------------------

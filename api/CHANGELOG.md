@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+
+- [DEV-4385] Added new `error::Error` type that derives `Fail`. So far, all
+  errors have been captured in `parser::error::Error`, but it really only makes
+  sense to handle parsing-specific errors with that. The new type should provide
+  errors for the whole crate and thus wraps the old `parser::error::Error` as
+  needed. Also moved the `IncompatibleUnitTypes` variant to the new type. The
+  new type also implements `From<parser::Error>` for ergonomic conversions.
+- [DEV-4385] Implemented all of the `invert` traits for `Measurement`. Seems I
+  forgot to do that for 0.9.0. This also required a new `DivideByZero` error
+  variant in the new `error::Error`. ...which also required changing the
+  `ToInverse` and `IntoInverse` traits to add an `Output` associated type to
+  allow clients to handle the `DivideByZero` case.
+
 ## [0.9.0] - 2019-01-10
 
 ### Added
