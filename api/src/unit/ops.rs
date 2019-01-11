@@ -21,9 +21,7 @@ impl Div for Unit {
 
     #[inline]
     fn div(self, other: Self) -> Self::Output {
-        let terms = divide_terms(&self.terms, &other.terms);
-
-        Self::from(terms)
+        divide_terms(&self.terms, &other.terms).into()
     }
 }
 
@@ -32,9 +30,7 @@ impl<'a> Div<&'a Unit> for Unit {
 
     #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
-        let terms = divide_terms(&self.terms, &other.terms);
-
-        Self::from(terms)
+        divide_terms(&self.terms, &other.terms).into()
     }
 }
 
@@ -43,9 +39,7 @@ impl<'a> Div for &'a Unit {
 
     #[inline]
     fn div(self, other: &'a Unit) -> Self::Output {
-        let terms = divide_terms(&self.terms, &other.terms);
-
-        Unit::from(terms)
+        divide_terms(&self.terms, &other.terms).into()
     }
 }
 
@@ -54,9 +48,7 @@ impl<'a> Div<Unit> for &'a Unit {
 
     #[inline]
     fn div(self, other: Unit) -> Self::Output {
-        let terms = divide_terms(self, &other);
-
-        Unit::from(terms)
+        divide_terms(self, &other).into()
     }
 }
 
@@ -68,9 +60,7 @@ impl Mul for Unit {
 
     #[inline]
     fn mul(self, other: Self) -> Self::Output {
-        let terms = multiply_terms(&self.terms, &other.terms);
-
-        Self::from(terms)
+        multiply_terms(&self.terms, &other.terms).into()
     }
 }
 
@@ -79,9 +69,7 @@ impl<'a> Mul<&'a Unit> for Unit {
 
     #[inline]
     fn mul(self, other: &'a Self) -> Self::Output {
-        let terms = multiply_terms(&self.terms, &other.terms);
-
-        Self::from(terms)
+        multiply_terms(&self.terms, &other.terms).into()
     }
 }
 
@@ -90,9 +78,7 @@ impl<'a> Mul for &'a Unit {
 
     #[inline]
     fn mul(self, other: &'a Unit) -> Self::Output {
-        let terms = multiply_terms(&self.terms, &other.terms);
-
-        Unit::from(terms)
+        multiply_terms(&self.terms, &other.terms).into()
     }
 }
 
@@ -101,9 +87,7 @@ impl<'a> Mul<Unit> for &'a Unit {
 
     #[inline]
     fn mul(self, other: Unit) -> Self::Output {
-        let terms = multiply_terms(&self.terms, &other.terms);
-
-        Unit::from(terms)
+        multiply_terms(&self.terms, &other.terms).into()
     }
 }
 

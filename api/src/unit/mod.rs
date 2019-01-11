@@ -115,7 +115,7 @@ mod tests {
         let unit = Unit::new_unity();
         assert!(unit.is_unity());
 
-        let unit = Unit { terms: Vec::new() };
+        let unit: Unit = Vec::new().into();
         assert!(!unit.is_unity());
 
         let unit = Unit::from_str("1").unwrap();
@@ -175,7 +175,7 @@ mod tests {
 
         #[test]
         fn validate_serialization_empty_terms() {
-            let unit = Unit { terms: vec![] };
+            let unit: Unit = vec![].into();
             let expected_json = r#"{"terms":[]}"#;
 
             let j = serde_json::to_string(&unit).expect("Couldn't convert Unit to JSON String");
@@ -207,9 +207,7 @@ mod tests {
                 term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, factor: 1, exponent: -4);
 
-            let unit = Unit {
-                terms: vec![term1, term2],
-            };
+            let unit: Unit = vec![term1, term2].into();
 
             let j = serde_json::to_string(&unit).expect("Couldn't convert Unit to JSON String");
 
@@ -220,9 +218,8 @@ mod tests {
         fn validate_deserialization_empty_terms() {
             let json = r#"{"terms": []}"#;
 
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
-
-            let expected_unit = Unit { terms: vec![] };
+            let k: Unit = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
+            let expected_unit: Unit = vec![].into();
 
             assert_eq!(expected_unit, k);
         }
@@ -245,15 +242,13 @@ mod tests {
                 }]
             }"#;
 
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
+            let k: Unit = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
 
             let term1 =
                 term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
             let term2 = term!(Gram, exponent: -4);
 
-            let expected_unit = Unit {
-                terms: vec![term1, term2],
-            };
+            let expected_unit: Unit = vec![term1, term2].into();
 
             assert_eq!(expected_unit, k);
         }
