@@ -25,14 +25,12 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
             .atoms
             .iter()
             .filter_map(|atom| {
-                atom.secondary_code
-                    .as_ref()
-                    .map(|secondary_code| {
-                        let code = secondary_code.clone();
-                        let s = atom.type_name.clone();
+                atom.secondary_code.as_ref().map(|secondary_code| {
+                    let code = secondary_code.clone();
+                    let s = atom.type_name.clone();
 
-                        PestSymbol::new(super::build_pest_rule_name("sec", &s), code)
-                    })
+                    PestSymbol::new(super::build_pest_rule_name("sec", &s), code)
+                })
             })
             .collect();
 

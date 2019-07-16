@@ -30,7 +30,7 @@ use pest::Parser;
 pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
     fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Vec<Term>, Error> {
         let main_term = if let Rule::main_term = pair.as_rule() {
-             visit_main_term(pair)?
+            visit_main_term(pair)?
         } else {
             let e = Error::UnableToParse {
                 expression: pair.as_str().to_string(),
@@ -116,7 +116,7 @@ fn visit_simple_unit(pair: Pair<'_, Rule>) -> Result<SimpleUnit, Error> {
         return Ok(SimpleUnit { prefix, atom });
     }
 
-    if let Ok(mut symbol_pairs)  = SymbolParser::parse(SymbolRule::symbol, string) {
+    if let Ok(mut symbol_pairs) = SymbolParser::parse(SymbolRule::symbol, string) {
         let symbol = symbol_mapper::map(symbol_pairs.next().unwrap())?;
         atom = symbol.atom;
         prefix = symbol.prefix;
