@@ -64,7 +64,7 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 ///
 fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
     terms
-        .into_iter()
+        .iter()
         .map(|term| (ComposableTerm::from(term), term.exponent.unwrap_or(1)))
         .fold(
             BTreeMap::<ComposableTerm, i32>::new(),

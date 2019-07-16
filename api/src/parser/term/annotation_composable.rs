@@ -10,7 +10,7 @@ use crate::parser::Term;
 impl<'a> AnnotationComposable for &'a [Term] {
     fn annotation_composition(self) -> Option<AnnotationComposition> {
         let mut map = self
-            .into_iter()
+            .iter()
             .filter(|term| term.annotation.is_some())
             .map(|term| (term.annotation.clone().unwrap(), term.exponent.unwrap_or(1)))
             .fold(AnnotationComposition::new(), |mut map, (key, exponent)| {
