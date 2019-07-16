@@ -164,7 +164,7 @@ impl Mul<f64> for Measurement {
 
         Self {
             value: new_value,
-            unit: self.unit.clone(),
+            unit: self.unit,
         }
     }
 }
@@ -246,7 +246,7 @@ impl Div<f64> for Measurement {
 
         Self {
             value: new_value,
-            unit: self.unit.clone(),
+            unit: self.unit,
         }
     }
 }

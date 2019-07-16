@@ -4,8 +4,8 @@ use crate::parser::Term;
 use crate::unit::Unit;
 
 impl AsFraction for Unit {
-    type Numerator = Unit;
-    type Denominator = Unit;
+    type Numerator = Self;
+    type Denominator = Self;
 
     #[inline]
     fn numerator(&self) -> Option<Self::Numerator> {
@@ -19,7 +19,7 @@ impl AsFraction for Unit {
         if positive_terms.is_empty() {
             None
         } else {
-            Some(Unit::from(positive_terms))
+            Some(Self::from(positive_terms))
         }
     }
 
@@ -28,14 +28,19 @@ impl AsFraction for Unit {
         let negative_terms: Vec<Term> = self
             .terms
             .iter()
-            .filter(|term| term.exponent.unwrap_or(1).is_negative())
-            .map(|term| term.to_inverse())
+            .filter_map(|term| {
+                if term.exponent.unwrap_or(1).is_negative() {
+                    Some(term.to_inverse())
+                } else {
+                    None
+                }
+            })
             .collect();
 
         if negative_terms.is_empty() {
             None
         } else {
-            Some(Unit::from(negative_terms))
+            Some(Self::from(negative_terms))
         }
     }
 }

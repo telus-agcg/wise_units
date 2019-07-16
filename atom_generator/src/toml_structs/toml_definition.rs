@@ -17,6 +17,6 @@ pub(crate) struct TomlFunction {
     pub(crate) unit: String,
 }
 
-fn default_value() -> f64 {
+const fn default_value() -> f64 {
     1.0
 }

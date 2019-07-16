@@ -48,7 +48,7 @@ impl Unit {
     pub fn new_unity() -> Self {
         let unity_term = Term::new_unity();
 
-        Unit {
+        Self {
             terms: vec![unity_term],
         }
     }
@@ -101,7 +101,7 @@ impl Unit {
     pub fn expression_reduced(&self) -> String {
         let reduced = term_reducing::reduce_terms(&self.terms);
 
-        Unit::from(reduced).to_string()
+        Self::from(reduced).to_string()
     }
 }
 

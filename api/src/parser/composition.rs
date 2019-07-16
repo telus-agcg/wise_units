@@ -10,7 +10,7 @@ type Exponent = i32;
 /// would be "L-2". This continues on when a Unit has multiple `Term`s (ex.
 /// "mL/(kg.d)").
 ///
-/// For more info, see https://en.wikipedia.org/wiki/Dimensional_analysis.
+/// For more info, see [https://en.wikipedia.org/wiki/Dimensional_analysis](https://en.wikipedia.org/wiki/Dimensional_analysis).
 ///
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Composition {
@@ -82,7 +82,7 @@ impl Composition {
     }
 
     fn new_electric_charge(exponent: i32) -> Self {
-        Composition {
+        Self {
             electric_charge: Some(exponent),
             length: None,
             luminous_intensity: None,
@@ -94,7 +94,7 @@ impl Composition {
     }
 
     fn new_length(exponent: i32) -> Self {
-        Composition {
+        Self {
             electric_charge: None,
             length: Some(exponent),
             luminous_intensity: None,
@@ -106,7 +106,7 @@ impl Composition {
     }
 
     fn new_luminous_intensity(exponent: i32) -> Self {
-        Composition {
+        Self {
             electric_charge: None,
             length: None,
             luminous_intensity: Some(exponent),
@@ -118,7 +118,7 @@ impl Composition {
     }
 
     fn new_mass(exponent: i32) -> Self {
-        Composition {
+        Self {
             electric_charge: None,
             length: None,
             luminous_intensity: None,
@@ -130,7 +130,7 @@ impl Composition {
     }
 
     fn new_plane_angle(exponent: i32) -> Self {
-        Composition {
+        Self {
             electric_charge: None,
             length: None,
             luminous_intensity: None,
@@ -142,7 +142,7 @@ impl Composition {
     }
 
     fn new_temperature(exponent: i32) -> Self {
-        Composition {
+        Self {
             electric_charge: None,
             length: None,
             luminous_intensity: None,
@@ -154,7 +154,7 @@ impl Composition {
     }
 
     fn new_time(exponent: i32) -> Self {
-        Composition {
+        Self {
             electric_charge: None,
             length: None,
             luminous_intensity: None,
@@ -223,7 +223,7 @@ impl Composition {
 // impl Default
 impl Default for Composition {
     fn default() -> Self {
-        Composition {
+        Self {
             electric_charge: None,
             length: None,
             luminous_intensity: None,
@@ -278,7 +278,7 @@ impl Mul for Composition {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self::Output {
-        let mut new_composition = Composition::default();
+        let mut new_composition = Self::default();
 
         add_electric_charge(self.electric_charge, rhs, &mut new_composition);
         add_length(self.length, rhs, &mut new_composition);
@@ -323,7 +323,7 @@ impl Mul<i32> for Composition {
     type Output = Self;
 
     fn mul(self, rhs: i32) -> Self::Output {
-        let mut new_composition = Composition::default();
+        let mut new_composition = Self::default();
 
         mul_electric_charge(self.electric_charge, rhs, &mut new_composition);
         mul_length(self.length, rhs, &mut new_composition);

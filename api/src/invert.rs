@@ -24,7 +24,7 @@ pub trait IntoInverse: ToInverse {
 /// Auto-derive `IntoInverse` for all types that implement `ToInverse`.
 ///
 impl<T: ToInverse> IntoInverse for T {
-    fn into_inverse(self) -> <T as ToInverse>::Output {
+    fn into_inverse(self) -> <Self as ToInverse>::Output {
         ToInverse::to_inverse(&self)
     }
 }

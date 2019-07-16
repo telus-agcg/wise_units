@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fixed some clippy warnings related to moving while iterating.
+- Fixed lots of clippy warnings.
 
 ### Removed
 

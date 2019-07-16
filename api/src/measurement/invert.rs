@@ -13,7 +13,7 @@ impl Invert for &mut Measurement {
 }
 
 impl ToInverse for Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Result<Self, Error>;
 
     #[inline]
     fn to_inverse(&self) -> Self::Output {

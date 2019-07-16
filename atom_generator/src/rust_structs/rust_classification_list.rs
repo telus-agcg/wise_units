@@ -8,10 +8,8 @@ pub(crate) struct RustClassificationList {
 }
 
 impl<'a> From<&'a RustAtomList> for RustClassificationList {
-    fn from(atom_list: &'a RustAtomList) -> RustClassificationList {
-        let type_names = unique_classification_names(atom_list);
-
-        RustClassificationList { type_names }
+    fn from(atom_list: &'a RustAtomList) -> Self {
+        Self { type_names: unique_classification_names(atom_list) }
     }
 }
 

@@ -38,7 +38,7 @@ impl ToInverse for Vec<Term> {
     type Output = Self;
 
     fn to_inverse(&self) -> Self::Output {
-        self.iter().map(|term| term.to_inverse()).collect()
+        self.iter().map(ToInverse::to_inverse).collect()
     }
 }
 

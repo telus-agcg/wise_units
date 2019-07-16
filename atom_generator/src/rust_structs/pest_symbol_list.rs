@@ -7,7 +7,7 @@ pub(crate) struct PestSymbolList {
 }
 
 impl<'a> From<&'a RustAtomList> for PestSymbolList {
-    fn from(atom_list: &'a RustAtomList) -> PestSymbolList {
+    fn from(atom_list: &'a RustAtomList) -> Self {
         let mut primary_rule_names = atom_list
             .atoms
             .iter()
@@ -24,18 +24,21 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
         let mut secondary_rule_names = atom_list
             .atoms
             .iter()
-            .filter(|a| a.secondary_code.is_some())
-            .map(|a| {
-                let s = a.type_name.clone();
-                let code = a.secondary_code.clone().unwrap();
+            .filter_map(|atom| {
+                atom.secondary_code
+                    .as_ref()
+                    .map(|secondary_code| {
+                        let code = secondary_code.clone();
+                        let s = atom.type_name.clone();
 
-                PestSymbol::new(super::build_pest_rule_name("sec", &s), code)
+                        PestSymbol::new(super::build_pest_rule_name("sec", &s), code)
+                    })
             })
             .collect();
 
         sort_symbols(&mut secondary_rule_names);
 
-        PestSymbolList {
+        Self {
             primary_rule_names,
             secondary_rule_names,
         }
@@ -54,7 +57,7 @@ pub(crate) struct PestSymbol {
 }
 
 impl PestSymbol {
-    pub(crate) fn new(rule_name: String, code: String) -> Self {
-        PestSymbol { rule_name, code }
+    pub(crate) const fn new(rule_name: String, code: String) -> Self {
+        Self { rule_name, code }
     }
 }
