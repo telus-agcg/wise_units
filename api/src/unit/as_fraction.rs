@@ -28,12 +28,9 @@ impl AsFraction for Unit {
         let negative_terms: Vec<Term> = self
             .terms
             .iter()
-            .filter_map(|term| {
-                if term.exponent.unwrap_or(1).is_negative() {
-                    Some(term.to_inverse())
-                } else {
-                    None
-                }
+            .filter_map(|term| match term.exponent {
+                Some(e) if e.is_negative() => Some(term.to_inverse()),
+                _ => None,
             })
             .collect();
 
