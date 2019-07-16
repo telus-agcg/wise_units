@@ -4,7 +4,7 @@ use crate::error::Error;
 use crate::reduce::ToReduced;
 
 impl ToReduced for Measurement {
-    type Output = Result<Measurement, Error>;
+    type Output = Result<Self, Error>;
 
     /// Reduces `self`'s `Term`s into a new `Unit`, consuming `self`.
     ///

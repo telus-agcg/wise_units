@@ -68,9 +68,7 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
 
                 format!(
                     "Definition::new({:?}, \"{}\", Some({}))",
-                    function.value,
-                    function.unit.clone(),
-                    function_set_string
+                    function.value, function.unit, function_set_string
                 )
             } else if &u.primary_code == "[pi]" {
                 format!(
@@ -110,18 +108,14 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
 ///
 fn build_scalar_function(primary_code: &str) -> String {
     match primary_code {
-        "B" => "|value: f64| 10_f64.powf(value)",
-        "B[SPL]" => "|value: f64| 10_f64.powf(value / 2.0)",
-        "B[V]" => "|value: f64| 10_f64.powf(value / 2.0)",
-        "B[mV]" => "|value: f64| 10_f64.powf(value / 2.0)",
-        "B[uV]" => "|value: f64| 10_f64.powf(value / 2.0)",
-        "B[10.nV]" => "|value: f64| 10_f64.powf(value / 2.0)",
-        "B[W]" => "|value: f64| 10_f64.powf(value)",
-        "B[kW]" => "|value: f64| 10_f64.powf(value)",
+        "B" | "B[W]" | "B[kW]" => "|value: f64| 10_f64.powf(value)",
+        "B[SPL]" | "B[V]" | "B[mV]" | "B[uV]" | "B[10.nV]" => {
+            "|value: f64| 10_f64.powf(value / 2.0)"
+        }
         "bit_s" => "|value: f64| 2_f64.powf(value)",
         "Cel" => "|value: f64| value + 273.15",
         "Np" => "|value: f64| ::std::f64::consts::E.powf(value)",
-        "%[slope]" => "|value: f64| value.tan() * 100.0",
+        "%[slope]" | "[p'diop]" => "|value: f64| value.tan() * 100.0",
         "[hp'_X]" => "|value: f64| 10_f64.powf(-value)",
         "[hp'_C]" => "|value: f64| 100_f64.powf(-value)",
         "[hp'_M]" => "|value: f64| 1_000_f64.powf(-value)",
@@ -130,7 +124,6 @@ fn build_scalar_function(primary_code: &str) -> String {
         "[pH]" => "|value: f64| -value.log10()",
         "[degF]" => "|value: f64| 5.0 / 9.0 * (value + 459.67)",
         "[degRe]" => "|value: f64| (value / 0.8) + 273.15",
-        "[p'diop]" => "|value: f64| value.tan() * 100.0",
         _ => panic!("Unknown primary code on special unit: {}", primary_code),
     }
     .to_string()
@@ -145,18 +138,12 @@ fn build_scalar_function(primary_code: &str) -> String {
 ///
 fn build_magnitude_function(primary_code: &str) -> String {
     match primary_code {
-        "B" => "|value: f64| value.log10()",
-        "B[SPL]" => "|value: f64| 2.0 * value.log10()",
-        "B[V]" => "|value: f64| 2.0 * value.log10()",
-        "B[mV]" => "|value: f64| 2.0 * value.log10()",
-        "B[uV]" => "|value: f64| 2.0 * value.log10()",
-        "B[10.nV]" => "|value: f64| 2.0 * value.log10()",
-        "B[W]" => "|value: f64| value.log10()",
-        "B[kW]" => "|value: f64| value.log10()",
+        "B" | "B[W]" | "B[kW]" => "|value: f64| value.log10()",
+        "B[SPL]" | "B[V]" | "B[mV]" | "B[uV]" | "B[10.nV]" => "|value: f64| 2.0 * value.log10()",
         "bit_s" => "|value: f64| value.log2()",
         "Cel" => "|value: f64| value - 273.15",
         "Np" => "|value: f64| value.ln()",
-        "%[slope]" => "|value: f64| (value / 100.0).atan()",
+        "%[slope]" | "[p'diop]" => "|value: f64| (value / 100.0).atan()",
         "[hp'_X]" => "|value: f64| -value.log10()",
         "[hp'_C]" => "|value: f64| -value.ln() / 100_f64.ln()",
         "[hp'_M]" => "|value: f64| -value.ln() / 1_000_f64.ln()",
@@ -165,7 +152,6 @@ fn build_magnitude_function(primary_code: &str) -> String {
         "[pH]" => "|value: f64| 10.0_f64.powf(-value)",
         "[degF]" => "|value: f64| 9.0 * value / 5.0 - 459.67",
         "[degRe]" => "|value: f64| (value - 273.15) * 0.8",
-        "[p'diop]" => "|value: f64| (value / 100.0).atan()",
         _ => panic!("Unknown primary code on special unit: {}", primary_code),
     }
     .to_string()

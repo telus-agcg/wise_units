@@ -11,7 +11,7 @@ impl UcumUnit for Unit {
     /// special if any of its `Term`s has an `Atom` that is special.
     ///
     fn is_special(&self) -> bool {
-        self.terms.iter().any(|term| term.is_special())
+        self.terms.iter().any(UcumUnit::is_special)
     }
 
     /// The UCUM defines "metric units" using four points. First:
@@ -37,11 +37,11 @@ impl UcumUnit for Unit {
     /// `Term`s are metric.
     ///
     fn is_metric(&self) -> bool {
-        self.terms.iter().all(|term| term.is_metric())
+        self.terms.iter().all(UcumUnit::is_metric)
     }
 
     fn is_arbitrary(&self) -> bool {
-        self.terms.iter().all(|term| term.is_arbitrary())
+        self.terms.iter().all(UcumUnit::is_arbitrary)
     }
 
     /// This gives the scalar value of `self` in terms of `self`'s

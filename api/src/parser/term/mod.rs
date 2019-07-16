@@ -24,7 +24,7 @@ pub struct Term {
 }
 
 impl Term {
-    pub fn new(prefix: Option<Prefix>, atom: Option<Atom>) -> Self {
+    pub const fn new(prefix: Option<Prefix>, atom: Option<Atom>) -> Self {
         Self {
             atom,
             prefix,
@@ -55,7 +55,7 @@ impl Term {
     /// * it has no `Prefix`
     ///
     pub fn is_unity(&self) -> bool {
-        self.factor == Some(1u32)
+        self.factor == Some(1_u32)
             && self.exponent.is_none()
             && self.atom.is_none()
             && self.prefix.is_none()

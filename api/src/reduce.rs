@@ -17,7 +17,7 @@ pub trait IntoReduced: ToReduced {
 /// Auto-derive `IntoReduced` for all types that implement `ToReduced`.
 ///
 impl<T: ToReduced> IntoReduced for T {
-    fn into_reduced(self) -> <T as ToReduced>::Output {
+    fn into_reduced(self) -> <Self as ToReduced>::Output {
         ToReduced::to_reduced(&self)
     }
 }

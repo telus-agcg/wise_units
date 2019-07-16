@@ -29,7 +29,7 @@ impl Definition {
         })
     }
 
-    pub(crate) fn value(&self) -> f64 {
+    pub(crate) const fn value(&self) -> f64 {
         self.value
     }
 

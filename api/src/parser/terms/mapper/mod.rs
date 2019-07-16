@@ -29,14 +29,13 @@ use pest::Parser;
 
 pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
     fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Vec<Term>, Error> {
-        let main_term = match pair.as_rule() {
-            Rule::main_term => visit_main_term(pair)?,
-            _ => {
-                let e = Error::UnableToParse {
-                    expression: pair.as_str().to_string(),
-                };
-                return Err(e);
-            }
+        let main_term = if let Rule::main_term = pair.as_rule() {
+            visit_main_term(pair)?
+        } else {
+            let e = Error::UnableToParse {
+                expression: pair.as_str().to_string(),
+            };
+            return Err(e);
         };
 
         let mut terms: Vec<Term> = main_term.into();
@@ -117,17 +116,14 @@ fn visit_simple_unit(pair: Pair<'_, Rule>) -> Result<SimpleUnit, Error> {
         return Ok(SimpleUnit { prefix, atom });
     }
 
-    match SymbolParser::parse(SymbolRule::symbol, string) {
-        Ok(mut symbol_pairs) => {
-            let symbol = symbol_mapper::map(symbol_pairs.next().unwrap())?;
-            atom = symbol.atom;
-            prefix = symbol.prefix;
-        }
-        Err(_) => {
-            return Err(Error::UnableToParse {
-                expression: string.to_string(),
-            });
-        }
+    if let Ok(mut symbol_pairs) = SymbolParser::parse(SymbolRule::symbol, string) {
+        let symbol = symbol_mapper::map(symbol_pairs.next().unwrap())?;
+        atom = symbol.atom;
+        prefix = symbol.prefix;
+    } else {
+        return Err(Error::UnableToParse {
+            expression: string.to_string(),
+        });
     };
 
     Ok(SimpleUnit { prefix, atom })

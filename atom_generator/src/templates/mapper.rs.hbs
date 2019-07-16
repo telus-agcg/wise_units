@@ -11,15 +11,14 @@ pub(super) mod mapper {
 
     pub(in super::super) fn map(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {
         fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {
-            let symbol = match pair.as_rule() {
-                Rule::symbol => visit_symbol(pair)?,
-                _ => {
-                    let error = Error::UnableToParse {
-                        expression: pair.as_str().to_string(),
-                    };
+            let symbol = if let Rule::symbol = pair.as_rule() {
+                visit_symbol(pair)?
+            } else {
+                let error = Error::UnableToParse {
+                    expression: pair.as_str().to_string(),
+                };
 
-                    return Err(error);
-                }
+                return Err(error);
             };
 
             Ok(symbol)

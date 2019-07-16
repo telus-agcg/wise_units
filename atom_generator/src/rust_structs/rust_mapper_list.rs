@@ -9,7 +9,7 @@ pub(crate) struct RustMapperList {
 }
 
 impl<'a> From<&'a RustAtomList> for RustMapperList {
-    fn from(atom_list: &'a RustAtomList) -> RustMapperList {
+    fn from(atom_list: &'a RustAtomList) -> Self {
         let mut mappings: HashMap<AtomTypeName, RustMappingValue> = HashMap::new();
 
         for rust_unit in &atom_list.atoms {
@@ -29,7 +29,7 @@ impl<'a> From<&'a RustAtomList> for RustMapperList {
             mappings.entry(key).or_insert(mapping_value);
         }
 
-        RustMapperList { mappings }
+        Self { mappings }
     }
 }
 

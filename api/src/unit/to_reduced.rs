@@ -79,7 +79,7 @@ fn build_unit_parts(
     let mut new_denominator_combos = build_terms_and_compositions(denominator_terms);
 
     'outer: for numerator_combo in new_numerator_combos.iter_mut().rev() {
-        'inner: for new_denominator_combo in new_denominator_combos.iter_mut() {
+        'inner: for new_denominator_combo in &mut new_denominator_combos {
             match (&numerator_combo, &new_denominator_combo) {
                 (Some(nc), Some(dc)) => {
                     if nc.1 == dc.1 {
