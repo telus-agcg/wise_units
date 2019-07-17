@@ -127,9 +127,9 @@ impl UcumUnit for Unit {
 
 #[cfg(test)]
 mod tests {
-    use approx::{assert_relative_eq, assert_ulps_eq};
     use crate::ucum_unit::UcumUnit;
     use crate::unit::Unit;
+    use approx::{assert_relative_eq, assert_ulps_eq};
     use std::str::FromStr;
 
     macro_rules! validate_scalar {

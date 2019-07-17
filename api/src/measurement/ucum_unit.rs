@@ -75,9 +75,9 @@ impl UcumUnit for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use approx::assert_ulps_eq;
     use crate::measurement::Measurement;
     use crate::ucum_unit::UcumUnit;
+    use approx::assert_ulps_eq;
 
     #[test]
     fn validate_scalar() {

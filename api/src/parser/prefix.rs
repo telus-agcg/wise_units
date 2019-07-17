@@ -208,9 +208,9 @@ impl fmt::Display for Prefix {
 
 #[cfg(test)]
 mod tests {
-    use approx::{assert_relative_eq, assert_ulps_eq};
     use super::Prefix;
     use crate::parser::ucum_symbol::UcumSymbol;
+    use approx::{assert_relative_eq, assert_ulps_eq};
 
     macro_rules! validate_value {
         ($test_name:ident, $variant:ident, $value:expr) => {

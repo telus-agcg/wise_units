@@ -56,9 +56,9 @@ fn combine_term_values(
 
 #[cfg(test)]
 mod tests {
-    use approx::assert_relative_eq;
     use crate::parser::{Atom, Prefix, Term};
     use crate::reducible::Reducible;
+    use approx::assert_relative_eq;
 
     macro_rules! validate_reduce_value {
         ($test_name:ident, $term:expr, $expected_value:expr) => {

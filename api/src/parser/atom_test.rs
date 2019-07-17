@@ -2,11 +2,11 @@
 //!
 #[cfg(test)]
 mod atom_test {
-    use approx::{assert_relative_eq, assert_ulps_eq};
     use crate::parser::{
         Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol,
     };
     use crate::ucum_unit::UcumUnit;
+    use approx::{assert_relative_eq, assert_ulps_eq};
 
     macro_rules! validate_definition {
         (
