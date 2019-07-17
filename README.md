@@ -28,18 +28,26 @@ extern crate wise_units;
 _Note_: wise_units depends on the [pest](https://github.com/pest-parser/pest)
 parser, which depends on Rust 1.23.
 
-### Feature `with_serde`
+### Feature `serde`
 
 wise_units provides the ability to (de)serialize `Measurement`s and its children
-using the `with_serde` feature (using [serde](https://serde.rs)). This lets you
+using the `serde` feature (using [serde](https://serde.rs)). This lets you
 convert wise_units objects into (and from!) any of the many formats supported by
-serde.
+serde. For example, deserializing a `Measurement` looks like:
+
+```rust
+let m = Measurement::new(123.4, "m2").unwrap();
+let json = serde_json::to_string(&m).unwrap();
+let expected_json = r#"{"value":123.4,"unit":"m2"}";
+
+assert_eq!(json, expected_json);
+```
 
 This feature is disabled by default. To enable it:
 
 ```toml
 [dependencies]
-wise_units = { version = "0.1", features = ["with_serde"] }
+wise_units = { version = "0.10", features = ["serde"] }
 ```
 
 ## Examples

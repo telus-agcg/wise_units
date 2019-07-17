@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Changed `serde` serialization and deserialization of `Measurement` and `Unit`
+  to expect/return `Unit`s as `String`s. The previous implementation expected a
+  `Vec<Term>`, which is really a private-ish API (or at least not ergonomic for
+  public consumption).
+- Renamed feature `with_serde` to just `serde` to follow convention.
+
 ### Fixed
 
 - Fixed lots of clippy warnings.
@@ -18,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Bad `api/clippy.toml` was causing some builds to fail; removed the file.
+- Removed `derive(Serialize, Deserialize)` from `Atom`, `Prefix`, and `Term`
+  since these no longer need to be (de)serialized.
 
 ## [0.10.0] - 2019-01-11
 

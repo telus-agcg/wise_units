@@ -517,8 +517,7 @@ mod tests {
     #[test]
     fn validate_mul_composition_lhs_empty() {
         let subject = Composition::default();
-        let other = subject.clone();
-        let product = subject * other;
+        let product = subject * subject;
         assert!(product.is_empty());
 
         let other = Composition::new(Dimension::Mass, 1);
@@ -545,8 +544,7 @@ mod tests {
         let product = subject * other;
         assert_eq!(product.mass, Some(1));
 
-        let other = subject.clone();
-        let product = subject * other;
+        let product = subject * subject;
         assert_eq!(product.mass, Some(2));
 
         let other = Composition::new(Dimension::Mass, 2);
@@ -573,8 +571,7 @@ mod tests {
         let product = subject * other;
         assert_eq!(product.mass, Some(3));
 
-        let other = subject.clone();
-        let product = subject * other;
+        let product = subject * subject;
         assert_eq!(product.mass, Some(4));
 
         let other = Composition::new(Dimension::Mass, -1);

@@ -1,3 +1,5 @@
+use pest_derive::Parser;
+
 #[derive(Parser)]
 #[grammar = "parser/terms/term.pest"]
 pub(crate) struct TermParser;
@@ -6,7 +8,7 @@ pub(crate) struct TermParser;
 mod tests {
     use super::TermParser;
     use super::*;
-    use pest::Parser;
+    use pest::{consumes_to, parses_to, Parser};
 
     #[test]
     fn parse_sign() {
