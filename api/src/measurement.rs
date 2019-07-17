@@ -10,14 +10,14 @@ pub mod reducible;
 pub mod to_reduced;
 pub mod ucum_unit;
 
-#[cfg(feature = "serde")]
-mod serde;
-
 use crate::error::Error;
 use crate::reducible::Reducible;
 use crate::ucum_unit::UcumUnit;
 use crate::unit::Unit;
 use std::str::FromStr;
+
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
 
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
@@ -34,6 +34,7 @@ use std::str::FromStr;
 /// assert!(in_meters.value == 1000.0);
 /// ```
 ///
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug)]
 pub struct Measurement {
     pub value: f64,
@@ -113,5 +114,91 @@ mod tests {
         let m = Measurement::new(1.0, "Cel").unwrap();
         let unit = Unit::from_str("[degF]").unwrap();
         assert_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
+    }
+
+    #[cfg(feature = "serde")]
+    mod serde {
+        use crate::Measurement;
+
+        fn expected_measurement() -> Measurement {
+            Measurement::new(432.1, "100cm456{stuff}/g4").unwrap()
+        }
+
+        fn validate_measurement(expected_measurement: &Measurement, expected_json: &str) {
+            let json = serde_json::to_string(&expected_measurement)
+                .expect("Couldn't convert Measurement to JSON String");
+            assert_eq!(expected_json, json);
+        }
+
+        fn validate_json(expected_json: &str, expected_measurement: &Measurement) {
+            let measurement: Measurement = serde_json::from_str(expected_json).unwrap();
+            assert_eq!(&measurement, expected_measurement);
+        }
+
+        #[test]
+        fn validate_serde_json_full_unit() {
+            let expected_measurement = expected_measurement();
+            let expected_json = r#"{"value":432.1,"unit":"100cm456{stuff}/g4"}"#;
+            validate_measurement(&expected_measurement, expected_json);
+            validate_json(expected_json, &expected_measurement)
+        }
+
+        #[test]
+        fn validate_serde_json_empty_unit_terms() {
+            let expected_measurement = Measurement::new(2.0, "1").unwrap();
+            let expected_json = r#"{"value":2.0,"unit":"1"}"#;
+            validate_measurement(&expected_measurement, expected_json);
+            validate_json(expected_json, &expected_measurement)
+        }
+
+        #[test]
+        fn validate_deserialize_json_integer_value() {
+            let expected_json = r#"{"value":2,"unit":"m"}"#;
+            let expected_measurement = Measurement::new(2.0, "m").unwrap();
+            validate_json(expected_json, &expected_measurement)
+        }
+
+        #[test]
+        fn validate_deserialize_json_errors() {
+            let expected_json = r#"{"value":2.0,"unit":""}"#;
+            let measurement: Result<Measurement, serde_json::Error> =
+                serde_json::from_str(expected_json);
+            assert!(measurement.is_err());
+
+            let expected_json = r#"{"value":"adsf","unit":"m"}"#;
+            let measurement: Result<Measurement, serde_json::Error> =
+                serde_json::from_str(expected_json);
+            assert!(measurement.is_err());
+        }
+
+        #[allow(box_pointers)]
+        #[test]
+        fn validate_bincode_serde() {
+            let expected_measurement = Measurement::new(123.4, "100cm456{stuff}/g4").unwrap();
+            let encoded: Vec<u8> = bincode::serialize(&expected_measurement).unwrap();
+            let decoded: Measurement = bincode::deserialize(&encoded).unwrap();
+
+            assert_eq!(expected_measurement, decoded);
+        }
+
+        #[test]
+        fn validate_message_pack_serde() {
+            use rmp_serde::{Deserializer, Serializer};
+            use serde::{Deserialize, Serialize};
+
+            let expected_measurement = expected_measurement();
+            let mut buf = Vec::new();
+            expected_measurement
+                .serialize(&mut Serializer::new(&mut buf))
+                .unwrap();
+
+            assert_eq!(buf.len(), 29);
+
+            let mut de = Deserializer::new(&buf[..]);
+            assert_eq!(
+                expected_measurement,
+                Deserialize::deserialize(&mut de).unwrap()
+            );
+        }
     }
 }
