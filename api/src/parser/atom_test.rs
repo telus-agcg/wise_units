@@ -567,7 +567,7 @@ mod atom_test {
     validate_scalar_mile_br, MileBritish, 1_609.342_732_8;
     validate_scalar_mile_international, MileInternational, 1_609.344;
     validate_scalar_mile_us, MileUS, 1_609.347_218_694_437_3;
-    validate_scalar_minim_br, MinimBritish, 5.919_388_020_833_333_4e-08;
+    validate_scalar_minim_br, MinimBritish, 5.919_388_020_833_333_4e-8;
     validate_scalar_minim_us, MinimUS, 6.161_151_992_187_5e-08;
     validate_scalar_mole, Mole, 6.0221367e+23;
     validate_scalar_month, Month, 2_629_800.0;
