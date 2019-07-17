@@ -1,6 +1,6 @@
 [package]
 name = "wise_units"
-version = "0.10.0"
+version = "0.11.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 edition = "2018"
 
