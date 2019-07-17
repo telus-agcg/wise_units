@@ -127,6 +127,7 @@ impl UcumUnit for Unit {
 
 #[cfg(test)]
 mod tests {
+    use approx::{assert_relative_eq, assert_ulps_eq};
     use crate::ucum_unit::UcumUnit;
     use crate::unit::Unit;
     use std::str::FromStr;

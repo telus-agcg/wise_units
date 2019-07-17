@@ -208,6 +208,7 @@ impl fmt::Display for Prefix {
 
 #[cfg(test)]
 mod tests {
+    use approx::{assert_relative_eq, assert_ulps_eq};
     use super::Prefix;
     use crate::parser::ucum_symbol::UcumSymbol;
 

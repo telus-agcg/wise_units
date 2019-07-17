@@ -23,6 +23,7 @@ impl Reducible for Measurement {
 
 #[cfg(test)]
 mod tests {
+    use approx::assert_relative_eq;
     use crate::measurement::Measurement;
     use crate::reducible::Reducible;
 

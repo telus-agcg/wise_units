@@ -4,6 +4,8 @@
 //-----------------------------------------------------------------------------
 
 pub(crate) mod symbol_parser {
+    use pest_derive::Parser;
+
     #[derive(Parser)]
     #[grammar = "{{ grammar_file_path }}"]
     pub(crate) struct SymbolParser;

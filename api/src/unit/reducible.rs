@@ -18,6 +18,7 @@ impl Reducible for Unit {
 
 #[cfg(test)]
 mod tests {
+    use approx::assert_relative_eq;
     use crate::reducible::Reducible;
     use crate::unit::Unit;
     use std::str::FromStr;

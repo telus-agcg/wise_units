@@ -105,7 +105,7 @@ mod tests {
     use super::*;
     use std::str::FromStr;
 
-    lazy_static! {
+    lazy_static::lazy_static! {
         static ref ACRE: Unit = Unit::from_str("[acr_us]").unwrap();
         static ref METER: Unit = Unit::from_str("m").unwrap();
         static ref KILOMETER: Unit = Unit::from_str("km").unwrap();

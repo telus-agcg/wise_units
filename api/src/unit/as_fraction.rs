@@ -47,7 +47,7 @@ mod tests {
     use crate::unit::Unit;
     use std::str::FromStr;
 
-    lazy_static! {
+    lazy_static::lazy_static! {
         static ref METER: Unit = Unit::from_str("m").unwrap();
         static ref SECOND: Unit = Unit::from_str("s").unwrap();
         static ref GRAM_METER: Unit = Unit::from_str("g.m").unwrap();

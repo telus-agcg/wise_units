@@ -2,6 +2,7 @@
 //!
 #[cfg(test)]
 mod atom_test {
+    use approx::{assert_relative_eq, assert_ulps_eq};
     use crate::parser::{
         Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol,
     };

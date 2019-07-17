@@ -19,30 +19,8 @@
     clippy::style
 )]
 
-#[cfg(test)]
-#[macro_use]
-extern crate approx;
-
 #[macro_use]
 extern crate failure_derive;
-
-#[cfg(test)]
-#[macro_use]
-extern crate lazy_static;
-
-// Only include macros for testing
-#[cfg(test)]
-#[macro_use(consumes_to, fails_with, parses_to)]
-extern crate pest;
-
-#[cfg(not(test))]
-extern crate pest;
-
-#[macro_use]
-extern crate pest_derive;
-
-// #[cfg(all(test, feature = "serde"))]
-// extern crate serde_json;
 
 #[macro_use]
 mod macros;

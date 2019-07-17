@@ -56,6 +56,7 @@ fn combine_term_values(
 
 #[cfg(test)]
 mod tests {
+    use approx::assert_relative_eq;
     use crate::parser::{Atom, Prefix, Term};
     use crate::reducible::Reducible;
 
