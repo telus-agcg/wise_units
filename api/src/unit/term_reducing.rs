@@ -19,7 +19,7 @@ impl ComposableTerm {
 
 impl<'a> From<&'a Term> for ComposableTerm {
     fn from(term: &'a Term) -> Self {
-        ComposableTerm {
+        Self {
             atom: term.atom,
             prefix: term.prefix,
             factor: term.factor,
@@ -34,7 +34,7 @@ impl From<Parts> for Term {
     fn from(parts: Parts) -> Self {
         let e = if parts.1 == 1 { None } else { Some(parts.1) };
 
-        Term {
+        Self {
             atom: parts.0.atom,
             prefix: parts.0.prefix,
             factor: parts.0.factor,
@@ -64,7 +64,7 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 ///
 fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
     terms
-        .into_iter()
+        .iter()
         .map(|term| (ComposableTerm::from(term), term.exponent.unwrap_or(1)))
         .fold(
             BTreeMap::<ComposableTerm, i32>::new(),

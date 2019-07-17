@@ -20,6 +20,7 @@ impl Reducible for Unit {
 mod tests {
     use crate::reducible::Reducible;
     use crate::unit::Unit;
+    use approx::assert_relative_eq;
     use std::str::FromStr;
 
     macro_rules! validate_reduce_value {

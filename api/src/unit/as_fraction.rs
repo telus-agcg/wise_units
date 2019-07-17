@@ -4,8 +4,8 @@ use crate::parser::Term;
 use crate::unit::Unit;
 
 impl AsFraction for Unit {
-    type Numerator = Unit;
-    type Denominator = Unit;
+    type Numerator = Self;
+    type Denominator = Self;
 
     #[inline]
     fn numerator(&self) -> Option<Self::Numerator> {
@@ -19,7 +19,7 @@ impl AsFraction for Unit {
         if positive_terms.is_empty() {
             None
         } else {
-            Some(Unit::from(positive_terms))
+            Some(Self::from(positive_terms))
         }
     }
 
@@ -28,14 +28,16 @@ impl AsFraction for Unit {
         let negative_terms: Vec<Term> = self
             .terms
             .iter()
-            .filter(|term| term.exponent.unwrap_or(1).is_negative())
-            .map(|term| term.to_inverse())
+            .filter_map(|term| match term.exponent {
+                Some(e) if e.is_negative() => Some(term.to_inverse()),
+                _ => None,
+            })
             .collect();
 
         if negative_terms.is_empty() {
             None
         } else {
-            Some(Unit::from(negative_terms))
+            Some(Self::from(negative_terms))
         }
     }
 }
@@ -45,7 +47,7 @@ mod tests {
     use crate::unit::Unit;
     use std::str::FromStr;
 
-    lazy_static! {
+    lazy_static::lazy_static! {
         static ref METER: Unit = Unit::from_str("m").unwrap();
         static ref SECOND: Unit = Unit::from_str("s").unwrap();
         static ref GRAM_METER: Unit = Unit::from_str("g.m").unwrap();

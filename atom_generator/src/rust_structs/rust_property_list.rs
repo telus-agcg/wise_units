@@ -16,7 +16,7 @@ pub(crate) struct RustProperty {
 }
 
 impl<'a> From<&'a RustAtomList> for RustPropertyList {
-    fn from(atom_list: &'a RustAtomList) -> RustPropertyList {
+    fn from(atom_list: &'a RustAtomList) -> Self {
         let mut properties: HashMap<PropertyTypeName, RustProperty> = HashMap::new();
 
         for atom in &atom_list.atoms {
@@ -31,6 +31,6 @@ impl<'a> From<&'a RustAtomList> for RustPropertyList {
                 });
         }
 
-        RustPropertyList { properties }
+        Self { properties }
     }
 }

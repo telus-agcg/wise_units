@@ -20,20 +20,11 @@ fn de_bool<'de, D>(deserializer: D) -> Result<bool, D::Error>
 where
     D: Deserializer<'de>,
 {
-    match String::deserialize(deserializer) {
-        Ok(string) => {
-            let result = match string.as_str() {
-                "yes" => true,
-                "no" => false,
-                _ => false,
-            };
-
-            Ok(result)
-        }
-        Err(_) => Ok(false),
-    }
+    String::deserialize(deserializer)
+        .map(|string| &string == "yes")
+        .or(Ok(false))
 }
 
-fn de_bool_default() -> bool {
+const fn de_bool_default() -> bool {
     false
 }

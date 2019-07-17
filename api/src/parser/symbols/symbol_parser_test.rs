@@ -3,7 +3,7 @@
 #[cfg(test)]
 mod symbol_parser_test {
     use crate::parser::symbols::symbol_parser::{Rule, SymbolParser};
-    use pest::Parser;
+    use pest::{consumes_to, fails_with, parses_to, Parser};
 
     #[test]
     fn validate_prefixes() {

@@ -16,6 +16,9 @@ use crate::ucum_unit::UcumUnit;
 use crate::unit::Unit;
 use std::str::FromStr;
 
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
+
 /// A Measurement is the prime interface for consumers of the library. It
 /// consists of some scalar value and a `Unit`, where the Unit represents the
 /// type of unit.
@@ -31,7 +34,7 @@ use std::str::FromStr;
 /// assert!(in_meters.value == 1000.0);
 /// ```
 ///
-#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug)]
 pub struct Measurement {
     pub value: f64,
@@ -113,105 +116,89 @@ mod tests {
         assert_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
     }
 
-    #[cfg(feature = "with_serde")]
-    mod with_serde {
-        use super::super::Measurement;
-        use crate::parser::{Atom, Prefix, Term};
-        use serde_json;
+    #[cfg(feature = "serde")]
+    mod serde {
+        use crate::Measurement;
 
-        #[test]
-        fn validate_serialization_empty_terms() {
-            let measurement = Measurement {
-                value: 123.4,
-                unit: vec![].into(),
-            };
-            let expected_json = r#"{"value":123.4,"unit":{"terms":[]}}"#;
+        fn expected_measurement() -> Measurement {
+            Measurement::new(432.1, "100cm456{stuff}/g4").unwrap()
+        }
 
-            let j =
-                serde_json::to_string(&measurement).expect("Couldn't convert Unit to JSON String");
+        fn validate_measurement(expected_measurement: &Measurement, expected_json: &str) {
+            let json = serde_json::to_string(&expected_measurement)
+                .expect("Couldn't convert Measurement to JSON String");
+            assert_eq!(expected_json, json);
+        }
 
-            assert_eq!(expected_json, j);
+        fn validate_json(expected_json: &str, expected_measurement: &Measurement) {
+            let measurement: Measurement = serde_json::from_str(expected_json).unwrap();
+            assert_eq!(&measurement, expected_measurement);
         }
 
         #[test]
-        fn validate_serialization_full_terms() {
-            let expected_json = r#"{
-                "value":123.4,
-                "unit":{
-                    "terms":[{
-                        "atom": "Meter",
-                        "prefix": "Centi",
-                        "factor": 100,
-                        "exponent": 456,
-                        "annotation": "stuff"
-                    }, {
-                        "atom": "Gram",
-                        "prefix": null,
-                        "factor": null,
-                        "exponent": -4,
-                        "annotation": null
-                    }]
-                }
-            }"#
-            .replace("\n", "")
-            .replace(" ", "");
-
-            let term1 =
-                term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
-            let term2 = term!(Gram, exponent: -4);
-
-            let unit = vec![term1, term2].into();
-            let measurement = Measurement { value: 123.4, unit };
-
-            let j =
-                serde_json::to_string(&measurement).expect("Couldn't convert Unit to JSON String");
-
-            assert_eq!(expected_json, j);
+        fn validate_serde_json_full_unit() {
+            let expected_measurement = expected_measurement();
+            let expected_json = r#"{"value":432.1,"unit":"100cm456{stuff}/g4"}"#;
+            validate_measurement(&expected_measurement, expected_json);
+            validate_json(expected_json, &expected_measurement)
         }
 
         #[test]
-        fn validate_deserialization_empty_terms() {
-            let json = r#"{"value":1.0, "unit":{"terms": []}}"#;
-
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
-
-            let unit = vec![].into();
-            let expected_measurement = Measurement { value: 1.0, unit };
-
-            assert_eq!(expected_measurement, k);
+        fn validate_serde_json_empty_unit_terms() {
+            let expected_measurement = Measurement::new(2.0, "1").unwrap();
+            let expected_json = r#"{"value":2.0,"unit":"1"}"#;
+            validate_measurement(&expected_measurement, expected_json);
+            validate_json(expected_json, &expected_measurement)
         }
 
         #[test]
-        fn validate_deserialization_full_terms() {
-            let json = r#"{
-                "value":432.1,
-                "unit":{
-                    "terms":[{
-                        "atom": "Meter",
-                        "prefix": "Centi",
-                        "factor": 100,
-                        "exponent": 456,
-                        "annotation": "stuff"
-                    }, {
-                        "atom": "Gram",
-                        "prefix": null,
-                        "factor": 1,
-                        "exponent": -4,
-                        "annotation": null
-                    }]
-                }
-            }"#;
+        fn validate_deserialize_json_integer_value() {
+            let expected_json = r#"{"value":2,"unit":"m"}"#;
+            let expected_measurement = Measurement::new(2.0, "m").unwrap();
+            validate_json(expected_json, &expected_measurement)
+        }
 
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
+        #[test]
+        fn validate_deserialize_json_errors() {
+            let expected_json = r#"{"value":2.0,"unit":""}"#;
+            let measurement: Result<Measurement, serde_json::Error> =
+                serde_json::from_str(expected_json);
+            assert!(measurement.is_err());
 
-            let term1 =
-                term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
-            let term2 = term!(Gram, exponent: -4);
+            let expected_json = r#"{"value":"adsf","unit":"m"}"#;
+            let measurement: Result<Measurement, serde_json::Error> =
+                serde_json::from_str(expected_json);
+            assert!(measurement.is_err());
+        }
 
-            let unit = vec![term1, term2].into();
-            let expected_measurement = Measurement { value: 432.1, unit };
+        #[allow(box_pointers)]
+        #[test]
+        fn validate_bincode_serde() {
+            let expected_measurement = Measurement::new(123.4, "100cm456{stuff}/g4").unwrap();
+            let encoded: Vec<u8> = bincode::serialize(&expected_measurement).unwrap();
+            let decoded: Measurement = bincode::deserialize(&encoded).unwrap();
 
-            assert_eq!(expected_measurement, k);
+            assert_eq!(expected_measurement, decoded);
+        }
+
+        #[test]
+        fn validate_message_pack_serde() {
+            use rmp_serde::{Deserializer, Serializer};
+            use serde::{Deserialize, Serialize};
+
+            let expected_measurement = expected_measurement();
+            let mut buf = Vec::new();
+            expected_measurement
+                .serialize(&mut Serializer::new(&mut buf))
+                .unwrap();
+
+            assert_eq!(buf.len(), 29);
+
+            let mut de = Deserializer::new(&buf[..]);
+            assert_eq!(
+                expected_measurement,
+                Deserialize::deserialize(&mut de).unwrap()
+            );
         }
     }
 }

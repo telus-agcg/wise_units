@@ -6,7 +6,15 @@
     nonstandard_style,
     rust_2018_idioms,
     trivial_casts,
-    trivial_numeric_casts
+    trivial_numeric_casts,
+    unused_qualifications,
+    clippy::all,
+    clippy::complexity,
+    clippy::correctness,
+    clippy::pedantic,
+    clippy::perf,
+    clippy::nursery,
+    clippy::style
 )]
 
 #[macro_use(handlebars_helper)]

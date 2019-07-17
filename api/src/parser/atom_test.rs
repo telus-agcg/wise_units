@@ -6,6 +6,7 @@ mod atom_test {
         Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol,
     };
     use crate::ucum_unit::UcumUnit;
+    use approx::{assert_relative_eq, assert_ulps_eq};
 
     macro_rules! validate_definition {
         (
@@ -566,7 +567,7 @@ mod atom_test {
     validate_scalar_mile_br, MileBritish, 1_609.342_732_8;
     validate_scalar_mile_international, MileInternational, 1_609.344;
     validate_scalar_mile_us, MileUS, 1_609.347_218_694_437_3;
-    validate_scalar_minim_br, MinimBritish, 5.919_388_020_833_333_4e-08;
+    validate_scalar_minim_br, MinimBritish, 5.919_388_020_833_333_4e-8;
     validate_scalar_minim_us, MinimUS, 6.161_151_992_187_5e-08;
     validate_scalar_mole, Mole, 6.0221367e+23;
     validate_scalar_month, Month, 2_629_800.0;
@@ -703,27 +704,5 @@ mod atom_test {
     fn validate_display() {
         let atom = Atom::TheNumberPi;
         assert_eq!(&atom.to_string(), "[pi]")
-    }
-
-    #[cfg(feature = "with_serde")]
-    mod with_serde {
-        use crate::parser::Atom;
-        use serde_json;
-
-        #[test]
-        fn validate_serialization() {
-            let j = serde_json::to_string(&Atom::BushelUS)
-                .expect("Couldn't convert Atom to JSON String");
-
-            assert_eq!("\"BushelUS\"", j);
-        }
-
-        #[test]
-        fn validate_deserialization() {
-            let k =
-                serde_json::from_str("\"BushelUS\"").expect("Couldn't convert JSON String to Atom");
-
-            assert_eq!(Atom::BushelUS, k);
-        }
     }
 }

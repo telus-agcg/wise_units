@@ -4,40 +4,23 @@
     box_pointers,
     future_incompatible,
     missing_copy_implementations,
+    // missing_docs,
     nonstandard_style,
     rust_2018_idioms,
     trivial_casts,
-    trivial_numeric_casts
+    trivial_numeric_casts,
+    unused_qualifications,
+    clippy::all,
+    clippy::complexity,
+    clippy::correctness,
+    clippy::pedantic,
+    clippy::perf,
+    clippy::nursery,
+    clippy::style
 )]
-
-#[cfg(test)]
-#[macro_use]
-extern crate approx;
 
 #[macro_use]
 extern crate failure_derive;
-
-#[cfg(test)]
-#[macro_use]
-extern crate lazy_static;
-
-// Only include macros for testing
-#[cfg(test)]
-#[macro_use(consumes_to, fails_with, parses_to)]
-extern crate pest;
-
-#[cfg(not(test))]
-extern crate pest;
-
-#[macro_use]
-extern crate pest_derive;
-
-#[cfg(feature = "with_serde")]
-#[cfg_attr(feature = "with_serde", macro_use)]
-extern crate serde_derive;
-
-#[cfg(all(test, feature = "with_serde"))]
-extern crate serde_json;
 
 #[macro_use]
 mod macros;

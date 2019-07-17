@@ -33,7 +33,6 @@ const ZETTA: f64 = 1.0e21;
 /// only pertain to metric units, but that rule is not adhered to in
 /// `wise_units`.
 ///
-#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Prefix {
     Atto,
@@ -211,6 +210,7 @@ impl fmt::Display for Prefix {
 mod tests {
     use super::Prefix;
     use crate::parser::ucum_symbol::UcumSymbol;
+    use approx::{assert_relative_eq, assert_ulps_eq};
 
     macro_rules! validate_value {
         ($test_name:ident, $variant:ident, $value:expr) => {
@@ -262,27 +262,5 @@ mod tests {
     fn validate_display() {
         let prefix = Prefix::Kilo;
         assert_eq!(&prefix.to_string(), "k")
-    }
-
-    #[cfg(feature = "with_serde")]
-    mod with_serde {
-        use super::super::Prefix;
-        use serde_json;
-
-        #[test]
-        fn validate_serialization() {
-            let j = serde_json::to_string(&Prefix::Kilo)
-                .expect("Couldn't convert Prefix to JSON String");
-
-            assert_eq!("\"Kilo\"", j);
-        }
-
-        #[test]
-        fn validate_deserialization() {
-            let k =
-                serde_json::from_str("\"Kilo\"").expect("Couldn't convert JSON String to Prefix");
-
-            assert_eq!(Prefix::Kilo, k);
-        }
     }
 }
