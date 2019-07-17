@@ -41,12 +41,8 @@ extern crate pest;
 #[macro_use]
 extern crate pest_derive;
 
-#[cfg(feature = "with_serde")]
-#[cfg_attr(feature = "with_serde", macro_use)]
-extern crate serde_derive;
-
-#[cfg(all(test, feature = "with_serde"))]
-extern crate serde_json;
+// #[cfg(all(test, feature = "serde"))]
+// extern crate serde_json;
 
 #[macro_use]
 mod macros;

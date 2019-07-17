@@ -17,7 +17,6 @@ pub mod atom {
     use crate::ucum_unit::UcumUnit;
     use std::fmt;
 
-    #[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
     #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
     pub enum Atom {
         {{~ #each atoms }}

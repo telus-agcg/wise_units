@@ -10,7 +10,7 @@ pub mod reducible;
 pub mod to_reduced;
 pub mod ucum_unit;
 
-#[cfg(feature = "with_serde")]
+#[cfg(feature = "serde")]
 mod serde;
 
 use crate::error::Error;

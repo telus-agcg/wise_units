@@ -13,7 +13,6 @@ use crate::parser::{Atom, Prefix};
 /// Atom-less Term, which would simple be a Factor (with or without an
 /// annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
 ///
-#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Term {
     pub atom: Option<Atom>,
@@ -133,86 +132,5 @@ mod tests {
     fn validate_new_unity() {
         let term = Term::new_unity();
         assert_eq!(term.to_string(), "1");
-    }
-
-    #[cfg(feature = "with_serde")]
-    mod with_serde {
-        use super::super::Term;
-        use crate::parser::{Atom, Prefix};
-        use serde_json;
-
-        #[test]
-        fn validate_serialization_empty_term() {
-            let term = term!();
-
-            let expected_json = r#"{
-                                    "atom": null,
-                                    "prefix": null,
-                                    "factor": null,
-                                    "exponent": null,
-                                    "annotation": null
-                                   }"#
-            .replace("\n", "")
-            .replace(" ", "");
-
-            let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");
-
-            assert_eq!(expected_json.as_str(), j);
-        }
-
-        #[test]
-        fn validate_serialization_full_term() {
-            let mut term = term!(Kilo, Meter, factor: 123, exponent: -456);
-            term.annotation = Some("stuff".to_string());
-
-            let expected_json = r#"{
-                                    "atom": "Meter",
-                                    "prefix": "Kilo",
-                                    "factor": 123,
-                                    "exponent": -456,
-                                    "annotation": "stuff"
-                                   }"#
-            .replace("\n", "")
-            .replace(" ", "");
-
-            let j = serde_json::to_string(&term).expect("Couldn't convert Term to JSON String");
-
-            assert_eq!(expected_json.as_str(), j);
-        }
-
-        #[test]
-        fn validate_deserialization_empty_term() {
-            let json = r#"{
-                            "atom": null,
-                            "prefix": null,
-                            "factor": null,
-                            "exponent": null,
-                            "annotation": null
-                           }"#;
-
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
-
-            let expected_term = term!();
-
-            assert_eq!(expected_term, k);
-        }
-
-        #[test]
-        fn validate_deserialization_full_term() {
-            let json = r#"{
-                            "atom": "Meter",
-                            "prefix": "Kilo",
-                            "factor": 123,
-                            "exponent": -456,
-                            "annotation": "stuff"
-                           }"#;
-
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Term");
-
-            let mut expected_term = term!(Kilo, Meter, factor: 123, exponent: -456);
-            expected_term.annotation = Some("stuff".to_string());
-
-            assert_eq!(expected_term, k);
-        }
     }
 }
