@@ -10,6 +10,9 @@ pub mod reducible;
 pub mod to_reduced;
 pub mod ucum_unit;
 
+#[cfg(feature = "with_serde")]
+mod serde;
+
 use crate::error::Error;
 use crate::reducible::Reducible;
 use crate::ucum_unit::UcumUnit;
@@ -31,7 +34,6 @@ use std::str::FromStr;
 /// assert!(in_meters.value == 1000.0);
 /// ```
 ///
-#[cfg_attr(feature = "with_serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug)]
 pub struct Measurement {
     pub value: f64,
@@ -111,107 +113,5 @@ mod tests {
         let m = Measurement::new(1.0, "Cel").unwrap();
         let unit = Unit::from_str("[degF]").unwrap();
         assert_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
-    }
-
-    #[cfg(feature = "with_serde")]
-    mod with_serde {
-        use super::super::Measurement;
-        use crate::parser::{Atom, Prefix, Term};
-        use serde_json;
-
-        #[test]
-        fn validate_serialization_empty_terms() {
-            let measurement = Measurement {
-                value: 123.4,
-                unit: vec![].into(),
-            };
-            let expected_json = r#"{"value":123.4,"unit":{"terms":[]}}"#;
-
-            let j =
-                serde_json::to_string(&measurement).expect("Couldn't convert Unit to JSON String");
-
-            assert_eq!(expected_json, j);
-        }
-
-        #[test]
-        fn validate_serialization_full_terms() {
-            let expected_json = r#"{
-                "value":123.4,
-                "unit":{
-                    "terms":[{
-                        "atom": "Meter",
-                        "prefix": "Centi",
-                        "factor": 100,
-                        "exponent": 456,
-                        "annotation": "stuff"
-                    }, {
-                        "atom": "Gram",
-                        "prefix": null,
-                        "factor": null,
-                        "exponent": -4,
-                        "annotation": null
-                    }]
-                }
-            }"#
-            .replace("\n", "")
-            .replace(" ", "");
-
-            let term1 =
-                term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
-            let term2 = term!(Gram, exponent: -4);
-
-            let unit = vec![term1, term2].into();
-            let measurement = Measurement { value: 123.4, unit };
-
-            let j =
-                serde_json::to_string(&measurement).expect("Couldn't convert Unit to JSON String");
-
-            assert_eq!(expected_json, j);
-        }
-
-        #[test]
-        fn validate_deserialization_empty_terms() {
-            let json = r#"{"value":1.0, "unit":{"terms": []}}"#;
-
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
-
-            let unit = vec![].into();
-            let expected_measurement = Measurement { value: 1.0, unit };
-
-            assert_eq!(expected_measurement, k);
-        }
-
-        #[test]
-        fn validate_deserialization_full_terms() {
-            let json = r#"{
-                "value":432.1,
-                "unit":{
-                    "terms":[{
-                        "atom": "Meter",
-                        "prefix": "Centi",
-                        "factor": 100,
-                        "exponent": 456,
-                        "annotation": "stuff"
-                    }, {
-                        "atom": "Gram",
-                        "prefix": null,
-                        "factor": 1,
-                        "exponent": -4,
-                        "annotation": null
-                    }]
-                }
-            }"#;
-
-            let k = serde_json::from_str(json).expect("Couldn't convert JSON String to Unit");
-
-            let term1 =
-                term!(Centi, Meter, factor: 100, exponent: 456, annotation: "stuff".to_string());
-            let term2 = term!(Gram, exponent: -4);
-
-            let unit = vec![term1, term2].into();
-            let expected_measurement = Measurement { value: 432.1, unit };
-
-            assert_eq!(expected_measurement, k);
-        }
     }
 }
