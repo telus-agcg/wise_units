@@ -1,8 +1,7 @@
+use super::Unit;
 use serde::de::{self, Deserialize, Deserializer, Unexpected, Visitor};
 use serde::ser::{Serialize, Serializer};
 use std::{fmt, str::FromStr};
-use super::Unit;
-
 
 struct UnitVisitor;
 
@@ -17,8 +16,7 @@ impl<'de> Visitor<'de> for UnitVisitor {
     where
         E: de::Error,
     {
-        Unit::from_str(s)
-            .map_err(|_| de::Error::invalid_value(Unexpected::Str(s), &self))
+        Unit::from_str(s).map_err(|_| de::Error::invalid_value(Unexpected::Str(s), &self))
     }
 }
 
@@ -56,7 +54,8 @@ mod tests {
     }
 
     fn validate_unit(expected_unit: &Unit, expected_json: &str) {
-        let json = serde_json::to_string(&expected_unit).expect("Couldn't convert Unit to JSON String");
+        let json =
+            serde_json::to_string(&expected_unit).expect("Couldn't convert Unit to JSON String");
         assert_eq!(expected_json, json);
     }
 
@@ -109,7 +108,9 @@ mod tests {
 
         let expected_unit = expected_unit();
         let mut buf = Vec::new();
-        expected_unit.serialize(&mut Serializer::new(&mut buf)).unwrap();
+        expected_unit
+            .serialize(&mut Serializer::new(&mut buf))
+            .unwrap();
         assert_eq!(buf.len(), 19);
 
         let mut de = Deserializer::new(&buf[..]);

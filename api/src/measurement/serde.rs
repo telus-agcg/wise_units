@@ -1,7 +1,7 @@
-use serde::de::{self, Deserialize, Deserializer, Visitor, MapAccess, SeqAccess};
-use serde::ser::{Serialize, Serializer, SerializeStruct};
-use std::fmt;
 use super::Measurement;
+use serde::de::{self, Deserialize, Deserializer, MapAccess, SeqAccess, Visitor};
+use serde::ser::{Serialize, SerializeStruct, Serializer};
+use std::fmt;
 
 //-----------------------------------------------------------------------------
 // Deserialize
@@ -11,7 +11,10 @@ impl<'de> Deserialize<'de> for Measurement {
     where
         D: Deserializer<'de>,
     {
-        enum Field { Value, Unit };
+        enum Field {
+            Value,
+            Unit,
+        };
 
         impl<'de> Deserialize<'de> for Field {
             fn deserialize<D>(deserializer: D) -> Result<Field, D::Error>
@@ -34,7 +37,7 @@ impl<'de> Deserialize<'de> for Measurement {
                         match value {
                             "value" => Ok(Field::Value),
                             "unit" => Ok(Field::Unit),
-                            _ => Err(de::Error::unknown_field(value, FIELDS))
+                            _ => Err(de::Error::unknown_field(value, FIELDS)),
                         }
                     }
                 }
@@ -56,9 +59,11 @@ impl<'de> Deserialize<'de> for Measurement {
             where
                 V: SeqAccess<'de>,
             {
-                let value = seq.next_element()?
+                let value = seq
+                    .next_element()?
                     .ok_or_else(|| de::Error::invalid_length(0, &self))?;
-                let unit = seq.next_element()?
+                let unit = seq
+                    .next_element()?
                     .ok_or_else(|| de::Error::invalid_length(1, &self))?;
                 Ok(Measurement { value, unit })
             }
@@ -123,7 +128,8 @@ mod tests {
     }
 
     fn validate_measurement(expected_measurement: &Measurement, expected_json: &str) {
-        let json = serde_json::to_string(&expected_measurement).expect("Couldn't convert Measurement to JSON String");
+        let json = serde_json::to_string(&expected_measurement)
+            .expect("Couldn't convert Measurement to JSON String");
         assert_eq!(expected_json, json);
     }
 
@@ -158,11 +164,13 @@ mod tests {
     #[test]
     fn validate_deserialize_json_errors() {
         let expected_json = r#"{"value":2.0,"unit":""}"#;
-        let measurement: Result<Measurement, serde_json::Error> = serde_json::from_str(expected_json);
+        let measurement: Result<Measurement, serde_json::Error> =
+            serde_json::from_str(expected_json);
         assert!(measurement.is_err());
 
         let expected_json = r#"{"value":"adsf","unit":"m"}"#;
-        let measurement: Result<Measurement, serde_json::Error> = serde_json::from_str(expected_json);
+        let measurement: Result<Measurement, serde_json::Error> =
+            serde_json::from_str(expected_json);
         assert!(measurement.is_err());
     }
 
@@ -183,11 +191,16 @@ mod tests {
 
         let expected_measurement = Measurement::new(123.4, "100cm456{stuff}/g4").unwrap();
         let mut buf = Vec::new();
-        expected_measurement.serialize(&mut Serializer::new(&mut buf)).unwrap();
+        expected_measurement
+            .serialize(&mut Serializer::new(&mut buf))
+            .unwrap();
 
         assert_eq!(buf.len(), 29);
 
         let mut de = Deserializer::new(&buf[..]);
-        assert_eq!(expected_measurement, Deserialize::deserialize(&mut de).unwrap());
+        assert_eq!(
+            expected_measurement,
+            Deserialize::deserialize(&mut de).unwrap()
+        );
     }
 }
