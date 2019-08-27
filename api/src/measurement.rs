@@ -36,6 +36,7 @@ use serde::{Deserialize, Serialize};
 ///
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug)]
+#[repr(C)]
 pub struct Measurement {
     pub value: f64,
     pub unit: Unit,
