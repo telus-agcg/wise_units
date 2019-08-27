@@ -34,6 +34,7 @@ const ZETTA: f64 = 1.0e21;
 /// `wise_units`.
 ///
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[repr(C)]
 pub enum Prefix {
     Atto,
     Centi,
