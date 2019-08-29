@@ -1,34 +1,61 @@
-use std::{
-    ffi::CStr,
-    ops::{Div, Mul},
-    os::raw::c_char,
-    ptr,
-    str::FromStr,
-};
-use wise_units::{is_compatible_with::IsCompatibleWith, UcumUnit, Unit};
+use std::{ffi::CStr, ops::Deref, os::raw::c_char, ptr, str::FromStr};
+use wise_units::{is_compatible_with::IsCompatibleWith, Error, UcumUnit, Unit as WiseUnit};
+
+/// Wrapper for `wise_units::Unit`. Safe for C interop.
+///
+#[derive(Debug, PartialEq)]
+#[repr(C)]
+pub struct Unit {
+    pub inner: WiseUnit,
+}
+
+impl FromStr for Unit {
+    type Err = Error;
+
+    fn from_str(expression: &str) -> Result<Self, Self::Err> {
+        let wise_unit = WiseUnit::from_str(expression)?;
+        Ok(Self::from(wise_unit))
+    }
+}
+
+impl From<WiseUnit> for Unit {
+    fn from(wise_unit: WiseUnit) -> Self {
+        Self { inner: wise_unit }
+    }
+}
+
+impl Deref for Unit {
+    type Target = WiseUnit;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
 
 /// Create a new `Unit`. Note that you must call `unit_destroy(data: unit)` with
 /// this instance when you are done with it so that the the unit can be properly
 /// destroyed and its memory freed.
+///
 #[no_mangle]
-pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *mut Unit {
+pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
     if expression.is_null() {
-        return ptr::null_mut();
+        return ptr::null();
     };
 
     match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => match Unit::from_str(exp_str) {
             Ok(unit) => Box::into_raw(Box::new(unit)),
-            Err(_) => ptr::null_mut(),
+            Err(_) => ptr::null(),
         },
-        Err(_) => ptr::null_mut(),
+        Err(_) => ptr::null(),
     }
 }
 
 /// Return ownership of `data` to Rust to deallocate safely.
+///
 #[no_mangle]
-pub unsafe extern "C" fn unit_destroy(data: *mut Unit) {
-    let _ = Box::from_raw(data);
+pub unsafe extern "C" fn unit_destroy(data: *const Unit) {
+    let _ = Box::from_raw(data as *mut Unit);
 }
 
 #[no_mangle]
@@ -60,7 +87,7 @@ pub unsafe extern "C" fn unit_magnitude(data: *const Unit) -> f64 {
 pub unsafe extern "C" fn unit_is_compatible_with(data: *const Unit, other: *const Unit) -> bool {
     let unit1 = &*data;
     let unit2 = &*other;
-    unit1.is_compatible_with(unit2)
+    unit1.inner.is_compatible_with(&unit2.inner)
 }
 
 #[no_mangle]
@@ -76,27 +103,27 @@ pub unsafe extern "C" fn unit_is_valid(expression: *const c_char) -> bool {
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn unit_div(data: *const Unit, other: *const Unit) -> *mut Unit {
+pub unsafe extern "C" fn unit_div(data: *const Unit, other: *const Unit) -> *const Unit {
     let unit = &*data;
     let other = &*other;
-    let quotient = unit.div(other);
+    let quotient = Unit::from(&unit.inner / &other.inner);
     let quotient_box = Box::new(quotient);
     Box::into_raw(quotient_box)
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *mut Unit {
+pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *const Unit {
     let unit = &*data;
     let other = &*other;
-    let product = unit.mul(other);
+    let product = Unit::from(&unit.inner * &other.inner);
     let product_box = Box::new(product);
     Box::into_raw(product_box)
 }
 
 #[cfg(test)]
 mod tests {
-    // use approx::{assert_relative_eq, assert_ulps_eq};
     use super::*;
+    use approx::{assert_relative_eq, assert_ulps_eq};
     use std::ffi::CString;
 
     #[test]
@@ -105,7 +132,7 @@ mod tests {
         let expression_c = CString::new(expression).expect("CString::new failed");
         unsafe {
             let u = unit_new(expression_c.as_ptr());
-            let boxed_u = Box::from_raw(u);
+            let boxed_u = Box::from_raw(u as *mut Unit);
             assert_eq!(expression, boxed_u.expression());
         }
     }
@@ -148,7 +175,8 @@ mod tests {
         let scalar = 1000.0;
         unsafe {
             let u = unit_new(expression.as_ptr());
-            assert_eq!(scalar, unit_scalar(u));
+            assert_relative_eq!(scalar, unit_scalar(u));
+            assert_ulps_eq!(scalar, unit_scalar(u));
         }
     }
 
@@ -158,7 +186,8 @@ mod tests {
         let magnitude = 0.4;
         unsafe {
             let u = unit_new(expression.as_ptr());
-            assert_eq!(magnitude, unit_magnitude(u));
+            assert_relative_eq!(magnitude, unit_magnitude(u));
+            assert_ulps_eq!(magnitude, unit_magnitude(u));
         }
     }
 
@@ -194,8 +223,8 @@ mod tests {
         unsafe {
             let u = unit_new(base_expression.as_ptr());
             let d = unit_new(divisor_expression.as_ptr());
-            let result = Box::from_raw(unit_div(u, d));
-            assert_eq!(expected, result.expression());
+            let result = unit_div(u, d);
+            assert_eq!(expected, Box::from_raw(result as *mut Unit).expression());
         }
     }
 
@@ -207,7 +236,7 @@ mod tests {
         unsafe {
             let u = unit_new(base_expression.as_ptr());
             let m = unit_new(multiplier_expression.as_ptr());
-            let result = Box::from_raw(unit_mul(u, m));
+            let result = Box::from_raw(unit_mul(u, m) as *mut Unit);
             assert_eq!(expected, result.expression());
         }
     }

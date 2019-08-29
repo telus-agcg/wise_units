@@ -1,42 +1,74 @@
-use std::{
-    ffi::CStr,
-    ops::{Div, Mul},
-    os::raw::c_char,
-    ptr,
-};
-use wise_units::{Convertible, Measurement, UcumUnit, Unit};
+use std::{ffi::CStr, ops::Deref, os::raw::c_char, ptr, str::FromStr};
+use wise_units::{Convertible, Error, Measurement as WiseMeasurement, UcumUnit, Unit as WiseUnit};
+
+use crate::unit::Unit;
+
+/// Wrapper for `wise_units::Measurement`. Safe for C interop.
+///
+#[derive(Debug, PartialEq)]
+#[repr(C)]
+pub struct Measurement {
+    pub inner: WiseMeasurement,
+}
+
+impl Measurement {
+    pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
+        let unit = WiseUnit::from_str(expression)?;
+        let wm = WiseMeasurement { value, unit };
+
+        Ok(Self::from(wm))
+    }
+}
+
+impl From<WiseMeasurement> for Measurement {
+    fn from(wise_measurement: WiseMeasurement) -> Self {
+        Self {
+            inner: wise_measurement,
+        }
+    }
+}
+
+impl Deref for Measurement {
+    type Target = WiseMeasurement;
+
+    fn deref(&self) -> &Self::Target {
+        &self.inner
+    }
+}
 
 /// Create a new `Measurement`. Note that you must call
 /// `measurement_destroy(data: measurement)` with this instance when you are done with
 /// it so that the the measurement can be properly destroyed and its memory freed.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_new(
     value: f64,
     expression: *const c_char,
-) -> *mut Measurement {
+) -> *const Measurement {
     if expression.is_null() {
-        return ptr::null_mut();
+        return ptr::null();
     };
 
     match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => match Measurement::new(value, exp_str) {
             Ok(measurement) => Box::into_raw(Box::new(measurement)),
-            Err(_) => ptr::null_mut(),
+            Err(_) => ptr::null(),
         },
-        Err(_) => ptr::null_mut(),
+        Err(_) => ptr::null(),
     }
 }
 
 /// Return ownership of `data` to Rust to deallocate safely.
+///
 #[no_mangle]
-pub unsafe extern "C" fn measurement_destroy(data: *mut Measurement) {
-    let _ = Box::from_raw(data);
+pub unsafe extern "C" fn measurement_destroy(data: *const Measurement) {
+    let _ = Box::from_raw(data as *mut Measurement);
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn measurement_partial_eq(
-    data: *mut Measurement,
-    other: *mut Measurement,
+    data: *const Measurement,
+    other: *const Measurement,
 ) -> bool {
     let m1 = &*data;
     let m2 = &*other;
@@ -44,11 +76,11 @@ pub unsafe extern "C" fn measurement_partial_eq(
 }
 
 #[no_mangle]
-pub unsafe extern "C" fn measurement_get_unit(data: *const Measurement) -> *mut Unit {
+pub unsafe extern "C" fn measurement_get_unit(data: *const Measurement) -> *const Unit {
     let measurement = &*data;
     // Passing back a clone in this case since the Unit has a lifetime equal to the Measurement.
     let unit = measurement.unit.clone();
-    Box::into_raw(Box::new(unit))
+    Box::into_raw(Box::new(Unit::from(unit)))
 }
 
 // cbindgen blows up when parsing a const fn, so suppress the warning.
@@ -75,7 +107,7 @@ pub unsafe extern "C" fn measurement_magnitude(data: *const Measurement) -> f64 
 pub unsafe extern "C" fn measurement_convert_to(
     data: *const Measurement,
     expression: *const c_char,
-) -> *mut Measurement {
+) -> *const Measurement {
     let measurement = &*data;
 
     let converted_measurement = match CStr::from_ptr(expression).to_str() {
@@ -86,18 +118,18 @@ pub unsafe extern "C" fn measurement_convert_to(
         Err(_) => return ptr::null_mut(),
     };
 
-    Box::into_raw(Box::new(converted_measurement))
+    Box::into_raw(Box::new(Measurement::from(converted_measurement)))
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn measurement_add(
     data: *const Measurement,
     other: *const Measurement,
-) -> *mut Measurement {
+) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = match m1 + m2 {
-        Ok(m) => m,
+    let result = match &m1.inner + &m2.inner {
+        Ok(m) => Measurement::from(m),
         Err(_) => return ptr::null_mut(),
     };
 
@@ -108,11 +140,11 @@ pub unsafe extern "C" fn measurement_add(
 pub unsafe extern "C" fn measurement_sub(
     data: *const Measurement,
     other: *const Measurement,
-) -> *mut Measurement {
+) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = match m1 - m2 {
-        Ok(m) => m,
+    let result = match &m1.inner - &m2.inner {
+        Ok(m) => Measurement::from(m),
         Err(_) => return ptr::null_mut(),
     };
 
@@ -123,46 +155,46 @@ pub unsafe extern "C" fn measurement_sub(
 pub unsafe extern "C" fn measurement_mul(
     data: *const Measurement,
     other: *const Measurement,
-) -> *mut Measurement {
+) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = m1 * m2;
+    let result = &m1.inner * &m2.inner;
 
-    Box::into_raw(Box::new(result))
+    Box::into_raw(Box::new(Measurement::from(result)))
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn measurement_mul_scalar(
     data: *const Measurement,
     scalar: f64,
-) -> *mut Measurement {
+) -> *const Measurement {
     let measurement = &*data;
-    let result = measurement.mul(scalar);
+    let result = &measurement.inner * scalar;
 
-    Box::into_raw(Box::new(result))
+    Box::into_raw(Box::new(Measurement::from(result)))
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn measurement_div(
     data: *const Measurement,
     other: *const Measurement,
-) -> *mut Measurement {
+) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = m1 / m2;
+    let result = &m1.inner / &m2.inner;
 
-    Box::into_raw(Box::new(result))
+    Box::into_raw(Box::new(Measurement::from(result)))
 }
 
 #[no_mangle]
 pub unsafe extern "C" fn measurement_div_scalar(
     data: *const Measurement,
     scalar: f64,
-) -> *mut Measurement {
+) -> *const Measurement {
     let measurement = &*data;
-    let result = measurement.div(scalar);
+    let result = &measurement.inner / scalar;
 
-    Box::into_raw(Box::new(result))
+    Box::into_raw(Box::new(Measurement::from(result)))
 }
 
 #[cfg(test)]
@@ -177,8 +209,9 @@ mod tests {
         let expression = CString::new("m").expect("CString::new failed");
         unsafe {
             let m = measurement_new(value, expression.as_ptr());
-            let boxed_m = Box::from_raw(m);
-            assert_eq!(value, boxed_m.value);
+            let boxed_m = Box::from_raw(m as *mut Measurement);
+            assert_relative_eq!(value, boxed_m.value);
+            assert_ulps_eq!(value, boxed_m.value);
         }
     }
 
@@ -209,7 +242,7 @@ mod tests {
         unsafe {
             let m = measurement_new(1.0, expression_c.as_ptr());
             let unit = measurement_get_unit(m);
-            let boxed_unit = Box::from_raw(unit);
+            let boxed_unit = Box::from_raw(unit as *mut Unit);
             assert_eq!(expression, boxed_unit.expression());
         }
     }
@@ -220,7 +253,8 @@ mod tests {
         let value = 42.42152;
         unsafe {
             let m = measurement_new(value, expression.as_ptr());
-            assert_eq!(value, measurement_get_value(m));
+            assert_relative_eq!(value, measurement_get_value(m));
+            assert_ulps_eq!(value, measurement_get_value(m));
         }
     }
 
@@ -230,7 +264,8 @@ mod tests {
         let value = 42.42152;
         unsafe {
             let m = measurement_new(value, expression.as_ptr());
-            assert_eq!(value, measurement_scalar(m));
+            assert_relative_eq!(value, measurement_scalar(m));
+            assert_ulps_eq!(value, measurement_scalar(m));
         }
     }
 
@@ -240,7 +275,8 @@ mod tests {
         let value = 42.42152;
         unsafe {
             let m = measurement_new(value, expression.as_ptr());
-            assert_eq!(value, measurement_magnitude(m));
+            assert_relative_eq!(value, measurement_magnitude(m));
+            assert_ulps_eq!(value, measurement_magnitude(m));
         }
     }
 
@@ -249,10 +285,11 @@ mod tests {
         let expression1 = CString::new("[lb_av]/[acr_us]").expect("CString::new failed");
         let expression2 = CString::new("kg/har").expect("CString::new failed");
         let value = 12.0;
-        let expected = 13.450160073531776;
+        let expected = 13.450_160_073_531_777;
         unsafe {
             let m = measurement_new(value, expression1.as_ptr());
-            let converted = Box::from_raw(measurement_convert_to(m, expression2.as_ptr()));
+            let converted =
+                Box::from_raw(measurement_convert_to(m, expression2.as_ptr()) as *mut Measurement);
             assert_relative_eq!(converted.value, expected);
             assert_ulps_eq!(converted.value, expected);
         }
@@ -264,11 +301,11 @@ mod tests {
         let expression2 = CString::new("m").expect("CString::new failed");
         let value1 = 42.42152;
         let value2 = 4.825;
-        let expected = 42.426345;
+        let expected = 42.426_345;
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_add(m1, m2));
+            let result = Box::from_raw(measurement_add(m1, m2) as *mut Measurement);
             assert_relative_eq!(result.value, expected);
             assert_ulps_eq!(result.value, expected);
         }
@@ -280,11 +317,11 @@ mod tests {
         let expression2 = CString::new("m").expect("CString::new failed");
         let value1 = 42.42152;
         let value2 = 4.825;
-        let expected = 42.416695;
+        let expected = 42.416_695;
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_sub(m1, m2));
+            let result = Box::from_raw(measurement_sub(m1, m2) as *mut Measurement);
             assert_relative_eq!(result.value, expected);
             assert_ulps_eq!(result.value, expected);
         }
@@ -296,11 +333,11 @@ mod tests {
         let expression2 = CString::new("km").expect("CString::new failed");
         let value1 = 42.42152;
         let value2 = 4.825;
-        let expected = 204683.834;
+        let expected = 204_683.834;
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_mul(m1, m2));
+            let result = Box::from_raw(measurement_mul(m1, m2) as *mut Measurement);
             assert_relative_eq!(result.value, expected);
             assert_ulps_eq!(result.value, expected);
         }
@@ -311,10 +348,10 @@ mod tests {
         let expression = CString::new("kg").expect("CString::new failed");
         let value1 = 42.42152;
         let scalar = 4.825;
-        let expected = 204.683834;
+        let expected = 204.683_834;
         unsafe {
             let m1 = measurement_new(value1, expression.as_ptr());
-            let result = Box::from_raw(measurement_mul_scalar(m1, scalar));
+            let result = Box::from_raw(measurement_mul_scalar(m1, scalar) as *mut Measurement);
             assert_relative_eq!(result.value, expected);
             assert_ulps_eq!(result.value, expected);
         }
@@ -326,11 +363,11 @@ mod tests {
         let expression2 = CString::new("km").expect("CString::new failed");
         let value1 = 42.42152;
         let value2 = 4.825;
-        let expected = 0.008792024870466321243523;
+        let expected = 0.008_792_024_870_466_321;
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_div(m1, m2));
+            let result = Box::from_raw(measurement_div(m1, m2) as *mut Measurement);
             assert_relative_eq!(result.value, expected);
             assert_ulps_eq!(result.value, expected);
         }
@@ -339,12 +376,12 @@ mod tests {
     #[test]
     fn can_divide_scalar() {
         let expression = CString::new("kg").expect("CString::new failed");
-        let value1 = 42.42152;
+        let value1 = 42.42352;
         let scalar = 4.825;
-        let expected = 8.792024870466321;
+        let expected = 8.792_439_378_238_342;
         unsafe {
             let m1 = measurement_new(value1, expression.as_ptr());
-            let result = Box::from_raw(measurement_div_scalar(m1, scalar));
+            let result = Box::from_raw(measurement_div_scalar(m1, scalar) as *mut Measurement);
             assert_relative_eq!(result.value, expected);
             assert_ulps_eq!(result.value, expected);
         }
