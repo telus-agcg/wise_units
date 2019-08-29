@@ -21,7 +21,6 @@ mod serde;
 use crate::parser::Term;
 
 #[derive(Clone, Debug)]
-#[repr(C)]
 pub struct Unit {
     pub terms: Vec<Term>,
 }

@@ -9,14 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- [DEV-8049] Added `ffi` crate to expose C bindings for wise_units (moved from
+- [DEV-8049] Added `ffi` crate to expose C bindings for wise_units functions, 
+  with C-safe wrapper types around `Measurement` and `Unit`. (Moved from
   [WiseUnitsMobile](https://bitbucket.org/agrian/wiseunitsmobile/) with some
   updates).
-
-### Changed
-
-- Set [#[repr(C)]](https://doc.rust-lang.org/nomicon/other-reprs.html#reprc) 
-  attribute on `Measurement` and related types to safely expose them for FFI.
 
 ## [0.11.0] - 2019-07-17
 
