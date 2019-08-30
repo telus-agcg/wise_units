@@ -1,6 +1,7 @@
 target
 Cargo.lock
 src/parser.rs
+ffi/bindings.h
 tags
 *.bk
 GPATH
