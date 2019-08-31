@@ -6,7 +6,7 @@ use wise_units::{is_compatible_with::IsCompatibleWith, Error, UcumUnit, Unit as 
 #[derive(Debug, PartialEq)]
 #[repr(C)]
 pub struct Unit {
-    pub inner: WiseUnit,
+    inner: WiseUnit,
 }
 
 impl FromStr for Unit {

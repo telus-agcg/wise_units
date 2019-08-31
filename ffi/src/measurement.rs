@@ -8,7 +8,7 @@ use crate::unit::Unit;
 #[derive(Debug, PartialEq)]
 #[repr(C)]
 pub struct Measurement {
-    pub inner: WiseMeasurement,
+    inner: WiseMeasurement,
 }
 
 impl Measurement {
