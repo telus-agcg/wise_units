@@ -11,4 +11,4 @@ C interface for using `wise_units` in other languages.
 
 ## Development
 
-Update ffi::measurement with any new/changed interface that needs to be exposed to C. Note that if a type in wise_units will be exposed via ffi, that type must be marked with the #[repr(C)] attribute.
+Update ffi::measurement with any new/changed interface that needs to be exposed to C. Note that new types in `wise_units` will need to be wrapped in a #[repr(C)] type in `wise_units-ffi`; `wise_units` types should not be exported directly.
