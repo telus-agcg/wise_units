@@ -6,7 +6,7 @@ pub enum Error {
     IncompatibleUnitTypes { lhs: String, rhs: String },
 
     #[fail(display = "{}", _0)]
-    ParseError(#[fail(cause)] ParserError),
+    ParsingFailed(#[fail(cause)] ParserError),
 
     #[fail(display = "Operation caused a divide by 0")]
     DivideByZero,
@@ -14,6 +14,6 @@ pub enum Error {
 
 impl From<ParserError> for Error {
     fn from(other: ParserError) -> Self {
-        Error::ParseError(other)
+        Error::ParsingFailed(other)
     }
 }

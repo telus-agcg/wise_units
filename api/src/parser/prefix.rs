@@ -124,6 +124,7 @@ impl UcumSymbol for Prefix {
         }
     }
 
+    #[allow(clippy::non_ascii_literal)]
     fn print_symbol(&self) -> Option<&'static str> {
         match *self {
             Prefix::Micro => Some("μ"),
