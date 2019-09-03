@@ -46,7 +46,7 @@ mod tests {
     fn validate_eq_same_unit() {
         let m1 = Measurement::new(1.0, "m").unwrap();
         let m2 = Measurement::new(1.0, "m").unwrap();
-        assert!(&m1 == &m2);
+        assert!(m1 == m2);
 
         let m2 = Measurement::new(1.1, "m").unwrap();
         assert!(m1 != m2);
@@ -56,10 +56,10 @@ mod tests {
     fn validate_eq_unit_with_prefix() {
         let m = Measurement::new(1000.0, "m").unwrap();
         let km = Measurement::new(1.0, "km").unwrap();
-        assert!(&m == &km);
+        assert!(m == km);
 
         let km = Measurement::new(1.1, "km").unwrap();
-        assert!(&m != &km);
+        assert!(m != km);
     }
 
     #[test]
@@ -76,6 +76,6 @@ mod tests {
     fn validate_eq_incompatible_unit() {
         let m = Measurement::new(1.0, "m").unwrap();
         let s = Measurement::new(1.0, "s").unwrap();
-        assert!(&m != &s);
+        assert!(m != s);
     }
 }

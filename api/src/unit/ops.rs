@@ -114,6 +114,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::eq_op)]
     fn validate_div() {
         let expected = Unit::from_str("m/km").unwrap();
         assert_eq!(&*METER / &*KILOMETER, expected);
@@ -123,7 +124,7 @@ mod tests {
         let expected = Unit::from_str("10m/20m").unwrap();
         assert_eq!(unit / other, expected);
 
-        assert_eq!(&*SEED / &*SEED, *&*UNITY);
+        assert_eq!(&*SEED / &*SEED, *UNITY);
         assert_eq!(&*UNITY / &*SEED, Unit::from_str("/{seed}").unwrap());
         assert_eq!(&*SEED / &*ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
     }
@@ -139,9 +140,9 @@ mod tests {
         assert_eq!(unit * other, expected);
 
         let per_seed = Unit::from_str("/{seed}").unwrap();
-        assert_eq!(&*SEED * &per_seed, *&*UNITY);
+        assert_eq!(&*SEED * &per_seed, *UNITY);
 
         let seed_per_acre = Unit::from_str("{seed}/[acr_us]").unwrap();
-        assert_eq!(seed_per_acre * &*ACRE, *&*SEED);
+        assert_eq!(seed_per_acre * &*ACRE, *SEED);
     }
 }

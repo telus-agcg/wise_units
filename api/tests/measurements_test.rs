@@ -36,7 +36,7 @@ validate_conversion!(
     1.0,
     "m/s",
     "[mi_i]/h",
-    2.2369362920544025
+    2.236_936_292_054_402_5
 );
 
 validate_conversion!(
@@ -54,7 +54,7 @@ validate_conversion!(
     1.0,
     "[lb_av]/[acr_us]",
     "[lb_av]/[ft_i]2",
-    2.295_674_931_138_659e-05
+    2.295_674_931_138_659e-5
 );
 
 validate_conversion!(

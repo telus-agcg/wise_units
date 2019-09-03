@@ -41,16 +41,26 @@ mod tests {
     use crate::parser::Atom;
     use crate::parser::Term;
 
-    #[test]
-    fn validate_no_annotations() {
-        let terms = [term!()];
-        assert!(terms.annotation_composition().is_none());
+    mod without_annotations {
+        use super::*;
 
-        let terms = [term!(Meter)];
-        assert!(terms.annotation_composition().is_none());
+        #[test]
+        fn validate_no_atom() {
+            let terms = [term!()];
+            assert!(terms.annotation_composition().is_none());
+        }
 
-        let terms = [term!(Meter, exponent: 2), term!(Second, exponent: -1)];
-        assert!(terms.annotation_composition().is_none());
+        #[test]
+        fn validate_with_atom() {
+            let terms = [term!(Meter)];
+            assert!(terms.annotation_composition().is_none());
+        }
+
+        #[test]
+        fn validate_with_atom_and_exponent() {
+            let terms = [term!(Meter, exponent: 2), term!(Second, exponent: -1)];
+            assert!(terms.annotation_composition().is_none());
+        }
     }
 
     mod with_annotations {

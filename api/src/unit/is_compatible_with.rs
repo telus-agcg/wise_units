@@ -74,6 +74,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::blacklisted_name)]
     fn validate_is_compatible_with_units_with_annotations() {
         fn verify_compatible(lhs: &Unit, rhs: &Unit) {
             assert!(lhs.is_compatible_with(rhs));

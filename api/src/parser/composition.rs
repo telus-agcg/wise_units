@@ -588,6 +588,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::erasing_op, clippy::identity_op)]
     fn validate_mul_i32_lhs_empty() {
         let subject = Composition::default();
         let product = subject * 0;
@@ -604,6 +605,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::erasing_op, clippy::identity_op)]
     fn validate_mul_i32_lhs_1() {
         let subject = Composition::new(Dimension::Mass, 1);
         let product = subject * 0;
@@ -623,6 +625,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::erasing_op, clippy::identity_op)]
     fn validate_mul_i32_lhs_2() {
         let subject = Composition::new(Dimension::Mass, 2);
         let product = subject * 0;

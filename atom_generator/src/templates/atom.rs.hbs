@@ -5,7 +5,7 @@
 
 // Because long numbers are generated, there's no way (that I know of) to
 // generate them using underscores (to make them pass the clippy lint).
-#[cfg_attr(feature = "cargo-clippy", allow(clippy::unreadable_literal))]
+#[cfg_attr(feature = "cargo-clippy", allow(clippy::unreadable_literal, clippy::match_same_arms, clippy::too_many_lines, clippy::non_ascii_literal))]
 pub mod atom {
     use crate::is_compatible_with::{DefaultCompatibility, IsCompatibleWith};
     use crate::parser::{
