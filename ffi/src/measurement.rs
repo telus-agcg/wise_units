@@ -1,5 +1,8 @@
 use std::{ffi::CStr, ops::Deref, os::raw::c_char, ptr, str::FromStr};
-use wise_units::{Convertible, Error, Measurement as WiseMeasurement, UcumUnit, Unit as WiseUnit};
+use wise_units::{
+    reduce::ToReduced, Convertible, Error, Measurement as WiseMeasurement, UcumUnit,
+    Unit as WiseUnit,
+};
 
 use crate::unit::Unit;
 
@@ -113,12 +116,22 @@ pub unsafe extern "C" fn measurement_convert_to(
     let converted_measurement = match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => match measurement.convert_to(exp_str) {
             Ok(m) => m,
-            Err(_) => return ptr::null_mut(),
+            Err(_) => return ptr::null(),
         },
-        Err(_) => return ptr::null_mut(),
+        Err(_) => return ptr::null(),
     };
 
     Box::into_raw(Box::new(Measurement::from(converted_measurement)))
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn measurement_reduced(data: *const Measurement) -> *const Measurement {
+    let original = &*data;
+    let reduced = match original.to_reduced() {
+        Ok(r) => Measurement::from(r),
+        Err(_) => return ptr::null(),
+    };
+    Box::into_raw(Box::new(reduced))
 }
 
 #[no_mangle]
@@ -130,7 +143,7 @@ pub unsafe extern "C" fn measurement_add(
     let m2 = &*other;
     let result = match &m1.inner + &m2.inner {
         Ok(m) => Measurement::from(m),
-        Err(_) => return ptr::null_mut(),
+        Err(_) => return ptr::null(),
     };
 
     Box::into_raw(Box::new(result))
@@ -145,7 +158,7 @@ pub unsafe extern "C" fn measurement_sub(
     let m2 = &*other;
     let result = match &m1.inner - &m2.inner {
         Ok(m) => Measurement::from(m),
-        Err(_) => return ptr::null_mut(),
+        Err(_) => return ptr::null(),
     };
 
     Box::into_raw(Box::new(result))
@@ -292,6 +305,21 @@ mod tests {
                 Box::from_raw(measurement_convert_to(m, expression2.as_ptr()) as *mut Measurement);
             assert_relative_eq!(converted.value, expected);
             assert_ulps_eq!(converted.value, expected);
+        }
+    }
+
+    #[test]
+    fn can_reduce() {
+        let expression = CString::new("[acr_us]/m2/har").expect("CString::new failed");
+        let value = 1.0;
+        let expected_expression = "[acr_us]";
+        let expected_value = 10_000.0;
+        unsafe {
+            let m = measurement_new(value, expression.as_ptr());
+            let r = measurement_reduced(m);
+            assert_eq!((*r).unit.expression(), expected_expression);
+            assert_relative_eq!((*r).value, expected_value);
+            assert_ulps_eq!((*r).value, expected_value);
         }
     }
 
