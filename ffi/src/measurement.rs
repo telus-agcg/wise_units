@@ -1,43 +1,5 @@
-use std::{ffi::CStr, ops::Deref, os::raw::c_char, ptr, str::FromStr};
-use wise_units::{
-    reduce::ToReduced, Convertible, Error, Measurement as WiseMeasurement, UcumUnit,
-    Unit as WiseUnit,
-};
-
-use crate::unit::Unit;
-
-/// Wrapper for `wise_units::Measurement`. Safe for C interop.
-///
-#[derive(Debug, PartialEq)]
-#[repr(C)]
-pub struct Measurement {
-    inner: WiseMeasurement,
-}
-
-impl Measurement {
-    pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
-        let unit = WiseUnit::from_str(expression)?;
-        let wm = WiseMeasurement { value, unit };
-
-        Ok(Self::from(wm))
-    }
-}
-
-impl From<WiseMeasurement> for Measurement {
-    fn from(wise_measurement: WiseMeasurement) -> Self {
-        Self {
-            inner: wise_measurement,
-        }
-    }
-}
-
-impl Deref for Measurement {
-    type Target = WiseMeasurement;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
+use std::{ffi::CStr, os::raw::c_char, ptr};
+use wise_units::{reduce::ToReduced, Convertible, Measurement, UcumUnit, Unit};
 
 /// Create a new `Measurement`. Note that you must call
 /// `measurement_destroy(data: measurement)` with this instance when you are done with
@@ -141,7 +103,7 @@ pub unsafe extern "C" fn measurement_add(
 ) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = match &m1.inner + &m2.inner {
+    let result = match m1 + m2 {
         Ok(m) => Measurement::from(m),
         Err(_) => return ptr::null(),
     };
@@ -156,7 +118,7 @@ pub unsafe extern "C" fn measurement_sub(
 ) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = match &m1.inner - &m2.inner {
+    let result = match m1 - m2 {
         Ok(m) => Measurement::from(m),
         Err(_) => return ptr::null(),
     };
@@ -171,7 +133,7 @@ pub unsafe extern "C" fn measurement_mul(
 ) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = &m1.inner * &m2.inner;
+    let result = m1 * m2;
 
     Box::into_raw(Box::new(Measurement::from(result)))
 }
@@ -182,7 +144,7 @@ pub unsafe extern "C" fn measurement_mul_scalar(
     scalar: f64,
 ) -> *const Measurement {
     let measurement = &*data;
-    let result = &measurement.inner * scalar;
+    let result = measurement * scalar;
 
     Box::into_raw(Box::new(Measurement::from(result)))
 }
@@ -194,7 +156,7 @@ pub unsafe extern "C" fn measurement_div(
 ) -> *const Measurement {
     let m1 = &*data;
     let m2 = &*other;
-    let result = &m1.inner / &m2.inner;
+    let result = m1 / m2;
 
     Box::into_raw(Box::new(Measurement::from(result)))
 }
@@ -205,7 +167,7 @@ pub unsafe extern "C" fn measurement_div_scalar(
     scalar: f64,
 ) -> *const Measurement {
     let measurement = &*data;
-    let result = &measurement.inner / scalar;
+    let result = measurement / scalar;
 
     Box::into_raw(Box::new(Measurement::from(result)))
 }

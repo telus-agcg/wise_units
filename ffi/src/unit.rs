@@ -1,44 +1,10 @@
 use std::{
     ffi::{CStr, CString},
-    ops::Deref,
     os::raw::c_char,
     ptr,
     str::FromStr,
 };
-use wise_units::{
-    is_compatible_with::IsCompatibleWith, reduce::ToReduced, Error, UcumUnit, Unit as WiseUnit,
-};
-
-/// Wrapper for `wise_units::Unit`. Safe for C interop.
-///
-#[derive(Debug, PartialEq)]
-#[repr(C)]
-pub struct Unit {
-    inner: WiseUnit,
-}
-
-impl FromStr for Unit {
-    type Err = Error;
-
-    fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let wise_unit = WiseUnit::from_str(expression)?;
-        Ok(Self::from(wise_unit))
-    }
-}
-
-impl From<WiseUnit> for Unit {
-    fn from(wise_unit: WiseUnit) -> Self {
-        Self { inner: wise_unit }
-    }
-}
-
-impl Deref for Unit {
-    type Target = WiseUnit;
-
-    fn deref(&self) -> &Self::Target {
-        &self.inner
-    }
-}
+use wise_units::{is_compatible_with::IsCompatibleWith, reduce::ToReduced, UcumUnit, Unit};
 
 /// Create a new `Unit`. Note that you must call `unit_destroy(data: unit)` with
 /// this instance when you are done with it so that the the unit can be properly
@@ -95,7 +61,7 @@ pub unsafe extern "C" fn unit_magnitude(data: *const Unit) -> f64 {
 pub unsafe extern "C" fn unit_is_compatible_with(data: *const Unit, other: *const Unit) -> bool {
     let unit1 = &*data;
     let unit2 = &*other;
-    unit1.inner.is_compatible_with(&unit2.inner)
+    unit1.is_compatible_with(unit2)
 }
 
 #[no_mangle]
@@ -130,7 +96,7 @@ pub unsafe extern "C" fn unit_reduced(data: *const Unit) -> *const Unit {
 pub unsafe extern "C" fn unit_div(data: *const Unit, other: *const Unit) -> *const Unit {
     let unit = &*data;
     let other = &*other;
-    let quotient = Unit::from(&unit.inner / &other.inner);
+    let quotient = Unit::from(unit / other);
     let quotient_box = Box::new(quotient);
     Box::into_raw(quotient_box)
 }
@@ -139,7 +105,7 @@ pub unsafe extern "C" fn unit_div(data: *const Unit, other: *const Unit) -> *con
 pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *const Unit {
     let unit = &*data;
     let other = &*other;
-    let product = Unit::from(&unit.inner * &other.inner);
+    let product = Unit::from(unit * other);
     let product_box = Box::new(product);
     Box::into_raw(product_box)
 }
@@ -255,7 +221,7 @@ mod tests {
         unsafe {
             let unit = unit_new(expression.as_ptr());
             let reduced = unit_reduced(unit);
-            assert_eq!((*reduced).inner.expression().as_str(), "/m2.cm.km");
+            assert_eq!((*reduced).expression().as_str(), "/m2.cm.km");
         }
     }
 
