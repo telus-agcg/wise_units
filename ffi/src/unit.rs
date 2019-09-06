@@ -1,5 +1,13 @@
-use std::{ffi::CStr, ops::Deref, os::raw::c_char, ptr, str::FromStr};
-use wise_units::{is_compatible_with::IsCompatibleWith, Error, UcumUnit, Unit as WiseUnit};
+use std::{
+    ffi::{CStr, CString},
+    ops::Deref,
+    os::raw::c_char,
+    ptr,
+    str::FromStr,
+};
+use wise_units::{
+    is_compatible_with::IsCompatibleWith, reduce::ToReduced, Error, UcumUnit, Unit as WiseUnit,
+};
 
 /// Wrapper for `wise_units::Unit`. Safe for C interop.
 ///
@@ -100,6 +108,22 @@ pub unsafe extern "C" fn unit_is_valid(expression: *const c_char) -> bool {
         Ok(exp_str) => Unit::from_str(exp_str).is_ok(),
         Err(_) => false,
     }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn unit_expression(data: *const Unit) -> *const c_char {
+    let unit = &*data;
+    match CString::new(unit.expression()) {
+        Ok(expression) => expression.into_raw(),
+        Err(_) => ptr::null(),
+    }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn unit_reduced(data: *const Unit) -> *const Unit {
+    let original = &*data;
+    let reduced = Unit::from(original.to_reduced());
+    Box::into_raw(Box::new(reduced))
 }
 
 #[no_mangle]
@@ -212,6 +236,26 @@ mod tests {
         unsafe {
             assert!(unit_is_valid(ten_meters_per_hour_per_second.as_ptr()));
             assert!(!unit_is_valid(trees.as_ptr()));
+        }
+    }
+
+    #[test]
+    fn can_get_expression() {
+        let expression = CString::new("[lb_av]/[acr_us]").expect("CString::new failed");
+        unsafe {
+            let u = unit_new(expression.as_ptr());
+            let result = CStr::from_ptr(unit_expression(u));
+            assert_eq!(expression.to_str(), result.to_str());
+        }
+    }
+
+    #[test]
+    fn can_get_reduced_unit() {
+        let expression = CString::new("km-1/m2.cm").expect("CString::new failed");
+        unsafe {
+            let unit = unit_new(expression.as_ptr());
+            let reduced = unit_reduced(unit);
+            assert_eq!((*reduced).inner.expression().as_str(), "/m2.cm.km");
         }
     }
 
