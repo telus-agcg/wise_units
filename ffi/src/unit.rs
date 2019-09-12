@@ -76,6 +76,9 @@ pub unsafe extern "C" fn unit_is_valid(expression: *const c_char) -> bool {
     }
 }
 
+/// After copying the string data referenced by the returned pointer, you must
+/// call `destroy_string` to free the pointer from Rust.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_expression(data: *const Unit) -> *const c_char {
     let unit = &*data;
@@ -108,6 +111,16 @@ pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *con
     let product = Unit::from(unit * other);
     let product_box = Box::new(product);
     Box::into_raw(product_box)
+}
+
+/// Return ownership of `data` to Rust to deallocate safely.
+///
+#[no_mangle]
+pub unsafe extern "C" fn destroy_string(data: *const c_char) {
+    if data.is_null() {
+        return;
+    }
+    CString::from_raw(data as *mut c_char);
 }
 
 #[cfg(test)]
