@@ -2,7 +2,7 @@ use pest;
 
 /// Errors when trying to convert between types that aren't commensurable.
 ///
-#[derive(Fail, Debug, PartialEq)]
+#[derive(Clone, Fail, Debug, PartialEq)]
 pub enum Error {
     #[fail(display = "Unable to parse expression: {}", expression)]
     UnableToParse { expression: String },

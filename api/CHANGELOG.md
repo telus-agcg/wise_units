@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   with C-safe wrapper types around `Measurement` and `Unit`. (Moved from
   [WiseUnitsMobile](https://bitbucket.org/agrian/wiseunitsmobile/) with some
   updates).
+- Derive `Clone` for `error::Error` and `parser::Error`.
 
 ## [0.11.0] - 2019-07-17
 
