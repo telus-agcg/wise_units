@@ -1,6 +1,6 @@
 use crate::parser::Error as ParserError;
 
-#[derive(Debug, Fail, PartialEq)]
+#[derive(Clone, Debug, Fail, PartialEq)]
 pub enum Error {
     #[fail(display = "Units are not compatible: {}, {}", lhs, rhs)]
     IncompatibleUnitTypes { lhs: String, rhs: String },
