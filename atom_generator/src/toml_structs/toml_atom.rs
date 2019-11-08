@@ -60,6 +60,7 @@ fn sanitize_type_name_segment(mut string: String) -> String {
     s.to_camel_case()
 }
 
+#[allow(clippy::non_ascii_literal)]
 fn remove_non_latin_chars(string: &str) -> String {
     string
         .replace("è", "e")

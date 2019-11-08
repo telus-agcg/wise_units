@@ -75,13 +75,15 @@ mod tests {
     use super::super::parser::{Atom, Term};
     use super::*;
     use crate::unit::Unit;
+    use approx::{assert_relative_eq, assert_ulps_eq};
     use std::str::FromStr;
 
     #[test]
     fn validate_new() {
         let m = Measurement::new(1.0, "m").unwrap();
 
-        assert_eq!(m.value, 1.0);
+        assert_relative_eq!(m.value, 1.0);
+        assert_ulps_eq!(m.value, 1.0);
         assert_eq!(m.unit, vec![term!(Meter)].into());
     }
 
@@ -90,30 +92,36 @@ mod tests {
         // No special units
         let m = Measurement::new(1.0, "m").unwrap();
         let unit = Unit::from_str("m").unwrap();
-        assert_eq!(m.converted_scalar(&unit), 1.0);
+        assert_relative_eq!(m.converted_scalar(&unit), 1.0);
+        assert_ulps_eq!(m.converted_scalar(&unit), 1.0);
 
         let m = Measurement::new(1.0, "m").unwrap();
         let unit = Unit::from_str("km").unwrap();
-        assert_eq!(m.converted_scalar(&unit), 0.001);
+        assert_relative_eq!(m.converted_scalar(&unit), 0.001);
+        assert_ulps_eq!(m.converted_scalar(&unit), 0.001);
 
         let m = Measurement::new(1000.0, "m").unwrap();
         let unit = Unit::from_str("km").unwrap();
-        assert_eq!(m.converted_scalar(&unit), 1.0);
+        assert_relative_eq!(m.converted_scalar(&unit), 1.0);
+        assert_ulps_eq!(m.converted_scalar(&unit), 1.0);
 
         // Measurement unit is not special, but other_unit is
         let m = Measurement::new(1.0, "K").unwrap();
         let unit = Unit::from_str("Cel").unwrap();
-        assert_eq!(m.converted_scalar(&unit), -272.15);
+        assert_relative_eq!(m.converted_scalar(&unit), -272.15);
+        assert_ulps_eq!(m.converted_scalar(&unit), -272.15);
 
         // Measurement unit is special, but other_unit is not
         let m = Measurement::new(1.0, "Cel").unwrap();
         let unit = Unit::from_str("K").unwrap();
-        assert_eq!(m.converted_scalar(&unit), 274.15);
+        assert_relative_eq!(m.converted_scalar(&unit), 274.15);
+        assert_ulps_eq!(m.converted_scalar(&unit), 274.15);
 
         // Measurement unit and other_unit are special
         let m = Measurement::new(1.0, "Cel").unwrap();
         let unit = Unit::from_str("[degF]").unwrap();
-        assert_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
+        assert_relative_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
+        assert_ulps_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
     }
 
     #[cfg(feature = "serde")]

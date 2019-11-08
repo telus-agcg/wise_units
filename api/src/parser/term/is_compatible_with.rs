@@ -51,59 +51,83 @@ mod tests {
     use crate::is_compatible_with::IsCompatibleWith;
     use crate::parser::{Atom, Prefix, Term};
 
-    #[test]
-    fn validate_term_no_annotations() {
-        let lhs = term!(Meter);
-        let rhs = term!(Kilo, Meter);
-        assert!(lhs.is_compatible_with(&rhs));
+    mod without_annotations {
+        use super::*;
 
-        let rhs = term!(Kilo, Meter, factor: 20);
-        assert!(lhs.is_compatible_with(&rhs));
+        #[test]
+        fn validate_term() {
+            let lhs = term!(Meter);
+            let rhs = term!(Kilo, Meter);
+            assert!(lhs.is_compatible_with(&rhs));
+        }
 
-        let rhs = term!(Kilo, Meter, factor: 20, exponent: 2);
-        assert!(!lhs.is_compatible_with(&rhs));
+        #[test]
+        fn validate_term_with_factor() {
+            let lhs = term!(Meter);
+            let rhs = term!(Kilo, Meter, factor: 20);
+            assert!(lhs.is_compatible_with(&rhs));
+        }
+
+        #[test]
+        fn validate_term_with_factor_and_exponent() {
+            let lhs = term!(Meter);
+            let rhs = term!(Kilo, Meter, factor: 20, exponent: 2);
+            assert!(!lhs.is_compatible_with(&rhs));
+        }
+
+        #[test]
+        fn validate_terms() {
+            let lhs = [term!(Meter)];
+            let rhs = [term!(Kilo, Meter)];
+            assert!(lhs.is_compatible_with(&rhs));
+        }
+
+        #[test]
+        fn validate_terms_with_factor() {
+            let lhs = [term!(Meter)];
+            let rhs = [term!(Kilo, Meter, factor: 20)];
+            assert!(lhs.is_compatible_with(&rhs));
+        }
+
+        #[test]
+        fn validate_terms_with_factor_and_exponent() {
+            let lhs = [term!(Meter)];
+            let rhs = [term!(Kilo, Meter, factor: 20, exponent: 2)];
+            assert!(!lhs.is_compatible_with(&rhs));
+        }
     }
 
-    #[test]
-    fn validate_terms_no_annotations() {
-        let lhs = [term!(Meter)];
-        let rhs = [term!(Kilo, Meter)];
-        assert!(lhs.is_compatible_with(&rhs));
+    mod with_annotations {
+        use super::*;
 
-        let rhs = [term!(Kilo, Meter, factor: 20)];
-        assert!(lhs.is_compatible_with(&rhs));
+        #[test]
+        fn validate_term() {
+            let m = term!(Meter, annotation: "stuff".to_string());
+            let km_stuff = term!(Kilo, Meter, annotation: "stuff".to_string());
+            assert!(m.is_compatible_with(&km_stuff));
 
-        let rhs = [term!(Kilo, Meter, factor: 20, exponent: 2)];
-        assert!(!lhs.is_compatible_with(&rhs));
-    }
+            // Different annotation
+            let km_pants = term!(Kilo, Meter, annotation: "pants".to_string());
+            assert!(!m.is_compatible_with(&km_pants));
 
-    #[test]
-    fn validate_term_with_annotations() {
-        let lhs = term!(Meter, annotation: "stuff".to_string());
-        let rhs = term!(Kilo, Meter, annotation: "stuff".to_string());
-        assert!(lhs.is_compatible_with(&rhs));
+            // No annotation
+            let km_no_annotation = term!(Kilo, Meter);
+            assert!(!m.is_compatible_with(&km_no_annotation));
+        }
 
-        // Different annotation
-        let rhs = term!(Kilo, Meter, annotation: "pants".to_string());
-        assert!(!lhs.is_compatible_with(&rhs));
+        #[test]
+        fn validate_terms() {
+            let m = [term!(Meter, annotation: "stuff".to_string())];
+            let km_stuff = [term!(Kilo, Meter, annotation: "stuff".to_string())];
+            assert!(m.is_compatible_with(&km_stuff));
 
-        // No annotation
-        let rhs = term!(Kilo, Meter);
-        assert!(!lhs.is_compatible_with(&rhs));
-    }
+            // Different annotation
+            let km_pants = [term!(Kilo, Meter, annotation: "pants".to_string())];
+            assert!(!m.is_compatible_with(&km_pants));
 
-    #[test]
-    fn validate_terms_with_annotations() {
-        let lhs = [term!(Meter, annotation: "stuff".to_string())];
-        let rhs = [term!(Kilo, Meter, annotation: "stuff".to_string())];
-        assert!(lhs.is_compatible_with(&rhs));
-
-        // Different annotation
-        let rhs = [term!(Kilo, Meter, annotation: "pants".to_string())];
-        assert!(!lhs.is_compatible_with(&rhs));
-
-        // No annotation
-        let rhs = [term!(Kilo, Meter)];
-        assert!(!lhs.is_compatible_with(&rhs));
+            // No annotation
+            let km_no_annotation = [term!(Kilo, Meter)];
+            assert!(!m.is_compatible_with(&km_no_annotation));
+        }
     }
 }

@@ -1,6 +1,7 @@
 use crate::is_compatible_with::IsCompatibleWith;
 use crate::measurement::Measurement;
 use crate::ucum_unit::UcumUnit;
+use approx::ulps_eq;
 
 /// `Measurement`s are `PartialEq` if
 ///
@@ -34,7 +35,7 @@ impl PartialEq for Measurement {
             return false;
         }
 
-        self.scalar() == other.scalar()
+        ulps_eq!(self.scalar(), other.scalar())
     }
 }
 
@@ -46,7 +47,7 @@ mod tests {
     fn validate_eq_same_unit() {
         let m1 = Measurement::new(1.0, "m").unwrap();
         let m2 = Measurement::new(1.0, "m").unwrap();
-        assert!(&m1 == &m2);
+        assert!(m1 == m2);
 
         let m2 = Measurement::new(1.1, "m").unwrap();
         assert!(m1 != m2);
@@ -56,10 +57,10 @@ mod tests {
     fn validate_eq_unit_with_prefix() {
         let m = Measurement::new(1000.0, "m").unwrap();
         let km = Measurement::new(1.0, "km").unwrap();
-        assert!(&m == &km);
+        assert!(m == km);
 
         let km = Measurement::new(1.1, "km").unwrap();
-        assert!(&m != &km);
+        assert!(m != km);
     }
 
     #[test]
@@ -76,6 +77,15 @@ mod tests {
     fn validate_eq_incompatible_unit() {
         let m = Measurement::new(1.0, "m").unwrap();
         let s = Measurement::new(1.0, "s").unwrap();
-        assert!(&m != &s);
+        assert!(m != s);
+    }
+
+    #[test]
+    fn validate_eq_with_different_precision() {
+        let m1 = Measurement::new(1.0, "[ft_i]").unwrap();
+        let m2 = Measurement::new(12.0, "[in_i]").unwrap();
+        let m3 = Measurement::new(12.0, "[ft_i].[in_i]").unwrap();
+        assert!((&m1 * &m2) == m3);
+        assert!((&m2 * &m1) == m3);
     }
 }

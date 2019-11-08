@@ -1,6 +1,7 @@
 use crate::is_compatible_with::IsCompatibleWith;
 use crate::ucum_unit::UcumUnit;
 use crate::unit::Unit;
+use approx::ulps_eq;
 
 //-----------------------------------------------------------------------------
 // impl PartialEq
@@ -34,6 +35,21 @@ impl PartialEq for Unit {
             return false;
         }
 
-        self.scalar() == other.scalar()
+        ulps_eq!(self.scalar(), other.scalar())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::str::FromStr;
+
+    #[test]
+    fn validate_eq_with_different_precision() {
+        let u1 = Unit::from_str("100[ft_i]").unwrap();
+        let u2 = Unit::from_str("[in_i]2/5har").unwrap();
+        let u3 = Unit::from_str("100[ft_i].[in_i]2/5har").unwrap();
+        assert!((&u1 * &u2) == u3);
+        assert!((&u2 * &u1) == u3);
     }
 }

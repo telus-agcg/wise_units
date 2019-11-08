@@ -13,6 +13,7 @@ pub mod partial_ord;
 pub mod reducible;
 mod term_reducing;
 pub mod to_reduced;
+#[allow(clippy::module_name_repetitions)]
 pub mod ucum_unit;
 
 #[cfg(feature = "serde")]
