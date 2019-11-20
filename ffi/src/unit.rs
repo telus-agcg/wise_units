@@ -1,3 +1,4 @@
+use ffi_common::error;
 use std::{
     ffi::{CStr, CString},
     os::raw::c_char,
@@ -12,6 +13,8 @@ use wise_units::{is_compatible_with::IsCompatibleWith, reduce::ToReduced, UcumUn
 ///
 #[no_mangle]
 pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
+    error::clear_last_err_msg();
+
     if expression.is_null() {
         return ptr::null();
     };
@@ -19,9 +22,9 @@ pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
     match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => match Unit::from_str(exp_str) {
             Ok(unit) => Box::into_raw(Box::new(unit)),
-            Err(_) => ptr::null(),
+            Err(why) => crate::set_error_and_return(why.to_string()),
         },
-        Err(_) => ptr::null(),
+        Err(why) => crate::set_error_and_return(why.to_string()),
     }
 }
 
@@ -66,13 +69,18 @@ pub unsafe extern "C" fn unit_is_compatible_with(data: *const Unit, other: *cons
 
 #[no_mangle]
 pub unsafe extern "C" fn unit_is_valid(expression: *const c_char) -> bool {
+    error::clear_last_err_msg();
+
     if expression.is_null() {
         return false;
     };
 
     match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => Unit::from_str(exp_str).is_ok(),
-        Err(_) => false,
+        Err(why) => {
+            error::set_last_err_msg(why.to_string());
+            return false;
+        }
     }
 }
 
@@ -81,10 +89,12 @@ pub unsafe extern "C" fn unit_is_valid(expression: *const c_char) -> bool {
 ///
 #[no_mangle]
 pub unsafe extern "C" fn unit_expression(data: *const Unit) -> *const c_char {
+    error::clear_last_err_msg();
+
     let unit = &*data;
     match CString::new(unit.expression()) {
         Ok(expression) => expression.into_raw(),
-        Err(_) => ptr::null(),
+        Err(why) => crate::set_error_and_return(why.to_string()),
     }
 }
 
@@ -113,16 +123,6 @@ pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *con
     Box::into_raw(product_box)
 }
 
-/// Return ownership of `data` to Rust to deallocate safely.
-///
-#[no_mangle]
-pub unsafe extern "C" fn destroy_string(data: *const c_char) {
-    if data.is_null() {
-        return;
-    }
-    CString::from_raw(data as *mut c_char);
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -137,6 +137,19 @@ mod tests {
             let u = unit_new(expression_c.as_ptr());
             let boxed_u = Box::from_raw(u as *mut Unit);
             assert_eq!(expression, boxed_u.expression());
+        }
+    }
+
+    #[test]
+    fn creating_bad_unit_sets_error() {
+        let unit = "meow";
+        let expected_error = format!("Unable to parse expression: {}", &unit);
+        let expression = CString::new(unit).expect("CString::new failed");
+        unsafe {
+            let u = unit_new(expression.as_ptr());
+            assert_eq!(u, ptr::null());
+            let error = CStr::from_ptr(error::get_last_err_msg()).to_str().expect("Failed to get str from CStr."); 
+            assert_eq!(error, expected_error);
         }
     }
 
@@ -263,5 +276,4 @@ mod tests {
             assert_eq!(expected, result.expression());
         }
     }
-
 }

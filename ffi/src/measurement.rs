@@ -1,3 +1,4 @@
+use ffi_common::error;
 use std::{ffi::CStr, os::raw::c_char, ptr};
 use wise_units::{reduce::ToReduced, Convertible, Measurement, UcumUnit, Unit};
 
@@ -10,6 +11,8 @@ pub unsafe extern "C" fn measurement_new(
     value: f64,
     expression: *const c_char,
 ) -> *const Measurement {
+    error::clear_last_err_msg();
+
     if expression.is_null() {
         return ptr::null();
     };
@@ -17,9 +20,9 @@ pub unsafe extern "C" fn measurement_new(
     match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => match Measurement::new(value, exp_str) {
             Ok(measurement) => Box::into_raw(Box::new(measurement)),
-            Err(_) => ptr::null(),
+            Err(why) => return crate::set_error_and_return(why.to_string()),
         },
-        Err(_) => ptr::null(),
+        Err(why) => return crate::set_error_and_return(why.to_string()),
     }
 }
 
@@ -73,14 +76,16 @@ pub unsafe extern "C" fn measurement_convert_to(
     data: *const Measurement,
     expression: *const c_char,
 ) -> *const Measurement {
+    error::clear_last_err_msg();
+
     let measurement = &*data;
 
     let converted_measurement = match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => match measurement.convert_to(exp_str) {
             Ok(m) => m,
-            Err(_) => return ptr::null(),
+            Err(why) => return crate::set_error_and_return(why.to_string()),
         },
-        Err(_) => return ptr::null(),
+        Err(why) => return crate::set_error_and_return(why.to_string()),
     };
 
     Box::into_raw(Box::new(Measurement::from(converted_measurement)))
@@ -88,10 +93,12 @@ pub unsafe extern "C" fn measurement_convert_to(
 
 #[no_mangle]
 pub unsafe extern "C" fn measurement_reduced(data: *const Measurement) -> *const Measurement {
+    error::clear_last_err_msg();
+
     let original = &*data;
     let reduced = match original.to_reduced() {
         Ok(r) => Measurement::from(r),
-        Err(_) => return ptr::null(),
+        Err(why) => return crate::set_error_and_return(why.to_string()),
     };
     Box::into_raw(Box::new(reduced))
 }
@@ -101,11 +108,13 @@ pub unsafe extern "C" fn measurement_add(
     data: *const Measurement,
     other: *const Measurement,
 ) -> *const Measurement {
+    error::clear_last_err_msg();
+
     let m1 = &*data;
     let m2 = &*other;
     let result = match m1 + m2 {
         Ok(m) => Measurement::from(m),
-        Err(_) => return ptr::null(),
+        Err(why) => return crate::set_error_and_return(why.to_string()),
     };
 
     Box::into_raw(Box::new(result))
@@ -116,11 +125,13 @@ pub unsafe extern "C" fn measurement_sub(
     data: *const Measurement,
     other: *const Measurement,
 ) -> *const Measurement {
+    error::clear_last_err_msg();
+
     let m1 = &*data;
     let m2 = &*other;
     let result = match m1 - m2 {
         Ok(m) => Measurement::from(m),
-        Err(_) => return ptr::null(),
+        Err(why) => return crate::set_error_and_return(why.to_string()),
     };
 
     Box::into_raw(Box::new(result))
@@ -374,6 +385,41 @@ mod tests {
             let result = Box::from_raw(measurement_div_scalar(m1, scalar) as *mut Measurement);
             assert_relative_eq!(result.value, expected);
             assert_ulps_eq!(result.value, expected);
+        }
+    }
+
+    #[test]
+    fn invalid_conversion_produces_error() {
+        let expression1 = CString::new("[lb_av]/[acr_us]").expect("CString::new failed");
+        let expression2 = CString::new("m").expect("CString::new failed");
+        let value = 12.0;
+        let expected_error = "Units are not compatible: [lb_av]/[acr_us], m";
+        unsafe {
+            let m = measurement_new(value, expression1.as_ptr());
+            let converted = measurement_convert_to(m, expression2.as_ptr());
+            assert_eq!(converted, ptr::null());
+            let error = CStr::from_ptr(error::get_last_err_msg());
+            let error_str = error.to_str().expect("Failed to get str from CStr");
+            assert_eq!(error_str, expected_error);
+        }
+    }
+
+    #[test]
+    fn error_is_cleared_on_subsequent_ops() {
+        let expression1 = CString::new("[lb_av]/[acr_us]").expect("CString::new failed");
+        let expression2 = CString::new("m").expect("CString::new failed");
+        let expression3 = CString::new("[lb_av]/m2").expect("CString::new failed");
+        let value = 12.0;
+        unsafe {
+            let m = measurement_new(value, expression1.as_ptr());
+            // result is null, error is not null
+            let conversion_result_1 = measurement_convert_to(m, expression2.as_ptr());
+            assert_eq!(conversion_result_1, ptr::null());
+            assert_ne!(error::get_last_err_msg(), ptr::null());
+            // result is not null, error is null
+            let conversion_result_2 = measurement_convert_to(m, expression3.as_ptr());
+            assert_ne!(conversion_result_2, ptr::null());
+            assert_eq!(error::get_last_err_msg(), ptr::null());
         }
     }
 }
