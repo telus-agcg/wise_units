@@ -7,6 +7,10 @@ edition = "2018"
 [dependencies]
 wise_units = { path = "../api" }
 
+[dependencies.ffi_common]
+git = "ssh://bitbucket.org/agrian/ffi_common.git"
+rev = "7ddeec9"
+
 [build-dependencies]
 cbindgen = "0.9.1"
 
