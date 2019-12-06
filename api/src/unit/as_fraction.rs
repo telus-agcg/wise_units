@@ -1,7 +1,4 @@
-use crate::as_fraction::AsFraction;
-use crate::invert::ToInverse;
-use crate::parser::Term;
-use crate::unit::Unit;
+use crate::{as_fraction::AsFraction, invert::ToInverse, unit::Unit};
 
 impl AsFraction for Unit {
     type Numerator = Self;

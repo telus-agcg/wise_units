@@ -1,4 +1,3 @@
-use crate::parser::{Atom, Prefix, Term};
 use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.

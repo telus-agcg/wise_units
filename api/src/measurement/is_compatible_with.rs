@@ -1,7 +1,4 @@
-use crate::is_compatible_with::IsCompatibleWith;
-use crate::measurement::Measurement;
-use crate::parser::Term;
-use crate::unit::Unit;
+use crate::{IsCompatibleWith, Measurement, Unit};
 
 impl<'a, 'b> IsCompatibleWith<&'b Measurement> for &'a Measurement {
     #[inline]

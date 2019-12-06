@@ -1,4 +1,3 @@
-#![forbid(unused_imports)]
 #![deny(unused_extern_crates)]
 #![warn(
     box_pointers,
@@ -26,26 +25,24 @@ extern crate failure_derive;
 mod macros;
 
 pub mod as_fraction;
+pub mod composable;
+pub mod composition;
 pub mod convertible;
 pub mod error;
 pub mod field_eq;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
-pub mod parser;
 pub mod reduce;
 pub mod unit;
 
 mod reducible;
 mod ucum_unit;
 
-pub use crate::convertible::Convertible;
-pub use crate::error::Error;
-pub use crate::field_eq::FieldEq;
-pub use crate::is_compatible_with::IsCompatibleWith;
-pub use crate::measurement::Measurement;
-pub use crate::parser::{
-    Atom, Classification, Composable, Composition, Dimension, Prefix, Property, Term, UcumSymbol,
+pub use crate::{
+    composable::Composable, composition::Composition, convertible::Convertible, error::Error,
+    field_eq::FieldEq, is_compatible_with::IsCompatibleWith, measurement::Measurement,
+    ucum_unit::UcumUnit, unit::Unit,
 };
-pub use crate::ucum_unit::UcumUnit;
-pub use crate::unit::Unit;
+
+pub use wise_units_parser::Dimension;

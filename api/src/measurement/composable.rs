@@ -1,5 +1,4 @@
-use crate::measurement::Measurement;
-use crate::parser::{Composable, Composition};
+use crate::{measurement::Measurement, Composable, Composition};
 
 //-----------------------------------------------------------------------------
 // impl Composable
@@ -17,7 +16,7 @@ impl Composable for Measurement {
 #[cfg(test)]
 mod tests {
     use crate::measurement::Measurement;
-    use crate::parser::{Composable, Composition, Dimension};
+    use crate::{Composable, Composition, Dimension};
 
     #[test]
     fn validate_composition() {

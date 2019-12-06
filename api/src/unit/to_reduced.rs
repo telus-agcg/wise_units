@@ -1,9 +1,7 @@
 use super::Unit;
-use crate::as_fraction::AsFraction;
-use crate::invert::IntoInverse;
-use crate::parser::{Composable, Composition};
-use crate::reduce::ToReduced;
-use crate::Term;
+use crate::{
+    as_fraction::AsFraction, invert::IntoInverse, reduce::ToReduced, Composable, Composition, Term,
+};
 
 type OptionCombos = Vec<Option<(Term, Composition)>>;
 

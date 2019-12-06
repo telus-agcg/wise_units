@@ -1,4 +1,4 @@
-use crate::parser::Error as ParserError;
+use wise_units_parser::Error as ParserError;
 
 #[derive(Clone, Debug, Fail, PartialEq)]
 pub enum Error {
