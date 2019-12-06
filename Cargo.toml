@@ -2,7 +2,8 @@
 members = [
   "api",
   "atom_generator",
-  "definition_fetcher",
-  "ffi",
   "parser",
+  "interpreter",
+  "ffi",
+  "definition_fetcher",
 ]
