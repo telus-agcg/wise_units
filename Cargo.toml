@@ -4,4 +4,5 @@ members = [
   "atom_generator",
   "definition_fetcher",
   "ffi",
+  "parser",
 ]

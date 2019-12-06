@@ -1,0 +1,19 @@
+[package]
+name = "wise_units-parser"
+version = "0.1.0"
+authors = ["Steve Loveless <steve@agrian.com>"]
+edition = "2018"
+
+[lib]
+bench = false
+
+[dependencies]
+lazy_static = "1.2"
+
+[dev-dependencies]
+criterion = "0.2"
+pretty_assertions = "0.6"
+
+[[bench]]
+name = "parse_benchmark"
+harness = false
