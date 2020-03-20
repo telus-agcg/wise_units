@@ -1,20 +1,21 @@
-pub mod as_fraction;
-pub mod composable;
-pub mod deref;
-pub mod display;
-pub mod field_eq;
-pub mod from;
-pub mod from_str;
-pub mod invert;
-pub mod is_compatible_with;
-pub mod ops;
-pub mod partial_eq;
-pub mod partial_ord;
-pub mod reducible;
+mod as_fraction;
+mod composable;
+mod deref;
+mod display;
+mod field_eq;
+mod from;
+mod from_str;
+mod invert;
+mod is_compatible_with;
+mod ops;
+mod partial_eq;
+mod partial_ord;
+mod reducible;
 mod term_reducing;
-pub mod to_reduced;
+mod to_reduced;
+
 #[allow(clippy::module_name_repetitions)]
-pub mod ucum_unit;
+mod ucum_unit;
 
 #[cfg(feature = "serde")]
 mod serde;

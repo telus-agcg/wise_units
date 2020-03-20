@@ -1,15 +1,15 @@
-pub mod composable;
-pub mod convertible;
-pub mod field_eq;
-pub mod invert;
-pub mod is_compatible_with;
-pub mod ops;
-pub mod partial_eq;
-pub mod partial_ord;
-pub mod reducible;
-pub mod to_reduced;
-pub mod ucum_unit;
+mod composable;
+mod convertible;
 mod display;
+mod field_eq;
+mod invert;
+mod is_compatible_with;
+mod ops;
+mod partial_eq;
+mod partial_ord;
+mod reducible;
+mod to_reduced;
+mod ucum_unit;
 
 use crate::error::Error;
 use crate::reducible::Reducible;
