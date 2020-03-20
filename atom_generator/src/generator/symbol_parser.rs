@@ -1,4 +1,4 @@
-pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/symbol_parser.rs.hbs");
+pub(super) static HBS_TEMPLATE: &str = include_str!("../templates/symbol_parser.rs.hbs");
 
 #[derive(Serialize)]
 struct RustSymbolParser {

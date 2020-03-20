@@ -13,7 +13,7 @@ pub enum Error {
 
 impl<'i, R: ::pest::RuleType> ::std::convert::From<pest::Error<'i, R>> for Error {
     fn from(pest_error: pest::Error<'i, R>) -> Self {
-        Error::UnableToParse {
+        Self::UnableToParse {
             expression: pest_error.to_string(),
         }
     }
@@ -21,7 +21,7 @@ impl<'i, R: ::pest::RuleType> ::std::convert::From<pest::Error<'i, R>> for Error
 
 impl ::std::convert::From<::std::num::ParseIntError> for Error {
     fn from(error: ::std::num::ParseIntError) -> Self {
-        Error::UnableToParse {
+        Self::UnableToParse {
             expression: error.to_string(),
         }
     }

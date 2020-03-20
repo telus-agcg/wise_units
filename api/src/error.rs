@@ -14,6 +14,6 @@ pub enum Error {
 
 impl From<ParserError> for Error {
     fn from(other: ParserError) -> Self {
-        Error::ParsingFailed(other)
+        Self::ParsingFailed(other)
     }
 }

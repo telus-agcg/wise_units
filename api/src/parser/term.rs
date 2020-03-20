@@ -23,6 +23,7 @@ pub struct Term {
 }
 
 impl Term {
+    #[must_use]
     pub const fn new(prefix: Option<Prefix>, atom: Option<Atom>) -> Self {
         Self {
             atom,
@@ -35,6 +36,7 @@ impl Term {
 
     /// Creates a new `Term` that's equivalent to the unit "1".
     ///
+    #[must_use]
     pub fn new_unity() -> Self {
         Self {
             atom: None,
@@ -53,6 +55,7 @@ impl Term {
     /// * it has no `Atom`
     /// * it has no `Prefix`
     ///
+    #[must_use]
     pub fn is_unity(&self) -> bool {
         self.factor == Some(1_u32)
             && self.exponent.is_none()
@@ -70,6 +73,7 @@ impl Term {
     /// A `Term` with _only_ an `exponent` doesn't really make any sense. A `Term` with an
     /// `annotation` certainly makes sense, but does not impact the value of anything.
     ///
+    #[must_use]
     pub fn has_value(&self) -> bool {
         self.factor.is_some() || self.atom.is_some() || self.annotation.is_some()
     }
@@ -77,6 +81,7 @@ impl Term {
     /// If `self` has an `exponent`, it checks if its value is positive; if not, it returns `true`
     /// (since `None` is analogous to an exponent of 1).
     ///
+    #[must_use]
     pub fn exponent_is_positive(&self) -> bool {
         match self.exponent {
             Some(e) => e.is_positive(),
@@ -88,6 +93,7 @@ impl Term {
     /// If `self` has an `exponent`, it checks if its value is negative; if not, it returns `false`
     /// (since `None` is analogous to an exponent of 1).
     ///
+    #[must_use]
     pub fn exponent_is_negative(&self) -> bool {
         match self.exponent {
             Some(e) => e.is_negative(),
@@ -104,6 +110,7 @@ impl Term {
         }
     }
 
+    #[must_use]
     pub fn factor_as_u32(&self) -> u32 {
         match self.factor {
             Some(f) => f,

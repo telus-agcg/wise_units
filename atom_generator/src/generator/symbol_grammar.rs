@@ -1,6 +1,6 @@
 use crate::rust_structs::{PestSymbolList, RustAtomList};
 
-pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/symbol.pest.hbs");
+pub(super) static HBS_TEMPLATE: &str = include_str!("../templates/symbol.pest.hbs");
 
 /// Uses the associated handlebars template to generate the Rust code for the
 /// `symbol.pest` pest grammar.

@@ -28,10 +28,11 @@ pub mod property {
         /// assert_eq!(Property::Acidity.atoms(), vec![Atom::PH]);
         /// ```
         ///
+        #[must_use]
         pub fn atoms(self) -> Vec<Atom> {
             match self {
                 {{~ #each properties }}
-                Property::{{ @key }} => {
+                Self::{{ @key }} => {
                     vec![
                         {{~ #each this.atom_type_names }}
                         Atom::{{ this }},{{ /each }}
@@ -43,16 +44,16 @@ pub mod property {
 
     impl Default for Property {
         fn default() -> Self {
-            Property::Unclassified
+            Self::Unclassified
         }
     }
 
     impl fmt::Display for Property {
         fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-            let string = match *self {
+            let string = match self {
                 {{~ #each properties as |key value| }}
-                Property::{{ key }} => {
-                    "{{ value.description }}"
+                Self::{{ @key }} => {
+                    "{{ @key }}"
                 },{{ /each }}
             };
 
@@ -67,7 +68,7 @@ pub mod property {
         #[test]
         fn validate_display() {
             let a = format!("{}", Property::Acceleration);
-            assert_eq!(a, "acceleration".to_string());
+            assert_eq!(&a, "Acceleration");
         }
     }
 }

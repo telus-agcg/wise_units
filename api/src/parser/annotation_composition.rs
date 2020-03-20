@@ -6,6 +6,6 @@ pub type AnnotationComposition = HashMap<String, i32>;
 /// annotations. For those cases, we want to be able to ensure that, for example, `m{foo}` is not
 /// comparable to `m{bar}`.
 ///
-pub trait AnnotationComposable {
+pub(crate) trait AnnotationComposable {
     fn annotation_composition(self) -> Option<AnnotationComposition>;
 }
