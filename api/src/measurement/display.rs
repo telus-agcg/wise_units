@@ -1,11 +1,11 @@
-use measurement::Measurement;
+use super::Measurement;
 use std::fmt;
 
 //-----------------------------------------------------------------------------
 // impl Display
 //-----------------------------------------------------------------------------
 impl fmt::Display for Measurement {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{} {}", self.value, self.unit)
     }
 }
@@ -16,29 +16,22 @@ mod tests {
 
     #[test]
     fn validate_display() {
+        assert_eq!(&format!("{}", Measurement::new(1.1, "m").unwrap()), "1.1 m");
         assert_eq!(
-            Measurement::new(1.1, "m").unwrap().to_string(),
-            "1.1 m".to_string()
+            &format!("{}", Measurement::new(1.1, "m2").unwrap()),
+            "1.1 m2"
         );
         assert_eq!(
-            Measurement::new(1.1, "m2").unwrap().to_string(),
-            "1.1 m2".to_string()
+            &format!("{}", Measurement::new(1.1, "km2").unwrap()),
+            "1.1 km2"
         );
         assert_eq!(
-            Measurement::new(1.1, "km2").unwrap().to_string(),
-            "1.1 km2".to_string()
+            &format!("{}", Measurement::new(1.1, "km2/rad.s").unwrap()),
+            "1.1 km2/rad.s"
         );
         assert_eq!(
-            Measurement::new(1.1, "km2/s").unwrap().to_string(),
-            "1.1 km2/s".to_string()
-        );
-        assert_eq!(
-            Measurement::new(1.1, "km2/rad.s").unwrap().to_string(),
-            "1.1 km2/rad.s".to_string()
-        );
-        assert_eq!(
-            Measurement::new(1.1, "100km2/rad.s").unwrap().to_string(),
-            "1.1 100km2/rad.s".to_string()
+            &format!("{}", Measurement::new(1.1, "100km2/rad.s").unwrap()),
+            "1.1 100km2/rad.s"
         );
     }
 }

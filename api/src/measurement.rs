@@ -9,6 +9,7 @@ pub mod partial_ord;
 pub mod reducible;
 pub mod to_reduced;
 pub mod ucum_unit;
+mod display;
 
 use crate::error::Error;
 use crate::reducible::Reducible;
