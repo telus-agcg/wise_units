@@ -6,7 +6,7 @@ use std::io::Read;
 use std::path::Path;
 use std::str::FromStr;
 
-static CUSTOM_ATOMS_FILE_NAME: &'static str = "CustomAtoms.toml";
+static CUSTOM_ATOMS_FILE_NAME: &str = "CustomAtoms.toml";
 
 /// Reads the `Atoms.toml` file (containing UCUM unit definitions) that's part
 /// of the repo *and* a `CustomAtoms.toml` file that's part of the calling

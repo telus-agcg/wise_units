@@ -1,6 +1,6 @@
 use crate::rust_structs::{RustAtomList, RustPropertyList};
 
-pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/property.rs.hbs");
+pub(super) static HBS_TEMPLATE: &str = include_str!("../templates/property.rs.hbs");
 
 /// Uses the associated handlebars template to generate the Rust code for the
 /// `Property` enum.

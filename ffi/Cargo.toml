@@ -12,10 +12,10 @@ git = "ssh://bitbucket.org/agrian/ffi_common.git"
 rev = "7ddeec9"
 
 [build-dependencies]
-cbindgen = "0.9.1"
+cbindgen = "0.13.1"
 
 [dev-dependencies]
 approx = "0.3"
 
 [lib]
-crate-type = ["staticlib", "rlib"]
+crate-type = ["staticlib", "rlib", "cdylib"]

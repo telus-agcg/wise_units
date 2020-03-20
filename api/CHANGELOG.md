@@ -5,11 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+
+- `Measurement` had a submodule for implementing `Display`, but it wasn't being
+  `use`d; could call this a "fix", but technically it's adding this impl.
+
+### Removed
+
+- Both `measurement` and `unit` had all submodules as `pub` that just implement
+  traits; this is unnecessary.
+
+### Fixed
+
+- `parser::property::Property`'s implementation of `Display` wasn't working.
+
 ## [0.12.0] - 2019-11-07
 
 ### Added
 
-- [DEV-8049] Added `wise_units-ffi` crate to expose C bindings for wise_units functions, 
+- [DEV-8049] Added `wise_units-ffi` crate to expose C bindings for wise_units functions,
   with C-safe wrapper types around `Measurement` and `Unit`.
 - Derive `Clone` for `error::Error` and `parser::Error`.
 

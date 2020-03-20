@@ -11,6 +11,15 @@ use wise_units::{is_compatible_with::IsCompatibleWith, reduce::ToReduced, UcumUn
 /// this instance when you are done with it so that the the unit can be properly
 /// destroyed and its memory freed.
 ///
+/// # Safety
+///
+/// `expression` is checked that it's null, but not checked for its type.
+///
+/// # Errors
+///
+/// * If the `expression` can't be converted to a `&str`.
+/// * If `Unit` can't be created using the `expression` string.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
     error::clear_last_err_msg();
@@ -30,11 +39,21 @@ pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
 
 /// Return ownership of `data` to Rust to deallocate safely.
 ///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_destroy(data: *const Unit) {
     let _ = Box::from_raw(data as *mut Unit);
 }
 
+/// Essentially checks if the two `Unit`'s scalar values are equal.
+///
+/// # Safety
+///
+/// `data` and `other` are unchecked, so validate them before passing them in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_partial_eq(data: *const Unit, other: *const Unit) -> bool {
     let unit = &*data;
@@ -42,24 +61,49 @@ pub unsafe extern "C" fn unit_partial_eq(data: *const Unit, other: *const Unit) 
     unit == other
 }
 
+/// Checks to see if the `Unit` is "special" (one that uses a function for converting instead of
+/// a scalar value).
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_is_special(data: *const Unit) -> bool {
     let unit = &*data;
     unit.is_special()
 }
 
+/// Gets the `Unit`'s scalar value (expressed in terms of the `Unit`'s base unit).
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_scalar(data: *const Unit) -> f64 {
     let unit = &*data;
     unit.scalar()
 }
 
+/// Gets the `Unit`'s magnitude.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_magnitude(data: *const Unit) -> f64 {
     let unit = &*data;
     unit.magnitude()
 }
 
+/// Checks if `data` and `other` are compatible/comparable `Units`.
+///
+/// # Safety
+///
+/// Both `data` and `other` are unchecked, so validate your pointers before passing them in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_is_compatible_with(data: *const Unit, other: *const Unit) -> bool {
     let unit1 = &*data;
@@ -67,6 +111,18 @@ pub unsafe extern "C" fn unit_is_compatible_with(data: *const Unit, other: *cons
     unit1.is_compatible_with(unit2)
 }
 
+/// Wrapper function for checking if the `Unit` is valid.
+///
+/// # Safety
+///
+/// `expression` is checked that it's null, but not checked for its type. If it's null, this returns
+/// `false`.
+///
+/// # Errors
+///
+/// * If the `expression` can't be converted to a `&str`.
+/// * If `Unit` can't be created using the `expression` string.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_is_valid(expression: *const c_char) -> bool {
     error::clear_last_err_msg();
@@ -79,13 +135,17 @@ pub unsafe extern "C" fn unit_is_valid(expression: *const c_char) -> bool {
         Ok(exp_str) => Unit::from_str(exp_str).is_ok(),
         Err(why) => {
             error::set_last_err_msg(why.to_string());
-            return false;
+            false
         }
     }
 }
 
 /// After copying the string data referenced by the returned pointer, you must
 /// call `destroy_string` to free the pointer from Rust.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
 ///
 #[no_mangle]
 pub unsafe extern "C" fn unit_expression(data: *const Unit) -> *const c_char {
@@ -98,27 +158,45 @@ pub unsafe extern "C" fn unit_expression(data: *const Unit) -> *const c_char {
     }
 }
 
+/// Wrapper function for reducing a `Unit`.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate your pointer before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_reduced(data: *const Unit) -> *const Unit {
     let original = &*data;
-    let reduced = Unit::from(original.to_reduced());
+    let reduced = original.to_reduced();
     Box::into_raw(Box::new(reduced))
 }
 
+/// Wrapper function for dividing `Unit`s.
+///
+/// # Safety
+///
+/// Both `data` and `other` are unchecked, so validate your pointers before passing them in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_div(data: *const Unit, other: *const Unit) -> *const Unit {
     let unit = &*data;
     let other = &*other;
-    let quotient = Unit::from(unit / other);
+    let quotient = unit / other;
     let quotient_box = Box::new(quotient);
     Box::into_raw(quotient_box)
 }
 
+/// Wrapper function for multiplying `Unit`s.
+///
+/// # Safety
+///
+/// Both `data` and `other` are unchecked, so validate your pointers before passing them in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *const Unit {
     let unit = &*data;
     let other = &*other;
-    let product = Unit::from(unit * other);
+    let product = unit * other;
     let product_box = Box::new(product);
     Box::into_raw(product_box)
 }
@@ -148,7 +226,9 @@ mod tests {
         unsafe {
             let u = unit_new(expression.as_ptr());
             assert_eq!(u, ptr::null());
-            let error = CStr::from_ptr(error::get_last_err_msg()).to_str().expect("Failed to get str from CStr."); 
+            let error = CStr::from_ptr(error::get_last_err_msg())
+                .to_str()
+                .expect("Failed to get str from CStr.");
             assert_eq!(error, expected_error);
         }
     }
