@@ -9,7 +9,7 @@ use super::symbol_grammar;
 use super::symbol_parser;
 
 lazy_static! {
-    pub static ref HANDLEBARS: Handlebars = {
+    pub static ref HANDLEBARS: Handlebars<'static> = {
         let mut handlebars = Handlebars::new();
         handlebars.register_escape_fn(::handlebars::no_escape);
         handlebars.register_helper("camelCase", Box::new(camel_case_helper));

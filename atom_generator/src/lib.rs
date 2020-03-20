@@ -19,16 +19,12 @@
 
 #[macro_use(handlebars_helper)]
 extern crate handlebars;
-extern crate heck;
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]
 extern crate log;
-extern crate regex;
-extern crate serde;
 #[macro_use]
 extern crate serde_derive;
-extern crate toml;
 
 mod from_toml;
 mod generator;

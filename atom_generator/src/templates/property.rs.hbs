@@ -50,10 +50,10 @@ pub mod property {
 
     impl fmt::Display for Property {
         fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-            let string = match *self {
+            let string = match self {
                 {{~ #each properties as |key value| }}
-                Self::{{ key }} => {
-                    "{{ value.description }}"
+                Self::{{ @key }} => {
+                    "{{ @key }}"
                 },{{ /each }}
             };
 
@@ -68,7 +68,7 @@ pub mod property {
         #[test]
         fn validate_display() {
             let a = format!("{}", Property::Acceleration);
-            assert_eq!(a, "acceleration".to_string());
+            assert_eq!(&a, "Acceleration");
         }
     }
 }

@@ -10,12 +10,6 @@
     trivial_numeric_casts
 )]
 
-extern crate reqwest;
-extern crate serde_transcode;
-extern crate serde_xml_rs;
-extern crate simple_logger;
-extern crate toml;
-
 use std::fs::File;
 use std::io::{Read, Write};
 
@@ -37,14 +31,14 @@ fn main() -> Result<(), ::std::io::Error> {
 /// however, since the XML contains printSymbols that can't be successfully
 /// deserialized; they have to be manually removed, then added back to the
 /// resulting TOML doc.
-fn _fetch() -> String {
-    let mut res =
-        reqwest::get("http://unitsofmeasure.org/ucum-essence.xml").expect("Unable to fetch XML");
+async fn _fetch() -> String {
+    reqwest::get("http://unitsofmeasure.org/ucum-essence.xml")
+        .await
+        .expect("Unable to fetch XML")
+        .text()
+        .await
+        .expect("Unable to read response")
 
-    let mut body = String::new();
-    res.read_to_string(&mut body).unwrap();
-
-    body
 }
 
 fn read_xml_file() -> String {

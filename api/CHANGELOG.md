@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Both `measurement` and `unit` had all submodules as `pub` that just implement
   traits; this is unnecessary.
 
+### Fixed
+
+- `parser::property::Property`'s implementation of `Display` wasn't working.
+
 ## [0.12.0] - 2019-11-07
 
 ### Added
