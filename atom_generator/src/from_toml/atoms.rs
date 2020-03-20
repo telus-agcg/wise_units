@@ -2,7 +2,7 @@ use crate::rust_structs::RustAtomList;
 use crate::toml_structs::TomlAtomList;
 use std::str::FromStr;
 
-static ATOMS_FILE: &'static str = include_str!("../../Atoms.toml");
+static ATOMS_FILE: &str = include_str!("../../Atoms.toml");
 
 /// Reads the `Atoms.toml` file (containing UCUM unit definitions) that's part
 /// of the repo and transforms that into a `RustAtomList`.

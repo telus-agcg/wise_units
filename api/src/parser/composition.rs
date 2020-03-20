@@ -69,6 +69,7 @@ macro_rules! def_add_dimension {
 }
 
 impl Composition {
+    #[must_use]
     pub fn new(dimension: Dimension, exponent: i32) -> Self {
         match dimension {
             Dimension::ElectricCharge => Self::new_electric_charge(exponent),
@@ -209,6 +210,7 @@ impl Composition {
         self.time = insert_exponent!(self, time, exponent);
     }
 
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.electric_charge.is_none()
             && self.length.is_none()

@@ -18,4 +18,4 @@ cbindgen = "0.9.1"
 approx = "0.3"
 
 [lib]
-crate-type = ["staticlib", "rlib"]
+crate-type = ["staticlib", "rlib", "cdylib"]

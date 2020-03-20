@@ -1,6 +1,6 @@
 use crate::rust_structs::{RustAtomList, RustMapperList};
 
-pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/mapper.rs.hbs");
+pub(super) static HBS_TEMPLATE: &str = include_str!("../templates/mapper.rs.hbs");
 
 /// Uses the associated handlebars template to generate the Rust code for the
 /// `mapper` module.

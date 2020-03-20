@@ -9,6 +9,7 @@
     rust_2018_idioms,
     trivial_casts,
     trivial_numeric_casts,
+    unreachable_pub,
     unused_qualifications,
     clippy::all,
     clippy::complexity,

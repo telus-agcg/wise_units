@@ -45,6 +45,10 @@ pub struct Measurement {
 impl Measurement {
     /// Creates a new `Measurement` by parsing `expression` into a `Unit`.
     ///
+    /// # Errors
+    ///
+    /// Returns an `Error` if `expression` isn't one that represents a valid `Unit`.
+    ///
     #[inline]
     pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
         let unit = Unit::from_str(expression)?;
@@ -168,13 +172,16 @@ mod tests {
         }
 
         #[test]
-        fn validate_deserialize_json_errors() {
-            let expected_json = r#"{"value":2.0,"unit":""}"#;
+        fn validate_deserialize_json_errors_bad_value_type() {
+            let expected_json = r#"{"value":"adsf","unit":"m"}"#;
             let measurement: Result<Measurement, serde_json::Error> =
                 serde_json::from_str(expected_json);
             assert!(measurement.is_err());
+        }
 
-            let expected_json = r#"{"value":"adsf","unit":"m"}"#;
+        #[test]
+        fn validate_deserialize_json_errors_empty_unit() {
+            let expected_json = r#"{"value":2.0,"unit":""}"#;
             let measurement: Result<Measurement, serde_json::Error> =
                 serde_json::from_str(expected_json);
             assert!(measurement.is_err());

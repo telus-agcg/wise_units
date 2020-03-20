@@ -6,8 +6,8 @@ impl Composable for Term {
     /// `Composition`. If the `Term` has no `Atom`, it has no dimension, thus will have an empty
     /// `Composition`.
     ///
-    /// TODO: https://agrian.atlassian.net/browse/DEV-971
-    ///
+    // TODO: https://agrian.atlassian.net/browse/DEV-971
+    //
     fn composition(&self) -> Composition {
         match self.atom {
             Some(atom) => {

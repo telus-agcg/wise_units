@@ -24,7 +24,7 @@ impl<'de> Visitor<'de> for UnitVisitor {
 // Deserialize
 //-----------------------------------------------------------------------------
 impl<'de> Deserialize<'de> for Unit {
-    fn deserialize<D>(deserializer: D) -> Result<Unit, D::Error>
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
@@ -81,11 +81,14 @@ mod tests {
     }
 
     #[test]
-    fn validate_deserialize_json_errors() {
+    fn validate_deserialize_json_error_empty_unit() {
         let expected_json = r#""""#;
         let unit: Result<Unit, serde_json::Error> = serde_json::from_str(expected_json);
         assert!(unit.is_err());
+    }
 
+    #[test]
+    fn validate_deserialize_json_error_bad_unit() {
         let expected_json = r#""!@#$""#;
         let unit: Result<Unit, serde_json::Error> = serde_json::from_str(expected_json);
         assert!(unit.is_err());

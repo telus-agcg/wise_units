@@ -1,6 +1,6 @@
 use crate::rust_structs::{RustAtomList, RustClassificationList};
 
-pub(super) static HBS_TEMPLATE: &'static str = include_str!("../templates/classification.rs.hbs");
+pub(super) static HBS_TEMPLATE: &str = include_str!("../templates/classification.rs.hbs");
 
 /// Uses the associated handlebars template to generate the Rust code for the
 /// `Classification` enum.

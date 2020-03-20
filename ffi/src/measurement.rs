@@ -4,7 +4,16 @@ use wise_units::{reduce::ToReduced, Convertible, Measurement, UcumUnit, Unit};
 
 /// Create a new `Measurement`. Note that you must call
 /// `measurement_destroy(data: measurement)` with this instance when you are done with
-/// it so that the the measurement can be properly destroyed and its memory freed.
+/// it so that the measurement can be properly destroyed and its memory freed.
+///
+/// # Safety
+///
+/// `expression` is checked that it's null, but not checked for its type.
+///
+/// # Errors
+///
+/// * If the `expression` can't be converted to a `&str`.
+/// * If the `Measurement`'s `Unit` can't be created using the `expression` string.
 ///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_new(
@@ -20,19 +29,29 @@ pub unsafe extern "C" fn measurement_new(
     match CStr::from_ptr(expression).to_str() {
         Ok(exp_str) => match Measurement::new(value, exp_str) {
             Ok(measurement) => Box::into_raw(Box::new(measurement)),
-            Err(why) => return crate::set_error_and_return(why.to_string()),
+            Err(why) => crate::set_error_and_return(why.to_string()),
         },
-        Err(why) => return crate::set_error_and_return(why.to_string()),
+        Err(why) => crate::set_error_and_return(why.to_string()),
     }
 }
 
 /// Return ownership of `data` to Rust to deallocate safely.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
 ///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_destroy(data: *const Measurement) {
     let _ = Box::from_raw(data as *mut Measurement);
 }
 
+/// Essentially checks if the two `Measurement`'s scalar values are equal.
+///
+/// # Safety
+///
+/// `data` and `other` are unchecked, so validate them before passing them in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_partial_eq(
     data: *const Measurement,
@@ -43,14 +62,26 @@ pub unsafe extern "C" fn measurement_partial_eq(
     m1 == m2
 }
 
+/// Gets the `Measurement`'s `Unit` (the non-`value` part of the `Measurement`).
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_get_unit(data: *const Measurement) -> *const Unit {
     let measurement = &*data;
     // Passing back a clone in this case since the Unit has a lifetime equal to the Measurement.
     let unit = measurement.unit.clone();
-    Box::into_raw(Box::new(Unit::from(unit)))
+    Box::into_raw(Box::new(unit))
 }
 
+/// Gets the `Measurement`'s `value` (the non-`Unit` part of the `Measurement`).
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 // cbindgen blows up when parsing a const fn, so suppress the warning.
 #[allow(clippy::missing_const_for_fn)]
 #[no_mangle]
@@ -59,18 +90,44 @@ pub unsafe extern "C" fn measurement_get_value(data: *const Measurement) -> f64 
     measurement.value
 }
 
+/// Gets the `Measurement`'s scalar value (expressed in terms of its `Unit`'s base unit).
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_scalar(data: *const Measurement) -> f64 {
     let measurement = &*data;
     measurement.scalar()
 }
 
+/// Gets the `Measurement`'s magnitude.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_magnitude(data: *const Measurement) -> f64 {
     let measurement = &*data;
     measurement.magnitude()
 }
 
+/// Tries to convert a `Measurement` to the `expression` that represents a `Unit`.
+///
+/// # Safety
+///
+/// `data` and `expression` are unchecked, so validate them before passing them in.
+///
+/// # Errors
+///
+/// If the `Measurement` can't be converted to the `Unit` represented by `expression`
+/// (uncommensurable `Unit`s), the error is set and a `null` pointer is returned.
+///
+/// Also, if `expression` can't be converted to a `&str`, an error is set and a `null` pointer is
+/// returned
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_convert_to(
     data: *const Measurement,
@@ -88,21 +145,42 @@ pub unsafe extern "C" fn measurement_convert_to(
         Err(why) => return crate::set_error_and_return(why.to_string()),
     };
 
-    Box::into_raw(Box::new(Measurement::from(converted_measurement)))
+    Box::into_raw(Box::new(converted_measurement))
 }
 
+/// Tries to reduce the `Measurement`'s `Unit` terms.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate is before passing is in.
+///
+/// # Errors
+///
+/// If the reduction process fails, the error is set and a `null` pointer returned.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_reduced(data: *const Measurement) -> *const Measurement {
     error::clear_last_err_msg();
 
     let original = &*data;
     let reduced = match original.to_reduced() {
-        Ok(r) => Measurement::from(r),
+        Ok(r) => r,
         Err(why) => return crate::set_error_and_return(why.to_string()),
     };
     Box::into_raw(Box::new(reduced))
 }
 
+/// Adds a `Measurement` to another `Measurement`.
+///
+/// # Safety
+///
+/// `data` and `other` are unchecked, so validate them before passing them in.
+///
+/// # Errors
+///
+/// If the two `Measurement`s can't be added (uncommensurable `Unit`s), the error is set and a
+/// `null` pointer is returned.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_add(
     data: *const Measurement,
@@ -113,13 +191,24 @@ pub unsafe extern "C" fn measurement_add(
     let m1 = &*data;
     let m2 = &*other;
     let result = match m1 + m2 {
-        Ok(m) => Measurement::from(m),
+        Ok(m) => m,
         Err(why) => return crate::set_error_and_return(why.to_string()),
     };
 
     Box::into_raw(Box::new(result))
 }
 
+/// Subtracts a `Measurement` from another `Measurement`.
+///
+/// # Safety
+///
+/// `data` and `other` are unchecked, so validate them before passing them in.
+///
+/// # Errors
+///
+/// If the two `Measurement`s can't be subtracted (uncommensurable `Unit`s), the error is set and
+/// a `null` pointer is returned.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_sub(
     data: *const Measurement,
@@ -130,13 +219,19 @@ pub unsafe extern "C" fn measurement_sub(
     let m1 = &*data;
     let m2 = &*other;
     let result = match m1 - m2 {
-        Ok(m) => Measurement::from(m),
+        Ok(m) => m,
         Err(why) => return crate::set_error_and_return(why.to_string()),
     };
 
     Box::into_raw(Box::new(result))
 }
 
+/// Multiplies a `Measurement` by another `Measurement`.
+///
+/// # Safety
+///
+/// `data` and `other` are unchecked, so validate them before passing them in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_mul(
     data: *const Measurement,
@@ -146,9 +241,15 @@ pub unsafe extern "C" fn measurement_mul(
     let m2 = &*other;
     let result = m1 * m2;
 
-    Box::into_raw(Box::new(Measurement::from(result)))
+    Box::into_raw(Box::new(result))
 }
 
+/// Multiplies a `Measurement` by a scalar value.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_mul_scalar(
     data: *const Measurement,
@@ -157,9 +258,15 @@ pub unsafe extern "C" fn measurement_mul_scalar(
     let measurement = &*data;
     let result = measurement * scalar;
 
-    Box::into_raw(Box::new(Measurement::from(result)))
+    Box::into_raw(Box::new(result))
 }
 
+/// Divides a `Measurement` by another `Measurement`.
+///
+/// # Safety
+///
+/// `data` and `other` are unchecked, so validate them before passing them in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_div(
     data: *const Measurement,
@@ -169,9 +276,15 @@ pub unsafe extern "C" fn measurement_div(
     let m2 = &*other;
     let result = m1 / m2;
 
-    Box::into_raw(Box::new(Measurement::from(result)))
+    Box::into_raw(Box::new(result))
 }
 
+/// Divides a `Measurement` by a scalar value.
+///
+/// # Safety
+///
+/// `data` is unchecked, so validate it before passing it in.
+///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_div_scalar(
     data: *const Measurement,
@@ -180,7 +293,7 @@ pub unsafe extern "C" fn measurement_div_scalar(
     let measurement = &*data;
     let result = measurement / scalar;
 
-    Box::into_raw(Box::new(Measurement::from(result)))
+    Box::into_raw(Box::new(result))
 }
 
 #[cfg(test)]

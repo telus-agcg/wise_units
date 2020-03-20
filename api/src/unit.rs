@@ -49,6 +49,7 @@ pub struct Unit {
 impl Unit {
     /// Creates a new `Unit` that's equivalent to "1".
     ///
+    #[must_use]
     pub fn new_unity() -> Self {
         let unity_term = Term::new_unity();
 
@@ -66,6 +67,7 @@ impl Unit {
     ///     * has no `Atom`
     ///     * has no `Prefix`
     ///
+    #[must_use]
     pub fn is_unity(&self) -> bool {
         self.terms.len() == 1 && self.terms[0].is_unity()
     }
@@ -85,6 +87,7 @@ impl Unit {
     /// ```
     ///
     #[inline]
+    #[must_use]
     pub fn expression(&self) -> String {
         self.to_string()
     }
@@ -102,6 +105,7 @@ impl Unit {
     /// ```
     ///
     #[inline]
+    #[must_use]
     pub fn expression_reduced(&self) -> String {
         let reduced = term_reducing::reduce_terms(&self.terms);
 
