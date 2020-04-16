@@ -82,7 +82,8 @@ impl Composition {
         }
     }
 
-    fn new_electric_charge(exponent: i32) -> Self {
+    #[must_use]
+    pub const fn new_electric_charge(exponent: i32) -> Self {
         Self {
             electric_charge: Some(exponent),
             length: None,
@@ -94,7 +95,8 @@ impl Composition {
         }
     }
 
-    fn new_length(exponent: i32) -> Self {
+    #[must_use]
+    pub const fn new_length(exponent: i32) -> Self {
         Self {
             electric_charge: None,
             length: Some(exponent),
@@ -106,7 +108,8 @@ impl Composition {
         }
     }
 
-    fn new_luminous_intensity(exponent: i32) -> Self {
+    #[must_use]
+    pub const fn new_luminous_intensity(exponent: i32) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -118,7 +121,8 @@ impl Composition {
         }
     }
 
-    fn new_mass(exponent: i32) -> Self {
+    #[must_use]
+    pub const fn new_mass(exponent: i32) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -130,7 +134,8 @@ impl Composition {
         }
     }
 
-    fn new_plane_angle(exponent: i32) -> Self {
+    #[must_use]
+    pub const fn new_plane_angle(exponent: i32) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -142,7 +147,8 @@ impl Composition {
         }
     }
 
-    fn new_temperature(exponent: i32) -> Self {
+    #[must_use]
+    pub const fn new_temperature(exponent: i32) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -154,7 +160,8 @@ impl Composition {
         }
     }
 
-    fn new_time(exponent: i32) -> Self {
+    #[must_use]
+    pub const fn new_time(exponent: i32) -> Self {
         Self {
             electric_charge: None,
             length: None,
