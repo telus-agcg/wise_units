@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `Composition` now exposes `const fn`s for constructing 1-`Dimension`al
   objects.
+- `Composition` now derives `Eq`.
 
 ## [0.13.0] - 2020-03-20
 

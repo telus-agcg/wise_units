@@ -12,7 +12,7 @@ type Exponent = i32;
 ///
 /// For more info, see [https://en.wikipedia.org/wiki/Dimensional_analysis](https://en.wikipedia.org/wiki/Dimensional_analysis).
 ///
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Composition {
     electric_charge: Option<Exponent>,
     length: Option<Exponent>,
