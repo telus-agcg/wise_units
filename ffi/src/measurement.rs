@@ -506,7 +506,7 @@ mod tests {
         let expression1 = CString::new("[lb_av]/[acr_us]").expect("CString::new failed");
         let expression2 = CString::new("m").expect("CString::new failed");
         let value = 12.0;
-        let expected_error = "Units are not compatible: [lb_av]/[acr_us], m";
+        let expected_error = r#"Units are not compatible: "[lb_av]/[acr_us]", "m""#;
         unsafe {
             let m = measurement_new(value, expression1.as_ptr());
             let converted = measurement_convert_to(m, expression2.as_ptr());
