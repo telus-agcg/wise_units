@@ -1,4 +1,3 @@
-#![forbid(unused_imports)]
 #![deny(unused_extern_crates)]
 #![warn(
     box_pointers,
@@ -19,9 +18,6 @@
     clippy::nursery,
     clippy::style
 )]
-
-#[macro_use]
-extern crate failure_derive;
 
 #[macro_use]
 mod macros;
