@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Composition` now exposes `const fn`s for constructing 1-`Dimension`al
   objects.
 - `Composition` now derives `Eq`.
+- `Error` now derives `serde::Serialize`.
 
 ### Changed
 

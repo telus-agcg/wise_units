@@ -3,6 +3,7 @@ use pest;
 /// Errors when trying to convert between types that aren't commensurable.
 ///
 #[derive(Clone, thiserror::Error, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub enum Error {
     #[error("Unable to parse expression: {}", expression)]
     UnableToParse { expression: String },
