@@ -2,12 +2,13 @@ use pest;
 
 /// Errors when trying to convert between types that aren't commensurable.
 ///
-#[derive(Clone, Fail, Debug, PartialEq)]
+#[derive(Clone, thiserror::Error, Debug, PartialEq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub enum Error {
-    #[fail(display = "Unable to parse expression: {}", expression)]
+    #[error("Unable to parse expression: {}", expression)]
     UnableToParse { expression: String },
 
-    #[fail(display = "Unknown unit string: {}", _0)]
+    #[error("Unknown unit string: {0}")]
     UnknownUnitString(String),
 }
 
