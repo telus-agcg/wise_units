@@ -69,7 +69,8 @@ fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
         .fold(
             BTreeMap::<ComposableTerm, i32>::new(),
             |mut map, (key, exponent)| {
-                map.entry(key)
+                let _ = map
+                    .entry(key)
                     .and_modify(|entry| *entry += exponent)
                     .or_insert(exponent);
 

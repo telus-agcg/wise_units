@@ -38,7 +38,6 @@ async fn _fetch() -> String {
         .text()
         .await
         .expect("Unable to read response")
-
 }
 
 fn read_xml_file() -> String {
