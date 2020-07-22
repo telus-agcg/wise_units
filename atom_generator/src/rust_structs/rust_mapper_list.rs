@@ -26,7 +26,7 @@ impl<'a> From<&'a RustAtomList> for RustMapperList {
                 secondary_rule_name,
             };
 
-            mappings.entry(key).or_insert(mapping_value);
+            let _ = mappings.entry(key).or_insert(mapping_value);
         }
 
         Self { mappings }

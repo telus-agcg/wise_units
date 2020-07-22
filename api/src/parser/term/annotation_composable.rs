@@ -17,7 +17,8 @@ impl<'a> AnnotationComposable for &'a [Term] {
                     .map(|annotation| (annotation.clone(), term.exponent.unwrap_or(1)))
             })
             .fold(AnnotationComposition::new(), |mut map, (key, exponent)| {
-                map.entry(key)
+                let _ = map
+                    .entry(key)
                     .and_modify(|entry| *entry += exponent)
                     .or_insert(exponent);
 
@@ -71,7 +72,7 @@ mod tests {
             let terms = [term!(annotation: "foo".to_string())];
 
             let mut annotation_composition = AnnotationComposition::new();
-            annotation_composition.insert("foo".to_string(), 1);
+            let _ = annotation_composition.insert("foo".to_string(), 1);
 
             assert_eq!(terms.annotation_composition(), Some(annotation_composition));
         }
@@ -81,7 +82,7 @@ mod tests {
             let terms = [term!(Meter, annotation: "foo".to_string())];
 
             let mut annotation_composition = AnnotationComposition::new();
-            annotation_composition.insert("foo".to_string(), 1);
+            let _ = annotation_composition.insert("foo".to_string(), 1);
 
             assert_eq!(terms.annotation_composition(), Some(annotation_composition));
         }
@@ -91,7 +92,7 @@ mod tests {
             let terms = [term!(Meter, exponent: -2, annotation: "foo".to_string())];
 
             let mut annotation_composition = AnnotationComposition::new();
-            annotation_composition.insert("foo".to_string(), -2);
+            let _ = annotation_composition.insert("foo".to_string(), -2);
 
             assert_eq!(terms.annotation_composition(), Some(annotation_composition));
         }
@@ -103,8 +104,8 @@ mod tests {
                 term!(Meter, exponent: -2, annotation: "foo".to_string()),
             ];
             let mut annotation_composition = AnnotationComposition::new();
-            annotation_composition.insert("bar".to_string(), 3);
-            annotation_composition.insert("foo".to_string(), -2);
+            let _ = annotation_composition.insert("bar".to_string(), 3);
+            let _ = annotation_composition.insert("foo".to_string(), -2);
             assert_eq!(terms.annotation_composition(), Some(annotation_composition));
         }
 

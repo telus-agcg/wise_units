@@ -1,22 +1,24 @@
 #![deny(unused_extern_crates)]
 #![warn(
+    // missing_docs,
     box_pointers,
+    clippy::all,
+    clippy::complexity,
+    clippy::correctness,
+    clippy::nursery,
+    clippy::pedantic,
+    clippy::perf,
+    clippy::style,
     future_incompatible,
     missing_copy_implementations,
-    // missing_docs,
     nonstandard_style,
     rust_2018_idioms,
     trivial_casts,
     trivial_numeric_casts,
     unreachable_pub,
     unused_qualifications,
-    clippy::all,
-    clippy::complexity,
-    clippy::correctness,
-    clippy::pedantic,
-    clippy::perf,
-    clippy::nursery,
-    clippy::style
+    unused_results,
+    variant_size_differences
 )]
 
 #[macro_use]
