@@ -1,6 +1,6 @@
 [package]
 name = "wise_units-atom_generator"
-version = "0.2.0"
+version = "0.14.1"
 authors = ["Steve Loveless <steve@agrian.com>"]
 edition = "2018"
 
@@ -12,5 +12,4 @@ log = "0.4"
 regex = "1.0"
 serde = "1.0"
 serde_derive = "1.0"
-serde_json = { version = "1.0", features = ["arbitrary_precision"] }
 toml = "0.5"

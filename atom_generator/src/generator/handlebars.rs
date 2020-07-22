@@ -1,18 +1,14 @@
+use super::{atom, classification, mapper, property, symbol_grammar, symbol_parser};
 use handlebars::Handlebars;
 use heck::CamelCase;
 
-use super::atom;
-use super::classification;
-use super::mapper;
-use super::property;
-use super::symbol_grammar;
-use super::symbol_parser;
+handlebars_helper!(camel_case_helper: |word: str| word.to_camel_case());
 
 lazy_static! {
     pub static ref HANDLEBARS: Handlebars<'static> = {
         let mut handlebars = Handlebars::new();
         handlebars.register_escape_fn(::handlebars::no_escape);
-        handlebars.register_helper("camelCase", Box::new(camel_case_helper));
+        let _ = handlebars.register_helper("camelCase", Box::new(camel_case_helper));
 
         handlebars
             .register_template_string("atom", atom::HBS_TEMPLATE)
@@ -36,5 +32,3 @@ lazy_static! {
         handlebars
     };
 }
-
-handlebars_helper!(camel_case_helper: |word: str| word.to_camel_case());

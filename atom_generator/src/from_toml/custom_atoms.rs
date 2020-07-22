@@ -50,7 +50,7 @@ fn read_custom_atoms_toml() -> String {
     let mut atoms_file = File::open(src_path).expect("file not found");
     let mut read_contents = String::new();
 
-    atoms_file
+    let _ = atoms_file
         .read_to_string(&mut read_contents)
         .expect("something went wrong reading the file");
     debug!("[read_custom_atoms_toml] Read {}", CUSTOM_ATOMS_FILE_NAME);
