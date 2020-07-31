@@ -8,8 +8,26 @@
 ///
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Classification {
-    {{~ #each type_names as |type_name| }}
-    {{ type_name }},{{ /each }}
+    Apoth,
+    Avoirdupois,
+    BritLength,
+    BritVolumes,
+    Cgs,
+    Chemical,
+    Clinical,
+    Const,
+    Dimless,
+    Heat,
+    Infotech,
+    Intcust,
+    Iso1000,
+    Levels,
+    Misc,
+    Si,
+    Troy,
+    Typeset,
+    UsLengths,
+    UsVolumes,
 }
 
 impl Default for Classification {
