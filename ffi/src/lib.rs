@@ -25,6 +25,6 @@ pub mod unit;
 pub use wise_units::{Measurement, Unit};
 
 fn set_error_and_return<T>(message: String) -> *const T {
-    ffi_common::error::set_last_err_msg(message);
+    ffi_common::error::set_last_err_msg(&message);
     std::ptr::null()
 }
