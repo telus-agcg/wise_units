@@ -12,12 +12,10 @@ pub(self) mod handlebars;
 pub(self) mod mapper;
 pub(self) mod property;
 pub(self) mod symbol_grammar;
-pub(self) mod symbol_parser;
 
 pub(self) use self::handlebars::HANDLEBARS;
 
 use crate::rust_structs::RustAtomList;
-use std::env;
 use std::fs::File;
 use std::io::Write;
 use std::path::{Path, PathBuf};
@@ -30,50 +28,41 @@ pub(crate) fn generate_files(rust_atom_list: &RustAtomList) {
     generate_property_file(rust_atom_list);
     generate_atom_file(rust_atom_list);
     generate_symbol_grammar_file(rust_atom_list);
-    generate_symbol_parser_file();
     generate_mapper_file(rust_atom_list);
 }
 
 fn generate_classification_file(rust_atom_list: &RustAtomList) {
     let file_body = self::classification::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("classification.rs");
+    let file_path = build_file_path("parser/classification.rs");
     write_project_file(&file_path, &file_body);
 }
 
 fn generate_property_file(rust_atom_list: &RustAtomList) {
     let file_body = self::property::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("property.rs");
+    let file_path = build_file_path("parser/property.rs");
     write_project_file(&file_path, &file_body);
 }
 
 fn generate_atom_file(rust_atom_list: &RustAtomList) {
     let file_body = self::atom::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("atom.rs");
+    let file_path = build_file_path("parser/atom.rs");
     write_project_file(&file_path, &file_body);
 }
 
 fn generate_symbol_grammar_file(rust_atom_list: &RustAtomList) {
     let file_body = self::symbol_grammar::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("symbol.pest");
-    write_project_file(&file_path, &file_body);
-}
-
-fn generate_symbol_parser_file() {
-    let grammar_file_path = build_file_path("symbol.pest");
-    let file_body =
-        self::symbol_parser::generate_file_body(grammar_file_path.display().to_string());
-    let file_path = build_file_path("symbol_parser.rs");
+    let file_path = build_file_path("parser/symbols/symbol.pest");
     write_project_file(&file_path, &file_body);
 }
 
 fn generate_mapper_file(rust_atom_list: &RustAtomList) {
     let file_body = self::mapper::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("mapper.rs");
+    let file_path = build_file_path("parser/symbols/mapper.rs");
     write_project_file(&file_path, &file_body);
 }
 
 fn build_file_path(file_name: &str) -> PathBuf {
-    let dest_dir = env::var("OUT_DIR").unwrap();
+    let dest_dir = "../api/src/";
 
     Path::new(&dest_dir).join(file_name)
 }

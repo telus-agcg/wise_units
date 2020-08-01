@@ -1,4 +1,4 @@
-use super::{atom, classification, mapper, property, symbol_grammar, symbol_parser};
+use super::{atom, classification, mapper, property, symbol_grammar};
 use handlebars::Handlebars;
 use heck::CamelCase;
 
@@ -21,9 +21,6 @@ lazy_static! {
             .unwrap();
         handlebars
             .register_template_string("symbol_grammar", symbol_grammar::HBS_TEMPLATE)
-            .unwrap();
-        handlebars
-            .register_template_string("symbol_parser", symbol_parser::HBS_TEMPLATE)
             .unwrap();
         handlebars
             .register_template_string("mapper", mapper::HBS_TEMPLATE)

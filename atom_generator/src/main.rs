@@ -1,4 +1,3 @@
-#![forbid(unused_imports)]
 #![deny(unused_extern_crates)]
 #![warn(
     clippy::all,
@@ -33,6 +32,10 @@ mod from_toml;
 mod generator;
 mod rust_structs;
 mod toml_structs;
+
+fn main() {
+    build_ucum_atoms()
+}
 
 /// Used by standard `wise_units` to define only UCUM atoms/units as part of
 /// the library. If you're not defining custom units, there's no reason to call

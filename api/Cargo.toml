@@ -1,8 +1,13 @@
 [package]
 name = "wise_units"
-version = "0.14.1"
+version = "0.15.0"
+description = "Measure things using UCUM units"
+documentation = "https://teamcity-build.agriandev.com/repository/download/Crates_WiseUnits_Test/369131:id/docs/wise_units/index.html"
+repository = "https://bitbucket.org/agrian/wise_units"
+license = "MIT"
 authors = ["Steve Loveless <steve@agrian.com>"]
 edition = "2018"
+publish = ["agrian-registry"]
 
 [dependencies]
 approx = "0.3"
@@ -17,9 +22,6 @@ criterion = "0.3"
 lazy_static = "1.4"
 rmp-serde = "0.13"
 serde_json = "1.0"
-
-[build-dependencies]
-wise_units-atom_generator = { path = "../atom_generator" }
 
 [[bench]]
 name = "measurements_benchmarks"

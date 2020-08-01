@@ -1,6 +1,18 @@
-include!(concat!(env!("OUT_DIR"), "/classification.rs"));
-include!(concat!(env!("OUT_DIR"), "/property.rs"));
-include!(concat!(env!("OUT_DIR"), "/atom.rs"));
+// Because long numbers are generated, there's no way (that I know of) to
+// generate them using underscores (to make them pass the clippy lint).
+#[cfg_attr(
+    feature = "cargo-clippy",
+    allow(
+        clippy::unreadable_literal,
+        clippy::match_same_arms,
+        clippy::too_many_lines,
+        clippy::non_ascii_literal
+    )
+)]
+pub mod atom;
+pub mod classification;
+#[allow(clippy::non_ascii_literal)]
+pub mod property;
 
 pub(self) mod symbols;
 
@@ -18,20 +30,13 @@ mod term;
 mod terms;
 mod ucum_symbol;
 
-pub use self::annotation_composition::AnnotationComposition;
-pub use self::atom::Atom;
-pub use self::classification::Classification;
-pub use self::composable::Composable;
-pub use self::composition::Composition;
-pub use self::dimension::Dimension;
-pub use self::error::Error;
-pub use self::prefix::Prefix;
-pub use self::property::Property;
-pub use self::term::Term;
-pub use self::ucum_symbol::UcumSymbol;
+pub use self::{
+    annotation_composition::AnnotationComposition, atom::Atom, classification::Classification,
+    composable::Composable, composition::Composition, dimension::Dimension, error::Error,
+    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
+};
 
-use self::terms::term_parser::Rule;
-use self::terms::term_parser::TermParser;
+use self::terms::term_parser::{Rule, TermParser};
 use pest::Parser;
 
 #[inline]

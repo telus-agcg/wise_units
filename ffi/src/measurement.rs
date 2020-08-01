@@ -511,7 +511,7 @@ mod tests {
             let m = measurement_new(value, expression1.as_ptr());
             let converted = measurement_convert_to(m, expression2.as_ptr());
             assert_eq!(converted, ptr::null());
-            let error = CStr::from_ptr(error::get_last_err_msg());
+            let error = CStr::from_ptr(ffi_common::ffi::get_last_err_msg());
             let error_str = error.to_str().expect("Failed to get str from CStr");
             assert_eq!(error_str, expected_error);
         }
@@ -528,11 +528,11 @@ mod tests {
             // result is null, error is not null
             let conversion_result_1 = measurement_convert_to(m, expression2.as_ptr());
             assert_eq!(conversion_result_1, ptr::null());
-            assert_ne!(error::get_last_err_msg(), ptr::null());
+            assert_ne!(ffi_common::ffi::get_last_err_msg(), ptr::null());
             // result is not null, error is null
             let conversion_result_2 = measurement_convert_to(m, expression3.as_ptr());
             assert_ne!(conversion_result_2, ptr::null());
-            assert_eq!(error::get_last_err_msg(), ptr::null());
+            assert_eq!(ffi_common::ffi::get_last_err_msg(), ptr::null());
         }
     }
 }
