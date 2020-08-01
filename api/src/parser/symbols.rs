@@ -1,7 +1,7 @@
-include!(concat!(env!("OUT_DIR"), "/mapper.rs"));
-include!(concat!(env!("OUT_DIR"), "/symbol_parser.rs"));
-
+#[allow(clippy::too_many_lines)]
+pub(super) mod mapper;
 pub(super) mod symbol;
+pub(crate) mod symbol_parser;
 
 #[cfg(test)]
 mod symbol_parser_test;

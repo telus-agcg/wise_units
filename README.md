@@ -16,7 +16,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-wise_units = "0.1"
+wise_units = "0.14"
 ```
 
 and this to your crate root:
@@ -78,8 +78,15 @@ tests, you should use the `--all-features` flag: `cargo test --all-features`.
 
 ### Static Analysis
 
-Please run [clippy](https://github.com/rust-lang-nursery/rust-clippy). Right now
-you have to use rust nightly, so `cargo +nightly clippy`.
+Please run [clippy](https://github.com/rust-lang-nursery/rust-clippy):
+`cargo clippy`.
 
 Please also keep things tidy with
-[rustfmt](https://github.com/rust-lang-nursery/rustfmt).
+[rustfmt](https://github.com/rust-lang-nursery/rustfmt):
+`cargo fmt`
+
+### Generating Things
+
+A bunch of code is generated from `Atoms.toml` using the `atom_generator`
+executable. This needs to be run each time `Atoms.toml` gets updated (which is
+hardly ever).

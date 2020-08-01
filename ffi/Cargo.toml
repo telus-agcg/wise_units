@@ -5,11 +5,8 @@ authors = ["Nicholas Smillie <nicholas@agrian.com>"]
 edition = "2018"
 
 [dependencies]
+ffi_common = { version = "0.1", registry = "agrian-registry" }
 wise_units = { path = "../api" }
-
-[dependencies.ffi_common]
-git = "ssh://bitbucket.org/agrian/ffi_common.git"
-rev = "7ddeec9"
 
 [build-dependencies]
 cbindgen = "0.13.1"
