@@ -62,7 +62,10 @@ pub unsafe extern "C" fn measurement_partial_eq(
     m1 == m2
 }
 
-/// Gets the `Measurement`'s `Unit` (the non-`value` part of the `Measurement`).
+/// Gets the `Measurement`'s `Unit` (the non-`value` part of the `Measurement`). 
+/// Note that you must call `unit_destroy(data: unit)` with
+/// this return value when you are done with it so that the the unit can be properly
+/// destroyed and its memory freed.
 ///
 /// # Safety
 ///

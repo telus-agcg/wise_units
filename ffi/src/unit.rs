@@ -5,6 +5,7 @@ use std::{
     ptr,
     str::FromStr,
 };
+use wise_units::parser::Composable;
 use wise_units::{is_compatible_with::IsCompatibleWith, reduce::ToReduced, UcumUnit, Unit};
 
 /// Create a new `Unit`. Note that you must call `unit_destroy(data: unit)` with
@@ -201,6 +202,22 @@ pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *con
     Box::into_raw(product_box)
 }
 
+/// Wrapper function for extracting `Unit`s composition.
+///
+/// # Safety
+///
+/// `data` is unchecked, validate your pointers before passing them in.
+///
+#[no_mangle]
+pub unsafe extern "C" fn unit_composition(data: *const Unit) -> *const c_char {
+    error::clear_last_err_msg();
+    let unit = &*data;
+    match CString::new(unit.composition().to_string()) {
+        Ok(composition) => composition.into_raw(),
+        Err(why) => crate::set_error_and_return(why.to_string()),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -354,6 +371,16 @@ mod tests {
             let m = unit_new(multiplier_expression.as_ptr());
             let result = Box::from_raw(unit_mul(u, m) as *mut Unit);
             assert_eq!(expected, result.expression());
+        }
+    }
+    
+    #[test]
+    fn can_get_composition() {
+        let expression = CString::new("[acr_us]").expect("CString::new failed");
+        unsafe {
+            let u = unit_new(expression.as_ptr());
+            let result = CStr::from_ptr(unit_composition(u));
+            assert_eq!(result.to_str().unwrap(), "L2");
         }
     }
 }
