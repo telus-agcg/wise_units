@@ -283,7 +283,7 @@ mod tests {
         unsafe {
             let u = unit_new(expression.as_ptr());
             assert_eq!(u, ptr::null());
-            let error = CStr::from_ptr(ffi_common::ffi::get_last_err_msg())
+            let error = CStr::from_ptr(ffi_common::error::get_last_err_msg())
                 .to_str()
                 .expect("Failed to get str from CStr.");
             assert_eq!(error, expected_error);

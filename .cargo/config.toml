@@ -1,0 +1,3 @@
+[registries]
+agrian-registry = { index = "ssh://git@bitbucket.org/agrian/crates-registry.git" }
+
