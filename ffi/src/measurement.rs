@@ -62,7 +62,7 @@ pub unsafe extern "C" fn measurement_partial_eq(
     m1 == m2
 }
 
-/// Gets the `Measurement`'s `Unit` (the non-`value` part of the `Measurement`). 
+/// Gets the `Measurement`'s `Unit` (the non-`value` part of the `Measurement`).
 /// Note that you must call `unit_destroy(data: unit)` with
 /// this return value when you are done with it so that the the unit can be properly
 /// destroyed and its memory freed.
@@ -514,7 +514,7 @@ mod tests {
             let m = measurement_new(value, expression1.as_ptr());
             let converted = measurement_convert_to(m, expression2.as_ptr());
             assert_eq!(converted, ptr::null());
-            let error = CStr::from_ptr(ffi_common::ffi::get_last_err_msg());
+            let error = CStr::from_ptr(ffi_common::error::get_last_err_msg());
             let error_str = error.to_str().expect("Failed to get str from CStr");
             assert_eq!(error_str, expected_error);
         }
@@ -531,11 +531,11 @@ mod tests {
             // result is null, error is not null
             let conversion_result_1 = measurement_convert_to(m, expression2.as_ptr());
             assert_eq!(conversion_result_1, ptr::null());
-            assert_ne!(ffi_common::ffi::get_last_err_msg(), ptr::null());
+            assert_ne!(ffi_common::error::get_last_err_msg(), ptr::null());
             // result is not null, error is null
             let conversion_result_2 = measurement_convert_to(m, expression3.as_ptr());
             assert_ne!(conversion_result_2, ptr::null());
-            assert_eq!(ffi_common::ffi::get_last_err_msg(), ptr::null());
+            assert_eq!(ffi_common::error::get_last_err_msg(), ptr::null());
         }
     }
 }

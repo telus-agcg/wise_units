@@ -14,7 +14,7 @@ ffi_common = { version = "0.1", registry = "agrian-registry" }
 wise_units = { version = "0.15.0", registry = "agrian-registry" }
 
 [build-dependencies]
-cbindgen = "0.13.1"
+cbindgen = "0.14"
 
 [dev-dependencies]
 approx = "0.3"
