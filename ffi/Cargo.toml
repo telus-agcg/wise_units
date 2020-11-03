@@ -10,13 +10,8 @@ edition = "2018"
 publish = ["agrian-registry"]
 
 [dependencies]
+ffi_common = { version = "0.1", registry = "agrian-registry" }
 wise_units = { version = "0.15.0", registry = "agrian-registry" }
-
-[dependencies.ffi_common]
-version = "0.1"
-# registry = "agrian-registry"
-git = "ssh://git@bitbucket.org/agrian/ffi_common.git"
-branch = "develop"
 
 [build-dependencies]
 cbindgen = "0.14"
