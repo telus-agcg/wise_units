@@ -26,6 +26,8 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ env.TAG }}
       - uses: actions/cache@v2
         with:
           path: |
@@ -36,8 +38,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml') }}
             ${{ runner.os }}-cargo
-      - name: Build project
-        run: cargo build --release --frozen
+      - name: Build wise_units-ffi
+        run: cargo build --release --package wise_units-ffi
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -56,5 +58,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./target/release/libwise_units_ffi.so
-          asset_name: libwise_units_ffi-linux-amd64
+          asset_name: libwise_units_ffi-linux-amd64.so
           asset_content_type: application/octet-stream
