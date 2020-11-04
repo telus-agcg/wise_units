@@ -12,6 +12,8 @@ on:
 
 env:
   TAG: ${{ github.event.inputs.tag || github.ref }}
+  CARGO_TERM_COLOR: always
+  CARGO_REGISTRIES_AGRIAN_REGISTRY_INDEX: ${{ secrets.AGRIAN_CRATES_REGISTRY }}
 
 jobs:
   build:
