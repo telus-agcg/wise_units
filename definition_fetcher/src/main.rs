@@ -14,7 +14,7 @@ use std::fs::File;
 use std::io::{Read, Write};
 
 fn main() -> Result<(), ::std::io::Error> {
-    simple_logger::init().unwrap();
+    simple_logger::SimpleLogger::new().init().unwrap();
 
     // let xml_string = fetch();
     let xml_string = read_xml_file();
