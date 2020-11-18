@@ -14,11 +14,11 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Setup SSH
         uses: webfactory/ssh-agent@ee29fafb6aa450493bac9136b346e51ea60a8b5e
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      - uses: actions/checkout@v2
+          ssh-private-key: ${{ secrets.MAC_OS_BUILD_AGENT_PRIVATE_KEY }}
       - uses: actions/cache@v2
         with:
           path: |
@@ -27,10 +27,10 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-${{ hashFiles('Cargo.toml') }}
+            ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
       - name: cargo test all
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --workspace --all-features
+          args: --workspace
