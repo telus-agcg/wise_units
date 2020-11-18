@@ -8,10 +8,10 @@ members = [
 
 [patch."agrian-registry".ffi_common]
 # path = "../ffi_common/ffi_common"
-git = "ssh://github.com/agrian-inc/ffi_common.git"
+git = "ssh://git@github.com/agrian-inc/ffi_common.git"
 branch = "develop"
 
 [patch."agrian-registry".ffi_derive]
 # path = "../ffi_common/ffi_derive"
-git = "ssh://github.com/agrian-inc/ffi_common.git"
+git = "ssh://git@github.com/agrian-inc/ffi_common.git"
 branch = "develop"
