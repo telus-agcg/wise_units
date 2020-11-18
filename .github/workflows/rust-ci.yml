@@ -31,10 +31,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
-      - name: cargo update (temp)
-        uses: actions-rs/cargo@v1
-        with:
-          command: update
       - name: cargo test all
         uses: actions-rs/cargo@v1
         with:
