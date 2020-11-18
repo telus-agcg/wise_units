@@ -9,16 +9,8 @@ edition = "2018"
 publish = ["agrian-registry"]
 
 [dependencies]
-# ffi_common = { version = "0.1", registry = "agrian-registry" }
+ffi_common = { version = "0.1", registry = "agrian-registry" }
 wise_units = { version = "0.15.0", registry = "agrian-registry" }
-
-[dependencies.ffi_common]
-git = "ssh://git@github.com/agrian-inc/ffi_common.git"
-branch = "develop"
-
-[dependencies.ffi_derive]
-git = "ssh://git@github.com/agrian-inc/ffi_common.git"
-branch = "develop"
 
 [build-dependencies]
 cbindgen = "0.14"
