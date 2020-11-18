@@ -8,7 +8,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
   CARGO_REGISTRIES_AGRIAN_REGISTRY_INDEX: ${{ secrets.AGRIAN_CRATES_REGISTRY }}
-  CARGO_NET_GIT_FETCH_WITH_CLI: true
 
 jobs:
   test:
@@ -32,6 +31,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
+      - name: cargo update (temp)
+        uses: actions-rs/cargo@v1
+        with:
+          command: update
       - name: cargo test all
         uses: actions-rs/cargo@v1
         with:
