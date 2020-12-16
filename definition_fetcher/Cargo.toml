@@ -1,8 +1,9 @@
 [package]
 name = "wise_units-definition_fetcher"
-version = "0.14.1"
+version = "0.16.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 edition = "2018"
+publish = false
 
 [dependencies]
 reqwest = "0.10"
