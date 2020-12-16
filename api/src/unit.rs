@@ -17,11 +17,16 @@ mod to_reduced;
 #[allow(clippy::module_name_repetitions)]
 mod ucum_unit;
 
+#[cfg(feature = "cffi")]
+pub mod custom_ffi;
 #[cfg(feature = "serde")]
 mod serde;
+#[cfg(feature = "cffi")]
+use ffi_derive::FFI;
 
 use crate::parser::Term;
 
+#[cfg_attr(feature = "cffi", derive(FFI), ffi(custom = "src/unit/custom_ffi.rs"))]
 #[derive(Clone, Debug)]
 pub struct Unit {
     pub terms: Vec<Term>,
@@ -173,5 +178,19 @@ mod tests {
 
         let unit = Unit::from_str("km3/nm2").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "km3/nm2");
+    }
+
+    #[cfg(feature = "cffi")]
+    mod cffi {
+        use super::*;
+
+        #[test]
+        fn test_custom_and_derived_ffi() {
+            let expression = "kg/[lb_av]";
+            let unit = custom_ffi::unit_init(ffi_common::ffi_string!(expression));
+            let c_expression = custom_ffi::get_unit_expression(unit);
+            assert_eq!(expression, ffi_common::string::string_from_c(c_expression));
+            unsafe { unit_ffi::unit_free(unit) };
+        }
     }
 }

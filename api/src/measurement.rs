@@ -17,6 +17,8 @@ use crate::ucum_unit::UcumUnit;
 use crate::unit::Unit;
 use std::str::FromStr;
 
+#[cfg(feature = "cffi")]
+use ffi_derive::FFI;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -36,6 +38,7 @@ use serde::{Deserialize, Serialize};
 /// ```
 ///
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "cffi", derive(FFI))]
 #[derive(Clone, Debug)]
 pub struct Measurement {
     pub value: f64,
@@ -215,6 +218,31 @@ mod tests {
                 expected_measurement,
                 Deserialize::deserialize(&mut de).unwrap()
             );
+        }
+    }
+
+    #[cfg(feature = "cffi")]
+    mod cffi {
+        use super::*;
+
+        #[test]
+        fn test_derived_ffi() {
+            unsafe {
+                let scalar = 123.456;
+                let expression = "kg/[lb_av]";
+                let unit = crate::unit::custom_ffi::unit_init(ffi_common::ffi_string!(expression));
+                let unit_for_measurement = crate::unit::custom_ffi::clone_unit(unit) as *mut Unit;
+                let measurement = measurement_ffi::measurement_init(scalar, unit_for_measurement);
+                let retrieved_value = measurement_ffi::get_measurement_value(measurement);
+                let retrieved_unit = measurement_ffi::get_measurement_unit(measurement);
+
+                assert_eq!(scalar, retrieved_value);
+                assert_eq!(*unit, *retrieved_unit);
+
+                measurement_ffi::measurement_free(measurement);
+                crate::unit::unit_ffi::unit_free(retrieved_unit);
+                crate::unit::unit_ffi::unit_free(unit);
+            }
         }
     }
 }

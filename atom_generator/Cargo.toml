@@ -1,6 +1,6 @@
 [package]
 name = "wise_units-atom_generator"
-version = "0.15.0"
+version = "0.16.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 edition = "2018"
 publish = false

@@ -1,3 +1,4 @@
+use crate::move_string_to_buffer;
 use ffi_common::error;
 use std::{
     ffi::{CStr, CString},
@@ -5,6 +6,7 @@ use std::{
     ptr,
     str::FromStr,
 };
+use wise_units::parser::Composable;
 use wise_units::{is_compatible_with::IsCompatibleWith, reduce::ToReduced, UcumUnit, Unit};
 
 /// Create a new `Unit`. Note that you must call `unit_destroy(data: unit)` with
@@ -158,6 +160,24 @@ pub unsafe extern "C" fn unit_expression(data: *const Unit) -> *const c_char {
     }
 }
 
+/// Wrapper function for extracting `Unit`s expression.
+/// If buffer is not large enough the first char will be set to 0 and the required length as the return value
+/// # Safety
+///
+/// `data` is unchecked, validate your pointers before passing them in.
+///
+#[no_mangle]
+pub unsafe extern "C" fn unit_expression_buf(
+    data: *const Unit,
+    buffer: *mut c_char,
+    length: usize,
+) -> i32 {
+    error::clear_last_err_msg();
+
+    let unit = &*data;
+    return move_string_to_buffer(unit.expression(), buffer, length);
+}
+
 /// Wrapper function for reducing a `Unit`.
 ///
 /// # Safety
@@ -201,6 +221,43 @@ pub unsafe extern "C" fn unit_mul(data: *const Unit, other: *const Unit) -> *con
     Box::into_raw(product_box)
 }
 
+/// Wrapper function for extracting `Unit`s composition.
+/// After copying the string data referenced by the returned pointer, you must
+/// call `destroy_string` to free the pointer from Rust.
+///
+///
+/// # Safety
+///
+/// `data` is unchecked, validate your pointers before passing them in.
+///
+#[no_mangle]
+pub unsafe extern "C" fn unit_composition(data: *const Unit) -> *const c_char {
+    error::clear_last_err_msg();
+    let unit = &*data;
+    match CString::new(unit.composition().to_string()) {
+        Ok(composition) => composition.into_raw(),
+        Err(why) => crate::set_error_and_return(why.to_string()),
+    }
+}
+
+/// Wrapper function for extracting `Unit`s composition.
+/// If buffer is not large enough the first char will be set to 0 and the required length as the return value
+/// # Safety
+///
+/// `data` is unchecked, validate your pointers before passing them in.
+///
+#[no_mangle]
+pub unsafe extern "C" fn unit_composition_buf(
+    data: *const Unit,
+    buffer: *mut c_char,
+    length: usize,
+) -> i32 {
+    error::clear_last_err_msg();
+
+    let unit = &*data;
+    return move_string_to_buffer(unit.composition().to_string(), buffer, length);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -226,7 +283,7 @@ mod tests {
         unsafe {
             let u = unit_new(expression.as_ptr());
             assert_eq!(u, ptr::null());
-            let error = CStr::from_ptr(ffi_common::ffi::get_last_err_msg())
+            let error = CStr::from_ptr(ffi_common::error::get_last_err_msg())
                 .to_str()
                 .expect("Failed to get str from CStr.");
             assert_eq!(error, expected_error);
@@ -322,6 +379,22 @@ mod tests {
     }
 
     #[test]
+    fn can_get_expression_buf() {
+        let expression = CString::new("[lb_av]/[acr_us]").expect("CString::new failed");
+
+        unsafe {
+            let mut buffer: [c_char; 256] = [0; 256];
+            let u = unit_new(expression.as_ptr());
+            let result = unit_expression_buf(u, buffer.as_mut_ptr(), 256);
+            assert_eq!(result, 16);
+            assert_eq!(
+                CStr::from_ptr(buffer.as_ptr()).to_str().unwrap(),
+                expression.to_str().unwrap()
+            );
+        }
+    }
+
+    #[test]
     fn can_get_reduced_unit() {
         let expression = CString::new("km-1/m2.cm").expect("CString::new failed");
         unsafe {
@@ -354,6 +427,26 @@ mod tests {
             let m = unit_new(multiplier_expression.as_ptr());
             let result = Box::from_raw(unit_mul(u, m) as *mut Unit);
             assert_eq!(expected, result.expression());
+        }
+    }
+    #[test]
+    fn can_get_composition() {
+        let expression = CString::new("[acr_us]").expect("CString::new failed");
+        unsafe {
+            let u = unit_new(expression.as_ptr());
+            let result = CStr::from_ptr(unit_composition(u));
+            assert_eq!(result.to_str().unwrap(), "L2");
+        }
+    }
+    #[test]
+    fn can_get_composition_buf() {
+        let expression = CString::new("[acr_us]").expect("CString::new failed");
+        unsafe {
+            let mut buffer: [c_char; 256] = [0; 256];
+            let u = unit_new(expression.as_ptr());
+            let result = unit_composition_buf(u, buffer.as_mut_ptr(), 256);
+            assert_eq!(result, 2);
+            assert_eq!(CStr::from_ptr(buffer.as_ptr()).to_str().unwrap(), "L2");
         }
     }
 }
