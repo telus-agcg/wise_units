@@ -9,8 +9,8 @@ edition = "2018"
 publish = ["agrian-registry"]
 
 [dependencies]
-ffi_common = { version = "0.1", registry = "agrian-registry" }
 wise_units = { version = "0.15.0", registry = "agrian-registry" }
+ffi_common = { version = "0.2", registry = "agrian-registry" }
 
 [build-dependencies]
 cbindgen = "0.14"

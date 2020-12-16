@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `ffi_derive` for `Measurement` and `Unit` (behind the `cffi` feature flag).
 
+### Changed
+
+- Updated `ffi_common` and `ffi_derive` to 0.2.
 
 ### Fixed
 
