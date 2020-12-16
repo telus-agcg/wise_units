@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
 - Add `ffi_derive` for `Measurement` and `Unit` (behind the `cffi` feature flag).
+
+
+### Fixed
+
+- Pointed `agrian-registry` to GitHub.
 
 ## [0.15.0] - 2020-07-31
 
