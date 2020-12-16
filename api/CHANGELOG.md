@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated `ffi_common` and `ffi_derive` to 0.2.
+- `wise_units-ffi`'s `build.rs` now uses `OUT_DIR` instead of
+    `CARGO_MANIFEST_DIR`.
 
 ### Fixed
 

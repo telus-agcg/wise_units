@@ -1,10 +1,16 @@
-use cbindgen;
+use cbindgen::{self, Builder, Language};
 use std::env;
 
 fn main() {
-    let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let crate_dir = env::var("OUT_DIR").unwrap();
 
-    cbindgen::generate(crate_dir)
-        .expect("Unable to generate bindings")
-        .write_to_file("bindings.h");
+    Builder::new()
+        .with_crate(crate_dir)
+        .with_language(Language::C)
+        .generate()
+        .map(|bindings| bindings.write_to_file("bindings.h"))
+        .unwrap_or_else(|e| {
+            eprintln!("Unable to generate bindings: {}", e);
+            false
+        });
 }
