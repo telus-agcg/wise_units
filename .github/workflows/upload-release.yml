@@ -23,7 +23,9 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@ee29fafb6aa450493bac9136b346e51ea60a8b5e
         with:
-          ssh-private-key: ${{ secrets.MAC_OS_BUILD_AGENT_PRIVATE_KEY }}
+          ssh-private-key: |
+            ${{ secrets.MAC_OS_BUILD_AGENT_PRIVATE_KEY }}
+            ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Checkout code
         uses: actions/checkout@v2
         with:
