@@ -6,6 +6,7 @@ use std::str::FromStr;
 /// is invalid, you'll get an `Error`. If `self`'s `Unit` and `other_unit` are
 /// incompatible, you'll get an `Error`.
 ///
+#[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl<'a> Convertible<&'a str> for Measurement {
     type Output = Self;
     type ConversionError = Error;

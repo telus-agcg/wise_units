@@ -8,6 +8,7 @@ impl IsCompatibleWith<Vec<Term>> for Unit {
     }
 }
 
+#[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl IsCompatibleWith for Unit {
     #[inline]
     fn is_compatible_with(&self, rhs: &Self) -> bool {
