@@ -25,7 +25,7 @@ impl Composable for Term {
     }
 }
 
-impl<'a> Composable for &'a [Term] {
+impl Composable for Vec<Term> {
     fn composition(&self) -> Composition {
         self.iter()
             .fold(Composition::default(), |acc, term| acc * term.composition())

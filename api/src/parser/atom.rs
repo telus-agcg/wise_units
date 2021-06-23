@@ -704,7 +704,7 @@ impl Atom {
                 "1",
                 Some(FunctionSet {
                     convert_from: |value: f64| value.ln(),
-                    convert_to: |value: f64| ::std::f64::consts::E.powf(value),
+                    convert_to: |value: f64| value.exp(),
                 }),
             ),
             Self::Bel => Definition::new(
@@ -787,7 +787,7 @@ impl Atom {
                 "m2/s4/Hz",
                 Some(FunctionSet {
                     convert_from: |value: f64| value.sqrt(),
-                    convert_to: |value: f64| value.powi(2),
+                    convert_to: |value: f64| value * value,
                 }),
             ),
             Self::BitLogarithmusDualis => Definition::new(
@@ -795,7 +795,7 @@ impl Atom {
                 "1",
                 Some(FunctionSet {
                     convert_from: |value: f64| value.log2(),
-                    convert_to: |value: f64| 2_f64.powf(value),
+                    convert_to: |value: f64| value.exp2(),
                 }),
             ),
             Self::Bit => Ok(Definition::default()),
@@ -807,7 +807,7 @@ impl Atom {
     }
 
     #[must_use]
-    pub fn property(self) -> Property {
+    pub const fn property(self) -> Property {
         match self {
             Self::Meter => Property::Length,
             Self::Second => Property::Time,
@@ -2634,7 +2634,7 @@ impl UcumSymbol for Atom {
     }
 
     fn definition_unit(&self) -> Unit {
-        self.definition().terms().to_vec().into()
+        Unit::from(self.definition().terms().clone())
     }
 }
 
@@ -2857,7 +2857,7 @@ impl Composable for Atom {
 
 impl PartialEq for Atom {
     fn eq(&self, other: &Self) -> bool {
-        if !self.is_compatible_with(*other) {
+        if !self.is_compatible_with(other) {
             return false;
         }
 

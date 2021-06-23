@@ -112,15 +112,15 @@ fn build_scalar_function(primary_code: &str) -> String {
         "B[SPL]" | "B[V]" | "B[mV]" | "B[uV]" | "B[10.nV]" => {
             "|value: f64| 10_f64.powf(value / 2.0)"
         }
-        "bit_s" => "|value: f64| 2_f64.powf(value)",
+        "bit_s" => "|value: f64| value.exp2()",
         "Cel" => "|value: f64| value + 273.15",
-        "Np" => "|value: f64| ::std::f64::consts::E.powf(value)",
+        "Np" => "|value: f64| value.exp()",
         "%[slope]" | "[p'diop]" => "|value: f64| value.tan() * 100.0",
         "[hp'_X]" => "|value: f64| 10_f64.powf(-value)",
         "[hp'_C]" => "|value: f64| 100_f64.powf(-value)",
         "[hp'_M]" => "|value: f64| 1_000_f64.powf(-value)",
         "[hp'_Q]" => "|value: f64| 50_000_f64.powf(-value)",
-        "[m/s2/Hz^(1/2)]" => "|value: f64| value.powi(2)",
+        "[m/s2/Hz^(1/2)]" => "|value: f64| value * value",
         "[pH]" => "|value: f64| -value.log10()",
         "[degF]" => "|value: f64| 5.0 / 9.0 * (value + 459.67)",
         "[degRe]" => "|value: f64| (value / 0.8) + 273.15",

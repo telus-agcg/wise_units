@@ -47,7 +47,7 @@ pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
 ///
 #[no_mangle]
 pub unsafe extern "C" fn unit_destroy(data: *const Unit) {
-    let _ = Box::from_raw(data as *mut Unit);
+    let _unit = Box::from_raw(data as *mut Unit);
 }
 
 /// Essentially checks if the two `Unit`'s scalar values are equal.
@@ -175,7 +175,8 @@ pub unsafe extern "C" fn unit_expression_buf(
     error::clear_last_err_msg();
 
     let unit = &*data;
-    return move_string_to_buffer(unit.expression(), buffer, length);
+
+    move_string_to_buffer(unit.expression(), buffer, length)
 }
 
 /// Wrapper function for reducing a `Unit`.
@@ -255,7 +256,8 @@ pub unsafe extern "C" fn unit_composition_buf(
     error::clear_last_err_msg();
 
     let unit = &*data;
-    return move_string_to_buffer(unit.composition().to_string(), buffer, length);
+
+    move_string_to_buffer(unit.composition().to_string(), buffer, length)
 }
 
 #[cfg(test)]

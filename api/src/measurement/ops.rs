@@ -25,7 +25,7 @@ impl Add for Measurement {
     }
 }
 
-impl<'a> Add<&'a Measurement> for Measurement {
+impl<'a> Add<&'a Self> for Measurement {
     type Output = Result<Self, Error>;
 
     #[inline]
@@ -74,7 +74,7 @@ impl Sub for Measurement {
     }
 }
 
-impl<'a> Sub<&'a Measurement> for Measurement {
+impl<'a> Sub<&'a Self> for Measurement {
     type Output = Result<Self, Error>;
 
     #[inline]
@@ -125,7 +125,7 @@ impl Mul for Measurement {
     }
 }
 
-impl<'a> Mul<&'a Measurement> for Measurement {
+impl<'a> Mul<&'a Self> for Measurement {
     type Output = Self;
 
     #[inline]
@@ -216,7 +216,7 @@ impl<'a> Div for &'a Measurement {
     }
 }
 
-impl<'a> Div<&'a Measurement> for Measurement {
+impl<'a> Div<&'a Self> for Measurement {
     type Output = Self;
 
     #[inline]

@@ -1,6 +1,7 @@
-use crate::parser::ucum_symbol::UcumSymbol;
-use crate::parser::{definition::Definition, Classification};
-use crate::unit::Unit;
+use crate::{
+    parser::{definition::Definition, ucum_symbol::UcumSymbol, Classification},
+    unit::Unit,
+};
 use std::fmt;
 
 const ATTO: f64 = 1.0e-18;
@@ -197,7 +198,7 @@ impl UcumSymbol for Prefix {
     fn definition_unit(&self) -> Unit {
         let definition = Definition::default();
 
-        definition.terms().into()
+        Unit::from(definition.terms().clone())
     }
 }
 

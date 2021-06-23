@@ -161,10 +161,8 @@ fn visit_annotatable(pair: Pair<'_, Rule>) -> Result<Annotatable, Error> {
     })
 }
 
-fn visit_annotation(pair: Pair<'_, Rule>) -> Result<String, Error> {
-    let string = pair.into_span().as_str().to_string();
-
-    Ok(string)
+fn visit_annotation(pair: Pair<'_, Rule>) -> String {
+    pair.into_span().as_str().to_string()
 }
 
 fn visit_factor(pair: Pair<'_, Rule>) -> Result<u32, Error> {
@@ -189,9 +187,7 @@ fn visit_basic_component(pair: Pair<'_, Rule>) -> Result<BasicComponent, Error> 
                 bc.exponent = annotatable.exponent;
             }
             Rule::annotation => {
-                let annotation = visit_annotation(inner_pair)?;
-
-                bc.annotation = Some(annotation);
+                bc.annotation = Some(visit_annotation(inner_pair));
             }
             Rule::factor => {
                 bc.factor = Some(visit_factor(inner_pair)?);

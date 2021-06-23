@@ -30,14 +30,14 @@ use crate::parser::{annotation_composition::AnnotationComposable, Composable, Te
 /// More info at nih.gov, [here](https://ucum.nlm.nih.gov/ucum-service.html) (look under the
 /// "Annotations" section for starters).
 ///
-impl<'a, 'b> IsCompatibleWith<&'b Term> for &'a Term {
-    fn is_compatible_with(self, rhs: &'b Term) -> bool {
+impl IsCompatibleWith for Term {
+    fn is_compatible_with(&self, rhs: &Self) -> bool {
         self.composition() == rhs.composition() && self.annotation == rhs.annotation
     }
 }
 
-impl<'a, 'b> IsCompatibleWith<&'b [Term]> for &'a [Term] {
-    fn is_compatible_with(self, rhs: &'b [Term]) -> bool {
+impl IsCompatibleWith for Vec<Term> {
+    fn is_compatible_with(&self, rhs: &Self) -> bool {
         let lhs_annotation_composition = self.annotation_composition();
         let rhs_annotation_composition = rhs.annotation_composition();
 
@@ -77,22 +77,22 @@ mod tests {
 
         #[test]
         fn validate_terms() {
-            let lhs = [term!(Meter)];
-            let rhs = [term!(Kilo, Meter)];
+            let lhs = vec![term!(Meter)];
+            let rhs = vec![term!(Kilo, Meter)];
             assert!(lhs.is_compatible_with(&rhs));
         }
 
         #[test]
         fn validate_terms_with_factor() {
-            let lhs = [term!(Meter)];
-            let rhs = [term!(Kilo, Meter, factor: 20)];
+            let lhs = vec![term!(Meter)];
+            let rhs = vec![term!(Kilo, Meter, factor: 20)];
             assert!(lhs.is_compatible_with(&rhs));
         }
 
         #[test]
         fn validate_terms_with_factor_and_exponent() {
-            let lhs = [term!(Meter)];
-            let rhs = [term!(Kilo, Meter, factor: 20, exponent: 2)];
+            let lhs = vec![term!(Meter)];
+            let rhs = vec![term!(Kilo, Meter, factor: 20, exponent: 2)];
             assert!(!lhs.is_compatible_with(&rhs));
         }
     }
@@ -117,16 +117,16 @@ mod tests {
 
         #[test]
         fn validate_terms() {
-            let m = [term!(Meter, annotation: "stuff".to_string())];
-            let km_stuff = [term!(Kilo, Meter, annotation: "stuff".to_string())];
+            let m = vec![term!(Meter, annotation: "stuff".to_string())];
+            let km_stuff = vec![term!(Kilo, Meter, annotation: "stuff".to_string())];
             assert!(m.is_compatible_with(&km_stuff));
 
             // Different annotation
-            let km_pants = [term!(Kilo, Meter, annotation: "pants".to_string())];
+            let km_pants = vec![term!(Kilo, Meter, annotation: "pants".to_string())];
             assert!(!m.is_compatible_with(&km_pants));
 
             // No annotation
-            let km_no_annotation = [term!(Kilo, Meter)];
+            let km_no_annotation = vec![term!(Kilo, Meter)];
             assert!(!m.is_compatible_with(&km_no_annotation));
         }
     }

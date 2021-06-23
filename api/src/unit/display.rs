@@ -32,7 +32,18 @@ fn string_from_collection<F>(terms: &[Term], func: F) -> Option<String>
 where
     F: Fn(&Term) -> Option<String>,
 {
-    terms.iter().filter_map(func).fold(None, build_string)
+    terms
+        .iter()
+        .filter_map(func)
+        .fold(None, |acc: Option<String>, term_string: String| match acc {
+            Some(mut a) => {
+                a.push('.');
+                a.push_str(&term_string);
+
+                Some(a)
+            }
+            None => Some(term_string),
+        })
 }
 
 /// Specifically for use with `filter_map()`, this returns `None` if the `Term` is not positive.
@@ -82,21 +93,6 @@ fn extract_denominator_atom(term: &Term, term_string: &mut String) {
         } else {
             term_string.push_str(&atom.to_string());
         }
-    }
-}
-
-fn build_string(acc: Option<String>, term_string: String) -> Option<String> {
-    match acc {
-        Some(mut a) => {
-            // let new_string = format!(".{}", term_string);
-
-            // a.push_str(&new_string);
-            a.push_str(".");
-            a.push_str(&term_string);
-
-            Some(a)
-        }
-        None => Some(term_string),
     }
 }
 
