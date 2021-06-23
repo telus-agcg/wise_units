@@ -140,7 +140,7 @@ pri_atom = {
         | pri_gpl_unit
         | pri_mpl_unit
         | pri_united_states_pharmacopeia_unit
-        | pri_arbitary_unit
+        | pri_arbitrary_unit
         | pri_bushel_british
         | pri_bushel_us
         | pri_metric_carat
@@ -453,7 +453,7 @@ pri_mean_british_thermal_unit = { "[Btu_m]" }
 pri_gpl_unit = { "[GPL'U]" }
 pri_mpl_unit = { "[MPL'U]" }
 pri_united_states_pharmacopeia_unit = { "[USP'U]" }
-pri_arbitary_unit = { "[arb'U]" }
+pri_arbitrary_unit = { "[arb'U]" }
 pri_bushel_british = { "[bu_br]" }
 pri_bushel_us = { "[bu_us]" }
 pri_metric_carat = { "[car_m]" }
@@ -817,7 +817,7 @@ sec_atom = {
         | sec_teaspoon_us
         | sec_wood_unit
         | sec_apl_unit
-        | sec_arbitary_unit
+        | sec_arbitrary_unit
         | sec_mean_british_thermal_unit
         | sec_bushel_british
         | sec_bushel_us
@@ -1129,7 +1129,7 @@ sec_todd_unit = { "[TODD'U]" }
 sec_teaspoon_us = { "[TSP_US]" }
 sec_wood_unit = { "[WOOD'U]" }
 sec_apl_unit = { "[APL'U]" }
-sec_arbitary_unit = { "[ARB'U]" }
+sec_arbitrary_unit = { "[ARB'U]" }
 sec_mean_british_thermal_unit = { "[BTU_M]" }
 sec_bushel_british = { "[BU_BR]" }
 sec_bushel_us = { "[BU_US]" }

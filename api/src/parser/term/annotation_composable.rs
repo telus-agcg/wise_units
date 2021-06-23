@@ -98,7 +98,7 @@ mod tests {
         }
 
         #[test]
-        fn validate_with_atoms_and_postive_and_negative_exponents() {
+        fn validate_with_atoms_and_positive_and_negative_exponents() {
             let terms = [
                 term!(Gram, exponent: 3, annotation: "bar".to_string()),
                 term!(Meter, exponent: -2, annotation: "foo".to_string()),

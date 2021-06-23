@@ -3630,7 +3630,7 @@ CODE = "[ARB'U]"
 isMetric = 'no'
 isArbitrary = 'yes'
 class = 'chemical'
-names = ['arbitary unit']
+names = ['arbitrary unit']
 printSymbol = 'arb. U'
 property = 'arbitrary'
 
