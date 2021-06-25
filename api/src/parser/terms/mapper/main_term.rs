@@ -4,8 +4,8 @@ pub(super) struct MainTerm {
     pub(super) terms: Vec<Term>,
 }
 
-impl Into<Vec<Term>> for MainTerm {
-    fn into(self) -> Vec<Term> {
-        self.terms
+impl From<MainTerm> for Vec<Term> {
+    fn from(main_term: MainTerm) -> Self {
+        main_term.terms
     }
 }

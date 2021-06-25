@@ -12,7 +12,7 @@ struct ComposableTerm {
 }
 
 impl ComposableTerm {
-    fn has_value(&self) -> bool {
+    const fn has_value(&self) -> bool {
         self.atom.is_some() || self.factor.is_some() || self.annotation.is_some()
     }
 }

@@ -1,31 +1,24 @@
-use crate::is_compatible_with::IsCompatibleWith;
-use crate::measurement::Measurement;
-use crate::parser::Term;
-use crate::unit::Unit;
+use crate::{
+    is_compatible_with::IsCompatibleWith, measurement::Measurement, parser::Term, unit::Unit,
+};
 
-impl<'a, 'b> IsCompatibleWith<&'b [Term]> for &'a Unit {
-    fn is_compatible_with(self, rhs: &'b [Term]) -> bool {
-        let lhs_terms: &'a [Term] = &*self;
-
-        lhs_terms.is_compatible_with(rhs)
+impl IsCompatibleWith<Vec<Term>> for Unit {
+    fn is_compatible_with(&self, rhs: &Vec<Term>) -> bool {
+        self.terms.is_compatible_with(rhs)
     }
 }
 
-impl<'a, 'b> IsCompatibleWith<&'b Unit> for &'a Unit {
+impl IsCompatibleWith for Unit {
     #[inline]
-    fn is_compatible_with(self, rhs: &'b Unit) -> bool {
-        let rhs_terms: &'b [Term] = &*rhs;
-
-        self.is_compatible_with(rhs_terms)
+    fn is_compatible_with(&self, rhs: &Self) -> bool {
+        self.is_compatible_with(rhs.terms())
     }
 }
 
-impl<'a, 'b> IsCompatibleWith<&'b Measurement> for &'a Unit {
+impl IsCompatibleWith<Measurement> for Unit {
     #[inline]
-    fn is_compatible_with(self, rhs: &'b Measurement) -> bool {
-        let rhs_terms: &'b [Term] = &*rhs.unit;
-
-        (&*self).is_compatible_with(rhs_terms)
+    fn is_compatible_with(&self, rhs: &Measurement) -> bool {
+        (&*self).is_compatible_with(rhs.unit().terms())
     }
 }
 

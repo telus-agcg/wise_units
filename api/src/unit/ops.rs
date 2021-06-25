@@ -25,7 +25,7 @@ impl Div for Unit {
     }
 }
 
-impl<'a> Div<&'a Unit> for Unit {
+impl<'a> Div<&'a Self> for Unit {
     type Output = Self;
 
     #[inline]
@@ -64,7 +64,7 @@ impl Mul for Unit {
     }
 }
 
-impl<'a> Mul<&'a Unit> for Unit {
+impl<'a> Mul<&'a Self> for Unit {
     type Output = Self;
 
     #[inline]

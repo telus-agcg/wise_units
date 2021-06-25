@@ -30,7 +30,7 @@ impl Atom {
     }
 
     #[must_use]
-    pub fn property(self) -> Property {
+    pub const fn property(self) -> Property {
         match self {
             {{~ #each atoms }}
             Self::{{ type_name }} => Property::{{ camelCase property }},{{ /each }}
@@ -85,7 +85,7 @@ impl UcumSymbol for Atom {
     }
 
     fn definition_unit(&self) -> Unit {
-        self.definition().terms().to_vec().into()
+        Unit::from(self.definition().terms().clone())
     }
 }
 
@@ -162,7 +162,7 @@ impl Composable for Atom {
 
 impl PartialEq for Atom {
     fn eq(&self, other: &Self) -> bool {
-        if !self.is_compatible_with(*other) {
+        if !self.is_compatible_with(other) {
             return false;
         }
 

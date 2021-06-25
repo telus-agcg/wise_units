@@ -34,15 +34,15 @@ use serde::{Deserialize, Serialize};
 /// let one_km = Measurement::new(1.0, "km").unwrap();
 /// let in_meters = one_km.convert_to("m").unwrap();
 ///
-/// assert!(in_meters.value == 1000.0);
+/// assert_eq!(in_meters.value(), 1000.0);
 /// ```
 ///
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "cffi", derive(FFI))]
 #[derive(Clone, Debug)]
 pub struct Measurement {
-    pub value: f64,
-    pub unit: Unit,
+    value: f64,
+    unit: Unit,
 }
 
 impl Measurement {
@@ -59,6 +59,20 @@ impl Measurement {
         let m = Self { value, unit };
 
         Ok(m)
+    }
+
+    /// Accessor for the value, or magnitude, of the measurement.
+    ///
+    #[must_use]
+    pub const fn value(&self) -> f64 {
+        self.value
+    }
+
+    /// Accessor for the `Unit` used for the measurement.
+    ///
+    #[must_use]
+    pub const fn unit(&self) -> &Unit {
+        &self.unit
     }
 
     /// The value of the `Measurement` in terms of `other_unit`. Only used for

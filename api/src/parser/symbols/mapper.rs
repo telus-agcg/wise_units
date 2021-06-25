@@ -75,7 +75,7 @@ fn visit_atom(pair: &Pair<'_, Rule>) -> Result<Atom, Error> {
         Rule::pri_angstrom | Rule::sec_angstrom => Atom::Angstrom,
         Rule::pri_anti_factor_xa_unit | Rule::sec_anti_factor_xa_unit => Atom::AntiFactorXaUnit,
         Rule::pri_apl_unit | Rule::sec_apl_unit => Atom::AplUnit,
-        Rule::pri_arbitary_unit | Rule::sec_arbitary_unit => Atom::ArbitaryUnit,
+        Rule::pri_arbitrary_unit | Rule::sec_arbitrary_unit => Atom::ArbitraryUnit,
         Rule::pri_are | Rule::sec_are => Atom::Are,
         Rule::pri_astronomic_unit | Rule::sec_astronomic_unit => Atom::AstronomicUnit,
         Rule::pri_bar | Rule::sec_bar => Atom::Bar,

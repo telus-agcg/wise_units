@@ -1,5 +1,3 @@
-use pest;
-
 /// Errors when trying to convert between types that aren't commensurable.
 ///
 #[derive(Clone, thiserror::Error, Debug, PartialEq)]

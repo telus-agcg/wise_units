@@ -4,6 +4,7 @@
 /// be useful elsewhere.
 ///
 #[macro_export]
+#[allow(clippy::field_reassign_with_default)]
 macro_rules! term {
     (@params $term:expr, $attribute_name:ident: $attribute_value:expr) => {
         $term.$attribute_name = Some($attribute_value);
@@ -48,7 +49,7 @@ macro_rules! term {
     };
 
     () => {
-        Term::default();
+        Term::default()
     };
 }
 

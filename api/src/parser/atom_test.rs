@@ -636,7 +636,7 @@ validate_scalar_square_mile_us, SquareMileUS, 2_589_998.470_319_521;
 validate_scalar_square_rod_us, SquareRodUS, 25.292_953_811_714_074;
 validate_scalar_square_yard_international, SquareYardInternational, 0.836_127_36;
 validate_scalar_standard_acceleration_of_free_fall, StandardAccelerationOfFreeFall, 9.80665;
-validate_scalar_standard_atomsphere, StandardAtmosphere, 101_325_000.0;
+validate_scalar_standard_atmosphere, StandardAtmosphere, 101_325_000.0;
 validate_scalar_steradian, Steradian, 1.0;
 validate_scalar_stilb, Stilb, 10_000.0;
 validate_scalar_stokes, Stokes, 0.000_1;

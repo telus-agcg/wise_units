@@ -269,7 +269,7 @@ pub enum Atom {
     Unit,
     InternationalUnit,
     InternationalUnitSecondary,
-    ArbitaryUnit,
+    ArbitraryUnit,
     UnitedStatesPharmacopeiaUnit,
     GplUnit,
     MplUnit,
@@ -668,7 +668,7 @@ impl Atom {
             Self::Unit => Definition::new(1.0, "umol/min", None),
             Self::InternationalUnit => Ok(Definition::default()),
             Self::InternationalUnitSecondary => Definition::new(1.0, "[iU]", None),
-            Self::ArbitaryUnit => Ok(Definition::default()),
+            Self::ArbitraryUnit => Ok(Definition::default()),
             Self::UnitedStatesPharmacopeiaUnit => Ok(Definition::default()),
             Self::GplUnit => Ok(Definition::default()),
             Self::MplUnit => Ok(Definition::default()),
@@ -704,7 +704,7 @@ impl Atom {
                 "1",
                 Some(FunctionSet {
                     convert_from: |value: f64| value.ln(),
-                    convert_to: |value: f64| ::std::f64::consts::E.powf(value),
+                    convert_to: |value: f64| value.exp(),
                 }),
             ),
             Self::Bel => Definition::new(
@@ -787,7 +787,7 @@ impl Atom {
                 "m2/s4/Hz",
                 Some(FunctionSet {
                     convert_from: |value: f64| value.sqrt(),
-                    convert_to: |value: f64| value.powi(2),
+                    convert_to: |value: f64| value * value,
                 }),
             ),
             Self::BitLogarithmusDualis => Definition::new(
@@ -795,7 +795,7 @@ impl Atom {
                 "1",
                 Some(FunctionSet {
                     convert_from: |value: f64| value.log2(),
-                    convert_to: |value: f64| 2_f64.powf(value),
+                    convert_to: |value: f64| value.exp2(),
                 }),
             ),
             Self::Bit => Ok(Definition::default()),
@@ -807,7 +807,7 @@ impl Atom {
     }
 
     #[must_use]
-    pub fn property(self) -> Property {
+    pub const fn property(self) -> Property {
         match self {
             Self::Meter => Property::Length,
             Self::Second => Property::Time,
@@ -1063,7 +1063,7 @@ impl Atom {
             Self::Unit => Property::CatalyticActivity,
             Self::InternationalUnit => Property::Arbitrary,
             Self::InternationalUnitSecondary => Property::Arbitrary,
-            Self::ArbitaryUnit => Property::Arbitrary,
+            Self::ArbitraryUnit => Property::Arbitrary,
             Self::UnitedStatesPharmacopeiaUnit => Property::Arbitrary,
             Self::GplUnit => Property::BiologicActivityOfAnticardiolipinIgG,
             Self::MplUnit => Property::BiologicActivityOfAnticardiolipinIgM,
@@ -1382,7 +1382,7 @@ impl UcumSymbol for Atom {
             Self::Unit => Classification::Chemical,
             Self::InternationalUnit => Classification::Chemical,
             Self::InternationalUnitSecondary => Classification::Chemical,
-            Self::ArbitaryUnit => Classification::Chemical,
+            Self::ArbitraryUnit => Classification::Chemical,
             Self::UnitedStatesPharmacopeiaUnit => Classification::Chemical,
             Self::GplUnit => Classification::Chemical,
             Self::MplUnit => Classification::Chemical,
@@ -1729,7 +1729,7 @@ impl UcumSymbol for Atom {
             Self::Unit => vec!["Unit"],
             Self::InternationalUnit => vec!["international unit"],
             Self::InternationalUnitSecondary => vec!["international unit"],
-            Self::ArbitaryUnit => vec!["arbitary unit"],
+            Self::ArbitraryUnit => vec!["arbitrary unit"],
             Self::UnitedStatesPharmacopeiaUnit => vec!["United States Pharmacopeia unit"],
             Self::GplUnit => vec!["GPL unit"],
             Self::MplUnit => vec!["MPL unit"],
@@ -2048,7 +2048,7 @@ impl UcumSymbol for Atom {
             Self::Unit => "U",
             Self::InternationalUnit => "[iU]",
             Self::InternationalUnitSecondary => "[IU]",
-            Self::ArbitaryUnit => "[arb'U]",
+            Self::ArbitraryUnit => "[arb'U]",
             Self::UnitedStatesPharmacopeiaUnit => "[USP'U]",
             Self::GplUnit => "[GPL'U]",
             Self::MplUnit => "[MPL'U]",
@@ -2273,7 +2273,7 @@ impl UcumSymbol for Atom {
             Self::Unit => Some("U"),
             Self::InternationalUnit => Some("IU"),
             Self::InternationalUnitSecondary => Some("i.U."),
-            Self::ArbitaryUnit => Some("arb. U"),
+            Self::ArbitraryUnit => Some("arb. U"),
             Self::UnitedStatesPharmacopeiaUnit => Some("U.S.P."),
             Self::CellCultureInfectiousDose => Some("CCID<sub>50</sub>"),
             Self::TissueCultureInfectiousDose => Some("TCID<sub>50</sub>"),
@@ -2569,7 +2569,7 @@ impl UcumSymbol for Atom {
             Self::Unit => Some("U"),
             Self::InternationalUnit => Some("[IU]"),
             Self::InternationalUnitSecondary => Some("[IU]"),
-            Self::ArbitaryUnit => Some("[ARB'U]"),
+            Self::ArbitraryUnit => Some("[ARB'U]"),
             Self::UnitedStatesPharmacopeiaUnit => Some("[USP'U]"),
             Self::GplUnit => Some("[GPL'U]"),
             Self::MplUnit => Some("[MPL'U]"),
@@ -2634,7 +2634,7 @@ impl UcumSymbol for Atom {
     }
 
     fn definition_unit(&self) -> Unit {
-        self.definition().terms().to_vec().into()
+        Unit::from(self.definition().terms().clone())
     }
 }
 
@@ -2659,7 +2659,7 @@ impl UcumUnit for Atom {
             Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => true,
             Self::InternationalUnit => true,
             Self::InternationalUnitSecondary => true,
-            Self::ArbitaryUnit => true,
+            Self::ArbitraryUnit => true,
             Self::UnitedStatesPharmacopeiaUnit => true,
             Self::GplUnit => true,
             Self::MplUnit => true,
@@ -2857,7 +2857,7 @@ impl Composable for Atom {
 
 impl PartialEq for Atom {
     fn eq(&self, other: &Self) -> bool {
-        if !self.is_compatible_with(*other) {
+        if !self.is_compatible_with(other) {
             return false;
         }
 

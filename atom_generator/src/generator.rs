@@ -67,7 +67,7 @@ fn build_file_path(file_name: &str) -> PathBuf {
     Path::new(&dest_dir).join(file_name)
 }
 
-fn write_project_file(file_path: &PathBuf, file_body: &str) {
+fn write_project_file(file_path: &Path, file_body: &str) {
     let mut f = File::create(file_path).unwrap();
 
     f.write_all(file_body.as_bytes())

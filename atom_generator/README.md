@@ -153,7 +153,7 @@ When adding units to `CustomAtoms.toml`, follow these rules:
         * `volume`
         * `unclassified`
 1. `unit.value`
-    * is requried.
+    * is required.
     * `Unit`
         * is required.
         * is the unit string that makes up your unit: ex `m2`.
