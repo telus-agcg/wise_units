@@ -47,7 +47,7 @@ pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
 ///
 #[no_mangle]
 pub unsafe extern "C" fn unit_destroy(data: *const Unit) {
-    let _unit = Box::from_raw(data as *mut Unit);
+    drop(Box::from_raw(data as *mut Unit));
 }
 
 /// Essentially checks if the two `Unit`'s scalar values are equal.

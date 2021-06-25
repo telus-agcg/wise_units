@@ -43,7 +43,7 @@ pub unsafe extern "C" fn measurement_new(
 ///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_destroy(data: *const Measurement) {
-    let _measurement = Box::from_raw(data as *mut Measurement);
+    drop(Box::from_raw(data as *mut Measurement));
 }
 
 /// Essentially checks if the two `Measurement`'s scalar values are equal.
