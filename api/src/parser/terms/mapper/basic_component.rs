@@ -17,7 +17,7 @@ impl Visit<Rule> for BasicComponent {
             Some(first) => match first.as_rule() {
                 Rule::annotatable => FirstToken::Annotatable(Annotatable::visit(first)?),
                 Rule::annotation => {
-                    return Ok(BasicComponent {
+                    return Ok(Self {
                         factor: None,
                         annotatable: None,
                         annotation: Some(Annotation::visit(first)?),
@@ -26,7 +26,7 @@ impl Visit<Rule> for BasicComponent {
                 }
                 Rule::factor => FirstToken::Factor(Factor::visit(first)?),
                 Rule::term => {
-                    return Ok(BasicComponent {
+                    return Ok(Self {
                         factor: None,
                         annotatable: None,
                         annotation: None,
@@ -41,7 +41,7 @@ impl Visit<Rule> for BasicComponent {
         match first_token {
             FirstToken::Annotatable(annotatable) => match pairs.next() {
                 Some(second) => match second.as_rule() {
-                    Rule::annotation => Ok(BasicComponent {
+                    Rule::annotation => Ok(Self {
                         factor: None,
                         annotatable: Some(annotatable),
                         annotation: Some(Annotation::visit(second)?),
@@ -49,14 +49,14 @@ impl Visit<Rule> for BasicComponent {
                     }),
                     _ => unreachable!(),
                 },
-                None => Ok(BasicComponent {
+                None => Ok(Self {
                     factor: None,
                     annotatable: Some(annotatable),
                     annotation: None,
                     terms: Vec::with_capacity(0),
                 }),
             },
-            FirstToken::Factor(factor) => Ok(BasicComponent {
+            FirstToken::Factor(factor) => Ok(Self {
                 factor: Some(factor),
                 annotatable: None,
                 annotation: None,

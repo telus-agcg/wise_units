@@ -2,6 +2,7 @@ use crate::parser::{
     symbols::symbol_parser::Rule as SymbolRule, terms::term_parser::Rule as TermRule,
 };
 use pest::error::Error as PestError;
+use serde::Serializer;
 
 /// Errors when trying to convert between types that aren't commensurable.
 ///
@@ -9,12 +10,15 @@ use pest::error::Error as PestError;
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub enum Error {
     #[error(transparent)]
+    #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
     UnableToParseTerm(#[from] PestError<TermRule>),
 
     #[error(transparent)]
+    #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
     UnableToParseSymbol(#[from] PestError<SymbolRule>),
 
     #[error(transparent)]
+    #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
     UnableToParseInteger(#[from] std::num::ParseIntError),
 
     #[error("Unknown unit string fragment: {fragment} ({position})")]
@@ -24,4 +28,12 @@ pub enum Error {
     ///
     #[error("Unknown unit string: {0}")]
     UnknownUnitString(String),
+}
+
+fn stringify<E, S>(error: E, s: S) -> Result<S::Ok, S::Error>
+where
+    E: std::error::Error,
+    S: Serializer,
+{
+    s.serialize_str(&error.to_string())
 }

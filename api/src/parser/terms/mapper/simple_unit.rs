@@ -20,19 +20,17 @@ impl Visit<TermRule> for SimpleUnit {
         let string = pair.as_span().as_str();
 
         if string == "1" {
-            return Ok(SimpleUnit::Unity);
+            return Ok(Self::Unity);
         }
 
         if let Ok(mut symbol_pairs) = SymbolParser::parse(SymbolRule::symbol, string) {
             match symbol_mapper::map(symbol_pairs.next().unwrap())? {
                 Symbol::PrimaryPrefixed { prefix, atom }
-                | Symbol::SecondaryPrefixed { prefix, atom } => {
-                    Ok(SimpleUnit::Prefixed { prefix, atom })
-                }
+                | Symbol::SecondaryPrefixed { prefix, atom } => Ok(Self::Prefixed { prefix, atom }),
                 Symbol::PrimaryBasic { atom } | Symbol::SecondaryBasic { atom } => {
-                    Ok(SimpleUnit::Basic { atom })
+                    Ok(Self::Basic { atom })
                 }
-                Symbol::Unity => Ok(SimpleUnit::Unity),
+                Symbol::Unity => Ok(Self::Unity),
             }
         } else {
             Err(Error::BadFragment {

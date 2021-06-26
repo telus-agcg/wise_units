@@ -26,7 +26,7 @@ impl AstTerm {
                 _ => unreachable!(),
             },
             None => {
-                return Ok(AstTerm {
+                return Ok(Self {
                     component,
                     terms: Vec::with_capacity(0),
                 });
@@ -36,7 +36,7 @@ impl AstTerm {
         match pairs.next() {
             Some(third) => match third.as_rule() {
                 Rule::term => {
-                    let mut new_terms: Vec<Term> = AstTerm::visit(third)?.finish();
+                    let mut new_terms: Vec<Term> = Self::visit(third)?.finish();
 
                     match op {
                         SecondToken::Dot => (),
@@ -45,7 +45,7 @@ impl AstTerm {
                         }
                     }
 
-                    Ok(AstTerm {
+                    Ok(Self {
                         component,
                         terms: new_terms,
                     })

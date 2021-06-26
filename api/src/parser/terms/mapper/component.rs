@@ -15,7 +15,7 @@ impl Visit<Rule> for Component {
             Some(first) => match first.as_rule() {
                 Rule::factor => Factor::visit(first)?,
                 Rule::basic_component => {
-                    return Ok(Component {
+                    return Ok(Self {
                         factor: None,
                         terms: BasicComponent::visit(first)?.finish(),
                     });
@@ -27,7 +27,7 @@ impl Visit<Rule> for Component {
 
         match pairs.next() {
             Some(second) => match second.as_rule() {
-                Rule::basic_component => Ok(Component {
+                Rule::basic_component => Ok(Self {
                     factor: Some(factor),
                     terms: BasicComponent::visit(second)?.finish(),
                 }),

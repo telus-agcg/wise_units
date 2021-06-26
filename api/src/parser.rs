@@ -59,572 +59,572 @@ trait Visit<R> {
 // TODO: Move to atom_generator.
 //
 impl Visit<SymbolRule> for Atom {
-    fn visit(pair: Pair<'_, SymbolRule>) -> Result<Atom, Error> {
+    fn visit(pair: Pair<'_, SymbolRule>) -> Result<Self, Error> {
         let atom = match pair.as_rule() {
-            SymbolRule::pri_acre_british | SymbolRule::sec_acre_british => Atom::AcreBritish,
-            SymbolRule::pri_acre_us | SymbolRule::sec_acre_us => Atom::AcreUS,
-            SymbolRule::pri_allergen_unit | SymbolRule::sec_allergen_unit => Atom::AllergenUnit,
+            SymbolRule::pri_acre_british | SymbolRule::sec_acre_british => Self::AcreBritish,
+            SymbolRule::pri_acre_us | SymbolRule::sec_acre_us => Self::AcreUS,
+            SymbolRule::pri_allergen_unit | SymbolRule::sec_allergen_unit => Self::AllergenUnit,
             SymbolRule::pri_allergen_unit_for_ambrosia_artemisiifolia
             | SymbolRule::sec_allergen_unit_for_ambrosia_artemisiifolia => {
-                Atom::AllergenUnitForAmbrosiaArtemisiifolia
+                Self::AllergenUnitForAmbrosiaArtemisiifolia
             }
-            SymbolRule::pri_ampere | SymbolRule::sec_ampere => Atom::Ampere,
-            SymbolRule::pri_angstrom | SymbolRule::sec_angstrom => Atom::Angstrom,
+            SymbolRule::pri_ampere | SymbolRule::sec_ampere => Self::Ampere,
+            SymbolRule::pri_angstrom | SymbolRule::sec_angstrom => Self::Angstrom,
             SymbolRule::pri_anti_factor_xa_unit | SymbolRule::sec_anti_factor_xa_unit => {
-                Atom::AntiFactorXaUnit
+                Self::AntiFactorXaUnit
             }
-            SymbolRule::pri_apl_unit | SymbolRule::sec_apl_unit => Atom::AplUnit,
-            SymbolRule::pri_arbitrary_unit | SymbolRule::sec_arbitrary_unit => Atom::ArbitraryUnit,
-            SymbolRule::pri_are | SymbolRule::sec_are => Atom::Are,
+            SymbolRule::pri_apl_unit | SymbolRule::sec_apl_unit => Self::AplUnit,
+            SymbolRule::pri_arbitrary_unit | SymbolRule::sec_arbitrary_unit => Self::ArbitraryUnit,
+            SymbolRule::pri_are | SymbolRule::sec_are => Self::Are,
             SymbolRule::pri_astronomic_unit | SymbolRule::sec_astronomic_unit => {
-                Atom::AstronomicUnit
+                Self::AstronomicUnit
             }
-            SymbolRule::pri_bar | SymbolRule::sec_bar => Atom::Bar,
-            SymbolRule::pri_barn | SymbolRule::sec_barn => Atom::Barn,
-            SymbolRule::pri_barrel_us | SymbolRule::sec_barrel_us => Atom::BarrelUS,
-            SymbolRule::pri_baud | SymbolRule::sec_baud => Atom::Baud,
-            SymbolRule::pri_becquerel | SymbolRule::sec_becquerel => Atom::Becquerel,
-            SymbolRule::pri_bel | SymbolRule::sec_bel => Atom::Bel,
-            SymbolRule::pri_bel10_nanovolt | SymbolRule::sec_bel10_nanovolt => Atom::Bel10Nanovolt,
-            SymbolRule::pri_bel_kilowatt | SymbolRule::sec_bel_kilowatt => Atom::BelKilowatt,
-            SymbolRule::pri_bel_microvolt | SymbolRule::sec_bel_microvolt => Atom::BelMicrovolt,
-            SymbolRule::pri_bel_millivolt | SymbolRule::sec_bel_millivolt => Atom::BelMillivolt,
+            SymbolRule::pri_bar | SymbolRule::sec_bar => Self::Bar,
+            SymbolRule::pri_barn | SymbolRule::sec_barn => Self::Barn,
+            SymbolRule::pri_barrel_us | SymbolRule::sec_barrel_us => Self::BarrelUS,
+            SymbolRule::pri_baud | SymbolRule::sec_baud => Self::Baud,
+            SymbolRule::pri_becquerel | SymbolRule::sec_becquerel => Self::Becquerel,
+            SymbolRule::pri_bel | SymbolRule::sec_bel => Self::Bel,
+            SymbolRule::pri_bel10_nanovolt | SymbolRule::sec_bel10_nanovolt => Self::Bel10Nanovolt,
+            SymbolRule::pri_bel_kilowatt | SymbolRule::sec_bel_kilowatt => Self::BelKilowatt,
+            SymbolRule::pri_bel_microvolt | SymbolRule::sec_bel_microvolt => Self::BelMicrovolt,
+            SymbolRule::pri_bel_millivolt | SymbolRule::sec_bel_millivolt => Self::BelMillivolt,
             SymbolRule::pri_bel_sound_pressure | SymbolRule::sec_bel_sound_pressure => {
-                Atom::BelSoundPressure
+                Self::BelSoundPressure
             }
-            SymbolRule::pri_bel_volt | SymbolRule::sec_bel_volt => Atom::BelVolt,
-            SymbolRule::pri_bel_watt | SymbolRule::sec_bel_watt => Atom::BelWatt,
-            SymbolRule::pri_bethesda_unit | SymbolRule::sec_bethesda_unit => Atom::BethesdaUnit,
+            SymbolRule::pri_bel_volt | SymbolRule::sec_bel_volt => Self::BelVolt,
+            SymbolRule::pri_bel_watt | SymbolRule::sec_bel_watt => Self::BelWatt,
+            SymbolRule::pri_bethesda_unit | SymbolRule::sec_bethesda_unit => Self::BethesdaUnit,
             SymbolRule::pri_bioequivalent_allergen_unit
-            | SymbolRule::sec_bioequivalent_allergen_unit => Atom::BioequivalentAllergenUnit,
-            SymbolRule::pri_biot | SymbolRule::sec_biot => Atom::Biot,
-            SymbolRule::pri_bit | SymbolRule::sec_bit => Atom::Bit,
+            | SymbolRule::sec_bioequivalent_allergen_unit => Self::BioequivalentAllergenUnit,
+            SymbolRule::pri_biot | SymbolRule::sec_biot => Self::Biot,
+            SymbolRule::pri_bit | SymbolRule::sec_bit => Self::Bit,
             SymbolRule::pri_bit_logarithmus_dualis | SymbolRule::sec_bit_logarithmus_dualis => {
-                Atom::BitLogarithmusDualis
+                Self::BitLogarithmusDualis
             }
             SymbolRule::pri_board_foot_international | SymbolRule::sec_board_foot_international => {
-                Atom::BoardFootInternational
+                Self::BoardFootInternational
             }
-            SymbolRule::pri_bodansky_unit | SymbolRule::sec_bodansky_unit => Atom::BodanskyUnit,
+            SymbolRule::pri_bodansky_unit | SymbolRule::sec_bodansky_unit => Self::BodanskyUnit,
             SymbolRule::pri_boltzmann_constant | SymbolRule::sec_boltzmann_constant => {
-                Atom::BoltzmannConstant
+                Self::BoltzmannConstant
             }
             SymbolRule::pri_british_thermal_unit | SymbolRule::sec_british_thermal_unit => {
-                Atom::BritishThermalUnit
+                Self::BritishThermalUnit
             }
             SymbolRule::pri_british_thermal_unit_at39_f
-            | SymbolRule::sec_british_thermal_unit_at39_f => Atom::BritishThermalUnitAt39F,
+            | SymbolRule::sec_british_thermal_unit_at39_f => Self::BritishThermalUnitAt39F,
             SymbolRule::pri_british_thermal_unit_at59_f
-            | SymbolRule::sec_british_thermal_unit_at59_f => Atom::BritishThermalUnitAt59F,
+            | SymbolRule::sec_british_thermal_unit_at59_f => Self::BritishThermalUnitAt59F,
             SymbolRule::pri_british_thermal_unit_at60_f
-            | SymbolRule::sec_british_thermal_unit_at60_f => Atom::BritishThermalUnitAt60F,
-            SymbolRule::pri_bushel_british | SymbolRule::sec_bushel_british => Atom::BushelBritish,
-            SymbolRule::pri_bushel_us | SymbolRule::sec_bushel_us => Atom::BushelUS,
-            SymbolRule::pri_byte | SymbolRule::sec_byte => Atom::Byte,
-            SymbolRule::pri_calorie | SymbolRule::sec_calorie => Atom::Calorie,
-            SymbolRule::pri_calorie_at15_c | SymbolRule::sec_calorie_at15_c => Atom::CalorieAt15C,
-            SymbolRule::pri_calorie_at20_c | SymbolRule::sec_calorie_at20_c => Atom::CalorieAt20C,
-            SymbolRule::pri_candela | SymbolRule::sec_candela => Atom::Candela,
+            | SymbolRule::sec_british_thermal_unit_at60_f => Self::BritishThermalUnitAt60F,
+            SymbolRule::pri_bushel_british | SymbolRule::sec_bushel_british => Self::BushelBritish,
+            SymbolRule::pri_bushel_us | SymbolRule::sec_bushel_us => Self::BushelUS,
+            SymbolRule::pri_byte | SymbolRule::sec_byte => Self::Byte,
+            SymbolRule::pri_calorie | SymbolRule::sec_calorie => Self::Calorie,
+            SymbolRule::pri_calorie_at15_c | SymbolRule::sec_calorie_at15_c => Self::CalorieAt15C,
+            SymbolRule::pri_calorie_at20_c | SymbolRule::sec_calorie_at20_c => Self::CalorieAt20C,
+            SymbolRule::pri_candela | SymbolRule::sec_candela => Self::Candela,
             SymbolRule::pri_carat_of_gold_alloys | SymbolRule::sec_carat_of_gold_alloys => {
-                Atom::CaratOfGoldAlloys
+                Self::CaratOfGoldAlloys
             }
             SymbolRule::pri_cell_culture_infectious_dose
-            | SymbolRule::sec_cell_culture_infectious_dose => Atom::CellCultureInfectiousDose,
-            SymbolRule::pri_charriere | SymbolRule::sec_charriere => Atom::Charriere,
-            SymbolRule::pri_cicero | SymbolRule::sec_cicero => Atom::Cicero,
-            SymbolRule::pri_circle | SymbolRule::sec_circle => Atom::Circle,
+            | SymbolRule::sec_cell_culture_infectious_dose => Self::CellCultureInfectiousDose,
+            SymbolRule::pri_charriere | SymbolRule::sec_charriere => Self::Charriere,
+            SymbolRule::pri_cicero | SymbolRule::sec_cicero => Self::Cicero,
+            SymbolRule::pri_circle | SymbolRule::sec_circle => Self::Circle,
             SymbolRule::pri_circular_mil_international
-            | SymbolRule::sec_circular_mil_international => Atom::CircularMilInternational,
+            | SymbolRule::sec_circular_mil_international => Self::CircularMilInternational,
             SymbolRule::pri_colony_forming_units | SymbolRule::sec_colony_forming_units => {
-                Atom::ColonyFormingUnits
+                Self::ColonyFormingUnits
             }
             SymbolRule::pri_cord_international | SymbolRule::sec_cord_international => {
-                Atom::CordInternational
+                Self::CordInternational
             }
-            SymbolRule::pri_cord_us | SymbolRule::sec_cord_us => Atom::CordUS,
-            SymbolRule::pri_coulomb | SymbolRule::sec_coulomb => Atom::Coulomb,
+            SymbolRule::pri_cord_us | SymbolRule::sec_cord_us => Self::CordUS,
+            SymbolRule::pri_coulomb | SymbolRule::sec_coulomb => Self::Coulomb,
             SymbolRule::pri_cubic_foot_international | SymbolRule::sec_cubic_foot_international => {
-                Atom::CubicFootInternational
+                Self::CubicFootInternational
             }
             SymbolRule::pri_cubic_inch_international | SymbolRule::sec_cubic_inch_international => {
-                Atom::CubicInchInternational
+                Self::CubicInchInternational
             }
             SymbolRule::pri_cubic_yard_international | SymbolRule::sec_cubic_yard_international => {
-                Atom::CubicYardInternational
+                Self::CubicYardInternational
             }
-            SymbolRule::pri_cup_us | SymbolRule::sec_cup_us => Atom::CupUS,
-            SymbolRule::pri_curie | SymbolRule::sec_curie => Atom::Curie,
-            SymbolRule::pri_d_antigen_unit | SymbolRule::sec_d_antigen_unit => Atom::DAntigenUnit,
-            SymbolRule::pri_day | SymbolRule::sec_day => Atom::Day,
-            SymbolRule::pri_degree | SymbolRule::sec_degree => Atom::Degree,
-            SymbolRule::pri_degree_celsius | SymbolRule::sec_degree_celsius => Atom::DegreeCelsius,
+            SymbolRule::pri_cup_us | SymbolRule::sec_cup_us => Self::CupUS,
+            SymbolRule::pri_curie | SymbolRule::sec_curie => Self::Curie,
+            SymbolRule::pri_d_antigen_unit | SymbolRule::sec_d_antigen_unit => Self::DAntigenUnit,
+            SymbolRule::pri_day | SymbolRule::sec_day => Self::Day,
+            SymbolRule::pri_degree | SymbolRule::sec_degree => Self::Degree,
+            SymbolRule::pri_degree_celsius | SymbolRule::sec_degree_celsius => Self::DegreeCelsius,
             SymbolRule::pri_degree_fahrenheit | SymbolRule::sec_degree_fahrenheit => {
-                Atom::DegreeFahrenheit
+                Self::DegreeFahrenheit
             }
-            SymbolRule::pri_degree_rankine | SymbolRule::sec_degree_rankine => Atom::DegreeRankine,
-            SymbolRule::pri_degree_reaumur | SymbolRule::sec_degree_reaumur => Atom::DegreeReaumur,
-            SymbolRule::pri_denier | SymbolRule::sec_denier => Atom::Denier,
-            SymbolRule::pri_didot | SymbolRule::sec_didot => Atom::Didot,
-            SymbolRule::pri_diopter | SymbolRule::sec_diopter => Atom::Diopter,
+            SymbolRule::pri_degree_rankine | SymbolRule::sec_degree_rankine => Self::DegreeRankine,
+            SymbolRule::pri_degree_reaumur | SymbolRule::sec_degree_reaumur => Self::DegreeReaumur,
+            SymbolRule::pri_denier | SymbolRule::sec_denier => Self::Denier,
+            SymbolRule::pri_didot | SymbolRule::sec_didot => Self::Didot,
+            SymbolRule::pri_diopter | SymbolRule::sec_diopter => Self::Diopter,
             SymbolRule::pri_dram_apothecaries | SymbolRule::sec_dram_apothecaries => {
-                Atom::DramApothecaries
+                Self::DramApothecaries
             }
             SymbolRule::pri_dram_avoirdupois | SymbolRule::sec_dram_avoirdupois => {
-                Atom::DramAvoirdupois
+                Self::DramAvoirdupois
             }
-            SymbolRule::pri_drop | SymbolRule::sec_drop => Atom::Drop,
-            SymbolRule::pri_dry_pint_us | SymbolRule::sec_dry_pint_us => Atom::DryPintUS,
-            SymbolRule::pri_dry_quart_us | SymbolRule::sec_dry_quart_us => Atom::DryQuartUS,
-            SymbolRule::pri_dye_unit | SymbolRule::sec_dye_unit => Atom::DyeUnit,
-            SymbolRule::pri_dyne | SymbolRule::sec_dyne => Atom::Dyne,
-            SymbolRule::pri_ehrlich_unit | SymbolRule::sec_ehrlich_unit => Atom::EhrlichUnit,
-            SymbolRule::pri_electron_mass | SymbolRule::sec_electron_mass => Atom::ElectronMass,
-            SymbolRule::pri_electronvolt | SymbolRule::sec_electronvolt => Atom::Electronvolt,
+            SymbolRule::pri_drop | SymbolRule::sec_drop => Self::Drop,
+            SymbolRule::pri_dry_pint_us | SymbolRule::sec_dry_pint_us => Self::DryPintUS,
+            SymbolRule::pri_dry_quart_us | SymbolRule::sec_dry_quart_us => Self::DryQuartUS,
+            SymbolRule::pri_dye_unit | SymbolRule::sec_dye_unit => Self::DyeUnit,
+            SymbolRule::pri_dyne | SymbolRule::sec_dyne => Self::Dyne,
+            SymbolRule::pri_ehrlich_unit | SymbolRule::sec_ehrlich_unit => Self::EhrlichUnit,
+            SymbolRule::pri_electron_mass | SymbolRule::sec_electron_mass => Self::ElectronMass,
+            SymbolRule::pri_electronvolt | SymbolRule::sec_electronvolt => Self::Electronvolt,
             SymbolRule::pri_elementary_charge | SymbolRule::sec_elementary_charge => {
-                Atom::ElementaryCharge
+                Self::ElementaryCharge
             }
-            SymbolRule::pri_elisa_unit | SymbolRule::sec_elisa_unit => Atom::ElisaUnit,
+            SymbolRule::pri_elisa_unit | SymbolRule::sec_elisa_unit => Self::ElisaUnit,
             SymbolRule::pri_embryo_infectious_dose | SymbolRule::sec_embryo_infectious_dose => {
-                Atom::EmbryoInfectiousDose
+                Self::EmbryoInfectiousDose
             }
-            SymbolRule::pri_equivalents | SymbolRule::sec_equivalents => Atom::Equivalents,
-            SymbolRule::pri_erg | SymbolRule::sec_erg => Atom::Erg,
-            SymbolRule::pri_farad | SymbolRule::sec_farad => Atom::Farad,
-            SymbolRule::pri_fathom_british | SymbolRule::sec_fathom_british => Atom::FathomBritish,
+            SymbolRule::pri_equivalents | SymbolRule::sec_equivalents => Self::Equivalents,
+            SymbolRule::pri_erg | SymbolRule::sec_erg => Self::Erg,
+            SymbolRule::pri_farad | SymbolRule::sec_farad => Self::Farad,
+            SymbolRule::pri_fathom_british | SymbolRule::sec_fathom_british => Self::FathomBritish,
             SymbolRule::pri_fathom_international | SymbolRule::sec_fathom_international => {
-                Atom::FathomInternational
+                Self::FathomInternational
             }
-            SymbolRule::pri_fathom_us | SymbolRule::sec_fathom_us => Atom::FathomUS,
+            SymbolRule::pri_fathom_us | SymbolRule::sec_fathom_us => Self::FathomUS,
             SymbolRule::pri_fibrinogen_equivalent_unit
-            | SymbolRule::sec_fibrinogen_equivalent_unit => Atom::FibrinogenEquivalentUnit,
+            | SymbolRule::sec_fibrinogen_equivalent_unit => Self::FibrinogenEquivalentUnit,
             SymbolRule::pri_fluid_dram_british | SymbolRule::sec_fluid_dram_british => {
-                Atom::FluidDramBritish
+                Self::FluidDramBritish
             }
-            SymbolRule::pri_fluid_dram_us | SymbolRule::sec_fluid_dram_us => Atom::FluidDramUS,
+            SymbolRule::pri_fluid_dram_us | SymbolRule::sec_fluid_dram_us => Self::FluidDramUS,
             SymbolRule::pri_fluid_ounce_british | SymbolRule::sec_fluid_ounce_british => {
-                Atom::FluidOunceBritish
+                Self::FluidOunceBritish
             }
-            SymbolRule::pri_fluid_ounce_us | SymbolRule::sec_fluid_ounce_us => Atom::FluidOunceUS,
+            SymbolRule::pri_fluid_ounce_us | SymbolRule::sec_fluid_ounce_us => Self::FluidOunceUS,
             SymbolRule::pri_focus_forming_units | SymbolRule::sec_focus_forming_units => {
-                Atom::FocusFormingUnits
+                Self::FocusFormingUnits
             }
-            SymbolRule::pri_foot_british | SymbolRule::sec_foot_british => Atom::FootBritish,
+            SymbolRule::pri_foot_british | SymbolRule::sec_foot_british => Self::FootBritish,
             SymbolRule::pri_foot_international | SymbolRule::sec_foot_international => {
-                Atom::FootInternational
+                Self::FootInternational
             }
-            SymbolRule::pri_foot_us | SymbolRule::sec_foot_us => Atom::FootUS,
-            SymbolRule::pri_furlong_us | SymbolRule::sec_furlong_us => Atom::FurlongUS,
-            SymbolRule::pri_gal | SymbolRule::sec_gal => Atom::Gal,
-            SymbolRule::pri_gallon_british | SymbolRule::sec_gallon_british => Atom::GallonBritish,
-            SymbolRule::pri_gauss | SymbolRule::sec_gauss => Atom::Gauss,
-            SymbolRule::pri_gilbert | SymbolRule::sec_gilbert => Atom::Gilbert,
-            SymbolRule::pri_gill_british | SymbolRule::sec_gill_british => Atom::GillBritish,
-            SymbolRule::pri_gill_us | SymbolRule::sec_gill_us => Atom::GillUS,
-            SymbolRule::pri_gon | SymbolRule::sec_gon => Atom::Gon,
-            SymbolRule::pri_gpl_unit | SymbolRule::sec_gpl_unit => Atom::GplUnit,
-            SymbolRule::pri_grain | SymbolRule::sec_grain => Atom::Grain,
-            SymbolRule::pri_gram | SymbolRule::sec_gram => Atom::Gram,
-            SymbolRule::pri_gram_force | SymbolRule::sec_gram_force => Atom::GramForce,
-            SymbolRule::pri_gram_percent | SymbolRule::sec_gram_percent => Atom::GramPercent,
-            SymbolRule::pri_gray | SymbolRule::sec_gray => Atom::Gray,
+            SymbolRule::pri_foot_us | SymbolRule::sec_foot_us => Self::FootUS,
+            SymbolRule::pri_furlong_us | SymbolRule::sec_furlong_us => Self::FurlongUS,
+            SymbolRule::pri_gal | SymbolRule::sec_gal => Self::Gal,
+            SymbolRule::pri_gallon_british | SymbolRule::sec_gallon_british => Self::GallonBritish,
+            SymbolRule::pri_gauss | SymbolRule::sec_gauss => Self::Gauss,
+            SymbolRule::pri_gilbert | SymbolRule::sec_gilbert => Self::Gilbert,
+            SymbolRule::pri_gill_british | SymbolRule::sec_gill_british => Self::GillBritish,
+            SymbolRule::pri_gill_us | SymbolRule::sec_gill_us => Self::GillUS,
+            SymbolRule::pri_gon | SymbolRule::sec_gon => Self::Gon,
+            SymbolRule::pri_gpl_unit | SymbolRule::sec_gpl_unit => Self::GplUnit,
+            SymbolRule::pri_grain | SymbolRule::sec_grain => Self::Grain,
+            SymbolRule::pri_gram | SymbolRule::sec_gram => Self::Gram,
+            SymbolRule::pri_gram_force | SymbolRule::sec_gram_force => Self::GramForce,
+            SymbolRule::pri_gram_percent | SymbolRule::sec_gram_percent => Self::GramPercent,
+            SymbolRule::pri_gray | SymbolRule::sec_gray => Self::Gray,
             SymbolRule::pri_gunters_chain_british | SymbolRule::sec_gunters_chain_british => {
-                Atom::GuntersChainBritish
+                Self::GuntersChainBritish
             }
             SymbolRule::pri_gunters_chain_us | SymbolRule::sec_gunters_chain_us => {
-                Atom::GuntersChainUS
+                Self::GuntersChainUS
             }
             SymbolRule::pri_hand_international | SymbolRule::sec_hand_international => {
-                Atom::HandInternational
+                Self::HandInternational
             }
-            SymbolRule::pri_henry | SymbolRule::sec_henry => Atom::Henry,
-            SymbolRule::pri_hertz | SymbolRule::sec_hertz => Atom::Hertz,
+            SymbolRule::pri_henry | SymbolRule::sec_henry => Self::Henry,
+            SymbolRule::pri_hertz | SymbolRule::sec_hertz => Self::Hertz,
             SymbolRule::pri_high_power_field | SymbolRule::sec_high_power_field => {
-                Atom::HighPowerField
+                Self::HighPowerField
             }
             SymbolRule::pri_historical_winchester_gallon
-            | SymbolRule::sec_historical_winchester_gallon => Atom::HistoricalWinchesterGallon,
+            | SymbolRule::sec_historical_winchester_gallon => Self::HistoricalWinchesterGallon,
             SymbolRule::pri_homeopathic_potency_of_centesimal_hahnemannian_series
             | SymbolRule::sec_homeopathic_potency_of_centesimal_hahnemannian_series => {
-                Atom::HomeopathicPotencyOfCentesimalHahnemannianSeries
+                Self::HomeopathicPotencyOfCentesimalHahnemannianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_centesimal_korsakovian_series
             | SymbolRule::sec_homeopathic_potency_of_centesimal_korsakovian_series => {
-                Atom::HomeopathicPotencyOfCentesimalKorsakovianSeries
+                Self::HomeopathicPotencyOfCentesimalKorsakovianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_centesimal_series_retired
             | SymbolRule::sec_homeopathic_potency_of_centesimal_series_retired => {
-                Atom::HomeopathicPotencyOfCentesimalSeriesRetired
+                Self::HomeopathicPotencyOfCentesimalSeriesRetired
             }
             SymbolRule::pri_homeopathic_potency_of_decimal_hahnemannian_series
             | SymbolRule::sec_homeopathic_potency_of_decimal_hahnemannian_series => {
-                Atom::HomeopathicPotencyOfDecimalHahnemannianSeries
+                Self::HomeopathicPotencyOfDecimalHahnemannianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_decimal_korsakovian_series
             | SymbolRule::sec_homeopathic_potency_of_decimal_korsakovian_series => {
-                Atom::HomeopathicPotencyOfDecimalKorsakovianSeries
+                Self::HomeopathicPotencyOfDecimalKorsakovianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_decimal_series_retired
             | SymbolRule::sec_homeopathic_potency_of_decimal_series_retired => {
-                Atom::HomeopathicPotencyOfDecimalSeriesRetired
+                Self::HomeopathicPotencyOfDecimalSeriesRetired
             }
             SymbolRule::pri_homeopathic_potency_of_millesimal_hahnemannian_series
             | SymbolRule::sec_homeopathic_potency_of_millesimal_hahnemannian_series => {
-                Atom::HomeopathicPotencyOfMillesimalHahnemannianSeries
+                Self::HomeopathicPotencyOfMillesimalHahnemannianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_millesimal_korsakovian_series
             | SymbolRule::sec_homeopathic_potency_of_millesimal_korsakovian_series => {
-                Atom::HomeopathicPotencyOfMillesimalKorsakovianSeries
+                Self::HomeopathicPotencyOfMillesimalKorsakovianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_millesimal_series_retired
             | SymbolRule::sec_homeopathic_potency_of_millesimal_series_retired => {
-                Atom::HomeopathicPotencyOfMillesimalSeriesRetired
+                Self::HomeopathicPotencyOfMillesimalSeriesRetired
             }
             SymbolRule::pri_homeopathic_potency_of_quintamillesimal_hahnemannian_series
             | SymbolRule::sec_homeopathic_potency_of_quintamillesimal_hahnemannian_series => {
-                Atom::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries
+                Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_quintamillesimal_korsakovian_series
             | SymbolRule::sec_homeopathic_potency_of_quintamillesimal_korsakovian_series => {
-                Atom::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries
+                Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries
             }
             SymbolRule::pri_homeopathic_potency_of_quintamillesimal_series_retired
             | SymbolRule::sec_homeopathic_potency_of_quintamillesimal_series_retired => {
-                Atom::HomeopathicPotencyOfQuintamillesimalSeriesRetired
+                Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired
             }
-            SymbolRule::pri_horsepower | SymbolRule::sec_horsepower => Atom::Horsepower,
+            SymbolRule::pri_horsepower | SymbolRule::sec_horsepower => Self::Horsepower,
             SymbolRule::pri_hounsfield_unit | SymbolRule::sec_hounsfield_unit => {
-                Atom::HounsfieldUnit
+                Self::HounsfieldUnit
             }
-            SymbolRule::pri_hour | SymbolRule::sec_hour => Atom::Hour,
-            SymbolRule::pri_inch_british | SymbolRule::sec_inch_british => Atom::InchBritish,
+            SymbolRule::pri_hour | SymbolRule::sec_hour => Self::Hour,
+            SymbolRule::pri_inch_british | SymbolRule::sec_inch_british => Self::InchBritish,
             SymbolRule::pri_inch_international | SymbolRule::sec_inch_international => {
-                Atom::InchInternational
+                Self::InchInternational
             }
             SymbolRule::pri_inch_of_mercury_column | SymbolRule::sec_inch_of_mercury_column => {
-                Atom::InchOfMercuryColumn
+                Self::InchOfMercuryColumn
             }
             SymbolRule::pri_inch_of_water_column | SymbolRule::sec_inch_of_water_column => {
-                Atom::InchOfWaterColumn
+                Self::InchOfWaterColumn
             }
-            SymbolRule::pri_inch_us | SymbolRule::sec_inch_us => Atom::InchUS,
+            SymbolRule::pri_inch_us | SymbolRule::sec_inch_us => Self::InchUS,
             SymbolRule::pri_index_of_reactivity | SymbolRule::sec_index_of_reactivity => {
-                Atom::IndexOfReactivity
+                Self::IndexOfReactivity
             }
             SymbolRule::pri_international_table_british_thermal_unit
             | SymbolRule::sec_international_table_british_thermal_unit => {
-                Atom::InternationalTableBritishThermalUnit
+                Self::InternationalTableBritishThermalUnit
             }
             SymbolRule::pri_international_table_calorie
-            | SymbolRule::sec_international_table_calorie => Atom::InternationalTableCalorie,
+            | SymbolRule::sec_international_table_calorie => Self::InternationalTableCalorie,
             SymbolRule::pri_international_unit | SymbolRule::sec_international_unit => {
-                Atom::InternationalUnit
+                Self::InternationalUnit
             }
             SymbolRule::pri_international_unit_secondary
-            | SymbolRule::sec_international_unit_secondary => Atom::InternationalUnitSecondary,
-            SymbolRule::pri_joule | SymbolRule::sec_joule => Atom::Joule,
-            SymbolRule::pri_katal | SymbolRule::sec_katal => Atom::Katal,
-            SymbolRule::pri_kayser | SymbolRule::sec_kayser => Atom::Kayser,
-            SymbolRule::pri_kelvin | SymbolRule::sec_kelvin => Atom::Kelvin,
+            | SymbolRule::sec_international_unit_secondary => Self::InternationalUnitSecondary,
+            SymbolRule::pri_joule | SymbolRule::sec_joule => Self::Joule,
+            SymbolRule::pri_katal | SymbolRule::sec_katal => Self::Katal,
+            SymbolRule::pri_kayser | SymbolRule::sec_kayser => Self::Kayser,
+            SymbolRule::pri_kelvin | SymbolRule::sec_kelvin => Self::Kelvin,
             SymbolRule::pri_king_armstrong_unit | SymbolRule::sec_king_armstrong_unit => {
-                Atom::KingArmstrongUnit
+                Self::KingArmstrongUnit
             }
-            SymbolRule::pri_knot_british | SymbolRule::sec_knot_british => Atom::KnotBritish,
+            SymbolRule::pri_knot_british | SymbolRule::sec_knot_british => Self::KnotBritish,
             SymbolRule::pri_knot_international | SymbolRule::sec_knot_international => {
-                Atom::KnotInternational
+                Self::KnotInternational
             }
-            SymbolRule::pri_kunkel_unit | SymbolRule::sec_kunkel_unit => Atom::KunkelUnit,
-            SymbolRule::pri_lambert | SymbolRule::sec_lambert => Atom::Lambert,
-            SymbolRule::pri_light_year | SymbolRule::sec_light_year => Atom::LightYear,
-            SymbolRule::pri_ligne | SymbolRule::sec_ligne => Atom::Ligne,
+            SymbolRule::pri_kunkel_unit | SymbolRule::sec_kunkel_unit => Self::KunkelUnit,
+            SymbolRule::pri_lambert | SymbolRule::sec_lambert => Self::Lambert,
+            SymbolRule::pri_light_year | SymbolRule::sec_light_year => Self::LightYear,
+            SymbolRule::pri_ligne | SymbolRule::sec_ligne => Self::Ligne,
             SymbolRule::pri_limit_of_flocculation | SymbolRule::sec_limit_of_flocculation => {
-                Atom::LimitOfFlocculation
+                Self::LimitOfFlocculation
             }
-            SymbolRule::pri_line | SymbolRule::sec_line => Atom::Line,
+            SymbolRule::pri_line | SymbolRule::sec_line => Self::Line,
             SymbolRule::pri_link_for_gunters_chain_british
-            | SymbolRule::sec_link_for_gunters_chain_british => Atom::LinkForGuntersChainBritish,
+            | SymbolRule::sec_link_for_gunters_chain_british => Self::LinkForGuntersChainBritish,
             SymbolRule::pri_link_for_gunters_chain_us
-            | SymbolRule::sec_link_for_gunters_chain_us => Atom::LinkForGuntersChainUS,
+            | SymbolRule::sec_link_for_gunters_chain_us => Self::LinkForGuntersChainUS,
             SymbolRule::pri_link_for_ramdens_chain_us
-            | SymbolRule::sec_link_for_ramdens_chain_us => Atom::LinkForRamdensChainUS,
-            SymbolRule::pri_liter | SymbolRule::sec_liter => Atom::Liter,
-            SymbolRule::pri_liter_secondary => Atom::LiterSecondary,
+            | SymbolRule::sec_link_for_ramdens_chain_us => Self::LinkForRamdensChainUS,
+            SymbolRule::pri_liter | SymbolRule::sec_liter => Self::Liter,
+            SymbolRule::pri_liter_secondary => Self::LiterSecondary,
             SymbolRule::pri_long_hunderdweight_avoirdupois
-            | SymbolRule::sec_long_hunderdweight_avoirdupois => Atom::LongHunderdweightAvoirdupois,
+            | SymbolRule::sec_long_hunderdweight_avoirdupois => Self::LongHunderdweightAvoirdupois,
             SymbolRule::pri_long_ton_avoirdupois | SymbolRule::sec_long_ton_avoirdupois => {
-                Atom::LongTonAvoirdupois
+                Self::LongTonAvoirdupois
             }
             SymbolRule::pri_low_power_field | SymbolRule::sec_low_power_field => {
-                Atom::LowPowerField
+                Self::LowPowerField
             }
-            SymbolRule::pri_lumen | SymbolRule::sec_lumen => Atom::Lumen,
-            SymbolRule::pri_lux | SymbolRule::sec_lux => Atom::Lux,
-            SymbolRule::pri_mac_lagan_unit | SymbolRule::sec_mac_lagan_unit => Atom::MacLaganUnit,
-            SymbolRule::pri_maxwell | SymbolRule::sec_maxwell => Atom::Maxwell,
+            SymbolRule::pri_lumen | SymbolRule::sec_lumen => Self::Lumen,
+            SymbolRule::pri_lux | SymbolRule::sec_lux => Self::Lux,
+            SymbolRule::pri_mac_lagan_unit | SymbolRule::sec_mac_lagan_unit => Self::MacLaganUnit,
+            SymbolRule::pri_maxwell | SymbolRule::sec_maxwell => Self::Maxwell,
             SymbolRule::pri_mean_british_thermal_unit
-            | SymbolRule::sec_mean_british_thermal_unit => Atom::MeanBritishThermalUnit,
-            SymbolRule::pri_mean_calorie | SymbolRule::sec_mean_calorie => Atom::MeanCalorie,
+            | SymbolRule::sec_mean_british_thermal_unit => Self::MeanBritishThermalUnit,
+            SymbolRule::pri_mean_calorie | SymbolRule::sec_mean_calorie => Self::MeanCalorie,
             SymbolRule::pri_mean_gregorian_month | SymbolRule::sec_mean_gregorian_month => {
-                Atom::MeanGregorianMonth
+                Self::MeanGregorianMonth
             }
             SymbolRule::pri_mean_gregorian_year | SymbolRule::sec_mean_gregorian_year => {
-                Atom::MeanGregorianYear
+                Self::MeanGregorianYear
             }
             SymbolRule::pri_mean_julian_month | SymbolRule::sec_mean_julian_month => {
-                Atom::MeanJulianMonth
+                Self::MeanJulianMonth
             }
             SymbolRule::pri_mean_julian_year | SymbolRule::sec_mean_julian_year => {
-                Atom::MeanJulianYear
+                Self::MeanJulianYear
             }
             SymbolRule::pri_mesh_international | SymbolRule::sec_mesh_international => {
-                Atom::MeshInternational
+                Self::MeshInternational
             }
             SymbolRule::pri_metabolic_equivalent | SymbolRule::sec_metabolic_equivalent => {
-                Atom::MetabolicEquivalent
+                Self::MetabolicEquivalent
             }
-            SymbolRule::pri_meter | SymbolRule::sec_meter => Atom::Meter,
+            SymbolRule::pri_meter | SymbolRule::sec_meter => Self::Meter,
             SymbolRule::pri_meter_of_mercury_column | SymbolRule::sec_meter_of_mercury_column => {
-                Atom::MeterOfMercuryColumn
+                Self::MeterOfMercuryColumn
             }
             SymbolRule::pri_meter_of_water_column | SymbolRule::sec_meter_of_water_column => {
-                Atom::MeterOfWaterColumn
+                Self::MeterOfWaterColumn
             }
             SymbolRule::pri_meter_per_square_seconds_per_square_root_of_hertz
             | SymbolRule::sec_meter_per_square_seconds_per_square_root_of_hertz => {
-                Atom::MeterPerSquareSecondsPerSquareRootOfHertz
+                Self::MeterPerSquareSecondsPerSquareRootOfHertz
             }
-            SymbolRule::pri_metric_carat | SymbolRule::sec_metric_carat => Atom::MetricCarat,
-            SymbolRule::pri_metric_cup | SymbolRule::sec_metric_cup => Atom::MetricCup,
+            SymbolRule::pri_metric_carat | SymbolRule::sec_metric_carat => Self::MetricCarat,
+            SymbolRule::pri_metric_cup | SymbolRule::sec_metric_cup => Self::MetricCup,
             SymbolRule::pri_metric_fluid_ounce | SymbolRule::sec_metric_fluid_ounce => {
-                Atom::MetricFluidOunce
+                Self::MetricFluidOunce
             }
-            SymbolRule::pri_metric_ounce | SymbolRule::sec_metric_ounce => Atom::MetricOunce,
+            SymbolRule::pri_metric_ounce | SymbolRule::sec_metric_ounce => Self::MetricOunce,
             SymbolRule::pri_metric_tablespoon | SymbolRule::sec_metric_tablespoon => {
-                Atom::MetricTablespoon
+                Self::MetricTablespoon
             }
             SymbolRule::pri_metric_teaspoon | SymbolRule::sec_metric_teaspoon => {
-                Atom::MetricTeaspoon
+                Self::MetricTeaspoon
             }
-            SymbolRule::pri_mho | SymbolRule::sec_mho => Atom::Mho,
+            SymbolRule::pri_mho | SymbolRule::sec_mho => Self::Mho,
             SymbolRule::pri_mil_international | SymbolRule::sec_mil_international => {
-                Atom::MilInternational
+                Self::MilInternational
             }
-            SymbolRule::pri_mil_us | SymbolRule::sec_mil_us => Atom::MilUS,
-            SymbolRule::pri_mile_british | SymbolRule::sec_mile_british => Atom::MileBritish,
+            SymbolRule::pri_mil_us | SymbolRule::sec_mil_us => Self::MilUS,
+            SymbolRule::pri_mile_british | SymbolRule::sec_mile_british => Self::MileBritish,
             SymbolRule::pri_mile_international | SymbolRule::sec_mile_international => {
-                Atom::MileInternational
+                Self::MileInternational
             }
-            SymbolRule::pri_mile_us | SymbolRule::sec_mile_us => Atom::MileUS,
-            SymbolRule::pri_minim_british | SymbolRule::sec_minim_british => Atom::MinimBritish,
-            SymbolRule::pri_minim_us | SymbolRule::sec_minim_us => Atom::MinimUS,
-            SymbolRule::pri_minute | SymbolRule::sec_minute => Atom::Minute,
-            SymbolRule::pri_minute_angle | SymbolRule::sec_minute_angle => Atom::MinuteAngle,
-            SymbolRule::pri_mole | SymbolRule::sec_mole => Atom::Mole,
-            SymbolRule::pri_month | SymbolRule::sec_month => Atom::Month,
-            SymbolRule::pri_mpl_unit | SymbolRule::sec_mpl_unit => Atom::MplUnit,
+            SymbolRule::pri_mile_us | SymbolRule::sec_mile_us => Self::MileUS,
+            SymbolRule::pri_minim_british | SymbolRule::sec_minim_british => Self::MinimBritish,
+            SymbolRule::pri_minim_us | SymbolRule::sec_minim_us => Self::MinimUS,
+            SymbolRule::pri_minute | SymbolRule::sec_minute => Self::Minute,
+            SymbolRule::pri_minute_angle | SymbolRule::sec_minute_angle => Self::MinuteAngle,
+            SymbolRule::pri_mole | SymbolRule::sec_mole => Self::Mole,
+            SymbolRule::pri_month | SymbolRule::sec_month => Self::Month,
+            SymbolRule::pri_mpl_unit | SymbolRule::sec_mpl_unit => Self::MplUnit,
             SymbolRule::pri_nautical_mile_british | SymbolRule::sec_nautical_mile_british => {
-                Atom::NauticalMileBritish
+                Self::NauticalMileBritish
             }
             SymbolRule::pri_nautical_mile_international
-            | SymbolRule::sec_nautical_mile_international => Atom::NauticalMileInternational,
-            SymbolRule::pri_neper | SymbolRule::sec_neper => Atom::Neper,
-            SymbolRule::pri_newton | SymbolRule::sec_newton => Atom::Newton,
+            | SymbolRule::sec_nautical_mile_international => Self::NauticalMileInternational,
+            SymbolRule::pri_neper | SymbolRule::sec_neper => Self::Neper,
+            SymbolRule::pri_newton | SymbolRule::sec_newton => Self::Newton,
             SymbolRule::pri_newtonian_constant_of_gravitation
             | SymbolRule::sec_newtonian_constant_of_gravitation => {
-                Atom::NewtonianConstantOfGravitation
+                Self::NewtonianConstantOfGravitation
             }
             SymbolRule::pri_nutrition_label_calories | SymbolRule::sec_nutrition_label_calories => {
-                Atom::NutritionLabelCalories
+                Self::NutritionLabelCalories
             }
-            SymbolRule::pri_oersted | SymbolRule::sec_oersted => Atom::Oersted,
-            SymbolRule::pri_ohm | SymbolRule::sec_ohm => Atom::Ohm,
-            SymbolRule::pri_osmole | SymbolRule::sec_osmole => Atom::Osmole,
+            SymbolRule::pri_oersted | SymbolRule::sec_oersted => Self::Oersted,
+            SymbolRule::pri_ohm | SymbolRule::sec_ohm => Self::Ohm,
+            SymbolRule::pri_osmole | SymbolRule::sec_osmole => Self::Osmole,
             SymbolRule::pri_ounce_apothecaries | SymbolRule::sec_ounce_apothecaries => {
-                Atom::OunceApothecaries
+                Self::OunceApothecaries
             }
             SymbolRule::pri_ounce_avoirdupois | SymbolRule::sec_ounce_avoirdupois => {
-                Atom::OunceAvoirdupois
+                Self::OunceAvoirdupois
             }
-            SymbolRule::pri_ounce_troy | SymbolRule::sec_ounce_troy => Atom::OunceTroy,
-            SymbolRule::pri_ph | SymbolRule::sec_ph => Atom::PH,
-            SymbolRule::pri_pace_british | SymbolRule::sec_pace_british => Atom::PaceBritish,
-            SymbolRule::pri_parsec | SymbolRule::sec_parsec => Atom::Parsec,
+            SymbolRule::pri_ounce_troy | SymbolRule::sec_ounce_troy => Self::OunceTroy,
+            SymbolRule::pri_ph | SymbolRule::sec_ph => Self::PH,
+            SymbolRule::pri_pace_british | SymbolRule::sec_pace_british => Self::PaceBritish,
+            SymbolRule::pri_parsec | SymbolRule::sec_parsec => Self::Parsec,
             SymbolRule::pri_parts_per_billion | SymbolRule::sec_parts_per_billion => {
-                Atom::PartsPerBillion
+                Self::PartsPerBillion
             }
             SymbolRule::pri_parts_per_million | SymbolRule::sec_parts_per_million => {
-                Atom::PartsPerMillion
+                Self::PartsPerMillion
             }
             SymbolRule::pri_parts_per_thousand | SymbolRule::sec_parts_per_thousand => {
-                Atom::PartsPerThousand
+                Self::PartsPerThousand
             }
             SymbolRule::pri_parts_per_trillion | SymbolRule::sec_parts_per_trillion => {
-                Atom::PartsPerTrillion
+                Self::PartsPerTrillion
             }
-            SymbolRule::pri_pascal | SymbolRule::sec_pascal => Atom::Pascal,
-            SymbolRule::pri_peck_british | SymbolRule::sec_peck_british => Atom::PeckBritish,
-            SymbolRule::pri_peck_us | SymbolRule::sec_peck_us => Atom::PeckUS,
+            SymbolRule::pri_pascal | SymbolRule::sec_pascal => Self::Pascal,
+            SymbolRule::pri_peck_british | SymbolRule::sec_peck_british => Self::PeckBritish,
+            SymbolRule::pri_peck_us | SymbolRule::sec_peck_us => Self::PeckUS,
             SymbolRule::pri_pennyweight_troy | SymbolRule::sec_pennyweight_troy => {
-                Atom::PennyweightTroy
+                Self::PennyweightTroy
             }
-            SymbolRule::pri_percent | SymbolRule::sec_percent => Atom::Percent,
+            SymbolRule::pri_percent | SymbolRule::sec_percent => Self::Percent,
             SymbolRule::pri_percent_of_slope | SymbolRule::sec_percent_of_slope => {
-                Atom::PercentOfSlope
+                Self::PercentOfSlope
             }
             SymbolRule::pri_peripheral_vascular_resistance_unit
             | SymbolRule::sec_peripheral_vascular_resistance_unit => {
-                Atom::PeripheralVascularResistanceUnit
+                Self::PeripheralVascularResistanceUnit
             }
             SymbolRule::pri_permeability_of_vacuum | SymbolRule::sec_permeability_of_vacuum => {
-                Atom::PermeabilityOfVacuum
+                Self::PermeabilityOfVacuum
             }
             SymbolRule::pri_permittivity_of_vacuum | SymbolRule::sec_permittivity_of_vacuum => {
-                Atom::PermittivityOfVacuum
+                Self::PermittivityOfVacuum
             }
-            SymbolRule::pri_phot | SymbolRule::sec_phot => Atom::Phot,
-            SymbolRule::pri_pica | SymbolRule::sec_pica => Atom::Pica,
-            SymbolRule::pri_pied | SymbolRule::sec_pied => Atom::Pied,
-            SymbolRule::pri_pint_british | SymbolRule::sec_pint_british => Atom::PintBritish,
-            SymbolRule::pri_pint_us | SymbolRule::sec_pint_us => Atom::PintUS,
+            SymbolRule::pri_phot | SymbolRule::sec_phot => Self::Phot,
+            SymbolRule::pri_pica | SymbolRule::sec_pica => Self::Pica,
+            SymbolRule::pri_pied | SymbolRule::sec_pied => Self::Pied,
+            SymbolRule::pri_pint_british | SymbolRule::sec_pint_british => Self::PintBritish,
+            SymbolRule::pri_pint_us | SymbolRule::sec_pint_us => Self::PintUS,
             SymbolRule::pri_planck_constant | SymbolRule::sec_planck_constant => {
-                Atom::PlanckConstant
+                Self::PlanckConstant
             }
             SymbolRule::pri_plaque_forming_units | SymbolRule::sec_plaque_forming_units => {
-                Atom::PlaqueFormingUnits
+                Self::PlaqueFormingUnits
             }
-            SymbolRule::pri_point | SymbolRule::sec_point => Atom::Point,
-            SymbolRule::pri_poise | SymbolRule::sec_poise => Atom::Poise,
-            SymbolRule::pri_pouce | SymbolRule::sec_pouce => Atom::Pouce,
+            SymbolRule::pri_point | SymbolRule::sec_point => Self::Point,
+            SymbolRule::pri_poise | SymbolRule::sec_poise => Self::Poise,
+            SymbolRule::pri_pouce | SymbolRule::sec_pouce => Self::Pouce,
             SymbolRule::pri_pound_apothecaries | SymbolRule::sec_pound_apothecaries => {
-                Atom::PoundApothecaries
+                Self::PoundApothecaries
             }
             SymbolRule::pri_pound_avoirdupois | SymbolRule::sec_pound_avoirdupois => {
-                Atom::PoundAvoirdupois
+                Self::PoundAvoirdupois
             }
             SymbolRule::pri_pound_force_avoirdupois | SymbolRule::sec_pound_force_avoirdupois => {
-                Atom::PoundForceAvoirdupois
+                Self::PoundForceAvoirdupois
             }
             SymbolRule::pri_pound_per_sqare_inch | SymbolRule::sec_pound_per_sqare_inch => {
-                Atom::PoundPerSqareInch
+                Self::PoundPerSqareInch
             }
-            SymbolRule::pri_pound_troy | SymbolRule::sec_pound_troy => Atom::PoundTroy,
-            SymbolRule::pri_printers_pica | SymbolRule::sec_printers_pica => Atom::PrintersPica,
-            SymbolRule::pri_printers_point | SymbolRule::sec_printers_point => Atom::PrintersPoint,
-            SymbolRule::pri_prism_diopter | SymbolRule::sec_prism_diopter => Atom::PrismDiopter,
+            SymbolRule::pri_pound_troy | SymbolRule::sec_pound_troy => Self::PoundTroy,
+            SymbolRule::pri_printers_pica | SymbolRule::sec_printers_pica => Self::PrintersPica,
+            SymbolRule::pri_printers_point | SymbolRule::sec_printers_point => Self::PrintersPoint,
+            SymbolRule::pri_prism_diopter | SymbolRule::sec_prism_diopter => Self::PrismDiopter,
             SymbolRule::pri_protein_nitrogen_unit | SymbolRule::sec_protein_nitrogen_unit => {
-                Atom::ProteinNitrogenUnit
+                Self::ProteinNitrogenUnit
             }
-            SymbolRule::pri_proton_mass | SymbolRule::sec_proton_mass => Atom::ProtonMass,
-            SymbolRule::pri_quart_british | SymbolRule::sec_quart_british => Atom::QuartBritish,
-            SymbolRule::pri_quart_us | SymbolRule::sec_quart_us => Atom::QuartUS,
+            SymbolRule::pri_proton_mass | SymbolRule::sec_proton_mass => Self::ProtonMass,
+            SymbolRule::pri_quart_british | SymbolRule::sec_quart_british => Self::QuartBritish,
+            SymbolRule::pri_quart_us | SymbolRule::sec_quart_us => Self::QuartUS,
             SymbolRule::pri_queen_annes_wine_gallon_us
-            | SymbolRule::sec_queen_annes_wine_gallon_us => Atom::QueenAnnesWineGallonUS,
-            SymbolRule::pri_radian | SymbolRule::sec_radian => Atom::Radian,
+            | SymbolRule::sec_queen_annes_wine_gallon_us => Self::QueenAnnesWineGallonUS,
+            SymbolRule::pri_radian | SymbolRule::sec_radian => Self::Radian,
             SymbolRule::pri_radiation_absorbed_dose | SymbolRule::sec_radiation_absorbed_dose => {
-                Atom::RadiationAbsorbedDose
+                Self::RadiationAbsorbedDose
             }
             SymbolRule::pri_radiation_equivalent_man | SymbolRule::sec_radiation_equivalent_man => {
-                Atom::RadiationEquivalentMan
+                Self::RadiationEquivalentMan
             }
             SymbolRule::pri_ramdens_chain_us | SymbolRule::sec_ramdens_chain_us => {
-                Atom::RamdensChainUS
+                Self::RamdensChainUS
             }
-            SymbolRule::pri_rod_british | SymbolRule::sec_rod_british => Atom::RodBritish,
-            SymbolRule::pri_rod_us | SymbolRule::sec_rod_us => Atom::RodUS,
-            SymbolRule::pri_roentgen | SymbolRule::sec_roentgen => Atom::Roentgen,
+            SymbolRule::pri_rod_british | SymbolRule::sec_rod_british => Self::RodBritish,
+            SymbolRule::pri_rod_us | SymbolRule::sec_rod_us => Self::RodUS,
+            SymbolRule::pri_roentgen | SymbolRule::sec_roentgen => Self::Roentgen,
             SymbolRule::pri_scruple_apothecaries | SymbolRule::sec_scruple_apothecaries => {
-                Atom::ScrupleApothecaries
+                Self::ScrupleApothecaries
             }
-            SymbolRule::pri_second | SymbolRule::sec_second => Atom::Second,
-            SymbolRule::pri_second_angle | SymbolRule::sec_second_angle => Atom::SecondAngle,
-            SymbolRule::pri_section | SymbolRule::sec_section => Atom::Section,
+            SymbolRule::pri_second | SymbolRule::sec_second => Self::Second,
+            SymbolRule::pri_second_angle | SymbolRule::sec_second_angle => Self::SecondAngle,
+            SymbolRule::pri_section | SymbolRule::sec_section => Self::Section,
             SymbolRule::pri_short_hundredweight_avoirdupois
             | SymbolRule::sec_short_hundredweight_avoirdupois => {
-                Atom::ShortHundredweightAvoirdupois
+                Self::ShortHundredweightAvoirdupois
             }
             SymbolRule::pri_short_ton_avoirdupois | SymbolRule::sec_short_ton_avoirdupois => {
-                Atom::ShortTonAvoirdupois
+                Self::ShortTonAvoirdupois
             }
-            SymbolRule::pri_siemens | SymbolRule::sec_siemens => Atom::Siemens,
-            SymbolRule::pri_sievert | SymbolRule::sec_sievert => Atom::Sievert,
-            SymbolRule::pri_smoot | SymbolRule::sec_smoot => Atom::Smoot,
-            SymbolRule::pri_somogyi_unit | SymbolRule::sec_somogyi_unit => Atom::SomogyiUnit,
-            SymbolRule::pri_spere | SymbolRule::sec_spere => Atom::Spere,
+            SymbolRule::pri_siemens | SymbolRule::sec_siemens => Self::Siemens,
+            SymbolRule::pri_sievert | SymbolRule::sec_sievert => Self::Sievert,
+            SymbolRule::pri_smoot | SymbolRule::sec_smoot => Self::Smoot,
+            SymbolRule::pri_somogyi_unit | SymbolRule::sec_somogyi_unit => Self::SomogyiUnit,
+            SymbolRule::pri_spere | SymbolRule::sec_spere => Self::Spere,
             SymbolRule::pri_square_foot_international
-            | SymbolRule::sec_square_foot_international => Atom::SquareFootInternational,
+            | SymbolRule::sec_square_foot_international => Self::SquareFootInternational,
             SymbolRule::pri_square_inch_international
-            | SymbolRule::sec_square_inch_international => Atom::SquareInchInternational,
-            SymbolRule::pri_square_mile_us | SymbolRule::sec_square_mile_us => Atom::SquareMileUS,
-            SymbolRule::pri_square_rod_us | SymbolRule::sec_square_rod_us => Atom::SquareRodUS,
+            | SymbolRule::sec_square_inch_international => Self::SquareInchInternational,
+            SymbolRule::pri_square_mile_us | SymbolRule::sec_square_mile_us => Self::SquareMileUS,
+            SymbolRule::pri_square_rod_us | SymbolRule::sec_square_rod_us => Self::SquareRodUS,
             SymbolRule::pri_square_yard_international
-            | SymbolRule::sec_square_yard_international => Atom::SquareYardInternational,
+            | SymbolRule::sec_square_yard_international => Self::SquareYardInternational,
             SymbolRule::pri_standard_acceleration_of_free_fall
             | SymbolRule::sec_standard_acceleration_of_free_fall => {
-                Atom::StandardAccelerationOfFreeFall
+                Self::StandardAccelerationOfFreeFall
             }
             SymbolRule::pri_standard_atmosphere | SymbolRule::sec_standard_atmosphere => {
-                Atom::StandardAtmosphere
+                Self::StandardAtmosphere
             }
-            SymbolRule::pri_steradian | SymbolRule::sec_steradian => Atom::Steradian,
-            SymbolRule::pri_stere | SymbolRule::sec_stere => Atom::Stere,
-            SymbolRule::pri_stilb | SymbolRule::sec_stilb => Atom::Stilb,
-            SymbolRule::pri_stokes | SymbolRule::sec_stokes => Atom::Stokes,
+            SymbolRule::pri_steradian | SymbolRule::sec_steradian => Self::Steradian,
+            SymbolRule::pri_stere | SymbolRule::sec_stere => Self::Stere,
+            SymbolRule::pri_stilb | SymbolRule::sec_stilb => Self::Stilb,
+            SymbolRule::pri_stokes | SymbolRule::sec_stokes => Self::Stokes,
             SymbolRule::pri_stone_avoirdupois | SymbolRule::sec_stone_avoirdupois => {
-                Atom::StoneAvoirdupois
+                Self::StoneAvoirdupois
             }
-            SymbolRule::pri_svedberg_unit | SymbolRule::sec_svedberg_unit => Atom::SvedbergUnit,
-            SymbolRule::pri_synodal_month | SymbolRule::sec_synodal_month => Atom::SynodalMonth,
-            SymbolRule::pri_tablespoon_us | SymbolRule::sec_tablespoon_us => Atom::TablespoonUS,
-            SymbolRule::pri_teaspoon_us | SymbolRule::sec_teaspoon_us => Atom::TeaspoonUS,
+            SymbolRule::pri_svedberg_unit | SymbolRule::sec_svedberg_unit => Self::SvedbergUnit,
+            SymbolRule::pri_synodal_month | SymbolRule::sec_synodal_month => Self::SynodalMonth,
+            SymbolRule::pri_tablespoon_us | SymbolRule::sec_tablespoon_us => Self::TablespoonUS,
+            SymbolRule::pri_teaspoon_us | SymbolRule::sec_teaspoon_us => Self::TeaspoonUS,
             SymbolRule::pri_technical_atmosphere | SymbolRule::sec_technical_atmosphere => {
-                Atom::TechnicalAtmosphere
+                Self::TechnicalAtmosphere
             }
-            SymbolRule::pri_tesla | SymbolRule::sec_tesla => Atom::Tesla,
-            SymbolRule::pri_tex | SymbolRule::sec_tex => Atom::Tex,
-            SymbolRule::pri_the_number_pi | SymbolRule::sec_the_number_pi => Atom::TheNumberPi,
+            SymbolRule::pri_tesla | SymbolRule::sec_tesla => Self::Tesla,
+            SymbolRule::pri_tex | SymbolRule::sec_tex => Self::Tex,
+            SymbolRule::pri_the_number_pi | SymbolRule::sec_the_number_pi => Self::TheNumberPi,
             SymbolRule::pri_the_number_ten_for_arbitrary_powers_caret
             | SymbolRule::sec_the_number_ten_for_arbitrary_powers_caret => {
-                Atom::TheNumberTenForArbitraryPowersCaret
+                Self::TheNumberTenForArbitraryPowersCaret
             }
             SymbolRule::pri_the_number_ten_for_arbitrary_powers_star
             | SymbolRule::sec_the_number_ten_for_arbitrary_powers_star => {
-                Atom::TheNumberTenForArbitraryPowersStar
+                Self::TheNumberTenForArbitraryPowersStar
             }
             SymbolRule::pri_thermochemical_british_thermal_unit
             | SymbolRule::sec_thermochemical_british_thermal_unit => {
-                Atom::ThermochemicalBritishThermalUnit
+                Self::ThermochemicalBritishThermalUnit
             }
             SymbolRule::pri_thermochemical_calorie | SymbolRule::sec_thermochemical_calorie => {
-                Atom::ThermochemicalCalorie
+                Self::ThermochemicalCalorie
             }
             SymbolRule::pri_tissue_culture_infectious_dose
-            | SymbolRule::sec_tissue_culture_infectious_dose => Atom::TissueCultureInfectiousDose,
-            SymbolRule::pri_todd_unit | SymbolRule::sec_todd_unit => Atom::ToddUnit,
-            SymbolRule::pri_tonne | SymbolRule::sec_tonne => Atom::Tonne,
-            SymbolRule::pri_township | SymbolRule::sec_township => Atom::Township,
-            SymbolRule::pri_tropical_year | SymbolRule::sec_tropical_year => Atom::TropicalYear,
+            | SymbolRule::sec_tissue_culture_infectious_dose => Self::TissueCultureInfectiousDose,
+            SymbolRule::pri_todd_unit | SymbolRule::sec_todd_unit => Self::ToddUnit,
+            SymbolRule::pri_tonne | SymbolRule::sec_tonne => Self::Tonne,
+            SymbolRule::pri_township | SymbolRule::sec_township => Self::Township,
+            SymbolRule::pri_tropical_year | SymbolRule::sec_tropical_year => Self::TropicalYear,
             SymbolRule::pri_tuberculin_unit | SymbolRule::sec_tuberculin_unit => {
-                Atom::TuberculinUnit
+                Self::TuberculinUnit
             }
             SymbolRule::pri_unified_atomic_mass_unit | SymbolRule::sec_unified_atomic_mass_unit => {
-                Atom::UnifiedAtomicMassUnit
+                Self::UnifiedAtomicMassUnit
             }
-            SymbolRule::pri_unit | SymbolRule::sec_unit => Atom::Unit,
+            SymbolRule::pri_unit | SymbolRule::sec_unit => Self::Unit,
             SymbolRule::pri_united_states_pharmacopeia_unit
-            | SymbolRule::sec_united_states_pharmacopeia_unit => Atom::UnitedStatesPharmacopeiaUnit,
+            | SymbolRule::sec_united_states_pharmacopeia_unit => Self::UnitedStatesPharmacopeiaUnit,
             SymbolRule::pri_velocity_of_light | SymbolRule::sec_velocity_of_light => {
-                Atom::VelocityOfLight
+                Self::VelocityOfLight
             }
-            SymbolRule::pri_volt | SymbolRule::sec_volt => Atom::Volt,
-            SymbolRule::pri_watt | SymbolRule::sec_watt => Atom::Watt,
-            SymbolRule::pri_weber | SymbolRule::sec_weber => Atom::Weber,
-            SymbolRule::pri_week | SymbolRule::sec_week => Atom::Week,
-            SymbolRule::pri_wood_unit | SymbolRule::sec_wood_unit => Atom::WoodUnit,
-            SymbolRule::pri_yard_british | SymbolRule::sec_yard_british => Atom::YardBritish,
+            SymbolRule::pri_volt | SymbolRule::sec_volt => Self::Volt,
+            SymbolRule::pri_watt | SymbolRule::sec_watt => Self::Watt,
+            SymbolRule::pri_weber | SymbolRule::sec_weber => Self::Weber,
+            SymbolRule::pri_week | SymbolRule::sec_week => Self::Week,
+            SymbolRule::pri_wood_unit | SymbolRule::sec_wood_unit => Self::WoodUnit,
+            SymbolRule::pri_yard_british | SymbolRule::sec_yard_british => Self::YardBritish,
             SymbolRule::pri_yard_international | SymbolRule::sec_yard_international => {
-                Atom::YardInternational
+                Self::YardInternational
             }
-            SymbolRule::pri_yard_us | SymbolRule::sec_yard_us => Atom::YardUS,
-            SymbolRule::pri_year | SymbolRule::sec_year => Atom::Year,
+            SymbolRule::pri_yard_us | SymbolRule::sec_yard_us => Self::YardUS,
+            SymbolRule::pri_year | SymbolRule::sec_year => Self::Year,
             _ => {
                 return Err(Error::BadFragment {
                     fragment: pair.as_span().as_str().to_string(),

@@ -37,26 +37,26 @@ impl Visit<TermRule> for Annotatable {
         match simple_unit {
             SimpleUnit::Prefixed { prefix, atom } => match pairs.next() {
                 Some(second) => match second.as_rule() {
-                    TermRule::exponent => Ok(Annotatable::PrefixedWithExponent {
+                    TermRule::exponent => Ok(Self::PrefixedWithExponent {
                         prefix,
                         atom,
                         exponent: Exponent::visit(second)?.0,
                     }),
                     _ => unreachable!(),
                 },
-                None => Ok(Annotatable::Prefixed { prefix, atom }),
+                None => Ok(Self::Prefixed { prefix, atom }),
             },
             SimpleUnit::Basic { atom } => match pairs.next() {
                 Some(second) => match second.as_rule() {
-                    TermRule::exponent => Ok(Annotatable::BasicWithExponent {
+                    TermRule::exponent => Ok(Self::BasicWithExponent {
                         atom,
                         exponent: Exponent::visit(second)?.0,
                     }),
                     _ => unreachable!(),
                 },
-                None => Ok(Annotatable::Basic { atom }),
+                None => Ok(Self::Basic { atom }),
             },
-            SimpleUnit::Unity => Ok(Annotatable::Unity),
+            SimpleUnit::Unity => Ok(Self::Unity),
         }
     }
 }

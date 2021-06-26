@@ -13,7 +13,6 @@ pub(crate) enum Symbol {
 
 impl Visit<Rule> for Symbol {
     fn visit(pair: Pair<'_, Rule>) -> Result<Self, Error> {
-        let input = pair.as_span();
         let mut pairs = pair.into_inner();
 
         let first_token = match pairs.next() {
@@ -41,7 +40,7 @@ impl Visit<Rule> for Symbol {
         let symbol = match first_token {
             FirstToken::PrimaryPrefix(prefix) => match pairs.next() {
                 Some(second) => match second.as_rule() {
-                    Rule::pri_atom => Symbol::PrimaryPrefixed {
+                    Rule::pri_atom => Self::PrimaryPrefixed {
                         prefix,
                         atom: { Atom::visit(second.into_inner().next().unwrap())? },
                     },
@@ -51,7 +50,7 @@ impl Visit<Rule> for Symbol {
             },
             FirstToken::SecondaryPrefix(prefix) => match pairs.next() {
                 Some(second) => match second.as_rule() {
-                    Rule::sec_atom => Symbol::SecondaryPrefixed {
+                    Rule::sec_atom => Self::SecondaryPrefixed {
                         prefix,
                         atom: Atom::visit(second.into_inner().next().unwrap())?,
                     },
@@ -59,8 +58,8 @@ impl Visit<Rule> for Symbol {
                 },
                 None => unreachable!(),
             },
-            FirstToken::PrimaryAtom(atom) => Symbol::PrimaryBasic { atom },
-            FirstToken::SecondaryAtom(atom) => Symbol::SecondaryBasic { atom },
+            FirstToken::PrimaryAtom(atom) => Self::PrimaryBasic { atom },
+            FirstToken::SecondaryAtom(atom) => Self::SecondaryBasic { atom },
         };
 
         match pairs.next() {

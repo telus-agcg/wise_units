@@ -6,6 +6,6 @@ pub(super) type Factor = u32;
 
 impl Visit<TermRule> for Factor {
     fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
-        pair.as_span().as_str().parse::<u32>().map_err(Error::from)
+        pair.as_span().as_str().parse::<Self>().map_err(Error::from)
     }
 }

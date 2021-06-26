@@ -17,7 +17,7 @@ impl Visit<Rule> for MainTerm {
         match pairs.next() {
             Some(first) => match first.as_rule() {
                 Rule::term => {
-                    return Ok(MainTerm {
+                    return Ok(Self {
                         terms: AstTerm::visit(first)?.finish(),
                     });
                 }
@@ -37,7 +37,7 @@ impl Visit<Rule> for MainTerm {
                     // If we're here it's because there was a leading slash, so invert.
                     terms.invert();
 
-                    Ok(MainTerm { terms })
+                    Ok(Self { terms })
                 }
                 _ => unreachable!(),
             },

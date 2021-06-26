@@ -250,7 +250,7 @@ mod tests {
                 let retrieved_value = measurement_ffi::get_measurement_value(measurement);
                 let retrieved_unit = measurement_ffi::get_measurement_unit(measurement);
 
-                assert_eq!(scalar, retrieved_value);
+                approx::assert_relative_eq!(scalar, retrieved_value);
                 assert_eq!(*unit, *retrieved_unit);
 
                 measurement_ffi::measurement_free(measurement);
