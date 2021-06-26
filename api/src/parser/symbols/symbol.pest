@@ -8,11 +8,11 @@ symbol = ${
 }
 
 primary_symbol = _{
-    (soi ~ pri_atom ~ eoi) | (soi ~ pri_prefix ~ pri_atom ~ eoi)
+    (SOI ~ pri_atom ~ EOI) | (SOI ~ pri_prefix ~ pri_atom ~ EOI)
 }
 
 secondary_symbol = _{
-    (soi ~ sec_atom ~ eoi) | (soi ~ sec_prefix ~ sec_atom ~ eoi)
+    (SOI ~ sec_atom ~ EOI) | (SOI ~ sec_prefix ~ sec_atom ~ EOI)
 }
 
 pri_prefix = {

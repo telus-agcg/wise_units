@@ -13,10 +13,10 @@ ffi_common = { version = "0.2", registry = "agrian-registry" }
 wise_units = { version = "^0.16.0", registry = "agrian-registry" }
 
 [build-dependencies]
-cbindgen = "0.16"
+cbindgen = "0.19"
 
 [dev-dependencies]
-approx = "0.4"
+approx = "0.5"
 
 [lib]
 crate-type = ["staticlib", "rlib", "cdylib"]

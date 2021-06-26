@@ -1,27 +1,27 @@
+use crate::parser::{
+    symbols::symbol_parser::Rule as SymbolRule, terms::term_parser::Rule as TermRule,
+};
+use pest::error::Error as PestError;
+
 /// Errors when trying to convert between types that aren't commensurable.
 ///
 #[derive(Clone, thiserror::Error, Debug, PartialEq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub enum Error {
-    #[error("Unable to parse expression: {}", expression)]
-    UnableToParse { expression: String },
+    #[error(transparent)]
+    UnableToParseTerm(#[from] PestError<TermRule>),
 
+    #[error(transparent)]
+    UnableToParseSymbol(#[from] PestError<SymbolRule>),
+
+    #[error(transparent)]
+    UnableToParseInteger(#[from] std::num::ParseIntError),
+
+    #[error("Unknown unit string fragment: {fragment} ({position})")]
+    BadFragment { fragment: String, position: usize },
+
+    /// Indicates the whole unit string/expression is bad.
+    ///
     #[error("Unknown unit string: {0}")]
     UnknownUnitString(String),
-}
-
-impl<'i, R: ::pest::RuleType> ::std::convert::From<pest::Error<'i, R>> for Error {
-    fn from(pest_error: pest::Error<'i, R>) -> Self {
-        Self::UnableToParse {
-            expression: pest_error.to_string(),
-        }
-    }
-}
-
-impl ::std::convert::From<::std::num::ParseIntError> for Error {
-    fn from(error: ::std::num::ParseIntError) -> Self {
-        Self::UnableToParse {
-            expression: error.to_string(),
-        }
-    }
 }

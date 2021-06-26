@@ -1,11 +1,12 @@
 // <main-term>
-main_term = ${ soi ~ (slash ~ term | term) ~ eoi }
+main_term = ${ SOI ~ (slash ~ term | term) ~ EOI }
 
 // <term>
 term = {
-    component ~ "." ~ term | component ~ slash ~ term | component
+    component ~ dot ~ term | component ~ slash ~ term | component
 }
 
+dot = { "." }
 slash = { "/" }
 
 // <component>
@@ -46,9 +47,9 @@ symbol_char = _{
 }
 
 exponent = { sign? ~ digits }
-factor = { '0'..'9'+ ~ !not_factor  }
+factor = { ASCII_DIGIT+ ~ !not_factor  }
 not_factor = _{ "*" | "^" }
-digits = { '0'..'9'+ }
+digits = { ASCII_DIGIT+ }
 sign = { "-" | "+" }
 
 // vim:ft=rust

@@ -1,7 +1,12 @@
+use super::{Error, Visit};
 use crate::{
-    parser::{definition::Definition, ucum_symbol::UcumSymbol, Classification},
+    parser::{
+        definition::Definition, symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol,
+        Classification,
+    },
     unit::Unit,
 };
+use pest::iterators::Pair;
 use std::fmt;
 
 const ATTO: f64 = 1.0e-18;
@@ -199,6 +204,41 @@ impl UcumSymbol for Prefix {
         let definition = Definition::default();
 
         Unit::from(definition.terms().clone())
+    }
+}
+
+impl Visit<Rule> for Prefix {
+    fn visit(pair: Pair<'_, Rule>) -> Result<Prefix, Error> {
+        let prefix = match pair.as_rule() {
+            Rule::pri_atto | Rule::sec_atto => Prefix::Atto,
+            Rule::pri_centi | Rule::sec_centi => Prefix::Centi,
+            Rule::pri_deci | Rule::sec_deci => Prefix::Deci,
+            Rule::pri_deka | Rule::sec_deka => Prefix::Deka,
+            Rule::pri_exa | Rule::sec_exa => Prefix::Exa,
+            Rule::pri_femto | Rule::sec_femto => Prefix::Femto,
+            Rule::pri_gibi | Rule::sec_gibi => Prefix::Gibi,
+            Rule::pri_giga | Rule::sec_giga => Prefix::Giga,
+            Rule::pri_hecto | Rule::sec_hecto => Prefix::Hecto,
+            Rule::pri_kilo | Rule::sec_kilo => Prefix::Kilo,
+            Rule::pri_mebi | Rule::sec_mebi => Prefix::Mebi,
+            Rule::pri_mega | Rule::sec_mega => Prefix::Mega,
+            Rule::pri_micro | Rule::sec_micro => Prefix::Micro,
+            Rule::pri_milli | Rule::sec_milli => Prefix::Milli,
+            Rule::pri_nano | Rule::sec_nano => Prefix::Nano,
+            Rule::pri_peta | Rule::sec_peta => Prefix::Peta,
+            Rule::pri_tebi | Rule::sec_tebi => Prefix::Tebi,
+            Rule::pri_tera | Rule::sec_tera => Prefix::Tera,
+            Rule::pri_yocto | Rule::sec_yocto => Prefix::Yocto,
+            Rule::pri_yotta | Rule::sec_yotta => Prefix::Yotta,
+            Rule::pri_zepto | Rule::sec_zepto => Prefix::Zepto,
+            Rule::pri_zetta | Rule::sec_zetta => Prefix::Zetta,
+            _ => {
+                eprintln!("prefix wat");
+                return Err(Error::UnknownUnitString(pair.as_str().to_string()));
+            }
+        };
+
+        Ok(prefix)
     }
 }
 

@@ -1,41 +1,33 @@
 // Internal structs for mapping parser Rule data to an intermediate
 // representation of a Unit.
 pub(self) mod annotatable;
+pub(self) mod annotation;
 pub(self) mod ast_term;
 pub(self) mod basic_component;
 pub(self) mod component;
+pub(self) mod digits;
+pub(self) mod exponent;
+pub(self) mod factor;
 pub(self) mod finishable;
 pub(self) mod main_term;
 pub(self) mod simple_unit;
 
-use self::annotatable::Annotatable;
-use self::ast_term::AstTerm;
-use self::basic_component::BasicComponent;
-use self::component::Component;
-use self::finishable::Finishable;
-use self::main_term::MainTerm;
-use self::simple_unit::SimpleUnit;
-use crate::invert::Invert;
-use crate::parser::atom::Atom;
-use crate::parser::error::Error;
-use crate::parser::prefix::Prefix;
-use crate::parser::symbols::mapper as symbol_mapper;
-use crate::parser::symbols::symbol_parser::Rule as SymbolRule;
-use crate::parser::symbols::symbol_parser::SymbolParser;
-use crate::parser::term::Term;
-use crate::parser::terms::term_parser::Rule;
+use self::{
+    annotatable::Annotatable, annotation::Annotation, ast_term::AstTerm,
+    basic_component::BasicComponent, component::Component, digits::Digits, exponent::Exponent,
+    factor::Factor, finishable::Finishable, main_term::MainTerm, simple_unit::SimpleUnit,
+};
+use crate::parser::{terms::term_parser::Rule, Atom, Error, Prefix, Term, Visit};
 use pest::iterators::{Pair, Pairs};
-use pest::Parser;
 
 pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
     fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Vec<Term>, Error> {
         let main_term = if let Rule::main_term = pair.as_rule() {
-            visit_main_term(pair)?
+            MainTerm::visit(pair)?
         } else {
-            let e = Error::UnableToParse {
-                expression: pair.as_str().to_string(),
-            };
-            return Err(e);
+            return Err(Error::UnknownUnitString(
+                pair.as_span().as_str().to_string(),
+            ));
         };
 
         let mut terms: Vec<Term> = main_term.into();
@@ -48,257 +40,6 @@ pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
         Some(pair) => Ok(visit_pairs(pair)?),
         None => Ok(vec![]),
     }
-}
-
-fn visit_digits(pair: Pair<'_, Rule>) -> Result<i32, Error> {
-    let span = pair.into_span();
-    let string = span.as_str();
-
-    string.parse::<i32>().map_err(|e| Error::UnableToParse {
-        expression: e.to_string(),
-    })
-}
-
-fn visit_exponent(pair: Pair<'_, Rule>) -> Result<Option<i32>, Error> {
-    let mut e: Option<i32> = None;
-
-    for inner_pair in pair.into_inner() {
-        match inner_pair.as_rule() {
-            Rule::sign => {
-                let span = inner_pair.into_span();
-                let string = span.as_str();
-
-                match string {
-                    "+" => {}
-                    "-" => {
-                        e = match e {
-                            Some(exponent) => Some(-exponent),
-                            None => Some(-1),
-                        };
-                    }
-                    _ => {
-                        let error = Error::UnableToParse {
-                            expression: string.to_string(),
-                        };
-                        return Err(error);
-                    }
-                }
-            }
-            Rule::digits => {
-                let new_digits = visit_digits(inner_pair)?;
-
-                match e {
-                    Some(exponent) => {
-                        e = Some(exponent * new_digits);
-                    }
-                    None => e = Some(new_digits),
-                }
-            }
-            _ => {
-                let error = Error::UnableToParse {
-                    expression: inner_pair.as_str().to_string(),
-                };
-                return Err(error);
-            }
-        }
-    }
-
-    Ok(e)
-}
-
-fn visit_simple_unit(pair: Pair<'_, Rule>) -> Result<SimpleUnit, Error> {
-    let mut prefix: Option<Prefix> = None;
-    let mut atom: Option<Atom> = None;
-    let span = pair.into_span();
-    let string = span.as_str();
-
-    if string == "1" {
-        return Ok(SimpleUnit { prefix, atom });
-    }
-
-    if let Ok(mut symbol_pairs) = SymbolParser::parse(SymbolRule::symbol, string) {
-        let symbol = symbol_mapper::map(symbol_pairs.next().unwrap())?;
-        atom = symbol.atom;
-        prefix = symbol.prefix;
-    } else {
-        return Err(Error::UnableToParse {
-            expression: string.to_string(),
-        });
-    };
-
-    Ok(SimpleUnit { prefix, atom })
-}
-
-fn visit_annotatable(pair: Pair<'_, Rule>) -> Result<Annotatable, Error> {
-    let mut prefix: Option<Prefix> = None;
-    let mut atom: Option<Atom> = None;
-    let mut exponent: Option<i32> = None;
-
-    for inner_pair in pair.into_inner() {
-        match inner_pair.as_rule() {
-            Rule::simple_unit => {
-                let simple_unit = visit_simple_unit(inner_pair)?;
-
-                atom = simple_unit.atom;
-                prefix = simple_unit.prefix;
-            }
-            Rule::exponent => {
-                exponent = visit_exponent(inner_pair)?;
-            }
-            _ => {
-                let error = Error::UnableToParse {
-                    expression: inner_pair.as_str().to_string(),
-                };
-                return Err(error);
-            }
-        }
-    }
-
-    Ok(Annotatable {
-        prefix,
-        atom,
-        exponent,
-    })
-}
-
-fn visit_annotation(pair: Pair<'_, Rule>) -> String {
-    pair.into_span().as_str().to_string()
-}
-
-fn visit_factor(pair: Pair<'_, Rule>) -> Result<u32, Error> {
-    let span = pair.into_span();
-    let string = span.as_str();
-
-    string.parse::<u32>().map_err(|e| Error::UnableToParse {
-        expression: e.to_string(),
-    })
-}
-
-fn visit_basic_component(pair: Pair<'_, Rule>) -> Result<BasicComponent, Error> {
-    let mut bc = BasicComponent::default();
-
-    for inner_pair in pair.into_inner() {
-        match inner_pair.as_rule() {
-            Rule::annotatable => {
-                let annotatable = visit_annotatable(inner_pair)?;
-
-                bc.prefix = annotatable.prefix;
-                bc.atom = annotatable.atom;
-                bc.exponent = annotatable.exponent;
-            }
-            Rule::annotation => {
-                bc.annotation = Some(visit_annotation(inner_pair));
-            }
-            Rule::factor => {
-                bc.factor = Some(visit_factor(inner_pair)?);
-            }
-            Rule::term => {
-                let ast_term = visit_term(inner_pair)?;
-
-                bc.terms = ast_term.finish();
-            }
-            _ => {
-                let error = Error::UnableToParse {
-                    expression: inner_pair.as_str().to_string(),
-                };
-                return Err(error);
-            }
-        }
-    }
-
-    Ok(bc)
-}
-
-fn visit_component(pair: Pair<'_, Rule>) -> Result<Component, Error> {
-    let mut factor: Option<u32> = None;
-    let mut terms: Vec<Term> = vec![];
-
-    for inner_pair in pair.into_inner() {
-        match inner_pair.as_rule() {
-            Rule::factor => {
-                factor = Some(visit_factor(inner_pair)?);
-            }
-            Rule::basic_component => {
-                let bc = visit_basic_component(inner_pair)?;
-
-                terms = bc.finish();
-            }
-            _ => {
-                let error = Error::UnableToParse {
-                    expression: inner_pair.as_str().to_string(),
-                };
-                return Err(error);
-            }
-        }
-    }
-
-    Ok(Component { factor, terms })
-}
-
-fn visit_term(pair: Pair<'_, Rule>) -> Result<AstTerm, Error> {
-    let mut has_slash = false;
-    let mut component: Option<Component> = None;
-    let mut terms: Vec<Term> = vec![];
-
-    for inner_pair in pair.into_inner() {
-        match inner_pair.as_rule() {
-            Rule::term => {
-                let mut new_terms: Vec<Term> = visit_term(inner_pair)?.finish();
-
-                if has_slash {
-                    new_terms.invert();
-                    has_slash = false;
-                }
-
-                terms = new_terms;
-            }
-            Rule::slash => {
-                has_slash = true;
-            }
-            Rule::component => {
-                component = Some(visit_component(inner_pair)?);
-            }
-            _ => {
-                let error = Error::UnableToParse {
-                    expression: inner_pair.as_str().to_string(),
-                };
-                return Err(error);
-            }
-        }
-    }
-
-    Ok(AstTerm { component, terms })
-}
-
-fn visit_main_term(pair: Pair<'_, Rule>) -> Result<MainTerm, Error> {
-    let mut terms: Vec<Term> = vec![];
-    let mut has_slash = false;
-
-    for inner_pair in pair.into_inner() {
-        match inner_pair.as_rule() {
-            Rule::slash => {
-                has_slash = true;
-            }
-            Rule::term => {
-                let mut new_terms: Vec<Term> = visit_term(inner_pair)?.finish();
-
-                if has_slash {
-                    new_terms.invert();
-                    has_slash = false;
-                }
-
-                terms = new_terms;
-            }
-            _ => {
-                let error = Error::UnableToParse {
-                    expression: inner_pair.as_str().to_string(),
-                };
-                return Err(error);
-            }
-        }
-    }
-
-    Ok(MainTerm { terms })
 }
 
 #[cfg(test)]

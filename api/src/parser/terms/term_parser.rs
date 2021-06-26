@@ -297,6 +297,7 @@ mod tests {
                                 ])
                             ])
                         ]),
+                        dot(20, 21),
                         term(21, 27, [
                             component(21, 27, [
                                 basic_component(21, 27, [
@@ -327,6 +328,7 @@ mod tests {
                            ])
                         ])
                     ]),
+                    dot(8, 9),
                     term(9, 24, [
                         component(9, 15, [
                             basic_component(9, 15, [
@@ -375,7 +377,8 @@ mod tests {
                                ])
                             ])
                         ])
-                    ])
+                    ]),
+                    EOI(3, 3)
                 ])
             ]
         };
@@ -393,7 +396,8 @@ mod tests {
                                 factor(1, 2)
                             ])
                         ])
-                    ])
+                    ]),
+                    EOI(2, 2)
                 ])
             ]
         }
