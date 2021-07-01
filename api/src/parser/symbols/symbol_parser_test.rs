@@ -149,14 +149,14 @@ fn valid_atom_with_possible_matching_prefix_and_atom() {
         parser: SymbolParser,
         input: "cal",
         rule: Rule::symbol,
-        tokens: [symbol(0, 3, [pri_atom(0, 3, [pri_calorie(0, 3)])])]
+        tokens: [symbol(0, 3, [pri_atom(0, 3, [pri_calorie(0, 3)]), EOI(3, 3)])]
     }
 
     parses_to! {
         parser: SymbolParser,
         input: "CAL",
         rule: Rule::symbol,
-        tokens: [symbol(0, 3, [sec_atom(0, 3, [sec_calorie(0, 3)])])]
+        tokens: [symbol(0, 3, [sec_atom(0, 3, [sec_calorie(0, 3)]), EOI(3, 3)])]
     }
 }
 
@@ -169,7 +169,8 @@ fn valid_prefix_and_atom_with_possible_matching_atoms() {
         tokens: [
             symbol(0, 2, [
                    pri_prefix(0, 1, [pri_deci(0, 1)]),
-                   pri_atom(1, 2, [pri_meter(1, 2)])
+                   pri_atom(1, 2, [pri_meter(1, 2)]),
+                   EOI(2, 2)
             ])
         ]
     }
@@ -181,7 +182,8 @@ fn valid_prefix_and_atom_with_possible_matching_atoms() {
         tokens: [
             symbol(0, 2, [
                    sec_prefix(0, 1, [sec_deci(0, 1)]),
-                   sec_atom(1, 2, [sec_meter(1, 2)])
+                   sec_atom(1, 2, [sec_meter(1, 2)]),
+                   EOI(2, 2)
             ])
         ]
     }

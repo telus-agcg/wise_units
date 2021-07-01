@@ -23,6 +23,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - _BREAKING_ (maybe?): `impl<'a, 'b> IsCompatibleWith<&'b [Term]> for &'a [Term]>` is now
     `impl IsCompatibleWith for Vec<Term>`.
   - _BREAKING_ (maybe?): `impl<'a> Compsable for &'a [Term]` is now `impl Composable for Vec<Term>`.
+- Updated `pest` to `2.0`
+- Refactored parser.
 - Made functions `const`:
   - `Atom::property()`
   - `Composition::new()`
@@ -35,6 +37,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `Neper`
   - `MeterPerSquareSecondsPerSquareRootOfHertz`
   - `BitLogarithmusDualis`
+- Split `parser::Error::UnableToParse` into new variants:
+  1. `Error::UnableToParseTerm`
+  1. `Error::UnableToParseSymbol`
+  1. `Error::UnableToParseInteger`
+  1. `Error::BadFragment`
 - `custom_ffi::clone_unit()` and `custom_ffi::get_unit_expression()` are now marked `unsafe`.
 - Used [typos](https://github.com/crate-ci/typos) to find and fix typos. This included some internal
   types.

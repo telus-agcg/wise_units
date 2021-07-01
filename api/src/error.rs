@@ -6,7 +6,7 @@ pub enum Error {
     #[error("Units are not compatible: {lhs:?}, {rhs:?}")]
     IncompatibleUnitTypes { lhs: String, rhs: String },
 
-    #[error("{0}")]
+    #[error(transparent)]
     ParsingFailed(#[from] ParserError),
 
     #[error("Operation caused a divide by 0")]

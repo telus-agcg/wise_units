@@ -6,7 +6,7 @@ edition = "2018"
 publish = false
 
 [dependencies]
-handlebars = "3.0"
+handlebars = "4.0"
 heck = "0.3"
 lazy_static = "1.0"
 log = "0.4"
