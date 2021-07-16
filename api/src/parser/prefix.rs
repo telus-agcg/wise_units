@@ -1,6 +1,12 @@
-use crate::parser::ucum_symbol::UcumSymbol;
-use crate::parser::{definition::Definition, Classification};
-use crate::unit::Unit;
+use super::{Error, Visit};
+use crate::{
+    parser::{
+        definition::Definition, symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol,
+        Classification,
+    },
+    unit::Unit,
+};
+use pest::iterators::Pair;
 use std::fmt;
 
 const ATTO: f64 = 1.0e-18;
@@ -197,7 +203,42 @@ impl UcumSymbol for Prefix {
     fn definition_unit(&self) -> Unit {
         let definition = Definition::default();
 
-        definition.terms().into()
+        Unit::from(definition.terms().clone())
+    }
+}
+
+impl Visit<Rule> for Prefix {
+    fn visit(pair: Pair<'_, Rule>) -> Result<Self, Error> {
+        let prefix = match pair.as_rule() {
+            Rule::pri_atto | Rule::sec_atto => Self::Atto,
+            Rule::pri_centi | Rule::sec_centi => Self::Centi,
+            Rule::pri_deci | Rule::sec_deci => Self::Deci,
+            Rule::pri_deka | Rule::sec_deka => Self::Deka,
+            Rule::pri_exa | Rule::sec_exa => Self::Exa,
+            Rule::pri_femto | Rule::sec_femto => Self::Femto,
+            Rule::pri_gibi | Rule::sec_gibi => Self::Gibi,
+            Rule::pri_giga | Rule::sec_giga => Self::Giga,
+            Rule::pri_hecto | Rule::sec_hecto => Self::Hecto,
+            Rule::pri_kilo | Rule::sec_kilo => Self::Kilo,
+            Rule::pri_mebi | Rule::sec_mebi => Self::Mebi,
+            Rule::pri_mega | Rule::sec_mega => Self::Mega,
+            Rule::pri_micro | Rule::sec_micro => Self::Micro,
+            Rule::pri_milli | Rule::sec_milli => Self::Milli,
+            Rule::pri_nano | Rule::sec_nano => Self::Nano,
+            Rule::pri_peta | Rule::sec_peta => Self::Peta,
+            Rule::pri_tebi | Rule::sec_tebi => Self::Tebi,
+            Rule::pri_tera | Rule::sec_tera => Self::Tera,
+            Rule::pri_yocto | Rule::sec_yocto => Self::Yocto,
+            Rule::pri_yotta | Rule::sec_yotta => Self::Yotta,
+            Rule::pri_zepto | Rule::sec_zepto => Self::Zepto,
+            Rule::pri_zetta | Rule::sec_zetta => Self::Zetta,
+            _ => {
+                eprintln!("prefix wat");
+                return Err(Error::UnknownUnitString(pair.as_str().to_string()));
+            }
+        };
+
+        Ok(prefix)
     }
 }
 

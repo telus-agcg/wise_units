@@ -37,7 +37,7 @@ impl Term {
     /// Creates a new `Term` that's equivalent to the unit "1".
     ///
     #[must_use]
-    pub fn new_unity() -> Self {
+    pub const fn new_unity() -> Self {
         Self {
             atom: None,
             prefix: None,
@@ -74,7 +74,7 @@ impl Term {
     /// `annotation` certainly makes sense, but does not impact the value of anything.
     ///
     #[must_use]
-    pub fn has_value(&self) -> bool {
+    pub const fn has_value(&self) -> bool {
         self.factor.is_some() || self.atom.is_some() || self.annotation.is_some()
     }
 
@@ -82,7 +82,7 @@ impl Term {
     /// (since `None` is analogous to an exponent of 1).
     ///
     #[must_use]
-    pub fn exponent_is_positive(&self) -> bool {
+    pub const fn exponent_is_positive(&self) -> bool {
         match self.exponent {
             Some(e) => e.is_positive(),
             // None is analogous to an exponent of 1.
@@ -94,7 +94,7 @@ impl Term {
     /// (since `None` is analogous to an exponent of 1).
     ///
     #[must_use]
-    pub fn exponent_is_negative(&self) -> bool {
+    pub const fn exponent_is_negative(&self) -> bool {
         match self.exponent {
             Some(e) => e.is_negative(),
             // None is analogous to an exponent of 1.
@@ -112,10 +112,7 @@ impl Term {
 
     #[must_use]
     pub fn factor_as_u32(&self) -> u32 {
-        match self.factor {
-            Some(f) => f,
-            None => 1,
-        }
+        self.factor.unwrap_or(1)
     }
 }
 

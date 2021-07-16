@@ -70,7 +70,7 @@ macro_rules! def_add_dimension {
 
 impl Composition {
     #[must_use]
-    pub fn new(dimension: Dimension, exponent: i32) -> Self {
+    pub const fn new(dimension: Dimension, exponent: i32) -> Self {
         match dimension {
             Dimension::ElectricCharge => Self::new_electric_charge(exponent),
             Dimension::Length => Self::new_length(exponent),
@@ -218,7 +218,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub fn is_empty(&self) -> bool {
+    pub const fn is_empty(&self) -> bool {
         self.electric_charge.is_none()
             && self.length.is_none()
             && self.luminous_intensity.is_none()
@@ -357,7 +357,7 @@ def_mul_exponent!(mul_time, time);
 /// Used internally for disallowing setting any of the dimensions' exponents to 0 (it should
 /// be `None` in that case).
 ///
-fn set_exponent(exponent: i32) -> Option<i32> {
+const fn set_exponent(exponent: i32) -> Option<i32> {
     if exponent == 0 {
         None
     } else {

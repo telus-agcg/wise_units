@@ -5,7 +5,7 @@ use crate::parser::Composable;
 /// does not enforce that.
 ///
 pub trait IsCompatibleWith<RHS = Self> {
-    fn is_compatible_with(self, rhs: RHS) -> bool;
+    fn is_compatible_with(&self, rhs: &RHS) -> bool;
 }
 
 /// Marker trait to allow for auto-implementing `IsCompatibleWith` using the default implemntation.
@@ -20,7 +20,7 @@ where
     U: Composable + DefaultCompatibility,
 {
     #[inline]
-    fn is_compatible_with(self, rhs: U) -> bool {
+    fn is_compatible_with(&self, rhs: &U) -> bool {
         self.composition() == rhs.composition()
     }
 }

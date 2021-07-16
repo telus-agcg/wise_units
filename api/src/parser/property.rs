@@ -201,7 +201,7 @@ impl Property {
                 vec![
                     Atom::InternationalUnit,
                     Atom::InternationalUnitSecondary,
-                    Atom::ArbitaryUnit,
+                    Atom::ArbitraryUnit,
                     Atom::UnitedStatesPharmacopeiaUnit,
                 ]
             },

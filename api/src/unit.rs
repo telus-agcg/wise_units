@@ -29,7 +29,7 @@ use crate::parser::Term;
 #[cfg_attr(feature = "cffi", derive(FFI), ffi(custom = "src/unit/custom_ffi.rs"))]
 #[derive(Clone, Debug)]
 pub struct Unit {
-    pub terms: Vec<Term>,
+    terms: Vec<Term>,
 }
 
 /// A `Unit` is the piece of data that represents a *valid* UCUM unit or
@@ -61,6 +61,13 @@ impl Unit {
         Self {
             terms: vec![unity_term],
         }
+    }
+
+    /// Accessor for the `Term`s used that make up this `Unit`.
+    ///
+    #[must_use]
+    pub const fn terms(&self) -> &Vec<Term> {
+        &self.terms
     }
 
     /// A `Unit` is a unity `Unit` if represents "1", which technically means
@@ -188,7 +195,7 @@ mod tests {
         fn test_custom_and_derived_ffi() {
             let expression = "kg/[lb_av]";
             let unit = custom_ffi::unit_init(ffi_common::ffi_string!(expression));
-            let c_expression = custom_ffi::get_unit_expression(unit);
+            let c_expression = unsafe { custom_ffi::get_unit_expression(unit) };
             assert_eq!(expression, ffi_common::string::string_from_c(c_expression));
             unsafe { unit_ffi::unit_free(unit) };
         }

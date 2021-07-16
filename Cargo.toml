@@ -5,6 +5,7 @@ members = [
   "definition_fetcher",
   "ffi",
 ]
+resolver = "2"
 
 # [patch."agrian-registry".ffi_common]
 # # path = "../ffi_common/ffi_common"

@@ -1,6 +1,5 @@
 use super::RustAtomList;
 use std::collections::HashSet;
-use std::iter::FromIterator;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustClassificationList {
@@ -22,7 +21,7 @@ fn unique_classification_names(atom_list: &RustAtomList) -> Vec<String> {
         .map(|rust_unit| rust_unit.classification.clone())
         .collect();
 
-    let mut type_names = Vec::from_iter(type_names.into_iter());
+    let mut type_names = type_names.into_iter().collect::<Vec<_>>();
     type_names.sort();
 
     type_names

@@ -1,15 +1,42 @@
-use crate::parser::{Atom, Prefix};
+use super::{Atom, Error, Prefix, Visit};
+use crate::parser::{
+    symbols::{
+        mapper as symbol_mapper,
+        symbol_parser::{Rule as SymbolRule, SymbolParser},
+        Symbol,
+    },
+    terms::term_parser::Rule as TermRule,
+};
+use pest::{iterators::Pair, Parser};
 
-pub(super) struct SimpleUnit {
-    pub(super) prefix: Option<Prefix>,
-    pub(super) atom: Option<Atom>,
+pub(super) enum SimpleUnit {
+    Prefixed { prefix: Prefix, atom: Atom },
+    Basic { atom: Atom },
+    Unity,
 }
 
-impl Default for SimpleUnit {
-    fn default() -> Self {
-        Self {
-            prefix: None,
-            atom: None,
+impl Visit<TermRule> for SimpleUnit {
+    fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
+        let string = pair.as_span().as_str();
+
+        if string == "1" {
+            return Ok(Self::Unity);
+        }
+
+        if let Ok(mut symbol_pairs) = SymbolParser::parse(SymbolRule::symbol, string) {
+            match symbol_mapper::map(symbol_pairs.next().unwrap())? {
+                Symbol::PrimaryPrefixed { prefix, atom }
+                | Symbol::SecondaryPrefixed { prefix, atom } => Ok(Self::Prefixed { prefix, atom }),
+                Symbol::PrimaryBasic { atom } | Symbol::SecondaryBasic { atom } => {
+                    Ok(Self::Basic { atom })
+                }
+                Symbol::Unity => Ok(Self::Unity),
+            }
+        } else {
+            Err(Error::BadFragment {
+                fragment: string.to_string(),
+                position: pair.as_span().start(),
+            })
         }
     }
 }

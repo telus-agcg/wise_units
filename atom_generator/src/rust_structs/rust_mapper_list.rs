@@ -16,10 +16,10 @@ impl<'a> From<&'a RustAtomList> for RustMapperList {
             let key = rust_unit.type_name.clone();
             let primary_rule_name = super::build_pest_rule_name("pri", &key);
 
-            let secondary_rule_name = match rust_unit.secondary_code {
-                Some(ref _sc) => Some(super::build_pest_rule_name("sec", &key)),
-                None => None,
-            };
+            let secondary_rule_name = rust_unit
+                .secondary_code
+                .as_ref()
+                .map(|_sc| super::build_pest_rule_name("sec", &key));
 
             let mapping_value = RustMappingValue {
                 primary_rule_name,

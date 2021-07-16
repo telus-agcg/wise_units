@@ -33,7 +33,7 @@ impl Definition {
         self.value
     }
 
-    pub(crate) fn terms(&self) -> &[Term] {
+    pub(crate) const fn terms(&self) -> &Vec<Term> {
         &self.terms
     }
 

@@ -43,7 +43,7 @@ pub unsafe extern "C" fn measurement_new(
 ///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_destroy(data: *const Measurement) {
-    let _ = Box::from_raw(data as *mut Measurement);
+    drop(Box::from_raw(data as *mut Measurement));
 }
 
 /// Essentially checks if the two `Measurement`'s scalar values are equal.
@@ -75,7 +75,7 @@ pub unsafe extern "C" fn measurement_partial_eq(
 pub unsafe extern "C" fn measurement_get_unit(data: *const Measurement) -> *const Unit {
     let measurement = &*data;
     // Passing back a clone in this case since the Unit has a lifetime equal to the Measurement.
-    let unit = measurement.unit.clone();
+    let unit = measurement.unit().clone();
     Box::into_raw(Box::new(unit))
 }
 
@@ -90,7 +90,7 @@ pub unsafe extern "C" fn measurement_get_unit(data: *const Measurement) -> *cons
 #[no_mangle]
 pub unsafe extern "C" fn measurement_get_value(data: *const Measurement) -> f64 {
     let measurement = &*data;
-    measurement.value
+    measurement.value()
 }
 
 /// Gets the `Measurement`'s scalar value (expressed in terms of its `Unit`'s base unit).
