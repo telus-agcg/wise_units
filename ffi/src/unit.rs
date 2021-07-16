@@ -280,7 +280,7 @@ mod tests {
     #[test]
     fn creating_bad_unit_sets_error() {
         let unit = "meow";
-        let expected_error = format!("Unable to parse expression: {}", &unit);
+        let expected_error = format!("Unknown unit string fragment: {} (0)", &unit);
         let expression = CString::new(unit).expect("CString::new failed");
         unsafe {
             let u = unit_new(expression.as_ptr());
