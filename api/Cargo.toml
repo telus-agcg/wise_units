@@ -1,6 +1,6 @@
 [package]
 name = "wise_units"
-version = "0.16.0"
+version = "0.17.0"
 description = "Measure things using UCUM units"
 repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
@@ -22,7 +22,7 @@ thiserror = "1.0"
 bincode = "1.1"
 criterion = "0.3"
 lazy_static = "1.4"
-rmp-serde = "0.13"
+rmp-serde = "0.15"
 serde_json = "1.0"
 
 [features]
