@@ -11,20 +11,20 @@ use approx::ulps_eq;
 /// ```rust
 /// use wise_units::Measurement;
 ///
-/// let measurement = Measurement::new(1.0, "m").unwrap();
-/// let other = Measurement::new(1.0, "m").unwrap();
+/// let measurement = Measurement::try_new(1.0, "m").unwrap();
+/// let other = Measurement::try_new(1.0, "m").unwrap();
 /// assert!(measurement == other);
 ///
-/// let measurement = Measurement::new(1.0, "m").unwrap();
-/// let other = Measurement::new(1.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1.0, "m").unwrap();
+/// let other = Measurement::try_new(1.0, "km").unwrap();
 /// assert!(measurement != other);
 ///
-/// let measurement = Measurement::new(1.0, "1000m").unwrap();
-/// let other = Measurement::new(1.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1.0, "1000m").unwrap();
+/// let other = Measurement::try_new(1.0, "km").unwrap();
 /// assert!(measurement == other);
 ///
-/// let measurement = Measurement::new(1000.0, "m").unwrap();
-/// let other = Measurement::new(1.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1000.0, "m").unwrap();
+/// let other = Measurement::try_new(1.0, "km").unwrap();
 /// assert!(measurement == other);
 /// ```
 ///
@@ -45,46 +45,46 @@ mod tests {
 
     #[test]
     fn validate_eq_same_unit() {
-        let m1 = Measurement::new(1.0, "m").unwrap();
-        let m2 = Measurement::new(1.0, "m").unwrap();
+        let m1 = Measurement::try_new(1.0, "m").unwrap();
+        let m2 = Measurement::try_new(1.0, "m").unwrap();
         assert!(m1 == m2);
 
-        let m2 = Measurement::new(1.1, "m").unwrap();
+        let m2 = Measurement::try_new(1.1, "m").unwrap();
         assert!(m1 != m2);
     }
 
     #[test]
     fn validate_eq_unit_with_prefix() {
-        let m = Measurement::new(1000.0, "m").unwrap();
-        let km = Measurement::new(1.0, "km").unwrap();
+        let m = Measurement::try_new(1000.0, "m").unwrap();
+        let km = Measurement::try_new(1.0, "km").unwrap();
         assert!(m == km);
 
-        let km = Measurement::new(1.1, "km").unwrap();
+        let km = Measurement::try_new(1.1, "km").unwrap();
         assert!(m != km);
     }
 
     #[test]
     fn validate_eq_unit_with_derived() {
-        let m2 = Measurement::new(10_000.0, "m2").unwrap();
-        let har = Measurement::new(1.0, "har").unwrap();
+        let m2 = Measurement::try_new(10_000.0, "m2").unwrap();
+        let har = Measurement::try_new(1.0, "har").unwrap();
         assert!(m2 == har);
 
-        let har = Measurement::new(1.1, "har").unwrap();
+        let har = Measurement::try_new(1.1, "har").unwrap();
         assert!(m2 != har);
     }
 
     #[test]
     fn validate_eq_incompatible_unit() {
-        let m = Measurement::new(1.0, "m").unwrap();
-        let s = Measurement::new(1.0, "s").unwrap();
+        let m = Measurement::try_new(1.0, "m").unwrap();
+        let s = Measurement::try_new(1.0, "s").unwrap();
         assert!(m != s);
     }
 
     #[test]
     fn validate_eq_with_different_precision() {
-        let m1 = Measurement::new(1.0, "[ft_i]").unwrap();
-        let m2 = Measurement::new(12.0, "[in_i]").unwrap();
-        let m3 = Measurement::new(12.0, "[ft_i].[in_i]").unwrap();
+        let m1 = Measurement::try_new(1.0, "[ft_i]").unwrap();
+        let m2 = Measurement::try_new(12.0, "[in_i]").unwrap();
+        let m3 = Measurement::try_new(12.0, "[ft_i].[in_i]").unwrap();
         assert!((&m1 * &m2) == m3);
         assert!((&m2 * &m1) == m3);
     }

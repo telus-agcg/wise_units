@@ -13,45 +13,45 @@ use std::cmp::Ordering;
 /// use std::cmp::Ordering;
 /// use wise_units::Measurement;
 ///
-/// let measurement = Measurement::new(1.0, "m").unwrap();
-/// let other = Measurement::new(1.0, "m").unwrap();
+/// let measurement = Measurement::try_new(1.0, "m").unwrap();
+/// let other = Measurement::try_new(1.0, "m").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Equal);
 ///
-/// let measurement = Measurement::new(1.0, "m").unwrap();
-/// let other = Measurement::new(2.0, "m").unwrap();
+/// let measurement = Measurement::try_new(1.0, "m").unwrap();
+/// let other = Measurement::try_new(2.0, "m").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Less);
 /// assert!(measurement < other);
 ///
-/// let measurement = Measurement::new(2.0, "m").unwrap();
-/// let other = Measurement::new(1.0, "m").unwrap();
+/// let measurement = Measurement::try_new(2.0, "m").unwrap();
+/// let other = Measurement::try_new(1.0, "m").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Greater);
 /// assert!(measurement > other);
 ///
-/// let measurement = Measurement::new(1000.0, "m").unwrap();
-/// let other = Measurement::new(1.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1000.0, "m").unwrap();
+/// let other = Measurement::try_new(1.0, "km").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Equal);
 ///
-/// let measurement = Measurement::new(1000.0, "m").unwrap();
-/// let other = Measurement::new(2.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1000.0, "m").unwrap();
+/// let other = Measurement::try_new(2.0, "km").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Less);
 /// assert!(measurement < other);
 ///
-/// let measurement = Measurement::new(1000.1, "m").unwrap();
-/// let other = Measurement::new(1.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1000.1, "m").unwrap();
+/// let other = Measurement::try_new(1.0, "km").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Greater);
 /// assert!(measurement > other);
 ///
-/// let measurement = Measurement::new(1.0, "1000m").unwrap();
-/// let other = Measurement::new(1.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1.0, "1000m").unwrap();
+/// let other = Measurement::try_new(1.0, "km").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Equal);
 ///
-/// let measurement = Measurement::new(1.0, "1000m").unwrap();
-/// let other = Measurement::new(2.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1.0, "1000m").unwrap();
+/// let other = Measurement::try_new(2.0, "km").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Less);
 /// assert!(measurement < other);
 ///
-/// let measurement = Measurement::new(1.1, "1000m").unwrap();
-/// let other = Measurement::new(1.0, "km").unwrap();
+/// let measurement = Measurement::try_new(1.1, "1000m").unwrap();
+/// let other = Measurement::try_new(1.0, "km").unwrap();
 /// assert_eq!(measurement.partial_cmp(&other).unwrap(), Ordering::Greater);
 /// assert!(measurement > other);
 /// ```

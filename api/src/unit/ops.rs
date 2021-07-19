@@ -21,7 +21,7 @@ impl Div for Unit {
 
     #[inline]
     fn div(self, other: Self) -> Self::Output {
-        divide_terms(&self.terms, &other.terms).into()
+        Self::new(divide_terms(&self.terms, &other.terms))
     }
 }
 
@@ -30,7 +30,7 @@ impl<'a> Div<&'a Self> for Unit {
 
     #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
-        divide_terms(&self.terms, &other.terms).into()
+        Self::new(divide_terms(&self.terms, &other.terms))
     }
 }
 
@@ -39,7 +39,7 @@ impl<'a> Div for &'a Unit {
 
     #[inline]
     fn div(self, other: &'a Unit) -> Self::Output {
-        divide_terms(&self.terms, &other.terms).into()
+        Unit::new(divide_terms(&self.terms, &other.terms))
     }
 }
 
@@ -48,7 +48,7 @@ impl<'a> Div<Unit> for &'a Unit {
 
     #[inline]
     fn div(self, other: Unit) -> Self::Output {
-        divide_terms(self, &other).into()
+        Unit::new(divide_terms(self, &other))
     }
 }
 
@@ -60,7 +60,7 @@ impl Mul for Unit {
 
     #[inline]
     fn mul(self, other: Self) -> Self::Output {
-        multiply_terms(&self.terms, &other.terms).into()
+        Self::new(multiply_terms(&self.terms, &other.terms))
     }
 }
 
@@ -69,7 +69,7 @@ impl<'a> Mul<&'a Self> for Unit {
 
     #[inline]
     fn mul(self, other: &'a Self) -> Self::Output {
-        multiply_terms(&self.terms, &other.terms).into()
+        Self::new(multiply_terms(&self.terms, &other.terms))
     }
 }
 
@@ -78,7 +78,7 @@ impl<'a> Mul for &'a Unit {
 
     #[inline]
     fn mul(self, other: &'a Unit) -> Self::Output {
-        multiply_terms(&self.terms, &other.terms).into()
+        Unit::new(multiply_terms(&self.terms, &other.terms))
     }
 }
 
@@ -87,7 +87,7 @@ impl<'a> Mul<Unit> for &'a Unit {
 
     #[inline]
     fn mul(self, other: Unit) -> Self::Output {
-        multiply_terms(&self.terms, &other.terms).into()
+        Unit::new(multiply_terms(&self.terms, &other.terms))
     }
 }
 

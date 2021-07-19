@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Changed
+
+- _BREAKING_: Renamed `Measurement::new()` to `try_new()`; add new `new()` method that takes a
+  `Unit` for the `unit` param.
+
+### Removed
+
+- _BREAKING_: Removed `impl From<Vec<Term>> for Unit`; replaced with standard constructor:
+  `Unit::new(terms)`.
+
 ## [0.17.1] - 2021-07-16
 
 ### Changed

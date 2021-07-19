@@ -10,9 +10,9 @@ use wise_units::{Convertible, Measurement, Unit};
 
 fn new_group(c: &mut Criterion) {
     c.bench_function_over_inputs(
-        "Measurement::new",
+        "Measurement::try_new",
         |b, &unit_string| {
-            b.iter(|| Measurement::new(1.0, unit_string));
+            b.iter(|| Measurement::try_new(1.0, unit_string));
         },
         &common::UNIT_STRINGS,
     );
@@ -25,7 +25,7 @@ fn convert_to_str_group(c: &mut Criterion) {
     c.bench_function_over_inputs(
         "Measurement::convert_to(str)",
         |b, &(lhs_string, rhs_string)| {
-            let lhs = Measurement::new(2.0, lhs_string).unwrap();
+            let lhs = Measurement::try_new(2.0, lhs_string).unwrap();
 
             b.iter(|| lhs.convert_to(*rhs_string));
         },
@@ -37,7 +37,7 @@ fn convert_to_unit_group(c: &mut Criterion) {
     c.bench_function_over_inputs(
         "Measurement::convert_to(Unit)",
         |b, &(lhs_string, rhs_string)| {
-            let lhs = Measurement::new(2.0, lhs_string).unwrap();
+            let lhs = Measurement::try_new(2.0, lhs_string).unwrap();
             let rhs = &Unit::from_str(rhs_string).unwrap();
 
             b.iter(|| lhs.convert_to(rhs));

@@ -27,7 +27,7 @@ pub unsafe extern "C" fn measurement_new(
     };
 
     match CStr::from_ptr(expression).to_str() {
-        Ok(exp_str) => match Measurement::new(value, exp_str) {
+        Ok(exp_str) => match Measurement::try_new(value, exp_str) {
             Ok(measurement) => Box::into_raw(Box::new(measurement)),
             Err(why) => crate::set_error_and_return(why.to_string()),
         },
