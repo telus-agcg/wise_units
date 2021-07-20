@@ -1,7 +1,4 @@
-use crate::as_fraction::AsFraction;
-use crate::invert::ToInverse;
-use crate::parser::Term;
-use crate::unit::Unit;
+use crate::{as_fraction::AsFraction, invert::ToInverse, parser::Term, unit::Unit};
 
 impl AsFraction for Unit {
     type Numerator = Self;
@@ -19,7 +16,7 @@ impl AsFraction for Unit {
         if positive_terms.is_empty() {
             None
         } else {
-            Some(Self::from(positive_terms))
+            Some(Self::new(positive_terms))
         }
     }
 
@@ -37,14 +34,14 @@ impl AsFraction for Unit {
         if negative_terms.is_empty() {
             None
         } else {
-            Some(Self::from(negative_terms))
+            Some(Self::new(negative_terms))
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::unit::Unit;
+    use super::Unit;
     use std::str::FromStr;
 
     lazy_static::lazy_static! {

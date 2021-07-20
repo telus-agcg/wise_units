@@ -9,16 +9,13 @@ impl FromStr for Unit {
 
     #[inline]
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        let terms = crate::parser::parse(expression)?;
-
-        Ok(Self::from(terms))
+        Ok(Self::new(crate::parser::parse(expression)?))
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::unit::Unit;
-    use std::str::FromStr;
+    use super::{FromStr, Unit};
 
     #[test]
     fn validate_from_str_error() {

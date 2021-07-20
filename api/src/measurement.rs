@@ -31,7 +31,7 @@ use serde::{Deserialize, Serialize};
 /// ```
 /// use wise_units::{Convertible, Measurement};
 ///
-/// let one_km = Measurement::new(1.0, "km").unwrap();
+/// let one_km = Measurement::try_new(1.0, "km").unwrap();
 /// let in_meters = one_km.convert_to("m").unwrap();
 ///
 /// assert_eq!(in_meters.value(), 1000.0);
@@ -53,7 +53,7 @@ impl Measurement {
     /// Returns an `Error` if `expression` isn't one that represents a valid `Unit`.
     ///
     #[inline]
-    pub fn new(value: f64, expression: &str) -> Result<Self, Error> {
+    pub fn try_new(value: f64, expression: &str) -> Result<Self, Error> {
         let unit = Unit::from_str(expression)?;
 
         let m = Self { value, unit };
@@ -61,9 +61,26 @@ impl Measurement {
         Ok(m)
     }
 
+    /// Standard constructor.
+    ///
+    /// ```
+    /// use wise_units::Measurement;
+    ///
+    /// let m1 = Measurement::try_new(10.0, "m").unwrap();
+    /// let m2 = Measurement::new(10.0, m1.unit().clone());
+    ///
+    /// assert_eq!(m1, m2);
+    /// ```
+    ///
+    #[must_use]
+    pub const fn new(value: f64, unit: Unit) -> Self {
+        Self { value, unit }
+    }
+
     /// Accessor for the value, or magnitude, of the measurement.
     ///
     #[must_use]
+    #[inline]
     pub const fn value(&self) -> f64 {
         self.value
     }
@@ -71,6 +88,7 @@ impl Measurement {
     /// Accessor for the `Unit` used for the measurement.
     ///
     #[must_use]
+    #[inline]
     pub const fn unit(&self) -> &Unit {
         &self.unit
     }
@@ -102,45 +120,45 @@ mod tests {
 
     #[test]
     fn validate_new() {
-        let m = Measurement::new(1.0, "m").unwrap();
+        let m = Measurement::try_new(1.0, "m").unwrap();
 
         assert_relative_eq!(m.value, 1.0);
         assert_ulps_eq!(m.value, 1.0);
-        assert_eq!(m.unit, vec![term!(Meter)].into());
+        assert_eq!(m.unit, Unit::new(vec![term!(Meter)]));
     }
 
     #[test]
     fn validate_converted_scalar() {
         // No special units
-        let m = Measurement::new(1.0, "m").unwrap();
+        let m = Measurement::try_new(1.0, "m").unwrap();
         let unit = Unit::from_str("m").unwrap();
         assert_relative_eq!(m.converted_scalar(&unit), 1.0);
         assert_ulps_eq!(m.converted_scalar(&unit), 1.0);
 
-        let m = Measurement::new(1.0, "m").unwrap();
+        let m = Measurement::try_new(1.0, "m").unwrap();
         let unit = Unit::from_str("km").unwrap();
         assert_relative_eq!(m.converted_scalar(&unit), 0.001);
         assert_ulps_eq!(m.converted_scalar(&unit), 0.001);
 
-        let m = Measurement::new(1000.0, "m").unwrap();
+        let m = Measurement::try_new(1000.0, "m").unwrap();
         let unit = Unit::from_str("km").unwrap();
         assert_relative_eq!(m.converted_scalar(&unit), 1.0);
         assert_ulps_eq!(m.converted_scalar(&unit), 1.0);
 
         // Measurement unit is not special, but other_unit is
-        let m = Measurement::new(1.0, "K").unwrap();
+        let m = Measurement::try_new(1.0, "K").unwrap();
         let unit = Unit::from_str("Cel").unwrap();
         assert_relative_eq!(m.converted_scalar(&unit), -272.15);
         assert_ulps_eq!(m.converted_scalar(&unit), -272.15);
 
         // Measurement unit is special, but other_unit is not
-        let m = Measurement::new(1.0, "Cel").unwrap();
+        let m = Measurement::try_new(1.0, "Cel").unwrap();
         let unit = Unit::from_str("K").unwrap();
         assert_relative_eq!(m.converted_scalar(&unit), 274.15);
         assert_ulps_eq!(m.converted_scalar(&unit), 274.15);
 
         // Measurement unit and other_unit are special
-        let m = Measurement::new(1.0, "Cel").unwrap();
+        let m = Measurement::try_new(1.0, "Cel").unwrap();
         let unit = Unit::from_str("[degF]").unwrap();
         assert_relative_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
         assert_ulps_eq!(m.converted_scalar(&unit), 33.799_999_999_999_955);
@@ -151,7 +169,7 @@ mod tests {
         use crate::Measurement;
 
         fn expected_measurement() -> Measurement {
-            Measurement::new(432.1, "100cm456{stuff}/g4").unwrap()
+            Measurement::try_new(432.1, "100cm456{stuff}/g4").unwrap()
         }
 
         fn validate_measurement(expected_measurement: &Measurement, expected_json: &str) {
@@ -175,7 +193,7 @@ mod tests {
 
         #[test]
         fn validate_serde_json_empty_unit_terms() {
-            let expected_measurement = Measurement::new(2.0, "1").unwrap();
+            let expected_measurement = Measurement::try_new(2.0, "1").unwrap();
             let expected_json = r#"{"value":2.0,"unit":"1"}"#;
             validate_measurement(&expected_measurement, expected_json);
             validate_json(expected_json, &expected_measurement)
@@ -184,7 +202,7 @@ mod tests {
         #[test]
         fn validate_deserialize_json_integer_value() {
             let expected_json = r#"{"value":2,"unit":"m"}"#;
-            let expected_measurement = Measurement::new(2.0, "m").unwrap();
+            let expected_measurement = Measurement::try_new(2.0, "m").unwrap();
             validate_json(expected_json, &expected_measurement)
         }
 
@@ -207,7 +225,7 @@ mod tests {
         #[allow(box_pointers)]
         #[test]
         fn validate_bincode_serde() {
-            let expected_measurement = Measurement::new(123.4, "100cm456{stuff}/g4").unwrap();
+            let expected_measurement = Measurement::try_new(123.4, "100cm456{stuff}/g4").unwrap();
             let encoded: Vec<u8> = bincode::serialize(&expected_measurement).unwrap();
             let decoded: Measurement = bincode::deserialize(&encoded).unwrap();
 

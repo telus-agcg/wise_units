@@ -313,36 +313,36 @@ mod tests {
 
         #[test]
         fn validate_add_owned() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(3.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(3.0, "m").unwrap();
 
             assert_eq!((m1 + m2).unwrap(), expected);
         }
 
         #[test]
         fn validate_add_borrowed() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(3.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(3.0, "m").unwrap();
 
             assert_eq!((&m1 + &m2).unwrap(), expected);
         }
 
         #[test]
         fn validate_add_owned_and_borrowed() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(3.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(3.0, "m").unwrap();
 
             assert_eq!((m1 + &m2).unwrap(), expected);
         }
 
         #[test]
         fn validate_add_borrowed_and_owned() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(3.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(3.0, "m").unwrap();
 
             assert_eq!((&m1 + m2).unwrap(), expected);
         }
@@ -353,36 +353,36 @@ mod tests {
 
         #[test]
         fn validate_sub_owned() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(-1.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(-1.0, "m").unwrap();
 
             assert_eq!((m1 - m2).unwrap(), expected);
         }
 
         #[test]
         fn validate_sub_borrowed() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(-1.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(-1.0, "m").unwrap();
 
             assert_eq!((&m1 - &m2).unwrap(), expected);
         }
 
         #[test]
         fn validate_sub_owned_and_borrowed() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(-1.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(-1.0, "m").unwrap();
 
             assert_eq!((m1 - &m2).unwrap(), expected);
         }
 
         #[test]
         fn validate_sub_borrowed_and_owned() {
-            let m1 = Measurement::new(1.0, "m").unwrap();
-            let m2 = Measurement::new(2.0, "m").unwrap();
-            let expected = Measurement::new(-1.0, "m").unwrap();
+            let m1 = Measurement::try_new(1.0, "m").unwrap();
+            let m2 = Measurement::try_new(2.0, "m").unwrap();
+            let expected = Measurement::try_new(-1.0, "m").unwrap();
 
             assert_eq!((&m1 - m2).unwrap(), expected);
         }
@@ -395,86 +395,94 @@ mod tests {
         #[test]
         fn validate_ownership_and_borrowing() {
             validate_ownership_and_borrowing!(
-                Measurement::new(2.0, "m").unwrap(),
+                Measurement::try_new(2.0, "m").unwrap(),
                 mul,
-                Measurement::new(3.0, "m").unwrap(),
-                Measurement::new(6.0, "m2")
+                Measurement::try_new(3.0, "m").unwrap(),
+                Measurement::try_new(6.0, "m2")
             );
         }
 
         #[test]
         fn validate_mul_reductions() {
             validate_op!(
-                Measurement::new(2.0, "1").unwrap() * Measurement::new(3.0, "1").unwrap(),
-                Measurement::new(6.0, "1")
+                Measurement::try_new(2.0, "1").unwrap() * Measurement::try_new(3.0, "1").unwrap(),
+                Measurement::try_new(6.0, "1")
             );
 
             validate_op!(
-                Measurement::new(2.0, "m/s").unwrap() * Measurement::new(3.0, "s/m").unwrap(),
-                Measurement::new(6.0, "1")
+                Measurement::try_new(2.0, "m/s").unwrap()
+                    * Measurement::try_new(3.0, "s/m").unwrap(),
+                Measurement::try_new(6.0, "1")
             );
 
             validate_op!(
-                Measurement::new(2.0, "m/m/m/m").unwrap()
-                    * Measurement::new(3.0, "m/m/m/m").unwrap(),
-                Measurement::new(6.0, "1")
+                Measurement::try_new(2.0, "m/m/m/m").unwrap()
+                    * Measurement::try_new(3.0, "m/m/m/m").unwrap(),
+                Measurement::try_new(6.0, "1")
             );
 
             validate_op!(
-                Measurement::new(2.0, "m.m").unwrap() * Measurement::new(3.0, "/m2").unwrap(),
-                Measurement::new(6.0, "1")
+                Measurement::try_new(2.0, "m.m").unwrap()
+                    * Measurement::try_new(3.0, "/m2").unwrap(),
+                Measurement::try_new(6.0, "1")
             );
 
             validate_op!(
-                Measurement::new(2.0, "kg").unwrap() * Measurement::new(3000.0, "g").unwrap(),
-                Measurement::new(6.0, "kg2")
+                Measurement::try_new(2.0, "kg").unwrap()
+                    * Measurement::try_new(3000.0, "g").unwrap(),
+                Measurement::try_new(6.0, "kg2")
             );
 
             validate_op!(
-                Measurement::new(3.0, "g").unwrap() * Measurement::new(0.002, "kg").unwrap(),
-                Measurement::new(6.0, "g2")
+                Measurement::try_new(3.0, "g").unwrap()
+                    * Measurement::try_new(0.002, "kg").unwrap(),
+                Measurement::try_new(6.0, "g2")
             );
 
             validate_op!(
-                Measurement::new(2.0, "1").unwrap() * Measurement::new(3.0, "m").unwrap(),
-                Measurement::new(6.0, "m")
+                Measurement::try_new(2.0, "1").unwrap() * Measurement::try_new(3.0, "m").unwrap(),
+                Measurement::try_new(6.0, "m")
             );
 
             validate_op!(
-                Measurement::new(2.0, "m").unwrap() * Measurement::new(3.0, "s").unwrap(),
-                Measurement::new(6.0, "m.s")
+                Measurement::try_new(2.0, "m").unwrap() * Measurement::try_new(3.0, "s").unwrap(),
+                Measurement::try_new(6.0, "m.s")
             );
 
             validate_op!(
-                Measurement::new(2.0, "m.m").unwrap() * Measurement::new(3.0, "m2").unwrap(),
-                Measurement::new(6.0, "m4")
+                Measurement::try_new(2.0, "m.m").unwrap()
+                    * Measurement::try_new(3.0, "m2").unwrap(),
+                Measurement::try_new(6.0, "m4")
             );
 
             validate_op!(
-                Measurement::new(2.0, "m.m").unwrap() * Measurement::new(3.0, "s2").unwrap(),
-                Measurement::new(6.0, "m2.s2")
+                Measurement::try_new(2.0, "m.m").unwrap()
+                    * Measurement::try_new(3.0, "s2").unwrap(),
+                Measurement::try_new(6.0, "m2.s2")
             );
 
             validate_op!(
-                Measurement::new(2.0, "m").unwrap() * Measurement::new(3.0, "s/m").unwrap(),
-                Measurement::new(6.0, "s")
+                Measurement::try_new(2.0, "m").unwrap() * Measurement::try_new(3.0, "s/m").unwrap(),
+                Measurement::try_new(6.0, "s")
             );
 
             validate_op!(
-                Measurement::new(2.0, "10m2").unwrap() * Measurement::new(3.0, "10m").unwrap(),
-                Measurement::new(6.0, "10m3")
+                Measurement::try_new(2.0, "10m2").unwrap()
+                    * Measurement::try_new(3.0, "10m").unwrap(),
+                Measurement::try_new(6.0, "10m3")
             );
 
             validate_op!(
-                Measurement::new(2.0, "10m2").unwrap() * Measurement::new(3.0, "5m").unwrap(),
-                Measurement::new(6.0, "10m2.5m")
+                Measurement::try_new(2.0, "10m2").unwrap()
+                    * Measurement::try_new(3.0, "5m").unwrap(),
+                Measurement::try_new(6.0, "10m2.5m")
             );
         }
 
         #[test]
         fn validate_mul_f64() {
-            let m = Measurement::new(10.0, "m").unwrap();
-            let expected = Measurement::new(200.0, "m").unwrap();
+            let m = Measurement::try_new(10.0, "m").unwrap();
+            let expected = Measurement::try_new(200.0, "m").unwrap();
 
             assert_eq!(m.mul(20.0), expected);
         }
@@ -487,69 +495,74 @@ mod tests {
         #[test]
         fn validate_ownership_and_borrowing() {
             validate_ownership_and_borrowing!(
-                Measurement::new(10.0, "m").unwrap(),
+                Measurement::try_new(10.0, "m").unwrap(),
                 div,
-                Measurement::new(2.0, "m").unwrap(),
-                Measurement::new(5.0, "1")
+                Measurement::try_new(2.0, "m").unwrap(),
+                Measurement::try_new(5.0, "1")
             );
         }
 
         #[test]
         fn validate_div_reductions() {
             validate_op!(
-                Measurement::new(10.0, "1").unwrap() / Measurement::new(2.0, "1").unwrap(),
-                Measurement::new(5.0, "1")
+                Measurement::try_new(10.0, "1").unwrap() / Measurement::try_new(2.0, "1").unwrap(),
+                Measurement::try_new(5.0, "1")
             );
             validate_op!(
-                Measurement::new(10.0, "m.m").unwrap() / Measurement::new(2.0, "m2").unwrap(),
-                Measurement::new(5.0, "1")
+                Measurement::try_new(10.0, "m.m").unwrap()
+                    / Measurement::try_new(2.0, "m2").unwrap(),
+                Measurement::try_new(5.0, "1")
             );
             validate_op!(
-                Measurement::new(10.0, "kg").unwrap() / Measurement::new(2000.0, "g").unwrap(),
-                Measurement::new(5.0, "1")
+                Measurement::try_new(10.0, "kg").unwrap()
+                    / Measurement::try_new(2000.0, "g").unwrap(),
+                Measurement::try_new(5.0, "1")
             );
             validate_op!(
-                Measurement::new(10.0, "m.m.m.m").unwrap()
-                    / Measurement::new(2.0, "m.m.m.m").unwrap(),
-                Measurement::new(5.0, "1")
-            );
-
-            validate_op!(
-                Measurement::new(10.0, "m2").unwrap() / Measurement::new(2.0, "m").unwrap(),
-                Measurement::new(5.0, "m")
-            );
-            validate_op!(
-                Measurement::new(10.0, "m").unwrap() / Measurement::new(2.0, "s").unwrap(),
-                Measurement::new(5.0, "m/s")
-            );
-            validate_op!(
-                Measurement::new(10.0, "m2/s").unwrap() / Measurement::new(2.0, "m").unwrap(),
-                Measurement::new(5.0, "m/s")
+                Measurement::try_new(10.0, "m.m.m.m").unwrap()
+                    / Measurement::try_new(2.0, "m.m.m.m").unwrap(),
+                Measurement::try_new(5.0, "1")
             );
 
             validate_op!(
-                Measurement::new(10.0, "1").unwrap() / Measurement::new(2.0, "m").unwrap(),
-                Measurement::new(5.0, "/m")
+                Measurement::try_new(10.0, "m2").unwrap() / Measurement::try_new(2.0, "m").unwrap(),
+                Measurement::try_new(5.0, "m")
             );
             validate_op!(
-                Measurement::new(10.0, "m").unwrap() / Measurement::new(2.0, "/m").unwrap(),
-                Measurement::new(5.0, "m2")
+                Measurement::try_new(10.0, "m").unwrap() / Measurement::try_new(2.0, "s").unwrap(),
+                Measurement::try_new(5.0, "m/s")
+            );
+            validate_op!(
+                Measurement::try_new(10.0, "m2/s").unwrap()
+                    / Measurement::try_new(2.0, "m").unwrap(),
+                Measurement::try_new(5.0, "m/s")
             );
 
             validate_op!(
-                Measurement::new(10.0, "10m2").unwrap() / Measurement::new(2.0, "10m").unwrap(),
-                Measurement::new(5.0, "10m")
+                Measurement::try_new(10.0, "1").unwrap() / Measurement::try_new(2.0, "m").unwrap(),
+                Measurement::try_new(5.0, "/m")
             );
             validate_op!(
-                Measurement::new(10.0, "10m2").unwrap() / Measurement::new(2.0, "5m").unwrap(),
-                Measurement::new(5.0, "10m2/5m")
+                Measurement::try_new(10.0, "m").unwrap() / Measurement::try_new(2.0, "/m").unwrap(),
+                Measurement::try_new(5.0, "m2")
+            );
+
+            validate_op!(
+                Measurement::try_new(10.0, "10m2").unwrap()
+                    / Measurement::try_new(2.0, "10m").unwrap(),
+                Measurement::try_new(5.0, "10m")
+            );
+            validate_op!(
+                Measurement::try_new(10.0, "10m2").unwrap()
+                    / Measurement::try_new(2.0, "5m").unwrap(),
+                Measurement::try_new(5.0, "10m2/5m")
             );
         }
 
         #[test]
         fn validate_div_f64() {
-            let m = Measurement::new(10.0, "m").unwrap();
-            let expected = Measurement::new(2.0, "m").unwrap();
+            let m = Measurement::try_new(10.0, "m").unwrap();
+            let expected = Measurement::try_new(2.0, "m").unwrap();
 
             assert_eq!(m.div(5.0), expected);
         }

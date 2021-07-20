@@ -2635,7 +2635,7 @@ impl UcumSymbol for Atom {
     }
 
     fn definition_unit(&self) -> Unit {
-        Unit::from(self.definition().terms().clone())
+        Unit::new(self.definition().terms().clone())
     }
 }
 

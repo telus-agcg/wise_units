@@ -1,5 +1,4 @@
-use crate::parser::Term;
-use crate::unit::Unit;
+use crate::{parser::Term, unit::Unit};
 
 //-----------------------------------------------------------------------------
 // impl Deref

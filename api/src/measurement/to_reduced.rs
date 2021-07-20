@@ -14,19 +14,19 @@ impl ToReduced for Measurement {
     /// use wise_units::Measurement;
     ///
     /// // "m2" doesn't reduce down...
-    /// let m1 = Measurement::new(10.0, "m2").unwrap();
-    /// let m2 = Measurement::new(10.0, "m2").unwrap();
+    /// let m1 = Measurement::try_new(10.0, "m2").unwrap();
+    /// let m2 = Measurement::try_new(10.0, "m2").unwrap();
     /// assert_eq!(m1.to_reduced().unwrap(), m2);
     ///
     /// // ...but "m4/m2" does.
-    /// let m1 = Measurement::new(10.0, "m4/m2").unwrap();
-    /// let m2 = Measurement::new(10.0, "m2").unwrap();
+    /// let m1 = Measurement::try_new(10.0, "m4/m2").unwrap();
+    /// let m2 = Measurement::try_new(10.0, "m2").unwrap();
     /// assert_eq!(m1.to_reduced().unwrap(), m2);
     ///
     /// // This also works for Units of the same dimension, but with different scalar
     /// // representations.
-    /// let m1 = Measurement::new(5.0, "[lb_av].har/m2").unwrap();
-    /// let m2 = Measurement::new(50_000.0, "[lb_av]").unwrap();
+    /// let m1 = Measurement::try_new(5.0, "[lb_av].har/m2").unwrap();
+    /// let m2 = Measurement::try_new(50_000.0, "[lb_av]").unwrap();
     /// assert_eq!(m1.to_reduced().unwrap(), m2);
     /// ```
     ///
@@ -49,9 +49,9 @@ mod tests {
             ($test_name:ident, $input_value:expr, $input_unit:expr, $expected_value:expr, $expected_unit:expr) => {
                 #[test]
                 fn $test_name() {
-                    let measurement = Measurement::new($input_value, $input_unit).unwrap();
+                    let measurement = Measurement::try_new($input_value, $input_unit).unwrap();
                     let actual = measurement.to_reduced().expect("Unable to reduce");
-                    let expected = Measurement::new($expected_value, $expected_unit).unwrap();
+                    let expected = Measurement::try_new($expected_value, $expected_unit).unwrap();
 
                     assert_eq!(&actual, &expected);
                     assert_eq!(actual.unit.expression(), expected.unit.expression());
@@ -111,9 +111,9 @@ mod tests {
             ($test_name:ident, $input_value:expr, $input_unit:expr, $expected_value:expr, $expected_unit:expr) => {
                 #[test]
                 fn $test_name() {
-                    let measurement = Measurement::new($input_value, $input_unit).unwrap();
+                    let measurement = Measurement::try_new($input_value, $input_unit).unwrap();
                     let actual = measurement.into_reduced().expect("Unable to reduce");
-                    let expected = Measurement::new($expected_value, $expected_unit).unwrap();
+                    let expected = Measurement::try_new($expected_value, $expected_unit).unwrap();
 
                     assert_eq!(&actual, &expected);
                     assert_eq!(actual.unit.expression(), expected.unit.expression());

@@ -21,11 +21,11 @@ mod tests {
 
     #[test]
     fn validate_composition() {
-        let m = Measurement::new(1.0, "m").unwrap();
+        let m = Measurement::try_new(1.0, "m").unwrap();
         let expected = Composition::new(Dimension::Length, 1);
         assert_eq!(m.composition(), expected);
 
-        let m = Measurement::new(1.0, "m2/s").unwrap();
+        let m = Measurement::try_new(1.0, "m2/s").unwrap();
         let mut expected = Composition::new(Dimension::Length, 2);
         expected.insert(Dimension::Time, -1);
 

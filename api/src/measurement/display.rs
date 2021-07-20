@@ -16,21 +16,24 @@ mod tests {
 
     #[test]
     fn validate_display() {
-        assert_eq!(&format!("{}", Measurement::new(1.1, "m").unwrap()), "1.1 m");
         assert_eq!(
-            &format!("{}", Measurement::new(1.1, "m2").unwrap()),
+            &format!("{}", Measurement::try_new(1.1, "m").unwrap()),
+            "1.1 m"
+        );
+        assert_eq!(
+            &format!("{}", Measurement::try_new(1.1, "m2").unwrap()),
             "1.1 m2"
         );
         assert_eq!(
-            &format!("{}", Measurement::new(1.1, "km2").unwrap()),
+            &format!("{}", Measurement::try_new(1.1, "km2").unwrap()),
             "1.1 km2"
         );
         assert_eq!(
-            &format!("{}", Measurement::new(1.1, "km2/rad.s").unwrap()),
+            &format!("{}", Measurement::try_new(1.1, "km2/rad.s").unwrap()),
             "1.1 km2/rad.s"
         );
         assert_eq!(
-            &format!("{}", Measurement::new(1.1, "100km2/rad.s").unwrap()),
+            &format!("{}", Measurement::try_new(1.1, "100km2/rad.s").unwrap()),
             "1.1 100km2/rad.s"
         );
     }

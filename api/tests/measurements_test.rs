@@ -15,7 +15,7 @@ macro_rules! validate_conversion {
     ) => {
         #[test]
         fn $convert_from_test_name() {
-            let subject = Measurement::new($measurement_value, $measurement_unit).unwrap();
+            let subject = Measurement::try_new($measurement_value, $measurement_unit).unwrap();
             let converted = subject.convert_to($convert_to_unit).unwrap();
             assert_relative_eq!(converted.value(), $expected_value);
             assert_ulps_eq!(converted.value(), $expected_value);
@@ -23,7 +23,7 @@ macro_rules! validate_conversion {
 
         #[test]
         fn $convert_to_test_name() {
-            let subject = Measurement::new($expected_value, $convert_to_unit).unwrap();
+            let subject = Measurement::try_new($expected_value, $convert_to_unit).unwrap();
             let converted = subject.convert_to($measurement_unit).unwrap();
             assert_ulps_eq!(converted.value(), $measurement_value);
         }

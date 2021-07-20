@@ -13,7 +13,7 @@ impl ToInverse for Unit {
 
     #[inline]
     fn to_inverse(&self) -> Self::Output {
-        self.terms.to_inverse().into()
+        Self::new(self.terms.to_inverse())
     }
 }
 
