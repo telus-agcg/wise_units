@@ -1,4 +1,4 @@
-use ffi_common::error;
+use ffi_common::ffi_core::error;
 use std::{ffi::CStr, os::raw::c_char, ptr};
 use wise_units::{reduce::ToReduced, Convertible, Measurement, UcumUnit, Unit};
 
@@ -303,6 +303,7 @@ pub unsafe extern "C" fn measurement_div_scalar(
 mod tests {
     use super::*;
     use approx::{assert_relative_eq, assert_ulps_eq};
+    use ffi_common::ffi_core;
     use std::ffi::CString;
 
     #[test]
@@ -514,7 +515,7 @@ mod tests {
             let m = measurement_new(value, expression1.as_ptr());
             let converted = measurement_convert_to(m, expression2.as_ptr());
             assert_eq!(converted, ptr::null());
-            let error = CStr::from_ptr(ffi_common::error::get_last_err_msg());
+            let error = CStr::from_ptr(ffi_core::error::get_last_err_msg());
             let error_str = error.to_str().expect("Failed to get str from CStr");
             assert_eq!(error_str, expected_error);
         }
@@ -531,11 +532,11 @@ mod tests {
             // result is null, error is not null
             let conversion_result_1 = measurement_convert_to(m, expression2.as_ptr());
             assert_eq!(conversion_result_1, ptr::null());
-            assert_ne!(ffi_common::error::get_last_err_msg(), ptr::null());
+            assert_ne!(ffi_core::error::get_last_err_msg(), ptr::null());
             // result is not null, error is null
             let conversion_result_2 = measurement_convert_to(m, expression3.as_ptr());
             assert_ne!(conversion_result_2, ptr::null());
-            assert_eq!(ffi_common::error::get_last_err_msg(), ptr::null());
+            assert_eq!(ffi_core::error::get_last_err_msg(), ptr::null());
         }
     }
 }
