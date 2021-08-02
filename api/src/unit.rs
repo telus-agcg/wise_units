@@ -21,7 +21,7 @@ pub mod custom_ffi;
 #[cfg(feature = "serde")]
 mod serde;
 #[cfg(feature = "cffi")]
-use ffi_derive::FFI;
+use ffi_common::ffi_derive::FFI;
 
 use crate::parser::Term;
 
@@ -201,13 +201,14 @@ mod tests {
     #[cfg(feature = "cffi")]
     mod cffi {
         use super::*;
+        use ffi_common::ffi_core;
 
         #[test]
         fn test_custom_and_derived_ffi() {
             let expression = "kg/[lb_av]";
-            let unit = custom_ffi::unit_init(ffi_common::ffi_string!(expression));
+            let unit = custom_ffi::unit_init(ffi_core::ffi_string!(expression));
             let c_expression = unsafe { custom_ffi::get_unit_expression(unit) };
-            assert_eq!(expression, ffi_common::string::string_from_c(c_expression));
+            assert_eq!(expression, ffi_common::ffi_core::string::string_from_c(c_expression));
             unsafe { unit_ffi::unit_free(unit) };
         }
     }
