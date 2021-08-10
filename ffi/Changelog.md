@@ -10,12 +10,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Updated to use `Measurement::try_new()`.
+- Update `ffi_common` to 0.4.0.
 
 ## [0.17.1] - 2021-07-16
 
 ### Changed
 
-- Point `ffi_common` to 0.3.0.
+- Update `ffi_common` to 0.3.0.
 
 ## [0.17.0] - 2021-07-16
 
