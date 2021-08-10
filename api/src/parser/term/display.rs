@@ -26,7 +26,7 @@ fn extract_term_string(term: &Term) -> String {
 fn extract_term_string_factor(term_string: &mut String, term_factor: Option<u32>) {
     if let Some(factor) = term_factor {
         if factor != 1 {
-            term_string.push_str(&factor.to_string())
+            term_string.push_str(&factor.to_string());
         }
     }
 }
