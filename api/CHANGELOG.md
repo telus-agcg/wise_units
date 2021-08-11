@@ -11,6 +11,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - _BREAKING_: Renamed `Measurement::new()` to `try_new()`; add new `new()` method that takes a
   `Unit` for the `unit` param.
+- Updated deps:
+  - `ffi_common` to 0.4.0.
 
 ### Removed
 

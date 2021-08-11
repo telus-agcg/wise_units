@@ -34,7 +34,7 @@ mod rust_structs;
 mod toml_structs;
 
 fn main() {
-    build_ucum_atoms()
+    build_ucum_atoms();
 }
 
 /// Used by standard `wise_units` to define only UCUM atoms/units as part of

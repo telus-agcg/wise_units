@@ -105,7 +105,7 @@ impl Term {
     pub fn factor_and_is_not_one<F: FnOnce(u32)>(&self, f: F) {
         if let Some(factor) = self.factor {
             if factor != 1 {
-                f(factor)
+                f(factor);
             }
         }
     }
