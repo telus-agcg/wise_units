@@ -74,7 +74,7 @@ mod tests {
 
     #[test]
     fn validate_serde_json_empty_terms() {
-        let expected_unit: Unit = vec![].into();
+        let expected_unit = Unit::new_unity();
         let expected_json = r#""1""#;
         validate_unit(&expected_unit, expected_json);
         validate_json(expected_json, &expected_unit)

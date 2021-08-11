@@ -1,6 +1,6 @@
 [package]
 name = "wise_units-definition_fetcher"
-version = "0.17.0"
+version = "0.18.0"
 authors = ["Steve Loveless <steve@agrian.com>"]
 edition = "2018"
 publish = false
@@ -8,6 +8,6 @@ publish = false
 [dependencies]
 reqwest = "0.11"
 serde-transcode = "1.0"
-serde-xml-rs = "0.4"
+serde-xml-rs = "0.5"
 simple_logger = "1.6"
 toml = "0.5"

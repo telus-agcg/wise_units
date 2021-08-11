@@ -71,5 +71,5 @@ fn write_project_file(file_path: &Path, file_body: &str) {
     let mut f = File::create(file_path).unwrap();
 
     f.write_all(file_body.as_bytes())
-        .expect("Problem writing the file")
+        .expect("Problem writing the file");
 }

@@ -1,6 +1,4 @@
-use crate::measurement::Measurement;
-use crate::reducible::Reducible;
-use crate::ucum_unit::UcumUnit;
+use crate::{measurement::Measurement, reducible::Reducible, ucum_unit::UcumUnit};
 
 impl Reducible for Measurement {
     fn reduce_value(&self, value: f64) -> f64 {
@@ -13,8 +11,7 @@ impl Reducible for Measurement {
 
     fn calculate_magnitude(&self, value: f64) -> f64 {
         if self.is_special() {
-            let scalar = self.scalar();
-            self.unit.calculate_magnitude(scalar)
+            self.unit.calculate_magnitude(self.scalar())
         } else {
             value * self.unit.calculate_magnitude(1.0)
         }
@@ -31,7 +28,7 @@ mod tests {
         ($test_name:ident, $measurement_value:expr, $unit_str:expr, $expected_value:expr) => {
             #[test]
             fn $test_name() {
-                let measurement = Measurement::new($measurement_value, $unit_str).unwrap();
+                let measurement = Measurement::try_new($measurement_value, $unit_str).unwrap();
                 assert_relative_eq!(measurement.reduce_value(1.0), $expected_value);
             }
         };
@@ -41,7 +38,7 @@ mod tests {
         ($test_name:ident, $measurement_value:expr, $unit_str:expr, $expected_value:expr) => {
             #[test]
             fn $test_name() {
-                let measurement = Measurement::new($measurement_value, $unit_str).unwrap();
+                let measurement = Measurement::try_new($measurement_value, $unit_str).unwrap();
                 assert_relative_eq!(measurement.calculate_magnitude(1.0), $expected_value);
             }
         };

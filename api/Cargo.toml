@@ -1,6 +1,6 @@
 [package]
 name = "wise_units"
-version = "0.17.1"
+version = "0.18.0"
 description = "Measure things using UCUM units"
 repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
@@ -10,9 +10,7 @@ publish = ["agrian-registry"]
 
 [dependencies]
 approx = "0.5"
-ffi_common = { version = "0.3", registry = "agrian-registry", optional = true }
-ffi_derive = { version = "0.3", registry = "agrian-registry", optional = true }
-paste = { version = "1.0", optional = true }
+ffi_common = { version = "0.4", registry = "agrian-registry", optional = true }
 pest = "^2.0"
 pest_derive = "^2.0"
 serde = { version = "1.0", optional = true, features = ["derive"] }
@@ -28,7 +26,7 @@ serde_json = "1.0"
 [features]
 # Enables the C foreign function interface. Some types may become repr(C) under this flag, and an
 # additional ffi module will be generated for each supported resource type.
-cffi = ["ffi_derive", "paste", "ffi_common"]
+cffi = ["ffi_common"]
 
 [[bench]]
 name = "measurements_benchmarks"

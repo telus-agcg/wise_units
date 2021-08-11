@@ -96,10 +96,10 @@ mod tests {
     #[test]
     fn validate_is_compatible_with_measurement() {
         let meter = Unit::from_str("m").unwrap();
-        let km = Measurement::new(1.0, "km").unwrap();
+        let km = Measurement::try_new(1.0, "km").unwrap();
         assert!(meter.is_compatible_with(&km));
 
-        let km_per_10m = Measurement::new(1.0, "km/10m").unwrap();
+        let km_per_10m = Measurement::try_new(1.0, "km/10m").unwrap();
         assert!(!meter.is_compatible_with(&km_per_10m));
     }
 }

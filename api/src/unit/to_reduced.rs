@@ -60,9 +60,9 @@ impl ToReduced for Unit {
                 new_terms.extend_from_slice(&new_numerators);
                 new_terms.extend_from_slice(&new_denominators.into_inverse());
 
-                super::term_reducing::reduce_terms(&new_terms).into()
+                Self::new(super::term_reducing::reduce_terms(&new_terms))
             }
-            (_, _) => super::term_reducing::reduce_terms(&self.terms).into(),
+            (_, _) => Self::new(super::term_reducing::reduce_terms(&self.terms)),
         }
     }
 }

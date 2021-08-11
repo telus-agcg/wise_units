@@ -63,7 +63,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_meter_str() {
-        let meter = Measurement::new(1.0, "m").unwrap();
+        let meter = Measurement::try_new(1.0, "m").unwrap();
         let converted = meter.convert_to("m").unwrap();
         assert_eq!(converted, meter);
         assert_relative_eq!(converted.value, 1.0);
@@ -72,7 +72,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_2meter_str() {
-        let meter = Measurement::new(1.0, "m").unwrap();
+        let meter = Measurement::try_new(1.0, "m").unwrap();
         let converted = meter.convert_to("2m").unwrap();
         assert_relative_eq!(converted.value, 0.5);
         assert_ulps_eq!(converted.value, 0.5);
@@ -80,7 +80,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_km_str() {
-        let meter = Measurement::new(1000.0, "m").unwrap();
+        let meter = Measurement::try_new(1000.0, "m").unwrap();
         let converted = meter.convert_to("km").unwrap();
         assert_relative_eq!(converted.value, 1.0);
         assert_ulps_eq!(converted.value, 1.0);
@@ -88,7 +88,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_2km_str() {
-        let meter = Measurement::new(1000.0, "m").unwrap();
+        let meter = Measurement::try_new(1000.0, "m").unwrap();
         let converted = meter.convert_to("2km").unwrap();
         assert_relative_eq!(converted.value, 0.5);
         assert_ulps_eq!(converted.value, 0.5);
@@ -96,7 +96,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_meter_unit() {
-        let meter = Measurement::new(1.0, "m").unwrap();
+        let meter = Measurement::try_new(1.0, "m").unwrap();
         let unit = Unit::from_str("m").unwrap();
         let converted = meter.convert_to(&unit).unwrap();
         assert_eq!(converted, meter);
@@ -106,7 +106,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_2meter_unit() {
-        let meter = Measurement::new(1.0, "m").unwrap();
+        let meter = Measurement::try_new(1.0, "m").unwrap();
         let unit = Unit::from_str("2m").unwrap();
         let converted = meter.convert_to(&unit).unwrap();
         assert_relative_eq!(converted.value, 0.5);
@@ -115,7 +115,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_km_unit() {
-        let meter = Measurement::new(1000.0, "m").unwrap();
+        let meter = Measurement::try_new(1000.0, "m").unwrap();
         let unit = Unit::from_str("km").unwrap();
         let converted = meter.convert_to(&unit).unwrap();
         assert_relative_eq!(converted.value, 1.0);
@@ -124,7 +124,7 @@ mod tests {
 
     #[test]
     fn validate_convert_to_meter_to_2km_unit() {
-        let meter = Measurement::new(1000.0, "m").unwrap();
+        let meter = Measurement::try_new(1000.0, "m").unwrap();
         let unit = Unit::from_str("2km").unwrap();
         let converted = meter.convert_to(&unit).unwrap();
         assert_relative_eq!(converted.value, 0.5);

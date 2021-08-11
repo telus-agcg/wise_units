@@ -3,7 +3,6 @@ mod composable;
 mod deref;
 mod display;
 mod field_eq;
-mod from;
 mod from_str;
 mod invert;
 mod is_compatible_with;
@@ -22,7 +21,7 @@ pub mod custom_ffi;
 #[cfg(feature = "serde")]
 mod serde;
 #[cfg(feature = "cffi")]
-use ffi_derive::FFI;
+use ffi_common::ffi_derive::FFI;
 
 use crate::parser::Term;
 
@@ -52,14 +51,26 @@ pub struct Unit {
 /// ```
 ///
 impl Unit {
+    /// ```
+    /// use wise_units::{Unit, Term, Prefix, Atom};
+    ///
+    /// let km_term = Term::new(Some(Prefix::Kilo), Some(Atom::Meter));
+    /// let km_unit = Unit::new(vec![km_term]);
+    ///
+    /// assert_eq!(km_unit.to_string(), "km");
+    /// ```
+    ///
+    #[must_use]
+    pub fn new(terms: Vec<Term>) -> Self {
+        Self { terms }
+    }
+
     /// Creates a new `Unit` that's equivalent to "1".
     ///
     #[must_use]
     pub fn new_unity() -> Self {
-        let unity_term = Term::new_unity();
-
         Self {
-            terms: vec![unity_term],
+            terms: vec![Term::new_unity()],
         }
     }
 
@@ -121,7 +132,7 @@ impl Unit {
     pub fn expression_reduced(&self) -> String {
         let reduced = term_reducing::reduce_terms(&self.terms);
 
-        Self::from(reduced).to_string()
+        Self::new(reduced).to_string()
     }
 }
 
@@ -135,7 +146,7 @@ mod tests {
         let unit = Unit::new_unity();
         assert!(unit.is_unity());
 
-        let unit: Unit = Vec::new().into();
+        let unit = Unit::new(Vec::new());
         assert!(!unit.is_unity());
 
         let unit = Unit::from_str("1").unwrap();
@@ -190,13 +201,14 @@ mod tests {
     #[cfg(feature = "cffi")]
     mod cffi {
         use super::*;
+        use ffi_common::ffi_core;
 
         #[test]
         fn test_custom_and_derived_ffi() {
             let expression = "kg/[lb_av]";
-            let unit = custom_ffi::unit_init(ffi_common::ffi_string!(expression));
+            let unit = custom_ffi::unit_init(ffi_core::ffi_string!(expression));
             let c_expression = unsafe { custom_ffi::get_unit_expression(unit) };
-            assert_eq!(expression, ffi_common::string::string_from_c(c_expression));
+            assert_eq!(expression, ffi_common::ffi_core::string::string_from_c(c_expression));
             unsafe { unit_ffi::unit_free(unit) };
         }
     }
