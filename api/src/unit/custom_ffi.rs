@@ -17,8 +17,8 @@ use std::{os::raw::c_char, str::FromStr};
 ///
 #[allow(box_pointers)]
 #[no_mangle]
-pub unsafe extern "C" fn unit_init(expression: *const c_char) -> *const Unit {
-    let string = core::string::string_from_c(expression);
+pub unsafe extern "C" fn unit_init(required_expression: *const c_char) -> *const Unit {
+    let string = core::string::string_from_c(required_expression);
     core::try_or_set_error!(Unit::from_str(&string).map(|u| Box::into_raw(Box::new(u))))
 }
 
