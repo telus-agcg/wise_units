@@ -28,6 +28,7 @@ use approx::ulps_eq;
 /// assert!(measurement == other);
 /// ```
 ///
+#[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl PartialEq for Measurement {
     #[inline]
     fn eq(&self, other: &Self) -> bool {

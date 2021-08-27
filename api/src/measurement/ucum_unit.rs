@@ -2,6 +2,7 @@ use crate::measurement::Measurement;
 use crate::reducible::Reducible;
 use crate::ucum_unit::UcumUnit;
 
+#[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl UcumUnit for Measurement {
     /// Checks if the associated Unit is "special". "Special" units are ones
     /// that must be converted using a function in combination with some other
