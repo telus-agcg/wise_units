@@ -16,12 +16,17 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     term_reducing::reduce_terms(&terms)
 }
 
+#[cfg_attr(feature = "cffi", ffi_common::derive::expose_fn(extend_type(Unit)))]
+fn divide_units(lhs: &Unit, rhs: &Unit) -> Unit {
+    Unit::new(divide_terms(&*lhs.terms, &*rhs.terms))
+}
+
 impl Div for Unit {
     type Output = Self;
 
     #[inline]
     fn div(self, other: Self) -> Self::Output {
-        Self::new(divide_terms(&self.terms, &other.terms))
+        divide_units(&self, &other)
     }
 }
 
@@ -30,7 +35,7 @@ impl<'a> Div<&'a Self> for Unit {
 
     #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
-        Self::new(divide_terms(&self.terms, &other.terms))
+        divide_units(&self, other)
     }
 }
 
@@ -39,7 +44,7 @@ impl<'a> Div for &'a Unit {
 
     #[inline]
     fn div(self, other: &'a Unit) -> Self::Output {
-        Unit::new(divide_terms(&self.terms, &other.terms))
+        divide_units(self, other)
     }
 }
 
@@ -48,48 +53,13 @@ impl<'a> Div<Unit> for &'a Unit {
 
     #[inline]
     fn div(self, other: Unit) -> Self::Output {
-        Unit::new(divide_terms(self, &other))
+        divide_units(self, &other)
     }
 }
 
 //-----------------------------------------------------------------------------
 // impl Mul
 //-----------------------------------------------------------------------------
-impl Mul for Unit {
-    type Output = Self;
-
-    #[inline]
-    fn mul(self, other: Self) -> Self::Output {
-        Self::new(multiply_terms(&self.terms, &other.terms))
-    }
-}
-
-impl<'a> Mul<&'a Self> for Unit {
-    type Output = Self;
-
-    #[inline]
-    fn mul(self, other: &'a Self) -> Self::Output {
-        Self::new(multiply_terms(&self.terms, &other.terms))
-    }
-}
-
-impl<'a> Mul for &'a Unit {
-    type Output = Unit;
-
-    #[inline]
-    fn mul(self, other: &'a Unit) -> Self::Output {
-        Unit::new(multiply_terms(&self.terms, &other.terms))
-    }
-}
-
-impl<'a> Mul<Unit> for &'a Unit {
-    type Output = Unit;
-
-    #[inline]
-    fn mul(self, other: Unit) -> Self::Output {
-        Unit::new(multiply_terms(&self.terms, &other.terms))
-    }
-}
 
 fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
@@ -98,6 +68,47 @@ fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     terms.extend_from_slice(rhs);
 
     term_reducing::reduce_terms(&terms)
+}
+
+#[cfg_attr(feature = "cffi", ffi_common::derive::expose_fn(extend_type(Unit)))]
+fn multiply_units(lhs: &Unit, rhs: &Unit) -> Unit {
+    Unit::new(multiply_terms(&*lhs.terms, &*rhs.terms))
+}
+
+impl Mul for Unit {
+    type Output = Self;
+
+    #[inline]
+    fn mul(self, other: Self) -> Self::Output {
+        multiply_units(&self, &other)
+    }
+}
+
+impl<'a> Mul<&'a Self> for Unit {
+    type Output = Self;
+
+    #[inline]
+    fn mul(self, other: &'a Self) -> Self::Output {
+        multiply_units(&self, other)
+    }
+}
+
+impl<'a> Mul for &'a Unit {
+    type Output = Unit;
+
+    #[inline]
+    fn mul(self, other: &'a Unit) -> Self::Output {
+        multiply_units(self, other)
+    }
+}
+
+impl<'a> Mul<Unit> for &'a Unit {
+    type Output = Unit;
+
+    #[inline]
+    fn mul(self, other: Unit) -> Self::Output {
+        multiply_units(self, &other)
+    }
 }
 
 #[cfg(test)]

@@ -18,7 +18,7 @@ use crate::unit::Unit;
 use std::str::FromStr;
 
 #[cfg(feature = "cffi")]
-use ffi_common::ffi_derive::FFI;
+use ffi_common::derive::FFI;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -256,14 +256,14 @@ mod tests {
     #[cfg(feature = "cffi")]
     mod cffi {
         use super::*;
-        use ffi_common::ffi_core;
+        use ffi_common::core;
 
         #[test]
         fn test_derived_ffi() {
             unsafe {
                 let scalar = 123.456;
                 let expression = "kg/[lb_av]";
-                let unit = crate::unit::custom_ffi::unit_init(ffi_core::ffi_string!(expression));
+                let unit = crate::unit::custom_ffi::unit_init(core::ffi_string!(expression));
                 let unit_for_measurement = crate::unit::custom_ffi::clone_unit(unit) as *mut Unit;
                 let measurement = measurement_ffi::measurement_init(scalar, unit_for_measurement);
                 let retrieved_value = measurement_ffi::get_measurement_value(measurement);
