@@ -265,14 +265,14 @@ mod tests {
                 let expression = "kg/[lb_av]";
                 let unit = crate::unit::custom_ffi::unit_init(core::ffi_string!(expression));
                 let unit_for_measurement = crate::unit::custom_ffi::clone_unit(unit) as *mut Unit;
-                let measurement = measurement_ffi::measurement_init(scalar, unit_for_measurement);
+                let measurement = measurement_ffi::measurement_rust_ffi_init(scalar, unit_for_measurement);
                 let retrieved_value = measurement_ffi::get_measurement_value(measurement);
                 let retrieved_unit = measurement_ffi::get_measurement_unit(measurement);
 
                 approx::assert_relative_eq!(scalar, retrieved_value);
                 assert_eq!(*unit, *retrieved_unit);
 
-                measurement_ffi::measurement_free(measurement);
+                measurement_ffi::measurement_rust_ffi_free(measurement);
                 crate::unit::unit_ffi::unit_free(retrieved_unit);
                 crate::unit::unit_ffi::unit_free(unit);
             }
