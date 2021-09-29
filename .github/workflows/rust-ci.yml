@@ -37,7 +37,7 @@ jobs:
 
   check-ios:
     name: Test (x86_64-apple-ios)
-    runs-on: macos-latest
+    runs-on: macos-10.15
     env:
       DYLD_ROOT_PATH: '/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app'
     steps:
