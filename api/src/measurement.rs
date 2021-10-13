@@ -11,10 +11,7 @@ mod reducible;
 mod to_reduced;
 mod ucum_unit;
 
-use crate::error::Error;
-use crate::reducible::Reducible;
-use crate::ucum_unit::UcumUnit;
-use crate::unit::Unit;
+use crate::{error::Error, reducible::Reducible, ucum_unit::UcumUnit, unit::Unit};
 use std::str::FromStr;
 
 #[cfg(feature = "cffi")]
@@ -112,8 +109,10 @@ impl Measurement {
 
 #[cfg(test)]
 mod tests {
-    use super::super::parser::{Atom, Term};
-    use super::*;
+    use super::{
+        super::parser::{Atom, Term},
+        *,
+    };
     use crate::unit::Unit;
     use approx::{assert_relative_eq, assert_ulps_eq};
     use std::str::FromStr;
@@ -265,7 +264,8 @@ mod tests {
                 let expression = "kg/[lb_av]";
                 let unit = crate::unit::custom_ffi::unit_init(core::ffi_string!(expression));
                 let unit_for_measurement = crate::unit::custom_ffi::clone_unit(unit) as *mut Unit;
-                let measurement = measurement_ffi::measurement_rust_ffi_init(scalar, unit_for_measurement);
+                let measurement =
+                    measurement_ffi::measurement_rust_ffi_init(scalar, unit_for_measurement);
                 let retrieved_value = measurement_ffi::get_measurement_value(measurement);
                 let retrieved_unit = measurement_ffi::get_measurement_unit(measurement);
 

@@ -20,8 +20,7 @@ impl Reducible for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use crate::measurement::Measurement;
-    use crate::reducible::Reducible;
+    use crate::{measurement::Measurement, reducible::Reducible};
     use approx::assert_relative_eq;
 
     macro_rules! validate_reduce_value {

@@ -1,6 +1,5 @@
 use super::Dimension;
-use std::fmt;
-use std::ops::Mul;
+use std::{fmt, ops::Mul};
 
 type Exponent = i32;
 
@@ -367,8 +366,7 @@ const fn set_exponent(exponent: i32) -> Option<i32> {
 
 #[cfg(test)]
 mod tests {
-    use super::super::Dimension;
-    use super::Composition;
+    use super::{super::Dimension, Composition};
 
     #[test]
     fn validate_default() {

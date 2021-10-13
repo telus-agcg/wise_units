@@ -1,6 +1,4 @@
-use crate::measurement::Measurement;
-use crate::reducible::Reducible;
-use crate::ucum_unit::UcumUnit;
+use crate::{measurement::Measurement, reducible::Reducible, ucum_unit::UcumUnit};
 
 #[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl UcumUnit for Measurement {
@@ -76,8 +74,7 @@ impl UcumUnit for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use crate::measurement::Measurement;
-    use crate::ucum_unit::UcumUnit;
+    use crate::{measurement::Measurement, ucum_unit::UcumUnit};
     use approx::assert_ulps_eq;
 
     #[test]

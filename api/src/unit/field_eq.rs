@@ -1,5 +1,4 @@
-use crate::field_eq::FieldEq;
-use crate::unit::Unit;
+use crate::{field_eq::FieldEq, unit::Unit};
 
 //-----------------------------------------------------------------------------
 // impl FieldEq
@@ -36,8 +35,7 @@ impl<'a> FieldEq<'a> for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::field_eq::FieldEq;
-    use crate::unit::Unit;
+    use crate::{field_eq::FieldEq, unit::Unit};
     use std::str::FromStr;
 
     #[test]

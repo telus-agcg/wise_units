@@ -1,6 +1,4 @@
-use crate::is_compatible_with::IsCompatibleWith;
-use crate::measurement::Measurement;
-use crate::ucum_unit::UcumUnit;
+use crate::{is_compatible_with::IsCompatibleWith, measurement::Measurement, ucum_unit::UcumUnit};
 use approx::ulps_eq;
 
 /// `Measurement`s are `PartialEq` if

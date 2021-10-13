@@ -25,9 +25,7 @@ impl IsCompatibleWith<Measurement> for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::measurement::Measurement;
-    use crate::unit::Unit;
-    use crate::IsCompatibleWith;
+    use crate::{measurement::Measurement, unit::Unit, IsCompatibleWith};
     use std::str::FromStr;
 
     #[test]

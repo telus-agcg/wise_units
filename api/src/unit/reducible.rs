@@ -1,5 +1,4 @@
-use crate::reducible::Reducible;
-use crate::unit::Unit;
+use crate::{reducible::Reducible, unit::Unit};
 
 //-----------------------------------------------------------------------------
 // impl Reducible
@@ -18,8 +17,7 @@ impl Reducible for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::reducible::Reducible;
-    use crate::unit::Unit;
+    use crate::{reducible::Reducible, unit::Unit};
     use approx::assert_relative_eq;
     use std::str::FromStr;
 

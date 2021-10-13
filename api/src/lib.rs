@@ -34,13 +34,16 @@ pub mod unit;
 mod reducible;
 mod ucum_unit;
 
-pub use crate::convertible::Convertible;
-pub use crate::error::Error;
-pub use crate::field_eq::FieldEq;
-pub use crate::is_compatible_with::IsCompatibleWith;
-pub use crate::measurement::Measurement;
-pub use crate::parser::{
-    Atom, Classification, Composable, Composition, Dimension, Prefix, Property, Term, UcumSymbol,
+pub use crate::{
+    convertible::Convertible,
+    error::Error,
+    field_eq::FieldEq,
+    is_compatible_with::IsCompatibleWith,
+    measurement::Measurement,
+    parser::{
+        Atom, Classification, Composable, Composition, Dimension, Prefix, Property, Term,
+        UcumSymbol,
+    },
+    ucum_unit::UcumUnit,
+    unit::Unit,
 };
-pub use crate::ucum_unit::UcumUnit;
-pub use crate::unit::Unit;

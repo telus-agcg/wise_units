@@ -9,8 +9,7 @@ pub(crate) struct TermParser;
 #[cfg(test)]
 #[allow(clippy::cognitive_complexity)]
 mod tests {
-    use super::TermParser;
-    use super::*;
+    use super::{TermParser, *};
     use pest::{consumes_to, parses_to, Parser};
 
     #[test]

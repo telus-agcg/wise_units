@@ -10,8 +10,10 @@
     trivial_numeric_casts
 )]
 
-use std::fs::File;
-use std::io::{Read, Write};
+use std::{
+    fs::File,
+    io::{Read, Write},
+};
 
 fn main() -> Result<(), ::std::io::Error> {
     simple_logger::SimpleLogger::new().init().unwrap();

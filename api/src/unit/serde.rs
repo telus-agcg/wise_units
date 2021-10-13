@@ -1,6 +1,8 @@
 use super::Unit;
-use serde::de::{self, Deserialize, Deserializer, Unexpected, Visitor};
-use serde::ser::{Serialize, Serializer};
+use serde::{
+    de::{self, Deserialize, Deserializer, Unexpected, Visitor},
+    ser::{Serialize, Serializer},
+};
 use std::{fmt, str::FromStr};
 
 struct UnitVisitor;

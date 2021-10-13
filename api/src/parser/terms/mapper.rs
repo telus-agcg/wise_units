@@ -45,8 +45,10 @@ pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parser::terms::term_parser::{Rule, TermParser};
-    use crate::parser::{Atom, Prefix, Term};
+    use crate::parser::{
+        terms::term_parser::{Rule, TermParser},
+        Atom, Prefix, Term,
+    };
     use pest::Parser;
 
     macro_rules! validate_interpret {
