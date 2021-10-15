@@ -16,6 +16,7 @@
     unused_results,
     variant_size_differences
 )]
+#![allow(clippy::redundant_pub_crate)]
 
 #[macro_use]
 mod macros;

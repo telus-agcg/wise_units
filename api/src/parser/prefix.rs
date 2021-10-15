@@ -303,6 +303,6 @@ mod tests {
     #[test]
     fn validate_display() {
         let prefix = Prefix::Kilo;
-        assert_eq!(&prefix.to_string(), "k")
+        assert_eq!(&prefix.to_string(), "k");
     }
 }

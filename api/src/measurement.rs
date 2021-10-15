@@ -188,7 +188,7 @@ mod tests {
             let expected_measurement = expected_measurement();
             let expected_json = r#"{"value":432.1,"unit":"100cm456{stuff}/g4"}"#;
             validate_measurement(&expected_measurement, expected_json);
-            validate_json(expected_json, &expected_measurement)
+            validate_json(expected_json, &expected_measurement);
         }
 
         #[test]
@@ -196,14 +196,14 @@ mod tests {
             let expected_measurement = Measurement::try_new(2.0, "1").unwrap();
             let expected_json = r#"{"value":2.0,"unit":"1"}"#;
             validate_measurement(&expected_measurement, expected_json);
-            validate_json(expected_json, &expected_measurement)
+            validate_json(expected_json, &expected_measurement);
         }
 
         #[test]
         fn validate_deserialize_json_integer_value() {
             let expected_json = r#"{"value":2,"unit":"m"}"#;
             let expected_measurement = Measurement::try_new(2.0, "m").unwrap();
-            validate_json(expected_json, &expected_measurement)
+            validate_json(expected_json, &expected_measurement);
         }
 
         #[test]

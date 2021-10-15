@@ -238,9 +238,9 @@ mod tests {
         let actual = map(pairs).unwrap();
         let acre_term = term!(AcreUS);
         let inch_term = term!(InchInternational);
-        let acre2_term = term!(AcreUS, exponent: -1);
+        let acre_inverse_term = term!(AcreUS, exponent: -1);
 
-        let expected = vec![acre_term, inch_term, acre2_term];
+        let expected = vec![acre_term, inch_term, acre_inverse_term];
 
         assert_eq!(actual, expected);
     }

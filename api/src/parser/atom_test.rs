@@ -711,7 +711,10 @@ fn validate_display() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{collections::hash_map::DefaultHasher, hash::{Hash, Hasher}};
+    use std::{
+        collections::hash_map::DefaultHasher,
+        hash::{Hash, Hasher},
+    };
 
     fn make_hash(unit: Atom) -> u64 {
         let mut hasher = DefaultHasher::new();

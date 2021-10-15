@@ -21,6 +21,7 @@ mod tests {
     use super::*;
     use std::collections::hash_map::DefaultHasher;
 
+    #[allow(clippy::needless_pass_by_value)]
     fn make_hash(measurement: Measurement) -> u64 {
         let mut hasher = DefaultHasher::new();
         measurement.hash(&mut hasher);

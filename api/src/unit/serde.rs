@@ -71,7 +71,7 @@ mod tests {
         let expected_unit = expected_unit();
         let expected_json = r#""100cm456{stuff}/g4""#;
         validate_unit(&expected_unit, expected_json);
-        validate_json(expected_json, &expected_unit)
+        validate_json(expected_json, &expected_unit);
     }
 
     #[test]
@@ -79,7 +79,7 @@ mod tests {
         let expected_unit = Unit::new_unity();
         let expected_json = r#""1""#;
         validate_unit(&expected_unit, expected_json);
-        validate_json(expected_json, &expected_unit)
+        validate_json(expected_json, &expected_unit);
     }
 
     #[test]

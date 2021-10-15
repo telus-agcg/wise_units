@@ -75,21 +75,23 @@ mod tests {
             assert!(!lhs.is_compatible_with(rhs));
         }
 
-        let foo = Unit::from_str("{foo}").unwrap();
-        verify_compatible(&foo, &foo);
+        {
+            let foo = Unit::from_str("{foo}").unwrap();
+            verify_compatible(&foo, &foo);
+            let bar = Unit::from_str("{bar}").unwrap();
+            verify_incompatible(&foo, &bar);
+            let unity = Unit::from_str("1").unwrap();
+            verify_incompatible(&foo, &unity);
+        }
 
-        let bar = Unit::from_str("{bar}").unwrap();
-        verify_incompatible(&foo, &bar);
+        {
+            let mfoo = Unit::from_str("m{foo}").unwrap();
+            let mfoo2_div_mfoo = Unit::from_str("m2{foo}/m{foo}").unwrap();
+            verify_compatible(&mfoo, &mfoo2_div_mfoo);
 
-        let unity = Unit::from_str("1").unwrap();
-        verify_incompatible(&foo, &unity);
-
-        let mfoo = Unit::from_str("m{foo}").unwrap();
-        let mfoo2_div_mfoo = Unit::from_str("m2{foo}/m{foo}").unwrap();
-        verify_compatible(&mfoo, &mfoo2_div_mfoo);
-
-        let mfoo2_div_mbar = Unit::from_str("m2{foo}/m{bar}").unwrap();
-        verify_incompatible(&mfoo, &mfoo2_div_mbar);
+            let mfoo2_div_mbar = Unit::from_str("m2{foo}/m{bar}").unwrap();
+            verify_incompatible(&mfoo, &mfoo2_div_mbar);
+        }
     }
 
     #[test]
