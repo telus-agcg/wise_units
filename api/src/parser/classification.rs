@@ -35,3 +35,32 @@ impl Default for Classification {
         Self::Si
     }
 }
+
+impl std::fmt::Display for Classification {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::Apoth => "Apoth",
+            Self::Avoirdupois => "Avoirdupois",
+            Self::BritLength => "BritLength",
+            Self::BritVolumes => "BritVolumes",
+            Self::Cgs => "Cgs",
+            Self::Chemical => "Chemical",
+            Self::Clinical => "Clinical",
+            Self::Const => "Const",
+            Self::Dimless => "Dimless",
+            Self::Heat => "Heat",
+            Self::Infotech => "Infotech",
+            Self::Intcust => "Intcust",
+            Self::Iso1000 => "Iso1000",
+            Self::Levels => "Levels",
+            Self::Misc => "Misc",
+            Self::Si => "Si",
+            Self::Troy => "Troy",
+            Self::Typeset => "Typeset",
+            Self::UsLengths => "UsLengths",
+            Self::UsVolumes => "UsVolumes",
+        };
+
+        f.write_str(s)
+    }
+}

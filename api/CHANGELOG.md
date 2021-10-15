@@ -17,6 +17,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `Prefix`
   - `Term`
   - `Unit`
+- Implemented `Display` for:
+  - `Classification`
 
 ## [0.20.0] - 2021-09-29
 
