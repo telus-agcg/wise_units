@@ -1,4 +1,4 @@
-use super::Unit;
+use super::Measurement;
 use crate::{parser::Composable, UcumUnit};
 use std::hash::{Hash, Hasher};
 
@@ -9,7 +9,7 @@ use std::hash::{Hash, Hasher};
 /// is because `wise_units` treats Measurements and such as equal if both their dimensions and
 /// scalar values are equal, regardless of their make-up.
 ///
-impl Hash for Unit {
+impl Hash for Measurement {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.composition().hash(state);
         self.scalar().to_string().hash(state);
@@ -19,58 +19,58 @@ impl Hash for Unit {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{collections::hash_map::DefaultHasher, str::FromStr};
+    use std::collections::hash_map::DefaultHasher;
 
-    fn make_hash(unit: Unit) -> u64 {
+    fn make_hash(measurement: Measurement) -> u64 {
         let mut hasher = DefaultHasher::new();
-        unit.hash(&mut hasher);
+        measurement.hash(&mut hasher);
         hasher.finish()
     }
 
     #[test]
     fn test_same_dim_same_scalar_same_unit() {
-        let lhs_hash = make_hash(Unit::from_str("m").unwrap());
-        let rhs_hash = make_hash(Unit::from_str("m").unwrap());
+        let lhs_hash = make_hash(Measurement::try_new(1000.0, "m").unwrap());
+        let rhs_hash = make_hash(Measurement::try_new(1000.0, "m").unwrap());
 
         assert_eq!(lhs_hash, rhs_hash);
     }
 
     #[test]
     fn test_same_dim_same_scalar_different_unit() {
-        let lhs_hash = make_hash(Unit::from_str("1000m").unwrap());
-        let rhs_hash = make_hash(Unit::from_str("km").unwrap());
+        let lhs_hash = make_hash(Measurement::try_new(1000.0, "m").unwrap());
+        let rhs_hash = make_hash(Measurement::try_new(1.0, "km").unwrap());
 
         assert_eq!(lhs_hash, rhs_hash);
     }
 
     #[test]
     fn test_same_dim_different_scalar_different_unit() {
-        let lhs_hash = make_hash(Unit::from_str("m").unwrap());
-        let rhs_hash = make_hash(Unit::from_str("km").unwrap());
+        let lhs_hash = make_hash(Measurement::try_new(1000.0, "m").unwrap());
+        let rhs_hash = make_hash(Measurement::try_new(1000.0, "km").unwrap());
 
         assert_ne!(lhs_hash, rhs_hash);
     }
 
     #[test]
     fn test_same_dim_different_scalar_same_unit() {
-        let lhs_hash = make_hash(Unit::from_str("1000m").unwrap());
-        let rhs_hash = make_hash(Unit::from_str("m").unwrap());
+        let lhs_hash = make_hash(Measurement::try_new(1.0, "m").unwrap());
+        let rhs_hash = make_hash(Measurement::try_new(2.0, "m").unwrap());
 
         assert_ne!(lhs_hash, rhs_hash);
     }
 
     #[test]
     fn test_different_dim_same_scalar() {
-        let lhs_hash = make_hash(Unit::from_str("m").unwrap());
-        let rhs_hash = make_hash(Unit::from_str("g").unwrap());
+        let lhs_hash = make_hash(Measurement::try_new(1.0, "m").unwrap());
+        let rhs_hash = make_hash(Measurement::try_new(1.0, "g").unwrap());
 
         assert_ne!(lhs_hash, rhs_hash);
     }
 
     #[test]
     fn test_different_dim_different_scalar() {
-        let lhs_hash = make_hash(Unit::from_str("m").unwrap());
-        let rhs_hash = make_hash(Unit::from_str("1000g").unwrap());
+        let lhs_hash = make_hash(Measurement::try_new(1.0, "m").unwrap());
+        let rhs_hash = make_hash(Measurement::try_new(2.0, "g").unwrap());
 
         assert_ne!(lhs_hash, rhs_hash);
     }

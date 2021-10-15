@@ -39,7 +39,7 @@ const ZETTA: f64 = 1.0e21;
 /// only pertain to metric units, but that rule is not adhered to in
 /// `wise_units`.
 ///
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Prefix {
     Atto,
     Centi,

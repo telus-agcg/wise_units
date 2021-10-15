@@ -6,6 +6,7 @@ mod field_eq;
 mod from_str;
 mod invert;
 mod is_compatible_with;
+mod hash;
 mod ops;
 mod partial_eq;
 mod partial_ord;

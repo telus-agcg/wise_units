@@ -2,6 +2,7 @@ mod composable;
 mod convertible;
 mod display;
 mod field_eq;
+mod hash;
 mod invert;
 mod is_compatible_with;
 mod ops;
