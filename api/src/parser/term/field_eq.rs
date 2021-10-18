@@ -48,7 +48,7 @@ impl<'a> FieldEq<'a> for Term {
     fn field_eq(&self, other: &'a Self) -> bool {
         self.factor == other.factor
             && self.prefix == other.prefix
-            && self.atom == other.atom
+            && self.atom.field_eq(&other.atom)
             && self.exponent == other.exponent
             && self.annotation == other.annotation
     }
