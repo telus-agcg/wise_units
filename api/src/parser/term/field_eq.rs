@@ -53,3 +53,24 @@ impl<'a> FieldEq<'a> for Term {
             && self.annotation == other.annotation
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{Atom, Prefix};
+
+    #[test]
+    fn validate_field_eq() {
+        let term = Term::new(None, Some(Atom::Are));
+        let other = Term::new(None, Some(Atom::Are));
+        assert!(term.field_eq(&other));
+
+        let term = Term::new(None, Some(Atom::Are));
+        let other = Term::new(Some(Prefix::Hecto), Some(Atom::Are));
+        assert!(!term.field_eq(&other));
+
+        let term = term!(factor: 100, atom: Atom::Are);
+        let other = Term::new(Some(Prefix::Hecto), Some(Atom::Are));
+        assert!(!term.field_eq(&other));
+    }
+}
