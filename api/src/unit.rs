@@ -4,7 +4,6 @@ mod deref;
 mod display;
 mod field_eq;
 mod from_str;
-mod hash;
 mod invert;
 mod is_compatible_with;
 mod ops;

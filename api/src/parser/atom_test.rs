@@ -707,34 +707,3 @@ fn validate_display() {
     let atom = Atom::TheNumberPi;
     assert_eq!(&atom.to_string(), "[pi]");
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::{
-        collections::hash_map::DefaultHasher,
-        hash::{Hash, Hasher},
-    };
-
-    fn make_hash(unit: Atom) -> u64 {
-        let mut hasher = DefaultHasher::new();
-        unit.hash(&mut hasher);
-        hasher.finish()
-    }
-
-    #[test]
-    fn test_same_atom() {
-        let lhs_hash = make_hash(Atom::Meter);
-        let rhs_hash = make_hash(Atom::Meter);
-
-        assert_eq!(lhs_hash, rhs_hash);
-    }
-
-    #[test]
-    fn test_different_atom() {
-        let lhs_hash = make_hash(Atom::Meter);
-        let rhs_hash = make_hash(Atom::Gram);
-
-        assert_ne!(lhs_hash, rhs_hash);
-    }
-}

@@ -10,13 +10,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Implemented `Hash` for:
-  - `Atom`
   - `Classification`
   - `Composition`
-  - `Measurement`
   - `Prefix`
-  - `Term`
-  - `Unit`
 - Implemented `Display` for:
   - `Classification`
 

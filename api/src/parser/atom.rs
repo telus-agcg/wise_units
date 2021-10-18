@@ -12,10 +12,7 @@ use crate::{
     reducible::Reducible,
     UcumUnit, Unit,
 };
-use std::{
-    fmt,
-    hash::{Hash, Hasher},
-};
+use std::fmt;
 
 #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
 pub enum Atom {
@@ -2866,20 +2863,6 @@ impl PartialEq for Atom {
         }
 
         self.scalar() == other.scalar()
-    }
-}
-
-/// The implementation here has to match up with that of `PartialEq`, which a) returns false if
-/// the two Atoms are of a different dimension, and b) checks equality of the two Atoms' `scalar()`
-/// values. Since the Hash value must be equal if and only if the two objects are equal, this also
-/// has to hash based on the dimension/composition _and_ scalar value of the Atom. And again, this
-/// is because `wise_units` treats Measurements and such as equal if both their dimensions and
-/// scalar values are equal, regardless of their make-up.
-///
-impl Hash for Atom {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.composition().hash(state);
-        self.scalar().to_string().hash(state);
     }
 }
 
