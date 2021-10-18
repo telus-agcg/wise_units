@@ -1,6 +1,5 @@
 use super::Dimension;
-use std::fmt;
-use std::ops::Mul;
+use std::{fmt, ops::Mul};
 
 type Exponent = i32;
 
@@ -12,7 +11,7 @@ type Exponent = i32;
 ///
 /// For more info, see [https://en.wikipedia.org/wiki/Dimensional_analysis](https://en.wikipedia.org/wiki/Dimensional_analysis).
 ///
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct Composition {
     electric_charge: Option<Exponent>,
     length: Option<Exponent>,
@@ -367,8 +366,7 @@ const fn set_exponent(exponent: i32) -> Option<i32> {
 
 #[cfg(test)]
 mod tests {
-    use super::super::Dimension;
-    use super::Composition;
+    use super::{super::Dimension, Composition};
 
     #[test]
     fn validate_default() {

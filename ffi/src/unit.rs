@@ -6,8 +6,9 @@ use std::{
     ptr,
     str::FromStr,
 };
-use wise_units::parser::Composable;
-use wise_units::{is_compatible_with::IsCompatibleWith, reduce::ToReduced, UcumUnit, Unit};
+use wise_units::{
+    is_compatible_with::IsCompatibleWith, parser::Composable, reduce::ToReduced, UcumUnit, Unit,
+};
 
 /// Create a new `Unit`. Note that you must call `unit_destroy(data: unit)` with
 /// this instance when you are done with it so that the the unit can be properly

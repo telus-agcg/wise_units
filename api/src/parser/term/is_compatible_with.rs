@@ -1,5 +1,7 @@
-use crate::is_compatible_with::IsCompatibleWith;
-use crate::parser::{annotation_composition::AnnotationComposable, Composable, Term};
+use crate::{
+    is_compatible_with::IsCompatibleWith,
+    parser::{annotation_composition::AnnotationComposable, Composable, Term},
+};
 
 /// In order to enforce compatibility on "non-units" (ex. `{each}`, `{total}`, `{heartbeats}`),
 /// `Term`s need to compare their annotations along with their `Composition`s. In practice, and
@@ -48,8 +50,10 @@ impl IsCompatibleWith for Vec<Term> {
 
 #[cfg(test)]
 mod tests {
-    use crate::is_compatible_with::IsCompatibleWith;
-    use crate::parser::{Atom, Prefix, Term};
+    use crate::{
+        is_compatible_with::IsCompatibleWith,
+        parser::{Atom, Prefix, Term},
+    };
 
     mod without_annotations {
         use super::*;

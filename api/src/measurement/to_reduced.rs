@@ -1,7 +1,5 @@
 use super::Measurement;
-use crate::convertible::Convertible;
-use crate::error::Error;
-use crate::reduce::ToReduced;
+use crate::{convertible::Convertible, error::Error, reduce::ToReduced};
 
 impl ToReduced for Measurement {
     type Output = Result<Self, Error>;

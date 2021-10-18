@@ -1,6 +1,4 @@
-use crate::is_compatible_with::IsCompatibleWith;
-use crate::measurement::Measurement;
-use crate::unit::Unit;
+use crate::{is_compatible_with::IsCompatibleWith, measurement::Measurement, unit::Unit};
 
 impl IsCompatibleWith for Measurement {
     #[inline]
@@ -19,9 +17,7 @@ impl IsCompatibleWith<Unit> for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use crate::is_compatible_with::IsCompatibleWith;
-    use crate::measurement::Measurement;
-    use crate::unit::Unit;
+    use crate::{is_compatible_with::IsCompatibleWith, measurement::Measurement, unit::Unit};
     use std::str::FromStr;
 
     #[test]

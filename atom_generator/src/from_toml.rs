@@ -22,8 +22,10 @@
 //! support for custom special units does not yet exist.
 //!
 
-use crate::rust_structs::{RustAtom, RustFunctionSet};
-use crate::toml_structs::{TomlAtom, TomlBaseUnit, TomlUnit};
+use crate::{
+    rust_structs::{RustAtom, RustFunctionSet},
+    toml_structs::{TomlAtom, TomlBaseUnit, TomlUnit},
+};
 use heck::CamelCase;
 
 pub(crate) mod atoms;

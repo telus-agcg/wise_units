@@ -2626,7 +2626,7 @@ impl UcumSymbol for Atom {
             Self::Bit => Some("BIT"),
             Self::Byte => Some("BY"),
             Self::Baud => Some("BD"),
-            _ => None,
+            Self::LiterSecondary => None,
         }
     }
 
@@ -2649,179 +2649,179 @@ impl UcumUnit for Atom {
     }
 
     fn is_arbitrary(&self) -> bool {
-        match *self {
-            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => true,
-            Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => true,
-            Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => true,
-            Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => true,
-            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => true,
-            Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => true,
-            Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => true,
-            Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => true,
-            Self::InternationalUnit => true,
-            Self::InternationalUnitSecondary => true,
-            Self::ArbitraryUnit => true,
-            Self::UnitedStatesPharmacopeiaUnit => true,
-            Self::GplUnit => true,
-            Self::MplUnit => true,
-            Self::AplUnit => true,
-            Self::BethesdaUnit => true,
-            Self::AntiFactorXaUnit => true,
-            Self::ToddUnit => true,
-            Self::DyeUnit => true,
-            Self::SomogyiUnit => true,
-            Self::BodanskyUnit => true,
-            Self::KingArmstrongUnit => true,
-            Self::KunkelUnit => true,
-            Self::MacLaganUnit => true,
-            Self::TuberculinUnit => true,
-            Self::CellCultureInfectiousDose => true,
-            Self::TissueCultureInfectiousDose => true,
-            Self::EmbryoInfectiousDose => true,
-            Self::PlaqueFormingUnits => true,
-            Self::FocusFormingUnits => true,
-            Self::ColonyFormingUnits => true,
-            Self::IndexOfReactivity => true,
-            Self::BioequivalentAllergenUnit => true,
-            Self::AllergenUnit => true,
-            Self::AllergenUnitForAmbrosiaArtemisiifolia => true,
-            Self::ProteinNitrogenUnit => true,
-            Self::LimitOfFlocculation => true,
-            Self::DAntigenUnit => true,
-            Self::FibrinogenEquivalentUnit => true,
-            Self::ElisaUnit => true,
-            Self::EhrlichUnit => true,
-            _ => false,
-        }
+        matches!(
+            *self,
+            Self::HomeopathicPotencyOfDecimalHahnemannianSeries
+                | Self::HomeopathicPotencyOfCentesimalHahnemannianSeries
+                | Self::HomeopathicPotencyOfMillesimalHahnemannianSeries
+                | Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries
+                | Self::HomeopathicPotencyOfDecimalKorsakovianSeries
+                | Self::HomeopathicPotencyOfCentesimalKorsakovianSeries
+                | Self::HomeopathicPotencyOfMillesimalKorsakovianSeries
+                | Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries
+                | Self::InternationalUnit
+                | Self::InternationalUnitSecondary
+                | Self::ArbitraryUnit
+                | Self::UnitedStatesPharmacopeiaUnit
+                | Self::GplUnit
+                | Self::MplUnit
+                | Self::AplUnit
+                | Self::BethesdaUnit
+                | Self::AntiFactorXaUnit
+                | Self::ToddUnit
+                | Self::DyeUnit
+                | Self::SomogyiUnit
+                | Self::BodanskyUnit
+                | Self::KingArmstrongUnit
+                | Self::KunkelUnit
+                | Self::MacLaganUnit
+                | Self::TuberculinUnit
+                | Self::CellCultureInfectiousDose
+                | Self::TissueCultureInfectiousDose
+                | Self::EmbryoInfectiousDose
+                | Self::PlaqueFormingUnits
+                | Self::FocusFormingUnits
+                | Self::ColonyFormingUnits
+                | Self::IndexOfReactivity
+                | Self::BioequivalentAllergenUnit
+                | Self::AllergenUnit
+                | Self::AllergenUnitForAmbrosiaArtemisiifolia
+                | Self::ProteinNitrogenUnit
+                | Self::LimitOfFlocculation
+                | Self::DAntigenUnit
+                | Self::FibrinogenEquivalentUnit
+                | Self::ElisaUnit
+                | Self::EhrlichUnit
+        )
     }
 
     fn is_special(&self) -> bool {
-        match *self {
-            Self::DegreeCelsius => true,
-            Self::DegreeFahrenheit => true,
-            Self::DegreeReaumur => true,
-            Self::PrismDiopter => true,
-            Self::PercentOfSlope => true,
-            Self::HomeopathicPotencyOfDecimalSeriesRetired => true,
-            Self::HomeopathicPotencyOfCentesimalSeriesRetired => true,
-            Self::HomeopathicPotencyOfMillesimalSeriesRetired => true,
-            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => true,
-            Self::PH => true,
-            Self::Neper => true,
-            Self::Bel => true,
-            Self::BelSoundPressure => true,
-            Self::BelVolt => true,
-            Self::BelMillivolt => true,
-            Self::BelMicrovolt => true,
-            Self::Bel10Nanovolt => true,
-            Self::BelWatt => true,
-            Self::BelKilowatt => true,
-            Self::MeterPerSquareSecondsPerSquareRootOfHertz => true,
-            Self::BitLogarithmusDualis => true,
-            _ => false,
-        }
+        matches!(
+            *self,
+            Self::DegreeCelsius
+                | Self::DegreeFahrenheit
+                | Self::DegreeReaumur
+                | Self::PrismDiopter
+                | Self::PercentOfSlope
+                | Self::HomeopathicPotencyOfDecimalSeriesRetired
+                | Self::HomeopathicPotencyOfCentesimalSeriesRetired
+                | Self::HomeopathicPotencyOfMillesimalSeriesRetired
+                | Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired
+                | Self::PH
+                | Self::Neper
+                | Self::Bel
+                | Self::BelSoundPressure
+                | Self::BelVolt
+                | Self::BelMillivolt
+                | Self::BelMicrovolt
+                | Self::Bel10Nanovolt
+                | Self::BelWatt
+                | Self::BelKilowatt
+                | Self::MeterPerSquareSecondsPerSquareRootOfHertz
+                | Self::BitLogarithmusDualis
+        )
     }
 
     fn is_metric(&self) -> bool {
-        match *self {
-            Self::Meter => true,
-            Self::Second => true,
-            Self::Gram => true,
-            Self::Radian => true,
-            Self::Kelvin => true,
-            Self::Coulomb => true,
-            Self::Candela => true,
-            Self::Mole => true,
-            Self::Steradian => true,
-            Self::Hertz => true,
-            Self::Newton => true,
-            Self::Pascal => true,
-            Self::Joule => true,
-            Self::Watt => true,
-            Self::Ampere => true,
-            Self::Volt => true,
-            Self::Farad => true,
-            Self::Ohm => true,
-            Self::Siemens => true,
-            Self::Weber => true,
-            Self::DegreeCelsius => true,
-            Self::Tesla => true,
-            Self::Henry => true,
-            Self::Lumen => true,
-            Self::Lux => true,
-            Self::Becquerel => true,
-            Self::Gray => true,
-            Self::Sievert => true,
-            Self::Liter => true,
-            Self::LiterSecondary => true,
-            Self::Are => true,
-            Self::Tonne => true,
-            Self::Bar => true,
-            Self::UnifiedAtomicMassUnit => true,
-            Self::Electronvolt => true,
-            Self::Parsec => true,
-            Self::VelocityOfLight => true,
-            Self::PlanckConstant => true,
-            Self::BoltzmannConstant => true,
-            Self::PermittivityOfVacuum => true,
-            Self::PermeabilityOfVacuum => true,
-            Self::ElementaryCharge => true,
-            Self::ElectronMass => true,
-            Self::ProtonMass => true,
-            Self::NewtonianConstantOfGravitation => true,
-            Self::StandardAccelerationOfFreeFall => true,
-            Self::LightYear => true,
-            Self::GramForce => true,
-            Self::Kayser => true,
-            Self::Gal => true,
-            Self::Dyne => true,
-            Self::Erg => true,
-            Self::Poise => true,
-            Self::Biot => true,
-            Self::Stokes => true,
-            Self::Maxwell => true,
-            Self::Gauss => true,
-            Self::Oersted => true,
-            Self::Gilbert => true,
-            Self::Stilb => true,
-            Self::Lambert => true,
-            Self::Phot => true,
-            Self::Curie => true,
-            Self::Roentgen => true,
-            Self::RadiationAbsorbedDose => true,
-            Self::RadiationEquivalentMan => true,
-            Self::CalorieAt15C => true,
-            Self::CalorieAt20C => true,
-            Self::MeanCalorie => true,
-            Self::InternationalTableCalorie => true,
-            Self::ThermochemicalCalorie => true,
-            Self::Calorie => true,
-            Self::Tex => true,
-            Self::MeterOfWaterColumn => true,
-            Self::MeterOfMercuryColumn => true,
-            Self::Equivalents => true,
-            Self::Osmole => true,
-            Self::GramPercent => true,
-            Self::Katal => true,
-            Self::Unit => true,
-            Self::InternationalUnit => true,
-            Self::InternationalUnitSecondary => true,
-            Self::Neper => true,
-            Self::Bel => true,
-            Self::BelSoundPressure => true,
-            Self::BelVolt => true,
-            Self::BelMillivolt => true,
-            Self::BelMicrovolt => true,
-            Self::Bel10Nanovolt => true,
-            Self::BelWatt => true,
-            Self::BelKilowatt => true,
-            Self::Stere => true,
-            Self::Mho => true,
-            Self::Bit => true,
-            Self::Byte => true,
-            Self::Baud => true,
-            _ => false,
-        }
+        matches!(
+            *self,
+            Self::Meter
+                | Self::Second
+                | Self::Gram
+                | Self::Radian
+                | Self::Kelvin
+                | Self::Coulomb
+                | Self::Candela
+                | Self::Mole
+                | Self::Steradian
+                | Self::Hertz
+                | Self::Newton
+                | Self::Pascal
+                | Self::Joule
+                | Self::Watt
+                | Self::Ampere
+                | Self::Volt
+                | Self::Farad
+                | Self::Ohm
+                | Self::Siemens
+                | Self::Weber
+                | Self::DegreeCelsius
+                | Self::Tesla
+                | Self::Henry
+                | Self::Lumen
+                | Self::Lux
+                | Self::Becquerel
+                | Self::Gray
+                | Self::Sievert
+                | Self::Liter
+                | Self::LiterSecondary
+                | Self::Are
+                | Self::Tonne
+                | Self::Bar
+                | Self::UnifiedAtomicMassUnit
+                | Self::Electronvolt
+                | Self::Parsec
+                | Self::VelocityOfLight
+                | Self::PlanckConstant
+                | Self::BoltzmannConstant
+                | Self::PermittivityOfVacuum
+                | Self::PermeabilityOfVacuum
+                | Self::ElementaryCharge
+                | Self::ElectronMass
+                | Self::ProtonMass
+                | Self::NewtonianConstantOfGravitation
+                | Self::StandardAccelerationOfFreeFall
+                | Self::LightYear
+                | Self::GramForce
+                | Self::Kayser
+                | Self::Gal
+                | Self::Dyne
+                | Self::Erg
+                | Self::Poise
+                | Self::Biot
+                | Self::Stokes
+                | Self::Maxwell
+                | Self::Gauss
+                | Self::Oersted
+                | Self::Gilbert
+                | Self::Stilb
+                | Self::Lambert
+                | Self::Phot
+                | Self::Curie
+                | Self::Roentgen
+                | Self::RadiationAbsorbedDose
+                | Self::RadiationEquivalentMan
+                | Self::CalorieAt15C
+                | Self::CalorieAt20C
+                | Self::MeanCalorie
+                | Self::InternationalTableCalorie
+                | Self::ThermochemicalCalorie
+                | Self::Calorie
+                | Self::Tex
+                | Self::MeterOfWaterColumn
+                | Self::MeterOfMercuryColumn
+                | Self::Equivalents
+                | Self::Osmole
+                | Self::GramPercent
+                | Self::Katal
+                | Self::Unit
+                | Self::InternationalUnit
+                | Self::InternationalUnitSecondary
+                | Self::Neper
+                | Self::Bel
+                | Self::BelSoundPressure
+                | Self::BelVolt
+                | Self::BelMillivolt
+                | Self::BelMicrovolt
+                | Self::Bel10Nanovolt
+                | Self::BelWatt
+                | Self::BelKilowatt
+                | Self::Stere
+                | Self::Mho
+                | Self::Bit
+                | Self::Byte
+                | Self::Baud
+        )
     }
 }
 

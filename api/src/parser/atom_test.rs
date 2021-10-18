@@ -2,10 +2,10 @@
 //!
 #![cfg(test)]
 
-use crate::parser::{
-    Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol,
+use crate::{
+    parser::{Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol},
+    ucum_unit::UcumUnit,
 };
-use crate::ucum_unit::UcumUnit;
 use approx::{assert_relative_eq, assert_ulps_eq};
 
 macro_rules! validate_definition {
@@ -705,5 +705,5 @@ validate_magnitudes!(
 #[test]
 fn validate_display() {
     let atom = Atom::TheNumberPi;
-    assert_eq!(&atom.to_string(), "[pi]")
+    assert_eq!(&atom.to_string(), "[pi]");
 }

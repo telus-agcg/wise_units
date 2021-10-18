@@ -1,12 +1,9 @@
 #![deny(unused_extern_crates)]
 #![warn(
     clippy::all,
-    clippy::complexity,
     clippy::correctness,
     clippy::nursery,
     clippy::pedantic,
-    clippy::perf,
-    clippy::style,
     future_incompatible,
     missing_copy_implementations,
     nonstandard_style,
@@ -18,6 +15,7 @@
     unused_results,
     variant_size_differences
 )]
+#![allow(clippy::redundant_pub_crate)]
 
 #[macro_use(handlebars_helper)]
 extern crate handlebars;
