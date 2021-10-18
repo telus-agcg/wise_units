@@ -15,6 +15,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `Prefix`
 - Implemented `Display` for:
   - `Classification`
+- Implemented `FieldEq` for:
+  - `Term`
+
+### Fixed
+
+- Manually implemeted `PartialEq` for `Term`, comparing the composition and `scalar()`
+  value (like `Measurement` and `Unit`).
 
 ## [0.20.0] - 2021-09-29
 

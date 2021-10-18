@@ -1,8 +1,10 @@
 mod annotation_composable;
 mod composable;
 mod display;
+mod field_eq;
 mod invert;
 mod is_compatible_with;
+mod partial_eq;
 mod reducible;
 mod ucum_unit;
 

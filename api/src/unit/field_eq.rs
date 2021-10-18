@@ -1,4 +1,5 @@
-use crate::{field_eq::FieldEq, unit::Unit};
+use crate::{field_eq::FieldEq, unit::Unit, Term, UcumUnit};
+use std::cmp::Ordering;
 
 //-----------------------------------------------------------------------------
 // impl FieldEq
@@ -29,7 +30,31 @@ use crate::{field_eq::FieldEq, unit::Unit};
 impl<'a> FieldEq<'a> for Unit {
     #[inline]
     fn field_eq(&self, other: &'a Self) -> bool {
-        self.terms == other.terms
+        fn sort_em(terms: &[Term]) -> Vec<Term> {
+            let mut t = terms.to_vec();
+
+            t.sort_by(|a, b| match a.scalar().partial_cmp(&b.scalar()) {
+                Some(ordering) => ordering,
+                None => Ordering::Equal,
+            });
+
+            t
+        }
+
+        if self.terms.len() != other.terms.len() {
+            return false;
+        }
+
+        let lhs = sort_em(&self.terms);
+        let rhs = sort_em(&other.terms);
+
+        for (l, r) in lhs.into_iter().zip(rhs.into_iter()) {
+            if !l.field_eq(&r) {
+                return false;
+            }
+        }
+
+        true
     }
 }
 
@@ -51,5 +76,9 @@ mod tests {
         let unit = Unit::from_str("100ar").unwrap();
         let other = Unit::from_str("har").unwrap();
         assert!(!unit.field_eq(&other));
+
+        let unit = Unit::from_str("[acr_us].[in_i]").unwrap();
+        let other = Unit::from_str("[in_i].[acr_us]").unwrap();
+        assert!(unit.field_eq(&other));
     }
 }
