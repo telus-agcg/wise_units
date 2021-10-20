@@ -1,10 +1,5 @@
-use crate::rust_structs::RustAtomList;
-use crate::toml_structs::TomlCustomAtomList;
-use std::env;
-use std::fs::File;
-use std::io::Read;
-use std::path::Path;
-use std::str::FromStr;
+use crate::{rust_structs::RustAtomList, toml_structs::TomlCustomAtomList};
+use std::{env, fs::File, io::Read, path::Path, str::FromStr};
 
 static CUSTOM_ATOMS_FILE_NAME: &str = "CustomAtoms.toml";
 

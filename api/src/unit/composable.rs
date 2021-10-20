@@ -15,8 +15,10 @@ impl Composable for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::{Composable, Composition, Dimension};
-    use crate::unit::Unit;
+    use crate::{
+        parser::{Composable, Composition, Dimension},
+        unit::Unit,
+    };
     use std::str::FromStr;
 
     macro_rules! build_composition {

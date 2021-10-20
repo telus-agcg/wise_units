@@ -16,9 +16,11 @@ pub(self) mod symbol_grammar;
 pub(self) use self::handlebars::HANDLEBARS;
 
 use crate::rust_structs::RustAtomList;
-use std::fs::File;
-use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::{
+    fs::File,
+    io::Write,
+    path::{Path, PathBuf},
+};
 
 /// Main function for generating all files that need to be generated from a
 /// `RustAtomList`.

@@ -1,6 +1,4 @@
-use crate::is_compatible_with::IsCompatibleWith;
-use crate::ucum_unit::UcumUnit;
-use crate::unit::Unit;
+use crate::{is_compatible_with::IsCompatibleWith, ucum_unit::UcumUnit, unit::Unit};
 use approx::ulps_eq;
 
 //-----------------------------------------------------------------------------

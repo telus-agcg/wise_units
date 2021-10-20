@@ -6,13 +6,11 @@ pub(crate) mod toml_definition;
 pub(crate) mod toml_prefix;
 pub(crate) mod toml_unit;
 
-pub(crate) use self::toml_atom::TomlAtom;
-pub(crate) use self::toml_atom_list::TomlAtomList;
-pub(crate) use self::toml_base_unit::TomlBaseUnit;
-pub(crate) use self::toml_custom_atom_list::TomlCustomAtomList;
-pub(crate) use self::toml_definition::TomlDefinition;
-pub(crate) use self::toml_prefix::TomlPrefix;
-pub(crate) use self::toml_unit::TomlUnit;
+pub(crate) use self::{
+    toml_atom::TomlAtom, toml_atom_list::TomlAtomList, toml_base_unit::TomlBaseUnit,
+    toml_custom_atom_list::TomlCustomAtomList, toml_definition::TomlDefinition,
+    toml_prefix::TomlPrefix, toml_unit::TomlUnit,
+};
 
 use serde::de::{Deserialize, Deserializer};
 

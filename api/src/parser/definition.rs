@@ -1,5 +1,7 @@
-use crate::parser::{function_set::FunctionSet, Error, Term};
-use crate::reducible::Reducible;
+use crate::{
+    parser::{function_set::FunctionSet, Error, Term},
+    reducible::Reducible,
+};
 
 /// A `Definition` is a slimmed-down version of a `Measurement` that is used to
 /// define `Atom`s in terms of other `Atom`s (ex. an `"[in_i]"` has a

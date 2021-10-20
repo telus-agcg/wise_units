@@ -10,7 +10,7 @@ use std::{os::raw::c_char, str::FromStr};
 /// Initialize a `wise_units::Unit` with `expression`.
 ///
 /// Sets an error for the caller to retrieve if `expression` is not a valid UCUM unit.
-/// 
+///
 /// # Safety
 ///
 /// `ptr` is dereferenced, so make sure it's not null!

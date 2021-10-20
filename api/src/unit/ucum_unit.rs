@@ -1,6 +1,4 @@
-use crate::reducible::Reducible;
-use crate::ucum_unit::UcumUnit;
-use crate::unit::Unit;
+use crate::{reducible::Reducible, ucum_unit::UcumUnit, unit::Unit};
 
 #[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl UcumUnit for Unit {
@@ -128,8 +126,7 @@ impl UcumUnit for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::ucum_unit::UcumUnit;
-    use crate::unit::Unit;
+    use crate::{ucum_unit::UcumUnit, unit::Unit};
     use approx::{assert_relative_eq, assert_ulps_eq};
     use std::str::FromStr;
 

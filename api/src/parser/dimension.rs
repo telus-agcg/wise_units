@@ -1,5 +1,4 @@
-use std::convert::AsRef;
-use std::fmt;
+use std::{convert::AsRef, fmt};
 
 /// UCUM depends on dimensional analysis to reflect the meaning of units. It
 /// uses dimensions to determine if two units are commensurable. Units that

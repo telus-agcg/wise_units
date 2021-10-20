@@ -45,8 +45,10 @@ pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::parser::terms::term_parser::{Rule, TermParser};
-    use crate::parser::{Atom, Prefix, Term};
+    use crate::parser::{
+        terms::term_parser::{Rule, TermParser},
+        Atom, Prefix, Term,
+    };
     use pest::Parser;
 
     macro_rules! validate_interpret {
@@ -236,9 +238,9 @@ mod tests {
         let actual = map(pairs).unwrap();
         let acre_term = term!(AcreUS);
         let inch_term = term!(InchInternational);
-        let acre2_term = term!(AcreUS, exponent: -1);
+        let acre_inverse_term = term!(AcreUS, exponent: -1);
 
-        let expected = vec![acre_term, inch_term, acre2_term];
+        let expected = vec![acre_term, inch_term, acre_inverse_term];
 
         assert_eq!(actual, expected);
     }

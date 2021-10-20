@@ -27,10 +27,13 @@ use crate::parser::Term;
 
 #[cfg_attr(
     feature = "cffi",
-     derive(FFI), 
-     ffi(custom = "src/unit/custom_ffi.rs", 
-     failable_init,
-     failable_fns(custom_ffi::get_unit_expression)))]
+    derive(FFI),
+    ffi(
+        custom = "src/unit/custom_ffi.rs",
+        failable_init,
+        failable_fns(custom_ffi::get_unit_expression)
+    )
+)]
 #[derive(Clone, Debug)]
 pub struct Unit {
     terms: Vec<Term>,
@@ -213,7 +216,9 @@ mod tests {
             let expression = "kg/[lb_av]";
             let unit = unsafe { custom_ffi::unit_init(core::ffi_string!(expression)) };
             let c_expression = unsafe { custom_ffi::get_unit_expression(unit) };
-            assert_eq!(expression, unsafe { ffi_common::core::string::string_from_c(c_expression) });
+            assert_eq!(expression, unsafe {
+                ffi_common::core::string::string_from_c(c_expression)
+            });
             unsafe { unit_ffi::unit_free(unit) };
         }
     }
