@@ -45,7 +45,6 @@ use approx::ulps_eq;
 /// assert!(lhs != rhs);
 /// ```
 ///
-#[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl PartialEq for Term {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
