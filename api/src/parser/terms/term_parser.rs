@@ -165,6 +165,15 @@ mod tests {
             ]
         };
 
+        parses_to! {
+            parser: TermParser,
+            input: "{!\"#$%&'()*+,-./01234567890:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz|~}",
+            rule: Rule::annotation_group,
+            tokens: [
+                annotation(1, 94)
+            ]
+        };
+
         let pairs = TermParser::parse(Rule::annotation_group, "k");
         assert!(pairs.is_err());
     }
