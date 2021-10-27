@@ -22,7 +22,7 @@ basic_component = {
 
 // <annotation>
 annotation_group = _{ "{" ~ annotation ~ "}" }
-annotation = { symbol_char+ }
+annotation = { annotation_char+ }
 
 // <annotatable>
 annotatable = { simple_unit ~ exponent | simple_unit }
@@ -44,6 +44,12 @@ symbol_char = _{
         | "^"       // 94
         | "|"       // 124
         | "~"       // 126
+}
+
+annotation_char = _{
+    '!'..'z'  // 33-122
+        | "|" // 124
+        | "~" // 126
 }
 
 exponent = { sign? ~ digits }
