@@ -1,6 +1,6 @@
 [package]
 name = "wise_units-ffi"
-version = "0.21.0"
+version = "0.21.1"
 description = "FFI wrapper for wise_units"
 repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
@@ -9,8 +9,8 @@ edition = "2018"
 publish = ["agrian-registry"]
 
 [dependencies]
-ffi_common = { version = "0.6.0", registry = "agrian-registry" }
-wise_units = { version = "=0.21.0", registry = "agrian-registry" }
+ffi_common = { version = "0.7", registry = "agrian-registry" }
+wise_units = { version = "0.21", registry = "agrian-registry" }
 
 [build-dependencies]
 cbindgen = "0.20"
