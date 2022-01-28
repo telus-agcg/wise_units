@@ -10,7 +10,7 @@ use crate::parser::{
 use pest::iterators::Pair;
 
 pub(in super::super) fn map(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {
-    if let Rule::symbol = pair.as_rule() {
+    if pair.as_rule() == Rule::symbol {
         Ok(Symbol::visit(pair)?)
     } else {
         Err(Error::BadFragment {

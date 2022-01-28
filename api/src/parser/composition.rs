@@ -11,7 +11,7 @@ type Exponent = i32;
 ///
 /// For more info, see [https://en.wikipedia.org/wiki/Dimensional_analysis](https://en.wikipedia.org/wiki/Dimensional_analysis).
 ///
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
 pub struct Composition {
     electric_charge: Option<Exponent>,
     length: Option<Exponent>,
@@ -225,21 +225,6 @@ impl Composition {
             && self.plane_angle.is_none()
             && self.temperature.is_none()
             && self.time.is_none()
-    }
-}
-
-// impl Default
-impl Default for Composition {
-    fn default() -> Self {
-        Self {
-            electric_charge: None,
-            length: None,
-            luminous_intensity: None,
-            mass: None,
-            plane_angle: None,
-            temperature: None,
-            time: None,
-        }
     }
 }
 

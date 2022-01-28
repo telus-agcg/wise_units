@@ -7,7 +7,7 @@ use pest_derive::Parser;
 pub(crate) struct TermParser;
 
 #[cfg(test)]
-#[allow(clippy::cognitive_complexity)]
+#[allow(clippy::cognitive_complexity, clippy::manual_assert)]
 mod tests {
     use super::{TermParser, *};
     use pest::{consumes_to, parses_to, Parser};
