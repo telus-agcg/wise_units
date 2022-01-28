@@ -7,6 +7,7 @@ use pest_derive::Parser;
 pub(crate) struct TermParser;
 
 #[cfg(test)]
+// Allowing manual_assert because of pest's `parses_to` macro.
 #[allow(clippy::cognitive_complexity, clippy::manual_assert)]
 mod tests {
     use super::{TermParser, *};
