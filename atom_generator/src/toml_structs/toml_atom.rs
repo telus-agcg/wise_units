@@ -1,4 +1,4 @@
-use heck::CamelCase;
+use heck::ToUpperCamelCase;
 use regex::Regex;
 
 lazy_static! {
@@ -57,7 +57,7 @@ fn sanitize_type_name_segment(mut string: String) -> String {
 
     let s = remove_non_letter_chars(&string);
 
-    s.to_camel_case()
+    s.to_upper_camel_case()
 }
 
 #[allow(clippy::non_ascii_literal)]
