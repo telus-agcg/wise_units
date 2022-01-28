@@ -1,5 +1,5 @@
 use super::RustAtomList;
-use heck::CamelCase;
+use heck::ToUpperCamelCase;
 use std::collections::HashMap;
 
 type PropertyTypeName = String;
@@ -20,7 +20,7 @@ impl<'a> From<&'a RustAtomList> for RustPropertyList {
         let mut properties: HashMap<PropertyTypeName, RustProperty> = HashMap::new();
 
         for atom in &atom_list.atoms {
-            let key = atom.property.to_camel_case();
+            let key = atom.property.to_upper_camel_case();
 
             let _ = properties
                 .entry(key)

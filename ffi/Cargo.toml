@@ -5,7 +5,7 @@ description = "FFI wrapper for wise_units"
 repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
 authors = ["Nicholas Smillie <nicholas@agrian.com>"]
-edition = "2018"
+edition = "2021"
 publish = ["agrian-registry"]
 
 [dependencies]

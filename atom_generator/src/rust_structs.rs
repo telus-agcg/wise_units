@@ -11,7 +11,7 @@ pub(crate) use self::{
     rust_mapper_list::RustMapperList, rust_property_list::RustPropertyList,
 };
 
-use heck::SnakeCase;
+use heck::ToSnakeCase;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct RustAtomList {

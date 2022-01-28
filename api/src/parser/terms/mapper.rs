@@ -22,7 +22,7 @@ use pest::iterators::{Pair, Pairs};
 
 pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
     fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Vec<Term>, Error> {
-        let main_term = if let Rule::main_term = pair.as_rule() {
+        let main_term = if pair.as_rule() == Rule::main_term {
             MainTerm::visit(pair)?
         } else {
             return Err(Error::UnknownUnitString(
