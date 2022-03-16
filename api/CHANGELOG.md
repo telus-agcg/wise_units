@@ -16,6 +16,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Exported `parser::composition` from the crate root.
 - Updated to Rust edition `2021`.
 
 ## [0.21.1] - 2021-11-19
