@@ -1,11 +1,11 @@
 use crate::{as_fraction::AsFraction, invert::ToInverse, parser::Term, unit::Unit};
 
 impl AsFraction for Unit {
-    type Numerator = Self;
-    type Denominator = Self;
+    type Numerator = Option<Self>;
+    type Denominator = Option<Self>;
 
     #[inline]
-    fn numerator(&self) -> Option<Self::Numerator> {
+    fn numerator(&self) -> Self::Numerator {
         let positive_terms: Vec<Term> = self
             .terms
             .iter()
@@ -21,7 +21,7 @@ impl AsFraction for Unit {
     }
 
     #[inline]
-    fn denominator(&self) -> Option<Self::Denominator> {
+    fn denominator(&self) -> Self::Denominator {
         let negative_terms: Vec<Term> = self
             .terms
             .iter()
