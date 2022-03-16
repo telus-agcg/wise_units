@@ -19,6 +19,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Exported `parser::composition` from the crate root.
+- `Measurement::try_new()` now takes `unit: U`, `where Unit: TryFrom<U, crate::Error>`. This still
+  allows for passing in a unit expression as a `&str`, but also allows for any other
+  implementations of type conversions to `Unit`.
 - Changed `AsFraction` trait definition to allow for non-optional `Numerator` and `Denominator`.
 - Updated to Rust edition `2021`.
 

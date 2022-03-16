@@ -11,8 +11,7 @@ mod reducible;
 mod to_reduced;
 mod ucum_unit;
 
-use crate::{error::Error, reducible::Reducible, ucum_unit::UcumUnit, unit::Unit};
-use std::str::FromStr;
+use crate::{reducible::Reducible, ucum_unit::UcumUnit, unit::Unit};
 
 #[cfg(feature = "cffi")]
 use ffi_common::derive::FFI;
@@ -50,12 +49,17 @@ impl Measurement {
     /// Returns an `Error` if `expression` isn't one that represents a valid `Unit`.
     ///
     #[inline]
-    pub fn try_new(value: f64, expression: &str) -> Result<Self, Error> {
-        let unit = Unit::from_str(expression)?;
+    pub fn try_new<V, U, E>(value: V, unit: U) -> Result<Self, E>
+    where
+        f64: From<V>,
+        Unit: TryFrom<U, Error = E>,
+    {
+        let unit = Unit::try_from(unit)?;
 
-        let m = Self { value, unit };
-
-        Ok(m)
+        Ok(Self {
+            value: f64::from(value),
+            unit,
+        })
     }
 
     /// Standard constructor.
@@ -121,7 +125,7 @@ mod tests {
     };
     use crate::unit::Unit;
     use approx::{assert_relative_eq, assert_ulps_eq};
-    use std::str::FromStr;
+    use std::{convert::Infallible, str::FromStr};
 
     #[test]
     fn validate_new() {
@@ -130,6 +134,30 @@ mod tests {
         assert_relative_eq!(m.value, 1.0);
         assert_ulps_eq!(m.value, 1.0);
         assert_eq!(m.unit, Unit::new(vec![term!(Meter)]));
+
+        let m = Measurement::try_new(1.0, Unit::from_str("m").unwrap()).unwrap();
+
+        assert_relative_eq!(m.value, 1.0);
+        assert_ulps_eq!(m.value, 1.0);
+        assert_eq!(m.unit, Unit::new(vec![term!(Meter)]));
+
+        {
+            struct Meter;
+
+            impl TryFrom<Meter> for Unit {
+                type Error = Infallible;
+
+                fn try_from(_value: Meter) -> Result<Self, Self::Error> {
+                    Ok(Self::new(vec![Term::new(None, Some(Atom::Meter))]))
+                }
+            }
+
+            let m = Measurement::try_new(1.0, Meter).unwrap();
+
+            assert_relative_eq!(m.value, 1.0);
+            assert_ulps_eq!(m.value, 1.0);
+            assert_eq!(m.unit, Unit::new(vec![term!(Meter)]));
+        }
     }
 
     #[test]
