@@ -3,6 +3,59 @@ use std::{fmt, ops::Mul};
 
 type Exponent = i32;
 
+pub const DIMLESS: Composition = Composition::new_dimless();
+
+pub const ELECTRIC_CHARGE: Composition = Composition::new_electric_charge(1);
+
+pub const LENGTH: Composition = Composition::new_length(1);
+pub const AREA: Composition = Composition::new_length(2);
+pub const VOLUME: Composition = Composition::new_length(3);
+
+pub const MASS: Composition = Composition::new_mass(1);
+pub const LUMINOUS_INTENSITY: Composition = Composition::new_luminous_intensity(1);
+pub const TEMPERATURE: Composition = Composition::new_temperature(1);
+pub const TIME: Composition = Composition::new_time(1);
+
+// L.T-1
+pub const VELOCITY: Composition =
+    Composition::new_any(None, Some(1), None, None, None, None, Some(-1));
+
+// L.T-2
+pub const ACCELERATION: Composition =
+    Composition::new_any(None, Some(1), None, None, None, None, Some(-2));
+
+// M.L-3
+pub const DENSITY: Composition =
+    Composition::new_any(None, Some(-3), None, Some(1), None, None, None);
+
+// M.L.T-2
+pub const FORCE: Composition =
+    Composition::new_any(None, Some(1), None, Some(1), None, None, Some(-2));
+
+// M.L-1.T-2
+pub const PRESSURE: Composition =
+    Composition::new_any(None, Some(-1), None, Some(1), None, None, Some(-2));
+
+// M.L2.T-2
+pub const ENEGERY: Composition =
+    Composition::new_any(None, Some(2), None, Some(1), None, None, Some(-2));
+
+// M.L2.T-3
+pub const POWER: Composition =
+    Composition::new_any(None, Some(2), None, Some(1), None, None, Some(-3));
+
+// M.L-1.T-1
+pub const DYNAMIC_VISCOSITY: Composition =
+    Composition::new_any(None, Some(-1), None, Some(1), None, None, Some(-1));
+
+// L2.T-1
+pub const KINEMATIC_VISCOSITY: Composition =
+    Composition::new_any(None, Some(2), None, None, None, None, Some(-1));
+
+// L2.Q-1.T-2
+pub const SPECIFIC_HEAT: Composition =
+    Composition::new_any(None, Some(2), None, None, None, Some(-1), Some(-2));
+
 /// A `Composition` represents the makeup of a `Unit`'s dimensions; only
 /// dimensions and each `Unit`s `Term`'s exponent. For example, "m" would
 /// effectively have the composition string of "L"; "m2" would be "L2"; "1/m2"
@@ -78,6 +131,19 @@ impl Composition {
             Dimension::PlaneAngle => Self::new_plane_angle(exponent),
             Dimension::Temperature => Self::new_temperature(exponent),
             Dimension::Time => Self::new_time(exponent),
+        }
+    }
+
+    #[must_use]
+    pub const fn new_dimless() -> Self {
+        Self {
+            electric_charge: None,
+            length: None,
+            luminous_intensity: None,
+            mass: None,
+            plane_angle: None,
+            temperature: None,
+            time: None,
         }
     }
 
@@ -169,6 +235,27 @@ impl Composition {
             plane_angle: None,
             temperature: None,
             time: Some(exponent),
+        }
+    }
+
+    #[must_use]
+    pub const fn new_any(
+        electric_charge: Option<i32>,
+        length: Option<i32>,
+        luminous_intensity: Option<i32>,
+        mass: Option<i32>,
+        plane_angle: Option<i32>,
+        temperature: Option<i32>,
+        time: Option<i32>,
+    ) -> Self {
+        Self {
+            electric_charge,
+            length,
+            luminous_intensity,
+            mass,
+            plane_angle,
+            temperature,
+            time,
         }
     }
 
