@@ -20,10 +20,12 @@ mod ucum_unit;
 pub mod custom_ffi;
 #[cfg(feature = "serde")]
 mod serde;
+
+use crate::{parser::Term, Error};
+use std::str::FromStr;
+
 #[cfg(feature = "cffi")]
 use ffi_common::derive::FFI;
-
-use crate::parser::Term;
 
 #[cfg_attr(
     feature = "cffi",
@@ -147,6 +149,14 @@ impl Unit {
 impl AsRef<Self> for Unit {
     fn as_ref(&self) -> &Self {
         self
+    }
+}
+
+impl<'a> TryFrom<&'a str> for Unit {
+    type Error = Error;
+
+    fn try_from(value: &'a str) -> Result<Self, Self::Error> {
+        Self::from_str(value)
     }
 }
 
