@@ -63,17 +63,17 @@ fn sanitize_type_name_segment(mut string: String) -> String {
 #[allow(clippy::non_ascii_literal)]
 fn remove_non_latin_chars(string: &str) -> String {
     string
-        .replace("è", "e")
-        .replace("é", "e")
-        .replace("Å", "A")
-        .replace("ö", "o")
+        .replace('è', "e")
+        .replace('é', "e")
+        .replace('Å', "A")
+        .replace('ö', "o")
 }
 
 fn remove_non_letter_chars(string: &str) -> String {
     string
-        .replace("'", "")
-        .replace("*", " Star")
-        .replace("^", " Caret")
+        .replace('\'', "")
+        .replace('*', " Star")
+        .replace('^', " Caret")
 }
 
 fn finally(name: &str, primary_code: &str) -> String {

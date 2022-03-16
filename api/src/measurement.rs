@@ -42,11 +42,11 @@ pub struct Measurement {
 }
 
 impl Measurement {
-    /// Creates a new `Measurement` by parsing `expression` into a `Unit`.
+    /// Creates a new `Measurement` by converting `value` to an `f64` and `unit` to a `Unit`.
     ///
     /// # Errors
     ///
-    /// Returns an `Error` if `expression` isn't one that represents a valid `Unit`.
+    /// Returns an `Error` if `unit` can't be converted to a `Unit`.
     ///
     #[inline]
     pub fn try_new<V, U, E>(value: V, unit: U) -> Result<Self, E>
