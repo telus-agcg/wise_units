@@ -107,6 +107,12 @@ impl Measurement {
     }
 }
 
+impl AsRef<Self> for Measurement {
+    fn as_ref(&self) -> &Self {
+        self
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{

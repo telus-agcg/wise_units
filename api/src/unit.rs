@@ -144,6 +144,12 @@ impl Unit {
     }
 }
 
+impl AsRef<Self> for Unit {
+    fn as_ref(&self) -> &Self {
+        self
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

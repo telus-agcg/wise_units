@@ -7,6 +7,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [unreleased]
 
+### Added
+
+- Implemented `AsRef<Self>` for `Measurement` and `Unit`. Allows for downstream wrapper types to
+  implement other functionality for all types via the `AsRef` implementation.
+
 ### Changed
 
 - Updated to Rust edition `2021`.
