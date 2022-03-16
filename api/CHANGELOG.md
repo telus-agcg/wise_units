@@ -12,6 +12,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Implemented `AsRef<Self>` for `Measurement` and `Unit`. Allows for downstream wrapper types to
   implement other functionality for all types via the `AsRef` implementation.
 - New `const` `Composition` methods: `new_dimless()`, `new_any()`.
+- New `composition` `const`s for common dimensional compositions.
 
 ### Changed
 
