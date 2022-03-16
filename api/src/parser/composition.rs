@@ -82,6 +82,19 @@ impl Composition {
     }
 
     #[must_use]
+    pub const fn new_dimless() -> Self {
+        Self {
+            electric_charge: None,
+            length: None,
+            luminous_intensity: None,
+            mass: None,
+            plane_angle: None,
+            temperature: None,
+            time: None,
+        }
+    }
+
+    #[must_use]
     pub const fn new_electric_charge(exponent: i32) -> Self {
         Self {
             electric_charge: Some(exponent),
@@ -169,6 +182,27 @@ impl Composition {
             plane_angle: None,
             temperature: None,
             time: Some(exponent),
+        }
+    }
+
+    #[must_use]
+    pub const fn new_any(
+        electric_charge: Option<i32>,
+        length: Option<i32>,
+        luminous_intensity: Option<i32>,
+        mass: Option<i32>,
+        plane_angle: Option<i32>,
+        temperature: Option<i32>,
+        time: Option<i32>,
+    ) -> Self {
+        Self {
+            electric_charge,
+            length,
+            luminous_intensity,
+            mass,
+            plane_angle,
+            temperature,
+            time,
         }
     }
 
