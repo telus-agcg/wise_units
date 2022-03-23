@@ -15,7 +15,7 @@ use crate::parser::{Atom, Prefix};
 /// Atom-less Term, which would simple be a Factor (with or without an
 /// annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
 ///
-#[derive(Clone, Debug, Eq)]
+#[derive(Clone, Debug, Eq, Default)]
 pub struct Term {
     pub factor: Option<u32>,
     pub prefix: Option<Prefix>,
@@ -115,18 +115,6 @@ impl Term {
     #[must_use]
     pub fn factor_as_u32(&self) -> u32 {
         self.factor.unwrap_or(1)
-    }
-}
-
-impl ::std::default::Default for Term {
-    fn default() -> Self {
-        Self {
-            prefix: None,
-            atom: None,
-            factor: None,
-            exponent: None,
-            annotation: None,
-        }
     }
 }
 

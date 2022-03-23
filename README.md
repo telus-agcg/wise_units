@@ -7,26 +7,10 @@ terms. It's similar to Ruby's [unitwise](https://github.com/joshwlewis/unitwise)
 
 ## Prerequisites
 
-* Rust 1.31
-    * Get it [here](https://rustup.rs/)
+- Rust 1.56
+  - Get it [here](https://rustup.rs/)
 
 ## Usage
-
-Add this to your `Cargo.toml`:
-
-```toml
-[dependencies]
-wise_units = "0.14"
-```
-
-and this to your crate root:
-
-```
-extern crate wise_units;
-```
-
-_Note_: wise_units depends on the [pest](https://github.com/pest-parser/pest)
-parser, which depends on Rust 1.23.
 
 ### Feature `serde`
 
@@ -47,7 +31,7 @@ This feature is disabled by default. To enable it:
 
 ```toml
 [dependencies]
-wise_units = { version = "0.10", features = ["serde"] }
+wise_units = { version = "0.22", features = ["serde"] }
 ```
 
 ## Examples

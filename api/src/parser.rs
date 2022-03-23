@@ -11,6 +11,7 @@
 )]
 pub mod atom;
 pub mod classification;
+pub mod composition;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;
 
@@ -20,7 +21,6 @@ mod annotation_composition;
 #[cfg(test)]
 mod atom_test;
 mod composable;
-mod composition;
 mod definition;
 mod dimension;
 mod error;

@@ -26,7 +26,7 @@ use crate::{
     rust_structs::{RustAtom, RustFunctionSet},
     toml_structs::{TomlAtom, TomlBaseUnit, TomlUnit},
 };
-use heck::CamelCase;
+use heck::ToUpperCamelCase;
 
 pub(crate) mod atoms;
 pub(crate) mod custom_atoms;
@@ -89,7 +89,7 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
 
             RustAtom {
                 type_name: u.type_name(),
-                classification: u.classification.clone().to_camel_case(),
+                classification: u.classification.clone().to_upper_camel_case(),
                 dim: None,
                 definition_signature,
                 primary_code: u.primary_code.clone(),

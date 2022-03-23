@@ -704,15 +704,15 @@ impl Atom {
                 1.0,
                 "1",
                 Some(FunctionSet {
-                    convert_from: |value: f64| value.ln(),
-                    convert_to: |value: f64| value.exp(),
+                    convert_from: f64::ln,
+                    convert_to: f64::exp,
                 }),
             ),
             Self::Bel => Definition::new(
                 1.0,
                 "1",
                 Some(FunctionSet {
-                    convert_from: |value: f64| value.log10(),
+                    convert_from: f64::log10,
                     convert_to: |value: f64| 10_f64.powf(value),
                 }),
             ),
@@ -760,7 +760,7 @@ impl Atom {
                 1.0,
                 "W",
                 Some(FunctionSet {
-                    convert_from: |value: f64| value.log10(),
+                    convert_from: f64::log10,
                     convert_to: |value: f64| 10_f64.powf(value),
                 }),
             ),
@@ -768,7 +768,7 @@ impl Atom {
                 1.0,
                 "kW",
                 Some(FunctionSet {
-                    convert_from: |value: f64| value.log10(),
+                    convert_from: f64::log10,
                     convert_to: |value: f64| 10_f64.powf(value),
                 }),
             ),
@@ -787,7 +787,7 @@ impl Atom {
                 1.0,
                 "m2/s4/Hz",
                 Some(FunctionSet {
-                    convert_from: |value: f64| value.sqrt(),
+                    convert_from: f64::sqrt,
                     convert_to: |value: f64| value * value,
                 }),
             ),
@@ -795,8 +795,8 @@ impl Atom {
                 1.0,
                 "1",
                 Some(FunctionSet {
-                    convert_from: |value: f64| value.log2(),
-                    convert_to: |value: f64| value.exp2(),
+                    convert_from: f64::log2,
+                    convert_to: f64::exp2,
                 }),
             ),
             Self::Bit => Ok(Definition::default()),

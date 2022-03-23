@@ -44,7 +44,13 @@ mod tests {
         use super::*;
 
         macro_rules! validate_reduction {
-            ($test_name:ident, $input_value:expr, $input_unit:expr, $expected_value:expr, $expected_unit:expr) => {
+            (
+                $test_name:ident,
+                $input_value:expr,
+                $input_unit:expr,
+                $expected_value:expr,
+                $expected_unit:expr
+            ) => {
                 #[test]
                 fn $test_name() {
                     let measurement = Measurement::try_new($input_value, $input_unit).unwrap();
@@ -106,7 +112,13 @@ mod tests {
         use crate::reduce::IntoReduced;
 
         macro_rules! validate_reduction {
-            ($test_name:ident, $input_value:expr, $input_unit:expr, $expected_value:expr, $expected_unit:expr) => {
+            (
+                $test_name:ident,
+                $input_value:expr,
+                $input_unit:expr,
+                $expected_value:expr,
+                $expected_unit:expr
+            ) => {
                 #[test]
                 fn $test_name() {
                     let measurement = Measurement::try_new($input_value, $input_unit).unwrap();

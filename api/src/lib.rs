@@ -42,8 +42,8 @@ pub use crate::{
     is_compatible_with::IsCompatibleWith,
     measurement::Measurement,
     parser::{
-        Atom, Classification, Composable, Composition, Dimension, Prefix, Property, Term,
-        UcumSymbol,
+        composition, Atom, Classification, Composable, Composition, Dimension, Prefix, Property,
+        Term, UcumSymbol,
     },
     ucum_unit::UcumUnit,
     unit::Unit,
