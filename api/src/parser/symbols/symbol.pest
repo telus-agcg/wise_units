@@ -16,7 +16,13 @@ secondary_symbol = _{
 }
 
 pri_prefix = {
-    pri_yotta
+    pri_gibi
+        | pri_mebi
+        | pri_kibi
+        | pri_tebi
+        | pri_deka
+
+        | pri_yotta
         | pri_zetta
         | pri_exa
         | pri_peta
@@ -25,7 +31,6 @@ pri_prefix = {
         | pri_mega
         | pri_kilo
         | pri_hecto
-        | pri_deka
         | pri_deci
         | pri_centi
         | pri_milli
@@ -36,10 +41,6 @@ pri_prefix = {
         | pri_atto
         | pri_zepto
         | pri_yocto
-        | pri_kibi
-        | pri_mebi
-        | pri_gibi
-        | pri_tebi
 }
 
 pri_atto  = { "a" }
@@ -697,16 +698,24 @@ pri_unified_atomic_mass_unit = { "u" }
 //-----------------------------------------------------------------------------
 
 sec_prefix = {
-  sec_yotta
-      | sec_zetta
+  sec_gibi
+      | sec_kibi
+      | sec_mebi
+      | sec_tebi
+
+      | sec_deka
       | sec_exa
-      | sec_peta
-      | sec_tera
       | sec_giga
       | sec_mega
+      | sec_peta
+      | sec_tera
+      | sec_yotta
+      | sec_yocto
+      | sec_zetta
+      | sec_zepto
+
       | sec_kilo
       | sec_hecto
-      | sec_deka
       | sec_deci
       | sec_centi
       | sec_milli
@@ -715,12 +724,6 @@ sec_prefix = {
       | sec_pico
       | sec_femto
       | sec_atto
-      | sec_zepto
-      | sec_yocto
-      | sec_kibi
-      | sec_mebi
-      | sec_gibi
-      | sec_tebi
 }
 
 sec_atto  = { "A" }
