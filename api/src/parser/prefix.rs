@@ -219,6 +219,7 @@ impl Visit<Rule> for Prefix {
             Rule::pri_gibi | Rule::sec_gibi => Self::Gibi,
             Rule::pri_giga | Rule::sec_giga => Self::Giga,
             Rule::pri_hecto | Rule::sec_hecto => Self::Hecto,
+            Rule::pri_kibi | Rule::sec_kibi => Self::Kibi,
             Rule::pri_kilo | Rule::sec_kilo => Self::Kilo,
             Rule::pri_mebi | Rule::sec_mebi => Self::Mebi,
             Rule::pri_mega | Rule::sec_mega => Self::Mega,
