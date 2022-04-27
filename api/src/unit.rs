@@ -220,6 +220,21 @@ mod tests {
 
         let unit = Unit::from_str("km3/nm2").unwrap();
         assert_eq!(unit.expression_reduced().as_str(), "km3/nm2");
+
+        let unit = Unit::from_str("Kibit").unwrap();
+        assert_eq!(unit.expression_reduced().as_str(), "Kibit");
+
+        let unit = Unit::from_str("KiBy").unwrap();
+        assert_eq!(unit.expression_reduced().as_str(), "KiBy");
+
+        let unit = Unit::from_str("MiBy").unwrap();
+        assert_eq!(unit.expression_reduced().as_str(), "MiBy");
+
+        let unit = Unit::from_str("GiBy").unwrap();
+        assert_eq!(unit.expression_reduced().as_str(), "GiBy");
+
+        let unit = Unit::from_str("TiBy").unwrap();
+        assert_eq!(unit.expression_reduced().as_str(), "TiBy");
     }
 
     #[cfg(feature = "cffi")]

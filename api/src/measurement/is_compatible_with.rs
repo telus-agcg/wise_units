@@ -38,6 +38,17 @@ mod tests {
 
         let other = Measurement::try_new(1.0, "g{foo}").unwrap();
         assert!(!subject.is_compatible_with(&other));
+
+        let subject = Measurement::try_new(1.0, "GiBy{bit}").unwrap();
+        let other = Measurement::try_new(1.0, "Kibit{bit}").unwrap();
+        assert!(subject.is_compatible_with(&other));
+
+        assert!(subject.is_compatible_with(&Measurement::try_new(1.0, "Mibit{bit}").unwrap()));
+        assert!(subject.is_compatible_with(&Measurement::try_new(1.0, "Mbit{bit}").unwrap()));
+        assert!(subject.is_compatible_with(&Measurement::try_new(1.0, "MiBy{bit}").unwrap()));
+
+        let other = Measurement::try_new(1.0, "kbit").unwrap();
+        assert!(!subject.is_compatible_with(&other));
     }
 
     #[test]

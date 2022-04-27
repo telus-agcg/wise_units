@@ -102,6 +102,15 @@ mod tests {
     );
     validate_interpret!(validate_interpret_kilometer, "km", term!(Kilo, Meter));
 
+    validate_interpret!(validate_interpret_kilobyte, "kBy", term!(Kilo, Byte));
+    validate_interpret!(validate_sec_interpret_klobyte, "KBY", term!(Kilo, Byte));
+    validate_interpret!(validate_sec_interpret_kibibyte, "KIBBY", term!(Kibi, Byte));
+    validate_interpret!(validate_interpret_kibibyte, "KiBy", term!(Kibi, Byte));
+    validate_interpret!(validate_interpret_mebibyte, "MiBy", term!(Mebi, Byte));
+    validate_interpret!(validate_interpret_gibibyte, "GiBy", term!(Gibi, Byte));
+    validate_interpret!(validate_interpret_tebibyte, "TiBy", term!(Tebi, Byte));
+    validate_interpret!(validate_interpret_yottabyte, "YBy", term!(Yotta, Byte));
+
     // Slash terms
     validate_interpret!(
         validate_interpret_meter_per_second,
