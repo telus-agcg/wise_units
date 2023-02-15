@@ -23,7 +23,7 @@ fn format_output(numerator: Option<String>, denominator: Option<String>) -> Stri
     match (numerator, denominator) {
         (Some(n), Some(d)) => [n, d].join("/"),
         (Some(n), None) => n,
-        (None, Some(d)) => format!("/{}", d),
+        (None, Some(d)) => format!("/{d}"),
         (None, None) => "1".to_string(),
     }
 }
@@ -70,7 +70,7 @@ fn extract_denominator(term: &Term) -> Option<String> {
     extract_denominator_atom(term, &mut term_string);
 
     if let Some(ref annotation) = term.annotation {
-        term_string.push_str(&format!("{{{}}}", annotation));
+        term_string.push_str(&format!("{{{annotation}}}"));
     }
 
     Some(term_string)
@@ -88,7 +88,7 @@ fn extract_denominator_atom(term: &Term, term_string: &mut String) {
             if ex_abs == 1 {
                 term_string.push_str(&atom.to_string());
             } else {
-                term_string.push_str(&format!("{}{}", atom, ex_abs));
+                term_string.push_str(&format!("{atom}{ex_abs}"));
             }
         } else {
             term_string.push_str(&atom.to_string());

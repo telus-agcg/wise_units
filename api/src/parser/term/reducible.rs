@@ -1,3 +1,6 @@
+#![allow(clippy::large_enum_variant)]
+#![allow(clippy::result_large_err)]
+
 use super::Term;
 use crate::{parser::ucum_symbol::UcumSymbol, reducible::Reducible};
 
@@ -37,20 +40,16 @@ fn combine_term_values(
 ) -> f64 {
     let a_p_product = calculated_atom * calculated_prefix;
 
-    match factor {
-        Some(f) => {
+    factor.map_or_else(
+        || exponent.map_or(a_p_product, |e| a_p_product.powi(e)), 
+        |f| {
             let product = a_p_product * f64::from(f);
-
-            match exponent {
-                Some(e) => product.powi(e),
-                None => product,
-            }
+            exponent.map_or(product, |e| product.powi(e))
         }
-        None => match exponent {
-            Some(e) => a_p_product.powi(e),
-            None => a_p_product,
-        },
-    }
+    )
+
+
+
 }
 
 #[cfg(test)]

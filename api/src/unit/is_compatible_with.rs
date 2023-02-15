@@ -19,7 +19,7 @@ impl IsCompatibleWith for Unit {
 impl IsCompatibleWith<Measurement> for Unit {
     #[inline]
     fn is_compatible_with(&self, rhs: &Measurement) -> bool {
-        (&*self).is_compatible_with(rhs.unit().terms())
+        (*self).is_compatible_with(rhs.unit().terms())
     }
 }
 
@@ -66,7 +66,7 @@ mod tests {
     }
 
     #[test]
-    #[allow(clippy::blacklisted_name)]
+    #[allow(clippy::disallowed_names)]
     fn validate_is_compatible_with_units_with_annotations() {
         fn verify_compatible(lhs: &Unit, rhs: &Unit) {
             assert!(lhs.is_compatible_with(rhs));

@@ -10,7 +10,7 @@ fn main() {
         .generate()
         .map(|bindings| bindings.write_to_file("bindings.h"))
         .unwrap_or_else(|e| {
-            eprintln!("Unable to generate bindings: {}", e);
+            eprintln!("Unable to generate bindings: {e}");
             false
         });
 }

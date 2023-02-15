@@ -4,13 +4,13 @@ use crate::invert::{Invert, ToInverse};
 // Term
 impl Invert for &mut Term {
     fn invert(self) {
-        self.exponent = match self.exponent {
-            Some(e) => match e {
+        self.exponent = self.exponent.map_or(
+            Some(-1), 
+            |e| match e {
                 -1 => None,
                 _ => Some(-e),
-            },
-            None => Some(-1),
-        };
+            }
+        ); 
     }
 }
 

@@ -18,7 +18,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
 
 #[cfg_attr(feature = "cffi", ffi_common::derive::expose_fn(extend_type(Unit)))]
 fn divide_units(lhs: &Unit, rhs: &Unit) -> Unit {
-    Unit::new(divide_terms(&*lhs.terms, &*rhs.terms))
+    Unit::new(divide_terms(&lhs.terms, &rhs.terms))
 }
 
 impl Div for Unit {
@@ -72,7 +72,7 @@ fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
 
 #[cfg_attr(feature = "cffi", ffi_common::derive::expose_fn(extend_type(Unit)))]
 fn multiply_units(lhs: &Unit, rhs: &Unit) -> Unit {
-    Unit::new(multiply_terms(&*lhs.terms, &*rhs.terms))
+    Unit::new(multiply_terms(&lhs.terms, &rhs.terms))
 }
 
 impl Mul for Unit {

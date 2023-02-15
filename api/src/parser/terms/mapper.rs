@@ -1,3 +1,6 @@
+#![allow(clippy::large_enum_variant)]
+#![allow(clippy::result_large_err)]
+
 // Internal structs for mapping parser Rule data to an intermediate
 // representation of a Unit.
 pub(self) mod annotatable;
@@ -20,6 +23,8 @@ use self::{
 use crate::parser::{terms::term_parser::Rule, Atom, Error, Prefix, Term, Visit};
 use pest::iterators::{Pair, Pairs};
 
+#[allow(clippy::large_enum_variant)]
+#[allow(clippy::result_large_err)]
 pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
     fn visit_pairs(pair: Pair<'_, Rule>) -> Result<Vec<Term>, Error> {
         let main_term = if pair.as_rule() == Rule::main_term {

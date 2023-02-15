@@ -1,3 +1,6 @@
+#![allow(clippy::large_enum_variant)]
+#![allow(clippy::result_large_err)]
+
 /// Intended for `Measurement`s, it allows for converting using various types to construct the
 /// destination `Unit`.
 ///

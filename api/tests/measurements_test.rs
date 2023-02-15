@@ -421,5 +421,5 @@ fn mebi() {
         nine_mebi_bit,
         Measurement::try_new(9 * 1024 * 1024, "bit").unwrap()
     );
-    eprintln!("M: {} {}", over_one_mebibyte, nine_mebi_bit);
+    eprintln!("M: {over_one_mebibyte} {nine_mebi_bit}");
 }

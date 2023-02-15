@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub(crate) struct TomlPrefix {
     #[serde(rename = "Code")]

@@ -63,8 +63,7 @@ fn sanitize_type_name_segment(mut string: String) -> String {
 #[allow(clippy::non_ascii_literal)]
 fn remove_non_latin_chars(string: &str) -> String {
     string
-        .replace('è', "e")
-        .replace('é', "e")
+        .replace(['è', 'é'], "e")
         .replace('Å', "A")
         .replace('ö', "o")
 }
@@ -77,7 +76,7 @@ fn remove_non_letter_chars(string: &str) -> String {
 }
 
 fn finally(name: &str, primary_code: &str) -> String {
-    let type_name = format!("{}{}", name, primary_code);
+    let type_name = format!("{name}{primary_code}");
 
     let mut type_name = NUMBER_REGEX.replace(&type_name, "").into_owned();
     type_name.truncate(64);
