@@ -11,7 +11,6 @@ pub(crate) struct TomlDefinition {
 
 #[derive(Debug, Deserialize, Clone)]
 pub(crate) struct TomlFunction {
-    //pub(crate) name: String,
     pub(crate) value: f64,
     #[serde(rename = "Unit")]
     pub(crate) unit: String,
