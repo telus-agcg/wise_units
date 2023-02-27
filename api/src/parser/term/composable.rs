@@ -8,20 +8,15 @@ impl Composable for Term {
     ///
     // TODO: https://agrian.atlassian.net/browse/DEV-971
     //
+    #[allow(clippy::redundant_closure)]
     fn composition(&self) -> Composition {
-        match self.atom {
-            Some(atom) => {
+        self.atom.map_or_else(
+            || Composition::default(),
+            |atom| {
                 let atom_composition = atom.composition();
-
-                match self.exponent {
-                    Some(term_exponent) => atom_composition * term_exponent,
-                    None => atom_composition,
-                }
+                self.exponent.map_or(atom_composition, |term_exponent| atom_composition * term_exponent)
             }
-            // If there's no Atom in the Term, there's no dimension--even if there's an exponent on
-            // the Term.
-            None => Composition::default(),
-        }
+        )
     }
 }
 

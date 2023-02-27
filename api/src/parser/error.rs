@@ -5,7 +5,7 @@ use pest::error::Error as PestError;
 
 /// Errors when trying to convert between types that aren't commensurable.
 ///
-#[derive(Clone, thiserror::Error, Debug, PartialEq)]
+#[derive(Clone, thiserror::Error, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub enum Error {
     #[error(transparent)]

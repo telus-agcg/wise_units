@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 pub(crate) mod toml_atom;
 pub(crate) mod toml_atom_list;
 pub(crate) mod toml_base_unit;

@@ -36,13 +36,13 @@ impl Visit<TermRule> for Exponent {
 }
 
 fn parse_second_token(next: Option<Pair<'_, TermRule>>) -> Result<Digits, Error> {
-    match next {
-        Some(second) => match second.as_rule() {
+    next.map_or_else(
+        || unreachable!(), 
+        |second| match second.as_rule() {
             TermRule::digits => Digits::visit(second),
             _ => unreachable!(),
-        },
-        None => unreachable!(),
-    }
+        }
+    )
 }
 
 enum FirstToken {

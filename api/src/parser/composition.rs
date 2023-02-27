@@ -345,7 +345,7 @@ fn push_display_expression(
         if value == 1 {
             expressions.push(dimension_str.to_string());
         } else {
-            expressions.push(format!("{}{}", dimension_str, value));
+            expressions.push(format!("{dimension_str}{value}"));
         }
     }
 }

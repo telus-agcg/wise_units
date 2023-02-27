@@ -17,7 +17,7 @@ fn extract_term_string(term: &Term) -> String {
     extract_term_string_atom(&mut term_string, term);
 
     if let Some(ref annotation) = term.annotation {
-        term_string.push_str(&format!("{{{}}}", annotation));
+        term_string.push_str(&format!("{{{annotation}}}"));
     }
 
     term_string
@@ -42,7 +42,7 @@ fn extract_term_string_atom(term_string: &mut String, term: &Term) {
                 if exponent == 1 {
                     term_string.push_str(&atom.to_string());
                 } else {
-                    term_string.push_str(&format!("{}{}", atom, exponent));
+                    term_string.push_str(&format!("{atom}{exponent}"));
                 }
             }
             None => term_string.push_str(&atom.to_string()),

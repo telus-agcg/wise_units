@@ -33,10 +33,10 @@ impl<'a> FieldEq<'a> for Unit {
         fn sort_em(terms: &[Term]) -> Vec<Term> {
             let mut t = terms.to_vec();
 
-            t.sort_by(|a, b| match a.scalar().partial_cmp(&b.scalar()) {
-                Some(ordering) => ordering,
-                None => Ordering::Equal,
-            });
+            t.sort_by(
+                |a, b| 
+                    a.scalar().partial_cmp(&b.scalar()).map_or(Ordering::Equal, |ordering| ordering)   
+            );
 
             t
         }

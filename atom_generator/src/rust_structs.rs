@@ -21,5 +21,5 @@ pub(crate) struct RustAtomList {
 pub(self) fn build_pest_rule_name(prefix: &str, symbol: &str) -> String {
     let symbol = symbol.to_snake_case();
 
-    format!("{}_{}", prefix, symbol)
+    format!("{prefix}_{symbol}")
 }

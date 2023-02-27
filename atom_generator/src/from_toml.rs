@@ -126,7 +126,7 @@ fn build_scalar_function(primary_code: &str) -> String {
         "[pH]" => "|value: f64| -value.log10()",
         "[degF]" => "|value: f64| 5.0 / 9.0 * (value + 459.67)",
         "[degRe]" => "|value: f64| (value / 0.8) + 273.15",
-        _ => panic!("Unknown primary code on special unit: {}", primary_code),
+        _ => panic!("Unknown primary code on special unit: {primary_code}"),
     }
     .to_string()
 }
@@ -154,7 +154,7 @@ fn build_magnitude_function(primary_code: &str) -> String {
         "[pH]" => "|value: f64| 10.0_f64.powf(-value)",
         "[degF]" => "|value: f64| 9.0 * value / 5.0 - 459.67",
         "[degRe]" => "|value: f64| (value - 273.15) * 0.8",
-        _ => panic!("Unknown primary code on special unit: {}", primary_code),
+        _ => panic!("Unknown primary code on special unit: {primary_code}"),
     }
     .to_string()
 }

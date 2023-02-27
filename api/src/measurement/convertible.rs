@@ -1,3 +1,6 @@
+#![allow(clippy::large_enum_variant)]
+#![allow(clippy::result_large_err)]
+
 use crate::{Convertible, Error, FieldEq, IsCompatibleWith, Measurement, Unit};
 use std::str::FromStr;
 

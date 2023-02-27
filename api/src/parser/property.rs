@@ -1152,7 +1152,7 @@ impl fmt::Display for Property {
             },
         };
 
-        write!(formatter, "{}", string)
+        write!(formatter, "{string}")
     }
 }
 

@@ -17,7 +17,7 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
 
                 PestSymbol::new(super::build_pest_rule_name("pri", &s), code)
             })
-            .collect();
+            .collect::<Vec<PestSymbol>>();
 
         sort_symbols(&mut primary_rule_names);
 
@@ -32,7 +32,7 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
                     PestSymbol::new(super::build_pest_rule_name("sec", &s), code)
                 })
             })
-            .collect();
+            .collect::<Vec<PestSymbol>>();
 
         sort_symbols(&mut secondary_rule_names);
 
@@ -43,7 +43,8 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
     }
 }
 
-fn sort_symbols(symbols: &mut Vec<PestSymbol>) {
+//#[allow(clippy::all)]
+fn sort_symbols(symbols: &mut [PestSymbol]) {
     symbols.sort_by(|a, b| a.code.cmp(&b.code));
     symbols.sort_by(|a, b| b.code.len().cmp(&a.code.len()));
 }
