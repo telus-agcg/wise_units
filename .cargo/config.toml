@@ -1,2 +1,2 @@
 [registries]
-agrian-registry = { index = "ssh://git@github.com/agrian-inc/crates-registry.git" }
+crates-registry = { index = "ssh://git@github.com/telus-agcg/crates-registry.git" }

@@ -6,11 +6,11 @@ repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
 authors = ["Nicholas Smillie <nicholas@agrian.com>"]
 edition = "2021"
-publish = ["agrian-registry"]
+publish = ["crates-registry"]
 
 [dependencies]
-ffi_common = { version = "0.7", registry = "agrian-registry" }
-wise_units = { version = "0.22", registry = "agrian-registry" }
+ffi_common = { version = "0.7", registry = "crates-registry" }
+wise_units = { version = "0.22", registry = "crates-registry" }
 
 [build-dependencies]
 cbindgen = "0.20"
