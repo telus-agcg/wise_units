@@ -133,5 +133,17 @@ mod tests {
             let km_no_annotation = vec![term!(Kilo, Meter)];
             assert!(!m.is_compatible_with(&km_no_annotation));
         }
+
+        #[test]
+        fn validate_atomless_term() {
+            let lhs_tree = term!(annotation: "tree".to_string());
+            let rhs_tree = term!(annotation: "tree".to_string());
+            assert!(lhs_tree.is_compatible_with(&rhs_tree));
+
+            // Different annotation
+            let rhs_plant = term!(annotation: "plant".to_string());
+            assert!(!lhs_tree.is_compatible_with(&rhs_plant));
+        }
+
     }
 }
