@@ -14,8 +14,10 @@ impl Composable for Term {
             || Composition::default(),
             |atom| {
                 let atom_composition = atom.composition();
-                self.exponent.map_or(atom_composition, |term_exponent| atom_composition * term_exponent)
-            }
+                self.exponent.map_or(atom_composition, |term_exponent| {
+                    atom_composition * term_exponent
+                })
+            },
         )
     }
 }

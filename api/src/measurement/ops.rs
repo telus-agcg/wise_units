@@ -328,9 +328,9 @@ mod tests {
     }
 
     mod add {
-        use crate::Unit;
-        use crate::Term;
         use crate::error;
+        use crate::Term;
+        use crate::Unit;
 
         use super::*;
 
@@ -381,8 +381,7 @@ mod tests {
 
             assert_eq!((&m1 + m2).unwrap(), expected);
         }
-        
- 
+
         #[test]
         fn validate_sub_arbitrary() {
             let term_tree = term!(annotation: "tree".to_string());
@@ -394,7 +393,6 @@ mod tests {
 
             assert_eq!((&m1 - m2).unwrap(), expected);
         }
-
     }
 
     mod sub {

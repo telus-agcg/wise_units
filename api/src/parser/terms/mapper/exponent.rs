@@ -37,11 +37,11 @@ impl Visit<TermRule> for Exponent {
 
 fn parse_second_token(next: Option<Pair<'_, TermRule>>) -> Result<Digits, Error> {
     next.map_or_else(
-        || unreachable!(), 
+        || unreachable!(),
         |second| match second.as_rule() {
             TermRule::digits => Digits::visit(second),
             _ => unreachable!(),
-        }
+        },
     )
 }
 
