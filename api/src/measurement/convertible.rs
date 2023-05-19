@@ -134,4 +134,49 @@ mod tests {
         assert_relative_eq!(converted.value, 0.5);
         assert_ulps_eq!(converted.value, 0.5);
     }
+
+    #[test]
+    fn validate_arbitrary_den_conversions() {
+        let m1 = Measurement::try_new(10.0, "[acr_us]/{tree}").unwrap();
+
+        let u1 = Unit::from_str("m2/{tree}").unwrap();
+        let u2 = Unit::from_str("m2/{vine}").unwrap();
+
+        let converted = m1.convert_to(&u1).unwrap();
+
+        assert_relative_eq!(converted.value, 40468.72609874252);
+        assert_ulps_eq!(converted.value, 40468.72609874252);
+
+        assert!(m1.convert_to(&u2).is_err());
+    }
+
+    #[test]
+    fn validate_arbitrary_num_conversions() {
+        let m1 = Measurement::try_new(10.0, "{tree}/[acr_us]").unwrap();
+
+        let u1 = Unit::from_str("{tree}/m2").unwrap();
+        let u2 = Unit::from_str("{vine}/m2").unwrap();
+
+        let converted = m1.convert_to(&u1).unwrap();
+
+        assert_relative_eq!(converted.value, 0.002471043930466279);
+        assert_ulps_eq!(converted.value, 0.002471043930466279);
+
+        assert!(m1.convert_to(&u2).is_err());
+    }
+
+    #[test]
+    fn validate_arbitrary_conversions() {
+        let m1 = Measurement::try_new(10.0, "{tree}").unwrap();
+
+        let u1 = Unit::from_str("{tree}").unwrap();
+        let u2 = Unit::from_str("{vine}").unwrap();
+
+        let converted = m1.convert_to(&u1).unwrap();
+
+        assert_relative_eq!(converted.value, 10.0);
+        assert_ulps_eq!(converted.value, 10.0);
+
+        assert!(m1.convert_to(&u2).is_err());
+    }
 }

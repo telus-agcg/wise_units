@@ -41,15 +41,12 @@ fn combine_term_values(
     let a_p_product = calculated_atom * calculated_prefix;
 
     factor.map_or_else(
-        || exponent.map_or(a_p_product, |e| a_p_product.powi(e)), 
+        || exponent.map_or(a_p_product, |e| a_p_product.powi(e)),
         |f| {
             let product = a_p_product * f64::from(f);
             exponent.map_or(product, |e| product.powi(e))
-        }
+        },
     )
-
-
-
 }
 
 #[cfg(test)]

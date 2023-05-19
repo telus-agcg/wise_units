@@ -328,6 +328,10 @@ mod tests {
     }
 
     mod add {
+        use crate::error;
+        use crate::Term;
+        use crate::Unit;
+
         use super::*;
 
         #[test]
@@ -364,6 +368,30 @@ mod tests {
             let expected = Measurement::try_new(3.0, "m").unwrap();
 
             assert_eq!((&m1 + m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_add_arbitrary() {
+            let term_tree = term!(annotation: "tree".to_string());
+            let term_tree2 = term!(annotation: "tree".to_string());
+            let expected_term_tree = term!(annotation: "tree".to_string());
+            let m1 = Measurement::new(10.0, Unit::new(vec![term_tree]));
+            let m2 = Measurement::new(7.0, Unit::new(vec![term_tree2]));
+            let expected = Measurement::new(17.0, Unit::new(vec![expected_term_tree]));
+
+            assert_eq!((&m1 + m2).unwrap(), expected);
+        }
+
+        #[test]
+        fn validate_sub_arbitrary() {
+            let term_tree = term!(annotation: "tree".to_string());
+            let term_tree2 = term!(annotation: "tree".to_string());
+            let expected_term_tree = term!(annotation: "tree".to_string());
+            let m1 = Measurement::new(10.0, Unit::new(vec![term_tree]));
+            let m2 = Measurement::new(7.0, Unit::new(vec![term_tree2]));
+            let expected = Measurement::new(3.0, Unit::new(vec![expected_term_tree]));
+
+            assert_eq!((&m1 - m2).unwrap(), expected);
         }
     }
 
