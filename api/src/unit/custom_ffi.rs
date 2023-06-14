@@ -31,7 +31,7 @@ pub unsafe extern "C" fn unit_init(required_expression: *const c_char) -> *const
 #[allow(box_pointers)]
 #[no_mangle]
 pub unsafe extern "C" fn clone_unit(ptr: *const Unit) -> *const Unit {
-    Box::into_raw(Box::new((&*ptr).clone()))
+    Box::into_raw(Box::new((*ptr).clone()))
 }
 
 /// Returns the `expression` for the `Unit` behind `ptr` as a C string.
@@ -42,5 +42,5 @@ pub unsafe extern "C" fn clone_unit(ptr: *const Unit) -> *const Unit {
 ///
 #[no_mangle]
 pub unsafe extern "C" fn get_unit_expression(ptr: *const Unit) -> *const c_char {
-    core::ffi_string!((&*ptr).expression())
+    core::ffi_string!((*ptr).expression())
 }

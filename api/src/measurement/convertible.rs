@@ -144,8 +144,8 @@ mod tests {
 
         let converted = m1.convert_to(&u1).unwrap();
 
-        assert_relative_eq!(converted.value, 40468.72609874252);
-        assert_ulps_eq!(converted.value, 40468.72609874252);
+        assert_relative_eq!(converted.value, 40_468.726_098_742_52);
+        assert_ulps_eq!(converted.value, 40_468.726_098_742_52);
 
         assert!(m1.convert_to(&u2).is_err());
     }
@@ -159,8 +159,8 @@ mod tests {
 
         let converted = m1.convert_to(&u1).unwrap();
 
-        assert_relative_eq!(converted.value, 0.002471043930466279);
-        assert_ulps_eq!(converted.value, 0.002471043930466279);
+        assert_relative_eq!(converted.value, 0.002_471_043_930_466_279);
+        assert_ulps_eq!(converted.value, 0.002_471_043_930_466_279);
 
         assert!(m1.convert_to(&u2).is_err());
     }
