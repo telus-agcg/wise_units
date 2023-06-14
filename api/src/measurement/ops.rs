@@ -328,8 +328,7 @@ mod tests {
     }
 
     mod add {
-        use crate::Term;
-        use crate::Unit;
+        use crate::{Term, Unit};
 
         use super::*;
 
