@@ -7,11 +7,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [unreleased]
 
+### Added
+
+- PCC-174: Derive `Hash` for `Atom`.
+
 ### Changed
 
 - Rust minimum version updated to `1.64.0`.
+- (Internal) Rust Codegen is now using `quote` instead of `handlebars` (the pest parser grammar is
+  still generated using `handlebars`).
 
-## [0.22.0] - 2022-03-23
+## [0.22.0] — 2022-03-23
 
 ### Added
 
@@ -31,7 +37,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Changed `AsFraction` trait definition to allow for non-optional `Numerator` and `Denominator`.
 - Updated to Rust edition `2021`.
 
-## [0.21.1] - 2021-11-19
+## [0.21.1] — 2021-11-19
 
 ### Changed
 
@@ -41,7 +47,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - gh-35: Use a separate rule for parsing annotations--one that permits more characters.
 
-## [0.21.0] - 2021-10-20
+## [0.21.0] — 2021-10-20
 
 ### Added
 
@@ -56,28 +62,28 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Manually implemeted `PartialEq` for `Term`, comparing the composition and `scalar()`
+- Manually implemented `PartialEq` for `Term`, comparing the composition and `scalar()`
   value (like `Measurement` and `Unit`).
 
-## [0.20.0] - 2021-09-29
+## [0.20.0] — 2021-09-29
 
 ### Changed
 
 - Updated deps:
   - `ffi_common` to 0.6.0.
 
-## [0.19.0] - 2021-09-22
+## [0.19.0] — 2021-09-22
 
 ### Added
 
-- Derive FFI for `Measurement` and `Unit` things.
+- Derive `FFI` for `Measurement` and `Unit` things.
 
 ### Changed
 
 - Updated deps:
   - `ffi_common` to 0.5.0.
 
-## [0.18.0] - 2021-08-11
+## [0.18.0] — 2021-08-11
 
 ### Changed
 
@@ -91,13 +97,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - _BREAKING_: Removed `impl From<Vec<Term>> for Unit`; replaced with standard constructor:
   `Unit::new(terms)`.
 
-## [0.17.1] - 2021-07-16
+## [0.17.1] — 2021-07-16
 
 ### Changed
 
 - Point `ffi_derive`, `ffi_common` to 0.3.0.
 
-## [0.17.0] - 2021-07-16
+## [0.17.0] — 2021-07-16
 
 ### Changed
 
@@ -114,7 +120,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     `impl IsCompatibleWith for Term`.
   - _BREAKING_ (maybe?): `impl<'a, 'b> IsCompatibleWith<&'b [Term]> for &'a [Term]>` is now
     `impl IsCompatibleWith for Vec<Term>`.
-  - _BREAKING_ (maybe?): `impl<'a> Compsable for &'a [Term]` is now `impl Composable for Vec<Term>`.
+  - _BREAKING_ (maybe?): `impl<'a> Composable for &'a [Term]` is now `impl Composable for Vec<Term>`.
 - Updated `pest` to `2.0`
 - Refactored parser.
 - Made functions `const`:
@@ -125,7 +131,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `Term::has_value()`
   - `Term::exponent_is_positive()`
   - `Term::exponent_is_negative()`
-- Updated functions used for converting some arbitrary units to use more accurate implementations:
+- Updated functions used for converting some arbitrary units to use more correct implementations:
   - `Neper`
   - `MeterPerSquareSecondsPerSquareRootOfHertz`
   - `BitLogarithmusDualis`
@@ -138,7 +144,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Used [typos](https://github.com/crate-ci/typos) to find and fix typos. This included some internal
   types.
 
-## [0.16.0] - 2020-12-16
+## [0.16.0] — 2020-12-16
 
 ### Added
 
@@ -153,20 +159,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Pointed `agrian-registry` to GitHub.
 
-## [0.15.0] - 2020-07-31
+## [0.15.0] — 2020-07-31
 
 ### Changed
 
 - No longer generate code every time we build. That code now just needs to be manually generated any
   time `Atoms.toml` is updated.
 
-## [0.14.1] - 2020-07-22
+## [0.14.1] — 2020-07-22
 
 ### Fixed
 
 - Removed `serde_json` as a dep for the `atom_generator`, resolving downstream serialization issues.
 
-## [0.14.0] - 2020-05-08
+## [0.14.0] — 2020-05-08
 
 ### Added
 
@@ -178,7 +184,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Switched internal error-helper crate from `failure` to `thiserror`.
 
-## [0.13.0] - 2020-03-20
+## [0.13.0] — 2020-03-20
 
 ### Added
 
@@ -194,7 +200,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `parser::property::Property`'s implementation of `Display` wasn't working.
 
-## [0.12.0] - 2019-11-07
+## [0.12.0] — 2019-11-07
 
 ### Added
 
@@ -202,7 +208,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   wrapper types around `Measurement` and `Unit`.
 - Derive `Clone` for `error::Error` and `parser::Error`.
 
-## [0.11.0] - 2019-07-17
+## [0.11.0] — 2019-07-17
 
 ### Added
 
@@ -223,7 +229,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Removed `derive(Serialize, Deserialize)` from `Atom`, `Prefix`, and `Term` since these no longer
   need to be (de)serialized.
 
-## [0.10.0] - 2019-01-11
+## [0.10.0] — 2019-01-11
 
 ### Added
 
@@ -232,12 +238,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   errors with that. The new type should provide errors for the whole crate and thus wraps the old
   `parser::error::Error` as needed. Also moved the `IncompatibleUnitTypes` variant to the new type.
   The new type also implements `From<parser::Error>` for ergonomic conversions.
-- [DEV-4385] Implemented all of the `invert` traits for `Measurement`. Seems I forgot to do that for
+- [DEV-4385] Implemented all the `invert` traits for `Measurement`. Seems I forgot to do that for
   0.9.0. This also required a new `DivideByZero` error variant in the new `error::Error`. ...which
   also required changing the `ToInverse` and `IntoInverse` traits to add an `Output` associated type
   to allow clients to handle the `DivideByZero` case.
 
-## [0.9.0] - 2019-01-10
+## [0.9.0] — 2019-01-10
 
 ### Added
 
@@ -257,20 +263,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Removed `decomposer::Deomposable` and turned the old `Simple` decomposer struct into a function,
   `decomposer::decompose()`.
 
-## [0.8.0] - 2019-01-09
+## [0.8.0] — 2019-01-09
 
 ### Added
 
 - [DEV-4413] Added `IntoReduced` trait and implemented for `Measurement` and `Unit`.
 
-## [0.7.1] - 2019-01-08
+## [0.7.1] — 2019-01-08
 
 ### Changed
 
 - Updated implementations of `Div` and `Mul` for `Unit` to be more performant.
 - Updated implementation of `IntoInverse` for `Vec<Term>` to be more performant.
 
-## [0.7.0] - 2019-01-07
+## [0.7.0] — 2019-01-07
 
 ### Added
 
@@ -293,7 +299,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - [DEV-4385] Removed `Term::invert_exponent` in favor of the new implementations of `Invert` and
   `IntoInverse`.
 
-## [0.6.0] - 2019-01-04
+## [0.6.0] — 2019-01-04
 
 ### Added
 
@@ -304,14 +310,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Unit::from_str("1")` didn't parse such that `unit.terms[0].is_unity()` returned `true`; it now
   skips parsing and just returns a proper `Unit`.
 
-## [0.5.1] - 2018-11-06
+## [0.5.1] — 2018-11-06
 
 ### Changed
 
 - [DEV-3155] Reverted the change to the `Composable` trait definition to deal only with `self`; this
   caused `cannot move out of borrowed content` errors when trying to use the API normally.
 
-## [0.5.0] - 2018-11-06
+## [0.5.0] — 2018-11-06
 
 ### Added
 
@@ -345,7 +351,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - [DEV-3300] Parsing annotations now excludes curly braces in the resulting string capture.
 
-## [0.4.0] - 2018-10-02
+## [0.4.0] — 2018-10-02
 
 ### Added
 
@@ -363,7 +369,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   possible that a `Unit` with 0 `Term`s may still be interpreted similarly (haven't looked into this
   yet).
 
-## [0.3.0] - 2018-08-27
+## [0.3.0] — 2018-08-27
 
 ### Added
 
@@ -383,7 +389,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Decomposable::decompose()` now takes a value to let the caller decide what to pass in.
 - `Decomposable` now defines associated types for more `impl` flexibility.
 - Extracted some of `Decomposable::decompose()` to a new method, `Decomposable::format_output()`,
-  which let's consumers customize the formatted output.
+  which lets consumers customize the formatted output.
 - `Decomposable::numerator()` and `Decomposable::denominator()` now return `Option<String>` instead
   of `String`.
 - Refactored a number of `Decomposable` implementation methods.
@@ -398,7 +404,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - To match SI displaying, added a space for the implementation of `Display` for `Measurement` in
   between the value and the unit.
 
-## [0.2.0] - 2018-06-26
+## [0.2.0] — 2018-06-26
 
 ### Added
 
@@ -416,14 +422,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Removed implementations of `Add`, `Sub`, `Mul`, `Div` for `&'a mut Measurement` and
   `&'a mut Unit`. Those seem like edge-cases and thus code bloat at this point.
 
-## [0.2.0] - 2018-06-26
+## [0.2.0] — 2018-06-26
 
 ### Added
 
 - [AGDEV-30315] Add serde support using "with_serde" feature flag.
 - [AGDEV-30253] Add stdweb support using "with_stdweb" feature flag. Just adds `js_serializable!`
   and `js_deserializable!` for both `Measurement` and `Unit`.
-- The `UcumUnit` trait now handles some of the core attributes defined by the UCUM spec. `Atom`,
+- The `UcumUnit` trait now handles some core attributes defined by the UCUM spec. `Atom`,
   `Term`, `Unit`, and `Measurement` implement this.
 - The `Convertible` trait allows for converting to different objects using `convert_to()`.
   `Measurement` implements this for `Unit` and `&str`.
@@ -473,7 +479,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Removed `Atom::TheUnity` in favor of dealing with this as a `Term` with a `factor` of 1.
 - `Composable::composition()` now returns a `Composition` instead of `Option<Composition>`.
 
-## [0.1.0] - 2018-01-22
+## [0.1.0] — 2018-01-22
 
 ### Added
 

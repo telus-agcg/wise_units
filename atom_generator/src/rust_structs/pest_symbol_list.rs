@@ -1,6 +1,8 @@
+use heck::ToSnakeCase;
+
 use serde::Serialize;
 
-use super::RustAtomList;
+use super::rust_atom_list::RustAtomList;
 
 #[derive(Debug, Serialize)]
 pub(crate) struct PestSymbolList {
@@ -17,7 +19,7 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
                 let s = a.type_name.clone();
                 let code = a.primary_code.clone();
 
-                PestSymbol::new(super::build_pest_rule_name("pri", &s), code)
+                PestSymbol::new(build_pest_rule_name("pri", &s), code)
             })
             .collect::<Vec<PestSymbol>>();
 
@@ -31,7 +33,7 @@ impl<'a> From<&'a RustAtomList> for PestSymbolList {
                     let code = secondary_code.clone();
                     let s = atom.type_name.clone();
 
-                    PestSymbol::new(super::build_pest_rule_name("sec", &s), code)
+                    PestSymbol::new(build_pest_rule_name("sec", &s), code)
                 })
             })
             .collect::<Vec<PestSymbol>>();
@@ -51,6 +53,11 @@ fn sort_symbols(symbols: &mut [PestSymbol]) {
     symbols.sort_by(|a, b| b.code.len().cmp(&a.code.len()));
 }
 
+fn build_pest_rule_name(prefix: &str, symbol: &str) -> String {
+    let symbol = symbol.to_snake_case();
+
+    format!("{prefix}_{symbol}")
+}
 #[derive(Debug, Serialize)]
 pub(crate) struct PestSymbol {
     pub(crate) rule_name: String,
