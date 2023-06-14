@@ -14,7 +14,7 @@ use crate::{
 };
 use std::fmt;
 
-#[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord, Hash)]
 pub enum Atom {
     {{~ #each atoms }}
     {{ type_name }},{{ /each }}
@@ -33,8 +33,9 @@ impl Atom {
     #[must_use]
     pub const fn property(self) -> Property {
         match self {
-            {{~ #each atoms }}
-            Self::{{ type_name }} => Property::{{ camelCase property }},{{ /each }}
+            {{ #each atoms }}
+            Self::{{ type_name }} => Property::{{ camelCase property }},
+            {{ /each }}
         }
     }
 }
@@ -43,21 +44,24 @@ impl UcumSymbol for Atom {
     fn classification(&self) -> Classification {
         match *self {
             {{~ #each atoms }}
-            Self::{{ type_name }} => Classification::{{ classification }},{{ /each }}
+            Self::{{ type_name }} => Classification::{{ classification }},
+            {{ /each }}
         }
     }
 
     fn names(&self) -> Vec<&'static str> {
         match *self {
             {{~ #each atoms }}
-            Self::{{ type_name }} => vec![{{ #each names }}"{{ this }}",{{ /each}}],{{ /each }}
+            Self::{{ type_name }} => vec![{{ #each names }}"{{ this }}",{{ /each}}],
+            {{ /each }}
         }
     }
 
     fn primary_code(&self) -> &'static str {
         match *self {
             {{~ #each atoms }}
-            Self::{{ type_name }} => "{{ primary_code }}",{{ /each }}
+            Self::{{ type_name }} => "{{ primary_code }}",
+            {{ /each }}
         }
     }
 

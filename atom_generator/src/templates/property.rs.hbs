@@ -29,13 +29,15 @@ impl Property {
     #[must_use]
     pub fn atoms(self) -> Vec<Atom> {
         match self {
-            {{~ #each properties }}
+            {{ #each properties }}
             Self::{{ @key }} => {
                 vec![
-                    {{~ #each this.atom_type_names }}
-                    Atom::{{ this }},{{ /each }}
+                    {{ #each this.atom_type_names }}
+                    Atom::{{ this }},
+                    {{ /each }}
                 ]
-            },{{ /each }}
+            },
+            {{ /each }}
         }
     }
 }
@@ -49,10 +51,11 @@ impl Default for Property {
 impl fmt::Display for Property {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         let string = match self {
-            {{~ #each properties as |key value| }}
+            {{ #each properties as |key value| }}
             Self::{{ @key }} => {
                 "{{ @key }}"
-            },{{ /each }}
+            },
+            {{ /each }}
         };
 
         write!(formatter, "{}", string)

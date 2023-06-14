@@ -14,7 +14,7 @@ use crate::{
 };
 use std::fmt;
 
-#[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord, Hash)]
 pub enum Atom {
     Meter,
     Second,
@@ -395,26 +395,20 @@ impl Atom {
             Self::Month => Definition::new(1.0, "mo_j", None),
             Self::Tonne => Definition::new(1000.0, "kg", None),
             Self::Bar => Definition::new(100000.0, "Pa", None),
-            Self::UnifiedAtomicMassUnit => {
-                Definition::new(0.0000000000000000000000016605402, "g", None)
-            }
+            Self::UnifiedAtomicMassUnit => Definition::new(1.6605402e-24, "g", None),
             Self::Electronvolt => Definition::new(1.0, "[e].V", None),
             Self::AstronomicUnit => Definition::new(149597.870691, "Mm", None),
-            Self::Parsec => Definition::new(30856780000000000.0, "m", None),
+            Self::Parsec => Definition::new(3.085678e16, "m", None),
             Self::VelocityOfLight => Definition::new(299792458.0, "m/s", None),
-            Self::PlanckConstant => {
-                Definition::new(0.00000000000000000000000000000000066260755, "J.s", None)
-            }
-            Self::BoltzmannConstant => {
-                Definition::new(0.00000000000000000000001380658, "J/K", None)
-            }
-            Self::PermittivityOfVacuum => Definition::new(0.000000000008854187817, "F/m", None),
+            Self::PlanckConstant => Definition::new(6.6260755e-34, "J.s", None),
+            Self::BoltzmannConstant => Definition::new(1.380658e-23, "J/K", None),
+            Self::PermittivityOfVacuum => Definition::new(8.854187817e-12, "F/m", None),
             Self::PermeabilityOfVacuum => Definition::new(1.0, "4.[pi].10*-7.N/A2", None),
-            Self::ElementaryCharge => Definition::new(0.000000000000000000160217733, "C", None),
-            Self::ElectronMass => Definition::new(0.00000000000000000000000000091093897, "g", None),
-            Self::ProtonMass => Definition::new(0.0000000000000000000000016726231, "g", None),
+            Self::ElementaryCharge => Definition::new(1.60217733e-19, "C", None),
+            Self::ElectronMass => Definition::new(9.1093897e-28, "g", None),
+            Self::ProtonMass => Definition::new(1.6726231e-24, "g", None),
             Self::NewtonianConstantOfGravitation => {
-                Definition::new(0.0000000000667259, "m3.kg-1.s-2", None)
+                Definition::new(6.67259e-11, "m3.kg-1.s-2", None)
             }
             Self::StandardAccelerationOfFreeFall => Definition::new(9.80665, "m/s2", None),
             Self::StandardAtmosphere => Definition::new(101325.0, "Pa", None),
@@ -428,7 +422,7 @@ impl Atom {
             Self::Poise => Definition::new(1.0, "dyn.s/cm2", None),
             Self::Biot => Definition::new(10.0, "A", None),
             Self::Stokes => Definition::new(1.0, "cm2/s", None),
-            Self::Maxwell => Definition::new(0.00000001, "Wb", None),
+            Self::Maxwell => Definition::new(1e-8, "Wb", None),
             Self::Gauss => Definition::new(0.0001, "T", None),
             Self::Oersted => Definition::new(250.0, "/[pi].A/m", None),
             Self::Gilbert => Definition::new(1.0, "Oe.cm", None),
@@ -704,15 +698,15 @@ impl Atom {
                 1.0,
                 "1",
                 Some(FunctionSet {
-                    convert_from: f64::ln,
-                    convert_to: f64::exp,
+                    convert_from: |value: f64| value.ln(),
+                    convert_to: |value: f64| value.exp(),
                 }),
             ),
             Self::Bel => Definition::new(
                 1.0,
                 "1",
                 Some(FunctionSet {
-                    convert_from: f64::log10,
+                    convert_from: |value: f64| value.log10(),
                     convert_to: |value: f64| 10_f64.powf(value),
                 }),
             ),
@@ -760,7 +754,7 @@ impl Atom {
                 1.0,
                 "W",
                 Some(FunctionSet {
-                    convert_from: f64::log10,
+                    convert_from: |value: f64| value.log10(),
                     convert_to: |value: f64| 10_f64.powf(value),
                 }),
             ),
@@ -768,7 +762,7 @@ impl Atom {
                 1.0,
                 "kW",
                 Some(FunctionSet {
-                    convert_from: f64::log10,
+                    convert_from: |value: f64| value.log10(),
                     convert_to: |value: f64| 10_f64.powf(value),
                 }),
             ),
@@ -787,7 +781,7 @@ impl Atom {
                 1.0,
                 "m2/s4/Hz",
                 Some(FunctionSet {
-                    convert_from: f64::sqrt,
+                    convert_from: |value: f64| value.sqrt(),
                     convert_to: |value: f64| value * value,
                 }),
             ),
@@ -795,8 +789,8 @@ impl Atom {
                 1.0,
                 "1",
                 Some(FunctionSet {
-                    convert_from: f64::log2,
-                    convert_to: f64::exp2,
+                    convert_from: |value: f64| value.log2(),
+                    convert_to: |value: f64| value.exp2(),
                 }),
             ),
             Self::Bit => Ok(Definition::default()),
@@ -2626,7 +2620,7 @@ impl UcumSymbol for Atom {
             Self::Bit => Some("BIT"),
             Self::Byte => Some("BY"),
             Self::Baud => Some("BD"),
-            Self::LiterSecondary => None,
+            _ => None,
         }
     }
 
@@ -2635,7 +2629,7 @@ impl UcumSymbol for Atom {
     }
 
     fn definition_unit(&self) -> Unit {
-        Unit::new(self.definition().terms().clone())
+        Unit::from(self.definition().terms().clone())
     }
 }
 
@@ -2649,179 +2643,179 @@ impl UcumUnit for Atom {
     }
 
     fn is_arbitrary(&self) -> bool {
-        matches!(
-            *self,
-            Self::HomeopathicPotencyOfDecimalHahnemannianSeries
-                | Self::HomeopathicPotencyOfCentesimalHahnemannianSeries
-                | Self::HomeopathicPotencyOfMillesimalHahnemannianSeries
-                | Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries
-                | Self::HomeopathicPotencyOfDecimalKorsakovianSeries
-                | Self::HomeopathicPotencyOfCentesimalKorsakovianSeries
-                | Self::HomeopathicPotencyOfMillesimalKorsakovianSeries
-                | Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries
-                | Self::InternationalUnit
-                | Self::InternationalUnitSecondary
-                | Self::ArbitraryUnit
-                | Self::UnitedStatesPharmacopeiaUnit
-                | Self::GplUnit
-                | Self::MplUnit
-                | Self::AplUnit
-                | Self::BethesdaUnit
-                | Self::AntiFactorXaUnit
-                | Self::ToddUnit
-                | Self::DyeUnit
-                | Self::SomogyiUnit
-                | Self::BodanskyUnit
-                | Self::KingArmstrongUnit
-                | Self::KunkelUnit
-                | Self::MacLaganUnit
-                | Self::TuberculinUnit
-                | Self::CellCultureInfectiousDose
-                | Self::TissueCultureInfectiousDose
-                | Self::EmbryoInfectiousDose
-                | Self::PlaqueFormingUnits
-                | Self::FocusFormingUnits
-                | Self::ColonyFormingUnits
-                | Self::IndexOfReactivity
-                | Self::BioequivalentAllergenUnit
-                | Self::AllergenUnit
-                | Self::AllergenUnitForAmbrosiaArtemisiifolia
-                | Self::ProteinNitrogenUnit
-                | Self::LimitOfFlocculation
-                | Self::DAntigenUnit
-                | Self::FibrinogenEquivalentUnit
-                | Self::ElisaUnit
-                | Self::EhrlichUnit
-        )
+        match *self {
+            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => true,
+            Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => true,
+            Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => true,
+            Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => true,
+            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => true,
+            Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => true,
+            Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => true,
+            Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => true,
+            Self::InternationalUnit => true,
+            Self::InternationalUnitSecondary => true,
+            Self::ArbitraryUnit => true,
+            Self::UnitedStatesPharmacopeiaUnit => true,
+            Self::GplUnit => true,
+            Self::MplUnit => true,
+            Self::AplUnit => true,
+            Self::BethesdaUnit => true,
+            Self::AntiFactorXaUnit => true,
+            Self::ToddUnit => true,
+            Self::DyeUnit => true,
+            Self::SomogyiUnit => true,
+            Self::BodanskyUnit => true,
+            Self::KingArmstrongUnit => true,
+            Self::KunkelUnit => true,
+            Self::MacLaganUnit => true,
+            Self::TuberculinUnit => true,
+            Self::CellCultureInfectiousDose => true,
+            Self::TissueCultureInfectiousDose => true,
+            Self::EmbryoInfectiousDose => true,
+            Self::PlaqueFormingUnits => true,
+            Self::FocusFormingUnits => true,
+            Self::ColonyFormingUnits => true,
+            Self::IndexOfReactivity => true,
+            Self::BioequivalentAllergenUnit => true,
+            Self::AllergenUnit => true,
+            Self::AllergenUnitForAmbrosiaArtemisiifolia => true,
+            Self::ProteinNitrogenUnit => true,
+            Self::LimitOfFlocculation => true,
+            Self::DAntigenUnit => true,
+            Self::FibrinogenEquivalentUnit => true,
+            Self::ElisaUnit => true,
+            Self::EhrlichUnit => true,
+            _ => false,
+        }
     }
 
     fn is_special(&self) -> bool {
-        matches!(
-            *self,
-            Self::DegreeCelsius
-                | Self::DegreeFahrenheit
-                | Self::DegreeReaumur
-                | Self::PrismDiopter
-                | Self::PercentOfSlope
-                | Self::HomeopathicPotencyOfDecimalSeriesRetired
-                | Self::HomeopathicPotencyOfCentesimalSeriesRetired
-                | Self::HomeopathicPotencyOfMillesimalSeriesRetired
-                | Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired
-                | Self::PH
-                | Self::Neper
-                | Self::Bel
-                | Self::BelSoundPressure
-                | Self::BelVolt
-                | Self::BelMillivolt
-                | Self::BelMicrovolt
-                | Self::Bel10Nanovolt
-                | Self::BelWatt
-                | Self::BelKilowatt
-                | Self::MeterPerSquareSecondsPerSquareRootOfHertz
-                | Self::BitLogarithmusDualis
-        )
+        match *self {
+            Self::DegreeCelsius => true,
+            Self::DegreeFahrenheit => true,
+            Self::DegreeReaumur => true,
+            Self::PrismDiopter => true,
+            Self::PercentOfSlope => true,
+            Self::HomeopathicPotencyOfDecimalSeriesRetired => true,
+            Self::HomeopathicPotencyOfCentesimalSeriesRetired => true,
+            Self::HomeopathicPotencyOfMillesimalSeriesRetired => true,
+            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => true,
+            Self::PH => true,
+            Self::Neper => true,
+            Self::Bel => true,
+            Self::BelSoundPressure => true,
+            Self::BelVolt => true,
+            Self::BelMillivolt => true,
+            Self::BelMicrovolt => true,
+            Self::Bel10Nanovolt => true,
+            Self::BelWatt => true,
+            Self::BelKilowatt => true,
+            Self::MeterPerSquareSecondsPerSquareRootOfHertz => true,
+            Self::BitLogarithmusDualis => true,
+            _ => false,
+        }
     }
 
     fn is_metric(&self) -> bool {
-        matches!(
-            *self,
-            Self::Meter
-                | Self::Second
-                | Self::Gram
-                | Self::Radian
-                | Self::Kelvin
-                | Self::Coulomb
-                | Self::Candela
-                | Self::Mole
-                | Self::Steradian
-                | Self::Hertz
-                | Self::Newton
-                | Self::Pascal
-                | Self::Joule
-                | Self::Watt
-                | Self::Ampere
-                | Self::Volt
-                | Self::Farad
-                | Self::Ohm
-                | Self::Siemens
-                | Self::Weber
-                | Self::DegreeCelsius
-                | Self::Tesla
-                | Self::Henry
-                | Self::Lumen
-                | Self::Lux
-                | Self::Becquerel
-                | Self::Gray
-                | Self::Sievert
-                | Self::Liter
-                | Self::LiterSecondary
-                | Self::Are
-                | Self::Tonne
-                | Self::Bar
-                | Self::UnifiedAtomicMassUnit
-                | Self::Electronvolt
-                | Self::Parsec
-                | Self::VelocityOfLight
-                | Self::PlanckConstant
-                | Self::BoltzmannConstant
-                | Self::PermittivityOfVacuum
-                | Self::PermeabilityOfVacuum
-                | Self::ElementaryCharge
-                | Self::ElectronMass
-                | Self::ProtonMass
-                | Self::NewtonianConstantOfGravitation
-                | Self::StandardAccelerationOfFreeFall
-                | Self::LightYear
-                | Self::GramForce
-                | Self::Kayser
-                | Self::Gal
-                | Self::Dyne
-                | Self::Erg
-                | Self::Poise
-                | Self::Biot
-                | Self::Stokes
-                | Self::Maxwell
-                | Self::Gauss
-                | Self::Oersted
-                | Self::Gilbert
-                | Self::Stilb
-                | Self::Lambert
-                | Self::Phot
-                | Self::Curie
-                | Self::Roentgen
-                | Self::RadiationAbsorbedDose
-                | Self::RadiationEquivalentMan
-                | Self::CalorieAt15C
-                | Self::CalorieAt20C
-                | Self::MeanCalorie
-                | Self::InternationalTableCalorie
-                | Self::ThermochemicalCalorie
-                | Self::Calorie
-                | Self::Tex
-                | Self::MeterOfWaterColumn
-                | Self::MeterOfMercuryColumn
-                | Self::Equivalents
-                | Self::Osmole
-                | Self::GramPercent
-                | Self::Katal
-                | Self::Unit
-                | Self::InternationalUnit
-                | Self::InternationalUnitSecondary
-                | Self::Neper
-                | Self::Bel
-                | Self::BelSoundPressure
-                | Self::BelVolt
-                | Self::BelMillivolt
-                | Self::BelMicrovolt
-                | Self::Bel10Nanovolt
-                | Self::BelWatt
-                | Self::BelKilowatt
-                | Self::Stere
-                | Self::Mho
-                | Self::Bit
-                | Self::Byte
-                | Self::Baud
-        )
+        match *self {
+            Self::Meter => true,
+            Self::Second => true,
+            Self::Gram => true,
+            Self::Radian => true,
+            Self::Kelvin => true,
+            Self::Coulomb => true,
+            Self::Candela => true,
+            Self::Mole => true,
+            Self::Steradian => true,
+            Self::Hertz => true,
+            Self::Newton => true,
+            Self::Pascal => true,
+            Self::Joule => true,
+            Self::Watt => true,
+            Self::Ampere => true,
+            Self::Volt => true,
+            Self::Farad => true,
+            Self::Ohm => true,
+            Self::Siemens => true,
+            Self::Weber => true,
+            Self::DegreeCelsius => true,
+            Self::Tesla => true,
+            Self::Henry => true,
+            Self::Lumen => true,
+            Self::Lux => true,
+            Self::Becquerel => true,
+            Self::Gray => true,
+            Self::Sievert => true,
+            Self::Liter => true,
+            Self::LiterSecondary => true,
+            Self::Are => true,
+            Self::Tonne => true,
+            Self::Bar => true,
+            Self::UnifiedAtomicMassUnit => true,
+            Self::Electronvolt => true,
+            Self::Parsec => true,
+            Self::VelocityOfLight => true,
+            Self::PlanckConstant => true,
+            Self::BoltzmannConstant => true,
+            Self::PermittivityOfVacuum => true,
+            Self::PermeabilityOfVacuum => true,
+            Self::ElementaryCharge => true,
+            Self::ElectronMass => true,
+            Self::ProtonMass => true,
+            Self::NewtonianConstantOfGravitation => true,
+            Self::StandardAccelerationOfFreeFall => true,
+            Self::LightYear => true,
+            Self::GramForce => true,
+            Self::Kayser => true,
+            Self::Gal => true,
+            Self::Dyne => true,
+            Self::Erg => true,
+            Self::Poise => true,
+            Self::Biot => true,
+            Self::Stokes => true,
+            Self::Maxwell => true,
+            Self::Gauss => true,
+            Self::Oersted => true,
+            Self::Gilbert => true,
+            Self::Stilb => true,
+            Self::Lambert => true,
+            Self::Phot => true,
+            Self::Curie => true,
+            Self::Roentgen => true,
+            Self::RadiationAbsorbedDose => true,
+            Self::RadiationEquivalentMan => true,
+            Self::CalorieAt15C => true,
+            Self::CalorieAt20C => true,
+            Self::MeanCalorie => true,
+            Self::InternationalTableCalorie => true,
+            Self::ThermochemicalCalorie => true,
+            Self::Calorie => true,
+            Self::Tex => true,
+            Self::MeterOfWaterColumn => true,
+            Self::MeterOfMercuryColumn => true,
+            Self::Equivalents => true,
+            Self::Osmole => true,
+            Self::GramPercent => true,
+            Self::Katal => true,
+            Self::Unit => true,
+            Self::InternationalUnit => true,
+            Self::InternationalUnitSecondary => true,
+            Self::Neper => true,
+            Self::Bel => true,
+            Self::BelSoundPressure => true,
+            Self::BelVolt => true,
+            Self::BelMillivolt => true,
+            Self::BelMicrovolt => true,
+            Self::Bel10Nanovolt => true,
+            Self::BelWatt => true,
+            Self::BelKilowatt => true,
+            Self::Stere => true,
+            Self::Mho => true,
+            Self::Bit => true,
+            Self::Byte => true,
+            Self::Baud => true,
+            _ => false,
+        }
     }
 }
 
