@@ -1,4 +1,4 @@
-#[derive(Debug, Serialize)]
+#[derive(Debug, serde::Serialize)]
 pub(crate) struct RustFunctionSet {
     // AKA "calculate_magnitude"
     pub(crate) convert_from: String,

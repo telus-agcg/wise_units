@@ -1,5 +1,6 @@
 use super::RustAtomList;
 use heck::ToUpperCamelCase;
+use serde::Serialize;
 use std::collections::HashMap;
 
 type PropertyTypeName = String;

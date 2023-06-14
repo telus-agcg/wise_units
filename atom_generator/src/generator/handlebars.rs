@@ -1,6 +1,8 @@
-use super::{atom, classification, mapper, property, symbol_grammar};
-use handlebars::Handlebars;
+use handlebars::{handlebars_helper, Handlebars};
 use heck::ToUpperCamelCase;
+use lazy_static::lazy_static;
+
+use super::{atom, classification, mapper, property, symbol_grammar};
 
 handlebars_helper!(camel_case_helper: |word: str| word.to_upper_camel_case());
 

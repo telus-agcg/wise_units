@@ -1,7 +1,7 @@
 use super::{TomlBaseUnit, TomlUnit};
 use std::str::FromStr;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 pub(crate) struct TomlAtomList {
     #[serde(rename = "base-unit")]
     pub(crate) base_units: Vec<TomlBaseUnit>,

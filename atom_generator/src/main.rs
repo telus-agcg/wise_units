@@ -17,15 +17,6 @@
 )]
 #![allow(clippy::redundant_pub_crate)]
 
-#[macro_use(handlebars_helper)]
-extern crate handlebars;
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate log;
-#[macro_use]
-extern crate serde_derive;
-
 mod from_toml;
 mod generator;
 mod rust_structs;

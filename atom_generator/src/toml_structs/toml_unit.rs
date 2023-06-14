@@ -1,6 +1,6 @@
 use super::{TomlAtom, TomlDefinition};
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct TomlUnit {
     #[serde(rename = "Code")]

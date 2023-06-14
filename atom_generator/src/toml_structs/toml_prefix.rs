@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 pub(crate) struct TomlPrefix {
     #[serde(rename = "Code")]
     pub(crate) primary_code: String,

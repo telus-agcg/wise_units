@@ -7,7 +7,7 @@ terms. It's similar to Ruby's [unitwise](https://github.com/joshwlewis/unitwise)
 
 ## Prerequisites
 
-- Rust 1.56
+- Rust 1.64
   - Get it [here](https://rustup.rs/)
 
 ## Usage

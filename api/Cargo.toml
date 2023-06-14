@@ -9,17 +9,17 @@ edition = "2021"
 publish = ["crates-registry"]
 
 [dependencies]
-approx = "0.5"
-ffi_common = { version = "0.7", registry = "crates-registry", optional = true }
+approx.workspace = true
+ffi_common = { workspace = true, optional = true }
 pest = "^2.1"
 pest_derive = "^2.1"
-serde = { version = "1.0", optional = true, features = ["derive"] }
+serde = { workspace = true, optional = true }
 thiserror = "1.0"
 
 [dev-dependencies]
 bincode = "1.3"
-criterion = "0.3"
-lazy_static = "1.4"
+criterion = "0.5"
+lazy_static.workspace = true
 rmp-serde = "1.0"
 serde_json = "1.0"
 

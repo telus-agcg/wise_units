@@ -328,7 +328,6 @@ mod tests {
     }
 
     mod add {
-        use crate::error;
         use crate::Term;
         use crate::Unit;
 

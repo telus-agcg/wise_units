@@ -9,14 +9,14 @@ edition = "2021"
 publish = ["crates-registry"]
 
 [dependencies]
-ffi_common = { version = "0.7", registry = "crates-registry" }
+ffi_common.workspace = true
 wise_units = { version = "0.22", registry = "crates-registry" }
 
 [build-dependencies]
-cbindgen = "0.20"
+cbindgen = "0.24"
 
 [dev-dependencies]
-approx = "0.5"
+approx.workspace = true
 
 [lib]
 crate-type = ["staticlib", "rlib", "cdylib"]

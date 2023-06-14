@@ -58,9 +58,9 @@ fn transcode(xml_string: &str) -> String {
 
     {
         let mut deserializer = serde_xml_rs::Deserializer::new_from_reader(xml_string.as_bytes());
-        let mut serializer = toml::ser::Serializer::pretty(&mut toml_string);
+        let serializer = toml::ser::Serializer::pretty(&mut toml_string);
 
-        serde_transcode::transcode(&mut deserializer, &mut serializer)
+        serde_transcode::transcode(&mut deserializer, serializer)
             .expect("Unable to translcode XML to TOML");
     }
 
