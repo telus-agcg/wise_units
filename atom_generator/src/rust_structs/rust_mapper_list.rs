@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 use super::RustAtomList;
 use std::collections::HashMap;
 

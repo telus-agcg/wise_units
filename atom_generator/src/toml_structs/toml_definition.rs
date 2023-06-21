@@ -1,3 +1,5 @@
+use serde::Deserialize;
+
 #[derive(Debug, Deserialize, Clone)]
 pub(crate) struct TomlDefinition {
     #[serde(default = "default_value")]

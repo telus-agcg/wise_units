@@ -1,7 +1,8 @@
-use super::RustAtomList;
 use std::collections::HashSet;
 
-#[derive(Debug, Serialize)]
+use super::RustAtomList;
+
+#[derive(Debug, serde::Serialize)]
 pub(crate) struct RustClassificationList {
     pub(crate) type_names: Vec<String>,
 }

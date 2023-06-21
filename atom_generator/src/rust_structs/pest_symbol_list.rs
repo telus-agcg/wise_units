@@ -1,3 +1,5 @@
+use serde::Serialize;
+
 use super::RustAtomList;
 
 #[derive(Debug, Serialize)]

@@ -1,4 +1,4 @@
-#[derive(Debug, Serialize)]
+#[derive(Debug, serde::Serialize)]
 pub(crate) struct RustAtom {
     pub(crate) type_name: String,
     pub(crate) classification: String,

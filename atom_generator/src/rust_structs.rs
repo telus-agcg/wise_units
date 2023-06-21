@@ -13,7 +13,7 @@ pub(crate) use self::{
 
 use heck::ToSnakeCase;
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, serde::Serialize)]
 pub(crate) struct RustAtomList {
     pub(crate) atoms: Vec<RustAtom>,
 }

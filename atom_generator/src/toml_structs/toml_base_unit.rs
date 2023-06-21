@@ -1,6 +1,6 @@
 use crate::toml_structs::TomlAtom;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, serde::Deserialize)]
 pub(crate) struct TomlBaseUnit {
     #[serde(rename = "Code")]
     pub(crate) primary_code: String,
