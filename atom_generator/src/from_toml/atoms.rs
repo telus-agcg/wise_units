@@ -1,4 +1,4 @@
-use crate::{rust_structs::RustAtomList, toml_structs::TomlAtomList};
+use crate::{rust_structs::rust_atom_list::RustAtomList, toml_structs::TomlAtomList};
 use std::str::FromStr;
 
 static ATOMS_FILE: &str = include_str!("../../Atoms.toml");

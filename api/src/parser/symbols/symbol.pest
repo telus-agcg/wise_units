@@ -381,7 +381,6 @@ pri_atom = {
         | pri_unified_atomic_mass_unit
 }
 
-
 pri_meter_per_square_seconds_per_square_root_of_hertz = { "[m/s2/Hz^(1/2)]" }
 pri_allergen_unit_for_ambrosia_artemisiifolia = { "[Amb'a'1'U]" }
 pri_anti_factor_xa_unit = { "[anti'Xa'U]" }
@@ -1062,7 +1061,6 @@ sec_atom = {
         | sec_volt
         | sec_watt
 }
-
 
 sec_meter_per_square_seconds_per_square_root_of_hertz = { "[M/S2/HZ^(1/2)]" }
 sec_allergen_unit_for_ambrosia_artemisiifolia = { "[AMB'A'1'U]" }

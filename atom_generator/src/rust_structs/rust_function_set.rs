@@ -1,8 +1,12 @@
-#[derive(Debug, serde::Serialize)]
-pub(crate) struct RustFunctionSet {
-    // AKA "calculate_magnitude"
-    pub(crate) convert_from: String,
+use proc_macro2::TokenStream;
 
-    // AKA "reduce_value"
-    pub(crate) convert_to: String,
+#[derive(Debug)]
+pub(crate) struct RustFunctionSet {
+    /// The function to use to convert from a unit to this one.
+    ///
+    pub(crate) convert_from: TokenStream,
+
+    /// The function to use to convert to a unit from this one.
+    ///
+    pub(crate) convert_to: TokenStream,
 }

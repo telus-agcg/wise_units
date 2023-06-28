@@ -27,6 +27,8 @@ use crate::{
     toml_structs::{TomlAtom, TomlBaseUnit, TomlUnit},
 };
 use heck::ToUpperCamelCase;
+use proc_macro2::TokenStream;
+use quote::quote;
 
 pub(crate) mod atoms;
 pub(crate) mod custom_atoms;
@@ -40,7 +42,7 @@ fn transform_base_units(atom_list_base_units: &[TomlBaseUnit]) -> Vec<RustAtom> 
             type_name: bu.type_name(),
             classification: "Si".to_string(),
             dim: Some(bu.dim.clone()),
-            definition_signature: "Ok(Definition::default())".to_string(),
+            definition_signature: quote! { Ok(Definition::default()) },
             primary_code: bu.primary_code.clone(),
             print_symbol: Some(bu.print_symbol.clone()),
             property: bu.property.clone(),
@@ -66,25 +68,27 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
                 };
 
                 let function = u.definition.function.clone().unwrap();
-                let function_set_string = build_function_set_string(&function_set);
+                let function_set_ts = build_function_set_ts(function_set);
 
-                format!(
-                    "Definition::new({:?}, \"{}\", Some({}))",
-                    function.value, function.unit, function_set_string
-                )
+                let value = function.value;
+                let unit = &function.unit;
+
+                quote! {
+                    Definition::new(#value, #unit, Some(#function_set_ts))
+                }
             } else if &u.primary_code == "[pi]" {
-                format!(
-                    "Definition::new(::std::f64::consts::PI, \"{}\", None)",
-                    u.definition.unit.clone()
-                )
+                let unit = &u.definition.unit;
+
+                quote! {
+                    Definition::new(::std::f64::consts::PI, #unit, None)
+                }
             } else if u.definition.value.eq(&1.0_f64) && &u.definition.unit == "1" {
-                "Ok(Definition::default())".to_string()
+                quote! { Ok(Definition::default()) }
             } else {
-                format!(
-                    "Definition::new({:?}, \"{}\", None)",
-                    u.definition.value,
-                    u.definition.unit.clone()
-                )
+                let value = u.definition.value;
+                let unit = &u.definition.unit;
+
+                quote! { Definition::new(#value, #unit, None) }
             };
 
             RustAtom {
@@ -108,27 +112,52 @@ fn transform_units(atom_list_units: &[TomlUnit]) -> Vec<RustAtom> {
 /// Determines which function to generate for converting *from* the unit with
 /// `primary_code` to its base unit.
 ///
-fn build_scalar_function(primary_code: &str) -> String {
+fn build_scalar_function(primary_code: &str) -> TokenStream {
     match primary_code {
-        "B" | "B[W]" | "B[kW]" => "|value: f64| 10_f64.powf(value)",
-        "B[SPL]" | "B[V]" | "B[mV]" | "B[uV]" | "B[10.nV]" => {
-            "|value: f64| 10_f64.powf(value / 2.0)"
-        }
-        "bit_s" => "|value: f64| value.exp2()",
-        "Cel" => "|value: f64| value + 273.15",
-        "Np" => "|value: f64| value.exp()",
-        "%[slope]" | "[p'diop]" => "|value: f64| value.tan() * 100.0",
-        "[hp'_X]" => "|value: f64| 10_f64.powf(-value)",
-        "[hp'_C]" => "|value: f64| 100_f64.powf(-value)",
-        "[hp'_M]" => "|value: f64| 1_000_f64.powf(-value)",
-        "[hp'_Q]" => "|value: f64| 50_000_f64.powf(-value)",
-        "[m/s2/Hz^(1/2)]" => "|value: f64| value * value",
-        "[pH]" => "|value: f64| -value.log10()",
-        "[degF]" => "|value: f64| 5.0 / 9.0 * (value + 459.67)",
-        "[degRe]" => "|value: f64| (value / 0.8) + 273.15",
+        "B" | "B[W]" | "B[kW]" => quote! {
+            |value: f64| 10_f64.powf(value)
+        },
+        "B[SPL]" | "B[V]" | "B[mV]" | "B[uV]" | "B[10.nV]" => quote! {
+            |value: f64| 10_f64.powf(value / 2.0)
+        },
+        "bit_s" => quote! {
+            f64::exp2
+        },
+        "Cel" => quote! {
+            |value: f64| value + 273.15
+        },
+        "Np" => quote! {
+            f64::exp
+        },
+        "%[slope]" | "[p'diop]" => quote! {
+            |value: f64| value.tan() * 100.0
+        },
+        "[hp'_X]" => quote! {
+            |value: f64| 10_f64.powf(-value)
+        },
+        "[hp'_C]" => quote! {
+            |value: f64| 100_f64.powf(-value)
+        },
+        "[hp'_M]" => quote! {
+            |value: f64| 1_000_f64.powf(-value)
+        },
+        "[hp'_Q]" => quote! {
+            |value: f64| 50_000_f64.powf(-value)
+        },
+        "[m/s2/Hz^(1/2)]" => quote! {
+            |value: f64| value * value
+        },
+        "[pH]" => quote! {
+            |value: f64| -value.log10()
+        },
+        "[degF]" => quote! {
+            |value: f64| 5.0 / 9.0 * (value + 459.67)
+        },
+        "[degRe]" => quote! {
+            |value: f64| (value / 0.8) + 273.15
+        },
         _ => panic!("Unknown primary code on special unit: {primary_code}"),
     }
-    .to_string()
 }
 
 /// Determines which function to generate for converting *to* the unit with
@@ -138,30 +167,59 @@ fn build_scalar_function(primary_code: &str) -> String {
 /// manually updated here, and support for custom special units does not yet
 /// exist.
 ///
-fn build_magnitude_function(primary_code: &str) -> String {
+fn build_magnitude_function(primary_code: &str) -> TokenStream {
     match primary_code {
-        "B" | "B[W]" | "B[kW]" => "|value: f64| value.log10()",
-        "B[SPL]" | "B[V]" | "B[mV]" | "B[uV]" | "B[10.nV]" => "|value: f64| 2.0 * value.log10()",
-        "bit_s" => "|value: f64| value.log2()",
-        "Cel" => "|value: f64| value - 273.15",
-        "Np" => "|value: f64| value.ln()",
-        "%[slope]" | "[p'diop]" => "|value: f64| (value / 100.0).atan()",
-        "[hp'_X]" => "|value: f64| -value.log10()",
-        "[hp'_C]" => "|value: f64| -value.ln() / 100_f64.ln()",
-        "[hp'_M]" => "|value: f64| -value.ln() / 1_000_f64.ln()",
-        "[hp'_Q]" => "|value: f64| -value.ln() / 50_000_f64.ln()",
-        "[m/s2/Hz^(1/2)]" => "|value: f64| value.sqrt()",
-        "[pH]" => "|value: f64| 10.0_f64.powf(-value)",
-        "[degF]" => "|value: f64| 9.0 * value / 5.0 - 459.67",
-        "[degRe]" => "|value: f64| (value - 273.15) * 0.8",
+        "B" | "B[W]" | "B[kW]" => quote! {
+            f64::log10
+        },
+        "B[SPL]" | "B[V]" | "B[mV]" | "B[uV]" | "B[10.nV]" => quote! {
+            |value: f64| 2.0 * value.log10()
+        },
+        "bit_s" => quote! {
+            f64::log2
+        },
+        "Cel" => quote! {
+            |value: f64| value - 273.15
+        },
+        "Np" => quote! {
+            f64::ln
+        },
+        "%[slope]" | "[p'diop]" => quote! {
+            |value: f64| (value / 100.0).atan()
+        },
+        "[hp'_X]" => quote! {
+            |value: f64| -value.log10()
+        },
+        "[hp'_C]" => quote! {
+            |value: f64| -value.ln() / 100_f64.ln()
+        },
+        "[hp'_M]" => quote! {
+            |value: f64| -value.ln() / 1_000_f64.ln()
+        },
+        "[hp'_Q]" => quote! {
+            |value: f64| -value.ln() / 50_000_f64.ln()
+        },
+        "[m/s2/Hz^(1/2)]" => quote! {
+            f64::sqrt
+        },
+        "[pH]" => quote! {
+            |value: f64| 10.0_f64.powf(-value)
+        },
+        "[degF]" => quote! {
+            |value: f64| 9.0 * value / 5.0 - 459.67
+        },
+        "[degRe]" => quote! {
+            |value: f64| (value - 273.15) * 0.8
+        },
         _ => panic!("Unknown primary code on special unit: {primary_code}"),
     }
-    .to_string()
 }
 
-fn build_function_set_string(rust_function_set: &RustFunctionSet) -> String {
-    format!(
-        "FunctionSet {{ convert_from: {}, convert_to: {} }}",
-        rust_function_set.convert_from, rust_function_set.convert_to
-    )
+fn build_function_set_ts(rust_function_set: RustFunctionSet) -> TokenStream {
+    let from = rust_function_set.convert_from;
+    let to = rust_function_set.convert_to;
+
+    quote! {
+        FunctionSet { convert_from: #from, convert_to: #to },
+    }
 }

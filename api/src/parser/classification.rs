@@ -29,13 +29,11 @@ pub enum Classification {
     UsLengths,
     UsVolumes,
 }
-
 impl Default for Classification {
     fn default() -> Self {
         Self::Si
     }
 }
-
 impl std::fmt::Display for Classification {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let s = match self {
@@ -60,7 +58,6 @@ impl std::fmt::Display for Classification {
             Self::UsLengths => "UsLengths",
             Self::UsVolumes => "UsVolumes",
         };
-
         f.write_str(s)
     }
 }

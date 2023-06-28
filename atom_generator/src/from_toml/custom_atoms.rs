@@ -2,7 +2,7 @@ use std::{env, fs::File, io::Read, path::Path, str::FromStr};
 
 use log::debug;
 
-use crate::{rust_structs::RustAtomList, toml_structs::TomlCustomAtomList};
+use crate::{rust_structs::rust_atom_list::RustAtomList, toml_structs::TomlCustomAtomList};
 
 static CUSTOM_ATOMS_FILE_NAME: &str = "CustomAtoms.toml";
 
