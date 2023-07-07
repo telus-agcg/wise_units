@@ -36,7 +36,7 @@ use ffi_common::derive::FFI;
         failable_fns(custom_ffi::get_unit_expression)
     )
 )]
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Hash)]
 pub struct Unit {
     terms: Vec<Term>,
 }
