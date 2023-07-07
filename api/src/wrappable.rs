@@ -21,3 +21,22 @@ macro_rules! wrapper_impl_display {
         }
     };
 }
+
+#[macro_export]
+macro_rules! wrapper_impl_v2_ucum_unit_flags {
+    ($dest:ty) => {
+        impl $crate::wrappable::v2::ucum_unit::UcumUnitFlags for $dest {
+            fn is_special(&self) -> bool {
+                $crate::UcumUnit::is_special(&*self.as_wrapped_ref())
+            }
+
+            fn is_metric(&self) -> bool {
+                $crate::UcumUnit::is_metric(&*self.as_wrapped_ref())
+            }
+
+            fn is_arbitrary(&self) -> bool {
+                $crate::UcumUnit::is_arbitrary(&*self.as_wrapped_ref())
+            }
+        }
+    };
+}
