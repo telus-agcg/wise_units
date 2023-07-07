@@ -19,7 +19,7 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
         /// HTML spec, but is used throughout the
         /// [XML description](http://unitsofmeasure.org/ucum-essence.xml).
         ///
-        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+        #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
         pub enum Property {
             #(#variants),*
         }
