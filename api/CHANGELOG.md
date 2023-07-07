@@ -10,6 +10,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - PCC-174: Derive `Hash` for `Atom`.
+- Derive `Partial, Ord` for `Composition`.
+- Derive `Partial, Ord, Hash` for `Term`.
+- Derive `Hash` for `Unit`.
 
 ### Changed
 

@@ -15,7 +15,7 @@ use crate::parser::{Atom, Prefix};
 /// Atom-less Term, which would simple be a Factor (with or without an
 /// annotation) (ex. the 10 in "10" or "10/m" would be an Atom-less Term).
 ///
-#[derive(Clone, Debug, Eq, Default)]
+#[derive(Clone, Debug, Eq, Default, Hash, PartialOrd, Ord)]
 pub struct Term {
     pub factor: Option<u32>,
     pub prefix: Option<Prefix>,
