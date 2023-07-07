@@ -1,6 +1,7 @@
-#![allow(clippy::module_name_repetitions)]
 //! These traits are a progression from the existing `crate::UcumUnit` trait, allowing the same
 //! functionality, but also allowing downstream crates to implement for wrapper types.
+//!
+#![allow(clippy::module_name_repetitions)]
 
 pub trait UcumUnitFlags {
     fn is_special(&self) -> bool;

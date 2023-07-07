@@ -67,6 +67,24 @@ impl RustAtomList {
         }
     }
 
+    pub(crate) fn v2_classified_impl(&self) -> TokenStream {
+        let classifications = self.atoms.iter().map(RustAtom::classification_ts);
+
+        quote! {
+            #[allow(unused_qualifications)]
+            #[cfg(feature = "v2")]
+            impl crate::v2::ucum_symbol::UcumClassified for Atom {
+                type Classification = crate::Classification;
+
+                fn classification(&self) -> Self::Classification {
+                    match *self {
+                        #(#classifications),*
+                    }
+                }
+            }
+        }
+    }
+
     pub(crate) fn names_method(&self) -> TokenStream {
         let names = self.atoms.iter().map(RustAtom::names_ts);
 
@@ -79,11 +97,35 @@ impl RustAtomList {
         }
     }
 
+    pub(crate) fn v2_names_method(&self) -> TokenStream {
+        let names = self.atoms.iter().map(RustAtom::v2_names_ts);
+
+        quote! {
+            fn names(&self) -> crate::v2::ucum_symbol::Names<&'static str> {
+                match *self {
+                    #(#names),*
+                }
+            }
+        }
+    }
+
     pub(crate) fn primary_code_method(&self) -> TokenStream {
         let primary_codes = self.atoms.iter().map(RustAtom::primary_code_ts);
 
         quote! {
             fn primary_code(&self) -> &'static str {
+                match *self {
+                    #(#primary_codes),*
+                }
+            }
+        }
+    }
+
+    pub(crate) fn v2_primary_code_method(&self) -> TokenStream {
+        let primary_codes = self.atoms.iter().map(RustAtom::primary_code_ts);
+
+        quote! {
+            fn primary_code(&self) -> Self::String {
                 match *self {
                     #(#primary_codes),*
                 }
@@ -104,11 +146,36 @@ impl RustAtomList {
         }
     }
 
+    pub(crate) fn v2_print_symbol_method(&self) -> TokenStream {
+        let print_symbols = self.atoms.iter().filter_map(RustAtom::print_symbol_ts);
+
+        quote! {
+            fn print_symbol(&self) -> Option<Self::String> {
+                match *self {
+                    #(#print_symbols),*,
+                    _ => None,
+                }
+            }
+        }
+    }
+
     pub(crate) fn secondary_code_method(&self) -> TokenStream {
         let secondary_codes = self.atoms.iter().map(RustAtom::secondary_code_ts);
 
         quote! {
             fn secondary_code(&self) -> Option<&'static str> {
+                match *self {
+                    #(#secondary_codes),*,
+                }
+            }
+        }
+    }
+
+    pub(crate) fn v2_secondary_code_method(&self) -> TokenStream {
+        let secondary_codes = self.atoms.iter().map(RustAtom::secondary_code_ts);
+
+        quote! {
+            fn secondary_code(&self) -> Option<Self::String> {
                 match *self {
                     #(#secondary_codes),*,
                 }
@@ -218,6 +285,29 @@ impl RustAtom {
 
         quote! {
             Self::#atom_variant => vec![#(#names),*]
+        }
+    }
+
+    pub(crate) fn v2_names_ts(&self) -> TokenStream {
+        let atom_variant = format_ident!("{}", self.type_name);
+
+        match self.names.len() {
+            1 => {
+                let name = &self.names[0];
+
+                quote! {
+                    Self::#atom_variant => crate::v2::ucum_symbol::Names::One(#name)
+                }
+            }
+            2 => {
+                let name0 = &self.names[0];
+                let name1 = &self.names[1];
+
+                quote! {
+                    Self::#atom_variant => crate::v2::ucum_symbol::Names::Two((#name0, #name1))
+                }
+            }
+            n => panic!("Unexpected number of Atom names: {n}"),
         }
     }
 
