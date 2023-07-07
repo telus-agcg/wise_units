@@ -30,7 +30,8 @@ default = []
 # additional ffi module will be generated for each supported resource type.
 cffi = ["ffi_common"]
 
-wrappable = []
+v2 = []
+wrappable = ["v2"]
 
 [[bench]]
 name = "measurements_benchmarks"
