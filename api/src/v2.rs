@@ -2,6 +2,7 @@
 //! should've been defined. Defining them here gives an opportunity to use them in other crates that
 //! build on `wise_units`, and if that goes well, then these traits can then replace the old ones.
 
+pub mod ucum_symbol;
 pub mod ucum_unit;
 
 pub trait Composable {

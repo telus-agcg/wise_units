@@ -16,6 +16,12 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
     let print_symbol_method = atom_list.print_symbol_method();
     let secondary_code_method = atom_list.secondary_code_method();
 
+    let v2_classified_impl = atom_list.v2_classified_impl();
+    let v2_primary_code_method = atom_list.v2_primary_code_method();
+    let v2_print_symbol_method = atom_list.v2_print_symbol_method();
+    let v2_secondary_code_method = atom_list.v2_secondary_code_method();
+    let v2_names_method = atom_list.v2_names_method();
+
     let is_arbitrary_method = atom_list.is_arbitrary_method();
     let is_special_method = atom_list.is_special_method();
     let is_metric_method = atom_list.is_metric_method();
@@ -26,6 +32,8 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
         mod hash;
         mod partial_eq;
         mod reducible;
+        #[cfg(feature = "v2")]
+        mod v2;
 
         use crate::{
             is_compatible_with::DefaultCompatibility,
@@ -62,6 +70,19 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
             fn definition_unit(&self) -> Unit {
                 Unit::new(self.definition().terms().clone())
             }
+        }
+
+        #v2_classified_impl
+
+        #[cfg(feature = "v2")]
+        impl crate::v2::ucum_symbol::UcumIdentifiers for Atom {
+            type String = &'static str;
+            type Names = crate::v2::ucum_symbol::Names<&'static str>;
+
+            #v2_primary_code_method
+            #v2_secondary_code_method
+            #v2_print_symbol_method
+            #v2_names_method
         }
 
         impl UcumUnit for Atom {
