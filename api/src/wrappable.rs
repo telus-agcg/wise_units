@@ -12,6 +12,19 @@ pub trait AsWrappedRef<'a> {
 }
 
 #[macro_export]
+macro_rules! wrapper_impl_v2_composable {
+    ($dest:ty, $composition:ty) => {
+        impl $crate::v2::Composable for $dest {
+            type Composition = $composition;
+
+            fn composition(&self) -> Self::Composition {
+                Self::Composition::from($crate::Composable::composition(&*self.as_wrapped_ref()))
+            }
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! wrapper_impl_display {
     ($dest:ty) => {
         impl<'a> std::fmt::Display for $dest {

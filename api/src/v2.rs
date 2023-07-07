@@ -11,6 +11,17 @@ pub trait Composable {
     fn composition(&self) -> Self::Composition;
 }
 
+impl<T> Composable for T
+where
+    T: crate::Composable,
+{
+    type Composition = crate::Composition;
+
+    fn composition(&self) -> Self::Composition {
+        crate::Composable::composition(self)
+    }
+}
+
 // NOTE: The difference with this trait is that it doesn't require the output to be a `Result` like
 // the original does. This allows for implementing for types that can guarantee a conversion.
 pub trait Convertible<RHS> {
