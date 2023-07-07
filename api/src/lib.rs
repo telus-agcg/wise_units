@@ -31,6 +31,8 @@ pub mod measurement;
 pub mod parser;
 pub mod reduce;
 pub mod unit;
+#[cfg(feature = "wrappable")]
+pub mod wrappable;
 
 mod reducible;
 mod ucum_unit;
