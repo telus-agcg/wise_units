@@ -203,15 +203,6 @@ impl UcumSymbol for Prefix {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::ucum_symbol::UcumClassified for Prefix {
-    type Classification = Classification;
-
-    fn classification(&self) -> Self::Classification {
-        UcumSymbol::classification(self)
-    }
-}
-
-#[cfg(feature = "v2")]
 impl crate::v2::ucum_symbol::UcumIdentifiers for Prefix {
     type String = &'static str;
     type Names = crate::v2::ucum_symbol::Names<&'static str>;

@@ -7,6 +7,17 @@ pub trait UcumClassified {
     fn classification(&self) -> Self::Classification;
 }
 
+impl<T> UcumClassified for T
+where
+    T: crate::UcumSymbol,
+{
+    type Classification = crate::Classification;
+
+    fn classification(&self) -> Self::Classification {
+        crate::UcumSymbol::classification(self)
+    }
+}
+
 pub trait UcumIdentifiers {
     type String;
     type Names;
