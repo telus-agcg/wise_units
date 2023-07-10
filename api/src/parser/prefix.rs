@@ -252,6 +252,17 @@ impl crate::v2::ucum_symbol::UcumIdentifiers for Prefix {
 }
 
 #[cfg(feature = "v2")]
+impl crate::v2::ucum_unit::UcumUnitComputedValues<f64> for Prefix {
+    fn scalar(&self) -> f64 {
+        self.definition_value()
+    }
+
+    fn magnitude(&self) -> f64 {
+        1.0
+    }
+}
+
+#[cfg(feature = "v2")]
 impl crate::v2::ucum_symbol::UcumDefinitionUnit for Prefix {
     type Unit = Unit;
 
