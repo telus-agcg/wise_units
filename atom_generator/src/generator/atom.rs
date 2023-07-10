@@ -16,7 +16,6 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
     let print_symbol_method = atom_list.print_symbol_method();
     let secondary_code_method = atom_list.secondary_code_method();
 
-    let v2_classified_impl = atom_list.v2_classified_impl();
     let v2_primary_code_method = atom_list.v2_primary_code_method();
     let v2_print_symbol_method = atom_list.v2_print_symbol_method();
     let v2_secondary_code_method = atom_list.v2_secondary_code_method();
@@ -71,8 +70,6 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
                 Unit::new(self.definition().terms().clone())
             }
         }
-
-        #v2_classified_impl
 
         #[cfg(feature = "v2")]
         impl crate::v2::ucum_symbol::UcumIdentifiers for Atom {
