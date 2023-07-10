@@ -35,3 +35,22 @@ pub trait Convertible<RHS> {
 pub trait FieldEq<T> {
     fn field_eq(&self, rhs: T) -> bool;
 }
+
+// NOTE: The difference with this trait is that it takes a `&mut self` instead of `self`, allowing
+// it to be implemented a bit more conventionally on types: ex. `impl Invert on Term` instead of
+// `impl Invert on &mut Term`.
+//
+pub trait Invert {
+    type Error;
+
+    fn invert(&mut self) -> Result<(), Self::Error>;
+}
+
+// NOTE: The difference with this trait is that it's generic over `T`, allowing
+// for multiple implementations.
+//
+pub trait ToInverse<T = Self> {
+    type Error;
+
+    fn to_inverse(&self) -> Result<T, Self::Error>;
+}

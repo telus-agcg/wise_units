@@ -12,6 +12,10 @@ pub enum Error {
     #[error(transparent)]
     ParsingFailed(#[from] ParserError),
 
+    // TODO: Extract this from this enum. The cases where this can happen typically don't involve
+    // any other error types--just this one; callers shouldn't have to handle all the variants here
+    // if the call site can only ever return a single error.
+    //
     #[error("Operation caused a divide by 0")]
     DivideByZero,
 }
