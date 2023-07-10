@@ -32,6 +32,15 @@ pub trait UcumDefinitionValue<T> {
     fn definition_value(&self) -> T;
 }
 
+impl<T> UcumDefinitionValue<f64> for T
+where
+    T: crate::UcumSymbol,
+{
+    fn definition_value(&self) -> f64 {
+        crate::UcumSymbol::definition_value(self)
+    }
+}
+
 pub trait UcumDefinitionUnit {
     type Unit;
 
