@@ -1,12 +1,6 @@
-use crate::v2::ucum_symbol::{UcumDefinitionUnit, UcumDefinitionValue};
+use crate::v2::ucum_symbol::UcumDefinitionUnit;
 
 use super::Atom;
-
-impl UcumDefinitionValue<f64> for Atom {
-    fn definition_value(&self) -> f64 {
-        self.definition().value()
-    }
-}
 
 impl UcumDefinitionUnit for Atom {
     type Unit = crate::Unit;
