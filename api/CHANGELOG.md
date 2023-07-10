@@ -14,6 +14,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Derive `Hash` for `Property`.
 - Derive `Partial, Ord, Hash` for `Term`.
 - Derive `Hash` for `Unit`.
+- Implement `Composable` for `Property`.
 - New feature flag: `wrappable`. Adds the `AsWrappedRef` trait to make it easier for downstream
   crates to create new types based on `Measurement`, `Unit`, etc. from this crate.
 - New feature flag: `v2`. Adds the `v2` module, with revamped versions of traits--both fixing some

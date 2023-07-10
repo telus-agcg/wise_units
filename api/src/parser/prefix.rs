@@ -2,6 +2,7 @@ use super::{Error, Visit};
 use crate::{
     parser::{symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol, Classification},
     unit::Unit,
+    Composable,
 };
 use pest::iterators::Pair;
 use std::fmt;
@@ -62,6 +63,12 @@ pub enum Prefix {
     Yotta,
     Zepto,
     Zetta,
+}
+
+impl Composable for Prefix {
+    fn composition(&self) -> crate::Composition {
+        crate::Composition::new_dimless()
+    }
 }
 
 impl UcumSymbol for Prefix {
