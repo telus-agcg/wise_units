@@ -12,6 +12,22 @@ impl Invert for &mut Measurement {
     }
 }
 
+#[cfg(feature = "v2")]
+impl crate::v2::Invert for Measurement {
+    type Error = Error;
+
+    fn invert(&mut self) -> Result<(), Self::Error> {
+        if self.value == 0.0 {
+            return Err(crate::Error::DivideByZero);
+        }
+
+        self.value = 1.0 / self.value;
+        crate::v2::Invert::invert(&mut self.unit)?;
+
+        Ok(())
+    }
+}
+
 impl ToInverse for Measurement {
     type Output = Result<Self, Error>;
 
@@ -26,6 +42,25 @@ impl ToInverse for Measurement {
         Ok(Self {
             value: new_value,
             unit: self.unit.to_inverse(),
+        })
+    }
+}
+
+#[cfg(feature = "v2")]
+impl crate::v2::ToInverse for Measurement {
+    type Error = Error;
+
+    #[inline]
+    fn to_inverse(&self) -> Result<Self, Self::Error> {
+        let new_value = 1.0 / self.value;
+
+        if new_value.is_infinite() {
+            return Err(Error::DivideByZero);
+        }
+
+        Ok(Self {
+            value: new_value,
+            unit: crate::v2::ToInverse::to_inverse(&self.unit)?,
         })
     }
 }
