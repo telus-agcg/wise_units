@@ -5,6 +5,20 @@
 pub mod ucum_symbol;
 pub mod ucum_unit;
 
+// NOTE: The difference with this trait is that a) you can specify the output type for the
+// `as_fraction()` call, letting wrapper crates use this trait (since other types may not easily be
+// able to convert from `(Self::Numerator, Self::Denominator)`).
+//
+pub trait AsFraction {
+    type Denominator;
+    type Numerator;
+    type Fraction;
+
+    fn as_fraction(&self) -> Self::Fraction;
+    fn numerator(&self) -> Self::Numerator;
+    fn denominator(&self) -> Self::Denominator;
+}
+
 pub trait Composable {
     type Composition;
 

@@ -39,6 +39,28 @@ impl AsFraction for Unit {
     }
 }
 
+#[cfg(feature = "v2")]
+impl crate::v2::AsFraction for Unit {
+    type Denominator = Option<Self>;
+    type Numerator = Option<Self>;
+    type Fraction = (Self::Numerator, Self::Denominator);
+
+    fn as_fraction(&self) -> Self::Fraction {
+        (
+            crate::v2::AsFraction::numerator(self),
+            crate::v2::AsFraction::denominator(self),
+        )
+    }
+
+    fn numerator(&self) -> Self::Numerator {
+        AsFraction::numerator(self)
+    }
+
+    fn denominator(&self) -> Self::Denominator {
+        AsFraction::denominator(self)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::Unit;
