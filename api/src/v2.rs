@@ -54,3 +54,12 @@ pub trait ToInverse<T = Self> {
 
     fn to_inverse(&self) -> Result<T, Self::Error>;
 }
+
+// NOTE: The difference with this trait is that it's generic over `T`, allowing
+// for multiple implementations.
+//
+pub trait ToReduced<T = Self> {
+    type Error;
+
+    fn to_reduced(&self) -> Result<T, Self::Error>;
+}
