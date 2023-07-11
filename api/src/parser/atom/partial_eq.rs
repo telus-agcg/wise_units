@@ -6,6 +6,7 @@ impl PartialEq for Atom {
             return false;
         }
 
+        // TODO: should this use `ulps_eq!()` like the `Term` impl?
         self.scalar() == other.scalar()
     }
 }

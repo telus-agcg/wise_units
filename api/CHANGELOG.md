@@ -9,11 +9,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- PCC-174: Derive `Hash` for `Atom`.
 - Derive `Partial, Ord` for `Composition`.
 - Derive `Hash` for `Property`.
-- Derive `Partial, Ord, Hash` for `Term`.
-- Derive `Hash` for `Unit`.
+- Derive `Partial, Ord` for `Term`.
 - Implement `Composable` for `Property`.
 - New feature flag: `wrappable`. Adds the `AsWrappedRef` trait to make it easier for downstream
   crates to create new types based on `Measurement`, `Unit`, etc. from this crate.

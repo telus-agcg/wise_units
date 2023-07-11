@@ -53,38 +53,3 @@ macro_rules! wrapper_impl_v2_ucum_unit_flags {
         }
     };
 }
-
-// use crate::{Composable, Composition};
-
-// impl<'a, T> Composable for T
-// where
-//     T: AsWrappedRef<'a>,
-//     T::RustType: Composable,
-// {
-//     fn composition(&self) -> Composition {
-//         self.as_wrapped_ref().composition()
-//     }
-// }
-
-// ╭──────────────────────╮
-// │  Traits for wrappers │
-// ╰──────────────────────╯
-// pub trait WrappableAdd<'a, 'b, Rhs = Self>: AsWrappedRef<'a>
-// where
-//     <Self as AsWrappedRef<'a>>::RustType: std::ops::Add,
-//     Rhs: AsWrappedRef<'b>,
-// {
-//     type Output;
-
-//     fn wrappable_add(&self, other: &Rhs) -> Self::Output;
-// }
-
-// pub trait WrappableSub<'a, 'b, Rhs = Self>: AsWrappedRef<'a>
-// where
-//     <Self as AsWrappedRef<'a>>::RustType: std::ops::Sub,
-//     Rhs: AsWrappedRef<'b>,
-// {
-//     type Output;
-
-//     fn wrappable_sub(&self, other: &Rhs) -> Self::Output;
-// }

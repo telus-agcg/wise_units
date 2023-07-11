@@ -39,9 +39,6 @@ pub use self::{
     prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
 };
 
-#[cfg(feature = "v2")]
-pub(crate) use self::function_set::FunctionSet;
-
 use self::{
     symbols::symbol_parser::Rule as SymbolRule,
     terms::term_parser::{Rule as TermRule, TermParser},

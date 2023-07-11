@@ -28,7 +28,6 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
     let tokens = quote! {
         mod composable;
         mod display;
-        mod hash;
         mod partial_eq;
         mod reducible;
         #[cfg(feature = "v2")]
