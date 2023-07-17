@@ -1,7 +1,13 @@
+---
 name: Continuous Integration
 
 on:
   push:
+    paths:
+      - "**/*.rs"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - ".github/workflows/rust-ci.yml"
 
 env:
   CARGO_TERM_COLOR: always
