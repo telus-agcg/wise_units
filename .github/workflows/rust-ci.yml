@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8
+        uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.TELUS_AGCG_MACHINE_USER_KEY }}
       - uses: actions/checkout@v3
@@ -46,7 +46,7 @@ jobs:
       DYLD_ROOT_PATH: "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
     steps:
       - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8
+        uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.TELUS_AGCG_MACHINE_USER_KEY }}
       - uses: actions/checkout@v3
