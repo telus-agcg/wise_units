@@ -73,7 +73,7 @@ impl RustAtomList {
         quote! {
             #[allow(unused_qualifications)]
             #[cfg(feature = "v2")]
-            impl crate::v2::ucum_symbol::UcumClassified for Atom {
+            impl crate::v2::ucum::UcumClassified for Atom {
                 type Classification = crate::Classification;
 
                 fn classification(&self) -> Self::Classification {
@@ -101,7 +101,7 @@ impl RustAtomList {
         let names = self.atoms.iter().map(RustAtom::v2_names_ts);
 
         quote! {
-            fn names(&self) -> crate::v2::ucum_symbol::Names<&'static str> {
+            fn names(&self) -> crate::v2::ucum::Names<&'static str> {
                 match *self {
                     #(#names),*
                 }
@@ -296,7 +296,7 @@ impl RustAtom {
                 let name = &self.names[0];
 
                 quote! {
-                    Self::#atom_variant => crate::v2::ucum_symbol::Names::One(#name)
+                    Self::#atom_variant => crate::v2::ucum::Names::One(#name)
                 }
             }
             2 => {
@@ -304,7 +304,7 @@ impl RustAtom {
                 let name1 = &self.names[1];
 
                 quote! {
-                    Self::#atom_variant => crate::v2::ucum_symbol::Names::Two((#name0, #name1))
+                    Self::#atom_variant => crate::v2::ucum::Names::Two((#name0, #name1))
                 }
             }
             n => panic!("Unexpected number of Atom names: {n}"),

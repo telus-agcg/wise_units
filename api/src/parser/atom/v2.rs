@@ -1,4 +1,4 @@
-use crate::v2::ucum_symbol::UcumDefinitionUnit;
+use crate::v2::ucum::UcumDefinitionUnit;
 
 use super::Atom;
 

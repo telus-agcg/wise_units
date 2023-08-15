@@ -71,9 +71,9 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
         }
 
         #[cfg(feature = "v2")]
-        impl crate::v2::ucum_symbol::UcumIdentifiers for Atom {
+        impl crate::v2::ucum::UcumIdentifiers for Atom {
             type String = &'static str;
-            type Names = crate::v2::ucum_symbol::Names<&'static str>;
+            type Names = crate::v2::ucum::Names<&'static str>;
 
             #v2_primary_code_method
             #v2_secondary_code_method
