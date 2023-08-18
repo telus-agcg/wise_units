@@ -2696,9 +2696,9 @@ impl UcumSymbol for Atom {
     }
 }
 #[cfg(feature = "v2")]
-impl crate::v2::ucum::UcumIdentifiers for Atom {
+impl crate::v2::traits::ucum::UcumIdentifiers for Atom {
     type String = &'static str;
-    type Names = crate::v2::ucum::Names<&'static str>;
+    type Names = crate::v2::traits::ucum::Names<&'static str>;
     fn primary_code(&self) -> Self::String {
         match *self {
             Self::Meter => "m",
@@ -3533,398 +3533,458 @@ impl crate::v2::ucum::UcumIdentifiers for Atom {
             _ => None,
         }
     }
-    fn names(&self) -> crate::v2::ucum::Names<&'static str> {
+    fn names(&self) -> crate::v2::traits::ucum::Names<&'static str> {
         match *self {
-            Self::Meter => crate::v2::ucum::Names::One("meter"),
-            Self::Second => crate::v2::ucum::Names::One("second"),
-            Self::Gram => crate::v2::ucum::Names::One("gram"),
-            Self::Radian => crate::v2::ucum::Names::One("radian"),
-            Self::Kelvin => crate::v2::ucum::Names::One("kelvin"),
-            Self::Coulomb => crate::v2::ucum::Names::One("coulomb"),
-            Self::Candela => crate::v2::ucum::Names::One("candela"),
+            Self::Meter => crate::v2::traits::ucum::Names::One("meter"),
+            Self::Second => crate::v2::traits::ucum::Names::One("second"),
+            Self::Gram => crate::v2::traits::ucum::Names::One("gram"),
+            Self::Radian => crate::v2::traits::ucum::Names::One("radian"),
+            Self::Kelvin => crate::v2::traits::ucum::Names::One("kelvin"),
+            Self::Coulomb => crate::v2::traits::ucum::Names::One("coulomb"),
+            Self::Candela => crate::v2::traits::ucum::Names::One("candela"),
             Self::TheNumberTenForArbitraryPowersStar => {
-                crate::v2::ucum::Names::One("the number ten for arbitrary powers")
+                crate::v2::traits::ucum::Names::One("the number ten for arbitrary powers")
             }
             Self::TheNumberTenForArbitraryPowersCaret => {
-                crate::v2::ucum::Names::One("the number ten for arbitrary powers")
+                crate::v2::traits::ucum::Names::One("the number ten for arbitrary powers")
             }
-            Self::TheNumberPi => crate::v2::ucum::Names::One("the number pi"),
-            Self::Percent => crate::v2::ucum::Names::One("percent"),
-            Self::PartsPerThousand => crate::v2::ucum::Names::One("parts per thousand"),
-            Self::PartsPerMillion => crate::v2::ucum::Names::One("parts per million"),
-            Self::PartsPerBillion => crate::v2::ucum::Names::One("parts per billion"),
-            Self::PartsPerTrillion => crate::v2::ucum::Names::One("parts per trillion"),
-            Self::Mole => crate::v2::ucum::Names::One("mole"),
-            Self::Steradian => crate::v2::ucum::Names::One("steradian"),
-            Self::Hertz => crate::v2::ucum::Names::One("hertz"),
-            Self::Newton => crate::v2::ucum::Names::One("newton"),
-            Self::Pascal => crate::v2::ucum::Names::One("pascal"),
-            Self::Joule => crate::v2::ucum::Names::One("joule"),
-            Self::Watt => crate::v2::ucum::Names::One("watt"),
-            Self::Ampere => crate::v2::ucum::Names::One("ampère"),
-            Self::Volt => crate::v2::ucum::Names::One("volt"),
-            Self::Farad => crate::v2::ucum::Names::One("farad"),
-            Self::Ohm => crate::v2::ucum::Names::One("ohm"),
-            Self::Siemens => crate::v2::ucum::Names::One("siemens"),
-            Self::Weber => crate::v2::ucum::Names::One("weber"),
-            Self::DegreeCelsius => crate::v2::ucum::Names::One("degree Celsius"),
-            Self::Tesla => crate::v2::ucum::Names::One("tesla"),
-            Self::Henry => crate::v2::ucum::Names::One("henry"),
-            Self::Lumen => crate::v2::ucum::Names::One("lumen"),
-            Self::Lux => crate::v2::ucum::Names::One("lux"),
-            Self::Becquerel => crate::v2::ucum::Names::One("becquerel"),
-            Self::Gray => crate::v2::ucum::Names::One("gray"),
-            Self::Sievert => crate::v2::ucum::Names::One("sievert"),
-            Self::Gon => crate::v2::ucum::Names::Two(("gon", "grade")),
-            Self::Degree => crate::v2::ucum::Names::One("degree"),
-            Self::MinuteAngle => crate::v2::ucum::Names::One("minute"),
-            Self::SecondAngle => crate::v2::ucum::Names::One("second"),
-            Self::Liter => crate::v2::ucum::Names::One("liter"),
-            Self::LiterSecondary => crate::v2::ucum::Names::One("liter"),
-            Self::Are => crate::v2::ucum::Names::One("are"),
-            Self::Minute => crate::v2::ucum::Names::One("minute"),
-            Self::Hour => crate::v2::ucum::Names::One("hour"),
-            Self::Day => crate::v2::ucum::Names::One("day"),
-            Self::TropicalYear => crate::v2::ucum::Names::One("tropical year"),
-            Self::MeanJulianYear => crate::v2::ucum::Names::One("mean Julian year"),
-            Self::MeanGregorianYear => crate::v2::ucum::Names::One("mean Gregorian year"),
-            Self::Year => crate::v2::ucum::Names::One("year"),
-            Self::Week => crate::v2::ucum::Names::One("week"),
-            Self::SynodalMonth => crate::v2::ucum::Names::One("synodal month"),
-            Self::MeanJulianMonth => crate::v2::ucum::Names::One("mean Julian month"),
-            Self::MeanGregorianMonth => crate::v2::ucum::Names::One("mean Gregorian month"),
-            Self::Month => crate::v2::ucum::Names::One("month"),
-            Self::Tonne => crate::v2::ucum::Names::One("tonne"),
-            Self::Bar => crate::v2::ucum::Names::One("bar"),
-            Self::UnifiedAtomicMassUnit => crate::v2::ucum::Names::One("unified atomic mass unit"),
-            Self::Electronvolt => crate::v2::ucum::Names::One("electronvolt"),
-            Self::AstronomicUnit => crate::v2::ucum::Names::One("astronomic unit"),
-            Self::Parsec => crate::v2::ucum::Names::One("parsec"),
-            Self::VelocityOfLight => crate::v2::ucum::Names::One("velocity of light"),
-            Self::PlanckConstant => crate::v2::ucum::Names::One("Planck constant"),
-            Self::BoltzmannConstant => crate::v2::ucum::Names::One("Boltzmann constant"),
-            Self::PermittivityOfVacuum => crate::v2::ucum::Names::One("permittivity of vacuum"),
-            Self::PermeabilityOfVacuum => crate::v2::ucum::Names::One("permeability of vacuum"),
-            Self::ElementaryCharge => crate::v2::ucum::Names::One("elementary charge"),
-            Self::ElectronMass => crate::v2::ucum::Names::One("electron mass"),
-            Self::ProtonMass => crate::v2::ucum::Names::One("proton mass"),
+            Self::TheNumberPi => crate::v2::traits::ucum::Names::One("the number pi"),
+            Self::Percent => crate::v2::traits::ucum::Names::One("percent"),
+            Self::PartsPerThousand => crate::v2::traits::ucum::Names::One("parts per thousand"),
+            Self::PartsPerMillion => crate::v2::traits::ucum::Names::One("parts per million"),
+            Self::PartsPerBillion => crate::v2::traits::ucum::Names::One("parts per billion"),
+            Self::PartsPerTrillion => crate::v2::traits::ucum::Names::One("parts per trillion"),
+            Self::Mole => crate::v2::traits::ucum::Names::One("mole"),
+            Self::Steradian => crate::v2::traits::ucum::Names::One("steradian"),
+            Self::Hertz => crate::v2::traits::ucum::Names::One("hertz"),
+            Self::Newton => crate::v2::traits::ucum::Names::One("newton"),
+            Self::Pascal => crate::v2::traits::ucum::Names::One("pascal"),
+            Self::Joule => crate::v2::traits::ucum::Names::One("joule"),
+            Self::Watt => crate::v2::traits::ucum::Names::One("watt"),
+            Self::Ampere => crate::v2::traits::ucum::Names::One("ampère"),
+            Self::Volt => crate::v2::traits::ucum::Names::One("volt"),
+            Self::Farad => crate::v2::traits::ucum::Names::One("farad"),
+            Self::Ohm => crate::v2::traits::ucum::Names::One("ohm"),
+            Self::Siemens => crate::v2::traits::ucum::Names::One("siemens"),
+            Self::Weber => crate::v2::traits::ucum::Names::One("weber"),
+            Self::DegreeCelsius => crate::v2::traits::ucum::Names::One("degree Celsius"),
+            Self::Tesla => crate::v2::traits::ucum::Names::One("tesla"),
+            Self::Henry => crate::v2::traits::ucum::Names::One("henry"),
+            Self::Lumen => crate::v2::traits::ucum::Names::One("lumen"),
+            Self::Lux => crate::v2::traits::ucum::Names::One("lux"),
+            Self::Becquerel => crate::v2::traits::ucum::Names::One("becquerel"),
+            Self::Gray => crate::v2::traits::ucum::Names::One("gray"),
+            Self::Sievert => crate::v2::traits::ucum::Names::One("sievert"),
+            Self::Gon => crate::v2::traits::ucum::Names::Two(("gon", "grade")),
+            Self::Degree => crate::v2::traits::ucum::Names::One("degree"),
+            Self::MinuteAngle => crate::v2::traits::ucum::Names::One("minute"),
+            Self::SecondAngle => crate::v2::traits::ucum::Names::One("second"),
+            Self::Liter => crate::v2::traits::ucum::Names::One("liter"),
+            Self::LiterSecondary => crate::v2::traits::ucum::Names::One("liter"),
+            Self::Are => crate::v2::traits::ucum::Names::One("are"),
+            Self::Minute => crate::v2::traits::ucum::Names::One("minute"),
+            Self::Hour => crate::v2::traits::ucum::Names::One("hour"),
+            Self::Day => crate::v2::traits::ucum::Names::One("day"),
+            Self::TropicalYear => crate::v2::traits::ucum::Names::One("tropical year"),
+            Self::MeanJulianYear => crate::v2::traits::ucum::Names::One("mean Julian year"),
+            Self::MeanGregorianYear => crate::v2::traits::ucum::Names::One("mean Gregorian year"),
+            Self::Year => crate::v2::traits::ucum::Names::One("year"),
+            Self::Week => crate::v2::traits::ucum::Names::One("week"),
+            Self::SynodalMonth => crate::v2::traits::ucum::Names::One("synodal month"),
+            Self::MeanJulianMonth => crate::v2::traits::ucum::Names::One("mean Julian month"),
+            Self::MeanGregorianMonth => crate::v2::traits::ucum::Names::One("mean Gregorian month"),
+            Self::Month => crate::v2::traits::ucum::Names::One("month"),
+            Self::Tonne => crate::v2::traits::ucum::Names::One("tonne"),
+            Self::Bar => crate::v2::traits::ucum::Names::One("bar"),
+            Self::UnifiedAtomicMassUnit => {
+                crate::v2::traits::ucum::Names::One("unified atomic mass unit")
+            }
+            Self::Electronvolt => crate::v2::traits::ucum::Names::One("electronvolt"),
+            Self::AstronomicUnit => crate::v2::traits::ucum::Names::One("astronomic unit"),
+            Self::Parsec => crate::v2::traits::ucum::Names::One("parsec"),
+            Self::VelocityOfLight => crate::v2::traits::ucum::Names::One("velocity of light"),
+            Self::PlanckConstant => crate::v2::traits::ucum::Names::One("Planck constant"),
+            Self::BoltzmannConstant => crate::v2::traits::ucum::Names::One("Boltzmann constant"),
+            Self::PermittivityOfVacuum => {
+                crate::v2::traits::ucum::Names::One("permittivity of vacuum")
+            }
+            Self::PermeabilityOfVacuum => {
+                crate::v2::traits::ucum::Names::One("permeability of vacuum")
+            }
+            Self::ElementaryCharge => crate::v2::traits::ucum::Names::One("elementary charge"),
+            Self::ElectronMass => crate::v2::traits::ucum::Names::One("electron mass"),
+            Self::ProtonMass => crate::v2::traits::ucum::Names::One("proton mass"),
             Self::NewtonianConstantOfGravitation => {
-                crate::v2::ucum::Names::One("Newtonian constant of gravitation")
+                crate::v2::traits::ucum::Names::One("Newtonian constant of gravitation")
             }
             Self::StandardAccelerationOfFreeFall => {
-                crate::v2::ucum::Names::One("standard acceleration of free fall")
+                crate::v2::traits::ucum::Names::One("standard acceleration of free fall")
             }
-            Self::StandardAtmosphere => crate::v2::ucum::Names::One("standard atmosphere"),
-            Self::LightYear => crate::v2::ucum::Names::One("light-year"),
-            Self::GramForce => crate::v2::ucum::Names::One("gram-force"),
-            Self::PoundForceAvoirdupois => crate::v2::ucum::Names::One("pound force"),
-            Self::Kayser => crate::v2::ucum::Names::One("Kayser"),
-            Self::Gal => crate::v2::ucum::Names::One("Gal"),
-            Self::Dyne => crate::v2::ucum::Names::One("dyne"),
-            Self::Erg => crate::v2::ucum::Names::One("erg"),
-            Self::Poise => crate::v2::ucum::Names::One("Poise"),
-            Self::Biot => crate::v2::ucum::Names::One("Biot"),
-            Self::Stokes => crate::v2::ucum::Names::One("Stokes"),
-            Self::Maxwell => crate::v2::ucum::Names::One("Maxwell"),
-            Self::Gauss => crate::v2::ucum::Names::One("Gauss"),
-            Self::Oersted => crate::v2::ucum::Names::One("Oersted"),
-            Self::Gilbert => crate::v2::ucum::Names::One("Gilbert"),
-            Self::Stilb => crate::v2::ucum::Names::One("stilb"),
-            Self::Lambert => crate::v2::ucum::Names::One("Lambert"),
-            Self::Phot => crate::v2::ucum::Names::One("phot"),
-            Self::Curie => crate::v2::ucum::Names::One("Curie"),
-            Self::Roentgen => crate::v2::ucum::Names::One("Roentgen"),
-            Self::RadiationAbsorbedDose => crate::v2::ucum::Names::One("radiation absorbed dose"),
-            Self::RadiationEquivalentMan => crate::v2::ucum::Names::One("radiation equivalent man"),
-            Self::InchInternational => crate::v2::ucum::Names::One("inch"),
-            Self::FootInternational => crate::v2::ucum::Names::One("foot"),
-            Self::YardInternational => crate::v2::ucum::Names::One("yard"),
-            Self::MileInternational => crate::v2::ucum::Names::One("mile"),
-            Self::FathomInternational => crate::v2::ucum::Names::One("fathom"),
-            Self::NauticalMileInternational => crate::v2::ucum::Names::One("nautical mile"),
-            Self::KnotInternational => crate::v2::ucum::Names::One("knot"),
-            Self::SquareInchInternational => crate::v2::ucum::Names::One("square inch"),
-            Self::SquareFootInternational => crate::v2::ucum::Names::One("square foot"),
-            Self::SquareYardInternational => crate::v2::ucum::Names::One("square yard"),
-            Self::CubicInchInternational => crate::v2::ucum::Names::One("cubic inch"),
-            Self::CubicFootInternational => crate::v2::ucum::Names::One("cubic foot"),
-            Self::CubicYardInternational => crate::v2::ucum::Names::One("cubic yard"),
-            Self::BoardFootInternational => crate::v2::ucum::Names::One("board foot"),
-            Self::CordInternational => crate::v2::ucum::Names::One("cord"),
-            Self::MilInternational => crate::v2::ucum::Names::One("mil"),
-            Self::CircularMilInternational => crate::v2::ucum::Names::One("circular mil"),
-            Self::HandInternational => crate::v2::ucum::Names::One("hand"),
-            Self::FootUS => crate::v2::ucum::Names::One("foot"),
-            Self::YardUS => crate::v2::ucum::Names::One("yard"),
-            Self::InchUS => crate::v2::ucum::Names::One("inch"),
-            Self::RodUS => crate::v2::ucum::Names::One("rod"),
+            Self::StandardAtmosphere => crate::v2::traits::ucum::Names::One("standard atmosphere"),
+            Self::LightYear => crate::v2::traits::ucum::Names::One("light-year"),
+            Self::GramForce => crate::v2::traits::ucum::Names::One("gram-force"),
+            Self::PoundForceAvoirdupois => crate::v2::traits::ucum::Names::One("pound force"),
+            Self::Kayser => crate::v2::traits::ucum::Names::One("Kayser"),
+            Self::Gal => crate::v2::traits::ucum::Names::One("Gal"),
+            Self::Dyne => crate::v2::traits::ucum::Names::One("dyne"),
+            Self::Erg => crate::v2::traits::ucum::Names::One("erg"),
+            Self::Poise => crate::v2::traits::ucum::Names::One("Poise"),
+            Self::Biot => crate::v2::traits::ucum::Names::One("Biot"),
+            Self::Stokes => crate::v2::traits::ucum::Names::One("Stokes"),
+            Self::Maxwell => crate::v2::traits::ucum::Names::One("Maxwell"),
+            Self::Gauss => crate::v2::traits::ucum::Names::One("Gauss"),
+            Self::Oersted => crate::v2::traits::ucum::Names::One("Oersted"),
+            Self::Gilbert => crate::v2::traits::ucum::Names::One("Gilbert"),
+            Self::Stilb => crate::v2::traits::ucum::Names::One("stilb"),
+            Self::Lambert => crate::v2::traits::ucum::Names::One("Lambert"),
+            Self::Phot => crate::v2::traits::ucum::Names::One("phot"),
+            Self::Curie => crate::v2::traits::ucum::Names::One("Curie"),
+            Self::Roentgen => crate::v2::traits::ucum::Names::One("Roentgen"),
+            Self::RadiationAbsorbedDose => {
+                crate::v2::traits::ucum::Names::One("radiation absorbed dose")
+            }
+            Self::RadiationEquivalentMan => {
+                crate::v2::traits::ucum::Names::One("radiation equivalent man")
+            }
+            Self::InchInternational => crate::v2::traits::ucum::Names::One("inch"),
+            Self::FootInternational => crate::v2::traits::ucum::Names::One("foot"),
+            Self::YardInternational => crate::v2::traits::ucum::Names::One("yard"),
+            Self::MileInternational => crate::v2::traits::ucum::Names::One("mile"),
+            Self::FathomInternational => crate::v2::traits::ucum::Names::One("fathom"),
+            Self::NauticalMileInternational => crate::v2::traits::ucum::Names::One("nautical mile"),
+            Self::KnotInternational => crate::v2::traits::ucum::Names::One("knot"),
+            Self::SquareInchInternational => crate::v2::traits::ucum::Names::One("square inch"),
+            Self::SquareFootInternational => crate::v2::traits::ucum::Names::One("square foot"),
+            Self::SquareYardInternational => crate::v2::traits::ucum::Names::One("square yard"),
+            Self::CubicInchInternational => crate::v2::traits::ucum::Names::One("cubic inch"),
+            Self::CubicFootInternational => crate::v2::traits::ucum::Names::One("cubic foot"),
+            Self::CubicYardInternational => crate::v2::traits::ucum::Names::One("cubic yard"),
+            Self::BoardFootInternational => crate::v2::traits::ucum::Names::One("board foot"),
+            Self::CordInternational => crate::v2::traits::ucum::Names::One("cord"),
+            Self::MilInternational => crate::v2::traits::ucum::Names::One("mil"),
+            Self::CircularMilInternational => crate::v2::traits::ucum::Names::One("circular mil"),
+            Self::HandInternational => crate::v2::traits::ucum::Names::One("hand"),
+            Self::FootUS => crate::v2::traits::ucum::Names::One("foot"),
+            Self::YardUS => crate::v2::traits::ucum::Names::One("yard"),
+            Self::InchUS => crate::v2::traits::ucum::Names::One("inch"),
+            Self::RodUS => crate::v2::traits::ucum::Names::One("rod"),
             Self::GuntersChainUS => {
-                crate::v2::ucum::Names::Two(("Gunter's chain", "Surveyor's chain"))
+                crate::v2::traits::ucum::Names::Two(("Gunter's chain", "Surveyor's chain"))
             }
-            Self::LinkForGuntersChainUS => crate::v2::ucum::Names::One("link for Gunter's chain"),
+            Self::LinkForGuntersChainUS => {
+                crate::v2::traits::ucum::Names::One("link for Gunter's chain")
+            }
             Self::RamdensChainUS => {
-                crate::v2::ucum::Names::Two(("Ramden's chain", "Engineer's chain"))
+                crate::v2::traits::ucum::Names::Two(("Ramden's chain", "Engineer's chain"))
             }
-            Self::LinkForRamdensChainUS => crate::v2::ucum::Names::One("link for Ramden's chain"),
-            Self::FathomUS => crate::v2::ucum::Names::One("fathom"),
-            Self::FurlongUS => crate::v2::ucum::Names::One("furlong"),
-            Self::MileUS => crate::v2::ucum::Names::One("mile"),
-            Self::AcreUS => crate::v2::ucum::Names::One("acre"),
-            Self::SquareRodUS => crate::v2::ucum::Names::One("square rod"),
-            Self::SquareMileUS => crate::v2::ucum::Names::One("square mile"),
-            Self::Section => crate::v2::ucum::Names::One("section"),
-            Self::Township => crate::v2::ucum::Names::One("township"),
-            Self::MilUS => crate::v2::ucum::Names::One("mil"),
-            Self::InchBritish => crate::v2::ucum::Names::One("inch"),
-            Self::FootBritish => crate::v2::ucum::Names::One("foot"),
-            Self::RodBritish => crate::v2::ucum::Names::One("rod"),
-            Self::GuntersChainBritish => crate::v2::ucum::Names::One("Gunter's chain"),
+            Self::LinkForRamdensChainUS => {
+                crate::v2::traits::ucum::Names::One("link for Ramden's chain")
+            }
+            Self::FathomUS => crate::v2::traits::ucum::Names::One("fathom"),
+            Self::FurlongUS => crate::v2::traits::ucum::Names::One("furlong"),
+            Self::MileUS => crate::v2::traits::ucum::Names::One("mile"),
+            Self::AcreUS => crate::v2::traits::ucum::Names::One("acre"),
+            Self::SquareRodUS => crate::v2::traits::ucum::Names::One("square rod"),
+            Self::SquareMileUS => crate::v2::traits::ucum::Names::One("square mile"),
+            Self::Section => crate::v2::traits::ucum::Names::One("section"),
+            Self::Township => crate::v2::traits::ucum::Names::One("township"),
+            Self::MilUS => crate::v2::traits::ucum::Names::One("mil"),
+            Self::InchBritish => crate::v2::traits::ucum::Names::One("inch"),
+            Self::FootBritish => crate::v2::traits::ucum::Names::One("foot"),
+            Self::RodBritish => crate::v2::traits::ucum::Names::One("rod"),
+            Self::GuntersChainBritish => crate::v2::traits::ucum::Names::One("Gunter's chain"),
             Self::LinkForGuntersChainBritish => {
-                crate::v2::ucum::Names::One("link for Gunter's chain")
+                crate::v2::traits::ucum::Names::One("link for Gunter's chain")
             }
-            Self::FathomBritish => crate::v2::ucum::Names::One("fathom"),
-            Self::PaceBritish => crate::v2::ucum::Names::One("pace"),
-            Self::YardBritish => crate::v2::ucum::Names::One("yard"),
-            Self::MileBritish => crate::v2::ucum::Names::One("mile"),
-            Self::NauticalMileBritish => crate::v2::ucum::Names::One("nautical mile"),
-            Self::KnotBritish => crate::v2::ucum::Names::One("knot"),
-            Self::AcreBritish => crate::v2::ucum::Names::One("acre"),
+            Self::FathomBritish => crate::v2::traits::ucum::Names::One("fathom"),
+            Self::PaceBritish => crate::v2::traits::ucum::Names::One("pace"),
+            Self::YardBritish => crate::v2::traits::ucum::Names::One("yard"),
+            Self::MileBritish => crate::v2::traits::ucum::Names::One("mile"),
+            Self::NauticalMileBritish => crate::v2::traits::ucum::Names::One("nautical mile"),
+            Self::KnotBritish => crate::v2::traits::ucum::Names::One("knot"),
+            Self::AcreBritish => crate::v2::traits::ucum::Names::One("acre"),
             Self::QueenAnnesWineGallonUS => {
-                crate::v2::ucum::Names::One("Queen\u{a0}Anne's wine gallon")
+                crate::v2::traits::ucum::Names::One("Queen\u{a0}Anne's wine gallon")
             }
-            Self::BarrelUS => crate::v2::ucum::Names::One("barrel"),
-            Self::QuartUS => crate::v2::ucum::Names::One("quart"),
-            Self::PintUS => crate::v2::ucum::Names::One("pint"),
-            Self::GillUS => crate::v2::ucum::Names::One("gill"),
-            Self::FluidOunceUS => crate::v2::ucum::Names::One("fluid ounce"),
-            Self::FluidDramUS => crate::v2::ucum::Names::One("fluid dram"),
-            Self::MinimUS => crate::v2::ucum::Names::One("minim"),
-            Self::CordUS => crate::v2::ucum::Names::One("cord"),
-            Self::BushelUS => crate::v2::ucum::Names::One("bushel"),
+            Self::BarrelUS => crate::v2::traits::ucum::Names::One("barrel"),
+            Self::QuartUS => crate::v2::traits::ucum::Names::One("quart"),
+            Self::PintUS => crate::v2::traits::ucum::Names::One("pint"),
+            Self::GillUS => crate::v2::traits::ucum::Names::One("gill"),
+            Self::FluidOunceUS => crate::v2::traits::ucum::Names::One("fluid ounce"),
+            Self::FluidDramUS => crate::v2::traits::ucum::Names::One("fluid dram"),
+            Self::MinimUS => crate::v2::traits::ucum::Names::One("minim"),
+            Self::CordUS => crate::v2::traits::ucum::Names::One("cord"),
+            Self::BushelUS => crate::v2::traits::ucum::Names::One("bushel"),
             Self::HistoricalWinchesterGallon => {
-                crate::v2::ucum::Names::One("historical winchester gallon")
+                crate::v2::traits::ucum::Names::One("historical winchester gallon")
             }
-            Self::PeckUS => crate::v2::ucum::Names::One("peck"),
-            Self::DryQuartUS => crate::v2::ucum::Names::One("dry quart"),
-            Self::DryPintUS => crate::v2::ucum::Names::One("dry pint"),
-            Self::TablespoonUS => crate::v2::ucum::Names::One("tablespoon"),
-            Self::TeaspoonUS => crate::v2::ucum::Names::One("teaspoon"),
-            Self::CupUS => crate::v2::ucum::Names::One("cup"),
-            Self::MetricFluidOunce => crate::v2::ucum::Names::One("metric fluid ounce"),
-            Self::MetricCup => crate::v2::ucum::Names::One("metric cup"),
-            Self::MetricTeaspoon => crate::v2::ucum::Names::One("metric teaspoon"),
-            Self::MetricTablespoon => crate::v2::ucum::Names::One("metric tablespoon"),
-            Self::GallonBritish => crate::v2::ucum::Names::One("gallon"),
-            Self::PeckBritish => crate::v2::ucum::Names::One("peck"),
-            Self::BushelBritish => crate::v2::ucum::Names::One("bushel"),
-            Self::QuartBritish => crate::v2::ucum::Names::One("quart"),
-            Self::PintBritish => crate::v2::ucum::Names::One("pint"),
-            Self::GillBritish => crate::v2::ucum::Names::One("gill"),
-            Self::FluidOunceBritish => crate::v2::ucum::Names::One("fluid ounce"),
-            Self::FluidDramBritish => crate::v2::ucum::Names::One("fluid dram"),
-            Self::MinimBritish => crate::v2::ucum::Names::One("minim"),
-            Self::Grain => crate::v2::ucum::Names::One("grain"),
-            Self::PoundAvoirdupois => crate::v2::ucum::Names::One("pound"),
-            Self::OunceAvoirdupois => crate::v2::ucum::Names::One("ounce"),
-            Self::DramAvoirdupois => crate::v2::ucum::Names::One("dram"),
+            Self::PeckUS => crate::v2::traits::ucum::Names::One("peck"),
+            Self::DryQuartUS => crate::v2::traits::ucum::Names::One("dry quart"),
+            Self::DryPintUS => crate::v2::traits::ucum::Names::One("dry pint"),
+            Self::TablespoonUS => crate::v2::traits::ucum::Names::One("tablespoon"),
+            Self::TeaspoonUS => crate::v2::traits::ucum::Names::One("teaspoon"),
+            Self::CupUS => crate::v2::traits::ucum::Names::One("cup"),
+            Self::MetricFluidOunce => crate::v2::traits::ucum::Names::One("metric fluid ounce"),
+            Self::MetricCup => crate::v2::traits::ucum::Names::One("metric cup"),
+            Self::MetricTeaspoon => crate::v2::traits::ucum::Names::One("metric teaspoon"),
+            Self::MetricTablespoon => crate::v2::traits::ucum::Names::One("metric tablespoon"),
+            Self::GallonBritish => crate::v2::traits::ucum::Names::One("gallon"),
+            Self::PeckBritish => crate::v2::traits::ucum::Names::One("peck"),
+            Self::BushelBritish => crate::v2::traits::ucum::Names::One("bushel"),
+            Self::QuartBritish => crate::v2::traits::ucum::Names::One("quart"),
+            Self::PintBritish => crate::v2::traits::ucum::Names::One("pint"),
+            Self::GillBritish => crate::v2::traits::ucum::Names::One("gill"),
+            Self::FluidOunceBritish => crate::v2::traits::ucum::Names::One("fluid ounce"),
+            Self::FluidDramBritish => crate::v2::traits::ucum::Names::One("fluid dram"),
+            Self::MinimBritish => crate::v2::traits::ucum::Names::One("minim"),
+            Self::Grain => crate::v2::traits::ucum::Names::One("grain"),
+            Self::PoundAvoirdupois => crate::v2::traits::ucum::Names::One("pound"),
+            Self::OunceAvoirdupois => crate::v2::traits::ucum::Names::One("ounce"),
+            Self::DramAvoirdupois => crate::v2::traits::ucum::Names::One("dram"),
             Self::ShortHundredweightAvoirdupois => {
-                crate::v2::ucum::Names::Two(("short hundredweight", "U.S. hundredweight"))
+                crate::v2::traits::ucum::Names::Two(("short hundredweight", "U.S. hundredweight"))
             }
             Self::LongHunderdweightAvoirdupois => {
-                crate::v2::ucum::Names::Two(("long hunderdweight", "British hundredweight"))
+                crate::v2::traits::ucum::Names::Two(("long hunderdweight", "British hundredweight"))
             }
-            Self::ShortTonAvoirdupois => crate::v2::ucum::Names::Two(("short ton", "U.S. ton")),
-            Self::LongTonAvoirdupois => crate::v2::ucum::Names::Two(("long ton", "British ton")),
-            Self::StoneAvoirdupois => crate::v2::ucum::Names::Two(("stone", "British stone")),
-            Self::PennyweightTroy => crate::v2::ucum::Names::One("pennyweight"),
-            Self::OunceTroy => crate::v2::ucum::Names::One("ounce"),
-            Self::PoundTroy => crate::v2::ucum::Names::One("pound"),
-            Self::ScrupleApothecaries => crate::v2::ucum::Names::One("scruple"),
-            Self::DramApothecaries => crate::v2::ucum::Names::Two(("dram", "drachm")),
-            Self::OunceApothecaries => crate::v2::ucum::Names::One("ounce"),
-            Self::PoundApothecaries => crate::v2::ucum::Names::One("pound"),
-            Self::MetricOunce => crate::v2::ucum::Names::One("metric ounce"),
-            Self::Line => crate::v2::ucum::Names::One("line"),
-            Self::Point => crate::v2::ucum::Names::One("point"),
-            Self::Pica => crate::v2::ucum::Names::One("pica"),
-            Self::PrintersPoint => crate::v2::ucum::Names::One("Printer's point"),
-            Self::PrintersPica => crate::v2::ucum::Names::One("Printer's pica"),
-            Self::Pied => crate::v2::ucum::Names::Two(("pied", "French foot")),
-            Self::Pouce => crate::v2::ucum::Names::Two(("pouce", "French inch")),
-            Self::Ligne => crate::v2::ucum::Names::Two(("ligne", "French line")),
-            Self::Didot => crate::v2::ucum::Names::Two(("didot", "Didot's point")),
-            Self::Cicero => crate::v2::ucum::Names::Two(("cicero", "Didot's pica")),
-            Self::DegreeFahrenheit => crate::v2::ucum::Names::One("degree Fahrenheit"),
-            Self::DegreeRankine => crate::v2::ucum::Names::One("degree Rankine"),
-            Self::DegreeReaumur => crate::v2::ucum::Names::One("degree Réaumur"),
-            Self::CalorieAt15C => crate::v2::ucum::Names::One("calorie at 15\u{a0}°C"),
-            Self::CalorieAt20C => crate::v2::ucum::Names::One("calorie at 20\u{a0}°C"),
-            Self::MeanCalorie => crate::v2::ucum::Names::One("mean calorie"),
+            Self::ShortTonAvoirdupois => {
+                crate::v2::traits::ucum::Names::Two(("short ton", "U.S. ton"))
+            }
+            Self::LongTonAvoirdupois => {
+                crate::v2::traits::ucum::Names::Two(("long ton", "British ton"))
+            }
+            Self::StoneAvoirdupois => {
+                crate::v2::traits::ucum::Names::Two(("stone", "British stone"))
+            }
+            Self::PennyweightTroy => crate::v2::traits::ucum::Names::One("pennyweight"),
+            Self::OunceTroy => crate::v2::traits::ucum::Names::One("ounce"),
+            Self::PoundTroy => crate::v2::traits::ucum::Names::One("pound"),
+            Self::ScrupleApothecaries => crate::v2::traits::ucum::Names::One("scruple"),
+            Self::DramApothecaries => crate::v2::traits::ucum::Names::Two(("dram", "drachm")),
+            Self::OunceApothecaries => crate::v2::traits::ucum::Names::One("ounce"),
+            Self::PoundApothecaries => crate::v2::traits::ucum::Names::One("pound"),
+            Self::MetricOunce => crate::v2::traits::ucum::Names::One("metric ounce"),
+            Self::Line => crate::v2::traits::ucum::Names::One("line"),
+            Self::Point => crate::v2::traits::ucum::Names::One("point"),
+            Self::Pica => crate::v2::traits::ucum::Names::One("pica"),
+            Self::PrintersPoint => crate::v2::traits::ucum::Names::One("Printer's point"),
+            Self::PrintersPica => crate::v2::traits::ucum::Names::One("Printer's pica"),
+            Self::Pied => crate::v2::traits::ucum::Names::Two(("pied", "French foot")),
+            Self::Pouce => crate::v2::traits::ucum::Names::Two(("pouce", "French inch")),
+            Self::Ligne => crate::v2::traits::ucum::Names::Two(("ligne", "French line")),
+            Self::Didot => crate::v2::traits::ucum::Names::Two(("didot", "Didot's point")),
+            Self::Cicero => crate::v2::traits::ucum::Names::Two(("cicero", "Didot's pica")),
+            Self::DegreeFahrenheit => crate::v2::traits::ucum::Names::One("degree Fahrenheit"),
+            Self::DegreeRankine => crate::v2::traits::ucum::Names::One("degree Rankine"),
+            Self::DegreeReaumur => crate::v2::traits::ucum::Names::One("degree Réaumur"),
+            Self::CalorieAt15C => crate::v2::traits::ucum::Names::One("calorie at 15\u{a0}°C"),
+            Self::CalorieAt20C => crate::v2::traits::ucum::Names::One("calorie at 20\u{a0}°C"),
+            Self::MeanCalorie => crate::v2::traits::ucum::Names::One("mean calorie"),
             Self::InternationalTableCalorie => {
-                crate::v2::ucum::Names::One("international table calorie")
+                crate::v2::traits::ucum::Names::One("international table calorie")
             }
-            Self::ThermochemicalCalorie => crate::v2::ucum::Names::One("thermochemical calorie"),
-            Self::Calorie => crate::v2::ucum::Names::One("calorie"),
-            Self::NutritionLabelCalories => crate::v2::ucum::Names::One("nutrition label Calories"),
+            Self::ThermochemicalCalorie => {
+                crate::v2::traits::ucum::Names::One("thermochemical calorie")
+            }
+            Self::Calorie => crate::v2::traits::ucum::Names::One("calorie"),
+            Self::NutritionLabelCalories => {
+                crate::v2::traits::ucum::Names::One("nutrition label Calories")
+            }
             Self::BritishThermalUnitAt39F => {
-                crate::v2::ucum::Names::One("British thermal unit at 39\u{a0}°F")
+                crate::v2::traits::ucum::Names::One("British thermal unit at 39\u{a0}°F")
             }
             Self::BritishThermalUnitAt59F => {
-                crate::v2::ucum::Names::One("British thermal unit at 59\u{a0}°F")
+                crate::v2::traits::ucum::Names::One("British thermal unit at 59\u{a0}°F")
             }
             Self::BritishThermalUnitAt60F => {
-                crate::v2::ucum::Names::One("British thermal unit at 60\u{a0}°F")
+                crate::v2::traits::ucum::Names::One("British thermal unit at 60\u{a0}°F")
             }
             Self::MeanBritishThermalUnit => {
-                crate::v2::ucum::Names::One("mean British thermal unit")
+                crate::v2::traits::ucum::Names::One("mean British thermal unit")
             }
             Self::InternationalTableBritishThermalUnit => {
-                crate::v2::ucum::Names::One("international table British thermal unit")
+                crate::v2::traits::ucum::Names::One("international table British thermal unit")
             }
             Self::ThermochemicalBritishThermalUnit => {
-                crate::v2::ucum::Names::One("thermochemical British thermal unit")
+                crate::v2::traits::ucum::Names::One("thermochemical British thermal unit")
             }
-            Self::BritishThermalUnit => crate::v2::ucum::Names::One("British thermal unit"),
-            Self::Horsepower => crate::v2::ucum::Names::One("horsepower"),
-            Self::Tex => crate::v2::ucum::Names::One("tex"),
-            Self::Denier => crate::v2::ucum::Names::One("Denier"),
-            Self::MeterOfWaterColumn => crate::v2::ucum::Names::One("meter of water column"),
-            Self::MeterOfMercuryColumn => crate::v2::ucum::Names::One("meter of mercury column"),
-            Self::InchOfWaterColumn => crate::v2::ucum::Names::One("inch of water column"),
-            Self::InchOfMercuryColumn => crate::v2::ucum::Names::One("inch of mercury column"),
+            Self::BritishThermalUnit => crate::v2::traits::ucum::Names::One("British thermal unit"),
+            Self::Horsepower => crate::v2::traits::ucum::Names::One("horsepower"),
+            Self::Tex => crate::v2::traits::ucum::Names::One("tex"),
+            Self::Denier => crate::v2::traits::ucum::Names::One("Denier"),
+            Self::MeterOfWaterColumn => {
+                crate::v2::traits::ucum::Names::One("meter of water column")
+            }
+            Self::MeterOfMercuryColumn => {
+                crate::v2::traits::ucum::Names::One("meter of mercury column")
+            }
+            Self::InchOfWaterColumn => crate::v2::traits::ucum::Names::One("inch of water column"),
+            Self::InchOfMercuryColumn => {
+                crate::v2::traits::ucum::Names::One("inch of mercury column")
+            }
             Self::PeripheralVascularResistanceUnit => {
-                crate::v2::ucum::Names::One("peripheral vascular resistance unit")
+                crate::v2::traits::ucum::Names::One("peripheral vascular resistance unit")
             }
-            Self::WoodUnit => crate::v2::ucum::Names::One("Wood unit"),
-            Self::Diopter => crate::v2::ucum::Names::One("diopter"),
-            Self::PrismDiopter => crate::v2::ucum::Names::One("prism diopter"),
-            Self::PercentOfSlope => crate::v2::ucum::Names::One("percent of slope"),
-            Self::MeshInternational => crate::v2::ucum::Names::One("mesh"),
-            Self::Charriere => crate::v2::ucum::Names::Two(("Charrière", "french")),
-            Self::Drop => crate::v2::ucum::Names::One("drop"),
-            Self::HounsfieldUnit => crate::v2::ucum::Names::One("Hounsfield unit"),
-            Self::MetabolicEquivalent => crate::v2::ucum::Names::One("metabolic equivalent"),
-            Self::HomeopathicPotencyOfDecimalSeriesRetired => {
-                crate::v2::ucum::Names::One("homeopathic potency of decimal series (retired)")
+            Self::WoodUnit => crate::v2::traits::ucum::Names::One("Wood unit"),
+            Self::Diopter => crate::v2::traits::ucum::Names::One("diopter"),
+            Self::PrismDiopter => crate::v2::traits::ucum::Names::One("prism diopter"),
+            Self::PercentOfSlope => crate::v2::traits::ucum::Names::One("percent of slope"),
+            Self::MeshInternational => crate::v2::traits::ucum::Names::One("mesh"),
+            Self::Charriere => crate::v2::traits::ucum::Names::Two(("Charrière", "french")),
+            Self::Drop => crate::v2::traits::ucum::Names::One("drop"),
+            Self::HounsfieldUnit => crate::v2::traits::ucum::Names::One("Hounsfield unit"),
+            Self::MetabolicEquivalent => {
+                crate::v2::traits::ucum::Names::One("metabolic equivalent")
             }
+            Self::HomeopathicPotencyOfDecimalSeriesRetired => crate::v2::traits::ucum::Names::One(
+                "homeopathic potency of decimal series (retired)",
+            ),
             Self::HomeopathicPotencyOfCentesimalSeriesRetired => {
-                crate::v2::ucum::Names::One("homeopathic potency of centesimal series (retired)")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of centesimal series (retired)",
+                )
             }
             Self::HomeopathicPotencyOfMillesimalSeriesRetired => {
-                crate::v2::ucum::Names::One("homeopathic potency of millesimal series (retired)")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of millesimal series (retired)",
+                )
             }
-            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => crate::v2::ucum::Names::One(
-                "homeopathic potency of quintamillesimal series (retired)",
-            ),
+            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => {
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of quintamillesimal series (retired)",
+                )
+            }
             Self::HomeopathicPotencyOfDecimalHahnemannianSeries => {
-                crate::v2::ucum::Names::One("homeopathic potency of decimal hahnemannian series")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of decimal hahnemannian series",
+                )
             }
             Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => {
-                crate::v2::ucum::Names::One("homeopathic potency of centesimal hahnemannian series")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of centesimal hahnemannian series",
+                )
             }
             Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => {
-                crate::v2::ucum::Names::One("homeopathic potency of millesimal hahnemannian series")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of millesimal hahnemannian series",
+                )
             }
             Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => {
-                crate::v2::ucum::Names::One(
+                crate::v2::traits::ucum::Names::One(
                     "homeopathic potency of quintamillesimal hahnemannian series",
                 )
             }
             Self::HomeopathicPotencyOfDecimalKorsakovianSeries => {
-                crate::v2::ucum::Names::One("homeopathic potency of decimal korsakovian series")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of decimal korsakovian series",
+                )
             }
             Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => {
-                crate::v2::ucum::Names::One("homeopathic potency of centesimal korsakovian series")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of centesimal korsakovian series",
+                )
             }
             Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => {
-                crate::v2::ucum::Names::One("homeopathic potency of millesimal korsakovian series")
+                crate::v2::traits::ucum::Names::One(
+                    "homeopathic potency of millesimal korsakovian series",
+                )
             }
             Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => {
-                crate::v2::ucum::Names::One(
+                crate::v2::traits::ucum::Names::One(
                     "homeopathic potency of quintamillesimal korsakovian series",
                 )
             }
-            Self::Equivalents => crate::v2::ucum::Names::One("equivalents"),
-            Self::Osmole => crate::v2::ucum::Names::One("osmole"),
-            Self::PH => crate::v2::ucum::Names::One("pH"),
-            Self::GramPercent => crate::v2::ucum::Names::One("gram percent"),
-            Self::SvedbergUnit => crate::v2::ucum::Names::One("Svedberg unit"),
-            Self::HighPowerField => crate::v2::ucum::Names::One("high power field"),
-            Self::LowPowerField => crate::v2::ucum::Names::One("low power field"),
-            Self::Katal => crate::v2::ucum::Names::One("katal"),
-            Self::Unit => crate::v2::ucum::Names::One("Unit"),
-            Self::InternationalUnit => crate::v2::ucum::Names::One("international unit"),
-            Self::InternationalUnitSecondary => crate::v2::ucum::Names::One("international unit"),
-            Self::ArbitraryUnit => crate::v2::ucum::Names::One("arbitrary unit"),
-            Self::UnitedStatesPharmacopeiaUnit => {
-                crate::v2::ucum::Names::One("United States Pharmacopeia unit")
+            Self::Equivalents => crate::v2::traits::ucum::Names::One("equivalents"),
+            Self::Osmole => crate::v2::traits::ucum::Names::One("osmole"),
+            Self::PH => crate::v2::traits::ucum::Names::One("pH"),
+            Self::GramPercent => crate::v2::traits::ucum::Names::One("gram percent"),
+            Self::SvedbergUnit => crate::v2::traits::ucum::Names::One("Svedberg unit"),
+            Self::HighPowerField => crate::v2::traits::ucum::Names::One("high power field"),
+            Self::LowPowerField => crate::v2::traits::ucum::Names::One("low power field"),
+            Self::Katal => crate::v2::traits::ucum::Names::One("katal"),
+            Self::Unit => crate::v2::traits::ucum::Names::One("Unit"),
+            Self::InternationalUnit => crate::v2::traits::ucum::Names::One("international unit"),
+            Self::InternationalUnitSecondary => {
+                crate::v2::traits::ucum::Names::One("international unit")
             }
-            Self::GplUnit => crate::v2::ucum::Names::One("GPL unit"),
-            Self::MplUnit => crate::v2::ucum::Names::One("MPL unit"),
-            Self::AplUnit => crate::v2::ucum::Names::One("APL unit"),
-            Self::BethesdaUnit => crate::v2::ucum::Names::One("Bethesda unit"),
-            Self::AntiFactorXaUnit => crate::v2::ucum::Names::One("anti factor Xa unit"),
-            Self::ToddUnit => crate::v2::ucum::Names::One("Todd unit"),
-            Self::DyeUnit => crate::v2::ucum::Names::One("Dye unit"),
-            Self::SomogyiUnit => crate::v2::ucum::Names::One("Somogyi unit"),
-            Self::BodanskyUnit => crate::v2::ucum::Names::One("Bodansky unit"),
-            Self::KingArmstrongUnit => crate::v2::ucum::Names::One("King-Armstrong unit"),
-            Self::KunkelUnit => crate::v2::ucum::Names::One("Kunkel unit"),
-            Self::MacLaganUnit => crate::v2::ucum::Names::One("Mac Lagan unit"),
-            Self::TuberculinUnit => crate::v2::ucum::Names::One("tuberculin unit"),
+            Self::ArbitraryUnit => crate::v2::traits::ucum::Names::One("arbitrary unit"),
+            Self::UnitedStatesPharmacopeiaUnit => {
+                crate::v2::traits::ucum::Names::One("United States Pharmacopeia unit")
+            }
+            Self::GplUnit => crate::v2::traits::ucum::Names::One("GPL unit"),
+            Self::MplUnit => crate::v2::traits::ucum::Names::One("MPL unit"),
+            Self::AplUnit => crate::v2::traits::ucum::Names::One("APL unit"),
+            Self::BethesdaUnit => crate::v2::traits::ucum::Names::One("Bethesda unit"),
+            Self::AntiFactorXaUnit => crate::v2::traits::ucum::Names::One("anti factor Xa unit"),
+            Self::ToddUnit => crate::v2::traits::ucum::Names::One("Todd unit"),
+            Self::DyeUnit => crate::v2::traits::ucum::Names::One("Dye unit"),
+            Self::SomogyiUnit => crate::v2::traits::ucum::Names::One("Somogyi unit"),
+            Self::BodanskyUnit => crate::v2::traits::ucum::Names::One("Bodansky unit"),
+            Self::KingArmstrongUnit => crate::v2::traits::ucum::Names::One("King-Armstrong unit"),
+            Self::KunkelUnit => crate::v2::traits::ucum::Names::One("Kunkel unit"),
+            Self::MacLaganUnit => crate::v2::traits::ucum::Names::One("Mac Lagan unit"),
+            Self::TuberculinUnit => crate::v2::traits::ucum::Names::One("tuberculin unit"),
             Self::CellCultureInfectiousDose => {
-                crate::v2::ucum::Names::One("50% cell culture infectious dose")
+                crate::v2::traits::ucum::Names::One("50% cell culture infectious dose")
             }
             Self::TissueCultureInfectiousDose => {
-                crate::v2::ucum::Names::One("50% tissue culture infectious dose")
+                crate::v2::traits::ucum::Names::One("50% tissue culture infectious dose")
             }
-            Self::EmbryoInfectiousDose => crate::v2::ucum::Names::One("50% embryo infectious dose"),
-            Self::PlaqueFormingUnits => crate::v2::ucum::Names::One("plaque forming units"),
-            Self::FocusFormingUnits => crate::v2::ucum::Names::One("focus forming units"),
-            Self::ColonyFormingUnits => crate::v2::ucum::Names::One("colony forming units"),
-            Self::IndexOfReactivity => crate::v2::ucum::Names::One("index of reactivity"),
+            Self::EmbryoInfectiousDose => {
+                crate::v2::traits::ucum::Names::One("50% embryo infectious dose")
+            }
+            Self::PlaqueFormingUnits => crate::v2::traits::ucum::Names::One("plaque forming units"),
+            Self::FocusFormingUnits => crate::v2::traits::ucum::Names::One("focus forming units"),
+            Self::ColonyFormingUnits => crate::v2::traits::ucum::Names::One("colony forming units"),
+            Self::IndexOfReactivity => crate::v2::traits::ucum::Names::One("index of reactivity"),
             Self::BioequivalentAllergenUnit => {
-                crate::v2::ucum::Names::One("bioequivalent allergen unit")
+                crate::v2::traits::ucum::Names::One("bioequivalent allergen unit")
             }
-            Self::AllergenUnit => crate::v2::ucum::Names::One("allergen unit"),
+            Self::AllergenUnit => crate::v2::traits::ucum::Names::One("allergen unit"),
             Self::AllergenUnitForAmbrosiaArtemisiifolia => {
-                crate::v2::ucum::Names::One("allergen unit for Ambrosia artemisiifolia")
+                crate::v2::traits::ucum::Names::One("allergen unit for Ambrosia artemisiifolia")
             }
-            Self::ProteinNitrogenUnit => crate::v2::ucum::Names::One("protein nitrogen unit"),
-            Self::LimitOfFlocculation => crate::v2::ucum::Names::One("Limit of flocculation"),
-            Self::DAntigenUnit => crate::v2::ucum::Names::One("D-antigen unit"),
+            Self::ProteinNitrogenUnit => {
+                crate::v2::traits::ucum::Names::One("protein nitrogen unit")
+            }
+            Self::LimitOfFlocculation => {
+                crate::v2::traits::ucum::Names::One("Limit of flocculation")
+            }
+            Self::DAntigenUnit => crate::v2::traits::ucum::Names::One("D-antigen unit"),
             Self::FibrinogenEquivalentUnit => {
-                crate::v2::ucum::Names::One("fibrinogen equivalent unit")
+                crate::v2::traits::ucum::Names::One("fibrinogen equivalent unit")
             }
-            Self::ElisaUnit => crate::v2::ucum::Names::One("ELISA unit"),
-            Self::EhrlichUnit => crate::v2::ucum::Names::One("Ehrlich unit"),
-            Self::Neper => crate::v2::ucum::Names::One("neper"),
-            Self::Bel => crate::v2::ucum::Names::One("bel"),
-            Self::BelSoundPressure => crate::v2::ucum::Names::One("bel sound pressure"),
-            Self::BelVolt => crate::v2::ucum::Names::One("bel volt"),
-            Self::BelMillivolt => crate::v2::ucum::Names::One("bel millivolt"),
-            Self::BelMicrovolt => crate::v2::ucum::Names::One("bel microvolt"),
-            Self::Bel10Nanovolt => crate::v2::ucum::Names::One("bel 10 nanovolt"),
-            Self::BelWatt => crate::v2::ucum::Names::One("bel watt"),
-            Self::BelKilowatt => crate::v2::ucum::Names::One("bel kilowatt"),
-            Self::Stere => crate::v2::ucum::Names::One("stere"),
-            Self::Angstrom => crate::v2::ucum::Names::One("Ångström"),
-            Self::Barn => crate::v2::ucum::Names::One("barn"),
-            Self::TechnicalAtmosphere => crate::v2::ucum::Names::One("technical atmosphere"),
-            Self::Mho => crate::v2::ucum::Names::One("mho"),
-            Self::PoundPerSqareInch => crate::v2::ucum::Names::One("pound per sqare inch"),
-            Self::Circle => crate::v2::ucum::Names::One("circle"),
-            Self::Spere => crate::v2::ucum::Names::One("spere"),
-            Self::MetricCarat => crate::v2::ucum::Names::One("metric carat"),
-            Self::CaratOfGoldAlloys => crate::v2::ucum::Names::One("carat of gold alloys"),
-            Self::Smoot => crate::v2::ucum::Names::One("Smoot"),
-            Self::MeterPerSquareSecondsPerSquareRootOfHertz => {
-                crate::v2::ucum::Names::One("meter per square seconds per square root of hertz")
+            Self::ElisaUnit => crate::v2::traits::ucum::Names::One("ELISA unit"),
+            Self::EhrlichUnit => crate::v2::traits::ucum::Names::One("Ehrlich unit"),
+            Self::Neper => crate::v2::traits::ucum::Names::One("neper"),
+            Self::Bel => crate::v2::traits::ucum::Names::One("bel"),
+            Self::BelSoundPressure => crate::v2::traits::ucum::Names::One("bel sound pressure"),
+            Self::BelVolt => crate::v2::traits::ucum::Names::One("bel volt"),
+            Self::BelMillivolt => crate::v2::traits::ucum::Names::One("bel millivolt"),
+            Self::BelMicrovolt => crate::v2::traits::ucum::Names::One("bel microvolt"),
+            Self::Bel10Nanovolt => crate::v2::traits::ucum::Names::One("bel 10 nanovolt"),
+            Self::BelWatt => crate::v2::traits::ucum::Names::One("bel watt"),
+            Self::BelKilowatt => crate::v2::traits::ucum::Names::One("bel kilowatt"),
+            Self::Stere => crate::v2::traits::ucum::Names::One("stere"),
+            Self::Angstrom => crate::v2::traits::ucum::Names::One("Ångström"),
+            Self::Barn => crate::v2::traits::ucum::Names::One("barn"),
+            Self::TechnicalAtmosphere => {
+                crate::v2::traits::ucum::Names::One("technical atmosphere")
             }
-            Self::BitLogarithmusDualis => crate::v2::ucum::Names::One("bit"),
-            Self::Bit => crate::v2::ucum::Names::One("bit"),
-            Self::Byte => crate::v2::ucum::Names::One("byte"),
-            Self::Baud => crate::v2::ucum::Names::One("baud"),
+            Self::Mho => crate::v2::traits::ucum::Names::One("mho"),
+            Self::PoundPerSqareInch => crate::v2::traits::ucum::Names::One("pound per sqare inch"),
+            Self::Circle => crate::v2::traits::ucum::Names::One("circle"),
+            Self::Spere => crate::v2::traits::ucum::Names::One("spere"),
+            Self::MetricCarat => crate::v2::traits::ucum::Names::One("metric carat"),
+            Self::CaratOfGoldAlloys => crate::v2::traits::ucum::Names::One("carat of gold alloys"),
+            Self::Smoot => crate::v2::traits::ucum::Names::One("Smoot"),
+            Self::MeterPerSquareSecondsPerSquareRootOfHertz => crate::v2::traits::ucum::Names::One(
+                "meter per square seconds per square root of hertz",
+            ),
+            Self::BitLogarithmusDualis => crate::v2::traits::ucum::Names::One("bit"),
+            Self::Bit => crate::v2::traits::ucum::Names::One("bit"),
+            Self::Byte => crate::v2::traits::ucum::Names::One("byte"),
+            Self::Baud => crate::v2::traits::ucum::Names::One("baud"),
         }
     }
 }

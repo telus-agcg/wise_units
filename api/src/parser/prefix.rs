@@ -210,9 +210,9 @@ impl UcumSymbol for Prefix {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::ucum::UcumIdentifiers for Prefix {
+impl crate::v2::traits::ucum::UcumIdentifiers for Prefix {
     type String = &'static str;
-    type Names = crate::v2::ucum::Names<&'static str>;
+    type Names = crate::v2::traits::ucum::Names<&'static str>;
 
     fn primary_code(&self) -> Self::String {
         UcumSymbol::primary_code(self)
@@ -227,7 +227,7 @@ impl crate::v2::ucum::UcumIdentifiers for Prefix {
     }
 
     fn names(&self) -> Self::Names {
-        use crate::v2::ucum::Names;
+        use crate::v2::traits::ucum::Names;
 
         match *self {
             Self::Atto => Names::One("atto"),
@@ -259,18 +259,23 @@ impl crate::v2::ucum::UcumIdentifiers for Prefix {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::ucum::UcumUnitComputedValues<f64> for Prefix {
-    fn scalar(&self) -> f64 {
+impl crate::v2::traits::convert::ToScalar<f64> for Prefix {
+    #[inline]
+    fn to_scalar(&self) -> f64 {
         self.definition_value()
     }
+}
 
-    fn magnitude(&self) -> f64 {
+#[cfg(feature = "v2")]
+impl crate::v2::traits::convert::ToMagnitude<f64> for Prefix {
+    #[inline]
+    fn to_magnitude(&self) -> f64 {
         1.0
     }
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::ucum::UcumDefinitionUnit for Prefix {
+impl crate::v2::traits::ucum::UcumDefinitionUnit for Prefix {
     type Unit = Unit;
 
     fn definition_unit(&self) -> Self::Unit {

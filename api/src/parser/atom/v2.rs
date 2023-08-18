@@ -1,4 +1,4 @@
-use crate::v2::ucum::UcumDefinitionUnit;
+use crate::v2::traits::ucum::UcumDefinitionUnit;
 
 use super::Atom;
 
