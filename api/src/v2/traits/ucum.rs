@@ -1,6 +1,14 @@
 //! These traits are a progression from the existing `crate::UcumSymbol` trait, allowing the same
 //! functionality, but also allowing downstream crates to implement for wrapper types.
 //!
+
+pub trait FromUcumStr {
+    type String: ?Sized;
+    type Output;
+
+    fn from_ucum_str(ucum_str: &Self::String) -> Self::Output;
+}
+
 pub trait UcumClassified {
     type Classification;
 
@@ -73,23 +81,5 @@ where
 
     fn is_arbitrary(&self) -> bool {
         crate::UcumUnit::is_arbitrary(self)
-    }
-}
-
-pub trait UcumUnitComputedValues<T> {
-    fn scalar(&self) -> T;
-    fn magnitude(&self) -> T;
-}
-
-impl<T> UcumUnitComputedValues<f64> for T
-where
-    T: crate::UcumUnit,
-{
-    fn scalar(&self) -> f64 {
-        crate::UcumUnit::scalar(self)
-    }
-
-    fn magnitude(&self) -> f64 {
-        crate::UcumUnit::magnitude(self)
     }
 }

@@ -9,11 +9,9 @@ impl Invert for &mut Unit {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::Invert for Unit {
-    type Error = crate::Error;
-
-    fn invert(&mut self) -> Result<(), Self::Error> {
-        crate::v2::Invert::invert(&mut self.terms)
+impl crate::v2::traits::convert::Invert for Unit {
+    fn invert(&mut self) {
+        crate::v2::traits::convert::Invert::invert(&mut self.terms)
     }
 }
 
@@ -27,11 +25,11 @@ impl ToInverse for Unit {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::ToInverse for Unit {
-    type Error = crate::Error;
-
-    fn to_inverse(&self) -> Result<Self, Self::Error> {
-        Ok(Self::new(crate::v2::ToInverse::to_inverse(&self.terms)?))
+impl crate::v2::traits::convert::ToInverse for Unit {
+    fn to_inverse(&self) -> Self {
+        Self::new(crate::v2::traits::convert::ToInverse::to_inverse(
+            &self.terms,
+        ))
     }
 }
 

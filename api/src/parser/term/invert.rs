@@ -12,10 +12,8 @@ impl Invert for &mut Term {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::Invert for Term {
-    type Error = crate::Error;
-
-    fn invert(&mut self) -> Result<(), Self::Error> {
+impl crate::v2::traits::convert::Invert for Term {
+    fn invert(&mut self) {
         match self.exponent {
             Some(e) if e == -1 => {
                 self.exponent = None;
@@ -27,8 +25,6 @@ impl crate::v2::Invert for Term {
                 let _ = self.exponent.replace(-1);
             }
         }
-
-        Ok(())
     }
 }
 
@@ -44,14 +40,12 @@ impl ToInverse for Term {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::ToInverse for Term {
-    type Error = crate::Error;
-
-    fn to_inverse(&self) -> Result<Self, Self::Error> {
+impl crate::v2::traits::convert::ToInverse for Term {
+    fn to_inverse(&self) -> Self {
         let mut new_term = self.clone();
-        let _ = crate::v2::Invert::invert(&mut new_term)?;
+        let _ = crate::v2::traits::convert::Invert::invert(&mut new_term);
 
-        Ok(new_term)
+        new_term
     }
 }
 
@@ -67,15 +61,11 @@ impl Invert for &mut Vec<Term> {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::Invert for Vec<Term> {
-    type Error = crate::Error;
-
-    fn invert(&mut self) -> Result<(), Self::Error> {
+impl crate::v2::traits::convert::Invert for Vec<Term> {
+    fn invert(&mut self) {
         for term in self.iter_mut() {
-            crate::v2::Invert::invert(term)?;
+            crate::v2::traits::convert::Invert::invert(term);
         }
-
-        Ok(())
     }
 }
 
@@ -88,11 +78,11 @@ impl ToInverse for Vec<Term> {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::ToInverse for Vec<Term> {
-    type Error = crate::Error;
-
-    fn to_inverse(&self) -> Result<Self, Self::Error> {
-        self.iter().map(crate::v2::ToInverse::to_inverse).collect()
+impl crate::v2::traits::convert::ToInverse for Vec<Term> {
+    fn to_inverse(&self) -> Self {
+        self.iter()
+            .map(crate::v2::traits::convert::ToInverse::to_inverse)
+            .collect()
     }
 }
 
