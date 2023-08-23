@@ -59,13 +59,6 @@ impl<'a> FieldEq<'a> for Unit {
     }
 }
 
-#[cfg(feature = "v2")]
-impl<'a> crate::v2::traits::ops::FieldEq<&'a Unit> for Unit {
-    fn field_eq(&self, rhs: &'a Unit) -> bool {
-        FieldEq::field_eq(self, rhs)
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use crate::{field_eq::FieldEq, unit::Unit};

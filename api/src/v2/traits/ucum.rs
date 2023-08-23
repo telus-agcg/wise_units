@@ -2,35 +2,21 @@
 //! functionality, but also allowing downstream crates to implement for wrapper types.
 //!
 
-pub trait FromUcumStr {
+/// Defines how to parse a string of unit symbols into a `Unit`.
+///
+pub trait ParseUcumStr<'a, U = Self> {
     type String: ?Sized;
-    type Output;
+    type Error;
 
-    fn from_ucum_str(ucum_str: &Self::String) -> Self::Output;
+    /// # Errors
+    ///
+    /// This should error if the `ucum_str` can't be parsed into a type that represents that
+    /// combinations of units.
+    ///
+    fn parse_ucum_str(ucum_str: Self::String) -> Result<U, Self::Error>;
 }
 
-// NOTE: This used to revolve around the term "classification", but that's nowhere to be found in
-// the UCUM spec; this term was borrowed from the `unitwise` Ruby gem during the initial port to
-// `wise_units`.
-//
-pub trait UcumDim {
-    type Dimension;
-
-    fn dim(&self) -> Self::Dimension;
-}
-
-// impl<T> UcumDim for T
-// where
-//     T: crate::UcumSymbol,
-// {
-//     type Dimension = crate::Classification;
-
-//     fn dim(&self) -> Self::Dimension {
-//         crate::UcumSymbol::classification(self)
-//     }
-// }
-
-pub trait UcumIdentifiers {
+pub trait DefinitionIdentifiers {
     type String;
     type Names;
 
@@ -40,20 +26,29 @@ pub trait UcumIdentifiers {
     fn names(&self) -> Self::Names;
 }
 
-pub trait UcumDefinitionValue<T> {
+pub trait Dim {
+    type Dimension;
+
+    fn dim(&self) -> Self::Dimension;
+}
+
+pub trait DefinitionFlags {
+    fn is_special(&self) -> bool;
+    fn is_metric(&self) -> bool;
+    fn is_arbitrary(&self) -> bool;
+}
+
+pub trait Property {
+    type Property;
+
+    fn property(&self) -> Self::Property;
+}
+
+pub trait DefinitionValue<T> {
     fn definition_value(&self) -> T;
 }
 
-impl<T> UcumDefinitionValue<f64> for T
-where
-    T: crate::UcumSymbol,
-{
-    fn definition_value(&self) -> f64 {
-        crate::UcumSymbol::definition_value(self)
-    }
-}
-
-pub trait UcumDefinitionUnit {
+pub trait DefinitionUnit {
     type Unit;
 
     fn definition_unit(&self) -> Self::Unit;
@@ -64,26 +59,3 @@ pub enum Names<T> {
     One(T),
     Two((T, T)),
 }
-
-pub trait UnitFlags {
-    fn is_special(&self) -> bool;
-    fn is_metric(&self) -> bool;
-    fn is_arbitrary(&self) -> bool;
-}
-
-// impl<T> UcumUnitFlags for T
-// where
-//     T: crate::UcumUnit,
-// {
-//     fn is_special(&self) -> bool {
-//         crate::UcumUnit::is_special(self)
-//     }
-
-//     fn is_metric(&self) -> bool {
-//         crate::UcumUnit::is_metric(self)
-//     }
-
-//     fn is_arbitrary(&self) -> bool {
-//         crate::UcumUnit::is_arbitrary(self)
-//     }
-// }

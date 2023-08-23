@@ -57,15 +57,6 @@ impl<'a> Div<Unit> for &'a Unit {
     }
 }
 
-#[cfg(feature = "v2")]
-impl crate::v2::traits::ops::RefDiv for Unit {
-    type Output = Self;
-
-    fn ref_div(&self, rhs: &Self) -> Self::Output {
-        Div::div(self, rhs)
-    }
-}
-
 //-----------------------------------------------------------------------------
 // impl Mul
 //-----------------------------------------------------------------------------
@@ -117,15 +108,6 @@ impl<'a> Mul<Unit> for &'a Unit {
     #[inline]
     fn mul(self, other: Unit) -> Self::Output {
         multiply_units(self, &other)
-    }
-}
-
-#[cfg(feature = "v2")]
-impl crate::v2::traits::ops::RefMul for Unit {
-    type Output = Self;
-
-    fn ref_mul(&self, rhs: &Self) -> Self::Output {
-        Mul::mul(self, rhs)
     }
 }
 

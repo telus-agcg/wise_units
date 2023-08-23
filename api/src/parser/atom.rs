@@ -2696,7 +2696,7 @@ impl UcumSymbol for Atom {
     }
 }
 #[cfg(feature = "v2")]
-impl crate::v2::traits::ucum::UcumIdentifiers for Atom {
+impl crate::v2::traits::ucum::DefinitionIdentifiers for Atom {
     type String = &'static str;
     type Names = crate::v2::traits::ucum::Names<&'static str>;
     fn primary_code(&self) -> Self::String {

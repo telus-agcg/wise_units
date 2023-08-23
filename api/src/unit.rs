@@ -16,6 +16,9 @@ mod to_reduced;
 #[allow(clippy::module_name_repetitions)]
 mod ucum_unit;
 
+#[cfg(feature = "v2")]
+mod v2;
+
 #[cfg(feature = "cffi")]
 pub mod custom_ffi;
 #[cfg(feature = "serde")]

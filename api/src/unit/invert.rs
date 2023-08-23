@@ -8,28 +8,12 @@ impl Invert for &mut Unit {
     }
 }
 
-#[cfg(feature = "v2")]
-impl crate::v2::traits::convert::Invert for Unit {
-    fn invert(&mut self) {
-        crate::v2::traits::convert::Invert::invert(&mut self.terms)
-    }
-}
-
 impl ToInverse for Unit {
     type Output = Self;
 
     #[inline]
     fn to_inverse(&self) -> Self::Output {
         Self::new(self.terms.to_inverse())
-    }
-}
-
-#[cfg(feature = "v2")]
-impl crate::v2::traits::convert::ToInverse for Unit {
-    fn to_inverse(&self) -> Self {
-        Self::new(crate::v2::traits::convert::ToInverse::to_inverse(
-            &self.terms,
-        ))
     }
 }
 

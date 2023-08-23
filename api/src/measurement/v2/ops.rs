@@ -19,33 +19,33 @@ impl<'a> ops::FieldEq<&'a Self> for Measurement {
     }
 }
 
-impl<'a> ops::TryRefAdd<'a> for Measurement {
+impl<'a> ops::TryAddRef<'a> for Measurement {
     type Error = crate::Error;
 
-    fn try_ref_add(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
+    fn try_add_ref(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
         // Just delegate to the old trait impl for now.
         std::ops::Add::add(self, rhs)
     }
 }
 
-impl<'a> ops::TryRefSub<'a> for Measurement {
+impl<'a> ops::TrySubRef<'a> for Measurement {
     type Error = crate::Error;
 
-    fn try_ref_sub(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
+    fn try_sub_ref(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
         // Just delegate to the old trait impl for now.
         std::ops::Sub::sub(self, rhs)
     }
 }
 
-impl ops::RefMul for Measurement {
-    fn ref_mul(&self, rhs: &Self) -> Self {
+impl ops::MulRef for Measurement {
+    fn mul_ref(&self, rhs: &Self) -> Self {
         // Just delegate to the old trait impl for now.
         std::ops::Mul::mul(self, rhs)
     }
 }
 
-impl ops::RefDiv for Measurement {
-    fn ref_div(&self, rhs: &Self) -> Self {
+impl ops::DivRef for Measurement {
+    fn div_ref(&self, rhs: &Self) -> Self {
         // Just delegate to the old trait impl for now.
         std::ops::Div::div(self, rhs)
     }
