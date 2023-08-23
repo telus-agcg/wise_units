@@ -3,7 +3,6 @@
 //! build on `wise_units`, and if that goes well, then these traits can then replace the old ones.
 
 pub mod convert;
-pub mod dim;
 pub mod ops;
 pub mod ucum;
 pub mod unit;

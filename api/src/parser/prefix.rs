@@ -210,7 +210,7 @@ impl UcumSymbol for Prefix {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::traits::ucum::UcumIdentifiers for Prefix {
+impl crate::v2::traits::ucum::DefinitionIdentifiers for Prefix {
     type String = &'static str;
     type Names = crate::v2::traits::ucum::Names<&'static str>;
 
@@ -275,7 +275,7 @@ impl crate::v2::traits::convert::ToMagnitude<f64> for Prefix {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::traits::ucum::UcumDefinitionUnit for Prefix {
+impl crate::v2::traits::ucum::DefinitionUnit for Prefix {
     type Unit = Unit;
 
     fn definition_unit(&self) -> Self::Unit {

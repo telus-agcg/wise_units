@@ -4,11 +4,14 @@ use crate::parser::Composable;
 /// compatible. Typically this comparison is made via each type's `Composition`, but the trait
 /// does not enforce that.
 ///
-pub trait IsCompatibleWith<RHS = Self> {
+pub trait IsCompatibleWith<RHS = Self>
+where
+    RHS: ?Sized,
+{
     fn is_compatible_with(&self, rhs: &RHS) -> bool;
 }
 
-/// Marker trait to allow for auto-implementing `IsCompatibleWith` using the default implemntation.
+/// Marker trait to allow for auto-implementing `IsCompatibleWith` using the default implementation.
 ///
 pub trait DefaultCompatibility {}
 

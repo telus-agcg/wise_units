@@ -40,6 +40,12 @@ impl IsCompatibleWith for Term {
 
 impl IsCompatibleWith for Vec<Term> {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
+        <Self as IsCompatibleWith<[Term]>>::is_compatible_with(self, rhs)
+    }
+}
+
+impl IsCompatibleWith<[Term]> for Vec<Term> {
+    fn is_compatible_with(&self, rhs: &[Term]) -> bool {
         let lhs_annotation_composition = self.annotation_composition();
         let rhs_annotation_composition = rhs.annotation_composition();
 
