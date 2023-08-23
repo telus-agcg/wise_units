@@ -2,7 +2,7 @@ use crate::v2::traits::{
     convert::{Invert, ToFraction, ToInverse, ToMagnitude, ToReduced, ToScalar},
     dim::Composable,
     ops::{IsCompatibleWith, RefDiv, RefMul},
-    ucum::{FromUcumStr, UcumUnitFlags},
+    ucum::{FromUcumStr, UnitFlags},
 };
 
 pub trait Unit<'a>:
@@ -20,12 +20,12 @@ pub trait Unit<'a>:
     + ToReduced
     + ToScalar<f64>
     + ToMagnitude<f64>
-    + UcumUnitFlags
+    + UnitFlags
     + 'a
 {
 }
 
-impl<'a> Unit<'a> for crate::Unit {}
+// impl<'a> Unit<'a> for crate::Unit {}
 
 impl FromUcumStr for crate::Unit {
     type String = str;

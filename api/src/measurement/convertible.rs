@@ -14,6 +14,12 @@ impl<'a> Convertible<&'a str> for Measurement {
     type Output = Self;
     type ConversionError = Error;
 
+    /// # Errors
+    ///
+    /// This fails if:
+    /// 1. `expression` can't be parsed into a `Unit`
+    /// 2. `self` couldn't be converted to `O`.
+    ///
     #[inline]
     fn convert_to(&self, expression: &'a str) -> Result<Self, Self::ConversionError> {
         let other_unit = Unit::from_str(expression)?;

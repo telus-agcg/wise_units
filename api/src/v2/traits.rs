@@ -7,6 +7,7 @@ pub mod dim;
 pub mod ops;
 pub mod ucum;
 pub mod unit;
+pub mod unit_conversion;
 
 // // NOTE: This is only intended to serve as a stepping stone to get from the old
 // // `Composable` trait to the new/v2 one.

@@ -16,7 +16,7 @@ pub trait AsWrappedRef<'a> {
     /// This should be the type of reference that's returned. Ideally this would be, say
     /// `&'a Measurement`, but in cases where alternative reference types are used (ex. `RefCell`), this would allow for that (ex. `Ref<'a, Measurement>`).
     ///
-    type Reference: std::ops::Deref<Target = Self::RustType>;
+    type Reference: Deref<Target = Self::RustType>;
 
     /// This is the type we want to get to for its functionality.
     ///

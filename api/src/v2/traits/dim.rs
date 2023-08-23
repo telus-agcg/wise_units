@@ -4,13 +4,13 @@ pub trait Composable {
     fn composition(&self) -> Self::Composition;
 }
 
-impl<T> Composable for T
-where
-    T: crate::Composable,
-{
-    type Composition = crate::Composition;
+// impl<T> Composable for T
+// where
+//     T: crate::Composable,
+// {
+//     type Composition = crate::Composition;
 
-    fn composition(&self) -> Self::Composition {
-        crate::Composable::composition(self)
-    }
-}
+//     fn composition(&self) -> Self::Composition {
+//         crate::Composable::composition(self)
+//     }
+// }
