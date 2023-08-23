@@ -9,22 +9,26 @@ pub trait FromUcumStr {
     fn from_ucum_str(ucum_str: &Self::String) -> Self::Output;
 }
 
-pub trait UcumClassified {
-    type Classification;
+// NOTE: This used to revolve around the term "classification", but that's nowhere to be found in
+// the UCUM spec; this term was borrowed from the `unitwise` Ruby gem during the initial port to
+// `wise_units`.
+//
+pub trait UcumDim {
+    type Dimension;
 
-    fn classification(&self) -> Self::Classification;
+    fn dim(&self) -> Self::Dimension;
 }
 
-impl<T> UcumClassified for T
-where
-    T: crate::UcumSymbol,
-{
-    type Classification = crate::Classification;
+// impl<T> UcumDim for T
+// where
+//     T: crate::UcumSymbol,
+// {
+//     type Dimension = crate::Classification;
 
-    fn classification(&self) -> Self::Classification {
-        crate::UcumSymbol::classification(self)
-    }
-}
+//     fn dim(&self) -> Self::Dimension {
+//         crate::UcumSymbol::classification(self)
+//     }
+// }
 
 pub trait UcumIdentifiers {
     type String;
@@ -61,25 +65,25 @@ pub enum Names<T> {
     Two((T, T)),
 }
 
-pub trait UcumUnitFlags {
+pub trait UnitFlags {
     fn is_special(&self) -> bool;
     fn is_metric(&self) -> bool;
     fn is_arbitrary(&self) -> bool;
 }
 
-impl<T> UcumUnitFlags for T
-where
-    T: crate::UcumUnit,
-{
-    fn is_special(&self) -> bool {
-        crate::UcumUnit::is_special(self)
-    }
+// impl<T> UcumUnitFlags for T
+// where
+//     T: crate::UcumUnit,
+// {
+//     fn is_special(&self) -> bool {
+//         crate::UcumUnit::is_special(self)
+//     }
 
-    fn is_metric(&self) -> bool {
-        crate::UcumUnit::is_metric(self)
-    }
+//     fn is_metric(&self) -> bool {
+//         crate::UcumUnit::is_metric(self)
+//     }
 
-    fn is_arbitrary(&self) -> bool {
-        crate::UcumUnit::is_arbitrary(self)
-    }
-}
+//     fn is_arbitrary(&self) -> bool {
+//         crate::UcumUnit::is_arbitrary(self)
+//     }
+// }
