@@ -33,13 +33,6 @@ impl convert::ToInverse for Unit {
     }
 }
 
-impl convert::ToReduced for Unit {
-    fn to_reduced(&self) -> Self {
-        // Just delegate to the old trait impl for now.
-        crate::reduce::ToReduced::to_reduced(self)
-    }
-}
-
 impl convert::ToScalar<f64> for Unit {
     fn to_scalar(&self) -> f64 {
         // Just delegate to the old trait impl for now.

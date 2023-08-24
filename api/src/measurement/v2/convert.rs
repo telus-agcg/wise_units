@@ -43,13 +43,6 @@ impl convert::CheckedToInverse for Measurement {
     }
 }
 
-impl convert::ToReduced for Measurement {
-    fn to_reduced(&self) -> Self {
-        // Just delegate to the old trait impl for now.
-        crate::reduce::ToReduced::to_reduced(self).unwrap()
-    }
-}
-
 impl convert::ToScalar<f64> for Measurement {
     fn to_scalar(&self) -> f64 {
         // Just delegate to the old trait impl for now.

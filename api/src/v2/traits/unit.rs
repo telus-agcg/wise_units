@@ -1,7 +1,8 @@
 use crate::v2::traits::{
-    convert::{Invert, ToFraction, ToInverse, ToMagnitude, ToReduced, ToScalar},
+    convert::{Invert, ToFraction, ToInverse, ToMagnitude, ToScalar},
     ops::{DivRef, IsCompatibleWith, MulRef},
     ucum::{DefinitionFlags, Dim, ParseUcumStr},
+    unit_conversion::ToReduced,
 };
 
 pub trait Unit<'a>:
