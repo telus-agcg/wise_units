@@ -27,13 +27,6 @@ pub trait CheckedToInverse<T = Self> {
     fn checked_to_inverse(&self) -> Option<T>;
 }
 
-// NOTE: The difference with this trait is that it's generic over `T`, allowing
-// for multiple implementations.
-//
-pub trait ToReduced<T = Self> {
-    fn to_reduced(&self) -> T;
-}
-
 pub trait ToScalar<T> {
     fn to_scalar(&self) -> T;
 }

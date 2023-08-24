@@ -17,3 +17,10 @@ impl<'a> unit_conversion::TryConvertTo<'a, &'a str> for Measurement {
         crate::Convertible::convert_to(self, rhs)
     }
 }
+
+impl unit_conversion::ToReduced for Measurement {
+    fn to_reduced(&self) -> Self {
+        // Just delegate to the old trait impl for now.
+        crate::reduce::ToReduced::to_reduced(self).unwrap()
+    }
+}
