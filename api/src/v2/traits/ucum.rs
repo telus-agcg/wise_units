@@ -38,6 +38,15 @@ pub trait DefinitionFlags {
     fn is_arbitrary(&self) -> bool;
 }
 
+/// NOTE: This is the same shape as the original trait, just renamed from `Classification` to
+/// `Class` to match the spec.
+///
+pub trait Class {
+    type Class;
+
+    fn class(&self) -> Self::Class;
+}
+
 pub trait Property {
     type Property;
 
