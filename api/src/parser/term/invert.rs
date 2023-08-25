@@ -4,16 +4,6 @@ use crate::invert::{Invert, ToInverse};
 // Term
 impl Invert for &mut Term {
     fn invert(self) {
-        self.exponent = self.exponent.map_or(Some(-1), |e| match e {
-            -1 => None,
-            _ => Some(-e),
-        });
-    }
-}
-
-#[cfg(feature = "v2")]
-impl crate::v2::traits::convert::Invert for Term {
-    fn invert(&mut self) {
         match self.exponent {
             Some(e) if e == -1 => {
                 self.exponent = None;
@@ -39,16 +29,6 @@ impl ToInverse for Term {
     }
 }
 
-#[cfg(feature = "v2")]
-impl crate::v2::traits::convert::ToInverse for Term {
-    fn to_inverse(&self) -> Self {
-        let mut new_term = self.clone();
-        let _ = crate::v2::traits::convert::Invert::invert(&mut new_term);
-
-        new_term
-    }
-}
-
 //  ╭───────────╮
 //  │ Vec<Term> │
 //  ╰───────────╯
@@ -60,29 +40,11 @@ impl Invert for &mut Vec<Term> {
     }
 }
 
-#[cfg(feature = "v2")]
-impl crate::v2::traits::convert::Invert for Vec<Term> {
-    fn invert(&mut self) {
-        for term in self.iter_mut() {
-            crate::v2::traits::convert::Invert::invert(term);
-        }
-    }
-}
-
 impl ToInverse for Vec<Term> {
     type Output = Self;
 
     fn to_inverse(&self) -> Self::Output {
         self.iter().map(ToInverse::to_inverse).collect()
-    }
-}
-
-#[cfg(feature = "v2")]
-impl crate::v2::traits::convert::ToInverse for Vec<Term> {
-    fn to_inverse(&self) -> Self {
-        self.iter()
-            .map(crate::v2::traits::convert::ToInverse::to_inverse)
-            .collect()
     }
 }
 

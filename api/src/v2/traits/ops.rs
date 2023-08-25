@@ -1,10 +1,10 @@
-// NOTE: The differences with this trait are
-// 1. It doesn't require `rhs` to be a reference
-// 2. It doesn't default `T` to `Self`
-//
-pub trait IsCompatibleWith<T: ?Sized> {
-    fn is_compatible_with(&self, rhs: T) -> bool;
-}
+//// NOTE: The differences with this trait are
+//// 1. It doesn't require `rhs` to be a reference
+//// 2. It doesn't default `T` to `Self`
+////
+//pub trait IsCompatibleWith<T: ?Sized> {
+//    fn is_compatible_with(&self, rhs: &T) -> bool;
+//}
 
 /// This trait is just a carryover from the old traits, where the old trait's use of lifetimes made
 /// it awkward to implement; this fixes that awkwardness, but this trait should go away. It was
@@ -21,7 +21,7 @@ pub trait IsCompatibleWith<T: ?Sized> {
 /// See the [Semantics](https://ucum.org/ucum#section-Semantics) section of the UCUM spec.
 ///
 pub trait FieldEq<T> {
-    fn field_eq(&self, rhs: T) -> bool;
+    fn field_eq(&self, rhs: &T) -> bool;
 }
 
 /// Allows for checking that `1 kilometer == 1000 meters`.
@@ -29,7 +29,7 @@ pub trait FieldEq<T> {
 /// See the [Semantics](https://ucum.org/ucum#section-Semantics) section of the UCUM spec.
 ///
 pub trait IsCommensurableWith<T> {
-    fn is_commensurable_with(&self, rhs: T) -> bool;
+    fn is_commensurable_with(&self, rhs: &T) -> bool;
 }
 
 /// `std::ops::Add::add()` takes `self`, which makes sense for regular numbers

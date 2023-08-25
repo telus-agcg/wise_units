@@ -1,19 +1,19 @@
-use crate::{v2::traits::ops, Measurement, Unit};
+use crate::{v2::traits::ops, Measurement};
 
-impl<'a> ops::IsCompatibleWith<&'a Self> for Measurement {
-    fn is_compatible_with(&self, rhs: &'a Self) -> bool {
-        crate::IsCompatibleWith::is_compatible_with(self, rhs)
-    }
-}
+// impl ops::IsCompatibleWith<Self> for Measurement {
+//     fn is_compatible_with(&self, rhs: &Self) -> bool {
+//         crate::IsCompatibleWith::is_compatible_with(self, rhs)
+//     }
+// }
 
-impl<'a> ops::IsCompatibleWith<&'a Unit> for Measurement {
-    fn is_compatible_with(&self, rhs: &'a Unit) -> bool {
-        crate::IsCompatibleWith::is_compatible_with(self, rhs)
-    }
-}
+// impl ops::IsCompatibleWith<Unit> for Measurement {
+//     fn is_compatible_with(&self, rhs: &Unit) -> bool {
+//         crate::IsCompatibleWith::is_compatible_with(self, rhs)
+//     }
+// }
 
-impl<'a> ops::FieldEq<&'a Self> for Measurement {
-    fn field_eq(&self, rhs: &'a Self) -> bool {
+impl ops::FieldEq<Self> for Measurement {
+    fn field_eq(&self, rhs: &Self) -> bool {
         // Just delegate to the old trait impl for now.
         crate::FieldEq::field_eq(self, rhs)
     }

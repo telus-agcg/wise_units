@@ -1,21 +1,17 @@
-use crate::{v2::traits::ops, Term, Unit};
+use crate::{v2::traits::ops, Unit};
 
-impl<'a> ops::FieldEq<&'a Self> for Unit {
-    fn field_eq(&self, rhs: &'a Self) -> bool {
+impl ops::FieldEq<Self> for Unit {
+    fn field_eq(&self, rhs: &Self) -> bool {
         // Just delegate to the old trait impl for now.
         crate::FieldEq::field_eq(self, rhs)
     }
 }
 
-impl<'a> ops::IsCompatibleWith<&'a Self> for Unit {
-    fn is_compatible_with(&self, rhs: &'a Self) -> bool {
-        crate::IsCompatibleWith::is_compatible_with(self, rhs)
-    }
-}
-
-impl<'a> ops::IsCompatibleWith<&'a [Term]> for Unit {
-    fn is_compatible_with(&self, rhs: &'a [Term]) -> bool {
-        crate::IsCompatibleWith::is_compatible_with(self, rhs)
+impl ops::IsCommensurableWith<Self> for Unit {
+    fn is_commensurable_with(&self, rhs: &Self) -> bool {
+        // TODO: Delegating, but the current implementation is incorrect (it should behave how the
+        // current FieldEq implementation behaves.).
+        PartialEq::eq(self, rhs)
     }
 }
 

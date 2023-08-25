@@ -30,13 +30,13 @@ where
 
 // NOTE: The difference with this trait is that it doesn't require the output to be a `Result` like
 // the original does. This allows for implementing for types that can guarantee a conversion.
-pub trait ConvertTo<U, O = Self> {
+pub trait ConvertTo<U: ?Sized, O = Self> {
     /// _The_ method for doing the conversion.
     ///
-    fn convert_to(&self, rhs: U) -> O;
+    fn convert_to(&self, rhs: &U) -> O;
 }
 
-pub trait TryConvertTo<'a, U, O = Self>: Sized {
+pub trait TryConvertTo<U: ?Sized, O = Self>: Sized {
     type Error;
 
     /// _The_ method for doing the conversion.
@@ -45,7 +45,7 @@ pub trait TryConvertTo<'a, U, O = Self>: Sized {
     ///
     /// This should fail if `self` couldn't be converted to `O`.
     ///
-    fn try_convert_to(&'a self, rhs: U) -> Result<O, Self::Error>;
+    fn try_convert_to(&self, rhs: &U) -> Result<O, Self::Error>;
 }
 
 // NOTE: The difference with this trait is that it's generic over `T`, allowing
