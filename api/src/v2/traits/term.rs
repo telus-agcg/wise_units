@@ -50,17 +50,17 @@ pub trait Term:
         FieldEq::field_eq(self, rhs)
     }
 
-    fn to_scalar<T>(&self) -> T
-    where
-        Self: ToScalar<T>,
-    {
-        ToScalar::to_scalar(self)
-    }
+    //     fn to_scalar<T>(&self) -> T
+    //     where
+    //         Self: ToScalar<T>,
+    //     {
+    //         ToScalar::to_scalar(self)
+    //     }
 
-    fn to_magnitude<T>(&self) -> T
-    where
-        Self: ToMagnitude<T>,
-    {
-        ToMagnitude::to_magnitude(self)
-    }
+    //     fn to_magnitude<T>(&self) -> T
+    //     where
+    //         Self: ToMagnitude<T>,
+    //     {
+    //         ToMagnitude::to_magnitude(self)
+    //     }
 }
