@@ -1,4 +1,4 @@
-use crate::{as_fraction::AsFraction, invert::ToInverse, parser::Term, unit::Unit};
+use crate::{as_fraction::AsFraction, invert::ToInverse, unit::Unit};
 
 impl AsFraction for Unit {
     type Numerator = Option<Self>;
@@ -6,35 +6,34 @@ impl AsFraction for Unit {
 
     #[inline]
     fn numerator(&self) -> Self::Numerator {
-        let positive_terms: Vec<Term> = self
-            .terms
+        let mut positive_terms_iter = self
+            .terms()
             .iter()
             .filter(|term| term.exponent.unwrap_or(1).is_positive())
-            .cloned()
-            .collect();
+            .peekable();
 
-        if positive_terms.is_empty() {
-            None
+        if positive_terms_iter.peek().is_some() {
+            Some(Self::new(positive_terms_iter.cloned().collect()))
         } else {
-            Some(Self::new(positive_terms))
+            None
         }
     }
 
     #[inline]
     fn denominator(&self) -> Self::Denominator {
-        let negative_terms: Vec<Term> = self
+        let mut negative_terms_iter = self
             .terms
             .iter()
             .filter_map(|term| match term.exponent {
                 Some(e) if e.is_negative() => Some(term.to_inverse()),
                 _ => None,
             })
-            .collect();
+            .peekable();
 
-        if negative_terms.is_empty() {
-            None
+        if negative_terms_iter.peek().is_some() {
+            Some(Self::new(negative_terms_iter.collect()))
         } else {
-            Some(Self::new(negative_terms))
+            None
         }
     }
 }

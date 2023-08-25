@@ -2,19 +2,7 @@
 //! functionality, but also allowing downstream crates to implement for wrapper types.
 //!
 
-/// Defines how to parse a string of unit symbols into a `Unit`.
-///
-pub trait ParseUcumStr<'a, U = Self> {
-    type String: ?Sized;
-    type Error;
-
-    /// # Errors
-    ///
-    /// This should error if the `ucum_str` can't be parsed into a type that represents that
-    /// combinations of units.
-    ///
-    fn parse_ucum_str(ucum_str: Self::String) -> Result<U, Self::Error>;
-}
+use std::ops::Mul;
 
 pub trait DefinitionIdentifiers {
     type String;
@@ -26,10 +14,11 @@ pub trait DefinitionIdentifiers {
     fn names(&self) -> Self::Names;
 }
 
-pub trait Dim {
-    type Dimension;
-
-    fn dim(&self) -> Self::Dimension;
+pub trait Dim<D>
+where
+    D: Default + Copy + PartialEq + Mul<i32, Output = D>,
+{
+    fn dim(&self) -> D;
 }
 
 pub trait DefinitionFlags {

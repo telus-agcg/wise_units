@@ -8,6 +8,9 @@ mod partial_eq;
 mod reducible;
 mod ucum_unit;
 
+#[cfg(feature = "v2")]
+mod v2;
+
 use crate::parser::{Atom, Prefix};
 
 /// A Term makes up an Atom (at its core) along with any Atom modifiers

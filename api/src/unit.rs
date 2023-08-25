@@ -163,6 +163,14 @@ impl<'a> TryFrom<&'a str> for Unit {
     }
 }
 
+impl FromIterator<Term> for Unit {
+    fn from_iter<T: IntoIterator<Item = Term>>(iter: T) -> Self {
+        Self {
+            terms: iter.into_iter().collect(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
