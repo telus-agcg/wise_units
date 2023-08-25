@@ -1,4 +1,7 @@
-// use crate::{v2::traits::convert, Unit};
+use crate::{
+    v2::traits::{convert, term_unit::TermUnit},
+    Unit,
+};
 
 // impl convert::ToFraction for Unit {
 //     fn to_fraction(&self) -> (Option<Self>, Option<Self>) {

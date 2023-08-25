@@ -5,6 +5,7 @@
 pub mod convert;
 pub mod ops;
 pub mod term;
+pub mod term_unit;
 pub mod ucum;
 pub mod unit;
 pub mod unit_conversion;

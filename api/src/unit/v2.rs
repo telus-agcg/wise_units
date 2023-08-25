@@ -5,10 +5,12 @@ mod unit_conversion;
 
 use std::borrow::Cow;
 
-use crate::{v2::traits::Unit as V2Unit, Unit};
+use crate::{
+    v2::traits::{term_unit::TermUnit, Unit as V2Unit},
+    Unit,
+};
 
 impl V2Unit for Unit {
-    type Term = crate::Term;
     type UcumString = str;
     type ParseError = crate::Error;
 
@@ -19,6 +21,26 @@ impl V2Unit for Unit {
     fn expression(&self) -> Cow<'_, str> {
         Cow::Owned(Self::expression(self))
     }
+
+    fn is_unity(&self) -> bool {
+        todo!()
+    }
+
+    fn equals<T>(&self, rhs: &T) -> bool {
+        todo!()
+    }
+
+    fn dim<D>(&self) -> D {
+        todo!()
+    }
+
+    fn commensurable_ord<T>(&self, rhs: &T) -> Option<std::cmp::Ordering> {
+        todo!()
+    }
+}
+
+impl TermUnit for Unit {
+    type Term = crate::Term;
 
     fn terms(&self) -> &[Self::Term] {
         &self.terms
