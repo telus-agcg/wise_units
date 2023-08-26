@@ -1,39 +1,16 @@
-use std::{borrow::Cow, cmp::Ordering, ops::Mul};
-
-use num_traits::One;
+use std::{borrow::Cow, cmp::Ordering};
 
 use crate::IsCompatibleWith;
 
-use super::{
-    convert::{self, Invert, ToInverse, ToMagnitude, ToScalar},
-    ops::{FieldEq, IsCommensurableWith},
-    ucum::Dim,
-    Term,
+use crate::v2::behavior_traits::{
+    convert::{Invert, ToInverse, ToMagnitude, ToScalar},
+    ops::IsCommensurableWith,
 };
-
-// pub trait Unit<'a>:
-//     Sized
-//     + DefinitionFlags
-//     + DivRef
-//     + Invert
-//     + IsCompatibleWith<&'a Self>
-//     + MulRef
-//     + ParseUcumStr<'a>
-//     + PartialEq
-//     + PartialOrd
-//     + ToFraction<Option<Self>, Option<Self>>
-//     + ToInverse
-//     + ToMagnitude<f64>
-//     + ToReduced
-//     + ToScalar<f64>
-//     + 'a
-// {
-// }
 
 pub trait Unit:
     Sized
     + Invert
-    + IsCommensurableWith<Self>
+    + IsCommensurableWith
     + IsCompatibleWith
     + PartialEq
     + ToInverse

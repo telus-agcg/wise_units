@@ -1,4 +1,4 @@
-use crate::{v2::traits::convert, Measurement};
+use crate::{v2::behavior_traits::convert, Measurement};
 
 // impl convert::Invert for Measurement {
 //     fn invert(&mut self) {

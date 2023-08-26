@@ -209,57 +209,57 @@ impl UcumSymbol for Prefix {
     }
 }
 
+// #[cfg(feature = "v2")]
+// impl crate::v2::behavior_traits::ucum::DefinitionIdentifiers for Prefix {
+//     type String = &'static str;
+//     type Names = crate::v2::behavior_traits::ucum::Names<&'static str>;
+
+//     fn primary_code(&self) -> Self::String {
+//         UcumSymbol::primary_code(self)
+//     }
+
+//     fn secondary_code(&self) -> Option<Self::String> {
+//         UcumSymbol::secondary_code(self)
+//     }
+
+//     fn print_symbol(&self) -> Option<Self::String> {
+//         UcumSymbol::print_symbol(self)
+//     }
+
+//     fn names(&self) -> Self::Names {
+//         use crate::v2::behavior_traits::ucum::Names;
+
+//         match *self {
+//             Self::Atto => Names::One("atto"),
+//             Self::Centi => Names::One("centi"),
+//             Self::Deci => Names::One("deci"),
+//             Self::Deka => Names::One("deka"),
+//             Self::Exa => Names::One("exa"),
+//             Self::Femto => Names::One("femto"),
+//             Self::Gibi => Names::One("gibi"),
+//             Self::Giga => Names::One("giga"),
+//             Self::Hecto => Names::One("hecto"),
+//             Self::Kibi => Names::One("kibi"),
+//             Self::Kilo => Names::One("kilo"),
+//             Self::Mebi => Names::One("mebi"),
+//             Self::Mega => Names::One("mega"),
+//             Self::Micro => Names::One("micro"),
+//             Self::Milli => Names::One("milli"),
+//             Self::Nano => Names::One("nano"),
+//             Self::Peta => Names::One("peta"),
+//             Self::Pico => Names::One("pico"),
+//             Self::Tebi => Names::One("tebi"),
+//             Self::Tera => Names::One("tera"),
+//             Self::Yocto => Names::One("yocto"),
+//             Self::Yotta => Names::One("yotta"),
+//             Self::Zepto => Names::One("zepto"),
+//             Self::Zetta => Names::One("zetta"),
+//         }
+//     }
+// }
+
 #[cfg(feature = "v2")]
-impl crate::v2::traits::ucum::DefinitionIdentifiers for Prefix {
-    type String = &'static str;
-    type Names = crate::v2::traits::ucum::Names<&'static str>;
-
-    fn primary_code(&self) -> Self::String {
-        UcumSymbol::primary_code(self)
-    }
-
-    fn secondary_code(&self) -> Option<Self::String> {
-        UcumSymbol::secondary_code(self)
-    }
-
-    fn print_symbol(&self) -> Option<Self::String> {
-        UcumSymbol::print_symbol(self)
-    }
-
-    fn names(&self) -> Self::Names {
-        use crate::v2::traits::ucum::Names;
-
-        match *self {
-            Self::Atto => Names::One("atto"),
-            Self::Centi => Names::One("centi"),
-            Self::Deci => Names::One("deci"),
-            Self::Deka => Names::One("deka"),
-            Self::Exa => Names::One("exa"),
-            Self::Femto => Names::One("femto"),
-            Self::Gibi => Names::One("gibi"),
-            Self::Giga => Names::One("giga"),
-            Self::Hecto => Names::One("hecto"),
-            Self::Kibi => Names::One("kibi"),
-            Self::Kilo => Names::One("kilo"),
-            Self::Mebi => Names::One("mebi"),
-            Self::Mega => Names::One("mega"),
-            Self::Micro => Names::One("micro"),
-            Self::Milli => Names::One("milli"),
-            Self::Nano => Names::One("nano"),
-            Self::Peta => Names::One("peta"),
-            Self::Pico => Names::One("pico"),
-            Self::Tebi => Names::One("tebi"),
-            Self::Tera => Names::One("tera"),
-            Self::Yocto => Names::One("yocto"),
-            Self::Yotta => Names::One("yotta"),
-            Self::Zepto => Names::One("zepto"),
-            Self::Zetta => Names::One("zetta"),
-        }
-    }
-}
-
-#[cfg(feature = "v2")]
-impl crate::v2::traits::convert::ToScalar<f64> for Prefix {
+impl crate::v2::behavior_traits::convert::ToScalar<f64> for Prefix {
     #[inline]
     fn to_scalar(&self) -> f64 {
         self.definition_value()
@@ -267,21 +267,21 @@ impl crate::v2::traits::convert::ToScalar<f64> for Prefix {
 }
 
 #[cfg(feature = "v2")]
-impl crate::v2::traits::convert::ToMagnitude<f64> for Prefix {
+impl crate::v2::behavior_traits::convert::ToMagnitude<f64> for Prefix {
     #[inline]
     fn to_magnitude(&self) -> f64 {
         1.0
     }
 }
 
-#[cfg(feature = "v2")]
-impl crate::v2::traits::ucum::DefinitionUnit for Prefix {
-    type Unit = Unit;
+// #[cfg(feature = "v2")]
+// impl crate::v2::behavior_traits::ucum::DefinitionUnit for Prefix {
+//     type Unit = Unit;
 
-    fn definition_unit(&self) -> Self::Unit {
-        Unit::new_unity()
-    }
-}
+//     fn definition_unit(&self) -> Self::Unit {
+//         Unit::new_unity()
+//     }
+// }
 
 impl Visit<Rule> for Prefix {
     fn visit(pair: Pair<'_, Rule>) -> Result<Self, Error> {

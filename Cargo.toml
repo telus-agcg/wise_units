@@ -1,5 +1,6 @@
 [workspace]
 members = ["api", "atom_generator", "definition_fetcher", "ffi"]
+resolver = "2"
 
 [workspace.package]
 rust-version = "1.64.0"

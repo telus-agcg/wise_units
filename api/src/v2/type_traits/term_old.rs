@@ -1,7 +1,7 @@
 use crate::IsCompatibleWith;
 
-use super::{
-    convert::{Invert, ToInverse, ToMagnitude, ToScalar},
+use crate::v2::behavior_traits::{
+    convert::{Invert, ToInverse},
     ops::{FieldEq, IsCommensurableWith},
     ucum::Dim,
 };
@@ -25,18 +25,6 @@ pub trait Term:
             && self.exponent().is_none()
             && self.atom_symbol().is_none()
             && self.prefix_symbol().is_none()
-    }
-
-    fn has_value(&self) -> bool {
-        self.factor().is_some() || self.atom_symbol().is_some() || self.annotation().is_some()
-    }
-
-    fn exponent_is_positive(&self) -> bool {
-        self.exponent().map_or(true, i32::is_positive)
-    }
-
-    fn exponent_is_negative(&self) -> bool {
-        self.exponent().map_or(false, i32::is_negative)
     }
 
     /// Here, "1 kilometer != 1000 meters"; "1 kilometer" only equals "1 kilometer".

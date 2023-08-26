@@ -1,5 +1,6 @@
 use crate::{
-    v2::traits::{convert, ops, term::Term as V2Term, ucum},
+    v2::behavior_traits::{convert, ops, ucum},
+    v2::type_traits::term_old::Term as V2Term,
     Term,
 };
 

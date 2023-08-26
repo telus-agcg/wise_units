@@ -2,13 +2,15 @@ use std::{cmp::Ordering, ops::Mul};
 
 use num_traits::One;
 
-use crate::IsCompatibleWith;
+use super::{unit_old::Unit, Term};
 
-use super::{
-    convert::{self, Invert, ToInverse, ToMagnitude, ToScalar},
-    ops::FieldEq,
-    ucum::Dim,
-    Term, Unit,
+use crate::{
+    v2::behavior_traits::{
+        convert::{self, Invert, ToInverse, ToMagnitude, ToScalar},
+        ops::FieldEq,
+        ucum::Dim,
+    },
+    IsCompatibleWith,
 };
 
 pub trait TermUnit: Unit + FromIterator<Self::Term> {

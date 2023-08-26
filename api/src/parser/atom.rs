@@ -2695,1299 +2695,1401 @@ impl UcumSymbol for Atom {
         Unit::new(self.definition().terms().clone())
     }
 }
-#[cfg(feature = "v2")]
-impl crate::v2::traits::ucum::DefinitionIdentifiers for Atom {
-    type String = &'static str;
-    type Names = crate::v2::traits::ucum::Names<&'static str>;
-    fn primary_code(&self) -> Self::String {
-        match *self {
-            Self::Meter => "m",
-            Self::Second => "s",
-            Self::Gram => "g",
-            Self::Radian => "rad",
-            Self::Kelvin => "K",
-            Self::Coulomb => "C",
-            Self::Candela => "cd",
-            Self::TheNumberTenForArbitraryPowersStar => "10*",
-            Self::TheNumberTenForArbitraryPowersCaret => "10^",
-            Self::TheNumberPi => "[pi]",
-            Self::Percent => "%",
-            Self::PartsPerThousand => "[ppth]",
-            Self::PartsPerMillion => "[ppm]",
-            Self::PartsPerBillion => "[ppb]",
-            Self::PartsPerTrillion => "[pptr]",
-            Self::Mole => "mol",
-            Self::Steradian => "sr",
-            Self::Hertz => "Hz",
-            Self::Newton => "N",
-            Self::Pascal => "Pa",
-            Self::Joule => "J",
-            Self::Watt => "W",
-            Self::Ampere => "A",
-            Self::Volt => "V",
-            Self::Farad => "F",
-            Self::Ohm => "Ohm",
-            Self::Siemens => "S",
-            Self::Weber => "Wb",
-            Self::DegreeCelsius => "Cel",
-            Self::Tesla => "T",
-            Self::Henry => "H",
-            Self::Lumen => "lm",
-            Self::Lux => "lx",
-            Self::Becquerel => "Bq",
-            Self::Gray => "Gy",
-            Self::Sievert => "Sv",
-            Self::Gon => "gon",
-            Self::Degree => "deg",
-            Self::MinuteAngle => "'",
-            Self::SecondAngle => "''",
-            Self::Liter => "l",
-            Self::LiterSecondary => "L",
-            Self::Are => "ar",
-            Self::Minute => "min",
-            Self::Hour => "h",
-            Self::Day => "d",
-            Self::TropicalYear => "a_t",
-            Self::MeanJulianYear => "a_j",
-            Self::MeanGregorianYear => "a_g",
-            Self::Year => "a",
-            Self::Week => "wk",
-            Self::SynodalMonth => "mo_s",
-            Self::MeanJulianMonth => "mo_j",
-            Self::MeanGregorianMonth => "mo_g",
-            Self::Month => "mo",
-            Self::Tonne => "t",
-            Self::Bar => "bar",
-            Self::UnifiedAtomicMassUnit => "u",
-            Self::Electronvolt => "eV",
-            Self::AstronomicUnit => "AU",
-            Self::Parsec => "pc",
-            Self::VelocityOfLight => "[c]",
-            Self::PlanckConstant => "[h]",
-            Self::BoltzmannConstant => "[k]",
-            Self::PermittivityOfVacuum => "[eps_0]",
-            Self::PermeabilityOfVacuum => "[mu_0]",
-            Self::ElementaryCharge => "[e]",
-            Self::ElectronMass => "[m_e]",
-            Self::ProtonMass => "[m_p]",
-            Self::NewtonianConstantOfGravitation => "[G]",
-            Self::StandardAccelerationOfFreeFall => "[g]",
-            Self::StandardAtmosphere => "atm",
-            Self::LightYear => "[ly]",
-            Self::GramForce => "gf",
-            Self::PoundForceAvoirdupois => "[lbf_av]",
-            Self::Kayser => "Ky",
-            Self::Gal => "Gal",
-            Self::Dyne => "dyn",
-            Self::Erg => "erg",
-            Self::Poise => "P",
-            Self::Biot => "Bi",
-            Self::Stokes => "St",
-            Self::Maxwell => "Mx",
-            Self::Gauss => "G",
-            Self::Oersted => "Oe",
-            Self::Gilbert => "Gb",
-            Self::Stilb => "sb",
-            Self::Lambert => "Lmb",
-            Self::Phot => "ph",
-            Self::Curie => "Ci",
-            Self::Roentgen => "R",
-            Self::RadiationAbsorbedDose => "RAD",
-            Self::RadiationEquivalentMan => "REM",
-            Self::InchInternational => "[in_i]",
-            Self::FootInternational => "[ft_i]",
-            Self::YardInternational => "[yd_i]",
-            Self::MileInternational => "[mi_i]",
-            Self::FathomInternational => "[fth_i]",
-            Self::NauticalMileInternational => "[nmi_i]",
-            Self::KnotInternational => "[kn_i]",
-            Self::SquareInchInternational => "[sin_i]",
-            Self::SquareFootInternational => "[sft_i]",
-            Self::SquareYardInternational => "[syd_i]",
-            Self::CubicInchInternational => "[cin_i]",
-            Self::CubicFootInternational => "[cft_i]",
-            Self::CubicYardInternational => "[cyd_i]",
-            Self::BoardFootInternational => "[bf_i]",
-            Self::CordInternational => "[cr_i]",
-            Self::MilInternational => "[mil_i]",
-            Self::CircularMilInternational => "[cml_i]",
-            Self::HandInternational => "[hd_i]",
-            Self::FootUS => "[ft_us]",
-            Self::YardUS => "[yd_us]",
-            Self::InchUS => "[in_us]",
-            Self::RodUS => "[rd_us]",
-            Self::GuntersChainUS => "[ch_us]",
-            Self::LinkForGuntersChainUS => "[lk_us]",
-            Self::RamdensChainUS => "[rch_us]",
-            Self::LinkForRamdensChainUS => "[rlk_us]",
-            Self::FathomUS => "[fth_us]",
-            Self::FurlongUS => "[fur_us]",
-            Self::MileUS => "[mi_us]",
-            Self::AcreUS => "[acr_us]",
-            Self::SquareRodUS => "[srd_us]",
-            Self::SquareMileUS => "[smi_us]",
-            Self::Section => "[sct]",
-            Self::Township => "[twp]",
-            Self::MilUS => "[mil_us]",
-            Self::InchBritish => "[in_br]",
-            Self::FootBritish => "[ft_br]",
-            Self::RodBritish => "[rd_br]",
-            Self::GuntersChainBritish => "[ch_br]",
-            Self::LinkForGuntersChainBritish => "[lk_br]",
-            Self::FathomBritish => "[fth_br]",
-            Self::PaceBritish => "[pc_br]",
-            Self::YardBritish => "[yd_br]",
-            Self::MileBritish => "[mi_br]",
-            Self::NauticalMileBritish => "[nmi_br]",
-            Self::KnotBritish => "[kn_br]",
-            Self::AcreBritish => "[acr_br]",
-            Self::QueenAnnesWineGallonUS => "[gal_us]",
-            Self::BarrelUS => "[bbl_us]",
-            Self::QuartUS => "[qt_us]",
-            Self::PintUS => "[pt_us]",
-            Self::GillUS => "[gil_us]",
-            Self::FluidOunceUS => "[foz_us]",
-            Self::FluidDramUS => "[fdr_us]",
-            Self::MinimUS => "[min_us]",
-            Self::CordUS => "[crd_us]",
-            Self::BushelUS => "[bu_us]",
-            Self::HistoricalWinchesterGallon => "[gal_wi]",
-            Self::PeckUS => "[pk_us]",
-            Self::DryQuartUS => "[dqt_us]",
-            Self::DryPintUS => "[dpt_us]",
-            Self::TablespoonUS => "[tbs_us]",
-            Self::TeaspoonUS => "[tsp_us]",
-            Self::CupUS => "[cup_us]",
-            Self::MetricFluidOunce => "[foz_m]",
-            Self::MetricCup => "[cup_m]",
-            Self::MetricTeaspoon => "[tsp_m]",
-            Self::MetricTablespoon => "[tbs_m]",
-            Self::GallonBritish => "[gal_br]",
-            Self::PeckBritish => "[pk_br]",
-            Self::BushelBritish => "[bu_br]",
-            Self::QuartBritish => "[qt_br]",
-            Self::PintBritish => "[pt_br]",
-            Self::GillBritish => "[gil_br]",
-            Self::FluidOunceBritish => "[foz_br]",
-            Self::FluidDramBritish => "[fdr_br]",
-            Self::MinimBritish => "[min_br]",
-            Self::Grain => "[gr]",
-            Self::PoundAvoirdupois => "[lb_av]",
-            Self::OunceAvoirdupois => "[oz_av]",
-            Self::DramAvoirdupois => "[dr_av]",
-            Self::ShortHundredweightAvoirdupois => "[scwt_av]",
-            Self::LongHunderdweightAvoirdupois => "[lcwt_av]",
-            Self::ShortTonAvoirdupois => "[ston_av]",
-            Self::LongTonAvoirdupois => "[lton_av]",
-            Self::StoneAvoirdupois => "[stone_av]",
-            Self::PennyweightTroy => "[pwt_tr]",
-            Self::OunceTroy => "[oz_tr]",
-            Self::PoundTroy => "[lb_tr]",
-            Self::ScrupleApothecaries => "[sc_ap]",
-            Self::DramApothecaries => "[dr_ap]",
-            Self::OunceApothecaries => "[oz_ap]",
-            Self::PoundApothecaries => "[lb_ap]",
-            Self::MetricOunce => "[oz_m]",
-            Self::Line => "[lne]",
-            Self::Point => "[pnt]",
-            Self::Pica => "[pca]",
-            Self::PrintersPoint => "[pnt_pr]",
-            Self::PrintersPica => "[pca_pr]",
-            Self::Pied => "[pied]",
-            Self::Pouce => "[pouce]",
-            Self::Ligne => "[ligne]",
-            Self::Didot => "[didot]",
-            Self::Cicero => "[cicero]",
-            Self::DegreeFahrenheit => "[degF]",
-            Self::DegreeRankine => "[degR]",
-            Self::DegreeReaumur => "[degRe]",
-            Self::CalorieAt15C => "cal_[15]",
-            Self::CalorieAt20C => "cal_[20]",
-            Self::MeanCalorie => "cal_m",
-            Self::InternationalTableCalorie => "cal_IT",
-            Self::ThermochemicalCalorie => "cal_th",
-            Self::Calorie => "cal",
-            Self::NutritionLabelCalories => "[Cal]",
-            Self::BritishThermalUnitAt39F => "[Btu_39]",
-            Self::BritishThermalUnitAt59F => "[Btu_59]",
-            Self::BritishThermalUnitAt60F => "[Btu_60]",
-            Self::MeanBritishThermalUnit => "[Btu_m]",
-            Self::InternationalTableBritishThermalUnit => "[Btu_IT]",
-            Self::ThermochemicalBritishThermalUnit => "[Btu_th]",
-            Self::BritishThermalUnit => "[Btu]",
-            Self::Horsepower => "[HP]",
-            Self::Tex => "tex",
-            Self::Denier => "[den]",
-            Self::MeterOfWaterColumn => "m[H2O]",
-            Self::MeterOfMercuryColumn => "m[Hg]",
-            Self::InchOfWaterColumn => "[in_i'H2O]",
-            Self::InchOfMercuryColumn => "[in_i'Hg]",
-            Self::PeripheralVascularResistanceUnit => "[PRU]",
-            Self::WoodUnit => "[wood'U]",
-            Self::Diopter => "[diop]",
-            Self::PrismDiopter => "[p'diop]",
-            Self::PercentOfSlope => "%[slope]",
-            Self::MeshInternational => "[mesh_i]",
-            Self::Charriere => "[Ch]",
-            Self::Drop => "[drp]",
-            Self::HounsfieldUnit => "[hnsf'U]",
-            Self::MetabolicEquivalent => "[MET]",
-            Self::HomeopathicPotencyOfDecimalSeriesRetired => "[hp'_X]",
-            Self::HomeopathicPotencyOfCentesimalSeriesRetired => "[hp'_C]",
-            Self::HomeopathicPotencyOfMillesimalSeriesRetired => "[hp'_M]",
-            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => "[hp'_Q]",
-            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => "[hp_X]",
-            Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => "[hp_C]",
-            Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => "[hp_M]",
-            Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => "[hp_Q]",
-            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => "[kp_X]",
-            Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => "[kp_C]",
-            Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => "[kp_M]",
-            Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => "[kp_Q]",
-            Self::Equivalents => "eq",
-            Self::Osmole => "osm",
-            Self::PH => "[pH]",
-            Self::GramPercent => "g%",
-            Self::SvedbergUnit => "[S]",
-            Self::HighPowerField => "[HPF]",
-            Self::LowPowerField => "[LPF]",
-            Self::Katal => "kat",
-            Self::Unit => "U",
-            Self::InternationalUnit => "[iU]",
-            Self::InternationalUnitSecondary => "[IU]",
-            Self::ArbitraryUnit => "[arb'U]",
-            Self::UnitedStatesPharmacopeiaUnit => "[USP'U]",
-            Self::GplUnit => "[GPL'U]",
-            Self::MplUnit => "[MPL'U]",
-            Self::AplUnit => "[APL'U]",
-            Self::BethesdaUnit => "[beth'U]",
-            Self::AntiFactorXaUnit => "[anti'Xa'U]",
-            Self::ToddUnit => "[todd'U]",
-            Self::DyeUnit => "[dye'U]",
-            Self::SomogyiUnit => "[smgy'U]",
-            Self::BodanskyUnit => "[bdsk'U]",
-            Self::KingArmstrongUnit => "[ka'U]",
-            Self::KunkelUnit => "[knk'U]",
-            Self::MacLaganUnit => "[mclg'U]",
-            Self::TuberculinUnit => "[tb'U]",
-            Self::CellCultureInfectiousDose => "[CCID_50]",
-            Self::TissueCultureInfectiousDose => "[TCID_50]",
-            Self::EmbryoInfectiousDose => "[EID_50]",
-            Self::PlaqueFormingUnits => "[PFU]",
-            Self::FocusFormingUnits => "[FFU]",
-            Self::ColonyFormingUnits => "[CFU]",
-            Self::IndexOfReactivity => "[IR]",
-            Self::BioequivalentAllergenUnit => "[BAU]",
-            Self::AllergenUnit => "[AU]",
-            Self::AllergenUnitForAmbrosiaArtemisiifolia => "[Amb'a'1'U]",
-            Self::ProteinNitrogenUnit => "[PNU]",
-            Self::LimitOfFlocculation => "[Lf]",
-            Self::DAntigenUnit => "[D'ag'U]",
-            Self::FibrinogenEquivalentUnit => "[FEU]",
-            Self::ElisaUnit => "[ELU]",
-            Self::EhrlichUnit => "[EU]",
-            Self::Neper => "Np",
-            Self::Bel => "B",
-            Self::BelSoundPressure => "B[SPL]",
-            Self::BelVolt => "B[V]",
-            Self::BelMillivolt => "B[mV]",
-            Self::BelMicrovolt => "B[uV]",
-            Self::Bel10Nanovolt => "B[10.nV]",
-            Self::BelWatt => "B[W]",
-            Self::BelKilowatt => "B[kW]",
-            Self::Stere => "st",
-            Self::Angstrom => "Ao",
-            Self::Barn => "b",
-            Self::TechnicalAtmosphere => "att",
-            Self::Mho => "mho",
-            Self::PoundPerSqareInch => "[psi]",
-            Self::Circle => "circ",
-            Self::Spere => "sph",
-            Self::MetricCarat => "[car_m]",
-            Self::CaratOfGoldAlloys => "[car_Au]",
-            Self::Smoot => "[smoot]",
-            Self::MeterPerSquareSecondsPerSquareRootOfHertz => "[m/s2/Hz^(1/2)]",
-            Self::BitLogarithmusDualis => "bit_s",
-            Self::Bit => "bit",
-            Self::Byte => "By",
-            Self::Baud => "Bd",
-        }
-    }
-    fn secondary_code(&self) -> Option<Self::String> {
-        match *self {
-            Self::Meter => Some("M"),
-            Self::Second => Some("S"),
-            Self::Gram => Some("G"),
-            Self::Radian => Some("RAD"),
-            Self::Kelvin => Some("K"),
-            Self::Coulomb => Some("C"),
-            Self::Candela => Some("CD"),
-            Self::TheNumberTenForArbitraryPowersStar => Some("10*"),
-            Self::TheNumberTenForArbitraryPowersCaret => Some("10^"),
-            Self::TheNumberPi => Some("[PI]"),
-            Self::Percent => Some("%"),
-            Self::PartsPerThousand => Some("[PPTH]"),
-            Self::PartsPerMillion => Some("[PPM]"),
-            Self::PartsPerBillion => Some("[PPB]"),
-            Self::PartsPerTrillion => Some("[PPTR]"),
-            Self::Mole => Some("MOL"),
-            Self::Steradian => Some("SR"),
-            Self::Hertz => Some("HZ"),
-            Self::Newton => Some("N"),
-            Self::Pascal => Some("PAL"),
-            Self::Joule => Some("J"),
-            Self::Watt => Some("W"),
-            Self::Ampere => Some("A"),
-            Self::Volt => Some("V"),
-            Self::Farad => Some("F"),
-            Self::Ohm => Some("OHM"),
-            Self::Siemens => Some("SIE"),
-            Self::Weber => Some("WB"),
-            Self::DegreeCelsius => Some("CEL"),
-            Self::Tesla => Some("T"),
-            Self::Henry => Some("H"),
-            Self::Lumen => Some("LM"),
-            Self::Lux => Some("LX"),
-            Self::Becquerel => Some("BQ"),
-            Self::Gray => Some("GY"),
-            Self::Sievert => Some("SV"),
-            Self::Gon => Some("GON"),
-            Self::Degree => Some("DEG"),
-            Self::MinuteAngle => Some("'"),
-            Self::SecondAngle => Some("''"),
-            Self::Liter => Some("L"),
-            Self::LiterSecondary => None,
-            Self::Are => Some("AR"),
-            Self::Minute => Some("MIN"),
-            Self::Hour => Some("HR"),
-            Self::Day => Some("D"),
-            Self::TropicalYear => Some("ANN_T"),
-            Self::MeanJulianYear => Some("ANN_J"),
-            Self::MeanGregorianYear => Some("ANN_G"),
-            Self::Year => Some("ANN"),
-            Self::Week => Some("WK"),
-            Self::SynodalMonth => Some("MO_S"),
-            Self::MeanJulianMonth => Some("MO_J"),
-            Self::MeanGregorianMonth => Some("MO_G"),
-            Self::Month => Some("MO"),
-            Self::Tonne => Some("TNE"),
-            Self::Bar => Some("BAR"),
-            Self::UnifiedAtomicMassUnit => Some("AMU"),
-            Self::Electronvolt => Some("EV"),
-            Self::AstronomicUnit => Some("ASU"),
-            Self::Parsec => Some("PRS"),
-            Self::VelocityOfLight => Some("[C]"),
-            Self::PlanckConstant => Some("[H]"),
-            Self::BoltzmannConstant => Some("[K]"),
-            Self::PermittivityOfVacuum => Some("[EPS_0]"),
-            Self::PermeabilityOfVacuum => Some("[MU_0]"),
-            Self::ElementaryCharge => Some("[E]"),
-            Self::ElectronMass => Some("[M_E]"),
-            Self::ProtonMass => Some("[M_P]"),
-            Self::NewtonianConstantOfGravitation => Some("[GC]"),
-            Self::StandardAccelerationOfFreeFall => Some("[G]"),
-            Self::StandardAtmosphere => Some("ATM"),
-            Self::LightYear => Some("[LY]"),
-            Self::GramForce => Some("GF"),
-            Self::PoundForceAvoirdupois => Some("[LBF_AV]"),
-            Self::Kayser => Some("KY"),
-            Self::Gal => Some("GL"),
-            Self::Dyne => Some("DYN"),
-            Self::Erg => Some("ERG"),
-            Self::Poise => Some("P"),
-            Self::Biot => Some("BI"),
-            Self::Stokes => Some("ST"),
-            Self::Maxwell => Some("MX"),
-            Self::Gauss => Some("GS"),
-            Self::Oersted => Some("OE"),
-            Self::Gilbert => Some("GB"),
-            Self::Stilb => Some("SB"),
-            Self::Lambert => Some("LMB"),
-            Self::Phot => Some("PHT"),
-            Self::Curie => Some("CI"),
-            Self::Roentgen => Some("ROE"),
-            Self::RadiationAbsorbedDose => Some("[RAD]"),
-            Self::RadiationEquivalentMan => Some("[REM]"),
-            Self::InchInternational => Some("[IN_I]"),
-            Self::FootInternational => Some("[FT_I]"),
-            Self::YardInternational => Some("[YD_I]"),
-            Self::MileInternational => Some("[MI_I]"),
-            Self::FathomInternational => Some("[FTH_I]"),
-            Self::NauticalMileInternational => Some("[NMI_I]"),
-            Self::KnotInternational => Some("[KN_I]"),
-            Self::SquareInchInternational => Some("[SIN_I]"),
-            Self::SquareFootInternational => Some("[SFT_I]"),
-            Self::SquareYardInternational => Some("[SYD_I]"),
-            Self::CubicInchInternational => Some("[CIN_I]"),
-            Self::CubicFootInternational => Some("[CFT_I]"),
-            Self::CubicYardInternational => Some("[CYD_I]"),
-            Self::BoardFootInternational => Some("[BF_I]"),
-            Self::CordInternational => Some("[CR_I]"),
-            Self::MilInternational => Some("[MIL_I]"),
-            Self::CircularMilInternational => Some("[CML_I]"),
-            Self::HandInternational => Some("[HD_I]"),
-            Self::FootUS => Some("[FT_US]"),
-            Self::YardUS => Some("[YD_US]"),
-            Self::InchUS => Some("[IN_US]"),
-            Self::RodUS => Some("[RD_US]"),
-            Self::GuntersChainUS => Some("[CH_US]"),
-            Self::LinkForGuntersChainUS => Some("[LK_US]"),
-            Self::RamdensChainUS => Some("[RCH_US]"),
-            Self::LinkForRamdensChainUS => Some("[RLK_US]"),
-            Self::FathomUS => Some("[FTH_US]"),
-            Self::FurlongUS => Some("[FUR_US]"),
-            Self::MileUS => Some("[MI_US]"),
-            Self::AcreUS => Some("[ACR_US]"),
-            Self::SquareRodUS => Some("[SRD_US]"),
-            Self::SquareMileUS => Some("[SMI_US]"),
-            Self::Section => Some("[SCT]"),
-            Self::Township => Some("[TWP]"),
-            Self::MilUS => Some("[MIL_US]"),
-            Self::InchBritish => Some("[IN_BR]"),
-            Self::FootBritish => Some("[FT_BR]"),
-            Self::RodBritish => Some("[RD_BR]"),
-            Self::GuntersChainBritish => Some("[CH_BR]"),
-            Self::LinkForGuntersChainBritish => Some("[LK_BR]"),
-            Self::FathomBritish => Some("[FTH_BR]"),
-            Self::PaceBritish => Some("[PC_BR]"),
-            Self::YardBritish => Some("[YD_BR]"),
-            Self::MileBritish => Some("[MI_BR]"),
-            Self::NauticalMileBritish => Some("[NMI_BR]"),
-            Self::KnotBritish => Some("[KN_BR]"),
-            Self::AcreBritish => Some("[ACR_BR]"),
-            Self::QueenAnnesWineGallonUS => Some("[GAL_US]"),
-            Self::BarrelUS => Some("[BBL_US]"),
-            Self::QuartUS => Some("[QT_US]"),
-            Self::PintUS => Some("[PT_US]"),
-            Self::GillUS => Some("[GIL_US]"),
-            Self::FluidOunceUS => Some("[FOZ_US]"),
-            Self::FluidDramUS => Some("[FDR_US]"),
-            Self::MinimUS => Some("[MIN_US]"),
-            Self::CordUS => Some("[CRD_US]"),
-            Self::BushelUS => Some("[BU_US]"),
-            Self::HistoricalWinchesterGallon => Some("[GAL_WI]"),
-            Self::PeckUS => Some("[PK_US]"),
-            Self::DryQuartUS => Some("[DQT_US]"),
-            Self::DryPintUS => Some("[DPT_US]"),
-            Self::TablespoonUS => Some("[TBS_US]"),
-            Self::TeaspoonUS => Some("[TSP_US]"),
-            Self::CupUS => Some("[CUP_US]"),
-            Self::MetricFluidOunce => Some("[FOZ_M]"),
-            Self::MetricCup => Some("[CUP_M]"),
-            Self::MetricTeaspoon => Some("[TSP_M]"),
-            Self::MetricTablespoon => Some("[TBS_M]"),
-            Self::GallonBritish => Some("[GAL_BR]"),
-            Self::PeckBritish => Some("[PK_BR]"),
-            Self::BushelBritish => Some("[BU_BR]"),
-            Self::QuartBritish => Some("[QT_BR]"),
-            Self::PintBritish => Some("[PT_BR]"),
-            Self::GillBritish => Some("[GIL_BR]"),
-            Self::FluidOunceBritish => Some("[FOZ_BR]"),
-            Self::FluidDramBritish => Some("[FDR_BR]"),
-            Self::MinimBritish => Some("[MIN_BR]"),
-            Self::Grain => Some("[GR]"),
-            Self::PoundAvoirdupois => Some("[LB_AV]"),
-            Self::OunceAvoirdupois => Some("[OZ_AV]"),
-            Self::DramAvoirdupois => Some("[DR_AV]"),
-            Self::ShortHundredweightAvoirdupois => Some("[SCWT_AV]"),
-            Self::LongHunderdweightAvoirdupois => Some("[LCWT_AV]"),
-            Self::ShortTonAvoirdupois => Some("[STON_AV]"),
-            Self::LongTonAvoirdupois => Some("[LTON_AV]"),
-            Self::StoneAvoirdupois => Some("[STONE_AV]"),
-            Self::PennyweightTroy => Some("[PWT_TR]"),
-            Self::OunceTroy => Some("[OZ_TR]"),
-            Self::PoundTroy => Some("[LB_TR]"),
-            Self::ScrupleApothecaries => Some("[SC_AP]"),
-            Self::DramApothecaries => Some("[DR_AP]"),
-            Self::OunceApothecaries => Some("[OZ_AP]"),
-            Self::PoundApothecaries => Some("[LB_AP]"),
-            Self::MetricOunce => Some("[OZ_M]"),
-            Self::Line => Some("[LNE]"),
-            Self::Point => Some("[PNT]"),
-            Self::Pica => Some("[PCA]"),
-            Self::PrintersPoint => Some("[PNT_PR]"),
-            Self::PrintersPica => Some("[PCA_PR]"),
-            Self::Pied => Some("[PIED]"),
-            Self::Pouce => Some("[POUCE]"),
-            Self::Ligne => Some("[LIGNE]"),
-            Self::Didot => Some("[DIDOT]"),
-            Self::Cicero => Some("[CICERO]"),
-            Self::DegreeFahrenheit => Some("[DEGF]"),
-            Self::DegreeRankine => Some("[degR]"),
-            Self::DegreeReaumur => Some("[degRe]"),
-            Self::CalorieAt15C => Some("CAL_[15]"),
-            Self::CalorieAt20C => Some("CAL_[20]"),
-            Self::MeanCalorie => Some("CAL_M"),
-            Self::InternationalTableCalorie => Some("CAL_IT"),
-            Self::ThermochemicalCalorie => Some("CAL_TH"),
-            Self::Calorie => Some("CAL"),
-            Self::NutritionLabelCalories => Some("[CAL]"),
-            Self::BritishThermalUnitAt39F => Some("[BTU_39]"),
-            Self::BritishThermalUnitAt59F => Some("[BTU_59]"),
-            Self::BritishThermalUnitAt60F => Some("[BTU_60]"),
-            Self::MeanBritishThermalUnit => Some("[BTU_M]"),
-            Self::InternationalTableBritishThermalUnit => Some("[BTU_IT]"),
-            Self::ThermochemicalBritishThermalUnit => Some("[BTU_TH]"),
-            Self::BritishThermalUnit => Some("[BTU]"),
-            Self::Horsepower => Some("[HP]"),
-            Self::Tex => Some("TEX"),
-            Self::Denier => Some("[DEN]"),
-            Self::MeterOfWaterColumn => Some("M[H2O]"),
-            Self::MeterOfMercuryColumn => Some("M[HG]"),
-            Self::InchOfWaterColumn => Some("[IN_I'H2O]"),
-            Self::InchOfMercuryColumn => Some("[IN_I'HG]"),
-            Self::PeripheralVascularResistanceUnit => Some("[PRU]"),
-            Self::WoodUnit => Some("[WOOD'U]"),
-            Self::Diopter => Some("[DIOP]"),
-            Self::PrismDiopter => Some("[P'DIOP]"),
-            Self::PercentOfSlope => Some("%[SLOPE]"),
-            Self::MeshInternational => Some("[MESH_I]"),
-            Self::Charriere => Some("[CH]"),
-            Self::Drop => Some("[DRP]"),
-            Self::HounsfieldUnit => Some("[HNSF'U]"),
-            Self::MetabolicEquivalent => Some("[MET]"),
-            Self::HomeopathicPotencyOfDecimalSeriesRetired => Some("[HP'_X]"),
-            Self::HomeopathicPotencyOfCentesimalSeriesRetired => Some("[HP'_C]"),
-            Self::HomeopathicPotencyOfMillesimalSeriesRetired => Some("[HP'_M]"),
-            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => Some("[HP'_Q]"),
-            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => Some("[HP_X]"),
-            Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => Some("[HP_C]"),
-            Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => Some("[HP_M]"),
-            Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => Some("[HP_Q]"),
-            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => Some("[KP_X]"),
-            Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => Some("[KP_C]"),
-            Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => Some("[KP_M]"),
-            Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => Some("[KP_Q]"),
-            Self::Equivalents => Some("EQ"),
-            Self::Osmole => Some("OSM"),
-            Self::PH => Some("[PH]"),
-            Self::GramPercent => Some("G%"),
-            Self::SvedbergUnit => Some("[S]"),
-            Self::HighPowerField => Some("[HPF]"),
-            Self::LowPowerField => Some("[LPF]"),
-            Self::Katal => Some("KAT"),
-            Self::Unit => Some("U"),
-            Self::InternationalUnit => Some("[IU]"),
-            Self::InternationalUnitSecondary => Some("[IU]"),
-            Self::ArbitraryUnit => Some("[ARB'U]"),
-            Self::UnitedStatesPharmacopeiaUnit => Some("[USP'U]"),
-            Self::GplUnit => Some("[GPL'U]"),
-            Self::MplUnit => Some("[MPL'U]"),
-            Self::AplUnit => Some("[APL'U]"),
-            Self::BethesdaUnit => Some("[BETH'U]"),
-            Self::AntiFactorXaUnit => Some("[ANTI'XA'U]"),
-            Self::ToddUnit => Some("[TODD'U]"),
-            Self::DyeUnit => Some("[DYE'U]"),
-            Self::SomogyiUnit => Some("[SMGY'U]"),
-            Self::BodanskyUnit => Some("[BDSK'U]"),
-            Self::KingArmstrongUnit => Some("[KA'U]"),
-            Self::KunkelUnit => Some("[KNK'U]"),
-            Self::MacLaganUnit => Some("[MCLG'U]"),
-            Self::TuberculinUnit => Some("[TB'U]"),
-            Self::CellCultureInfectiousDose => Some("[CCID_50]"),
-            Self::TissueCultureInfectiousDose => Some("[TCID_50]"),
-            Self::EmbryoInfectiousDose => Some("[EID_50]"),
-            Self::PlaqueFormingUnits => Some("[PFU]"),
-            Self::FocusFormingUnits => Some("[FFU]"),
-            Self::ColonyFormingUnits => Some("[CFU]"),
-            Self::IndexOfReactivity => Some("[IR]"),
-            Self::BioequivalentAllergenUnit => Some("[BAU]"),
-            Self::AllergenUnit => Some("[AU]"),
-            Self::AllergenUnitForAmbrosiaArtemisiifolia => Some("[AMB'A'1'U]"),
-            Self::ProteinNitrogenUnit => Some("[PNU]"),
-            Self::LimitOfFlocculation => Some("[LF]"),
-            Self::DAntigenUnit => Some("[D'AG'U]"),
-            Self::FibrinogenEquivalentUnit => Some("[FEU]"),
-            Self::ElisaUnit => Some("[ELU]"),
-            Self::EhrlichUnit => Some("[EU]"),
-            Self::Neper => Some("NEP"),
-            Self::Bel => Some("B"),
-            Self::BelSoundPressure => Some("B[SPL]"),
-            Self::BelVolt => Some("B[V]"),
-            Self::BelMillivolt => Some("B[MV]"),
-            Self::BelMicrovolt => Some("B[UV]"),
-            Self::Bel10Nanovolt => Some("B[10.NV]"),
-            Self::BelWatt => Some("B[W]"),
-            Self::BelKilowatt => Some("B[KW]"),
-            Self::Stere => Some("STR"),
-            Self::Angstrom => Some("AO"),
-            Self::Barn => Some("BRN"),
-            Self::TechnicalAtmosphere => Some("ATT"),
-            Self::Mho => Some("MHO"),
-            Self::PoundPerSqareInch => Some("[PSI]"),
-            Self::Circle => Some("CIRC"),
-            Self::Spere => Some("SPH"),
-            Self::MetricCarat => Some("[CAR_M]"),
-            Self::CaratOfGoldAlloys => Some("[CAR_AU]"),
-            Self::Smoot => Some("[SMOOT]"),
-            Self::MeterPerSquareSecondsPerSquareRootOfHertz => Some("[M/S2/HZ^(1/2)]"),
-            Self::BitLogarithmusDualis => Some("BIT_S"),
-            Self::Bit => Some("BIT"),
-            Self::Byte => Some("BY"),
-            Self::Baud => Some("BD"),
-        }
-    }
-    fn print_symbol(&self) -> Option<Self::String> {
-        match *self {
-            Self::Meter => Some("m"),
-            Self::Second => Some("s"),
-            Self::Gram => Some("g"),
-            Self::Radian => Some("rad"),
-            Self::Kelvin => Some("K"),
-            Self::Coulomb => Some("C"),
-            Self::Candela => Some("cd"),
-            Self::TheNumberTenForArbitraryPowersStar => Some("10"),
-            Self::TheNumberTenForArbitraryPowersCaret => Some("10"),
-            Self::TheNumberPi => Some("π"),
-            Self::Percent => Some("%"),
-            Self::PartsPerThousand => Some("ppth"),
-            Self::PartsPerMillion => Some("ppm"),
-            Self::PartsPerBillion => Some("ppb"),
-            Self::PartsPerTrillion => Some("pptr"),
-            Self::Mole => Some("mol"),
-            Self::Steradian => Some("sr"),
-            Self::Hertz => Some("Hz"),
-            Self::Newton => Some("N"),
-            Self::Pascal => Some("Pa"),
-            Self::Joule => Some("J"),
-            Self::Watt => Some("W"),
-            Self::Ampere => Some("A"),
-            Self::Volt => Some("V"),
-            Self::Farad => Some("F"),
-            Self::Ohm => Some("Ω"),
-            Self::Siemens => Some("S"),
-            Self::Weber => Some("Wb"),
-            Self::DegreeCelsius => Some("°C"),
-            Self::Tesla => Some("T"),
-            Self::Henry => Some("H"),
-            Self::Lumen => Some("lm"),
-            Self::Lux => Some("lx"),
-            Self::Becquerel => Some("Bq"),
-            Self::Gray => Some("Gy"),
-            Self::Sievert => Some("Sv"),
-            Self::Gon => Some("□<sup>g</sup>"),
-            Self::Degree => Some("°"),
-            Self::MinuteAngle => Some("'"),
-            Self::SecondAngle => Some("''"),
-            Self::Liter => Some("l"),
-            Self::LiterSecondary => Some("L"),
-            Self::Are => Some("a"),
-            Self::Minute => Some("min"),
-            Self::Hour => Some("h"),
-            Self::Day => Some("d"),
-            Self::TropicalYear => Some("a<sub>t</sub>"),
-            Self::MeanJulianYear => Some("a<sub>j</sub>"),
-            Self::MeanGregorianYear => Some("a<sub>g</sub>"),
-            Self::Year => Some("a"),
-            Self::Week => Some("wk"),
-            Self::SynodalMonth => Some("mo<sub>s</sub>"),
-            Self::MeanJulianMonth => Some("mo<sub>j</sub>"),
-            Self::MeanGregorianMonth => Some("mo<sub>g</sub>"),
-            Self::Month => Some("mo"),
-            Self::Tonne => Some("t"),
-            Self::Bar => Some("bar"),
-            Self::UnifiedAtomicMassUnit => Some("u"),
-            Self::Electronvolt => Some("eV"),
-            Self::AstronomicUnit => Some("AU"),
-            Self::Parsec => Some("pc"),
-            Self::VelocityOfLight => Some("<i>c</i>"),
-            Self::PlanckConstant => Some("<i>h</i>"),
-            Self::BoltzmannConstant => Some("<i>k</i>"),
-            Self::PermittivityOfVacuum => Some("<i>ε<sub><r>0</r></sub></i>"),
-            Self::PermeabilityOfVacuum => Some("<i>μ<sub><r>0</r></sub></i>"),
-            Self::ElementaryCharge => Some("<i>e</i>"),
-            Self::ElectronMass => Some("<i>m<sub><r>e</r></sub></i>"),
-            Self::ProtonMass => Some("<i>m<sub><r>p</r></sub></i>"),
-            Self::NewtonianConstantOfGravitation => Some("<i>G</i>"),
-            Self::StandardAccelerationOfFreeFall => Some("<i>g<sub>n</sub></i>"),
-            Self::StandardAtmosphere => Some("atm"),
-            Self::LightYear => Some("l.y."),
-            Self::GramForce => Some("gf"),
-            Self::PoundForceAvoirdupois => Some("lbf"),
-            Self::Kayser => Some("K"),
-            Self::Gal => Some("Gal"),
-            Self::Dyne => Some("dyn"),
-            Self::Erg => Some("erg"),
-            Self::Poise => Some("P"),
-            Self::Biot => Some("Bi"),
-            Self::Stokes => Some("St"),
-            Self::Maxwell => Some("Mx"),
-            Self::Gauss => Some("Gs"),
-            Self::Oersted => Some("Oe"),
-            Self::Gilbert => Some("Gb"),
-            Self::Stilb => Some("sb"),
-            Self::Lambert => Some("L"),
-            Self::Phot => Some("ph"),
-            Self::Curie => Some("Ci"),
-            Self::Roentgen => Some("R"),
-            Self::RadiationAbsorbedDose => Some("RAD"),
-            Self::RadiationEquivalentMan => Some("REM"),
-            Self::InchInternational => Some("in"),
-            Self::FootInternational => Some("ft"),
-            Self::YardInternational => Some("yd"),
-            Self::MileInternational => Some("mi"),
-            Self::FathomInternational => Some("fth"),
-            Self::NauticalMileInternational => Some("n.mi"),
-            Self::KnotInternational => Some("knot"),
-            Self::CubicYardInternational => Some("cu.yd"),
-            Self::MilInternational => Some("mil"),
-            Self::CircularMilInternational => Some("circ.mil"),
-            Self::HandInternational => Some("hd"),
-            Self::FootUS => Some("ft<sub>us</sub>"),
-            Self::FluidOunceUS => Some("oz fl"),
-            Self::MetricFluidOunce => Some("oz fl"),
-            Self::PoundAvoirdupois => Some("lb"),
-            Self::OunceAvoirdupois => Some("oz"),
-            Self::DegreeFahrenheit => Some("°F"),
-            Self::DegreeRankine => Some("°R"),
-            Self::DegreeReaumur => Some("°Ré"),
-            Self::CalorieAt15C => Some("cal<sub>15°C</sub>"),
-            Self::CalorieAt20C => Some("cal<sub>20°C</sub>"),
-            Self::MeanCalorie => Some("cal<sub>m</sub>"),
-            Self::InternationalTableCalorie => Some("cal<sub>IT</sub>"),
-            Self::ThermochemicalCalorie => Some("cal<sub>th</sub>"),
-            Self::Calorie => Some("cal"),
-            Self::NutritionLabelCalories => Some("Cal"),
-            Self::BritishThermalUnitAt39F => Some("Btu<sub>39°F</sub>"),
-            Self::BritishThermalUnitAt59F => Some("Btu<sub>59°F</sub>"),
-            Self::BritishThermalUnitAt60F => Some("Btu<sub>60°F</sub>"),
-            Self::MeanBritishThermalUnit => Some("Btu<sub>m</sub>"),
-            Self::InternationalTableBritishThermalUnit => Some("Btu<sub>IT</sub>"),
-            Self::ThermochemicalBritishThermalUnit => Some("Btu<sub>th</sub>"),
-            Self::BritishThermalUnit => Some("btu"),
-            Self::Tex => Some("tex"),
-            Self::Denier => Some("den"),
-            Self::MeterOfWaterColumn => Some("m\u{a0}H<sub><r>2</r></sub>O"),
-            Self::MeterOfMercuryColumn => Some("m\u{a0}Hg"),
-            Self::InchOfWaterColumn => Some("in\u{a0}H<sub><r>2</r></sub>O"),
-            Self::InchOfMercuryColumn => Some("in\u{a0}Hg"),
-            Self::PeripheralVascularResistanceUnit => Some("P.R.U."),
-            Self::WoodUnit => Some("Wood U."),
-            Self::Diopter => Some("dpt"),
-            Self::PrismDiopter => Some("PD"),
-            Self::PercentOfSlope => Some("%"),
-            Self::Charriere => Some("Ch"),
-            Self::Drop => Some("drp"),
-            Self::HounsfieldUnit => Some("HF"),
-            Self::MetabolicEquivalent => Some("MET"),
-            Self::HomeopathicPotencyOfDecimalSeriesRetired => Some("X"),
-            Self::HomeopathicPotencyOfCentesimalSeriesRetired => Some("C"),
-            Self::HomeopathicPotencyOfMillesimalSeriesRetired => Some("M"),
-            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => Some("Q"),
-            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => Some("X"),
-            Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => Some("C"),
-            Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => Some("M"),
-            Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => Some("Q"),
-            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => Some("X"),
-            Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => Some("C"),
-            Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => Some("M"),
-            Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => Some("Q"),
-            Self::Equivalents => Some("eq"),
-            Self::Osmole => Some("osm"),
-            Self::PH => Some("pH"),
-            Self::GramPercent => Some("g%"),
-            Self::SvedbergUnit => Some("S"),
-            Self::HighPowerField => Some("HPF"),
-            Self::LowPowerField => Some("LPF"),
-            Self::Katal => Some("kat"),
-            Self::Unit => Some("U"),
-            Self::InternationalUnit => Some("IU"),
-            Self::InternationalUnitSecondary => Some("i.U."),
-            Self::ArbitraryUnit => Some("arb. U"),
-            Self::UnitedStatesPharmacopeiaUnit => Some("U.S.P."),
-            Self::CellCultureInfectiousDose => Some("CCID<sub>50</sub>"),
-            Self::TissueCultureInfectiousDose => Some("TCID<sub>50</sub>"),
-            Self::EmbryoInfectiousDose => Some("EID<sub>50</sub>"),
-            Self::PlaqueFormingUnits => Some("PFU"),
-            Self::FocusFormingUnits => Some("FFU"),
-            Self::ColonyFormingUnits => Some("CFU"),
-            Self::IndexOfReactivity => Some("IR"),
-            Self::BioequivalentAllergenUnit => Some("BAU"),
-            Self::AllergenUnit => Some("AU"),
-            Self::AllergenUnitForAmbrosiaArtemisiifolia => Some("Amb a 1 U"),
-            Self::ProteinNitrogenUnit => Some("PNU"),
-            Self::LimitOfFlocculation => Some("Lf"),
-            Self::Neper => Some("Np"),
-            Self::Bel => Some("B"),
-            Self::BelSoundPressure => Some("B(SPL)"),
-            Self::BelVolt => Some("B(V)"),
-            Self::BelMillivolt => Some("B(mV)"),
-            Self::BelMicrovolt => Some("B(μV)"),
-            Self::Bel10Nanovolt => Some("B(10 nV)"),
-            Self::BelWatt => Some("B(W)"),
-            Self::BelKilowatt => Some("B(kW)"),
-            Self::Stere => Some("st"),
-            Self::Angstrom => Some("Å"),
-            Self::Barn => Some("b"),
-            Self::TechnicalAtmosphere => Some("at"),
-            Self::Mho => Some("mho"),
-            Self::PoundPerSqareInch => Some("psi"),
-            Self::Circle => Some("circ"),
-            Self::Spere => Some("sph"),
-            Self::MetricCarat => Some("ct<sub>m</sub>"),
-            Self::CaratOfGoldAlloys => Some("ct<sub><r>Au</r></sub>"),
-            Self::BitLogarithmusDualis => Some("bit<sub>s</sub>"),
-            Self::Bit => Some("bit"),
-            Self::Byte => Some("B"),
-            Self::Baud => Some("Bd"),
-            _ => None,
-        }
-    }
-    fn names(&self) -> crate::v2::traits::ucum::Names<&'static str> {
-        match *self {
-            Self::Meter => crate::v2::traits::ucum::Names::One("meter"),
-            Self::Second => crate::v2::traits::ucum::Names::One("second"),
-            Self::Gram => crate::v2::traits::ucum::Names::One("gram"),
-            Self::Radian => crate::v2::traits::ucum::Names::One("radian"),
-            Self::Kelvin => crate::v2::traits::ucum::Names::One("kelvin"),
-            Self::Coulomb => crate::v2::traits::ucum::Names::One("coulomb"),
-            Self::Candela => crate::v2::traits::ucum::Names::One("candela"),
-            Self::TheNumberTenForArbitraryPowersStar => {
-                crate::v2::traits::ucum::Names::One("the number ten for arbitrary powers")
-            }
-            Self::TheNumberTenForArbitraryPowersCaret => {
-                crate::v2::traits::ucum::Names::One("the number ten for arbitrary powers")
-            }
-            Self::TheNumberPi => crate::v2::traits::ucum::Names::One("the number pi"),
-            Self::Percent => crate::v2::traits::ucum::Names::One("percent"),
-            Self::PartsPerThousand => crate::v2::traits::ucum::Names::One("parts per thousand"),
-            Self::PartsPerMillion => crate::v2::traits::ucum::Names::One("parts per million"),
-            Self::PartsPerBillion => crate::v2::traits::ucum::Names::One("parts per billion"),
-            Self::PartsPerTrillion => crate::v2::traits::ucum::Names::One("parts per trillion"),
-            Self::Mole => crate::v2::traits::ucum::Names::One("mole"),
-            Self::Steradian => crate::v2::traits::ucum::Names::One("steradian"),
-            Self::Hertz => crate::v2::traits::ucum::Names::One("hertz"),
-            Self::Newton => crate::v2::traits::ucum::Names::One("newton"),
-            Self::Pascal => crate::v2::traits::ucum::Names::One("pascal"),
-            Self::Joule => crate::v2::traits::ucum::Names::One("joule"),
-            Self::Watt => crate::v2::traits::ucum::Names::One("watt"),
-            Self::Ampere => crate::v2::traits::ucum::Names::One("ampère"),
-            Self::Volt => crate::v2::traits::ucum::Names::One("volt"),
-            Self::Farad => crate::v2::traits::ucum::Names::One("farad"),
-            Self::Ohm => crate::v2::traits::ucum::Names::One("ohm"),
-            Self::Siemens => crate::v2::traits::ucum::Names::One("siemens"),
-            Self::Weber => crate::v2::traits::ucum::Names::One("weber"),
-            Self::DegreeCelsius => crate::v2::traits::ucum::Names::One("degree Celsius"),
-            Self::Tesla => crate::v2::traits::ucum::Names::One("tesla"),
-            Self::Henry => crate::v2::traits::ucum::Names::One("henry"),
-            Self::Lumen => crate::v2::traits::ucum::Names::One("lumen"),
-            Self::Lux => crate::v2::traits::ucum::Names::One("lux"),
-            Self::Becquerel => crate::v2::traits::ucum::Names::One("becquerel"),
-            Self::Gray => crate::v2::traits::ucum::Names::One("gray"),
-            Self::Sievert => crate::v2::traits::ucum::Names::One("sievert"),
-            Self::Gon => crate::v2::traits::ucum::Names::Two(("gon", "grade")),
-            Self::Degree => crate::v2::traits::ucum::Names::One("degree"),
-            Self::MinuteAngle => crate::v2::traits::ucum::Names::One("minute"),
-            Self::SecondAngle => crate::v2::traits::ucum::Names::One("second"),
-            Self::Liter => crate::v2::traits::ucum::Names::One("liter"),
-            Self::LiterSecondary => crate::v2::traits::ucum::Names::One("liter"),
-            Self::Are => crate::v2::traits::ucum::Names::One("are"),
-            Self::Minute => crate::v2::traits::ucum::Names::One("minute"),
-            Self::Hour => crate::v2::traits::ucum::Names::One("hour"),
-            Self::Day => crate::v2::traits::ucum::Names::One("day"),
-            Self::TropicalYear => crate::v2::traits::ucum::Names::One("tropical year"),
-            Self::MeanJulianYear => crate::v2::traits::ucum::Names::One("mean Julian year"),
-            Self::MeanGregorianYear => crate::v2::traits::ucum::Names::One("mean Gregorian year"),
-            Self::Year => crate::v2::traits::ucum::Names::One("year"),
-            Self::Week => crate::v2::traits::ucum::Names::One("week"),
-            Self::SynodalMonth => crate::v2::traits::ucum::Names::One("synodal month"),
-            Self::MeanJulianMonth => crate::v2::traits::ucum::Names::One("mean Julian month"),
-            Self::MeanGregorianMonth => crate::v2::traits::ucum::Names::One("mean Gregorian month"),
-            Self::Month => crate::v2::traits::ucum::Names::One("month"),
-            Self::Tonne => crate::v2::traits::ucum::Names::One("tonne"),
-            Self::Bar => crate::v2::traits::ucum::Names::One("bar"),
-            Self::UnifiedAtomicMassUnit => {
-                crate::v2::traits::ucum::Names::One("unified atomic mass unit")
-            }
-            Self::Electronvolt => crate::v2::traits::ucum::Names::One("electronvolt"),
-            Self::AstronomicUnit => crate::v2::traits::ucum::Names::One("astronomic unit"),
-            Self::Parsec => crate::v2::traits::ucum::Names::One("parsec"),
-            Self::VelocityOfLight => crate::v2::traits::ucum::Names::One("velocity of light"),
-            Self::PlanckConstant => crate::v2::traits::ucum::Names::One("Planck constant"),
-            Self::BoltzmannConstant => crate::v2::traits::ucum::Names::One("Boltzmann constant"),
-            Self::PermittivityOfVacuum => {
-                crate::v2::traits::ucum::Names::One("permittivity of vacuum")
-            }
-            Self::PermeabilityOfVacuum => {
-                crate::v2::traits::ucum::Names::One("permeability of vacuum")
-            }
-            Self::ElementaryCharge => crate::v2::traits::ucum::Names::One("elementary charge"),
-            Self::ElectronMass => crate::v2::traits::ucum::Names::One("electron mass"),
-            Self::ProtonMass => crate::v2::traits::ucum::Names::One("proton mass"),
-            Self::NewtonianConstantOfGravitation => {
-                crate::v2::traits::ucum::Names::One("Newtonian constant of gravitation")
-            }
-            Self::StandardAccelerationOfFreeFall => {
-                crate::v2::traits::ucum::Names::One("standard acceleration of free fall")
-            }
-            Self::StandardAtmosphere => crate::v2::traits::ucum::Names::One("standard atmosphere"),
-            Self::LightYear => crate::v2::traits::ucum::Names::One("light-year"),
-            Self::GramForce => crate::v2::traits::ucum::Names::One("gram-force"),
-            Self::PoundForceAvoirdupois => crate::v2::traits::ucum::Names::One("pound force"),
-            Self::Kayser => crate::v2::traits::ucum::Names::One("Kayser"),
-            Self::Gal => crate::v2::traits::ucum::Names::One("Gal"),
-            Self::Dyne => crate::v2::traits::ucum::Names::One("dyne"),
-            Self::Erg => crate::v2::traits::ucum::Names::One("erg"),
-            Self::Poise => crate::v2::traits::ucum::Names::One("Poise"),
-            Self::Biot => crate::v2::traits::ucum::Names::One("Biot"),
-            Self::Stokes => crate::v2::traits::ucum::Names::One("Stokes"),
-            Self::Maxwell => crate::v2::traits::ucum::Names::One("Maxwell"),
-            Self::Gauss => crate::v2::traits::ucum::Names::One("Gauss"),
-            Self::Oersted => crate::v2::traits::ucum::Names::One("Oersted"),
-            Self::Gilbert => crate::v2::traits::ucum::Names::One("Gilbert"),
-            Self::Stilb => crate::v2::traits::ucum::Names::One("stilb"),
-            Self::Lambert => crate::v2::traits::ucum::Names::One("Lambert"),
-            Self::Phot => crate::v2::traits::ucum::Names::One("phot"),
-            Self::Curie => crate::v2::traits::ucum::Names::One("Curie"),
-            Self::Roentgen => crate::v2::traits::ucum::Names::One("Roentgen"),
-            Self::RadiationAbsorbedDose => {
-                crate::v2::traits::ucum::Names::One("radiation absorbed dose")
-            }
-            Self::RadiationEquivalentMan => {
-                crate::v2::traits::ucum::Names::One("radiation equivalent man")
-            }
-            Self::InchInternational => crate::v2::traits::ucum::Names::One("inch"),
-            Self::FootInternational => crate::v2::traits::ucum::Names::One("foot"),
-            Self::YardInternational => crate::v2::traits::ucum::Names::One("yard"),
-            Self::MileInternational => crate::v2::traits::ucum::Names::One("mile"),
-            Self::FathomInternational => crate::v2::traits::ucum::Names::One("fathom"),
-            Self::NauticalMileInternational => crate::v2::traits::ucum::Names::One("nautical mile"),
-            Self::KnotInternational => crate::v2::traits::ucum::Names::One("knot"),
-            Self::SquareInchInternational => crate::v2::traits::ucum::Names::One("square inch"),
-            Self::SquareFootInternational => crate::v2::traits::ucum::Names::One("square foot"),
-            Self::SquareYardInternational => crate::v2::traits::ucum::Names::One("square yard"),
-            Self::CubicInchInternational => crate::v2::traits::ucum::Names::One("cubic inch"),
-            Self::CubicFootInternational => crate::v2::traits::ucum::Names::One("cubic foot"),
-            Self::CubicYardInternational => crate::v2::traits::ucum::Names::One("cubic yard"),
-            Self::BoardFootInternational => crate::v2::traits::ucum::Names::One("board foot"),
-            Self::CordInternational => crate::v2::traits::ucum::Names::One("cord"),
-            Self::MilInternational => crate::v2::traits::ucum::Names::One("mil"),
-            Self::CircularMilInternational => crate::v2::traits::ucum::Names::One("circular mil"),
-            Self::HandInternational => crate::v2::traits::ucum::Names::One("hand"),
-            Self::FootUS => crate::v2::traits::ucum::Names::One("foot"),
-            Self::YardUS => crate::v2::traits::ucum::Names::One("yard"),
-            Self::InchUS => crate::v2::traits::ucum::Names::One("inch"),
-            Self::RodUS => crate::v2::traits::ucum::Names::One("rod"),
-            Self::GuntersChainUS => {
-                crate::v2::traits::ucum::Names::Two(("Gunter's chain", "Surveyor's chain"))
-            }
-            Self::LinkForGuntersChainUS => {
-                crate::v2::traits::ucum::Names::One("link for Gunter's chain")
-            }
-            Self::RamdensChainUS => {
-                crate::v2::traits::ucum::Names::Two(("Ramden's chain", "Engineer's chain"))
-            }
-            Self::LinkForRamdensChainUS => {
-                crate::v2::traits::ucum::Names::One("link for Ramden's chain")
-            }
-            Self::FathomUS => crate::v2::traits::ucum::Names::One("fathom"),
-            Self::FurlongUS => crate::v2::traits::ucum::Names::One("furlong"),
-            Self::MileUS => crate::v2::traits::ucum::Names::One("mile"),
-            Self::AcreUS => crate::v2::traits::ucum::Names::One("acre"),
-            Self::SquareRodUS => crate::v2::traits::ucum::Names::One("square rod"),
-            Self::SquareMileUS => crate::v2::traits::ucum::Names::One("square mile"),
-            Self::Section => crate::v2::traits::ucum::Names::One("section"),
-            Self::Township => crate::v2::traits::ucum::Names::One("township"),
-            Self::MilUS => crate::v2::traits::ucum::Names::One("mil"),
-            Self::InchBritish => crate::v2::traits::ucum::Names::One("inch"),
-            Self::FootBritish => crate::v2::traits::ucum::Names::One("foot"),
-            Self::RodBritish => crate::v2::traits::ucum::Names::One("rod"),
-            Self::GuntersChainBritish => crate::v2::traits::ucum::Names::One("Gunter's chain"),
-            Self::LinkForGuntersChainBritish => {
-                crate::v2::traits::ucum::Names::One("link for Gunter's chain")
-            }
-            Self::FathomBritish => crate::v2::traits::ucum::Names::One("fathom"),
-            Self::PaceBritish => crate::v2::traits::ucum::Names::One("pace"),
-            Self::YardBritish => crate::v2::traits::ucum::Names::One("yard"),
-            Self::MileBritish => crate::v2::traits::ucum::Names::One("mile"),
-            Self::NauticalMileBritish => crate::v2::traits::ucum::Names::One("nautical mile"),
-            Self::KnotBritish => crate::v2::traits::ucum::Names::One("knot"),
-            Self::AcreBritish => crate::v2::traits::ucum::Names::One("acre"),
-            Self::QueenAnnesWineGallonUS => {
-                crate::v2::traits::ucum::Names::One("Queen\u{a0}Anne's wine gallon")
-            }
-            Self::BarrelUS => crate::v2::traits::ucum::Names::One("barrel"),
-            Self::QuartUS => crate::v2::traits::ucum::Names::One("quart"),
-            Self::PintUS => crate::v2::traits::ucum::Names::One("pint"),
-            Self::GillUS => crate::v2::traits::ucum::Names::One("gill"),
-            Self::FluidOunceUS => crate::v2::traits::ucum::Names::One("fluid ounce"),
-            Self::FluidDramUS => crate::v2::traits::ucum::Names::One("fluid dram"),
-            Self::MinimUS => crate::v2::traits::ucum::Names::One("minim"),
-            Self::CordUS => crate::v2::traits::ucum::Names::One("cord"),
-            Self::BushelUS => crate::v2::traits::ucum::Names::One("bushel"),
-            Self::HistoricalWinchesterGallon => {
-                crate::v2::traits::ucum::Names::One("historical winchester gallon")
-            }
-            Self::PeckUS => crate::v2::traits::ucum::Names::One("peck"),
-            Self::DryQuartUS => crate::v2::traits::ucum::Names::One("dry quart"),
-            Self::DryPintUS => crate::v2::traits::ucum::Names::One("dry pint"),
-            Self::TablespoonUS => crate::v2::traits::ucum::Names::One("tablespoon"),
-            Self::TeaspoonUS => crate::v2::traits::ucum::Names::One("teaspoon"),
-            Self::CupUS => crate::v2::traits::ucum::Names::One("cup"),
-            Self::MetricFluidOunce => crate::v2::traits::ucum::Names::One("metric fluid ounce"),
-            Self::MetricCup => crate::v2::traits::ucum::Names::One("metric cup"),
-            Self::MetricTeaspoon => crate::v2::traits::ucum::Names::One("metric teaspoon"),
-            Self::MetricTablespoon => crate::v2::traits::ucum::Names::One("metric tablespoon"),
-            Self::GallonBritish => crate::v2::traits::ucum::Names::One("gallon"),
-            Self::PeckBritish => crate::v2::traits::ucum::Names::One("peck"),
-            Self::BushelBritish => crate::v2::traits::ucum::Names::One("bushel"),
-            Self::QuartBritish => crate::v2::traits::ucum::Names::One("quart"),
-            Self::PintBritish => crate::v2::traits::ucum::Names::One("pint"),
-            Self::GillBritish => crate::v2::traits::ucum::Names::One("gill"),
-            Self::FluidOunceBritish => crate::v2::traits::ucum::Names::One("fluid ounce"),
-            Self::FluidDramBritish => crate::v2::traits::ucum::Names::One("fluid dram"),
-            Self::MinimBritish => crate::v2::traits::ucum::Names::One("minim"),
-            Self::Grain => crate::v2::traits::ucum::Names::One("grain"),
-            Self::PoundAvoirdupois => crate::v2::traits::ucum::Names::One("pound"),
-            Self::OunceAvoirdupois => crate::v2::traits::ucum::Names::One("ounce"),
-            Self::DramAvoirdupois => crate::v2::traits::ucum::Names::One("dram"),
-            Self::ShortHundredweightAvoirdupois => {
-                crate::v2::traits::ucum::Names::Two(("short hundredweight", "U.S. hundredweight"))
-            }
-            Self::LongHunderdweightAvoirdupois => {
-                crate::v2::traits::ucum::Names::Two(("long hunderdweight", "British hundredweight"))
-            }
-            Self::ShortTonAvoirdupois => {
-                crate::v2::traits::ucum::Names::Two(("short ton", "U.S. ton"))
-            }
-            Self::LongTonAvoirdupois => {
-                crate::v2::traits::ucum::Names::Two(("long ton", "British ton"))
-            }
-            Self::StoneAvoirdupois => {
-                crate::v2::traits::ucum::Names::Two(("stone", "British stone"))
-            }
-            Self::PennyweightTroy => crate::v2::traits::ucum::Names::One("pennyweight"),
-            Self::OunceTroy => crate::v2::traits::ucum::Names::One("ounce"),
-            Self::PoundTroy => crate::v2::traits::ucum::Names::One("pound"),
-            Self::ScrupleApothecaries => crate::v2::traits::ucum::Names::One("scruple"),
-            Self::DramApothecaries => crate::v2::traits::ucum::Names::Two(("dram", "drachm")),
-            Self::OunceApothecaries => crate::v2::traits::ucum::Names::One("ounce"),
-            Self::PoundApothecaries => crate::v2::traits::ucum::Names::One("pound"),
-            Self::MetricOunce => crate::v2::traits::ucum::Names::One("metric ounce"),
-            Self::Line => crate::v2::traits::ucum::Names::One("line"),
-            Self::Point => crate::v2::traits::ucum::Names::One("point"),
-            Self::Pica => crate::v2::traits::ucum::Names::One("pica"),
-            Self::PrintersPoint => crate::v2::traits::ucum::Names::One("Printer's point"),
-            Self::PrintersPica => crate::v2::traits::ucum::Names::One("Printer's pica"),
-            Self::Pied => crate::v2::traits::ucum::Names::Two(("pied", "French foot")),
-            Self::Pouce => crate::v2::traits::ucum::Names::Two(("pouce", "French inch")),
-            Self::Ligne => crate::v2::traits::ucum::Names::Two(("ligne", "French line")),
-            Self::Didot => crate::v2::traits::ucum::Names::Two(("didot", "Didot's point")),
-            Self::Cicero => crate::v2::traits::ucum::Names::Two(("cicero", "Didot's pica")),
-            Self::DegreeFahrenheit => crate::v2::traits::ucum::Names::One("degree Fahrenheit"),
-            Self::DegreeRankine => crate::v2::traits::ucum::Names::One("degree Rankine"),
-            Self::DegreeReaumur => crate::v2::traits::ucum::Names::One("degree Réaumur"),
-            Self::CalorieAt15C => crate::v2::traits::ucum::Names::One("calorie at 15\u{a0}°C"),
-            Self::CalorieAt20C => crate::v2::traits::ucum::Names::One("calorie at 20\u{a0}°C"),
-            Self::MeanCalorie => crate::v2::traits::ucum::Names::One("mean calorie"),
-            Self::InternationalTableCalorie => {
-                crate::v2::traits::ucum::Names::One("international table calorie")
-            }
-            Self::ThermochemicalCalorie => {
-                crate::v2::traits::ucum::Names::One("thermochemical calorie")
-            }
-            Self::Calorie => crate::v2::traits::ucum::Names::One("calorie"),
-            Self::NutritionLabelCalories => {
-                crate::v2::traits::ucum::Names::One("nutrition label Calories")
-            }
-            Self::BritishThermalUnitAt39F => {
-                crate::v2::traits::ucum::Names::One("British thermal unit at 39\u{a0}°F")
-            }
-            Self::BritishThermalUnitAt59F => {
-                crate::v2::traits::ucum::Names::One("British thermal unit at 59\u{a0}°F")
-            }
-            Self::BritishThermalUnitAt60F => {
-                crate::v2::traits::ucum::Names::One("British thermal unit at 60\u{a0}°F")
-            }
-            Self::MeanBritishThermalUnit => {
-                crate::v2::traits::ucum::Names::One("mean British thermal unit")
-            }
-            Self::InternationalTableBritishThermalUnit => {
-                crate::v2::traits::ucum::Names::One("international table British thermal unit")
-            }
-            Self::ThermochemicalBritishThermalUnit => {
-                crate::v2::traits::ucum::Names::One("thermochemical British thermal unit")
-            }
-            Self::BritishThermalUnit => crate::v2::traits::ucum::Names::One("British thermal unit"),
-            Self::Horsepower => crate::v2::traits::ucum::Names::One("horsepower"),
-            Self::Tex => crate::v2::traits::ucum::Names::One("tex"),
-            Self::Denier => crate::v2::traits::ucum::Names::One("Denier"),
-            Self::MeterOfWaterColumn => {
-                crate::v2::traits::ucum::Names::One("meter of water column")
-            }
-            Self::MeterOfMercuryColumn => {
-                crate::v2::traits::ucum::Names::One("meter of mercury column")
-            }
-            Self::InchOfWaterColumn => crate::v2::traits::ucum::Names::One("inch of water column"),
-            Self::InchOfMercuryColumn => {
-                crate::v2::traits::ucum::Names::One("inch of mercury column")
-            }
-            Self::PeripheralVascularResistanceUnit => {
-                crate::v2::traits::ucum::Names::One("peripheral vascular resistance unit")
-            }
-            Self::WoodUnit => crate::v2::traits::ucum::Names::One("Wood unit"),
-            Self::Diopter => crate::v2::traits::ucum::Names::One("diopter"),
-            Self::PrismDiopter => crate::v2::traits::ucum::Names::One("prism diopter"),
-            Self::PercentOfSlope => crate::v2::traits::ucum::Names::One("percent of slope"),
-            Self::MeshInternational => crate::v2::traits::ucum::Names::One("mesh"),
-            Self::Charriere => crate::v2::traits::ucum::Names::Two(("Charrière", "french")),
-            Self::Drop => crate::v2::traits::ucum::Names::One("drop"),
-            Self::HounsfieldUnit => crate::v2::traits::ucum::Names::One("Hounsfield unit"),
-            Self::MetabolicEquivalent => {
-                crate::v2::traits::ucum::Names::One("metabolic equivalent")
-            }
-            Self::HomeopathicPotencyOfDecimalSeriesRetired => crate::v2::traits::ucum::Names::One(
-                "homeopathic potency of decimal series (retired)",
-            ),
-            Self::HomeopathicPotencyOfCentesimalSeriesRetired => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of centesimal series (retired)",
-                )
-            }
-            Self::HomeopathicPotencyOfMillesimalSeriesRetired => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of millesimal series (retired)",
-                )
-            }
-            Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of quintamillesimal series (retired)",
-                )
-            }
-            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of decimal hahnemannian series",
-                )
-            }
-            Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of centesimal hahnemannian series",
-                )
-            }
-            Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of millesimal hahnemannian series",
-                )
-            }
-            Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of quintamillesimal hahnemannian series",
-                )
-            }
-            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of decimal korsakovian series",
-                )
-            }
-            Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of centesimal korsakovian series",
-                )
-            }
-            Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of millesimal korsakovian series",
-                )
-            }
-            Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => {
-                crate::v2::traits::ucum::Names::One(
-                    "homeopathic potency of quintamillesimal korsakovian series",
-                )
-            }
-            Self::Equivalents => crate::v2::traits::ucum::Names::One("equivalents"),
-            Self::Osmole => crate::v2::traits::ucum::Names::One("osmole"),
-            Self::PH => crate::v2::traits::ucum::Names::One("pH"),
-            Self::GramPercent => crate::v2::traits::ucum::Names::One("gram percent"),
-            Self::SvedbergUnit => crate::v2::traits::ucum::Names::One("Svedberg unit"),
-            Self::HighPowerField => crate::v2::traits::ucum::Names::One("high power field"),
-            Self::LowPowerField => crate::v2::traits::ucum::Names::One("low power field"),
-            Self::Katal => crate::v2::traits::ucum::Names::One("katal"),
-            Self::Unit => crate::v2::traits::ucum::Names::One("Unit"),
-            Self::InternationalUnit => crate::v2::traits::ucum::Names::One("international unit"),
-            Self::InternationalUnitSecondary => {
-                crate::v2::traits::ucum::Names::One("international unit")
-            }
-            Self::ArbitraryUnit => crate::v2::traits::ucum::Names::One("arbitrary unit"),
-            Self::UnitedStatesPharmacopeiaUnit => {
-                crate::v2::traits::ucum::Names::One("United States Pharmacopeia unit")
-            }
-            Self::GplUnit => crate::v2::traits::ucum::Names::One("GPL unit"),
-            Self::MplUnit => crate::v2::traits::ucum::Names::One("MPL unit"),
-            Self::AplUnit => crate::v2::traits::ucum::Names::One("APL unit"),
-            Self::BethesdaUnit => crate::v2::traits::ucum::Names::One("Bethesda unit"),
-            Self::AntiFactorXaUnit => crate::v2::traits::ucum::Names::One("anti factor Xa unit"),
-            Self::ToddUnit => crate::v2::traits::ucum::Names::One("Todd unit"),
-            Self::DyeUnit => crate::v2::traits::ucum::Names::One("Dye unit"),
-            Self::SomogyiUnit => crate::v2::traits::ucum::Names::One("Somogyi unit"),
-            Self::BodanskyUnit => crate::v2::traits::ucum::Names::One("Bodansky unit"),
-            Self::KingArmstrongUnit => crate::v2::traits::ucum::Names::One("King-Armstrong unit"),
-            Self::KunkelUnit => crate::v2::traits::ucum::Names::One("Kunkel unit"),
-            Self::MacLaganUnit => crate::v2::traits::ucum::Names::One("Mac Lagan unit"),
-            Self::TuberculinUnit => crate::v2::traits::ucum::Names::One("tuberculin unit"),
-            Self::CellCultureInfectiousDose => {
-                crate::v2::traits::ucum::Names::One("50% cell culture infectious dose")
-            }
-            Self::TissueCultureInfectiousDose => {
-                crate::v2::traits::ucum::Names::One("50% tissue culture infectious dose")
-            }
-            Self::EmbryoInfectiousDose => {
-                crate::v2::traits::ucum::Names::One("50% embryo infectious dose")
-            }
-            Self::PlaqueFormingUnits => crate::v2::traits::ucum::Names::One("plaque forming units"),
-            Self::FocusFormingUnits => crate::v2::traits::ucum::Names::One("focus forming units"),
-            Self::ColonyFormingUnits => crate::v2::traits::ucum::Names::One("colony forming units"),
-            Self::IndexOfReactivity => crate::v2::traits::ucum::Names::One("index of reactivity"),
-            Self::BioequivalentAllergenUnit => {
-                crate::v2::traits::ucum::Names::One("bioequivalent allergen unit")
-            }
-            Self::AllergenUnit => crate::v2::traits::ucum::Names::One("allergen unit"),
-            Self::AllergenUnitForAmbrosiaArtemisiifolia => {
-                crate::v2::traits::ucum::Names::One("allergen unit for Ambrosia artemisiifolia")
-            }
-            Self::ProteinNitrogenUnit => {
-                crate::v2::traits::ucum::Names::One("protein nitrogen unit")
-            }
-            Self::LimitOfFlocculation => {
-                crate::v2::traits::ucum::Names::One("Limit of flocculation")
-            }
-            Self::DAntigenUnit => crate::v2::traits::ucum::Names::One("D-antigen unit"),
-            Self::FibrinogenEquivalentUnit => {
-                crate::v2::traits::ucum::Names::One("fibrinogen equivalent unit")
-            }
-            Self::ElisaUnit => crate::v2::traits::ucum::Names::One("ELISA unit"),
-            Self::EhrlichUnit => crate::v2::traits::ucum::Names::One("Ehrlich unit"),
-            Self::Neper => crate::v2::traits::ucum::Names::One("neper"),
-            Self::Bel => crate::v2::traits::ucum::Names::One("bel"),
-            Self::BelSoundPressure => crate::v2::traits::ucum::Names::One("bel sound pressure"),
-            Self::BelVolt => crate::v2::traits::ucum::Names::One("bel volt"),
-            Self::BelMillivolt => crate::v2::traits::ucum::Names::One("bel millivolt"),
-            Self::BelMicrovolt => crate::v2::traits::ucum::Names::One("bel microvolt"),
-            Self::Bel10Nanovolt => crate::v2::traits::ucum::Names::One("bel 10 nanovolt"),
-            Self::BelWatt => crate::v2::traits::ucum::Names::One("bel watt"),
-            Self::BelKilowatt => crate::v2::traits::ucum::Names::One("bel kilowatt"),
-            Self::Stere => crate::v2::traits::ucum::Names::One("stere"),
-            Self::Angstrom => crate::v2::traits::ucum::Names::One("Ångström"),
-            Self::Barn => crate::v2::traits::ucum::Names::One("barn"),
-            Self::TechnicalAtmosphere => {
-                crate::v2::traits::ucum::Names::One("technical atmosphere")
-            }
-            Self::Mho => crate::v2::traits::ucum::Names::One("mho"),
-            Self::PoundPerSqareInch => crate::v2::traits::ucum::Names::One("pound per sqare inch"),
-            Self::Circle => crate::v2::traits::ucum::Names::One("circle"),
-            Self::Spere => crate::v2::traits::ucum::Names::One("spere"),
-            Self::MetricCarat => crate::v2::traits::ucum::Names::One("metric carat"),
-            Self::CaratOfGoldAlloys => crate::v2::traits::ucum::Names::One("carat of gold alloys"),
-            Self::Smoot => crate::v2::traits::ucum::Names::One("Smoot"),
-            Self::MeterPerSquareSecondsPerSquareRootOfHertz => crate::v2::traits::ucum::Names::One(
-                "meter per square seconds per square root of hertz",
-            ),
-            Self::BitLogarithmusDualis => crate::v2::traits::ucum::Names::One("bit"),
-            Self::Bit => crate::v2::traits::ucum::Names::One("bit"),
-            Self::Byte => crate::v2::traits::ucum::Names::One("byte"),
-            Self::Baud => crate::v2::traits::ucum::Names::One("baud"),
-        }
-    }
-}
+// #[cfg(feature = "v2")]
+// impl crate::v2::behavior_traits::ucum::DefinitionIdentifiers for Atom {
+//     type String = &'static str;
+//     type Names = crate::v2::behavior_traits::ucum::Names<&'static str>;
+//     fn primary_code(&self) -> Self::String {
+//         match *self {
+//             Self::Meter => "m",
+//             Self::Second => "s",
+//             Self::Gram => "g",
+//             Self::Radian => "rad",
+//             Self::Kelvin => "K",
+//             Self::Coulomb => "C",
+//             Self::Candela => "cd",
+//             Self::TheNumberTenForArbitraryPowersStar => "10*",
+//             Self::TheNumberTenForArbitraryPowersCaret => "10^",
+//             Self::TheNumberPi => "[pi]",
+//             Self::Percent => "%",
+//             Self::PartsPerThousand => "[ppth]",
+//             Self::PartsPerMillion => "[ppm]",
+//             Self::PartsPerBillion => "[ppb]",
+//             Self::PartsPerTrillion => "[pptr]",
+//             Self::Mole => "mol",
+//             Self::Steradian => "sr",
+//             Self::Hertz => "Hz",
+//             Self::Newton => "N",
+//             Self::Pascal => "Pa",
+//             Self::Joule => "J",
+//             Self::Watt => "W",
+//             Self::Ampere => "A",
+//             Self::Volt => "V",
+//             Self::Farad => "F",
+//             Self::Ohm => "Ohm",
+//             Self::Siemens => "S",
+//             Self::Weber => "Wb",
+//             Self::DegreeCelsius => "Cel",
+//             Self::Tesla => "T",
+//             Self::Henry => "H",
+//             Self::Lumen => "lm",
+//             Self::Lux => "lx",
+//             Self::Becquerel => "Bq",
+//             Self::Gray => "Gy",
+//             Self::Sievert => "Sv",
+//             Self::Gon => "gon",
+//             Self::Degree => "deg",
+//             Self::MinuteAngle => "'",
+//             Self::SecondAngle => "''",
+//             Self::Liter => "l",
+//             Self::LiterSecondary => "L",
+//             Self::Are => "ar",
+//             Self::Minute => "min",
+//             Self::Hour => "h",
+//             Self::Day => "d",
+//             Self::TropicalYear => "a_t",
+//             Self::MeanJulianYear => "a_j",
+//             Self::MeanGregorianYear => "a_g",
+//             Self::Year => "a",
+//             Self::Week => "wk",
+//             Self::SynodalMonth => "mo_s",
+//             Self::MeanJulianMonth => "mo_j",
+//             Self::MeanGregorianMonth => "mo_g",
+//             Self::Month => "mo",
+//             Self::Tonne => "t",
+//             Self::Bar => "bar",
+//             Self::UnifiedAtomicMassUnit => "u",
+//             Self::Electronvolt => "eV",
+//             Self::AstronomicUnit => "AU",
+//             Self::Parsec => "pc",
+//             Self::VelocityOfLight => "[c]",
+//             Self::PlanckConstant => "[h]",
+//             Self::BoltzmannConstant => "[k]",
+//             Self::PermittivityOfVacuum => "[eps_0]",
+//             Self::PermeabilityOfVacuum => "[mu_0]",
+//             Self::ElementaryCharge => "[e]",
+//             Self::ElectronMass => "[m_e]",
+//             Self::ProtonMass => "[m_p]",
+//             Self::NewtonianConstantOfGravitation => "[G]",
+//             Self::StandardAccelerationOfFreeFall => "[g]",
+//             Self::StandardAtmosphere => "atm",
+//             Self::LightYear => "[ly]",
+//             Self::GramForce => "gf",
+//             Self::PoundForceAvoirdupois => "[lbf_av]",
+//             Self::Kayser => "Ky",
+//             Self::Gal => "Gal",
+//             Self::Dyne => "dyn",
+//             Self::Erg => "erg",
+//             Self::Poise => "P",
+//             Self::Biot => "Bi",
+//             Self::Stokes => "St",
+//             Self::Maxwell => "Mx",
+//             Self::Gauss => "G",
+//             Self::Oersted => "Oe",
+//             Self::Gilbert => "Gb",
+//             Self::Stilb => "sb",
+//             Self::Lambert => "Lmb",
+//             Self::Phot => "ph",
+//             Self::Curie => "Ci",
+//             Self::Roentgen => "R",
+//             Self::RadiationAbsorbedDose => "RAD",
+//             Self::RadiationEquivalentMan => "REM",
+//             Self::InchInternational => "[in_i]",
+//             Self::FootInternational => "[ft_i]",
+//             Self::YardInternational => "[yd_i]",
+//             Self::MileInternational => "[mi_i]",
+//             Self::FathomInternational => "[fth_i]",
+//             Self::NauticalMileInternational => "[nmi_i]",
+//             Self::KnotInternational => "[kn_i]",
+//             Self::SquareInchInternational => "[sin_i]",
+//             Self::SquareFootInternational => "[sft_i]",
+//             Self::SquareYardInternational => "[syd_i]",
+//             Self::CubicInchInternational => "[cin_i]",
+//             Self::CubicFootInternational => "[cft_i]",
+//             Self::CubicYardInternational => "[cyd_i]",
+//             Self::BoardFootInternational => "[bf_i]",
+//             Self::CordInternational => "[cr_i]",
+//             Self::MilInternational => "[mil_i]",
+//             Self::CircularMilInternational => "[cml_i]",
+//             Self::HandInternational => "[hd_i]",
+//             Self::FootUS => "[ft_us]",
+//             Self::YardUS => "[yd_us]",
+//             Self::InchUS => "[in_us]",
+//             Self::RodUS => "[rd_us]",
+//             Self::GuntersChainUS => "[ch_us]",
+//             Self::LinkForGuntersChainUS => "[lk_us]",
+//             Self::RamdensChainUS => "[rch_us]",
+//             Self::LinkForRamdensChainUS => "[rlk_us]",
+//             Self::FathomUS => "[fth_us]",
+//             Self::FurlongUS => "[fur_us]",
+//             Self::MileUS => "[mi_us]",
+//             Self::AcreUS => "[acr_us]",
+//             Self::SquareRodUS => "[srd_us]",
+//             Self::SquareMileUS => "[smi_us]",
+//             Self::Section => "[sct]",
+//             Self::Township => "[twp]",
+//             Self::MilUS => "[mil_us]",
+//             Self::InchBritish => "[in_br]",
+//             Self::FootBritish => "[ft_br]",
+//             Self::RodBritish => "[rd_br]",
+//             Self::GuntersChainBritish => "[ch_br]",
+//             Self::LinkForGuntersChainBritish => "[lk_br]",
+//             Self::FathomBritish => "[fth_br]",
+//             Self::PaceBritish => "[pc_br]",
+//             Self::YardBritish => "[yd_br]",
+//             Self::MileBritish => "[mi_br]",
+//             Self::NauticalMileBritish => "[nmi_br]",
+//             Self::KnotBritish => "[kn_br]",
+//             Self::AcreBritish => "[acr_br]",
+//             Self::QueenAnnesWineGallonUS => "[gal_us]",
+//             Self::BarrelUS => "[bbl_us]",
+//             Self::QuartUS => "[qt_us]",
+//             Self::PintUS => "[pt_us]",
+//             Self::GillUS => "[gil_us]",
+//             Self::FluidOunceUS => "[foz_us]",
+//             Self::FluidDramUS => "[fdr_us]",
+//             Self::MinimUS => "[min_us]",
+//             Self::CordUS => "[crd_us]",
+//             Self::BushelUS => "[bu_us]",
+//             Self::HistoricalWinchesterGallon => "[gal_wi]",
+//             Self::PeckUS => "[pk_us]",
+//             Self::DryQuartUS => "[dqt_us]",
+//             Self::DryPintUS => "[dpt_us]",
+//             Self::TablespoonUS => "[tbs_us]",
+//             Self::TeaspoonUS => "[tsp_us]",
+//             Self::CupUS => "[cup_us]",
+//             Self::MetricFluidOunce => "[foz_m]",
+//             Self::MetricCup => "[cup_m]",
+//             Self::MetricTeaspoon => "[tsp_m]",
+//             Self::MetricTablespoon => "[tbs_m]",
+//             Self::GallonBritish => "[gal_br]",
+//             Self::PeckBritish => "[pk_br]",
+//             Self::BushelBritish => "[bu_br]",
+//             Self::QuartBritish => "[qt_br]",
+//             Self::PintBritish => "[pt_br]",
+//             Self::GillBritish => "[gil_br]",
+//             Self::FluidOunceBritish => "[foz_br]",
+//             Self::FluidDramBritish => "[fdr_br]",
+//             Self::MinimBritish => "[min_br]",
+//             Self::Grain => "[gr]",
+//             Self::PoundAvoirdupois => "[lb_av]",
+//             Self::OunceAvoirdupois => "[oz_av]",
+//             Self::DramAvoirdupois => "[dr_av]",
+//             Self::ShortHundredweightAvoirdupois => "[scwt_av]",
+//             Self::LongHunderdweightAvoirdupois => "[lcwt_av]",
+//             Self::ShortTonAvoirdupois => "[ston_av]",
+//             Self::LongTonAvoirdupois => "[lton_av]",
+//             Self::StoneAvoirdupois => "[stone_av]",
+//             Self::PennyweightTroy => "[pwt_tr]",
+//             Self::OunceTroy => "[oz_tr]",
+//             Self::PoundTroy => "[lb_tr]",
+//             Self::ScrupleApothecaries => "[sc_ap]",
+//             Self::DramApothecaries => "[dr_ap]",
+//             Self::OunceApothecaries => "[oz_ap]",
+//             Self::PoundApothecaries => "[lb_ap]",
+//             Self::MetricOunce => "[oz_m]",
+//             Self::Line => "[lne]",
+//             Self::Point => "[pnt]",
+//             Self::Pica => "[pca]",
+//             Self::PrintersPoint => "[pnt_pr]",
+//             Self::PrintersPica => "[pca_pr]",
+//             Self::Pied => "[pied]",
+//             Self::Pouce => "[pouce]",
+//             Self::Ligne => "[ligne]",
+//             Self::Didot => "[didot]",
+//             Self::Cicero => "[cicero]",
+//             Self::DegreeFahrenheit => "[degF]",
+//             Self::DegreeRankine => "[degR]",
+//             Self::DegreeReaumur => "[degRe]",
+//             Self::CalorieAt15C => "cal_[15]",
+//             Self::CalorieAt20C => "cal_[20]",
+//             Self::MeanCalorie => "cal_m",
+//             Self::InternationalTableCalorie => "cal_IT",
+//             Self::ThermochemicalCalorie => "cal_th",
+//             Self::Calorie => "cal",
+//             Self::NutritionLabelCalories => "[Cal]",
+//             Self::BritishThermalUnitAt39F => "[Btu_39]",
+//             Self::BritishThermalUnitAt59F => "[Btu_59]",
+//             Self::BritishThermalUnitAt60F => "[Btu_60]",
+//             Self::MeanBritishThermalUnit => "[Btu_m]",
+//             Self::InternationalTableBritishThermalUnit => "[Btu_IT]",
+//             Self::ThermochemicalBritishThermalUnit => "[Btu_th]",
+//             Self::BritishThermalUnit => "[Btu]",
+//             Self::Horsepower => "[HP]",
+//             Self::Tex => "tex",
+//             Self::Denier => "[den]",
+//             Self::MeterOfWaterColumn => "m[H2O]",
+//             Self::MeterOfMercuryColumn => "m[Hg]",
+//             Self::InchOfWaterColumn => "[in_i'H2O]",
+//             Self::InchOfMercuryColumn => "[in_i'Hg]",
+//             Self::PeripheralVascularResistanceUnit => "[PRU]",
+//             Self::WoodUnit => "[wood'U]",
+//             Self::Diopter => "[diop]",
+//             Self::PrismDiopter => "[p'diop]",
+//             Self::PercentOfSlope => "%[slope]",
+//             Self::MeshInternational => "[mesh_i]",
+//             Self::Charriere => "[Ch]",
+//             Self::Drop => "[drp]",
+//             Self::HounsfieldUnit => "[hnsf'U]",
+//             Self::MetabolicEquivalent => "[MET]",
+//             Self::HomeopathicPotencyOfDecimalSeriesRetired => "[hp'_X]",
+//             Self::HomeopathicPotencyOfCentesimalSeriesRetired => "[hp'_C]",
+//             Self::HomeopathicPotencyOfMillesimalSeriesRetired => "[hp'_M]",
+//             Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => "[hp'_Q]",
+//             Self::HomeopathicPotencyOfDecimalHahnemannianSeries => "[hp_X]",
+//             Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => "[hp_C]",
+//             Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => "[hp_M]",
+//             Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => "[hp_Q]",
+//             Self::HomeopathicPotencyOfDecimalKorsakovianSeries => "[kp_X]",
+//             Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => "[kp_C]",
+//             Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => "[kp_M]",
+//             Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => "[kp_Q]",
+//             Self::Equivalents => "eq",
+//             Self::Osmole => "osm",
+//             Self::PH => "[pH]",
+//             Self::GramPercent => "g%",
+//             Self::SvedbergUnit => "[S]",
+//             Self::HighPowerField => "[HPF]",
+//             Self::LowPowerField => "[LPF]",
+//             Self::Katal => "kat",
+//             Self::Unit => "U",
+//             Self::InternationalUnit => "[iU]",
+//             Self::InternationalUnitSecondary => "[IU]",
+//             Self::ArbitraryUnit => "[arb'U]",
+//             Self::UnitedStatesPharmacopeiaUnit => "[USP'U]",
+//             Self::GplUnit => "[GPL'U]",
+//             Self::MplUnit => "[MPL'U]",
+//             Self::AplUnit => "[APL'U]",
+//             Self::BethesdaUnit => "[beth'U]",
+//             Self::AntiFactorXaUnit => "[anti'Xa'U]",
+//             Self::ToddUnit => "[todd'U]",
+//             Self::DyeUnit => "[dye'U]",
+//             Self::SomogyiUnit => "[smgy'U]",
+//             Self::BodanskyUnit => "[bdsk'U]",
+//             Self::KingArmstrongUnit => "[ka'U]",
+//             Self::KunkelUnit => "[knk'U]",
+//             Self::MacLaganUnit => "[mclg'U]",
+//             Self::TuberculinUnit => "[tb'U]",
+//             Self::CellCultureInfectiousDose => "[CCID_50]",
+//             Self::TissueCultureInfectiousDose => "[TCID_50]",
+//             Self::EmbryoInfectiousDose => "[EID_50]",
+//             Self::PlaqueFormingUnits => "[PFU]",
+//             Self::FocusFormingUnits => "[FFU]",
+//             Self::ColonyFormingUnits => "[CFU]",
+//             Self::IndexOfReactivity => "[IR]",
+//             Self::BioequivalentAllergenUnit => "[BAU]",
+//             Self::AllergenUnit => "[AU]",
+//             Self::AllergenUnitForAmbrosiaArtemisiifolia => "[Amb'a'1'U]",
+//             Self::ProteinNitrogenUnit => "[PNU]",
+//             Self::LimitOfFlocculation => "[Lf]",
+//             Self::DAntigenUnit => "[D'ag'U]",
+//             Self::FibrinogenEquivalentUnit => "[FEU]",
+//             Self::ElisaUnit => "[ELU]",
+//             Self::EhrlichUnit => "[EU]",
+//             Self::Neper => "Np",
+//             Self::Bel => "B",
+//             Self::BelSoundPressure => "B[SPL]",
+//             Self::BelVolt => "B[V]",
+//             Self::BelMillivolt => "B[mV]",
+//             Self::BelMicrovolt => "B[uV]",
+//             Self::Bel10Nanovolt => "B[10.nV]",
+//             Self::BelWatt => "B[W]",
+//             Self::BelKilowatt => "B[kW]",
+//             Self::Stere => "st",
+//             Self::Angstrom => "Ao",
+//             Self::Barn => "b",
+//             Self::TechnicalAtmosphere => "att",
+//             Self::Mho => "mho",
+//             Self::PoundPerSqareInch => "[psi]",
+//             Self::Circle => "circ",
+//             Self::Spere => "sph",
+//             Self::MetricCarat => "[car_m]",
+//             Self::CaratOfGoldAlloys => "[car_Au]",
+//             Self::Smoot => "[smoot]",
+//             Self::MeterPerSquareSecondsPerSquareRootOfHertz => "[m/s2/Hz^(1/2)]",
+//             Self::BitLogarithmusDualis => "bit_s",
+//             Self::Bit => "bit",
+//             Self::Byte => "By",
+//             Self::Baud => "Bd",
+//         }
+//     }
+//     fn secondary_code(&self) -> Option<Self::String> {
+//         match *self {
+//             Self::Meter => Some("M"),
+//             Self::Second => Some("S"),
+//             Self::Gram => Some("G"),
+//             Self::Radian => Some("RAD"),
+//             Self::Kelvin => Some("K"),
+//             Self::Coulomb => Some("C"),
+//             Self::Candela => Some("CD"),
+//             Self::TheNumberTenForArbitraryPowersStar => Some("10*"),
+//             Self::TheNumberTenForArbitraryPowersCaret => Some("10^"),
+//             Self::TheNumberPi => Some("[PI]"),
+//             Self::Percent => Some("%"),
+//             Self::PartsPerThousand => Some("[PPTH]"),
+//             Self::PartsPerMillion => Some("[PPM]"),
+//             Self::PartsPerBillion => Some("[PPB]"),
+//             Self::PartsPerTrillion => Some("[PPTR]"),
+//             Self::Mole => Some("MOL"),
+//             Self::Steradian => Some("SR"),
+//             Self::Hertz => Some("HZ"),
+//             Self::Newton => Some("N"),
+//             Self::Pascal => Some("PAL"),
+//             Self::Joule => Some("J"),
+//             Self::Watt => Some("W"),
+//             Self::Ampere => Some("A"),
+//             Self::Volt => Some("V"),
+//             Self::Farad => Some("F"),
+//             Self::Ohm => Some("OHM"),
+//             Self::Siemens => Some("SIE"),
+//             Self::Weber => Some("WB"),
+//             Self::DegreeCelsius => Some("CEL"),
+//             Self::Tesla => Some("T"),
+//             Self::Henry => Some("H"),
+//             Self::Lumen => Some("LM"),
+//             Self::Lux => Some("LX"),
+//             Self::Becquerel => Some("BQ"),
+//             Self::Gray => Some("GY"),
+//             Self::Sievert => Some("SV"),
+//             Self::Gon => Some("GON"),
+//             Self::Degree => Some("DEG"),
+//             Self::MinuteAngle => Some("'"),
+//             Self::SecondAngle => Some("''"),
+//             Self::Liter => Some("L"),
+//             Self::LiterSecondary => None,
+//             Self::Are => Some("AR"),
+//             Self::Minute => Some("MIN"),
+//             Self::Hour => Some("HR"),
+//             Self::Day => Some("D"),
+//             Self::TropicalYear => Some("ANN_T"),
+//             Self::MeanJulianYear => Some("ANN_J"),
+//             Self::MeanGregorianYear => Some("ANN_G"),
+//             Self::Year => Some("ANN"),
+//             Self::Week => Some("WK"),
+//             Self::SynodalMonth => Some("MO_S"),
+//             Self::MeanJulianMonth => Some("MO_J"),
+//             Self::MeanGregorianMonth => Some("MO_G"),
+//             Self::Month => Some("MO"),
+//             Self::Tonne => Some("TNE"),
+//             Self::Bar => Some("BAR"),
+//             Self::UnifiedAtomicMassUnit => Some("AMU"),
+//             Self::Electronvolt => Some("EV"),
+//             Self::AstronomicUnit => Some("ASU"),
+//             Self::Parsec => Some("PRS"),
+//             Self::VelocityOfLight => Some("[C]"),
+//             Self::PlanckConstant => Some("[H]"),
+//             Self::BoltzmannConstant => Some("[K]"),
+//             Self::PermittivityOfVacuum => Some("[EPS_0]"),
+//             Self::PermeabilityOfVacuum => Some("[MU_0]"),
+//             Self::ElementaryCharge => Some("[E]"),
+//             Self::ElectronMass => Some("[M_E]"),
+//             Self::ProtonMass => Some("[M_P]"),
+//             Self::NewtonianConstantOfGravitation => Some("[GC]"),
+//             Self::StandardAccelerationOfFreeFall => Some("[G]"),
+//             Self::StandardAtmosphere => Some("ATM"),
+//             Self::LightYear => Some("[LY]"),
+//             Self::GramForce => Some("GF"),
+//             Self::PoundForceAvoirdupois => Some("[LBF_AV]"),
+//             Self::Kayser => Some("KY"),
+//             Self::Gal => Some("GL"),
+//             Self::Dyne => Some("DYN"),
+//             Self::Erg => Some("ERG"),
+//             Self::Poise => Some("P"),
+//             Self::Biot => Some("BI"),
+//             Self::Stokes => Some("ST"),
+//             Self::Maxwell => Some("MX"),
+//             Self::Gauss => Some("GS"),
+//             Self::Oersted => Some("OE"),
+//             Self::Gilbert => Some("GB"),
+//             Self::Stilb => Some("SB"),
+//             Self::Lambert => Some("LMB"),
+//             Self::Phot => Some("PHT"),
+//             Self::Curie => Some("CI"),
+//             Self::Roentgen => Some("ROE"),
+//             Self::RadiationAbsorbedDose => Some("[RAD]"),
+//             Self::RadiationEquivalentMan => Some("[REM]"),
+//             Self::InchInternational => Some("[IN_I]"),
+//             Self::FootInternational => Some("[FT_I]"),
+//             Self::YardInternational => Some("[YD_I]"),
+//             Self::MileInternational => Some("[MI_I]"),
+//             Self::FathomInternational => Some("[FTH_I]"),
+//             Self::NauticalMileInternational => Some("[NMI_I]"),
+//             Self::KnotInternational => Some("[KN_I]"),
+//             Self::SquareInchInternational => Some("[SIN_I]"),
+//             Self::SquareFootInternational => Some("[SFT_I]"),
+//             Self::SquareYardInternational => Some("[SYD_I]"),
+//             Self::CubicInchInternational => Some("[CIN_I]"),
+//             Self::CubicFootInternational => Some("[CFT_I]"),
+//             Self::CubicYardInternational => Some("[CYD_I]"),
+//             Self::BoardFootInternational => Some("[BF_I]"),
+//             Self::CordInternational => Some("[CR_I]"),
+//             Self::MilInternational => Some("[MIL_I]"),
+//             Self::CircularMilInternational => Some("[CML_I]"),
+//             Self::HandInternational => Some("[HD_I]"),
+//             Self::FootUS => Some("[FT_US]"),
+//             Self::YardUS => Some("[YD_US]"),
+//             Self::InchUS => Some("[IN_US]"),
+//             Self::RodUS => Some("[RD_US]"),
+//             Self::GuntersChainUS => Some("[CH_US]"),
+//             Self::LinkForGuntersChainUS => Some("[LK_US]"),
+//             Self::RamdensChainUS => Some("[RCH_US]"),
+//             Self::LinkForRamdensChainUS => Some("[RLK_US]"),
+//             Self::FathomUS => Some("[FTH_US]"),
+//             Self::FurlongUS => Some("[FUR_US]"),
+//             Self::MileUS => Some("[MI_US]"),
+//             Self::AcreUS => Some("[ACR_US]"),
+//             Self::SquareRodUS => Some("[SRD_US]"),
+//             Self::SquareMileUS => Some("[SMI_US]"),
+//             Self::Section => Some("[SCT]"),
+//             Self::Township => Some("[TWP]"),
+//             Self::MilUS => Some("[MIL_US]"),
+//             Self::InchBritish => Some("[IN_BR]"),
+//             Self::FootBritish => Some("[FT_BR]"),
+//             Self::RodBritish => Some("[RD_BR]"),
+//             Self::GuntersChainBritish => Some("[CH_BR]"),
+//             Self::LinkForGuntersChainBritish => Some("[LK_BR]"),
+//             Self::FathomBritish => Some("[FTH_BR]"),
+//             Self::PaceBritish => Some("[PC_BR]"),
+//             Self::YardBritish => Some("[YD_BR]"),
+//             Self::MileBritish => Some("[MI_BR]"),
+//             Self::NauticalMileBritish => Some("[NMI_BR]"),
+//             Self::KnotBritish => Some("[KN_BR]"),
+//             Self::AcreBritish => Some("[ACR_BR]"),
+//             Self::QueenAnnesWineGallonUS => Some("[GAL_US]"),
+//             Self::BarrelUS => Some("[BBL_US]"),
+//             Self::QuartUS => Some("[QT_US]"),
+//             Self::PintUS => Some("[PT_US]"),
+//             Self::GillUS => Some("[GIL_US]"),
+//             Self::FluidOunceUS => Some("[FOZ_US]"),
+//             Self::FluidDramUS => Some("[FDR_US]"),
+//             Self::MinimUS => Some("[MIN_US]"),
+//             Self::CordUS => Some("[CRD_US]"),
+//             Self::BushelUS => Some("[BU_US]"),
+//             Self::HistoricalWinchesterGallon => Some("[GAL_WI]"),
+//             Self::PeckUS => Some("[PK_US]"),
+//             Self::DryQuartUS => Some("[DQT_US]"),
+//             Self::DryPintUS => Some("[DPT_US]"),
+//             Self::TablespoonUS => Some("[TBS_US]"),
+//             Self::TeaspoonUS => Some("[TSP_US]"),
+//             Self::CupUS => Some("[CUP_US]"),
+//             Self::MetricFluidOunce => Some("[FOZ_M]"),
+//             Self::MetricCup => Some("[CUP_M]"),
+//             Self::MetricTeaspoon => Some("[TSP_M]"),
+//             Self::MetricTablespoon => Some("[TBS_M]"),
+//             Self::GallonBritish => Some("[GAL_BR]"),
+//             Self::PeckBritish => Some("[PK_BR]"),
+//             Self::BushelBritish => Some("[BU_BR]"),
+//             Self::QuartBritish => Some("[QT_BR]"),
+//             Self::PintBritish => Some("[PT_BR]"),
+//             Self::GillBritish => Some("[GIL_BR]"),
+//             Self::FluidOunceBritish => Some("[FOZ_BR]"),
+//             Self::FluidDramBritish => Some("[FDR_BR]"),
+//             Self::MinimBritish => Some("[MIN_BR]"),
+//             Self::Grain => Some("[GR]"),
+//             Self::PoundAvoirdupois => Some("[LB_AV]"),
+//             Self::OunceAvoirdupois => Some("[OZ_AV]"),
+//             Self::DramAvoirdupois => Some("[DR_AV]"),
+//             Self::ShortHundredweightAvoirdupois => Some("[SCWT_AV]"),
+//             Self::LongHunderdweightAvoirdupois => Some("[LCWT_AV]"),
+//             Self::ShortTonAvoirdupois => Some("[STON_AV]"),
+//             Self::LongTonAvoirdupois => Some("[LTON_AV]"),
+//             Self::StoneAvoirdupois => Some("[STONE_AV]"),
+//             Self::PennyweightTroy => Some("[PWT_TR]"),
+//             Self::OunceTroy => Some("[OZ_TR]"),
+//             Self::PoundTroy => Some("[LB_TR]"),
+//             Self::ScrupleApothecaries => Some("[SC_AP]"),
+//             Self::DramApothecaries => Some("[DR_AP]"),
+//             Self::OunceApothecaries => Some("[OZ_AP]"),
+//             Self::PoundApothecaries => Some("[LB_AP]"),
+//             Self::MetricOunce => Some("[OZ_M]"),
+//             Self::Line => Some("[LNE]"),
+//             Self::Point => Some("[PNT]"),
+//             Self::Pica => Some("[PCA]"),
+//             Self::PrintersPoint => Some("[PNT_PR]"),
+//             Self::PrintersPica => Some("[PCA_PR]"),
+//             Self::Pied => Some("[PIED]"),
+//             Self::Pouce => Some("[POUCE]"),
+//             Self::Ligne => Some("[LIGNE]"),
+//             Self::Didot => Some("[DIDOT]"),
+//             Self::Cicero => Some("[CICERO]"),
+//             Self::DegreeFahrenheit => Some("[DEGF]"),
+//             Self::DegreeRankine => Some("[degR]"),
+//             Self::DegreeReaumur => Some("[degRe]"),
+//             Self::CalorieAt15C => Some("CAL_[15]"),
+//             Self::CalorieAt20C => Some("CAL_[20]"),
+//             Self::MeanCalorie => Some("CAL_M"),
+//             Self::InternationalTableCalorie => Some("CAL_IT"),
+//             Self::ThermochemicalCalorie => Some("CAL_TH"),
+//             Self::Calorie => Some("CAL"),
+//             Self::NutritionLabelCalories => Some("[CAL]"),
+//             Self::BritishThermalUnitAt39F => Some("[BTU_39]"),
+//             Self::BritishThermalUnitAt59F => Some("[BTU_59]"),
+//             Self::BritishThermalUnitAt60F => Some("[BTU_60]"),
+//             Self::MeanBritishThermalUnit => Some("[BTU_M]"),
+//             Self::InternationalTableBritishThermalUnit => Some("[BTU_IT]"),
+//             Self::ThermochemicalBritishThermalUnit => Some("[BTU_TH]"),
+//             Self::BritishThermalUnit => Some("[BTU]"),
+//             Self::Horsepower => Some("[HP]"),
+//             Self::Tex => Some("TEX"),
+//             Self::Denier => Some("[DEN]"),
+//             Self::MeterOfWaterColumn => Some("M[H2O]"),
+//             Self::MeterOfMercuryColumn => Some("M[HG]"),
+//             Self::InchOfWaterColumn => Some("[IN_I'H2O]"),
+//             Self::InchOfMercuryColumn => Some("[IN_I'HG]"),
+//             Self::PeripheralVascularResistanceUnit => Some("[PRU]"),
+//             Self::WoodUnit => Some("[WOOD'U]"),
+//             Self::Diopter => Some("[DIOP]"),
+//             Self::PrismDiopter => Some("[P'DIOP]"),
+//             Self::PercentOfSlope => Some("%[SLOPE]"),
+//             Self::MeshInternational => Some("[MESH_I]"),
+//             Self::Charriere => Some("[CH]"),
+//             Self::Drop => Some("[DRP]"),
+//             Self::HounsfieldUnit => Some("[HNSF'U]"),
+//             Self::MetabolicEquivalent => Some("[MET]"),
+//             Self::HomeopathicPotencyOfDecimalSeriesRetired => Some("[HP'_X]"),
+//             Self::HomeopathicPotencyOfCentesimalSeriesRetired => Some("[HP'_C]"),
+//             Self::HomeopathicPotencyOfMillesimalSeriesRetired => Some("[HP'_M]"),
+//             Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => Some("[HP'_Q]"),
+//             Self::HomeopathicPotencyOfDecimalHahnemannianSeries => Some("[HP_X]"),
+//             Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => Some("[HP_C]"),
+//             Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => Some("[HP_M]"),
+//             Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => Some("[HP_Q]"),
+//             Self::HomeopathicPotencyOfDecimalKorsakovianSeries => Some("[KP_X]"),
+//             Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => Some("[KP_C]"),
+//             Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => Some("[KP_M]"),
+//             Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => Some("[KP_Q]"),
+//             Self::Equivalents => Some("EQ"),
+//             Self::Osmole => Some("OSM"),
+//             Self::PH => Some("[PH]"),
+//             Self::GramPercent => Some("G%"),
+//             Self::SvedbergUnit => Some("[S]"),
+//             Self::HighPowerField => Some("[HPF]"),
+//             Self::LowPowerField => Some("[LPF]"),
+//             Self::Katal => Some("KAT"),
+//             Self::Unit => Some("U"),
+//             Self::InternationalUnit => Some("[IU]"),
+//             Self::InternationalUnitSecondary => Some("[IU]"),
+//             Self::ArbitraryUnit => Some("[ARB'U]"),
+//             Self::UnitedStatesPharmacopeiaUnit => Some("[USP'U]"),
+//             Self::GplUnit => Some("[GPL'U]"),
+//             Self::MplUnit => Some("[MPL'U]"),
+//             Self::AplUnit => Some("[APL'U]"),
+//             Self::BethesdaUnit => Some("[BETH'U]"),
+//             Self::AntiFactorXaUnit => Some("[ANTI'XA'U]"),
+//             Self::ToddUnit => Some("[TODD'U]"),
+//             Self::DyeUnit => Some("[DYE'U]"),
+//             Self::SomogyiUnit => Some("[SMGY'U]"),
+//             Self::BodanskyUnit => Some("[BDSK'U]"),
+//             Self::KingArmstrongUnit => Some("[KA'U]"),
+//             Self::KunkelUnit => Some("[KNK'U]"),
+//             Self::MacLaganUnit => Some("[MCLG'U]"),
+//             Self::TuberculinUnit => Some("[TB'U]"),
+//             Self::CellCultureInfectiousDose => Some("[CCID_50]"),
+//             Self::TissueCultureInfectiousDose => Some("[TCID_50]"),
+//             Self::EmbryoInfectiousDose => Some("[EID_50]"),
+//             Self::PlaqueFormingUnits => Some("[PFU]"),
+//             Self::FocusFormingUnits => Some("[FFU]"),
+//             Self::ColonyFormingUnits => Some("[CFU]"),
+//             Self::IndexOfReactivity => Some("[IR]"),
+//             Self::BioequivalentAllergenUnit => Some("[BAU]"),
+//             Self::AllergenUnit => Some("[AU]"),
+//             Self::AllergenUnitForAmbrosiaArtemisiifolia => Some("[AMB'A'1'U]"),
+//             Self::ProteinNitrogenUnit => Some("[PNU]"),
+//             Self::LimitOfFlocculation => Some("[LF]"),
+//             Self::DAntigenUnit => Some("[D'AG'U]"),
+//             Self::FibrinogenEquivalentUnit => Some("[FEU]"),
+//             Self::ElisaUnit => Some("[ELU]"),
+//             Self::EhrlichUnit => Some("[EU]"),
+//             Self::Neper => Some("NEP"),
+//             Self::Bel => Some("B"),
+//             Self::BelSoundPressure => Some("B[SPL]"),
+//             Self::BelVolt => Some("B[V]"),
+//             Self::BelMillivolt => Some("B[MV]"),
+//             Self::BelMicrovolt => Some("B[UV]"),
+//             Self::Bel10Nanovolt => Some("B[10.NV]"),
+//             Self::BelWatt => Some("B[W]"),
+//             Self::BelKilowatt => Some("B[KW]"),
+//             Self::Stere => Some("STR"),
+//             Self::Angstrom => Some("AO"),
+//             Self::Barn => Some("BRN"),
+//             Self::TechnicalAtmosphere => Some("ATT"),
+//             Self::Mho => Some("MHO"),
+//             Self::PoundPerSqareInch => Some("[PSI]"),
+//             Self::Circle => Some("CIRC"),
+//             Self::Spere => Some("SPH"),
+//             Self::MetricCarat => Some("[CAR_M]"),
+//             Self::CaratOfGoldAlloys => Some("[CAR_AU]"),
+//             Self::Smoot => Some("[SMOOT]"),
+//             Self::MeterPerSquareSecondsPerSquareRootOfHertz => Some("[M/S2/HZ^(1/2)]"),
+//             Self::BitLogarithmusDualis => Some("BIT_S"),
+//             Self::Bit => Some("BIT"),
+//             Self::Byte => Some("BY"),
+//             Self::Baud => Some("BD"),
+//         }
+//     }
+//     fn print_symbol(&self) -> Option<Self::String> {
+//         match *self {
+//             Self::Meter => Some("m"),
+//             Self::Second => Some("s"),
+//             Self::Gram => Some("g"),
+//             Self::Radian => Some("rad"),
+//             Self::Kelvin => Some("K"),
+//             Self::Coulomb => Some("C"),
+//             Self::Candela => Some("cd"),
+//             Self::TheNumberTenForArbitraryPowersStar => Some("10"),
+//             Self::TheNumberTenForArbitraryPowersCaret => Some("10"),
+//             Self::TheNumberPi => Some("π"),
+//             Self::Percent => Some("%"),
+//             Self::PartsPerThousand => Some("ppth"),
+//             Self::PartsPerMillion => Some("ppm"),
+//             Self::PartsPerBillion => Some("ppb"),
+//             Self::PartsPerTrillion => Some("pptr"),
+//             Self::Mole => Some("mol"),
+//             Self::Steradian => Some("sr"),
+//             Self::Hertz => Some("Hz"),
+//             Self::Newton => Some("N"),
+//             Self::Pascal => Some("Pa"),
+//             Self::Joule => Some("J"),
+//             Self::Watt => Some("W"),
+//             Self::Ampere => Some("A"),
+//             Self::Volt => Some("V"),
+//             Self::Farad => Some("F"),
+//             Self::Ohm => Some("Ω"),
+//             Self::Siemens => Some("S"),
+//             Self::Weber => Some("Wb"),
+//             Self::DegreeCelsius => Some("°C"),
+//             Self::Tesla => Some("T"),
+//             Self::Henry => Some("H"),
+//             Self::Lumen => Some("lm"),
+//             Self::Lux => Some("lx"),
+//             Self::Becquerel => Some("Bq"),
+//             Self::Gray => Some("Gy"),
+//             Self::Sievert => Some("Sv"),
+//             Self::Gon => Some("□<sup>g</sup>"),
+//             Self::Degree => Some("°"),
+//             Self::MinuteAngle => Some("'"),
+//             Self::SecondAngle => Some("''"),
+//             Self::Liter => Some("l"),
+//             Self::LiterSecondary => Some("L"),
+//             Self::Are => Some("a"),
+//             Self::Minute => Some("min"),
+//             Self::Hour => Some("h"),
+//             Self::Day => Some("d"),
+//             Self::TropicalYear => Some("a<sub>t</sub>"),
+//             Self::MeanJulianYear => Some("a<sub>j</sub>"),
+//             Self::MeanGregorianYear => Some("a<sub>g</sub>"),
+//             Self::Year => Some("a"),
+//             Self::Week => Some("wk"),
+//             Self::SynodalMonth => Some("mo<sub>s</sub>"),
+//             Self::MeanJulianMonth => Some("mo<sub>j</sub>"),
+//             Self::MeanGregorianMonth => Some("mo<sub>g</sub>"),
+//             Self::Month => Some("mo"),
+//             Self::Tonne => Some("t"),
+//             Self::Bar => Some("bar"),
+//             Self::UnifiedAtomicMassUnit => Some("u"),
+//             Self::Electronvolt => Some("eV"),
+//             Self::AstronomicUnit => Some("AU"),
+//             Self::Parsec => Some("pc"),
+//             Self::VelocityOfLight => Some("<i>c</i>"),
+//             Self::PlanckConstant => Some("<i>h</i>"),
+//             Self::BoltzmannConstant => Some("<i>k</i>"),
+//             Self::PermittivityOfVacuum => Some("<i>ε<sub><r>0</r></sub></i>"),
+//             Self::PermeabilityOfVacuum => Some("<i>μ<sub><r>0</r></sub></i>"),
+//             Self::ElementaryCharge => Some("<i>e</i>"),
+//             Self::ElectronMass => Some("<i>m<sub><r>e</r></sub></i>"),
+//             Self::ProtonMass => Some("<i>m<sub><r>p</r></sub></i>"),
+//             Self::NewtonianConstantOfGravitation => Some("<i>G</i>"),
+//             Self::StandardAccelerationOfFreeFall => Some("<i>g<sub>n</sub></i>"),
+//             Self::StandardAtmosphere => Some("atm"),
+//             Self::LightYear => Some("l.y."),
+//             Self::GramForce => Some("gf"),
+//             Self::PoundForceAvoirdupois => Some("lbf"),
+//             Self::Kayser => Some("K"),
+//             Self::Gal => Some("Gal"),
+//             Self::Dyne => Some("dyn"),
+//             Self::Erg => Some("erg"),
+//             Self::Poise => Some("P"),
+//             Self::Biot => Some("Bi"),
+//             Self::Stokes => Some("St"),
+//             Self::Maxwell => Some("Mx"),
+//             Self::Gauss => Some("Gs"),
+//             Self::Oersted => Some("Oe"),
+//             Self::Gilbert => Some("Gb"),
+//             Self::Stilb => Some("sb"),
+//             Self::Lambert => Some("L"),
+//             Self::Phot => Some("ph"),
+//             Self::Curie => Some("Ci"),
+//             Self::Roentgen => Some("R"),
+//             Self::RadiationAbsorbedDose => Some("RAD"),
+//             Self::RadiationEquivalentMan => Some("REM"),
+//             Self::InchInternational => Some("in"),
+//             Self::FootInternational => Some("ft"),
+//             Self::YardInternational => Some("yd"),
+//             Self::MileInternational => Some("mi"),
+//             Self::FathomInternational => Some("fth"),
+//             Self::NauticalMileInternational => Some("n.mi"),
+//             Self::KnotInternational => Some("knot"),
+//             Self::CubicYardInternational => Some("cu.yd"),
+//             Self::MilInternational => Some("mil"),
+//             Self::CircularMilInternational => Some("circ.mil"),
+//             Self::HandInternational => Some("hd"),
+//             Self::FootUS => Some("ft<sub>us</sub>"),
+//             Self::FluidOunceUS => Some("oz fl"),
+//             Self::MetricFluidOunce => Some("oz fl"),
+//             Self::PoundAvoirdupois => Some("lb"),
+//             Self::OunceAvoirdupois => Some("oz"),
+//             Self::DegreeFahrenheit => Some("°F"),
+//             Self::DegreeRankine => Some("°R"),
+//             Self::DegreeReaumur => Some("°Ré"),
+//             Self::CalorieAt15C => Some("cal<sub>15°C</sub>"),
+//             Self::CalorieAt20C => Some("cal<sub>20°C</sub>"),
+//             Self::MeanCalorie => Some("cal<sub>m</sub>"),
+//             Self::InternationalTableCalorie => Some("cal<sub>IT</sub>"),
+//             Self::ThermochemicalCalorie => Some("cal<sub>th</sub>"),
+//             Self::Calorie => Some("cal"),
+//             Self::NutritionLabelCalories => Some("Cal"),
+//             Self::BritishThermalUnitAt39F => Some("Btu<sub>39°F</sub>"),
+//             Self::BritishThermalUnitAt59F => Some("Btu<sub>59°F</sub>"),
+//             Self::BritishThermalUnitAt60F => Some("Btu<sub>60°F</sub>"),
+//             Self::MeanBritishThermalUnit => Some("Btu<sub>m</sub>"),
+//             Self::InternationalTableBritishThermalUnit => Some("Btu<sub>IT</sub>"),
+//             Self::ThermochemicalBritishThermalUnit => Some("Btu<sub>th</sub>"),
+//             Self::BritishThermalUnit => Some("btu"),
+//             Self::Tex => Some("tex"),
+//             Self::Denier => Some("den"),
+//             Self::MeterOfWaterColumn => Some("m\u{a0}H<sub><r>2</r></sub>O"),
+//             Self::MeterOfMercuryColumn => Some("m\u{a0}Hg"),
+//             Self::InchOfWaterColumn => Some("in\u{a0}H<sub><r>2</r></sub>O"),
+//             Self::InchOfMercuryColumn => Some("in\u{a0}Hg"),
+//             Self::PeripheralVascularResistanceUnit => Some("P.R.U."),
+//             Self::WoodUnit => Some("Wood U."),
+//             Self::Diopter => Some("dpt"),
+//             Self::PrismDiopter => Some("PD"),
+//             Self::PercentOfSlope => Some("%"),
+//             Self::Charriere => Some("Ch"),
+//             Self::Drop => Some("drp"),
+//             Self::HounsfieldUnit => Some("HF"),
+//             Self::MetabolicEquivalent => Some("MET"),
+//             Self::HomeopathicPotencyOfDecimalSeriesRetired => Some("X"),
+//             Self::HomeopathicPotencyOfCentesimalSeriesRetired => Some("C"),
+//             Self::HomeopathicPotencyOfMillesimalSeriesRetired => Some("M"),
+//             Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => Some("Q"),
+//             Self::HomeopathicPotencyOfDecimalHahnemannianSeries => Some("X"),
+//             Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => Some("C"),
+//             Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => Some("M"),
+//             Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => Some("Q"),
+//             Self::HomeopathicPotencyOfDecimalKorsakovianSeries => Some("X"),
+//             Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => Some("C"),
+//             Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => Some("M"),
+//             Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => Some("Q"),
+//             Self::Equivalents => Some("eq"),
+//             Self::Osmole => Some("osm"),
+//             Self::PH => Some("pH"),
+//             Self::GramPercent => Some("g%"),
+//             Self::SvedbergUnit => Some("S"),
+//             Self::HighPowerField => Some("HPF"),
+//             Self::LowPowerField => Some("LPF"),
+//             Self::Katal => Some("kat"),
+//             Self::Unit => Some("U"),
+//             Self::InternationalUnit => Some("IU"),
+//             Self::InternationalUnitSecondary => Some("i.U."),
+//             Self::ArbitraryUnit => Some("arb. U"),
+//             Self::UnitedStatesPharmacopeiaUnit => Some("U.S.P."),
+//             Self::CellCultureInfectiousDose => Some("CCID<sub>50</sub>"),
+//             Self::TissueCultureInfectiousDose => Some("TCID<sub>50</sub>"),
+//             Self::EmbryoInfectiousDose => Some("EID<sub>50</sub>"),
+//             Self::PlaqueFormingUnits => Some("PFU"),
+//             Self::FocusFormingUnits => Some("FFU"),
+//             Self::ColonyFormingUnits => Some("CFU"),
+//             Self::IndexOfReactivity => Some("IR"),
+//             Self::BioequivalentAllergenUnit => Some("BAU"),
+//             Self::AllergenUnit => Some("AU"),
+//             Self::AllergenUnitForAmbrosiaArtemisiifolia => Some("Amb a 1 U"),
+//             Self::ProteinNitrogenUnit => Some("PNU"),
+//             Self::LimitOfFlocculation => Some("Lf"),
+//             Self::Neper => Some("Np"),
+//             Self::Bel => Some("B"),
+//             Self::BelSoundPressure => Some("B(SPL)"),
+//             Self::BelVolt => Some("B(V)"),
+//             Self::BelMillivolt => Some("B(mV)"),
+//             Self::BelMicrovolt => Some("B(μV)"),
+//             Self::Bel10Nanovolt => Some("B(10 nV)"),
+//             Self::BelWatt => Some("B(W)"),
+//             Self::BelKilowatt => Some("B(kW)"),
+//             Self::Stere => Some("st"),
+//             Self::Angstrom => Some("Å"),
+//             Self::Barn => Some("b"),
+//             Self::TechnicalAtmosphere => Some("at"),
+//             Self::Mho => Some("mho"),
+//             Self::PoundPerSqareInch => Some("psi"),
+//             Self::Circle => Some("circ"),
+//             Self::Spere => Some("sph"),
+//             Self::MetricCarat => Some("ct<sub>m</sub>"),
+//             Self::CaratOfGoldAlloys => Some("ct<sub><r>Au</r></sub>"),
+//             Self::BitLogarithmusDualis => Some("bit<sub>s</sub>"),
+//             Self::Bit => Some("bit"),
+//             Self::Byte => Some("B"),
+//             Self::Baud => Some("Bd"),
+//             _ => None,
+//         }
+//     }
+//     fn names(&self) -> crate::v2::behavior_traits::ucum::Names<&'static str> {
+//         match *self {
+//             Self::Meter => crate::v2::behavior_traits::ucum::Names::One("meter"),
+//             Self::Second => crate::v2::behavior_traits::ucum::Names::One("second"),
+//             Self::Gram => crate::v2::behavior_traits::ucum::Names::One("gram"),
+//             Self::Radian => crate::v2::behavior_traits::ucum::Names::One("radian"),
+//             Self::Kelvin => crate::v2::behavior_traits::ucum::Names::One("kelvin"),
+//             Self::Coulomb => crate::v2::behavior_traits::ucum::Names::One("coulomb"),
+//             Self::Candela => crate::v2::behavior_traits::ucum::Names::One("candela"),
+//             Self::TheNumberTenForArbitraryPowersStar => {
+//                 crate::v2::behavior_traits::ucum::Names::One("the number ten for arbitrary powers")
+//             }
+//             Self::TheNumberTenForArbitraryPowersCaret => {
+//                 crate::v2::behavior_traits::ucum::Names::One("the number ten for arbitrary powers")
+//             }
+//             Self::TheNumberPi => crate::v2::behavior_traits::ucum::Names::One("the number pi"),
+//             Self::Percent => crate::v2::behavior_traits::ucum::Names::One("percent"),
+//             Self::PartsPerThousand => {
+//                 crate::v2::behavior_traits::ucum::Names::One("parts per thousand")
+//             }
+//             Self::PartsPerMillion => {
+//                 crate::v2::behavior_traits::ucum::Names::One("parts per million")
+//             }
+//             Self::PartsPerBillion => {
+//                 crate::v2::behavior_traits::ucum::Names::One("parts per billion")
+//             }
+//             Self::PartsPerTrillion => {
+//                 crate::v2::behavior_traits::ucum::Names::One("parts per trillion")
+//             }
+//             Self::Mole => crate::v2::behavior_traits::ucum::Names::One("mole"),
+//             Self::Steradian => crate::v2::behavior_traits::ucum::Names::One("steradian"),
+//             Self::Hertz => crate::v2::behavior_traits::ucum::Names::One("hertz"),
+//             Self::Newton => crate::v2::behavior_traits::ucum::Names::One("newton"),
+//             Self::Pascal => crate::v2::behavior_traits::ucum::Names::One("pascal"),
+//             Self::Joule => crate::v2::behavior_traits::ucum::Names::One("joule"),
+//             Self::Watt => crate::v2::behavior_traits::ucum::Names::One("watt"),
+//             Self::Ampere => crate::v2::behavior_traits::ucum::Names::One("ampère"),
+//             Self::Volt => crate::v2::behavior_traits::ucum::Names::One("volt"),
+//             Self::Farad => crate::v2::behavior_traits::ucum::Names::One("farad"),
+//             Self::Ohm => crate::v2::behavior_traits::ucum::Names::One("ohm"),
+//             Self::Siemens => crate::v2::behavior_traits::ucum::Names::One("siemens"),
+//             Self::Weber => crate::v2::behavior_traits::ucum::Names::One("weber"),
+//             Self::DegreeCelsius => crate::v2::behavior_traits::ucum::Names::One("degree Celsius"),
+//             Self::Tesla => crate::v2::behavior_traits::ucum::Names::One("tesla"),
+//             Self::Henry => crate::v2::behavior_traits::ucum::Names::One("henry"),
+//             Self::Lumen => crate::v2::behavior_traits::ucum::Names::One("lumen"),
+//             Self::Lux => crate::v2::behavior_traits::ucum::Names::One("lux"),
+//             Self::Becquerel => crate::v2::behavior_traits::ucum::Names::One("becquerel"),
+//             Self::Gray => crate::v2::behavior_traits::ucum::Names::One("gray"),
+//             Self::Sievert => crate::v2::behavior_traits::ucum::Names::One("sievert"),
+//             Self::Gon => crate::v2::behavior_traits::ucum::Names::Two(("gon", "grade")),
+//             Self::Degree => crate::v2::behavior_traits::ucum::Names::One("degree"),
+//             Self::MinuteAngle => crate::v2::behavior_traits::ucum::Names::One("minute"),
+//             Self::SecondAngle => crate::v2::behavior_traits::ucum::Names::One("second"),
+//             Self::Liter => crate::v2::behavior_traits::ucum::Names::One("liter"),
+//             Self::LiterSecondary => crate::v2::behavior_traits::ucum::Names::One("liter"),
+//             Self::Are => crate::v2::behavior_traits::ucum::Names::One("are"),
+//             Self::Minute => crate::v2::behavior_traits::ucum::Names::One("minute"),
+//             Self::Hour => crate::v2::behavior_traits::ucum::Names::One("hour"),
+//             Self::Day => crate::v2::behavior_traits::ucum::Names::One("day"),
+//             Self::TropicalYear => crate::v2::behavior_traits::ucum::Names::One("tropical year"),
+//             Self::MeanJulianYear => {
+//                 crate::v2::behavior_traits::ucum::Names::One("mean Julian year")
+//             }
+//             Self::MeanGregorianYear => {
+//                 crate::v2::behavior_traits::ucum::Names::One("mean Gregorian year")
+//             }
+//             Self::Year => crate::v2::behavior_traits::ucum::Names::One("year"),
+//             Self::Week => crate::v2::behavior_traits::ucum::Names::One("week"),
+//             Self::SynodalMonth => crate::v2::behavior_traits::ucum::Names::One("synodal month"),
+//             Self::MeanJulianMonth => {
+//                 crate::v2::behavior_traits::ucum::Names::One("mean Julian month")
+//             }
+//             Self::MeanGregorianMonth => {
+//                 crate::v2::behavior_traits::ucum::Names::One("mean Gregorian month")
+//             }
+//             Self::Month => crate::v2::behavior_traits::ucum::Names::One("month"),
+//             Self::Tonne => crate::v2::behavior_traits::ucum::Names::One("tonne"),
+//             Self::Bar => crate::v2::behavior_traits::ucum::Names::One("bar"),
+//             Self::UnifiedAtomicMassUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("unified atomic mass unit")
+//             }
+//             Self::Electronvolt => crate::v2::behavior_traits::ucum::Names::One("electronvolt"),
+//             Self::AstronomicUnit => crate::v2::behavior_traits::ucum::Names::One("astronomic unit"),
+//             Self::Parsec => crate::v2::behavior_traits::ucum::Names::One("parsec"),
+//             Self::VelocityOfLight => {
+//                 crate::v2::behavior_traits::ucum::Names::One("velocity of light")
+//             }
+//             Self::PlanckConstant => crate::v2::behavior_traits::ucum::Names::One("Planck constant"),
+//             Self::BoltzmannConstant => {
+//                 crate::v2::behavior_traits::ucum::Names::One("Boltzmann constant")
+//             }
+//             Self::PermittivityOfVacuum => {
+//                 crate::v2::behavior_traits::ucum::Names::One("permittivity of vacuum")
+//             }
+//             Self::PermeabilityOfVacuum => {
+//                 crate::v2::behavior_traits::ucum::Names::One("permeability of vacuum")
+//             }
+//             Self::ElementaryCharge => {
+//                 crate::v2::behavior_traits::ucum::Names::One("elementary charge")
+//             }
+//             Self::ElectronMass => crate::v2::behavior_traits::ucum::Names::One("electron mass"),
+//             Self::ProtonMass => crate::v2::behavior_traits::ucum::Names::One("proton mass"),
+//             Self::NewtonianConstantOfGravitation => {
+//                 crate::v2::behavior_traits::ucum::Names::One("Newtonian constant of gravitation")
+//             }
+//             Self::StandardAccelerationOfFreeFall => {
+//                 crate::v2::behavior_traits::ucum::Names::One("standard acceleration of free fall")
+//             }
+//             Self::StandardAtmosphere => {
+//                 crate::v2::behavior_traits::ucum::Names::One("standard atmosphere")
+//             }
+//             Self::LightYear => crate::v2::behavior_traits::ucum::Names::One("light-year"),
+//             Self::GramForce => crate::v2::behavior_traits::ucum::Names::One("gram-force"),
+//             Self::PoundForceAvoirdupois => {
+//                 crate::v2::behavior_traits::ucum::Names::One("pound force")
+//             }
+//             Self::Kayser => crate::v2::behavior_traits::ucum::Names::One("Kayser"),
+//             Self::Gal => crate::v2::behavior_traits::ucum::Names::One("Gal"),
+//             Self::Dyne => crate::v2::behavior_traits::ucum::Names::One("dyne"),
+//             Self::Erg => crate::v2::behavior_traits::ucum::Names::One("erg"),
+//             Self::Poise => crate::v2::behavior_traits::ucum::Names::One("Poise"),
+//             Self::Biot => crate::v2::behavior_traits::ucum::Names::One("Biot"),
+//             Self::Stokes => crate::v2::behavior_traits::ucum::Names::One("Stokes"),
+//             Self::Maxwell => crate::v2::behavior_traits::ucum::Names::One("Maxwell"),
+//             Self::Gauss => crate::v2::behavior_traits::ucum::Names::One("Gauss"),
+//             Self::Oersted => crate::v2::behavior_traits::ucum::Names::One("Oersted"),
+//             Self::Gilbert => crate::v2::behavior_traits::ucum::Names::One("Gilbert"),
+//             Self::Stilb => crate::v2::behavior_traits::ucum::Names::One("stilb"),
+//             Self::Lambert => crate::v2::behavior_traits::ucum::Names::One("Lambert"),
+//             Self::Phot => crate::v2::behavior_traits::ucum::Names::One("phot"),
+//             Self::Curie => crate::v2::behavior_traits::ucum::Names::One("Curie"),
+//             Self::Roentgen => crate::v2::behavior_traits::ucum::Names::One("Roentgen"),
+//             Self::RadiationAbsorbedDose => {
+//                 crate::v2::behavior_traits::ucum::Names::One("radiation absorbed dose")
+//             }
+//             Self::RadiationEquivalentMan => {
+//                 crate::v2::behavior_traits::ucum::Names::One("radiation equivalent man")
+//             }
+//             Self::InchInternational => crate::v2::behavior_traits::ucum::Names::One("inch"),
+//             Self::FootInternational => crate::v2::behavior_traits::ucum::Names::One("foot"),
+//             Self::YardInternational => crate::v2::behavior_traits::ucum::Names::One("yard"),
+//             Self::MileInternational => crate::v2::behavior_traits::ucum::Names::One("mile"),
+//             Self::FathomInternational => crate::v2::behavior_traits::ucum::Names::One("fathom"),
+//             Self::NauticalMileInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("nautical mile")
+//             }
+//             Self::KnotInternational => crate::v2::behavior_traits::ucum::Names::One("knot"),
+//             Self::SquareInchInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("square inch")
+//             }
+//             Self::SquareFootInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("square foot")
+//             }
+//             Self::SquareYardInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("square yard")
+//             }
+//             Self::CubicInchInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("cubic inch")
+//             }
+//             Self::CubicFootInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("cubic foot")
+//             }
+//             Self::CubicYardInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("cubic yard")
+//             }
+//             Self::BoardFootInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("board foot")
+//             }
+//             Self::CordInternational => crate::v2::behavior_traits::ucum::Names::One("cord"),
+//             Self::MilInternational => crate::v2::behavior_traits::ucum::Names::One("mil"),
+//             Self::CircularMilInternational => {
+//                 crate::v2::behavior_traits::ucum::Names::One("circular mil")
+//             }
+//             Self::HandInternational => crate::v2::behavior_traits::ucum::Names::One("hand"),
+//             Self::FootUS => crate::v2::behavior_traits::ucum::Names::One("foot"),
+//             Self::YardUS => crate::v2::behavior_traits::ucum::Names::One("yard"),
+//             Self::InchUS => crate::v2::behavior_traits::ucum::Names::One("inch"),
+//             Self::RodUS => crate::v2::behavior_traits::ucum::Names::One("rod"),
+//             Self::GuntersChainUS => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("Gunter's chain", "Surveyor's chain"))
+//             }
+//             Self::LinkForGuntersChainUS => {
+//                 crate::v2::behavior_traits::ucum::Names::One("link for Gunter's chain")
+//             }
+//             Self::RamdensChainUS => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("Ramden's chain", "Engineer's chain"))
+//             }
+//             Self::LinkForRamdensChainUS => {
+//                 crate::v2::behavior_traits::ucum::Names::One("link for Ramden's chain")
+//             }
+//             Self::FathomUS => crate::v2::behavior_traits::ucum::Names::One("fathom"),
+//             Self::FurlongUS => crate::v2::behavior_traits::ucum::Names::One("furlong"),
+//             Self::MileUS => crate::v2::behavior_traits::ucum::Names::One("mile"),
+//             Self::AcreUS => crate::v2::behavior_traits::ucum::Names::One("acre"),
+//             Self::SquareRodUS => crate::v2::behavior_traits::ucum::Names::One("square rod"),
+//             Self::SquareMileUS => crate::v2::behavior_traits::ucum::Names::One("square mile"),
+//             Self::Section => crate::v2::behavior_traits::ucum::Names::One("section"),
+//             Self::Township => crate::v2::behavior_traits::ucum::Names::One("township"),
+//             Self::MilUS => crate::v2::behavior_traits::ucum::Names::One("mil"),
+//             Self::InchBritish => crate::v2::behavior_traits::ucum::Names::One("inch"),
+//             Self::FootBritish => crate::v2::behavior_traits::ucum::Names::One("foot"),
+//             Self::RodBritish => crate::v2::behavior_traits::ucum::Names::One("rod"),
+//             Self::GuntersChainBritish => {
+//                 crate::v2::behavior_traits::ucum::Names::One("Gunter's chain")
+//             }
+//             Self::LinkForGuntersChainBritish => {
+//                 crate::v2::behavior_traits::ucum::Names::One("link for Gunter's chain")
+//             }
+//             Self::FathomBritish => crate::v2::behavior_traits::ucum::Names::One("fathom"),
+//             Self::PaceBritish => crate::v2::behavior_traits::ucum::Names::One("pace"),
+//             Self::YardBritish => crate::v2::behavior_traits::ucum::Names::One("yard"),
+//             Self::MileBritish => crate::v2::behavior_traits::ucum::Names::One("mile"),
+//             Self::NauticalMileBritish => {
+//                 crate::v2::behavior_traits::ucum::Names::One("nautical mile")
+//             }
+//             Self::KnotBritish => crate::v2::behavior_traits::ucum::Names::One("knot"),
+//             Self::AcreBritish => crate::v2::behavior_traits::ucum::Names::One("acre"),
+//             Self::QueenAnnesWineGallonUS => {
+//                 crate::v2::behavior_traits::ucum::Names::One("Queen\u{a0}Anne's wine gallon")
+//             }
+//             Self::BarrelUS => crate::v2::behavior_traits::ucum::Names::One("barrel"),
+//             Self::QuartUS => crate::v2::behavior_traits::ucum::Names::One("quart"),
+//             Self::PintUS => crate::v2::behavior_traits::ucum::Names::One("pint"),
+//             Self::GillUS => crate::v2::behavior_traits::ucum::Names::One("gill"),
+//             Self::FluidOunceUS => crate::v2::behavior_traits::ucum::Names::One("fluid ounce"),
+//             Self::FluidDramUS => crate::v2::behavior_traits::ucum::Names::One("fluid dram"),
+//             Self::MinimUS => crate::v2::behavior_traits::ucum::Names::One("minim"),
+//             Self::CordUS => crate::v2::behavior_traits::ucum::Names::One("cord"),
+//             Self::BushelUS => crate::v2::behavior_traits::ucum::Names::One("bushel"),
+//             Self::HistoricalWinchesterGallon => {
+//                 crate::v2::behavior_traits::ucum::Names::One("historical winchester gallon")
+//             }
+//             Self::PeckUS => crate::v2::behavior_traits::ucum::Names::One("peck"),
+//             Self::DryQuartUS => crate::v2::behavior_traits::ucum::Names::One("dry quart"),
+//             Self::DryPintUS => crate::v2::behavior_traits::ucum::Names::One("dry pint"),
+//             Self::TablespoonUS => crate::v2::behavior_traits::ucum::Names::One("tablespoon"),
+//             Self::TeaspoonUS => crate::v2::behavior_traits::ucum::Names::One("teaspoon"),
+//             Self::CupUS => crate::v2::behavior_traits::ucum::Names::One("cup"),
+//             Self::MetricFluidOunce => {
+//                 crate::v2::behavior_traits::ucum::Names::One("metric fluid ounce")
+//             }
+//             Self::MetricCup => crate::v2::behavior_traits::ucum::Names::One("metric cup"),
+//             Self::MetricTeaspoon => crate::v2::behavior_traits::ucum::Names::One("metric teaspoon"),
+//             Self::MetricTablespoon => {
+//                 crate::v2::behavior_traits::ucum::Names::One("metric tablespoon")
+//             }
+//             Self::GallonBritish => crate::v2::behavior_traits::ucum::Names::One("gallon"),
+//             Self::PeckBritish => crate::v2::behavior_traits::ucum::Names::One("peck"),
+//             Self::BushelBritish => crate::v2::behavior_traits::ucum::Names::One("bushel"),
+//             Self::QuartBritish => crate::v2::behavior_traits::ucum::Names::One("quart"),
+//             Self::PintBritish => crate::v2::behavior_traits::ucum::Names::One("pint"),
+//             Self::GillBritish => crate::v2::behavior_traits::ucum::Names::One("gill"),
+//             Self::FluidOunceBritish => crate::v2::behavior_traits::ucum::Names::One("fluid ounce"),
+//             Self::FluidDramBritish => crate::v2::behavior_traits::ucum::Names::One("fluid dram"),
+//             Self::MinimBritish => crate::v2::behavior_traits::ucum::Names::One("minim"),
+//             Self::Grain => crate::v2::behavior_traits::ucum::Names::One("grain"),
+//             Self::PoundAvoirdupois => crate::v2::behavior_traits::ucum::Names::One("pound"),
+//             Self::OunceAvoirdupois => crate::v2::behavior_traits::ucum::Names::One("ounce"),
+//             Self::DramAvoirdupois => crate::v2::behavior_traits::ucum::Names::One("dram"),
+//             Self::ShortHundredweightAvoirdupois => crate::v2::behavior_traits::ucum::Names::Two((
+//                 "short hundredweight",
+//                 "U.S. hundredweight",
+//             )),
+//             Self::LongHunderdweightAvoirdupois => crate::v2::behavior_traits::ucum::Names::Two((
+//                 "long hunderdweight",
+//                 "British hundredweight",
+//             )),
+//             Self::ShortTonAvoirdupois => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("short ton", "U.S. ton"))
+//             }
+//             Self::LongTonAvoirdupois => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("long ton", "British ton"))
+//             }
+//             Self::StoneAvoirdupois => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("stone", "British stone"))
+//             }
+//             Self::PennyweightTroy => crate::v2::behavior_traits::ucum::Names::One("pennyweight"),
+//             Self::OunceTroy => crate::v2::behavior_traits::ucum::Names::One("ounce"),
+//             Self::PoundTroy => crate::v2::behavior_traits::ucum::Names::One("pound"),
+//             Self::ScrupleApothecaries => crate::v2::behavior_traits::ucum::Names::One("scruple"),
+//             Self::DramApothecaries => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("dram", "drachm"))
+//             }
+//             Self::OunceApothecaries => crate::v2::behavior_traits::ucum::Names::One("ounce"),
+//             Self::PoundApothecaries => crate::v2::behavior_traits::ucum::Names::One("pound"),
+//             Self::MetricOunce => crate::v2::behavior_traits::ucum::Names::One("metric ounce"),
+//             Self::Line => crate::v2::behavior_traits::ucum::Names::One("line"),
+//             Self::Point => crate::v2::behavior_traits::ucum::Names::One("point"),
+//             Self::Pica => crate::v2::behavior_traits::ucum::Names::One("pica"),
+//             Self::PrintersPoint => crate::v2::behavior_traits::ucum::Names::One("Printer's point"),
+//             Self::PrintersPica => crate::v2::behavior_traits::ucum::Names::One("Printer's pica"),
+//             Self::Pied => crate::v2::behavior_traits::ucum::Names::Two(("pied", "French foot")),
+//             Self::Pouce => crate::v2::behavior_traits::ucum::Names::Two(("pouce", "French inch")),
+//             Self::Ligne => crate::v2::behavior_traits::ucum::Names::Two(("ligne", "French line")),
+//             Self::Didot => crate::v2::behavior_traits::ucum::Names::Two(("didot", "Didot's point")),
+//             Self::Cicero => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("cicero", "Didot's pica"))
+//             }
+//             Self::DegreeFahrenheit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("degree Fahrenheit")
+//             }
+//             Self::DegreeRankine => crate::v2::behavior_traits::ucum::Names::One("degree Rankine"),
+//             Self::DegreeReaumur => crate::v2::behavior_traits::ucum::Names::One("degree Réaumur"),
+//             Self::CalorieAt15C => {
+//                 crate::v2::behavior_traits::ucum::Names::One("calorie at 15\u{a0}°C")
+//             }
+//             Self::CalorieAt20C => {
+//                 crate::v2::behavior_traits::ucum::Names::One("calorie at 20\u{a0}°C")
+//             }
+//             Self::MeanCalorie => crate::v2::behavior_traits::ucum::Names::One("mean calorie"),
+//             Self::InternationalTableCalorie => {
+//                 crate::v2::behavior_traits::ucum::Names::One("international table calorie")
+//             }
+//             Self::ThermochemicalCalorie => {
+//                 crate::v2::behavior_traits::ucum::Names::One("thermochemical calorie")
+//             }
+//             Self::Calorie => crate::v2::behavior_traits::ucum::Names::One("calorie"),
+//             Self::NutritionLabelCalories => {
+//                 crate::v2::behavior_traits::ucum::Names::One("nutrition label Calories")
+//             }
+//             Self::BritishThermalUnitAt39F => {
+//                 crate::v2::behavior_traits::ucum::Names::One("British thermal unit at 39\u{a0}°F")
+//             }
+//             Self::BritishThermalUnitAt59F => {
+//                 crate::v2::behavior_traits::ucum::Names::One("British thermal unit at 59\u{a0}°F")
+//             }
+//             Self::BritishThermalUnitAt60F => {
+//                 crate::v2::behavior_traits::ucum::Names::One("British thermal unit at 60\u{a0}°F")
+//             }
+//             Self::MeanBritishThermalUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("mean British thermal unit")
+//             }
+//             Self::InternationalTableBritishThermalUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "international table British thermal unit",
+//                 )
+//             }
+//             Self::ThermochemicalBritishThermalUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("thermochemical British thermal unit")
+//             }
+//             Self::BritishThermalUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("British thermal unit")
+//             }
+//             Self::Horsepower => crate::v2::behavior_traits::ucum::Names::One("horsepower"),
+//             Self::Tex => crate::v2::behavior_traits::ucum::Names::One("tex"),
+//             Self::Denier => crate::v2::behavior_traits::ucum::Names::One("Denier"),
+//             Self::MeterOfWaterColumn => {
+//                 crate::v2::behavior_traits::ucum::Names::One("meter of water column")
+//             }
+//             Self::MeterOfMercuryColumn => {
+//                 crate::v2::behavior_traits::ucum::Names::One("meter of mercury column")
+//             }
+//             Self::InchOfWaterColumn => {
+//                 crate::v2::behavior_traits::ucum::Names::One("inch of water column")
+//             }
+//             Self::InchOfMercuryColumn => {
+//                 crate::v2::behavior_traits::ucum::Names::One("inch of mercury column")
+//             }
+//             Self::PeripheralVascularResistanceUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("peripheral vascular resistance unit")
+//             }
+//             Self::WoodUnit => crate::v2::behavior_traits::ucum::Names::One("Wood unit"),
+//             Self::Diopter => crate::v2::behavior_traits::ucum::Names::One("diopter"),
+//             Self::PrismDiopter => crate::v2::behavior_traits::ucum::Names::One("prism diopter"),
+//             Self::PercentOfSlope => {
+//                 crate::v2::behavior_traits::ucum::Names::One("percent of slope")
+//             }
+//             Self::MeshInternational => crate::v2::behavior_traits::ucum::Names::One("mesh"),
+//             Self::Charriere => {
+//                 crate::v2::behavior_traits::ucum::Names::Two(("Charrière", "french"))
+//             }
+//             Self::Drop => crate::v2::behavior_traits::ucum::Names::One("drop"),
+//             Self::HounsfieldUnit => crate::v2::behavior_traits::ucum::Names::One("Hounsfield unit"),
+//             Self::MetabolicEquivalent => {
+//                 crate::v2::behavior_traits::ucum::Names::One("metabolic equivalent")
+//             }
+//             Self::HomeopathicPotencyOfDecimalSeriesRetired => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of decimal series (retired)",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfCentesimalSeriesRetired => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of centesimal series (retired)",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfMillesimalSeriesRetired => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of millesimal series (retired)",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of quintamillesimal series (retired)",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfDecimalHahnemannianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of decimal hahnemannian series",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of centesimal hahnemannian series",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of millesimal hahnemannian series",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of quintamillesimal hahnemannian series",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfDecimalKorsakovianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of decimal korsakovian series",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of centesimal korsakovian series",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of millesimal korsakovian series",
+//                 )
+//             }
+//             Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "homeopathic potency of quintamillesimal korsakovian series",
+//                 )
+//             }
+//             Self::Equivalents => crate::v2::behavior_traits::ucum::Names::One("equivalents"),
+//             Self::Osmole => crate::v2::behavior_traits::ucum::Names::One("osmole"),
+//             Self::PH => crate::v2::behavior_traits::ucum::Names::One("pH"),
+//             Self::GramPercent => crate::v2::behavior_traits::ucum::Names::One("gram percent"),
+//             Self::SvedbergUnit => crate::v2::behavior_traits::ucum::Names::One("Svedberg unit"),
+//             Self::HighPowerField => {
+//                 crate::v2::behavior_traits::ucum::Names::One("high power field")
+//             }
+//             Self::LowPowerField => crate::v2::behavior_traits::ucum::Names::One("low power field"),
+//             Self::Katal => crate::v2::behavior_traits::ucum::Names::One("katal"),
+//             Self::Unit => crate::v2::behavior_traits::ucum::Names::One("Unit"),
+//             Self::InternationalUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("international unit")
+//             }
+//             Self::InternationalUnitSecondary => {
+//                 crate::v2::behavior_traits::ucum::Names::One("international unit")
+//             }
+//             Self::ArbitraryUnit => crate::v2::behavior_traits::ucum::Names::One("arbitrary unit"),
+//             Self::UnitedStatesPharmacopeiaUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("United States Pharmacopeia unit")
+//             }
+//             Self::GplUnit => crate::v2::behavior_traits::ucum::Names::One("GPL unit"),
+//             Self::MplUnit => crate::v2::behavior_traits::ucum::Names::One("MPL unit"),
+//             Self::AplUnit => crate::v2::behavior_traits::ucum::Names::One("APL unit"),
+//             Self::BethesdaUnit => crate::v2::behavior_traits::ucum::Names::One("Bethesda unit"),
+//             Self::AntiFactorXaUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("anti factor Xa unit")
+//             }
+//             Self::ToddUnit => crate::v2::behavior_traits::ucum::Names::One("Todd unit"),
+//             Self::DyeUnit => crate::v2::behavior_traits::ucum::Names::One("Dye unit"),
+//             Self::SomogyiUnit => crate::v2::behavior_traits::ucum::Names::One("Somogyi unit"),
+//             Self::BodanskyUnit => crate::v2::behavior_traits::ucum::Names::One("Bodansky unit"),
+//             Self::KingArmstrongUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("King-Armstrong unit")
+//             }
+//             Self::KunkelUnit => crate::v2::behavior_traits::ucum::Names::One("Kunkel unit"),
+//             Self::MacLaganUnit => crate::v2::behavior_traits::ucum::Names::One("Mac Lagan unit"),
+//             Self::TuberculinUnit => crate::v2::behavior_traits::ucum::Names::One("tuberculin unit"),
+//             Self::CellCultureInfectiousDose => {
+//                 crate::v2::behavior_traits::ucum::Names::One("50% cell culture infectious dose")
+//             }
+//             Self::TissueCultureInfectiousDose => {
+//                 crate::v2::behavior_traits::ucum::Names::One("50% tissue culture infectious dose")
+//             }
+//             Self::EmbryoInfectiousDose => {
+//                 crate::v2::behavior_traits::ucum::Names::One("50% embryo infectious dose")
+//             }
+//             Self::PlaqueFormingUnits => {
+//                 crate::v2::behavior_traits::ucum::Names::One("plaque forming units")
+//             }
+//             Self::FocusFormingUnits => {
+//                 crate::v2::behavior_traits::ucum::Names::One("focus forming units")
+//             }
+//             Self::ColonyFormingUnits => {
+//                 crate::v2::behavior_traits::ucum::Names::One("colony forming units")
+//             }
+//             Self::IndexOfReactivity => {
+//                 crate::v2::behavior_traits::ucum::Names::One("index of reactivity")
+//             }
+//             Self::BioequivalentAllergenUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("bioequivalent allergen unit")
+//             }
+//             Self::AllergenUnit => crate::v2::behavior_traits::ucum::Names::One("allergen unit"),
+//             Self::AllergenUnitForAmbrosiaArtemisiifolia => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "allergen unit for Ambrosia artemisiifolia",
+//                 )
+//             }
+//             Self::ProteinNitrogenUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("protein nitrogen unit")
+//             }
+//             Self::LimitOfFlocculation => {
+//                 crate::v2::behavior_traits::ucum::Names::One("Limit of flocculation")
+//             }
+//             Self::DAntigenUnit => crate::v2::behavior_traits::ucum::Names::One("D-antigen unit"),
+//             Self::FibrinogenEquivalentUnit => {
+//                 crate::v2::behavior_traits::ucum::Names::One("fibrinogen equivalent unit")
+//             }
+//             Self::ElisaUnit => crate::v2::behavior_traits::ucum::Names::One("ELISA unit"),
+//             Self::EhrlichUnit => crate::v2::behavior_traits::ucum::Names::One("Ehrlich unit"),
+//             Self::Neper => crate::v2::behavior_traits::ucum::Names::One("neper"),
+//             Self::Bel => crate::v2::behavior_traits::ucum::Names::One("bel"),
+//             Self::BelSoundPressure => {
+//                 crate::v2::behavior_traits::ucum::Names::One("bel sound pressure")
+//             }
+//             Self::BelVolt => crate::v2::behavior_traits::ucum::Names::One("bel volt"),
+//             Self::BelMillivolt => crate::v2::behavior_traits::ucum::Names::One("bel millivolt"),
+//             Self::BelMicrovolt => crate::v2::behavior_traits::ucum::Names::One("bel microvolt"),
+//             Self::Bel10Nanovolt => crate::v2::behavior_traits::ucum::Names::One("bel 10 nanovolt"),
+//             Self::BelWatt => crate::v2::behavior_traits::ucum::Names::One("bel watt"),
+//             Self::BelKilowatt => crate::v2::behavior_traits::ucum::Names::One("bel kilowatt"),
+//             Self::Stere => crate::v2::behavior_traits::ucum::Names::One("stere"),
+//             Self::Angstrom => crate::v2::behavior_traits::ucum::Names::One("Ångström"),
+//             Self::Barn => crate::v2::behavior_traits::ucum::Names::One("barn"),
+//             Self::TechnicalAtmosphere => {
+//                 crate::v2::behavior_traits::ucum::Names::One("technical atmosphere")
+//             }
+//             Self::Mho => crate::v2::behavior_traits::ucum::Names::One("mho"),
+//             Self::PoundPerSqareInch => {
+//                 crate::v2::behavior_traits::ucum::Names::One("pound per sqare inch")
+//             }
+//             Self::Circle => crate::v2::behavior_traits::ucum::Names::One("circle"),
+//             Self::Spere => crate::v2::behavior_traits::ucum::Names::One("spere"),
+//             Self::MetricCarat => crate::v2::behavior_traits::ucum::Names::One("metric carat"),
+//             Self::CaratOfGoldAlloys => {
+//                 crate::v2::behavior_traits::ucum::Names::One("carat of gold alloys")
+//             }
+//             Self::Smoot => crate::v2::behavior_traits::ucum::Names::One("Smoot"),
+//             Self::MeterPerSquareSecondsPerSquareRootOfHertz => {
+//                 crate::v2::behavior_traits::ucum::Names::One(
+//                     "meter per square seconds per square root of hertz",
+//                 )
+//             }
+//             Self::BitLogarithmusDualis => crate::v2::behavior_traits::ucum::Names::One("bit"),
+//             Self::Bit => crate::v2::behavior_traits::ucum::Names::One("bit"),
+//             Self::Byte => crate::v2::behavior_traits::ucum::Names::One("byte"),
+//             Self::Baud => crate::v2::behavior_traits::ucum::Names::One("baud"),
+//         }
+//     }
+// }
 impl UcumUnit for Atom {
     fn scalar(&self) -> f64 {
         self.reduce_value(1.0)

@@ -1,4 +1,4 @@
-use crate::{v2::traits::unit_conversion, Unit};
+use crate::{v2::behavior_traits::unit_conversion, Unit};
 
 impl unit_conversion::ToReduced for Unit {
     fn to_reduced(&self) -> Self {
