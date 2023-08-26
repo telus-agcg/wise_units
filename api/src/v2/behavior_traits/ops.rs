@@ -28,8 +28,8 @@ pub trait FieldEq<T> {
 ///
 /// See the [Semantics](https://ucum.org/ucum#section-Semantics) section of the UCUM spec.
 ///
-pub trait IsCommensurableWith<T> {
-    fn is_commensurable_with(&self, rhs: &T) -> bool;
+pub trait IsCommensurableWith<Rhs = Self> {
+    fn is_commensurable_with(&self, rhs: &Rhs) -> bool;
 }
 
 /// `std::ops::Add::add()` takes `self`, which makes sense for regular numbers

@@ -1,4 +1,4 @@
-use crate::{v2::traits::unit_conversion, Measurement, Unit};
+use crate::{v2::behavior_traits::unit_conversion, Measurement, Unit};
 
 impl unit_conversion::TryConvertTo<Unit> for Measurement {
     type Error = crate::Error;

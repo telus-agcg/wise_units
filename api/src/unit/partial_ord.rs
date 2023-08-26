@@ -46,9 +46,6 @@ impl PartialOrd for Unit {
             return None;
         }
 
-        let other_scalar = other.scalar();
-        let my_scalar = self.scalar();
-
-        my_scalar.partial_cmp(&other_scalar)
+        self.scalar().partial_cmp(&other.scalar())
     }
 }

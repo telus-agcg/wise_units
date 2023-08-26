@@ -1,4 +1,4 @@
-use crate::{v2::traits::ops, Measurement};
+use crate::{v2::behavior_traits::ops, Measurement};
 
 // impl ops::IsCompatibleWith<Self> for Measurement {
 //     fn is_compatible_with(&self, rhs: &Self) -> bool {

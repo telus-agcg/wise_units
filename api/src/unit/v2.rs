@@ -6,7 +6,7 @@ mod unit_conversion;
 use std::borrow::Cow;
 
 use crate::{
-    v2::traits::{term_unit::TermUnit, Unit as V2Unit},
+    v2::type_traits::{term_unit::TermUnit, unit_old::Unit as V2Unit},
     Unit,
 };
 

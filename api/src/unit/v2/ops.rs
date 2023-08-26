@@ -1,4 +1,4 @@
-use crate::{v2::traits::ops, Unit};
+use crate::{v2::behavior_traits::ops, Unit};
 
 impl ops::FieldEq<Self> for Unit {
     fn field_eq(&self, rhs: &Self) -> bool {

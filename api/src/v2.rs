@@ -5,6 +5,7 @@
 
 // pub mod dimension;
 // pub mod measurement;
-pub mod traits;
+pub mod behavior_traits;
+pub mod type_traits;
 
 // pub use self::measurement::Measurement;

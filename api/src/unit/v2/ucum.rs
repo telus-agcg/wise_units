@@ -1,4 +1,4 @@
-use crate::{v2::traits::ucum, Unit};
+// use crate::{v2::behavior_traits::ucum, Unit};
 
 // impl<'a> ucum::ParseUcumStr<'a, &'a str> for Unit {
 //     type Error = crate::Error;
@@ -15,19 +15,19 @@ use crate::{v2::traits::ucum, Unit};
 //     }
 // }
 
-impl ucum::DefinitionFlags for Unit {
-    fn is_special(&self) -> bool {
-        // Just delegate to the old trait impl for now.
-        crate::UcumUnit::is_special(self)
-    }
+// impl ucum::DefinitionFlags for Unit {
+//     fn is_special(&self) -> bool {
+//         // Just delegate to the old trait impl for now.
+//         crate::UcumUnit::is_special(self)
+//     }
 
-    fn is_metric(&self) -> bool {
-        // Just delegate to the old trait impl for now.
-        crate::UcumUnit::is_metric(self)
-    }
+//     fn is_metric(&self) -> bool {
+//         // Just delegate to the old trait impl for now.
+//         crate::UcumUnit::is_metric(self)
+//     }
 
-    fn is_arbitrary(&self) -> bool {
-        // Just delegate to the old trait impl for now.
-        crate::UcumUnit::is_arbitrary(self)
-    }
-}
+//     fn is_arbitrary(&self) -> bool {
+//         // Just delegate to the old trait impl for now.
+//         crate::UcumUnit::is_arbitrary(self)
+//     }
+// }
