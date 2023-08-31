@@ -1,3 +1,6 @@
+#[cfg(feature = "v2")]
+mod v2;
+
 use super::Dimension;
 use std::{fmt, ops::Mul};
 

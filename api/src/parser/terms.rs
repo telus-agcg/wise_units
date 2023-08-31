@@ -1,5 +1,5 @@
 pub(super) mod mapper;
 pub(super) mod term_parser;
 
-#[cfg(feauture = "v2")]
+#[cfg(feature = "v2")]
 mod v2;

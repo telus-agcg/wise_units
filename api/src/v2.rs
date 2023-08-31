@@ -4,8 +4,8 @@
 //! goes well, then these traits can then replace the old ones.
 
 // pub mod dimension;
-// pub mod measurement;
 pub mod behavior_traits;
+pub mod measurement;
 pub mod type_traits;
 
-// pub use self::measurement::Measurement;
+pub use self::measurement::Measurement;

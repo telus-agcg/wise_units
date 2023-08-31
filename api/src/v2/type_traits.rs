@@ -8,9 +8,10 @@ pub mod dimension;
 pub mod measurement;
 pub mod prefix;
 pub mod property;
-pub mod term_old;
-pub mod term_unit;
+pub mod term;
 pub mod unit;
-pub mod unit_old;
 
-pub use self::{atom::Atom, prefix::Prefix, term_old::Term, unit::Unit};
+pub use self::{
+    atom::Atom, definition::Definition, dimension::Dimension, measurement::Measurement,
+    prefix::Prefix, property::Property, term::Term, unit::Unit,
+};

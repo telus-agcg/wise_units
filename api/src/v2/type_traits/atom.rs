@@ -1,12 +1,12 @@
-use super::dimension::Dimension;
+use super::{definition::Definition, dimension::Dimension};
 
-pub trait Atom {
+pub trait Atom<'a, V> {
     type String;
     type Names;
     type Property;
     type Class;
     type Dimension: Dimension;
-    type Definition;
+    type Definition: Definition<'a, V>;
 
     fn primary_code(&self) -> Self::String;
     fn secondary_code(&self) -> Option<Self::String>;

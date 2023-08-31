@@ -1,5 +1,3 @@
-pub trait Dimension {
-    type Output: PartialEq + std::ops::Mul<i32, Output = Self::Output>;
+use std::ops::Mul;
 
-    fn dimension(&self) -> Self::Output;
-}
+pub trait Dimension: PartialEq + Mul<i32, Output = Self> {}
