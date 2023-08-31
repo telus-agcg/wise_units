@@ -27,25 +27,13 @@ pub trait CheckedToInverse<T = Self> {
     fn checked_to_inverse(&self) -> Option<T>;
 }
 
-pub trait ToScalar<S> {
-    fn to_scalar(&self) -> S;
+pub trait ToScalar<'a, V> {
+    fn to_scalar(&'a self) -> V;
 }
 
-// pub trait TryToScalar<T> {
-//     type Error;
-
-//     fn try_to_scalar(&self) -> Result<T, Self::Error>;
-// }
-
-pub trait ToMagnitude<T> {
-    fn to_magnitude(&self) -> T;
+pub trait ToMagnitude<'a, T> {
+    fn to_magnitude(&'a self) -> T;
 }
-
-// pub trait TryToMagnitude<T> {
-//     type Error;
-
-//     fn try_to_magnitude(&self) -> Result<T, Self::Error>;
-// }
 
 // NOTE: This is the next version of `AsFraction`, which was incorrectly named, according to Rust
 // API guidelines. The difference with this trait is that a) you can specify the output type for

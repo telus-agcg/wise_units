@@ -1,35 +1,38 @@
-//// NOTE: The differences with this trait are
-//// 1. It doesn't require `rhs` to be a reference
-//// 2. It doesn't default `T` to `Self`
-////
-//pub trait IsCompatibleWith<T: ?Sized> {
-//    fn is_compatible_with(&self, rhs: &T) -> bool;
-//}
+use std::{
+    cmp::Ordering,
+    ops::{Div, Mul},
+};
 
-/// This trait is just a carryover from the old traits, where the old trait's use of lifetimes made
-/// it awkward to implement; this fixes that awkwardness, but this trait should go away. It was
-/// introduced to distinguish `PartialEq` and `FieldEq`, where the implementation of `PartialEq` was
-/// done to allow for, say `1 kilometer == 1000 meters`, but this implementation prevents for a
-/// proper `Hash` implementation, where we want different hashes for `1 kilometer` vs `1000 meters`,
-/// but the [`Hash` and `PartialEq` implementations need to reflect each
-/// other](https://rust-lang.github.io/rust-clippy/stable/index.html#derived_hash_with_manual_eq).
-///
-/// All that to say, the next major release of `wise_units` will change the behavior of `PartialEq`
-/// to mimic that of what `FieldEq` implementations do, and rely on `IsCommensurableWith` to see
-/// that `1 kilometer == 1000 meters`.
-///
-/// See the [Semantics](https://ucum.org/ucum#section-Semantics) section of the UCUM spec.
-///
-pub trait FieldEq<T> {
-    fn field_eq(&self, rhs: &T) -> bool;
-}
+use super::{convert::ToScalar, ucum::Dimensionable};
 
-/// Allows for checking that `1 kilometer == 1000 meters`.
-///
-/// See the [Semantics](https://ucum.org/ucum#section-Semantics) section of the UCUM spec.
-///
-pub trait IsCommensurableWith<Rhs = Self> {
-    fn is_commensurable_with(&self, rhs: &Rhs) -> bool;
+pub trait Comparable<'a, V, Rhs = Self>: Dimensionable + ToScalar<'a, V>
+where
+    Rhs: Dimensionable<Output = <Self as Dimensionable>::Output> + ToScalar<'a, V>,
+    V: PartialEq + PartialOrd,
+{
+    fn is_compatible_with(&'a self, rhs: &'a Rhs) -> bool {
+        self.dim() == rhs.dim()
+    }
+
+    /// Allows for checking that `1 kilometer == 1000 meters`.
+    ///
+    /// See the [Semantics](https://ucum.org/ucum#section-Semantics) section of the UCUM spec.
+    ///
+    fn is_commensurable_with(&'a self, rhs: &'a Rhs) -> bool {
+        if !self.is_compatible_with(rhs) {
+            return false;
+        }
+
+        PartialEq::eq(&self.to_scalar(), &rhs.to_scalar())
+    }
+
+    fn commensurable_ord(&'a self, rhs: &'a Rhs) -> Option<Ordering> {
+        if !self.is_compatible_with(rhs) {
+            return None;
+        }
+
+        self.to_scalar().partial_cmp(&rhs.to_scalar())
+    }
 }
 
 /// `std::ops::Add::add()` takes `self`, which makes sense for regular numbers
@@ -75,8 +78,27 @@ pub trait TrySubRef<'a, Rhs = Self, O = Self> {
 /// (which are `Copy`), but not for `Measurement` and `Unit` (which are not `Copy`).
 /// This is more ergonomic for our types.
 ///
+/// Also note that this operation *can't* fail.
+///
 pub trait DivRef<Rhs = Self, O = Self> {
     fn div_ref(&self, rhs: &Rhs) -> O;
+}
+
+pub trait TryDivRef<'a, Rhs = Self, O = Self>: Sized + Div<&'a Self, Output = O> + 'a {
+    type Error;
+
+    /// # Errors
+    ///
+    /// This crate's `Measurement` can always be divided by an object of its own type and return
+    /// an object of its own type, but other implementations may not. For example, if one created a
+    /// measurement type `Area`, dividing an object of such type by another object of the same type
+    /// would result in a measurement without dimension, not another `Area`. ...thus it might make
+    /// sense to implement this trait for that case such that it always errors.
+    ///
+    /// This trait mainly exists to provide a trait bounds for other traits like
+    /// `v2::type_traits::Measurement`, where you _should_ have some sdfasdlfkjas;dlfkjas;dflj
+    ///
+    fn try_div_ref(&'a self, rhs: &'a Rhs) -> Result<O, Self::Error>;
 }
 
 pub trait CheckedDivRef<Rhs = Self, O = Self>: Sized {
@@ -87,8 +109,27 @@ pub trait CheckedDivRef<Rhs = Self, O = Self>: Sized {
 /// (which are `Copy`), but not for `Measurement` and `Unit` (which are not `Copy`).
 /// This is more ergonomic for our types.
 ///
+/// Also note that this operation *can't* fail.
+///
 pub trait MulRef<Rhs = Self, O = Self> {
     fn mul_ref(&self, rhs: &Rhs) -> O;
+}
+
+pub trait TryMulRef<'a, Rhs = Self, O = Self>: Sized + Mul<&'a Self, Output = O> + 'a {
+    type Error;
+
+    /// # Errors
+    ///
+    /// This crate's `Measurement` can always be multiplied by an object of its own type and return
+    /// an object of its own type, but other implementations may not. For example, if one created a
+    /// measurement type `Area`, multiplying an object of such type by another object of the same type
+    /// would result in a measurement without dimension, not another `Area`. ...thus it might make
+    /// sense to implement this trait for that case such that it always errors.
+    ///
+    /// This trait mainly exists to provide a trait bounds for other traits like
+    /// `v2::type_traits::Measurement`, where you _should_ have some an implementation
+    ///
+    fn try_mul_ref(&'a self, rhs: &'a Rhs) -> Result<O, Self::Error>;
 }
 
 pub trait CheckedMulRef<Rhs = Self, O = Self>: Sized {

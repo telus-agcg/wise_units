@@ -12,26 +12,18 @@
 //     fn names(&self) -> Self::Names;
 // }
 
-// where
-//     D: Default + Copy + PartialEq + Mul<i32, Output = D>,
-pub trait Dim<D> {
-    fn dim(&self) -> D;
+use crate::v2::type_traits::dimension::Dimension;
+
+pub trait Dimensionable {
+    type Output: Dimension;
+
+    fn dim(&self) -> Self::Output;
 }
 
 // pub trait DefinitionFlags {
 //     fn is_special(&self) -> bool;
 //     fn is_metric(&self) -> bool;
 //     fn is_arbitrary(&self) -> bool;
-// }
-
-// pub trait DefinitionValue<T> {
-//     fn definition_value(&self) -> T;
-// }
-
-// pub trait DefinitionUnit {
-//     type Unit;
-
-//     fn definition_unit(&self) -> Self::Unit;
 // }
 
 /// Some Atoms have two names; some have one.
