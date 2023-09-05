@@ -35,8 +35,8 @@ mod ucum_symbol;
 
 pub use self::{
     annotation_composition::AnnotationComposition, atom::Atom, classification::Classification,
-    composable::Composable, composition::Composition, dimension::Dimension, error::Error,
-    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
+    composable::Composable, composition::Composition, definition::Definition, dimension::Dimension,
+    error::Error, prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
 };
 
 use self::{
