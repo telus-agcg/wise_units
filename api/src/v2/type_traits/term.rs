@@ -14,12 +14,11 @@ where
 {
     type Prefix: Prefix<'a, V>;
     type Atom: Atom<'a, V>;
-    type Annotation: PartialEq;
+    type Annotation;
 
-    fn factor(&self) -> Option<u32>;
-    fn prefix_symbol(&self) -> Option<Self::Prefix>;
-    fn atom_symbol(&self) -> Option<Self::Atom>;
-    fn exponent(&self) -> Option<i32>;
-    fn exponent_mut(&mut self) -> &mut Option<i32>;
-    fn annotation(&self) -> &Option<Self::Annotation>;
+    fn factor(&'a self) -> Option<u32>;
+    fn prefix_symbol(&'a self) -> Option<Self::Prefix>;
+    fn atom_symbol(&'a self) -> Option<Self::Atom>;
+    fn exponent(&'a self) -> Option<i32>;
+    fn annotation(&'a self) -> Option<Self::Annotation>;
 }
