@@ -1,6 +1,6 @@
 use crate::v2::behavior_traits::convert::{ToMagnitude, ToScalar};
 
-pub trait Definition<'a, V>: ToScalar<'a, V> + ToMagnitude<'a, V> {
+pub trait Definition<'a, V>: ToScalar<V> + ToMagnitude<'a, V> {
     type Unit;
 
     fn value(&'a self) -> &'a V;

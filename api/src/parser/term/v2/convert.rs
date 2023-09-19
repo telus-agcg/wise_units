@@ -15,7 +15,7 @@ impl convert::ToInverse for Term {
     }
 }
 
-impl convert::ToScalar<'_, f64> for Term {
+impl convert::ToScalar<f64> for Term {
     fn to_scalar(&self) -> f64 {
         // Just delegate to existing impl for now.
         crate::UcumUnit::scalar(self)

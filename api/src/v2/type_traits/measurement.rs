@@ -7,8 +7,8 @@ pub trait Measurement<'a, V>:
     + convert::Invert
     + convert::ToInverse
     + convert::ToMagnitude<'a, V>
-    + convert::ToScalar<'a, V>
-    + ops::Comparable<'a, V>
+    + convert::ToScalar<V>
+    + ops::DimEq
     + ops::TryAddRef<'a>
     + ops::TryDivRef<'a>
     + ops::TryMulRef<'a>

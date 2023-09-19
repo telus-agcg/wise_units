@@ -1,21 +1,6 @@
 use std::convert::Infallible;
 
-use crate::{
-    v2::behavior_traits::{convert::ToScalar, ops},
-    Unit,
-};
-
-impl<'a> ops::Comparable<'a, f64> for Unit {
-    /// Overriding default to use `ulps_eq` for comparing `f64`
-    ///
-    fn is_commensurable_with(&'a self, rhs: &'a Self) -> bool {
-        if !ops::Comparable::is_compatible_with(self, rhs) {
-            return false;
-        }
-
-        approx::ulps_eq!(self.to_scalar(), rhs.to_scalar())
-    }
-}
+use crate::{v2::behavior_traits::ops, Unit};
 
 impl ops::MulRef for Unit {
     fn mul_ref(&self, rhs: &Self) -> Self {

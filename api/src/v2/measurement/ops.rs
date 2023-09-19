@@ -3,24 +3,12 @@ use std::{
     ops::{Div, Mul},
 };
 
-use crate::v2::{
-    behavior_traits::{
-        ops,
-        unit_conversion::{self, TryConvertTo},
-    },
-    type_traits,
+use crate::v2::behavior_traits::{
+    ops,
+    unit_conversion::{self, TryConvertTo},
 };
 
 use super::Measurement;
-
-impl<'a, V, U> ops::Comparable<'a, V> for Measurement<V, U>
-where
-    Self: PartialEq,
-    V: PartialOrd + 'a,
-    &'a V: Mul<V, Output = V>,
-    U: type_traits::Unit<'a, V>,
-{
-}
 
 impl<'a> ops::TryAddRef<'a> for Measurement<f64, crate::Unit> {
     type Error = unit_conversion::ConversionError<'a, Self, crate::Unit>;

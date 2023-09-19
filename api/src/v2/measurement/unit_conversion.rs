@@ -15,7 +15,7 @@ where
     type Error = unit_conversion::ConversionError<'a, Self, U>;
 
     fn try_convert_to(&'a self, rhs: &'a U) -> Result<Self, Self::Error> {
-        if !self.unit.is_compatible_with(rhs) {
+        if !self.unit.dim_eq(rhs) {
             let e = unit_conversion::ConversionError::new_borrowed(self, rhs);
             return Err(e);
         }
