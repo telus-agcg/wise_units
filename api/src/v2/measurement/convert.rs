@@ -78,14 +78,13 @@ where
 //-----------------------------------------------------------------------------
 // ToScalar
 //-----------------------------------------------------------------------------
-impl<'a, V, U> ToScalar<'a, V> for Measurement<V, U>
+impl<V, U> ToScalar<V> for Measurement<V, U>
 where
-    V: 'a,
-    &'a V: Mul<V, Output = V>,
-    U: ToScalar<'a, V>,
+    V: Copy + Mul<V, Output = V>,
+    U: ToScalar<V>,
 {
-    fn to_scalar(&'a self) -> V {
-        Mul::mul(&self.value, self.unit.to_scalar())
+    fn to_scalar(&self) -> V {
+        self.value * self.unit.to_scalar()
     }
 }
 

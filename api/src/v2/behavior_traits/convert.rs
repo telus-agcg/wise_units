@@ -27,8 +27,8 @@ pub trait CheckedToInverse<T = Self> {
     fn checked_to_inverse(&self) -> Option<T>;
 }
 
-pub trait ToScalar<'a, V> {
-    fn to_scalar(&'a self) -> V;
+pub trait ToScalar<V> {
+    fn to_scalar(&self) -> V;
 }
 
 pub trait ToMagnitude<'a, T> {

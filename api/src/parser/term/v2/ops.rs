@@ -1,29 +1,7 @@
-use crate::{
-    v2::behavior_traits::{convert, ops},
-    IsCompatibleWith, Term,
-};
-
-impl<'a> ops::Comparable<'a, f64> for Term {
-    /// Overriding because current implementation of `IsCompatibleWith` also checks if the
-    /// annotations are equal, thus leaving, say `{tree}` and `{bush}` to be treated
-    /// as separate units.
-    ///
-    fn is_compatible_with(&'a self, rhs: &'a Self) -> bool {
-        IsCompatibleWith::is_compatible_with(self, rhs)
-    }
-
-    /// Overriding default to use `ulps_eq` for comparing `f64`
-    ///
-    fn is_commensurable_with(&'a self, rhs: &'a Self) -> bool {
-        use convert::ToScalar;
-
-        if !ops::Comparable::is_compatible_with(self, rhs) {
-            return false;
-        }
-
-        approx::ulps_eq!(self.to_scalar(), rhs.to_scalar())
-    }
-}
+// use crate::{
+//     v2::behavior_traits::{convert, ops},
+//     Composable, IsCompatibleWith, Term,
+// };
 
 #[cfg(test)]
 mod tests {

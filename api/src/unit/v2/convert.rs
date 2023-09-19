@@ -31,7 +31,7 @@ impl convert::ToInverse for Unit {
     }
 }
 
-impl convert::ToScalar<'_, f64> for Unit {
+impl convert::ToScalar<f64> for Unit {
     fn to_scalar(&self) -> f64 {
         // Just delegate to the old trait impl for now.
         crate::UcumUnit::scalar(self)

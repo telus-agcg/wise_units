@@ -14,8 +14,8 @@ impl<'a> type_traits::Definition<'a, f64> for Definition {
     }
 }
 
-impl<'a> convert::ToScalar<'a, f64> for Definition {
-    fn to_scalar(&'a self) -> f64 {
+impl convert::ToScalar<f64> for Definition {
+    fn to_scalar(&self) -> f64 {
         self.terms.to_scalar()
     }
 }

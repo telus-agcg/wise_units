@@ -43,7 +43,7 @@ impl convert::CheckedToInverse for Measurement {
     }
 }
 
-impl convert::ToScalar<'_, f64> for Measurement {
+impl convert::ToScalar<f64> for Measurement {
     fn to_scalar(&self) -> f64 {
         // Just delegate to the old trait impl for now.
         crate::UcumUnit::scalar(self)

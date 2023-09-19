@@ -5,29 +5,48 @@ use std::{
 
 use super::{convert::ToScalar, ucum::Dimensionable};
 
-pub trait Comparable<'a, V, Rhs = Self>: Dimensionable + ToScalar<'a, V>
+/// Trait for determining if two things are dimensionally equal.
+///
+pub trait DimEq<Rhs = Self> {
+    fn dim_eq(&self, rhs: &Rhs) -> bool;
+}
+
+impl<T> DimEq for T
 where
-    Rhs: Dimensionable<Output = <Self as Dimensionable>::Output> + ToScalar<'a, V>,
-    V: PartialEq + PartialOrd,
+    T: Dimensionable,
 {
-    fn is_compatible_with(&'a self, rhs: &'a Rhs) -> bool {
+    fn dim_eq(&self, rhs: &Self) -> bool {
         self.dim() == rhs.dim()
     }
+}
 
-    /// Allows for checking that `1 kilometer == 1000 meters`.
-    ///
-    /// See the [Semantics](https://ucum.org/ucum#section-Semantics) section of the UCUM spec.
-    ///
-    fn is_commensurable_with(&'a self, rhs: &'a Rhs) -> bool {
-        if !self.is_compatible_with(rhs) {
-            return false;
+pub trait IsCommensurableWith<'a, Rhs = Self>: DimEq<Rhs> {
+    fn is_commensurable_with(&'a self, rhs: &'a Rhs) -> Option<bool>;
+}
+
+impl<'a, T> IsCommensurableWith<'a> for T
+where
+    T: Dimensionable + ToScalar<f64> + 'a,
+{
+    fn is_commensurable_with(&'a self, rhs: &'a Self) -> Option<bool> {
+        if !self.dim_eq(rhs) {
+            return None;
         }
 
-        PartialEq::eq(&self.to_scalar(), &rhs.to_scalar())
+        Some(approx::ulps_eq!(&self.to_scalar(), &rhs.to_scalar()))
     }
+}
 
-    fn commensurable_ord(&'a self, rhs: &'a Rhs) -> Option<Ordering> {
-        if !self.is_compatible_with(rhs) {
+pub trait CommensurableOrd<Rhs = Self>: DimEq<Rhs> {
+    fn commensurable_ord(&self, rhs: &Rhs) -> Option<Ordering>;
+}
+
+impl<T> CommensurableOrd for T
+where
+    T: Dimensionable + ToScalar<f64>,
+{
+    fn commensurable_ord(&self, rhs: &Self) -> Option<Ordering> {
+        if !self.dim_eq(rhs) {
             return None;
         }
 

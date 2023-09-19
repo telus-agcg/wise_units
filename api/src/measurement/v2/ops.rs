@@ -5,33 +5,9 @@ use std::{
 };
 
 use crate::{
-    v2::behavior_traits::{convert::ToScalar, ops, unit_conversion::TryConvertTo},
-    Measurement, Unit,
+    v2::behavior_traits::{ops, unit_conversion::TryConvertTo},
+    Measurement,
 };
-
-impl<'a> ops::Comparable<'a, f64> for Measurement {
-    /// Overriding default to use `ulps_eq` for comparing `f64`
-    ///
-    fn is_commensurable_with(&'a self, rhs: &'a Self) -> bool {
-        if !ops::Comparable::is_compatible_with(self, rhs) {
-            return false;
-        }
-
-        approx::ulps_eq!(self.to_scalar(), rhs.to_scalar())
-    }
-}
-
-impl<'a> ops::Comparable<'a, f64, Unit> for Measurement {
-    /// Overriding default to use `ulps_eq` for comparing `f64`
-    ///
-    fn is_commensurable_with(&'a self, rhs: &'a Unit) -> bool {
-        if !ops::Comparable::is_compatible_with(self, rhs) {
-            return false;
-        }
-
-        approx::ulps_eq!(self.to_scalar(), rhs.to_scalar())
-    }
-}
 
 impl<'a> ops::TryAddRef<'a> for Measurement {
     type Error = crate::Error;

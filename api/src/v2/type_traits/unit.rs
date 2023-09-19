@@ -2,16 +2,14 @@ use std::borrow::Cow;
 
 use crate::v2::behavior_traits::{convert, ops};
 
-use super::dimension::Dimension;
-
 pub trait Unit<'a, V>:
     Sized
     + convert::Invert
     + convert::ToFraction
     + convert::ToInverse
     + convert::ToMagnitude<'a, V>
-    + convert::ToScalar<'a, V>
-    + ops::Comparable<'a, V>
+    + convert::ToScalar<V>
+    + ops::DimEq
     + ops::TryDivRef<'a>
     + ops::TryMulRef<'a>
 where
@@ -20,7 +18,6 @@ where
     type InputString: ?Sized;
     type ParseError;
     type Expression: Clone;
-    type Dimension: Dimension;
 
     /// Defines how to parse a string of unit symbols into a `Unit`.
     ///
@@ -35,8 +32,6 @@ where
     /// string that would represent the Unit (if it wasn't instantiated via parsing).
     ///
     fn expression(&'a self) -> Cow<'a, Self::Expression>;
-
-    fn dimension(&'a self) -> Self::Dimension;
 
     fn is_special(&'a self) -> bool;
 }

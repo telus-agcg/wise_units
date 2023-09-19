@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::v2::behavior_traits::{convert, ops};
 
 use super::{Atom, Prefix};
@@ -6,15 +8,16 @@ pub trait Term<'a, V>:
     Sized
     + convert::Invert
     + convert::ToInverse
-    + convert::ToScalar<'a, V>
+    + convert::ToScalar<V>
     + convert::ToMagnitude<'a, V>
-    + ops::Comparable<'a, V>
+    + ops::DimEq
 where
     V: PartialOrd,
 {
     type Prefix: Prefix<'a, V>;
     type Atom: Atom<'a, V>;
-    type Annotation;
+    // type Annotation: PartialEq;
+    type Annotation: Clone;
 
     fn factor(&'a self) -> Option<u32>;
     fn prefix_symbol(&'a self) -> Option<Self::Prefix>;
