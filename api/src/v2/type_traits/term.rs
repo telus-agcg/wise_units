@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use crate::v2::behavior_traits::{convert, ops};
 
 use super::{Atom, Prefix};
@@ -16,8 +14,7 @@ where
 {
     type Prefix: Prefix<'a, V>;
     type Atom: Atom<'a, V>;
-    // type Annotation: PartialEq;
-    type Annotation: Clone;
+    type Annotation;
 
     fn factor(&'a self) -> Option<u32>;
     fn prefix_symbol(&'a self) -> Option<Self::Prefix>;
