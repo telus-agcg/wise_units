@@ -17,6 +17,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   crates to create new types based on `Measurement`, `Unit`, etc. from this crate.
 - New feature flag: `v2`. Adds the `v2` module, with revamped versions of traits--both fixing some
   ergonomics and enabling easier downstream wrapping.
+- Added `Term::as_str()` to allow getting the representing string as a `&str` or `String`.
 
 ### Changed
 

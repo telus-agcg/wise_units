@@ -11,6 +11,8 @@ mod ucum_unit;
 #[cfg(feature = "v2")]
 mod v2;
 
+use std::borrow::Cow;
+
 use crate::parser::{Atom, Prefix};
 
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
@@ -118,6 +120,76 @@ impl Term {
     #[must_use]
     pub fn factor_as_u32(&self) -> u32 {
         self.factor.unwrap_or(1)
+    }
+
+    /// Depending on the `Term`, its string representation could be anywhere from a `&'static str`
+    /// to a combination of all of its fields as a `String`. For those former cases, we want to
+    /// allow borrowing the `&'static str` to save on allocations.
+    ///
+    pub fn as_str<'a>(&'a self) -> Cow<'a, str> {
+        use crate::UcumSymbol;
+
+        if self.is_unity() && self.annotation.is_none() {
+            return Cow::Borrowed("1");
+        };
+
+        match (
+            self.factor,
+            self.prefix,
+            self.atom,
+            self.exponent,
+            self.annotation.as_deref(),
+        ) {
+            (None, None, None, None, None) => Cow::Borrowed(""),
+            (None, None, None, None, Some(ann)) => Cow::Owned(format!("{{{ann}}}")),
+            (None, None, Some(atom), None, None) => Cow::Borrowed(atom.primary_code()),
+            (None, None, Some(atom), None, Some(ann)) => Cow::Owned(format!("{atom}{{{ann}}}")),
+            (None, None, Some(atom), Some(exp), None) if exp == 1 => {
+                Cow::Borrowed(atom.primary_code())
+            }
+            (None, None, Some(atom), Some(exp), None) => Cow::Owned(format!("{atom}{exp}")),
+            (None, None, Some(atom), Some(exp), Some(ann)) => {
+                Cow::Owned(format!("{atom}{exp}{{{ann}}}"))
+            }
+            (None, Some(prefix), Some(atom), None, None) => Cow::Owned(format!("{prefix}{atom}")),
+            (None, Some(prefix), Some(atom), None, Some(ann)) => {
+                Cow::Owned(format!("{prefix}{atom}{{{ann}}}"))
+            }
+            (None, Some(prefix), Some(atom), Some(exp), None) => {
+                Cow::Owned(format!("{prefix}{atom}{exp}"))
+            }
+            (None, Some(prefix), Some(atom), Some(exp), Some(ann)) => {
+                Cow::Owned(format!("{prefix}{atom}{exp}{{{ann}}}"))
+            }
+            (Some(factor), None, None, None, None) => Cow::Owned(factor.to_string()),
+            (Some(factor), None, None, None, Some(ann)) if factor == 1 => {
+                Cow::Owned(format!("{{{ann}}}"))
+            }
+            (Some(factor), None, None, None, Some(ann)) => Cow::Owned(format!("{factor}{{{ann}}}")),
+            (Some(factor), None, Some(atom), None, None) => Cow::Owned(format!("{factor}{atom}")),
+            (Some(factor), None, Some(atom), None, Some(ann)) => {
+                Cow::Owned(format!("{factor}{atom}{{{ann}}}"))
+            }
+            (Some(factor), None, Some(atom), Some(exp), None) => {
+                Cow::Owned(format!("{factor}{atom}{exp}"))
+            }
+            (Some(factor), None, Some(atom), Some(exp), Some(ann)) => {
+                Cow::Owned(format!("{factor}{atom}{exp}{{{ann}}}"))
+            }
+            (Some(factor), Some(prefix), Some(atom), None, None) => {
+                Cow::Owned(format!("{factor}{prefix}{atom}"))
+            }
+            (Some(factor), Some(prefix), Some(atom), None, Some(ann)) => {
+                Cow::Owned(format!("{factor}{prefix}{atom}{{{ann}}}"))
+            }
+            (Some(factor), Some(prefix), Some(atom), Some(exp), None) => {
+                Cow::Owned(format!("{factor}{prefix}{atom}{exp}"))
+            }
+            (Some(factor), Some(prefix), Some(atom), Some(exp), Some(ann)) => {
+                Cow::Owned(format!("{factor}{prefix}{atom}{exp}{{{ann}}}"))
+            }
+            _ => panic!("Invalid Term: {self:?}"),
+        }
     }
 }
 
