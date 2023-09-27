@@ -3,50 +3,7 @@ use std::fmt;
 
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", extract_term_string(self))
-    }
-}
-
-fn extract_term_string(term: &Term) -> String {
-    if term.is_unity() && term.annotation.is_none() {
-        return String::from("1");
-    };
-
-    let mut term_string = String::new();
-    extract_term_string_factor(&mut term_string, term.factor);
-    extract_term_string_atom(&mut term_string, term);
-
-    if let Some(ref annotation) = term.annotation {
-        term_string.push_str(&format!("{{{annotation}}}"));
-    }
-
-    term_string
-}
-
-fn extract_term_string_factor(term_string: &mut String, term_factor: Option<u32>) {
-    if let Some(factor) = term_factor {
-        if factor != 1 {
-            term_string.push_str(&factor.to_string());
-        }
-    }
-}
-
-fn extract_term_string_atom(term_string: &mut String, term: &Term) {
-    if let Some(atom) = term.atom {
-        if let Some(prefix) = term.prefix {
-            term_string.push_str(&prefix.to_string());
-        }
-
-        match term.exponent {
-            Some(exponent) => {
-                if exponent == 1 {
-                    term_string.push_str(&atom.to_string());
-                } else {
-                    term_string.push_str(&format!("{atom}{exponent}"));
-                }
-            }
-            None => term_string.push_str(&atom.to_string()),
-        }
+        write!(f, "{}", self.as_str())
     }
 }
 
