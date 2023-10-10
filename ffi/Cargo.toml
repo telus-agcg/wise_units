@@ -13,7 +13,7 @@ ffi_common.workspace = true
 wise_units = { version = "0.22", registry = "crates-registry" }
 
 [build-dependencies]
-cbindgen = "0.24"
+cbindgen = "0.26.0"
 
 [dev-dependencies]
 approx.workspace = true
