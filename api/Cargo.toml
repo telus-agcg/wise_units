@@ -6,7 +6,7 @@ repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
 authors = ["Steve Loveless <steve@agrian.com>"]
 edition = "2021"
-publish = ["crates-registry"]
+publish = ["agrian-registry"]
 
 [dependencies]
 approx.workspace = true
