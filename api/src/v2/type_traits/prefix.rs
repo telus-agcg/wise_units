@@ -1,10 +1,10 @@
 use crate::v2::type_traits;
 
-pub trait Prefix<'a, V> {
+pub trait Prefix<V> {
     type String;
     type Names;
     type Class;
-    type Definition: type_traits::Definition<'a, V>;
+    type Definition: type_traits::Definition<V>;
 
     fn primary_code(&self) -> Self::String;
     fn secondary_code(&self) -> Option<Self::String>;

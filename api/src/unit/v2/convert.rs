@@ -38,7 +38,7 @@ impl convert::ToScalar<f64> for Unit {
     }
 }
 
-impl convert::ToMagnitude<'_, f64> for Unit {
+impl convert::ToMagnitude<f64> for Unit {
     fn to_magnitude(&self) -> f64 {
         // Just delegate to the old trait impl for now.
         crate::UcumUnit::magnitude(self)

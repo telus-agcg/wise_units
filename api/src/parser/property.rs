@@ -4,7 +4,7 @@
 //-----------------------------------------------------------------------------
 
 #[cfg(feature = "v2")]
-impl<'a> crate::v2::type_traits::Property<'a, f64> for Property {
+impl crate::v2::type_traits::Property<f64> for Property {
     type Atom = Atom;
 
     fn atoms(&self) -> Vec<Self::Atom> {

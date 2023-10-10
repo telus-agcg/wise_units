@@ -22,7 +22,7 @@ impl convert::ToScalar<f64> for Term {
     }
 }
 
-impl convert::ToMagnitude<'_, f64> for Term {
+impl convert::ToMagnitude<f64> for Term {
     fn to_magnitude(&self) -> f64 {
         // Just delegate to existing impl for now.
         crate::UcumUnit::magnitude(self)

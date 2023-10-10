@@ -7,18 +7,18 @@ pub trait Term<'a, V>:
     + convert::Invert
     + convert::ToInverse
     + convert::ToScalar<V>
-    + convert::ToMagnitude<'a, V>
+    + convert::ToMagnitude<V>
     + ops::DimEq
 where
     V: PartialOrd,
 {
-    type Prefix: Prefix<'a, V>;
-    type Atom: Atom<'a, V>;
+    type Prefix: Prefix<V>;
+    type Atom: Atom<V>;
     type Annotation;
 
-    fn factor(&'a self) -> Option<u32>;
-    fn prefix_symbol(&'a self) -> Option<Self::Prefix>;
-    fn atom_symbol(&'a self) -> Option<Self::Atom>;
-    fn exponent(&'a self) -> Option<i32>;
+    fn factor(&self) -> Option<u32>;
+    fn prefix_symbol(&self) -> Option<Self::Prefix>;
+    fn atom_symbol(&self) -> Option<Self::Atom>;
+    fn exponent(&self) -> Option<i32>;
     fn annotation(&'a self) -> Option<Self::Annotation>;
 }

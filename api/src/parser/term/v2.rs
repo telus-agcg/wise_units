@@ -9,19 +9,19 @@ impl<'a> TTerm<'a, f64> for Term {
     type Atom = Atom;
     type Annotation = &'a str;
 
-    fn factor(&'a self) -> Option<u32> {
+    fn factor(&self) -> Option<u32> {
         self.factor
     }
 
-    fn prefix_symbol(&'a self) -> Option<Self::Prefix> {
+    fn prefix_symbol(&self) -> Option<Self::Prefix> {
         self.prefix
     }
 
-    fn atom_symbol(&'a self) -> Option<Self::Atom> {
+    fn atom_symbol(&self) -> Option<Self::Atom> {
         self.atom
     }
 
-    fn exponent(&'a self) -> Option<i32> {
+    fn exponent(&self) -> Option<i32> {
         self.exponent
     }
 

@@ -8,7 +8,7 @@ use crate::{
 
 use super::Atom;
 
-impl<'a> type_traits::Atom<'a, f64> for Atom {
+impl type_traits::Atom<f64> for Atom {
     type String = &'static str;
     type Names = Vec<&'static str>;
     type Property = crate::Property;

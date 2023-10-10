@@ -8,7 +8,7 @@ impl ops::MulRef for Unit {
     }
 }
 
-impl ops::TryMulRef<'_> for Unit {
+impl ops::TryMulRef for Unit {
     type Error = Infallible;
 
     fn try_mul_ref(&self, rhs: &Self) -> Result<Self, Self::Error> {
@@ -22,7 +22,7 @@ impl ops::DivRef for Unit {
     }
 }
 
-impl ops::TryDivRef<'_> for Unit {
+impl ops::TryDivRef for Unit {
     type Error = Infallible;
 
     fn try_div_ref(&self, rhs: &Self) -> Result<Self, Self::Error> {

@@ -31,8 +31,8 @@ pub trait ToScalar<V> {
     fn to_scalar(&self) -> V;
 }
 
-pub trait ToMagnitude<'a, T> {
-    fn to_magnitude(&'a self) -> T;
+pub trait ToMagnitude<T> {
+    fn to_magnitude(&self) -> T;
 }
 
 // NOTE: This is the next version of `AsFraction`, which was incorrectly named, according to Rust

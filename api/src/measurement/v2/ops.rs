@@ -34,7 +34,7 @@ impl ops::MulRef for Measurement {
     }
 }
 
-impl ops::TryMulRef<'_> for Measurement {
+impl ops::TryMulRef for Measurement {
     type Error = Infallible;
 
     fn try_mul_ref(&self, rhs: &Self) -> Result<Self, Self::Error> {
@@ -78,7 +78,7 @@ impl ops::DivRef for Measurement {
     }
 }
 
-impl ops::TryDivRef<'_> for Measurement {
+impl ops::TryDivRef for Measurement {
     type Error = Infallible;
 
     fn try_div_ref(&self, rhs: &Self) -> Result<Self, Self::Error> {

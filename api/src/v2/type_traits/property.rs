@@ -1,7 +1,7 @@
 use super::Atom;
 
-pub trait Property<'a, V> {
-    type Atom: Atom<'a, V>;
+pub trait Property<V> {
+    type Atom: Atom<V>;
 
     fn atoms(&self) -> Vec<Self::Atom>;
 }
