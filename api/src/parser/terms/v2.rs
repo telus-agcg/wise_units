@@ -20,8 +20,8 @@ impl convert::ToScalar<f64> for Vec<Term> {
     }
 }
 
-impl<'a> convert::ToMagnitude<'a, f64> for Vec<Term> {
-    fn to_magnitude(&'a self) -> f64 {
+impl convert::ToMagnitude<f64> for Vec<Term> {
+    fn to_magnitude(&self) -> f64 {
         self.iter()
             .map(convert::ToMagnitude::to_magnitude)
             .product()

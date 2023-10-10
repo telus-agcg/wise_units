@@ -3,7 +3,7 @@ use crate::{
     UcumSymbol,
 };
 
-impl<'a> TPrefix<'a, f64> for Prefix {
+impl TPrefix<f64> for Prefix {
     type String = &'static str;
     type Names = Vec<&'static str>;
     type Class = Classification;

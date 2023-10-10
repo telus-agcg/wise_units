@@ -1,7 +1,4 @@
-use std::{
-    cmp::Ordering,
-    ops::{Div, Mul},
-};
+use std::cmp::Ordering;
 
 use super::{convert::ToScalar, ucum::Dimensionable};
 
@@ -103,7 +100,8 @@ pub trait DivRef<Rhs = Self, O = Self> {
     fn div_ref(&self, rhs: &Rhs) -> O;
 }
 
-pub trait TryDivRef<'a, Rhs = Self, O = Self>: Sized + Div<&'a Self, Output = O> + 'a {
+// pub trait TryDivRef<'a, Rhs = Self, O = Self>: Sized + Div<&'a Self, Output = O> + 'a {
+pub trait TryDivRef<Rhs = Self, O = Self> {
     type Error;
 
     /// # Errors
@@ -117,7 +115,7 @@ pub trait TryDivRef<'a, Rhs = Self, O = Self>: Sized + Div<&'a Self, Output = O>
     /// This trait mainly exists to provide a trait bounds for other traits like
     /// `v2::type_traits::Measurement`, where you _should_ have some sdfasdlfkjas;dlfkjas;dflj
     ///
-    fn try_div_ref(&'a self, rhs: &'a Rhs) -> Result<O, Self::Error>;
+    fn try_div_ref(&self, rhs: &Rhs) -> Result<O, Self::Error>;
 }
 
 pub trait CheckedDivRef<Rhs = Self, O = Self>: Sized {
@@ -134,7 +132,8 @@ pub trait MulRef<Rhs = Self, O = Self> {
     fn mul_ref(&self, rhs: &Rhs) -> O;
 }
 
-pub trait TryMulRef<'a, Rhs = Self, O = Self>: Sized + Mul<&'a Self, Output = O> + 'a {
+// pub trait TryMulRef<'a, Rhs = Self, O = Self>: Sized + Mul<&'a Self, Output = O> + 'a {
+pub trait TryMulRef<Rhs = Self, O = Self> {
     type Error;
 
     /// # Errors
@@ -148,7 +147,7 @@ pub trait TryMulRef<'a, Rhs = Self, O = Self>: Sized + Mul<&'a Self, Output = O>
     /// This trait mainly exists to provide a trait bounds for other traits like
     /// `v2::type_traits::Measurement`, where you _should_ have some an implementation
     ///
-    fn try_mul_ref(&'a self, rhs: &'a Rhs) -> Result<O, Self::Error>;
+    fn try_mul_ref(&self, rhs: &Rhs) -> Result<O, Self::Error>;
 }
 
 pub trait CheckedMulRef<Rhs = Self, O = Self>: Sized {

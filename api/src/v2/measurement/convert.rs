@@ -91,13 +91,12 @@ where
 //-----------------------------------------------------------------------------
 // ToMagnitude
 //-----------------------------------------------------------------------------
-impl<'a, S, V, U> ToMagnitude<'a, S> for Measurement<V, U>
+impl<S, V, U> ToMagnitude<S> for Measurement<V, U>
 where
-    V: 'a,
-    &'a V: Mul<S, Output = S>,
-    U: ToMagnitude<'a, S>,
+    V: Copy + Mul<S, Output = S>,
+    U: ToMagnitude<S>,
 {
-    fn to_magnitude(&'a self) -> S {
-        Mul::mul(&self.value, self.unit.to_magnitude())
+    fn to_magnitude(&self) -> S {
+        self.value * self.unit.to_magnitude()
     }
 }

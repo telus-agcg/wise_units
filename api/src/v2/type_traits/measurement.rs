@@ -6,12 +6,12 @@ pub trait Measurement<'a, V>:
     Sized
     + convert::Invert
     + convert::ToInverse
-    + convert::ToMagnitude<'a, V>
+    + convert::ToMagnitude<V>
     + convert::ToScalar<V>
     + ops::DimEq
     + ops::TryAddRef<'a>
-    + ops::TryDivRef<'a>
-    + ops::TryMulRef<'a>
+    + ops::TryDivRef
+    + ops::TryMulRef
     + ops::TrySubRef<'a>
     + unit_conversion::TryConvertTo<'a, Self::Unit>
 where
@@ -19,6 +19,6 @@ where
 {
     type Unit: Unit<'a, V>;
 
-    fn value(&'a self) -> &'a V;
-    fn unit(&'a self) -> &'a Self::Unit;
+    fn value(&self) -> &V;
+    fn unit(&self) -> &Self::Unit;
 }

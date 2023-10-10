@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 use crate::v2::behavior_traits::{convert, ops};
 
 pub trait Unit<'a, V>:
@@ -7,11 +5,11 @@ pub trait Unit<'a, V>:
     + convert::Invert
     + convert::ToFraction
     + convert::ToInverse
-    + convert::ToMagnitude<'a, V>
+    + convert::ToMagnitude<V>
     + convert::ToScalar<V>
     + ops::DimEq
-    + ops::TryDivRef<'a>
-    + ops::TryMulRef<'a>
+    + ops::TryDivRef
+    + ops::TryMulRef
 where
     V: PartialOrd,
 {
@@ -26,12 +24,12 @@ where
     /// This should error if the `string` can't be parsed into a type that represents that
     /// combinations of units.
     ///
-    fn parse(string: &Self::InputString) -> Result<Self, Self::ParseError>;
+    fn parse(string: Self::InputString) -> Result<Self, Self::ParseError>;
 
     /// This is the string that was either a) parsed to instantiate the object, or b) the canonical
     /// string that would represent the Unit (if it wasn't instantiated via parsing).
     ///
     fn expression(&'a self) -> Cow<'a, Self::Expression>;
 
-    fn is_special(&'a self) -> bool;
+    fn is_special(&self) -> bool;
 }
