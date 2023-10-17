@@ -200,6 +200,15 @@ mod tests {
     #[test]
     fn validate_new_unity() {
         let term = Term::new_unity();
-        assert_eq!(term.to_string(), "1");
+        assert_eq!(
+            term,
+            Term {
+                factor: Some(1),
+                prefix: None,
+                atom: None,
+                exponent: None,
+                annotation: None
+            }
+        );
     }
 }
