@@ -15,7 +15,7 @@ where
 {
     type InputString: ?Sized;
     type ParseError;
-    type Expression: Clone;
+    type Expression: ?Sized;
 
     /// Defines how to parse a string of unit symbols into a `Unit`.
     ///
@@ -29,7 +29,7 @@ where
     /// This is the string that was either a) parsed to instantiate the object, or b) the canonical
     /// string that would represent the Unit (if it wasn't instantiated via parsing).
     ///
-    fn expression(&'a self) -> Cow<'a, Self::Expression>;
+    fn expression(&'a self) -> Self::Expression;
 
     fn is_special(&self) -> bool;
 }

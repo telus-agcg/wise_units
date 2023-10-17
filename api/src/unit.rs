@@ -25,7 +25,7 @@ pub mod custom_ffi;
 mod serde;
 
 use crate::{parser::Term, Error};
-use std::str::FromStr;
+use std::{borrow::Cow, str::FromStr};
 
 #[cfg(feature = "cffi")]
 use ffi_common::derive::FFI;
@@ -146,6 +146,14 @@ impl Unit {
         let reduced = term_reducing::reduce_terms(&self.terms);
 
         Self::new(reduced).to_string()
+    }
+
+    pub fn as_str<'a>(&'a self) -> Cow<'a, str> {
+        match self.terms.len() {
+            0 => Cow::Borrowed(""),
+            1 => self.terms[0].as_str(),
+            _ => Cow::Owned(self.to_string()),
+        }
     }
 }
 
