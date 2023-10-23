@@ -10,7 +10,8 @@ publish = ["agrian-registry"]
 
 [dependencies]
 ffi_common.workspace = true
-wise_units = { version = "0.22", registry = "agrian-registry" }
+# wise_units = { version = "0.22", registry = "agrian-registry" }
+wise_units = { path = "../api" }
 
 [build-dependencies]
 cbindgen = "0.26"
