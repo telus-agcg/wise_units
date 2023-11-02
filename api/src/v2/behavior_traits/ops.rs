@@ -2,7 +2,8 @@ use std::cmp::Ordering;
 
 use super::{convert::ToScalar, ucum::Dimensionable};
 
-/// Trait for determining if two things are dimensionally equal.
+/// Trait for determining if two things are dimensionally equal. This is a required check for many
+/// operations, such as adding, subtracting, and commensurability checking.
 ///
 pub trait DimEq<Rhs = Self> {
     fn dim_eq(&self, rhs: &Rhs) -> bool;
@@ -12,11 +13,26 @@ impl<T> DimEq for T
 where
     T: Dimensionable,
 {
+    #[inline]
     fn dim_eq(&self, rhs: &Self) -> bool {
         self.dim() == rhs.dim()
     }
 }
 
+/// Trait to determine if two, typically `Measurement`s are the same quantity.
+///
+/// ```
+/// use wise_units::Measurement;
+///
+/// let one_km = Measurement::try_new(1.0, "km").unwrap();
+/// let two_km = Measurement::try_new(2.0, "km").unwrap();
+/// let thousand_m = Measurement::try_new(1000.0, "m").unwrap();
+///
+/// assert!(one_km.is_commensurable_with(&one_km).unwrap());
+/// assert!(one_km.is_commensurable_with(&thousand_m).unwrap());
+/// assert!(!one_km.is_commensurable_with(&two_km).unwrap());
+///
+/// ```
 pub trait IsCommensurableWith<'a, Rhs = Self>: DimEq<Rhs> {
     fn is_commensurable_with(&'a self, rhs: &'a Rhs) -> Option<bool>;
 }
