@@ -85,3 +85,9 @@ impl convert::ToScalar<f64> for Atom {
         <Self as UcumUnit>::scalar(self)
     }
 }
+
+impl convert::ToMagnitude<f64> for Atom {
+    fn to_magnitude(&self) -> f64 {
+        <Self as UcumUnit>::magnitude(self)
+    }
+}
