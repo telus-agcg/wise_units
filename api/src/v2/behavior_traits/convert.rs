@@ -31,8 +31,32 @@ pub trait ToScalar<V> {
     fn to_scalar(&self) -> V;
 }
 
-pub trait ToMagnitude<T> {
-    fn to_magnitude(&self) -> T;
+pub trait TryToScalar<V> {
+    type Error;
+
+    /// # Errors
+    ///
+    /// An error returned here should indicate that `self` could not be coerced to a `V`. One
+    /// example of this would be converting a `f64` to a `num_rational::Rational`, where
+    /// `f64::INFINITY`, `f64::NEG_INFINITY`, and `f64::NAN` can't be converted.
+    ///
+    fn try_to_scalar(&self) -> Result<V, Self::Error>;
+}
+
+pub trait ToMagnitude<V> {
+    fn to_magnitude(&self) -> V;
+}
+
+pub trait TryToMagnitude<V> {
+    type Error;
+
+    /// # Errors
+    ///
+    /// An error returned here should indicate that `self` could not be coerced to a `V`. One
+    /// example of this would be converting a `f64` to a `num_rational::Rational`, where
+    /// `f64::INFINITY`, `f64::NEG_INFINITY`, and `f64::NAN` can't be converted.
+    ///
+    fn try_to_magnitude(&self) -> Result<V, Self::Error>;
 }
 
 // NOTE: This is the next version of `AsFraction`, which was incorrectly named, according to Rust
