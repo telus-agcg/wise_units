@@ -44,3 +44,10 @@ impl convert::ToMagnitude<f64> for Unit {
         crate::UcumUnit::magnitude(self)
     }
 }
+
+impl convert::ToReduced for Unit {
+    fn to_reduced(&self) -> Self {
+        // Just delegate to the old trait impl for now.
+        crate::reduce::ToReduced::to_reduced(self)
+    }
+}

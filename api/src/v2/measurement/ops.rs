@@ -1,21 +1,27 @@
 use std::{
     f64::{INFINITY, NAN},
-    ops::{Div, Mul},
+    ops::{Add, Div, Mul, Sub},
 };
 
-use crate::v2::behavior_traits::{
-    ops,
-    unit_conversion::{self, TryConvertTo},
+use crate::v2::{
+    behavior_traits::{convert::TryConvertTo, ops},
+    type_traits,
 };
 
 use super::Measurement;
 
-impl<'a> ops::TryAddRef<'a> for Measurement<f64, crate::Unit> {
-    type Error = unit_conversion::ConversionError<'a, Self, crate::Unit>;
+impl<'a, V, U> ops::TryAddRef<'a> for Measurement<V, U>
+where
+    U: type_traits::Unit<'a, V> + Clone + 'a,
+    &'a U: ToString,
+    V: PartialOrd + Clone + Mul<V, Output = V> + 'a,
+    V: Add<V, Output = V>,
+{
+    type Error = <Self as TryConvertTo<'a, U>>::Error;
 
     fn try_add_ref(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
         let rhs_converted = rhs.try_convert_to(&self.unit)?;
-        let new_value = self.value + rhs_converted.value;
+        let new_value = Add::add(self.value.clone(), rhs_converted.value);
 
         Ok(Self {
             value: new_value,
@@ -24,12 +30,18 @@ impl<'a> ops::TryAddRef<'a> for Measurement<f64, crate::Unit> {
     }
 }
 
-impl<'a> ops::TrySubRef<'a> for Measurement<f64, crate::Unit> {
-    type Error = unit_conversion::ConversionError<'a, Self, crate::Unit>;
+impl<'a, V, U> ops::TrySubRef<'a> for Measurement<V, U>
+where
+    U: type_traits::Unit<'a, V> + Clone + 'a,
+    &'a U: ToString,
+    V: PartialOrd + Clone + Mul<V, Output = V> + 'a,
+    V: Sub<V, Output = V>,
+{
+    type Error = <Self as TryConvertTo<'a, U>>::Error;
 
     fn try_sub_ref(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
         let rhs_converted = rhs.try_convert_to(&self.unit)?;
-        let new_value = self.value - rhs_converted.value;
+        let new_value = Sub::sub(self.value.clone(), rhs_converted.value);
 
         Ok(Self {
             value: new_value,

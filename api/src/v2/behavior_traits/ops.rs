@@ -1,9 +1,10 @@
 use std::cmp::Ordering;
 
-use super::{convert::ToScalar, ucum::Dimensionable};
+use super::{convert::TryToScalar, ucum::Dimensionable};
 
 /// Trait for determining if two things are dimensionally equal. This is a required check for many
-/// operations, such as adding, subtracting, and commensurability checking.
+/// operations, such as adding, subtracting, and commensurability checking. Really, any type that
+/// will be involved in comparing for commensurability should implement this.
 ///
 pub trait DimEq<Rhs = Self> {
     fn dim_eq(&self, rhs: &Rhs) -> bool;
@@ -21,6 +22,18 @@ where
 
 /// Trait to determine if two, typically `Measurement`s are the same quantity.
 ///
+/// Note that while the implementation for most cases should involve:
+/// 1. Checking if compared items are in the same dimension; if not, they cannot
+///    be compared.
+/// 2. Checking if the scalar values of compared items are equal; if so, the
+///    items are commensurable.
+///
+/// We explicitly don't provide generic implementations for any value type `V`,
+/// since the manner of checking the equality of `V` can differ depending on `V`.
+/// For example, we _do_ provide an implementation for `V` as `f64`, and in that
+/// case, we use the [Unit in the last place (ULP)](https://en.wikipedia.org/wiki/Unit_in_the_last_place)
+/// method for comparison. Comparing other value types may merit other methods.
+///
 /// ```
 /// use wise_units::Measurement;
 ///
@@ -33,37 +46,48 @@ where
 /// assert!(!one_km.is_commensurable_with(&two_km).unwrap());
 ///
 /// ```
-pub trait IsCommensurableWith<'a, Rhs = Self>: DimEq<Rhs> {
+pub trait IsCommensurableWith<'a, V, Rhs = Self>: DimEq<Rhs> {
     fn is_commensurable_with(&'a self, rhs: &'a Rhs) -> Option<bool>;
 }
 
-impl<'a, T> IsCommensurableWith<'a> for T
+impl<'a, T> IsCommensurableWith<'a, f64> for T
 where
-    T: Dimensionable + ToScalar<f64> + 'a,
+    T: Dimensionable + TryToScalar<f64> + 'a,
 {
     fn is_commensurable_with(&'a self, rhs: &'a Self) -> Option<bool> {
         if !self.dim_eq(rhs) {
             return None;
         }
 
-        Some(approx::ulps_eq!(&self.to_scalar(), &rhs.to_scalar()))
+        match (self.try_to_scalar(), rhs.try_to_scalar()) {
+            (Ok(lhs), Ok(rhs)) => Some(approx::ulps_eq!(lhs, rhs)),
+            (_, _) => None,
+        }
     }
 }
 
+/// This trait exists to allow for `PartialOrd` implementations that check for
+/// actual object equality, not semantic equality, which thus allows for proper
+/// behavior of `Hash` (and thus, say, `HashMap`) for those objects. We can then
+/// determine ordering for commensurable things using this trait's implementation.
+///
 pub trait CommensurableOrd<Rhs = Self>: DimEq<Rhs> {
     fn commensurable_ord(&self, rhs: &Rhs) -> Option<Ordering>;
 }
 
 impl<T> CommensurableOrd for T
 where
-    T: Dimensionable + ToScalar<f64>,
+    T: Dimensionable + TryToScalar<f64>,
 {
     fn commensurable_ord(&self, rhs: &Self) -> Option<Ordering> {
         if !self.dim_eq(rhs) {
             return None;
         }
 
-        self.to_scalar().partial_cmp(&rhs.to_scalar())
+        match (self.try_to_scalar(), rhs.try_to_scalar()) {
+            (Ok(lhs), Ok(ref rhs)) => lhs.partial_cmp(rhs),
+            (_, _) => None,
+        }
     }
 }
 

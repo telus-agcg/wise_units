@@ -1,6 +1,7 @@
 use crate::{
-    parser::definition::Definition, v2::type_traits::Prefix as TPrefix, Classification, Prefix,
-    UcumSymbol,
+    parser::definition::Definition,
+    v2::{behavior_traits, type_traits::Prefix as TPrefix},
+    Classification, Prefix, UcumSymbol,
 };
 
 impl TPrefix<f64> for Prefix {
@@ -36,5 +37,11 @@ impl TPrefix<f64> for Prefix {
 
     fn definition(&self) -> Self::Definition {
         Definition::new_non_dimensional(UcumSymbol::definition_value(self))
+    }
+}
+
+impl behavior_traits::convert::ToScalar<f64> for Prefix {
+    fn to_scalar(&self) -> f64 {
+        self.definition_value()
     }
 }

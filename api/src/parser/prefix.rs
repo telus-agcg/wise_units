@@ -3,8 +3,6 @@ pub mod ucum_symbol;
 #[cfg(feature = "v2")]
 mod v2;
 
-pub use self::ucum_symbol::*;
-
 use super::{Error, Visit};
 use crate::{
     parser::{symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol},
