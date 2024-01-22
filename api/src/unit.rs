@@ -148,7 +148,7 @@ impl Unit {
         Self::new(reduced).to_string()
     }
 
-    pub fn as_str<'a>(&'a self) -> Cow<'a, str> {
+    pub fn as_str(&self) -> Cow<'_, str> {
         match self.terms.len() {
             0 => Cow::Borrowed(""),
             1 => self.terms[0].as_str(),

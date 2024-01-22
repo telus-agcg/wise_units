@@ -4,10 +4,13 @@ use num_traits::{Inv, Zero};
 
 use crate::v2::{
     behavior_traits::convert::{
-        CheckedInvert, CheckedToInverse, Invert, ToInverse, ToMagnitude, ToScalar,
+        CheckedInvert, CheckedToInverse, ConversionError, Invert, ScalarConversionError, ToInverse,
+        ToMagnitude, ToReduced, ToScalar, TryConvertTo, TryToScalar, UnitConversionError,
     },
-    measurement::Measurement,
+    type_traits,
 };
+
+use super::Measurement;
 
 //-----------------------------------------------------------------------------
 // Invert
@@ -98,5 +101,42 @@ where
 {
     fn to_magnitude(&self) -> S {
         self.value * self.unit.to_magnitude()
+    }
+}
+
+impl<'a, V, U> TryConvertTo<'a, U> for Measurement<V, U>
+where
+    U: type_traits::Unit<'a, V> + Clone + 'a,
+    &'a U: ToString,
+    V: PartialOrd + Clone + Mul<V, Output = V> + 'a,
+{
+    type Error = ConversionError<<U as TryToScalar<V>>::Error>;
+
+    fn try_convert_to(&'a self, rhs: &'a U) -> Result<Self, Self::Error> {
+        if !self.unit.dim_eq(rhs) {
+            let e = UnitConversionError::new(&self.unit, rhs);
+            return Err(ConversionError::Unit(e));
+        }
+
+        let new_measurement = Self {
+            value: self.value.clone()
+                * rhs.try_to_scalar().map_err(|e| {
+                    let scalar_error = ScalarConversionError::new(rhs, e);
+
+                    ConversionError::Scalar(scalar_error)
+                })?,
+            unit: rhs.clone(),
+        };
+
+        Ok(new_measurement)
+    }
+}
+
+impl ToReduced for Measurement<f64, crate::Unit> {
+    fn to_reduced(&self) -> Self {
+        let _reduced_unit = crate::reduce::ToReduced::to_reduced(&self.unit);
+
+        // self.convert_to(&reduced_unit)
+        todo!()
     }
 }

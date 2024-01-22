@@ -5,9 +5,11 @@ pub trait Unit<'a, V>:
     + convert::Invert
     + convert::ToFraction
     + convert::ToInverse
-    + convert::ToMagnitude<V>
-    + convert::ToScalar<V>
+    + convert::TryToMagnitude<V>
+    + convert::TryToScalar<V>
     + ops::DimEq
+    + ops::IsCommensurableWith<'a, V>
+    + ops::CommensurableOrd
     + ops::TryDivRef
     + ops::TryMulRef
 where

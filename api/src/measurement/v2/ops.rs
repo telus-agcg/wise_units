@@ -5,7 +5,7 @@ use std::{
 };
 
 use crate::{
-    v2::behavior_traits::{ops, unit_conversion::TryConvertTo},
+    v2::behavior_traits::{convert::TryConvertTo, ops},
     Measurement,
 };
 

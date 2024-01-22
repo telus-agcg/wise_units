@@ -6,8 +6,8 @@ pub trait Term<'a, V>:
     Sized
     + convert::Invert
     + convert::ToInverse
-    + convert::ToScalar<V>
-    + convert::ToMagnitude<V>
+    + convert::TryToScalar<V>
+    + convert::TryToMagnitude<V>
     + ops::DimEq
 where
     V: PartialOrd,

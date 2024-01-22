@@ -1,7 +1,6 @@
 mod convert;
 mod ops;
 mod ucum;
-mod unit_conversion;
 
 use crate::{v2::type_traits, Measurement};
 

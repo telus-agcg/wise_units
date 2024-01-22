@@ -16,7 +16,9 @@ impl convert::ToInverse for Vec<Term> {
 
 impl convert::ToScalar<f64> for Vec<Term> {
     fn to_scalar(&self) -> f64 {
-        self.iter().map(convert::ToScalar::to_scalar).product()
+        self.iter()
+            .map(convert::ToScalar::<f64>::to_scalar)
+            .product()
     }
 }
 
