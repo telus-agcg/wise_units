@@ -11,7 +11,7 @@ impl IsCompatibleWith for Measurement {
 impl IsCompatibleWith<Unit> for Measurement {
     #[inline]
     fn is_compatible_with(&self, rhs: &Unit) -> bool {
-        self.unit.terms().is_compatible_with(rhs.terms())
+        self.unit.is_compatible_with(rhs)
     }
 }
 
