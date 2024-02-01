@@ -1,116 +1,44 @@
-use std::{
-    convert::Infallible,
-    f64::{INFINITY, NAN},
-    ops::{Add, Div, Mul, Sub},
-};
+use crate::{v2::behavior_traits::ops::inv, Measurement, Unit};
 
-use crate::{
-    v2::behavior_traits::{convert::TryConvertTo, ops},
-    Measurement,
-};
-
-impl<'a> ops::TryAddRef<'a> for Measurement {
-    type Error = crate::Error;
-
-    fn try_add_ref(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
-        // Just delegate to the old trait impl for now.
-        Add::add(self, rhs)
+impl inv::InvertMut for Measurement {
+    fn invert_mut(&mut self) {
+        self.value = 1.0 / self.value;
+        inv::InvertMut::invert_mut(&mut self.unit);
     }
 }
 
-impl<'a> ops::TrySubRef<'a> for Measurement {
-    type Error = crate::Error;
-
-    fn try_sub_ref(&'a self, rhs: &'a Self) -> Result<Self, Self::Error> {
-        // Just delegate to the old trait impl for now.
-        Sub::sub(self, rhs)
-    }
-}
-
-impl ops::MulRef for Measurement {
-    fn mul_ref(&self, rhs: &Self) -> Self {
-        // Just delegate to the old trait impl for now.
-        Mul::mul(self, rhs)
-    }
-}
-
-impl ops::TryMulRef for Measurement {
-    type Error = Infallible;
-
-    fn try_mul_ref(&self, rhs: &Self) -> Result<Self, Self::Error> {
-        Ok(ops::MulRef::mul_ref(self, rhs))
-    }
-}
-
-impl ops::CheckedMulRef for Measurement {
-    fn checked_mul_ref(&self, rhs: &Self) -> Option<Self> {
-        fn do_float_things(lhs: f64, rhs: f64) -> Option<f64> {
-            if rhs == 0.0 || rhs == NAN || rhs == INFINITY {
-                return None;
-            }
-
-            let value = lhs * rhs;
-
-            if value == NAN || value == INFINITY {
-                None
-            } else {
-                Some(value)
-            }
+impl inv::CheckedInvert for Measurement {
+    fn checked_invert(&mut self) -> Option<()> {
+        if self.value == 0.0 {
+            return None;
         }
 
-        match rhs.try_convert_to(&self.unit) {
-            Ok(converted) => Some(Self {
-                value: do_float_things(self.value, converted.value)?,
-                unit: Mul::mul(&self.unit, &converted.unit),
-            }),
-            Err(_) => Some(Self {
-                value: do_float_things(self.value, rhs.value)?,
-                unit: Mul::mul(&self.unit, &rhs.unit),
-            }),
+        inv::InvertMut::invert_mut(self);
+
+        Some(())
+    }
+}
+
+impl inv::ToInverse for Measurement {
+    fn to_inverse(&self) -> Self {
+        Self {
+            value: 1.0 / self.value,
+            unit: inv::ToInverse::to_inverse(&self.unit),
         }
     }
 }
 
-impl ops::DivRef for Measurement {
-    fn div_ref(&self, rhs: &Self) -> Self {
-        // Just delegate to the old trait impl for now.
-        Div::div(self, rhs)
-    }
-}
+impl inv::CheckedToInverse for Measurement {
+    fn checked_to_inverse(&self) -> Option<Self> {
+        let new_value = 1.0 / self.value;
 
-impl ops::TryDivRef for Measurement {
-    type Error = Infallible;
-
-    fn try_div_ref(&self, rhs: &Self) -> Result<Self, Self::Error> {
-        Ok(ops::DivRef::div_ref(self, rhs))
-    }
-}
-
-impl ops::CheckedDivRef for Measurement {
-    fn checked_div_ref(&self, rhs: &Self) -> Option<Self> {
-        fn do_float_things(lhs: f64, rhs: f64) -> Option<f64> {
-            if rhs == 0.0 || rhs == NAN || rhs == INFINITY {
-                return None;
-            }
-
-            let value = lhs / rhs;
-
-            if value == NAN || value == INFINITY {
-                None
-            } else {
-                Some(value)
-            }
+        if new_value.is_infinite() {
+            return None;
         }
 
-        match rhs.try_convert_to(&self.unit) {
-            Ok(converted) => Some(Self {
-                value: do_float_things(self.value, converted.value)?,
-                unit: Div::div(&self.unit, &converted.unit),
-            }),
-            Err(_) => Some(Self {
-                value: do_float_things(self.value, rhs.value)?,
-                unit: Div::div(&self.unit, &rhs.unit),
-            }),
-        }
+        Some(Self {
+            value: new_value,
+            unit: inv::ToInverse::to_inverse(&self.unit),
+        })
     }
 }

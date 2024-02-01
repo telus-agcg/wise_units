@@ -1,37 +1,80 @@
-use std::ops::Deref;
+//! Traits in here are intended for building wrappers in other languages around
+//! `wise_units` (v1).
+//!
+pub mod atom;
+pub mod measurement;
+pub mod prefix;
+pub mod property;
+pub mod term;
+pub mod unit;
 
-pub struct Wrappable<T> {
-    wrapped: T,
+pub use self::atom::WrapperAtom;
+pub use self::measurement::WrapperMeasurement;
+pub use self::prefix::WrapperPrefix;
+pub use self::property::WrapperProperty;
+pub use self::term::WrapperTerm;
+pub use self::unit::WrapperUnit;
+
+pub trait Ucum {
+    type Composition;
+
+    fn dim(&self) -> Self::Composition;
+    fn is_special(&self) -> bool;
+    fn is_metric(&self) -> bool;
+    fn is_arbitrary(&self) -> bool;
 }
 
-impl<T> Deref for Wrappable<T> {
-    type Target = T;
+pub trait TryToNumber {
+    type Number;
+    type ConversionError;
 
-    fn deref(&self) -> &Self::Target {
-        &self.wrapped
-    }
-}
-
-pub trait AsWrappedRef<'a> {
-    /// This should be the type of reference that's returned. Ideally this would be, say
-    /// `&'a Measurement`, but in cases where alternative reference types are used (ex. `RefCell`), this would allow for that (ex. `Ref<'a, Measurement>`).
+    /// Convert the Atom to a scalar as a `Self::Number`.
     ///
-    type Reference: Deref<Target = Self::RustType>;
-
-    /// This is the type we want to get to for its functionality.
+    /// # Errors
     ///
-    type RustType;
+    /// Depending on `Self::Number`, a safe conversion may not be possible; an
+    /// error here indicates that.
+    ///
+    fn try_to_scalar(&self) -> Result<Self::Number, Self::ConversionError>;
 
-    fn as_wrapped_ref(&'a self) -> Self::Reference;
+    /// Convert the Atom to a magnitude as a `Self::Number`.
+    ///
+    /// # Errors
+    ///
+    /// Depending on `Self::Number`, a safe conversion may not be possible; an
+    /// error here indicates that.
+    ///
+    fn try_to_magnitude(&self) -> Result<Self::Number, Self::ConversionError>;
 }
 
-#[macro_export]
-macro_rules! wrapper_impl_display {
-    ($dest:ty) => {
-        impl<'a> std::fmt::Display for $dest {
-            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-                self.as_wrapped_ref().fmt(f)
-            }
-        }
-    };
+pub trait Commensurability {
+    type OpRhs;
+
+    fn is_compatible_with(&self, rhs: &Self::OpRhs) -> bool;
+}
+
+pub trait Compare {
+    type OpRhs;
+    type Ordering;
+
+    fn coerced_eq(&self, rhs: &Self::OpRhs) -> bool;
+    fn hash_eq(&self, rhs: &Self::OpRhs) -> bool;
+    fn semantic_ord(&self, rhs: &Self::OpRhs) -> Self::Ordering;
+    fn hash_ord(&self, rhs: &Self::OpRhs) -> Self::Ordering;
+}
+
+pub trait AddSub {
+    type OpRhs;
+    type Output;
+
+    fn add(&self, rhs: Self::OpRhs) -> Self::Output;
+    fn sub(&self, rhs: Self::OpRhs) -> Self::Output;
+}
+
+pub trait MulDiv {
+    type OpRhs;
+    type Output;
+
+    fn mul(&self, rhs: Self::OpRhs) -> Self::Output;
+    fn div(&self, rhs: Self::OpRhs) -> Self::Output;
 }

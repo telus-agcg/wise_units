@@ -19,18 +19,6 @@ impl convert::ToFraction for Unit {
     }
 }
 
-impl convert::Invert for Unit {
-    fn invert(&mut self) {
-        convert::Invert::invert(&mut self.terms);
-    }
-}
-
-impl convert::ToInverse for Unit {
-    fn to_inverse(&self) -> Self {
-        Self::new(convert::ToInverse::to_inverse(&self.terms))
-    }
-}
-
 impl convert::ToScalar<f64> for Unit {
     fn to_scalar(&self) -> f64 {
         // Just delegate to the old trait impl for now.

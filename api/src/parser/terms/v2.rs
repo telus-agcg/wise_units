@@ -1,5 +1,3 @@
-use crate::{v2::behavior_traits::convert, Term};
-
 impl convert::Invert for Vec<Term> {
     fn invert(&mut self) {
         for term in &mut *self {

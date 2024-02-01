@@ -1,8 +1,9 @@
 #![allow(clippy::large_enum_variant)]
 #![allow(clippy::result_large_err)]
 
-use crate::{convertible::Convertible, error::Error, measurement::Measurement};
 use std::ops::{Add, Div, Mul, Sub};
+
+use crate::{convertible::Convertible, error::Error, Measurement};
 
 //-----------------------------------------------------------------------------
 // impl Add

@@ -1,6 +1,6 @@
-use crate::{v2::behavior_traits::ucum, Term};
+use crate::{v2::behavior_traits::dim, Term};
 
-impl ucum::Dimensionable for Term {
+impl dim::Dimensionable for Term {
     type Output = crate::Composition;
 
     fn dim(&self) -> Self::Output {
@@ -19,7 +19,7 @@ mod tests {
         let term = term!(Meter);
 
         assert_eq!(
-            ucum::Dimensionable::dim(&term),
+            dim::Dimensionable::dim(&term),
             crate::Composition::new(crate::Dimension::Length, 1)
         );
     }

@@ -1,4 +1,4 @@
-use crate::{v2::behavior_traits::ucum, Unit};
+use crate::{v2::behavior_traits::dim, Unit};
 
 // impl<'a> ucum::ParseUcumStr<'a, &'a str> for Unit {
 //     type Error = crate::Error;
@@ -8,7 +8,7 @@ use crate::{v2::behavior_traits::ucum, Unit};
 //     }
 // }
 
-impl ucum::Dimensionable for Unit {
+impl dim::Dimensionable for Unit {
     type Output = crate::Composition;
 
     fn dim(&self) -> Self::Output {

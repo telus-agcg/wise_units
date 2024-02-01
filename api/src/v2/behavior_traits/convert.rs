@@ -49,35 +49,6 @@ impl<T> ScalarConversionError<T> {
     }
 }
 
-// NOTE: The difference with this trait is that it takes a `&mut self` instead of `self`, allowing
-// it to be implemented a bit more conventionally on types: ex. `impl Invert on Term` instead of
-// `impl Invert on &mut Term`.
-//
-pub trait Invert {
-    fn invert(&mut self);
-}
-
-/// Similar to `Invert`, but allows for checking for divide-by-0 errors before converting; should
-/// return `None` in that case.
-///
-pub trait CheckedInvert {
-    fn checked_invert(&mut self) -> Option<()>;
-}
-
-// NOTE: The difference with this trait is that it's generic over `T`, allowing
-// for multiple implementations.
-//
-pub trait ToInverse<T = Self> {
-    fn to_inverse(&self) -> T;
-}
-
-// NOTE: The difference with this trait is that it's generic over `T`, allowing
-// for multiple implementations.
-//
-pub trait CheckedToInverse<T = Self> {
-    fn checked_to_inverse(&self) -> Option<T>;
-}
-
 pub trait ToScalar<V> {
     fn to_scalar(&self) -> V;
 }
@@ -93,14 +64,14 @@ pub trait TryToScalar<V> {
     ///
     fn try_to_scalar(&self) -> Result<V, Self::Error>;
 }
-
-impl<T, V> TryToScalar<V> for T
+//
+impl<T> TryToScalar<f64> for T
 where
-    T: ToScalar<V>,
+    T: ToScalar<f64>,
 {
     type Error = Infallible;
 
-    fn try_to_scalar(&self) -> Result<V, Self::Error> {
+    fn try_to_scalar(&self) -> Result<f64, Self::Error> {
         Ok(self.to_scalar())
     }
 }
@@ -121,13 +92,13 @@ pub trait TryToMagnitude<V> {
     fn try_to_magnitude(&self) -> Result<V, Self::Error>;
 }
 
-impl<T, V> TryToMagnitude<V> for T
+impl<T> TryToMagnitude<f64> for T
 where
-    T: ToMagnitude<V>,
+    T: ToMagnitude<f64>,
 {
     type Error = Infallible;
 
-    fn try_to_magnitude(&self) -> Result<V, Self::Error> {
+    fn try_to_magnitude(&self) -> Result<f64, Self::Error> {
         Ok(self.to_magnitude())
     }
 }
@@ -148,7 +119,6 @@ pub trait ToFraction<N = Option<Self>, D = Option<Self>, F = (N, D)> {
 ///
 // NOTE: The difference with this trait is that it doesn't require the output to be a `Result` like
 // the original does. This allows for implementing for types that can guarantee a conversion.
-#[allow(clippy::module_name_repetitions)]
 pub trait ConvertTo<U: ?Sized, O = Self> {
     /// _The_ method for doing the conversion.
     ///
