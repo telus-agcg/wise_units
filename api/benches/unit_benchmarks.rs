@@ -4,22 +4,28 @@ extern crate wise_units;
 
 mod common;
 
-use criterion::Criterion;
+use criterion::{BenchmarkId, Criterion};
 use std::str::FromStr;
 use wise_units::{Composable, IsCompatibleWith, UcumUnit, Unit};
 
 macro_rules! bench_over_inputs_method {
     ($function_name:ident, $test_name:expr, $method_name:ident) => {
         fn $function_name(c: &mut Criterion) {
-            c.bench_function_over_inputs(
-                $test_name,
-                |b, &unit_string| {
-                    let unit = Unit::from_str(unit_string).unwrap();
+            let mut group = c.benchmark_group($test_name);
 
-                    b.iter(|| unit.$method_name());
-                },
-                &common::UNIT_STRINGS,
-            );
+            for unit_string in common::UNIT_STRINGS {
+                group.bench_with_input(
+                    BenchmarkId::new("from_str", &unit_string),
+                    unit_string,
+                    |b, unit_string| {
+                        let unit = Unit::from_str(unit_string).unwrap();
+
+                        b.iter(|| unit.$method_name());
+                    },
+                );
+            }
+
+            group.finish()
         }
     };
 }
@@ -27,12 +33,22 @@ macro_rules! bench_over_inputs_method {
 macro_rules! bench_over_inputs_math {
     ($function_name:ident, $test_name:expr, $method_name:tt) => {
         fn $function_name(c: &mut Criterion) {
-            c.bench_function_over_inputs($test_name, |b, &(lhs_string, rhs_string)| {
-                let lhs = &Unit::from_str(lhs_string).unwrap();
-                let rhs = &Unit::from_str(rhs_string).unwrap();
+            let mut group = c.benchmark_group($test_name);
 
-                b.iter(|| lhs $method_name rhs);
-            }, &common::UNIT_PAIRS);
+            for pair in common::UNIT_PAIRS {
+                group.bench_with_input(
+                    BenchmarkId::new(stringify!($method_name), format!("{}->{}", pair.0, pair.1)),
+                    &pair,
+                    |b, (lhs_string, rhs_string)| {
+                        let lhs = &Unit::from_str(lhs_string).unwrap();
+                        let rhs = &Unit::from_str(rhs_string).unwrap();
+
+                        b.iter(|| lhs $method_name rhs);
+                    },
+                );
+            }
+
+            group.finish()
         }
     };
 }
@@ -54,16 +70,22 @@ bench_over_inputs_method!(
 bench_over_inputs_method!(composition_group, "Unit::composition()", composition);
 
 fn is_compatible_with_group(c: &mut Criterion) {
-    c.bench_function_over_inputs(
-        "Unit::is_compatible_with()",
-        |b, &(lhs_string, rhs_string)| {
-            let lhs = &Unit::from_str(lhs_string).unwrap();
-            let rhs = &Unit::from_str(rhs_string).unwrap();
+    let mut group = c.benchmark_group("Unit::is_compatible_with()");
 
-            b.iter(|| lhs.is_compatible_with(rhs));
-        },
-        &common::UNIT_PAIRS,
-    );
+    for pair in common::UNIT_PAIRS {
+        group.bench_with_input(
+            BenchmarkId::new("is_compatible_with", format!("{}->{}", pair.0, pair.1)),
+            &pair,
+            |b, (lhs_string, rhs_string)| {
+                let lhs = &Unit::from_str(lhs_string).unwrap();
+                let rhs = &Unit::from_str(rhs_string).unwrap();
+
+                b.iter(|| lhs.is_compatible_with(rhs));
+            },
+        );
+    }
+
+    group.finish()
 }
 
 //-----------------------------------------------------------------------------
@@ -75,13 +97,19 @@ bench_over_inputs_method!(display_group, "Unit::to_string()", to_string);
 // impl FromStr
 //-----------------------------------------------------------------------------
 fn from_str_group(c: &mut Criterion) {
-    c.bench_function_over_inputs(
-        "Unit::from_str()",
-        |b, &unit_string| {
-            b.iter(|| Unit::from_str(unit_string));
-        },
-        &common::UNIT_STRINGS,
-    );
+    let mut group = c.benchmark_group("Unit::from_str()");
+
+    for unit_string in common::UNIT_STRINGS {
+        group.bench_with_input(
+            BenchmarkId::new("from_str", &unit_string),
+            unit_string,
+            |b, unit_string| {
+                b.iter(|| Unit::from_str(unit_string));
+            },
+        );
+    }
+
+    group.finish()
 }
 
 //-----------------------------------------------------------------------------

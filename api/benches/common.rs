@@ -1,4 +1,4 @@
-pub static UNIT_STRINGS: [&str; 25] = [
+pub const UNIT_STRINGS: [&str; 25] = [
     // The unity
     "1",
     // base, factor*base, factor*base^exponent
@@ -39,7 +39,7 @@ pub static UNIT_STRINGS: [&str; 25] = [
     "10m3/5s2",
 ];
 
-pub static UNIT_PAIRS: [(&str, &str); 19] = [
+pub const UNIT_PAIRS: [(&str, &str); 19] = [
     ("m", "m"),
     ("m", "cm"),
     ("m", "[in_i]"),
