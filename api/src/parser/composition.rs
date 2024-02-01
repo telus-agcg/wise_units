@@ -318,6 +318,20 @@ impl Composition {
     }
 }
 
+impl From<Dimension> for Composition {
+    fn from(value: Dimension) -> Self {
+        match value {
+            Dimension::ElectricCharge => Self::new_electric_charge(1),
+            Dimension::Length => Self::new_length(1),
+            Dimension::LuminousIntensity => Self::new_luminous_intensity(1),
+            Dimension::Mass => Self::new_mass(1),
+            Dimension::PlaneAngle => Self::new_plane_angle(1),
+            Dimension::Temperature => Self::new_temperature(1),
+            Dimension::Time => Self::new_time(1),
+        }
+    }
+}
+
 // impl Display
 impl fmt::Display for Composition {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

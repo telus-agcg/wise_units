@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::{
     is_compatible_with::IsCompatibleWith,
     parser::{annotation_composition::AnnotationComposable, Composable, Term},
@@ -38,14 +40,25 @@ impl IsCompatibleWith for Term {
     }
 }
 
-impl IsCompatibleWith for Vec<Term> {
-    fn is_compatible_with(&self, rhs: &Self) -> bool {
-        <Self as IsCompatibleWith<[Term]>>::is_compatible_with(self, rhs)
-    }
-}
+// impl IsCompatibleWith for Vec<Term> {
+//     fn is_compatible_with(&self, rhs: &Self) -> bool {
+//         <Self as IsCompatibleWith<[Term]>>::is_compatible_with(self, rhs)
+//     }
+// }
+//
+// impl IsCompatibleWith<[Term]> for Vec<Term> {
+//     fn is_compatible_with(&self, rhs: &[Term]) -> bool {
+//         let lhs_annotation_composition = self.annotation_composition();
+//         let rhs_annotation_composition = rhs.annotation_composition();
+//
+//         self.composition() == rhs.composition()
+//             && rhs_annotation_composition == lhs_annotation_composition
+//     }
+// }
 
-impl IsCompatibleWith<[Term]> for Vec<Term> {
-    fn is_compatible_with(&self, rhs: &[Term]) -> bool {
+impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
+    fn is_compatible_with(&self, rhs: &Self) -> bool {
+        // <Self as IsCompatibleWith<[Term]>>::is_compatible_with(&*self, rhs)
         let lhs_annotation_composition = self.annotation_composition();
         let rhs_annotation_composition = rhs.annotation_composition();
 
@@ -56,6 +69,8 @@ impl IsCompatibleWith<[Term]> for Vec<Term> {
 
 #[cfg(test)]
 mod tests {
+    use std::borrow::Cow;
+
     use crate::{
         is_compatible_with::IsCompatibleWith,
         parser::{Atom, Prefix, Term},
@@ -87,22 +102,22 @@ mod tests {
 
         #[test]
         fn validate_terms() {
-            let lhs = vec![term!(Meter)];
-            let rhs = vec![term!(Kilo, Meter)];
+            let lhs: Cow<'_, [Term]> = Cow::Owned(vec![term!(Meter)]);
+            let rhs = Cow::Owned(vec![term!(Kilo, Meter)]);
             assert!(lhs.is_compatible_with(&rhs));
         }
 
         #[test]
         fn validate_terms_with_factor() {
-            let lhs = vec![term!(Meter)];
-            let rhs = vec![term!(Kilo, Meter, factor: 20)];
+            let lhs: Cow<'_, [Term]> = Cow::Owned(vec![term!(Meter)]);
+            let rhs = Cow::Owned(vec![term!(Kilo, Meter, factor: 20)]);
             assert!(lhs.is_compatible_with(&rhs));
         }
 
         #[test]
         fn validate_terms_with_factor_and_exponent() {
-            let lhs = vec![term!(Meter)];
-            let rhs = vec![term!(Kilo, Meter, factor: 20, exponent: 2)];
+            let lhs: Cow<'_, [Term]> = Cow::Owned(vec![term!(Meter)]);
+            let rhs = Cow::Owned(vec![term!(Kilo, Meter, factor: 20, exponent: 2)]);
             assert!(!lhs.is_compatible_with(&rhs));
         }
     }
@@ -127,16 +142,17 @@ mod tests {
 
         #[test]
         fn validate_terms() {
-            let m = vec![term!(Meter, annotation: "stuff".to_string())];
-            let km_stuff = vec![term!(Kilo, Meter, annotation: "stuff".to_string())];
+            let m: Cow<'_, [Term]> =
+                Cow::Owned(vec![term!(Meter, annotation: "stuff".to_string())]);
+            let km_stuff = Cow::Owned(vec![term!(Kilo, Meter, annotation: "stuff".to_string())]);
             assert!(m.is_compatible_with(&km_stuff));
 
             // Different annotation
-            let km_pants = vec![term!(Kilo, Meter, annotation: "pants".to_string())];
+            let km_pants = Cow::Owned(vec![term!(Kilo, Meter, annotation: "pants".to_string())]);
             assert!(!m.is_compatible_with(&km_pants));
 
             // No annotation
-            let km_no_annotation = vec![term!(Kilo, Meter)];
+            let km_no_annotation = Cow::Owned(vec![term!(Kilo, Meter)]);
             assert!(!m.is_compatible_with(&km_no_annotation));
         }
 

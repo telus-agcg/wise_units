@@ -2,14 +2,14 @@ use crate::reducible::Reducible;
 
 use super::Definition;
 
-impl Reducible for Definition {
+impl Reducible for Definition<f64> {
     fn reduce_value(&self, other_value: f64) -> f64 {
-        self.function_set.as_ref().map_or_else(
+        self.function_set().map_or_else(
             || {
                 if self.is_unity() {
-                    self.value
+                    self.value()
                 } else {
-                    self.value * self.terms.reduce_value(other_value)
+                    self.value() * self.terms().reduce_value(other_value)
                 }
             },
             |f| (f.convert_to)(other_value),
@@ -17,12 +17,12 @@ impl Reducible for Definition {
     }
 
     fn calculate_magnitude(&self, other_value: f64) -> f64 {
-        self.function_set.as_ref().map_or_else(
+        self.function_set().map_or_else(
             || {
                 if self.is_unity() {
-                    self.value
+                    self.value()
                 } else {
-                    self.value * self.terms.calculate_magnitude(other_value)
+                    self.value() * self.terms().calculate_magnitude(other_value)
                 }
             },
             |f| (f.convert_from)(other_value),

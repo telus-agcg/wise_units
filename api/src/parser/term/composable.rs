@@ -22,12 +22,6 @@ impl Composable for Term {
     }
 }
 
-impl Composable for Vec<Term> {
-    fn composition(&self) -> Composition {
-        <[Term] as Composable>::composition(self)
-    }
-}
-
 impl Composable for [Term] {
     fn composition(&self) -> Composition {
         self.iter()

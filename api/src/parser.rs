@@ -18,7 +18,7 @@ pub mod composition;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;
 
-pub(self) mod symbols;
+mod symbols;
 
 mod annotation_composition;
 #[cfg(test)]
@@ -27,16 +27,16 @@ mod composable;
 mod definition;
 mod dimension;
 mod error;
-mod function_set;
+pub mod function_set;
 mod prefix;
-mod term;
+pub(crate) mod term;
 mod terms;
 mod ucum_symbol;
 
 pub use self::{
     annotation_composition::AnnotationComposition, atom::Atom, classification::Classification,
-    composable::Composable, composition::Composition, definition::Definition, dimension::Dimension,
-    error::Error, prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
+    composable::Composable, composition::Composition, dimension::Dimension, error::Error,
+    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
 };
 
 use self::{

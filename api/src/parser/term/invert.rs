@@ -48,6 +48,22 @@ impl ToInverse for Vec<Term> {
     }
 }
 
+impl Invert for &mut std::borrow::Cow<'static, [Term]> {
+    fn invert(self) {
+        for term in self.to_mut().iter_mut() {
+            term.invert();
+        }
+    }
+}
+
+impl ToInverse for std::borrow::Cow<'static, [Term]> {
+    type Output = Self;
+
+    fn to_inverse(&self) -> Self::Output {
+        self.iter().map(ToInverse::to_inverse).collect()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     mod term {

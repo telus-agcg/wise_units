@@ -7,6 +7,14 @@ impl convert::ToScalar<f64> for Term {
     }
 }
 
+// impl convert::TryToScalar<f64> for Term {
+//     type Error = Infallible;
+//
+//     fn try_to_scalar(&self) -> Result<f64, Self::Error> {
+//         Ok(self.to_scalar())
+//     }
+// }
+
 impl convert::ToMagnitude<f64> for Term {
     fn to_magnitude(&self) -> f64 {
         // Just delegate to existing impl for now.

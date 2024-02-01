@@ -8,6 +8,8 @@ use crate::{
 };
 use approx::{assert_relative_eq, assert_ulps_eq};
 
+use super::term::UNITY_SLICE;
+
 macro_rules! validate_definition {
     (
         $test_name:ident,
@@ -18,11 +20,11 @@ macro_rules! validate_definition {
         #[test]
         fn $test_name() {
             let atom = Atom::$atom_name;
-            let expected = vec![$($expected_term),+];
+            let expected = [$($expected_term),+];
 
             assert_relative_eq!(atom.definition().value(), $expected_value);
             assert_ulps_eq!(atom.definition().value(), $expected_value);
-            assert_eq!(atom.definition().terms(), expected.as_slice());
+            assert_eq!(*atom.definition().terms(), expected.as_slice());
         }
     };
 }
@@ -207,12 +209,10 @@ fn validate_definitions_base_atoms() {
         Atom::Radian,
         Atom::Second,
     ];
-    let terms = vec![Term::new_unity()];
-
     for base_atom in base_atoms {
         assert_relative_eq!(base_atom.definition().value(), 1.0);
         assert_ulps_eq!(base_atom.definition().value(), 1.0);
-        assert_eq!(base_atom.definition().terms(), terms.as_slice());
+        assert_eq!(*base_atom.definition().terms(), UNITY_SLICE.as_slice());
     }
 }
 

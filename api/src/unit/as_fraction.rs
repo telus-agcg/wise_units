@@ -13,7 +13,7 @@ impl AsFraction for Unit {
             .peekable();
 
         if positive_terms_iter.peek().is_some() {
-            Some(Self::new(positive_terms_iter.cloned().collect()))
+            Some(Self::new(positive_terms_iter.cloned().collect::<Vec<_>>()))
         } else {
             None
         }
@@ -31,7 +31,7 @@ impl AsFraction for Unit {
             .peekable();
 
         if negative_terms_iter.peek().is_some() {
-            Some(Self::new(negative_terms_iter.collect()))
+            Some(Self::new(negative_terms_iter.collect::<Vec<_>>()))
         } else {
             None
         }

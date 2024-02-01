@@ -32,6 +32,18 @@ impl Reducible for Vec<Term> {
     }
 }
 
+impl Reducible for [Term] {
+    fn reduce_value(&self, value: f64) -> f64 {
+        self.iter()
+            .fold(1.0, |acc, term| acc * term.reduce_value(value))
+    }
+
+    fn calculate_magnitude(&self, value: f64) -> f64 {
+        self.iter()
+            .fold(1.0, |acc, term| acc * term.calculate_magnitude(value))
+    }
+}
+
 fn combine_term_values(
     calculated_atom: f64,
     calculated_prefix: f64,

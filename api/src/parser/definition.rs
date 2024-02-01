@@ -6,83 +6,117 @@ mod reducible;
 #[cfg(feature = "v2")]
 mod v2;
 
+use std::borrow::Cow;
+
+use num_traits::One;
+
 use crate::parser::{function_set::FunctionSet, Error, Term};
+
+use super::term;
 
 /// A `Definition` is a slimmed-down version of a `Measurement` that is used to
 /// define `Atom`s in terms of other `Atom`s (ex. an `"[in_i]"` has a
 /// `Definition` of 2.54 cm).
 ///
 #[derive(Debug)]
-pub struct Definition {
-    value: f64,
-    terms: Vec<Term>,
-
-    /// Conversion functions only required for special (non-ratio based) atoms.
-    function_set: Option<FunctionSet>,
+pub(crate) enum Definition<V>
+where
+    V: One + PartialEq,
+{
+    Base,
+    NonDimensional(V),
+    NonDimensionalSpecial {
+        value: V,
+        function_set: FunctionSet,
+    },
+    Dimensional {
+        value: V,
+        terms: Cow<'static, [Term]>,
+    },
+    DimensionalSpecial {
+        value: V,
+        terms: Cow<'static, [Term]>,
+        function_set: FunctionSet,
+    },
 }
 
-impl Definition {
-    pub(crate) fn try_new(
-        value: f64,
-        expression: &str,
-        function_set: Option<FunctionSet>,
-    ) -> Result<Self, Error> {
-        let terms = super::parse(expression)?;
-
-        Ok(Self {
+impl<V> Definition<V>
+where
+    V: One + PartialEq + Clone,
+{
+    pub(crate) fn try_new_dimensional(value: V, expression: &'static str) -> Result<Self, Error> {
+        Ok(Self::Dimensional {
             value,
-            terms,
+            terms: Cow::Owned(super::parse(expression)?),
+        })
+    }
+
+    pub(crate) fn try_new_dimensional_special(
+        value: V,
+        expression: &'static str,
+        function_set: FunctionSet,
+    ) -> Result<Self, Error> {
+        Ok(Self::DimensionalSpecial {
+            value,
+            terms: Cow::Owned(super::parse(expression)?),
             function_set,
         })
     }
 
-    pub(crate) fn new<T>(value: f64, terms: T, function_set: Option<FunctionSet>) -> Self
-    where
-        Vec<Term>: From<T>,
-    {
-        let terms = {
-            let t = Vec::from(terms);
+    pub(crate) fn value(&self) -> V {
+        match self {
+            Definition::Base => <V as One>::one(),
+            Definition::NonDimensional(value) => value.clone(),
+            Definition::NonDimensionalSpecial { value, .. }
+            | Definition::Dimensional { value, .. }
+            | Definition::DimensionalSpecial { value, .. } => (*value).clone(),
+        }
+    }
 
-            if t.is_empty() {
-                vec![Term::new_unity()]
-            } else {
-                t
+    pub(crate) const fn terms(&self) -> &Cow<'static, [Term]> {
+        match self {
+            Definition::Base => &Cow::Borrowed(term::UNITY_SLICE),
+            Definition::NonDimensional(_) | Definition::NonDimensionalSpecial { .. } => {
+                &Cow::Borrowed(term::UNITY_SLICE)
             }
-        };
-        Self {
-            value,
-            terms,
-            function_set,
+            Definition::Dimensional { terms, .. }
+            | Definition::DimensionalSpecial { terms, .. } => terms,
         }
     }
 
-    pub(crate) fn new_non_dimensional(value: f64) -> Self {
-        Self {
-            value,
-            terms: vec![Term::new_unity()],
-            function_set: None,
+    pub(crate) fn function_set(&self) -> Option<FunctionSet> {
+        match self {
+            Definition::Base | Definition::NonDimensional(_) | Definition::Dimensional { .. } => {
+                None
+            }
+            Definition::NonDimensionalSpecial { function_set, .. }
+            | Definition::DimensionalSpecial { function_set, .. } => Some(*function_set),
         }
     }
 
-    pub(crate) const fn value(&self) -> f64 {
-        self.value
-    }
-
-    pub(crate) const fn terms(&self) -> &Vec<Term> {
-        &self.terms
-    }
-
+    // TODO: this was incorrectly _only_ checking terms; to be the unity, based
+    // on our heuristics, the old implementation required `terms` to be a `[Term::new_unity()]`
+    // _and_ the `value` == 1. This wasn't checking the value.
     pub(crate) fn is_unity(&self) -> bool {
-        self.terms.len() == 1 && self.terms[0].is_unity()
+        match self {
+            Definition::Base => true,
+            Definition::NonDimensional(value) => value.is_one(),
+            Definition::NonDimensionalSpecial { value, .. } => value.is_one(),
+            Definition::DimensionalSpecial { value, terms, .. } => {
+                value.is_one() && terms.len() == 1 && terms[0].is_unity()
+            }
+            Definition::Dimensional { value, terms } => {
+                value.is_one() && terms.len() == 1 && terms[0].is_unity()
+            }
+        }
     }
 }
 
-impl Default for Definition {
+impl<V> Default for Definition<V>
+where
+    V: One + PartialEq,
+{
     fn default() -> Self {
-        Self {
-            value: 1.0,
-            terms: vec![Term::new_unity()],
-            function_set: None,
-        }
+        Self::NonDimensional(num_traits::One::one())
     }
 }

@@ -15,6 +15,10 @@ use std::borrow::Cow;
 
 use crate::parser::{Atom, Prefix};
 
+pub const UNITY: Term = Term::new_unity();
+pub const UNITY_ARRAY: [Term; 1] = [UNITY];
+pub const UNITY_SLICE: &[Term; 1] = &UNITY_ARRAY;
+
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an
 /// Atom-less Term, which would simple be a Factor (with or without an
@@ -126,7 +130,8 @@ impl Term {
     /// to a combination of all of its fields as a `String`. For those former cases, we want to
     /// allow borrowing the `&'static str` to save on allocations.
     ///
-    pub fn as_str<'a>(&'a self) -> Cow<'a, str> {
+    #[must_use]
+    pub fn as_str(&self) -> Cow<'_, str> {
         use crate::UcumSymbol;
 
         if self.is_unity() && self.annotation.is_none() {
