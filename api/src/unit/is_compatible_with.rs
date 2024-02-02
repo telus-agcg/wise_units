@@ -2,24 +2,24 @@ use crate::{
     is_compatible_with::IsCompatibleWith, measurement::Measurement, parser::Term, unit::Unit,
 };
 
+#[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
+impl IsCompatibleWith for Unit {
+    #[inline]
+    fn is_compatible_with(&self, rhs: &Self) -> bool {
+        self.is_compatible_with(&rhs.terms)
+    }
+}
+
 impl IsCompatibleWith<Vec<Term>> for Unit {
     fn is_compatible_with(&self, rhs: &Vec<Term>) -> bool {
         self.terms.is_compatible_with(rhs)
     }
 }
 
-#[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
-impl IsCompatibleWith for Unit {
-    #[inline]
-    fn is_compatible_with(&self, rhs: &Self) -> bool {
-        self.is_compatible_with(rhs.terms())
-    }
-}
-
 impl IsCompatibleWith<Measurement> for Unit {
     #[inline]
     fn is_compatible_with(&self, rhs: &Measurement) -> bool {
-        (*self).is_compatible_with(rhs.unit().terms())
+        self.is_compatible_with(rhs.unit())
     }
 }
 
