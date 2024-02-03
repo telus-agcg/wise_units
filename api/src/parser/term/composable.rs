@@ -1,5 +1,8 @@
-use super::Term;
+use std::borrow::Cow;
+
 use crate::parser::{Composable, Composition};
+
+use super::Term;
 
 impl Composable for Term {
     /// Combines the `Composition` from the `Term`'s `Atom` with its own `exponent` to build a
@@ -22,7 +25,7 @@ impl Composable for Term {
     }
 }
 
-impl Composable for Vec<Term> {
+impl<'a> Composable for Cow<'a, [Term]> {
     fn composition(&self) -> Composition {
         self.iter()
             .fold(Composition::default(), |acc, term| acc * term.composition())

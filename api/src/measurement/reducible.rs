@@ -1,6 +1,6 @@
 use crate::{measurement::Measurement, reducible::Reducible, ucum_unit::UcumUnit};
 
-impl Reducible for Measurement {
+impl Reducible<f64> for Measurement {
     fn reduce_value(&self, value: f64) -> f64 {
         if self.is_special() {
             self.unit.reduce_value(value)

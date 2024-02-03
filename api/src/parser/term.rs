@@ -10,6 +10,10 @@ mod ucum_unit;
 
 use crate::parser::{Atom, Prefix};
 
+pub const UNITY: Term = Term::new_unity();
+pub const UNITY_ARRAY: [Term; 1] = [UNITY];
+pub const UNITY_ARRAY_REF: &[Term; 1] = &UNITY_ARRAY;
+
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an
 /// Atom-less Term, which would simple be a Factor (with or without an

@@ -29,7 +29,7 @@ mod dimension;
 mod error;
 mod function_set;
 mod prefix;
-mod term;
+pub(crate) mod term;
 mod terms;
 mod ucum_symbol;
 

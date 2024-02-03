@@ -1,10 +1,13 @@
 #![allow(clippy::large_enum_variant)]
 #![allow(clippy::result_large_err)]
 
-use super::Term;
+use std::borrow::Cow;
+
 use crate::{parser::ucum_symbol::UcumSymbol, reducible::Reducible};
 
-impl Reducible for Term {
+use super::Term;
+
+impl Reducible<f64> for Term {
     fn reduce_value(&self, value: f64) -> f64 {
         let atom_scalar = self.atom.map_or(1.0, |a| a.reduce_value(value));
         let prefix_scalar = self.prefix.map_or(1.0, |p| p.definition_value());
@@ -20,7 +23,7 @@ impl Reducible for Term {
     }
 }
 
-impl Reducible for Vec<Term> {
+impl<'a> Reducible<f64> for Cow<'a, [Term]> {
     fn reduce_value(&self, value: f64) -> f64 {
         self.iter()
             .fold(1.0, |acc, term| acc * term.reduce_value(value))

@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::{
     is_compatible_with::IsCompatibleWith, measurement::Measurement, parser::Term, unit::Unit,
 };
@@ -10,8 +12,8 @@ impl IsCompatibleWith for Unit {
     }
 }
 
-impl IsCompatibleWith<Vec<Term>> for Unit {
-    fn is_compatible_with(&self, rhs: &Vec<Term>) -> bool {
+impl<'a> IsCompatibleWith<Cow<'a, [Term]>> for Unit {
+    fn is_compatible_with(&self, rhs: &Cow<'a, [Term]>) -> bool {
         self.terms.is_compatible_with(rhs)
     }
 }

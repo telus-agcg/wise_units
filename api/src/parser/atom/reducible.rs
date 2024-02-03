@@ -1,6 +1,6 @@
 use crate::{reducible::Reducible, Atom, UcumUnit};
 
-impl Reducible for Atom {
+impl Reducible<f64> for Atom {
     fn reduce_value(&self, value: f64) -> f64 {
         self.definition().reduce_value(value)
     }

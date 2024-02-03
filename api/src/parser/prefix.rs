@@ -1,10 +1,7 @@
 use super::{Error, Visit};
 use crate::{
-    parser::{
-        definition::Definition, symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol,
-        Classification,
-    },
-    unit::Unit,
+    parser::{symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol, Classification},
+    unit::{self, Unit},
 };
 use pest::iterators::Pair;
 use std::fmt;
@@ -201,9 +198,7 @@ impl UcumSymbol for Prefix {
     }
 
     fn definition_unit(&self) -> Unit {
-        let definition = Definition::default();
-
-        Unit::new(definition.terms().clone())
+        unit::UNITY
     }
 }
 

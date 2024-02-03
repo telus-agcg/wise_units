@@ -1,7 +1,11 @@
+use std::borrow::Cow;
+
 use super::Term;
 use crate::invert::{Invert, ToInverse};
 
-// Term
+// ╭──────╮
+// │ Term │
+// ╰──────╯
 impl Invert for &mut Term {
     fn invert(self) {
         self.exponent = self.exponent.map_or(Some(-1), |e| match e {
@@ -22,7 +26,9 @@ impl ToInverse for Term {
     }
 }
 
-// Vec<Term>
+// ╭───────────╮
+// │ Vec<Term> │
+// ╰───────────╯
 impl Invert for &mut Vec<Term> {
     fn invert(self) {
         for term in self.iter_mut() {
@@ -32,6 +38,25 @@ impl Invert for &mut Vec<Term> {
 }
 
 impl ToInverse for Vec<Term> {
+    type Output = Self;
+
+    fn to_inverse(&self) -> Self::Output {
+        self.iter().map(ToInverse::to_inverse).collect()
+    }
+}
+
+// ╭─────────────────╮
+// │ Cow<'a, [Term]> │
+// ╰─────────────────╯
+impl<'a> Invert for &mut Cow<'a, [Term]> {
+    fn invert(self) {
+        for term in self.to_mut().iter_mut() {
+            term.invert();
+        }
+    }
+}
+
+impl<'a> ToInverse for Cow<'a, [Term]> {
     type Output = Self;
 
     fn to_inverse(&self) -> Self::Output {

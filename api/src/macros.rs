@@ -53,6 +53,13 @@ macro_rules! term {
     };
 }
 
+#[macro_export]
+macro_rules! terms {
+    ($($term:expr),*) => {
+        std::borrow::Cow::<[Term]>::Owned(vec![$($term)*])
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use crate::parser::{Atom, Prefix, Term};
