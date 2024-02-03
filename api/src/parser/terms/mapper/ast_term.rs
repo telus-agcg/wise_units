@@ -65,7 +65,7 @@ enum SecondToken {
 impl Finishable for AstTerm {
     fn finish(self) -> Vec<Term> {
         let mut component_terms = self.component.finish();
-        component_terms.extend(self.terms.into_iter());
+        component_terms.extend(self.terms);
 
         component_terms
     }

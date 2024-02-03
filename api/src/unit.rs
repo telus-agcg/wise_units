@@ -90,8 +90,9 @@ impl Unit {
 
     /// Creates a new `Unit` that's equivalent to "1".
     ///
+    #[deprecated(since = "0.23.0", note = "Please use unit::UNITY instead")]
     #[must_use]
-    pub fn new_unity() -> Self {
+    pub const fn new_unity() -> Self {
         UNITY
     }
 
@@ -178,7 +179,7 @@ mod tests {
 
     #[test]
     fn validate_is_unity() {
-        let unit = Unit::new_unity();
+        let unit = UNITY;
         assert!(unit.is_unity());
 
         let unit = Unit::new(Vec::new());

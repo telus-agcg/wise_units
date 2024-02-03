@@ -9,7 +9,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
     terms.extend_from_slice(lhs);
 
-    for term in rhs.iter() {
+    for term in rhs {
         terms.push(term.to_inverse());
     }
 
