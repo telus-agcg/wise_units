@@ -12,22 +12,22 @@ use crate::{
 //
 // T = the type of token returned containing its parse tree.
 //
-pub trait Parse<'input, 'a, T> {
+pub trait Parse<'input, T> {
     fn parse(
         input: &'input str,
-        prefixes: &'a PrefixCollection,
-        atoms: &'a AtomCollection,
+        prefixes: &'static PrefixCollection,
+        atoms: &'static AtomCollection,
     ) -> ParseResult<'input, T>;
 }
 
 /// Trait for parsing specifically either an Atom or a Prefix.
 ///
 #[allow(clippy::module_name_repetitions)]
-pub trait ParseSymbol<'input, 'a, C, V>
+pub trait ParseSymbol<'input, C, T>
 where
-    C: SymbolCollection<'a, V>,
+    C: SymbolCollection<T>,
 {
-    fn parse_symbol(input: &'input str, collection: &'a C) -> ParseResult<'input, &'a V>;
+    fn parse_symbol(input: &'input str, collection: &'static C) -> ParseResult<'input, &'static T>;
 }
 
 #[allow(clippy::module_name_repetitions)]

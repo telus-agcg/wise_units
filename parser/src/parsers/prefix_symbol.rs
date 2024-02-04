@@ -1,15 +1,17 @@
 use crate::{
     parse::{ParseResult, ParseSymbol},
     symbol_collection::SymbolCollection,
+    tokens::PrefixSymbol,
+    PrefixCollection,
 };
 
 pub(super) struct Parser;
 
-impl<'input, 'a, C, V> ParseSymbol<'input, 'a, C, V> for Parser
-where
-    C: SymbolCollection<'a, V>,
-{
-    fn parse_symbol(input: &'input str, prefixes: &'a C) -> ParseResult<'input, &'a V> {
+impl<'input> ParseSymbol<'input, PrefixCollection, PrefixSymbol> for Parser {
+    fn parse_symbol(
+        input: &'input str,
+        prefixes: &'static PrefixCollection,
+    ) -> ParseResult<'input, &'static PrefixSymbol> {
         prefixes
             .find_match(input)
             .map(|(prefix_symbol, prefix_str_len)| (prefix_symbol, &input[prefix_str_len..]))

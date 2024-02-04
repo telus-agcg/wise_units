@@ -8,3 +8,6 @@ rust-version.workspace = true
 
 [dependencies]
 num-rational = "0.4.1"
+
+[dev-dependencies]
+pretty_assertions = "1.4"
