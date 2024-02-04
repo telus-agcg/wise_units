@@ -4,6 +4,7 @@ pub mod derived_units;
 pub mod parse;
 pub mod parsers;
 pub mod prefix_collection;
+pub mod prefixes;
 pub mod symbol_collection;
 pub mod symbol_key;
 pub mod tokens;
