@@ -1,6 +1,5 @@
 use crate::{symbol_collection::SymbolCollection, tokens::AtomSymbol, SymbolKey};
 
-#[allow(missing_copy_implementations)]
 pub struct AtomCollection {
     pub(crate) inner: [(SymbolKey, AtomSymbol); 290],
 }
