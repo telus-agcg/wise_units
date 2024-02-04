@@ -1,5 +1,5 @@
 [workspace]
-members = ["api", "atom_generator", "definition_fetcher", "ffi"]
+members = ["api", "atom_generator", "definition_fetcher", "ffi", "parser"]
 resolver = "2"
 
 [workspace.package]
