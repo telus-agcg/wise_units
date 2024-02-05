@@ -21,11 +21,19 @@ pub mod custom_ffi;
 #[cfg(feature = "serde")]
 mod serde;
 
-use crate::{parser::Term, Error};
-use std::str::FromStr;
+use std::{borrow::Cow, str::FromStr};
 
 #[cfg(feature = "cffi")]
 use ffi_common::derive::FFI;
+
+use crate::{
+    parser::{term, Term},
+    Error,
+};
+
+pub const UNITY: Unit = Unit {
+    terms: Cow::Borrowed(term::UNITY_ARRAY_REF),
+};
 
 #[cfg_attr(
     feature = "cffi",
@@ -38,7 +46,7 @@ use ffi_common::derive::FFI;
 )]
 #[derive(Clone, Debug)]
 pub struct Unit {
-    terms: Vec<Term>,
+    terms: Cow<'static, [Term]>,
 }
 
 /// A `Unit` is the piece of data that represents a *valid* UCUM unit or
@@ -71,23 +79,27 @@ impl Unit {
     /// ```
     ///
     #[must_use]
-    pub fn new(terms: Vec<Term>) -> Self {
-        Self { terms }
+    pub fn new<T>(terms: T) -> Self
+    where
+        Cow<'static, [Term]>: From<T>,
+    {
+        Self {
+            terms: Cow::from(terms),
+        }
     }
 
     /// Creates a new `Unit` that's equivalent to "1".
     ///
+    #[deprecated(since = "0.23.0", note = "Please use unit::UNITY instead")]
     #[must_use]
-    pub fn new_unity() -> Self {
-        Self {
-            terms: vec![Term::new_unity()],
-        }
+    pub const fn new_unity() -> Self {
+        UNITY
     }
 
     /// Accessor for the `Term`s used that make up this `Unit`.
     ///
     #[must_use]
-    pub const fn terms(&self) -> &Vec<Term> {
+    pub const fn terms(&self) -> &Cow<'static, [Term]> {
         &self.terms
     }
 
@@ -167,7 +179,7 @@ mod tests {
 
     #[test]
     fn validate_is_unity() {
-        let unit = Unit::new_unity();
+        let unit = UNITY;
         assert!(unit.is_unity());
 
         let unit = Unit::new(Vec::new());

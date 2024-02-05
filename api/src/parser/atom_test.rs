@@ -3,7 +3,10 @@
 #![cfg(test)]
 
 use crate::{
-    parser::{Atom, Classification, Composable, Composition, Dimension, Prefix, Term, UcumSymbol},
+    parser::{
+        term::UNITY_ARRAY, Atom, Classification, Composable, Composition, Dimension, Prefix, Term,
+        UcumSymbol,
+    },
     ucum_unit::UcumUnit,
 };
 use approx::{assert_relative_eq, assert_ulps_eq};
@@ -18,11 +21,11 @@ macro_rules! validate_definition {
         #[test]
         fn $test_name() {
             let atom = Atom::$atom_name;
-            let expected = vec![$($expected_term),+];
+            let expected = [$($expected_term),+];
 
             assert_relative_eq!(atom.definition().value(), $expected_value);
             assert_ulps_eq!(atom.definition().value(), $expected_value);
-            assert_eq!(atom.definition().terms(), expected.as_slice());
+            assert_eq!(*atom.definition().terms(), expected.as_slice());
         }
     };
 }
@@ -207,12 +210,11 @@ fn validate_definitions_base_atoms() {
         Atom::Radian,
         Atom::Second,
     ];
-    let terms = vec![Term::new_unity()];
 
     for base_atom in base_atoms {
         assert_relative_eq!(base_atom.definition().value(), 1.0);
         assert_ulps_eq!(base_atom.definition().value(), 1.0);
-        assert_eq!(base_atom.definition().terms(), terms.as_slice());
+        assert_eq!(*base_atom.definition().terms(), UNITY_ARRAY.as_slice());
     }
 }
 
@@ -297,6 +299,13 @@ validate_definition!(
     1.0,
     term!(Deci, Meter, exponent: 3)
 );
+validate_definition!(
+    validate_definition_ten_star,
+    TheNumberTenForArbitraryPowersStar,
+    10.0,
+    term!(factor: 1)
+);
+validate_definition!(validate_definition_percent, Percent, 0.01, term!(factor: 1));
 validate_definition!(
     validate_definition_mole,
     Mole,

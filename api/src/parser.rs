@@ -18,7 +18,7 @@ pub mod composition;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;
 
-pub(self) mod symbols;
+mod symbols;
 
 mod annotation_composition;
 #[cfg(test)]
@@ -29,7 +29,7 @@ mod dimension;
 mod error;
 mod function_set;
 mod prefix;
-mod term;
+pub(crate) mod term;
 mod terms;
 mod ucum_symbol;
 

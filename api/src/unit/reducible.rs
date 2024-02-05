@@ -3,7 +3,7 @@ use crate::{reducible::Reducible, unit::Unit};
 //-----------------------------------------------------------------------------
 // impl Reducible
 //-----------------------------------------------------------------------------
-impl Reducible for Unit {
+impl Reducible<f64> for Unit {
     fn reduce_value(&self, value: f64) -> f64 {
         self.terms.reduce_value(value)
     }

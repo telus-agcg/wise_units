@@ -71,4 +71,3 @@ criterion_group!(
     convert_to_unit_group,
 );
 criterion_main!(measurement_benches);
-

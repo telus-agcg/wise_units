@@ -7,6 +7,6 @@ impl ::std::ops::Deref for Unit {
     type Target = [Term];
 
     fn deref(&self) -> &[Term] {
-        self.terms.as_slice()
+        &self.terms
     }
 }

@@ -3,17 +3,17 @@
 
 // Internal structs for mapping parser Rule data to an intermediate
 // representation of a Unit.
-pub(self) mod annotatable;
-pub(self) mod annotation;
-pub(self) mod ast_term;
-pub(self) mod basic_component;
-pub(self) mod component;
-pub(self) mod digits;
-pub(self) mod exponent;
-pub(self) mod factor;
-pub(self) mod finishable;
-pub(self) mod main_term;
-pub(self) mod simple_unit;
+mod annotatable;
+mod annotation;
+mod ast_term;
+mod basic_component;
+mod component;
+mod digits;
+mod exponent;
+mod factor;
+mod finishable;
+mod main_term;
+mod simple_unit;
 
 use self::{
     annotatable::Annotatable, annotation::Annotation, ast_term::AstTerm,

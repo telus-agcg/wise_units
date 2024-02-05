@@ -149,4 +149,3 @@ criterion_group!(
     partial_ord_gt_group,
 );
 criterion_main!(unit_benches);
-
