@@ -10,4 +10,9 @@ rust-version.workspace = true
 num-rational = "0.4.1"
 
 [dev-dependencies]
-pretty_assertions = "1.4"
+criterion.workspace = true
+pretty_assertions.workspace = true
+
+[[bench]]
+name = "parse_benchmarks"
+harness = false

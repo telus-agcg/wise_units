@@ -1,6 +1,5 @@
 #![deny(unused_extern_crates)]
 #![warn(
-    box_pointers,
     clippy::all,
     clippy::correctness,
     clippy::nursery,
@@ -28,9 +27,11 @@ pub mod field_eq;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
-pub mod parser;
 pub mod reduce;
 pub mod unit;
+
+// #[cfg(not(feature = "new-parser"))]
+pub mod parser;
 
 mod reducible;
 mod ucum_unit;

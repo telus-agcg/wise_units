@@ -291,7 +291,7 @@ mod tests {
     macro_rules! validate_op {
         ($result:expr, $expected:expr) => {
             let expected = $expected.unwrap();
-            assert_eq!(
+            pretty_assertions::assert_eq!(
                 $result,
                 expected,
                 "expected Measurements to be equal;\nresult: {:?};\nunit string: {}",
@@ -338,7 +338,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(3.0, "m").unwrap();
 
-            assert_eq!((m1 + m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((m1 + m2).unwrap(), expected);
         }
 
         #[test]
@@ -347,7 +347,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(3.0, "m").unwrap();
 
-            assert_eq!((&m1 + &m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((&m1 + &m2).unwrap(), expected);
         }
 
         #[test]
@@ -356,7 +356,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(3.0, "m").unwrap();
 
-            assert_eq!((m1 + &m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((m1 + &m2).unwrap(), expected);
         }
 
         #[test]
@@ -365,7 +365,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(3.0, "m").unwrap();
 
-            assert_eq!((&m1 + m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((&m1 + m2).unwrap(), expected);
         }
 
         #[test]
@@ -377,7 +377,7 @@ mod tests {
             let m2 = Measurement::new(7.0, Unit::new(vec![term_tree2]));
             let expected = Measurement::new(17.0, Unit::new(vec![expected_term_tree]));
 
-            assert_eq!((&m1 + m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((&m1 + m2).unwrap(), expected);
         }
 
         #[test]
@@ -389,7 +389,7 @@ mod tests {
             let m2 = Measurement::new(7.0, Unit::new(vec![term_tree2]));
             let expected = Measurement::new(3.0, Unit::new(vec![expected_term_tree]));
 
-            assert_eq!((&m1 - m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((&m1 - m2).unwrap(), expected);
         }
     }
 
@@ -402,7 +402,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(-1.0, "m").unwrap();
 
-            assert_eq!((m1 - m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((m1 - m2).unwrap(), expected);
         }
 
         #[test]
@@ -411,7 +411,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(-1.0, "m").unwrap();
 
-            assert_eq!((&m1 - &m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((&m1 - &m2).unwrap(), expected);
         }
 
         #[test]
@@ -420,7 +420,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(-1.0, "m").unwrap();
 
-            assert_eq!((m1 - &m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((m1 - &m2).unwrap(), expected);
         }
 
         #[test]
@@ -429,7 +429,7 @@ mod tests {
             let m2 = Measurement::try_new(2.0, "m").unwrap();
             let expected = Measurement::try_new(-1.0, "m").unwrap();
 
-            assert_eq!((&m1 - m2).unwrap(), expected);
+            pretty_assertions::assert_eq!((&m1 - m2).unwrap(), expected);
         }
     }
 
@@ -529,7 +529,7 @@ mod tests {
             let m = Measurement::try_new(10.0, "m").unwrap();
             let expected = Measurement::try_new(200.0, "m").unwrap();
 
-            assert_eq!(m.mul(20.0), expected);
+            pretty_assertions::assert_eq!(m.mul(20.0), expected);
         }
     }
 
@@ -609,7 +609,7 @@ mod tests {
             let m = Measurement::try_new(10.0, "m").unwrap();
             let expected = Measurement::try_new(2.0, "m").unwrap();
 
-            assert_eq!(m.div(5.0), expected);
+            pretty_assertions::assert_eq!(m.div(5.0), expected);
         }
     }
 }

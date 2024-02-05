@@ -45,12 +45,38 @@ use self::{
 };
 use pest::{iterators::Pair, Parser};
 
+/// Main UCUM string parsing function.
+///
+/// # Errors
+///
+/// Errors if the string is not a UCUM-compliant unit string.
+///
+#[cfg(not(feature = "new-parser"))]
 #[inline]
-pub(crate) fn parse(expression: &str) -> Result<Vec<Term>, Error> {
+pub fn parse(expression: &str) -> Result<Vec<Term>, Error> {
     match TermParser::parse(TermRule::main_term, expression) {
         Ok(pairs) => Ok(terms::mapper::map(pairs)?),
         Err(_) => Err(Error::UnknownUnitString(expression.to_string())),
     }
+}
+
+#[cfg(feature = "new-parser")]
+mod transform;
+
+#[cfg(feature = "new-parser")]
+#[inline]
+pub fn parse(expression: &str) -> Result<Vec<Term>, Error> {
+    use transform::FromToken;
+
+    wise_units_parser::parse(expression)
+        .map(|main_term| Vec::<Term>::from_token(main_term))
+        .map_err(|parser_error| match parser_error {
+            wise_units_parser::Error::Unparsable(s) => Error::UnknownUnitString(s.clone()),
+            wise_units_parser::Error::PartialMatch {
+                matching,
+                remaining,
+            } => Error::UnknownUnitString(format!("{matching}{remaining}")),
+        })
 }
 
 trait Visit<R> {
