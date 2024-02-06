@@ -19,6 +19,7 @@ mod ucum_unit;
 
 #[cfg(feature = "cffi")]
 pub mod custom_ffi;
+
 #[cfg(feature = "serde")]
 mod serde;
 
@@ -120,7 +121,7 @@ impl Unit {
     ///
     #[must_use]
     pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1 && self.terms[0].is_unity()
+        &*self.terms == term::UNITY_ARRAY_REF
     }
 
     /// Turns the Unit's Terms into Strings and combines them accordingly.

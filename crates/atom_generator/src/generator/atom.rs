@@ -66,7 +66,7 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
 
         impl UcumUnit for Atom {
             fn scalar(&self) -> f64 {
-                self.reduce_value(1.0)
+                self.reduce_value(num_traits::One::one())
             }
 
             fn magnitude(&self) -> f64 {

@@ -1,9 +1,11 @@
-use super::Unit;
+use std::{fmt, str::FromStr};
+
 use serde::{
     de::{self, Deserialize, Deserializer, Unexpected, Visitor},
     ser::{Serialize, Serializer},
 };
-use std::{fmt, str::FromStr};
+
+use super::Unit;
 
 struct UnitVisitor;
 
@@ -76,7 +78,7 @@ mod tests {
 
     #[test]
     fn validate_serde_json_empty_terms() {
-        let expected_unit = Unit::new_unity();
+        let expected_unit = crate::unit::UNITY;
         let expected_json = r#""1""#;
         validate_unit(&expected_unit, expected_json);
         validate_json(expected_json, &expected_unit);

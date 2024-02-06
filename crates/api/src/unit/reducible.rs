@@ -26,7 +26,7 @@ mod tests {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($unit_str).unwrap();
-                assert_relative_eq!(unit.reduce_value(1.0), $expected_value);
+                assert_relative_eq!(unit.reduce_value(num_traits::One::one()), $expected_value);
             }
         };
     }
@@ -36,7 +36,7 @@ mod tests {
             #[test]
             fn $test_name() {
                 let unit = Unit::from_str($unit_str).unwrap();
-                let scalar = unit.reduce_value(1.0);
+                let scalar = unit.reduce_value(num_traits::One::one());
                 assert_relative_eq!(unit.calculate_magnitude(scalar), $expected_value);
             }
         };

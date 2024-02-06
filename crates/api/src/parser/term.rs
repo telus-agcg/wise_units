@@ -11,7 +11,15 @@ mod ucum_unit;
 
 use crate::parser::{Atom, Prefix};
 
-pub const UNITY: Term = Term::new_unity();
+pub const UNITY: Term = {
+    Term {
+        atom: None,
+        prefix: None,
+        factor: Some(1),
+        exponent: None,
+        annotation: None,
+    }
+};
 pub const UNITY_ARRAY: [Term; 1] = [UNITY];
 pub const UNITY_ARRAY_REF: &[Term; 1] = &UNITY_ARRAY;
 
@@ -46,13 +54,7 @@ impl Term {
     #[deprecated(since = "1.0.0", note = "Please use term::UNITY instead")]
     #[must_use]
     pub const fn new_unity() -> Self {
-        Self {
-            atom: None,
-            prefix: None,
-            factor: Some(1),
-            exponent: None,
-            annotation: None,
-        }
+        UNITY
     }
 
     /// A `Term` is a unity `Term` if represents "1", which technically means
@@ -62,6 +64,9 @@ impl Term {
     /// * it has no `exponent`
     /// * it has no `Atom`
     /// * it has no `Prefix`
+    ///
+    /// NOTE: This does not check the annotation since that does not effect the
+    /// quantity of the Term.
     ///
     #[must_use]
     pub fn is_unity(&self) -> bool {
@@ -126,11 +131,10 @@ impl Term {
 
 #[cfg(test)]
 mod tests {
-    use super::Term;
+    use super::*;
 
     #[test]
     fn validate_new_unity() {
-        let term = Term::new_unity();
-        assert_eq!(term.to_string(), "1");
+        assert_eq!(UNITY.to_string(), "1");
     }
 }

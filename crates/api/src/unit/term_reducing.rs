@@ -1,4 +1,6 @@
-use crate::parser::{Atom, Prefix, Term};
+use num_traits::Zero;
+
+use crate::parser::{term, Atom, Prefix, Term};
 use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.
@@ -51,7 +53,7 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 
     // If everything is reduced away, the effective Unit should be "1".
     if map.is_empty() {
-        vec![Term::new_unity()]
+        vec![term::UNITY]
     } else {
         // Reconstructs the map into the Vec<Term>.
         map.into_iter().map(Term::from).collect()
@@ -65,7 +67,12 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
     terms
         .iter()
-        .map(|term| (ComposableTerm::from(term), term.exponent.unwrap_or(1)))
+        .map(|term| {
+            (
+                ComposableTerm::from(term),
+                term.exponent.unwrap_or_else(num_traits::One::one),
+            )
+        })
         .fold(
             BTreeMap::<ComposableTerm, i32>::new(),
             |mut map, (key, exponent)| {
@@ -79,6 +86,6 @@ fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
         )
         .into_iter()
         // Filter out things that have no values
-        .filter(|(ct, exponent)| ct.has_value() && *exponent != 0)
+        .filter(|(ct, exponent)| ct.has_value() && !exponent.is_zero())
         .collect()
 }

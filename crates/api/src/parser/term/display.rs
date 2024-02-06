@@ -52,7 +52,7 @@ fn extract_term_string_atom(term_string: &mut String, term: &Term) {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::{Atom, Prefix, Term};
+    use crate::parser::{term::UNITY, Atom, Prefix, Term};
 
     macro_rules! validate_display {
         ($test_name:ident, $term:expr, $output:expr) => {
@@ -82,11 +82,11 @@ mod tests {
         },
         "{seed}"
     );
-    validate_display!(validate_display_unity, Term::new_unity(), "1");
+    validate_display!(validate_display_unity, UNITY, "1");
     validate_display!(
         validate_display_unity_annotation,
         {
-            let mut t = Term::new_unity();
+            let mut t = UNITY;
             t.annotation = Some("seed".to_string());
             t
         },
