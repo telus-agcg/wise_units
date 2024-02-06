@@ -10,12 +10,28 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - PCC-174: Derive `Hash` for `Atom`.
+- PLCC-287: `impl num_traits::Inv for Measurement`, `Unit`, and `Term`.
+- PLCC-287: `impl num_traits::One for Measurement`.
+- PLCC-287: `impl From<&Measurement> for f64`.
+- PLCC-287: `impl num_traits::ToPrimitive for Measurement`.
+- Added `Unit::into_terms()` for cases where you just need the `Term`s of the `Unit`.
+- Added `unit` constant: `UNITY`
+- Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
+- Added `measurement!()` macro for wrapping `Measurement::try_new().unwrap()`.
 
 ### Changed
 
 - Rust minimum version updated to `1.64.0`.
 - (Internal) Rust Codegen is now using `quote` instead of `handlebars` (the pest parser grammar is
   still generated using `handlebars`).
+- (Internal) `Definition` is now an enum and is generic over value type `V`.
+
+### Deprecated
+
+- PLCC-287: Deprecated traits `Invert`, `ToInverse`, `IntoInverse`; implementations of
+  `num_traits::Inv` cover these now.
+- The new `unit::UNITY` constant deprecates `Unit::is_unity()`.
+- The new `term::UNITY*` constants deprecate `Term::is_unity()`.
 
 ## [0.22.0] — 2022-03-23
 

@@ -32,10 +32,6 @@ mod tests {
         ($test_name:ident, $subject:expr, $expected:expr) => {
             #[test]
             fn $test_name() {
-                // Test &Measurement impl
-                // let new_measurement = Inv::inv(&$subject);
-                // assert_eq!(new_measurement, $expected);
-
                 // Test &mut Measurement impl
                 let mut mut_borrowed = $subject.clone();
                 let _ = Inv::inv(&mut mut_borrowed);

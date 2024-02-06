@@ -1,3 +1,10 @@
+#[macro_export]
+macro_rules! measurement {
+    ($value:expr, $unit:expr) => {
+        $crate::Measurement::try_new($value, $unit).unwrap()
+    };
+}
+
 /// The `term!` macro makes building `Term`s slightly more ergonomic and terse.
 /// It was initially made for testing purposes (since `Term`s are really mainly
 /// used by internal APIs), but since they are used all over the place, it may
