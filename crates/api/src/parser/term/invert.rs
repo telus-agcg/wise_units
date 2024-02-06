@@ -1,17 +1,20 @@
+// TODO: Remove in 1.0.0 release.
+#![allow(deprecated)]
+
 use std::borrow::Cow;
 
-use super::Term;
+use num_traits::Inv;
+
 use crate::invert::{Invert, ToInverse};
+
+use super::Term;
 
 // ╭──────╮
 // │ Term │
 // ╰──────╯
 impl Invert for &mut Term {
     fn invert(self) {
-        self.exponent = self.exponent.map_or(Some(-1), |e| match e {
-            -1 => None,
-            _ => Some(-e),
-        });
+        let _ = Inv::inv(self);
     }
 }
 
@@ -19,10 +22,7 @@ impl ToInverse for Term {
     type Output = Self;
 
     fn to_inverse(&self) -> Self::Output {
-        let mut new_term = self.clone();
-        new_term.invert();
-
-        new_term
+        Inv::inv(self)
     }
 }
 
@@ -32,7 +32,7 @@ impl ToInverse for Term {
 impl Invert for &mut Vec<Term> {
     fn invert(self) {
         for term in self.iter_mut() {
-            term.invert();
+            let _ = Inv::inv(term);
         }
     }
 }
@@ -41,7 +41,7 @@ impl ToInverse for Vec<Term> {
     type Output = Self;
 
     fn to_inverse(&self) -> Self::Output {
-        self.iter().map(ToInverse::to_inverse).collect()
+        self.iter().map(Inv::inv).collect()
     }
 }
 
@@ -51,7 +51,7 @@ impl ToInverse for Vec<Term> {
 impl<'a> Invert for &mut Cow<'a, [Term]> {
     fn invert(self) {
         for term in self.to_mut().iter_mut() {
-            term.invert();
+            let _ = term.inv();
         }
     }
 }
@@ -60,7 +60,7 @@ impl<'a> ToInverse for Cow<'a, [Term]> {
     type Output = Self;
 
     fn to_inverse(&self) -> Self::Output {
-        self.iter().map(ToInverse::to_inverse).collect()
+        self.iter().map(Inv::inv).collect()
     }
 }
 

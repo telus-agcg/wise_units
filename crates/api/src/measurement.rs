@@ -4,6 +4,7 @@ mod display;
 mod field_eq;
 mod invert;
 mod is_compatible_with;
+mod num_traits;
 mod ops;
 mod partial_eq;
 mod partial_ord;

@@ -1,10 +1,14 @@
-use super::Unit;
+// TODO: Remove in 1.0.0 release.
+#![allow(deprecated)]
+
 use crate::invert::{Invert, ToInverse};
+
+use super::Unit;
 
 impl Invert for &mut Unit {
     #[inline]
     fn invert(self) {
-        self.terms.invert();
+        let _ = num_traits::Inv::inv(self);
     }
 }
 
@@ -13,7 +17,7 @@ impl ToInverse for Unit {
 
     #[inline]
     fn to_inverse(&self) -> Self::Output {
-        Self::new(self.terms.to_inverse())
+        num_traits::Inv::inv(self.clone())
     }
 }
 

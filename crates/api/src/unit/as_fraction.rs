@@ -1,4 +1,6 @@
-use crate::{as_fraction::AsFraction, invert::ToInverse, parser::Term, unit::Unit};
+use num_traits::Inv;
+
+use crate::{as_fraction::AsFraction, parser::Term, unit::Unit};
 
 impl AsFraction for Unit {
     type Numerator = Option<Self>;
@@ -26,7 +28,7 @@ impl AsFraction for Unit {
             .terms
             .iter()
             .filter_map(|term| match term.exponent {
-                Some(e) if e.is_negative() => Some(term.to_inverse()),
+                Some(e) if e.is_negative() => Some(term.inv()),
                 _ => None,
             })
             .collect();

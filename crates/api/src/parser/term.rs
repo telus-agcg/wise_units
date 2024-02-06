@@ -4,6 +4,7 @@ mod display;
 mod field_eq;
 mod invert;
 mod is_compatible_with;
+mod num_traits;
 mod partial_eq;
 mod reducible;
 mod ucum_unit;
@@ -42,6 +43,7 @@ impl Term {
 
     /// Creates a new `Term` that's equivalent to the unit "1".
     ///
+    #[deprecated(since = "1.0.0", note = "Please use term::UNITY instead")]
     #[must_use]
     pub const fn new_unity() -> Self {
         Self {

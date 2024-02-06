@@ -1,32 +1,34 @@
-use super::Measurement;
+// TODO: Remove in 1.0.0 release.
+#![allow(deprecated)]
+
 use crate::{
     invert::{Invert, ToInverse},
     Error,
 };
 
+use super::Measurement;
+
 impl Invert for &mut Measurement {
     #[inline]
     fn invert(self) {
-        self.value = 1.0 / self.value;
-        self.unit.invert();
+        let _ = num_traits::Inv::inv(self);
     }
 }
 
+// TODO: Remove the check for divide by 0 in the future.
+//
 impl ToInverse for Measurement {
     type Output = Result<Self, Error>;
 
     #[inline]
     fn to_inverse(&self) -> Self::Output {
-        let new_value = 1.0 / self.value;
+        let m = num_traits::Inv::inv(self.clone());
 
-        if new_value.is_infinite() {
+        if m.value.is_infinite() {
             return Err(Error::DivideByZero);
         }
 
-        Ok(Self {
-            value: new_value,
-            unit: self.unit.to_inverse(),
-        })
+        Ok(m)
     }
 }
 

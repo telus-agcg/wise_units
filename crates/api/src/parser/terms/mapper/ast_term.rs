@@ -1,6 +1,9 @@
-use super::{Component, Error, Finishable, Term, Visit};
-use crate::{invert::Invert, parser::terms::term_parser::Rule};
+use num_traits::Inv;
 use pest::iterators::Pair;
+
+use crate::parser::terms::term_parser::Rule;
+
+use super::{Component, Error, Finishable, Term, Visit};
 
 pub(super) struct AstTerm {
     pub(super) component: Component,
@@ -36,18 +39,19 @@ impl AstTerm {
         match pairs.next() {
             Some(third) => match third.as_rule() {
                 Rule::term => {
-                    let mut new_terms: Vec<Term> = Self::visit(third)?.finish();
+                    let new_terms: Vec<Term> = Self::visit(third)?.finish();
+                    let mut u = crate::Unit::new(new_terms);
 
                     match op {
                         SecondToken::Dot => (),
                         SecondToken::Slash => {
-                            new_terms.invert();
+                            let _ = Inv::inv(&mut u);
                         }
                     }
 
                     Ok(Self {
                         component,
-                        terms: new_terms,
+                        terms: u.into_terms().to_vec(),
                     })
                 }
                 _ => unreachable!(),
