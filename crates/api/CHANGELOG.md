@@ -14,6 +14,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - PLCC-287: `impl num_traits::One for Measurement`.
 - PLCC-287: `impl From<&Measurement> for f64`.
 - PLCC-287: `impl num_traits::ToPrimitive for Measurement`.
+- PLCC-287: `impl num_traits::FromPrimitive for Measurement`.
 - PLCC-287: `impl num_traits::NumCast for Measurement`.
 - Added `Unit::into_terms()` for cases where you just need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
