@@ -20,6 +20,15 @@ impl ToPrimitive for Measurement {
     }
 }
 
+impl num_traits::NumCast for Measurement {
+    fn from<T: ToPrimitive>(n: T) -> Option<Self> {
+        Some(Self {
+            value: n.to_f64()?,
+            unit: crate::unit::UNITY,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use approx::assert_ulps_eq;
@@ -47,5 +56,22 @@ mod tests {
         assert_ulps_eq!(-0.01, f64::from(&m));
         assert_eq!(0, m.to_i64().unwrap());
         assert_eq!(0, m.to_u64().unwrap());
+    }
+
+    #[test]
+    fn numcast_test() {
+        use num_traits::NumCast;
+
+        let output = <Measurement as NumCast>::from(std::u32::MAX).unwrap();
+        assert_eq!(
+            Measurement::new(std::u32::MAX.into(), crate::unit::UNITY),
+            output
+        );
+
+        let output = <Measurement as NumCast>::from(std::i32::MIN).unwrap();
+        assert_eq!(
+            Measurement::new(std::i32::MIN.into(), crate::unit::UNITY),
+            output
+        );
     }
 }
