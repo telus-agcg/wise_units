@@ -1,3 +1,5 @@
+mod num_traits;
+
 use super::{Error, Visit};
 use crate::{
     parser::{symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol, Classification},
@@ -6,30 +8,50 @@ use crate::{
 use pest::iterators::Pair;
 use std::fmt;
 
-const ATTO: f64 = 1.0e-18;
-const CENTI: f64 = 1.0e-2;
 const DECI: f64 = 1.0e-1;
-const DEKA: f64 = 1.0e1;
-const EXA: f64 = 1.0e18;
-const FEMTO: f64 = 1.0e-15;
-const GIBI: f64 = 1_073_741_824.0;
-const GIGA: f64 = 1.0e9;
-const HECTO: f64 = 1.0e2;
-const KIBI: f64 = 1024.0;
-const KILO: f64 = 1.0e3;
-const MEBI: f64 = 1_048_576.0;
-const MEGA: f64 = 1.0e6;
-const MICRO: f64 = 1.0e-6;
+const CENTI: f64 = 1.0e-2;
 const MILLI: f64 = 1.0e-3;
+const MICRO: f64 = 1.0e-6;
 const NANO: f64 = 1.0e-9;
-const PETA: f64 = 1.0e15;
 const PICO: f64 = 1.0e-12;
-const TEBI: f64 = 1_099_511_627_776.0;
-const TERA: f64 = 1.0e12;
-const YOCTO: f64 = 1.0e-24;
-const YOTTA: f64 = 1.0e24;
+const FEMTO: f64 = 1.0e-15;
+const ATTO: f64 = 1.0e-18;
 const ZEPTO: f64 = 1.0e-21;
+const YOCTO: f64 = 1.0e-24;
+
+const DEKA: f64 = 1.0e1;
+const HECTO: f64 = 1.0e2;
+const KILO: f64 = 1.0e3;
+const MEGA: f64 = 1.0e6;
+const GIGA: f64 = 1.0e9;
+const TERA: f64 = 1.0e12;
+const PETA: f64 = 1.0e15;
+const EXA: f64 = 1.0e18;
 const ZETTA: f64 = 1.0e21;
+const YOTTA: f64 = 1.0e24;
+
+const KIBI: f64 = 1024.0;
+const MEBI: f64 = 1_048_576.0;
+const GIBI: f64 = 1_073_741_824.0;
+const TEBI: f64 = 1_099_511_627_776.0;
+
+pub(crate) mod u128 {
+    pub(crate) const DEKA: u128 = 10;
+    pub(crate) const HECTO: u128 = 100;
+    pub(crate) const KILO: u128 = 1000;
+    pub(crate) const MEGA: u128 = 1_000_000;
+    pub(crate) const GIGA: u128 = 1_000_000_000;
+    pub(crate) const TERA: u128 = 1_000_000_000_000;
+    pub(crate) const PETA: u128 = 1_000_000_000_000_000;
+    pub(crate) const EXA: u128 = 1_000_000_000_000_000_000;
+    pub(crate) const ZETTA: u128 = 1_000_000_000_000_000_000_000;
+    pub(crate) const YOTTA: u128 = 1_000_000_000_000_000_000_000_000;
+
+    pub(crate) const KIBI: u128 = 1024;
+    pub(crate) const GIBI: u128 = 1_073_741_824;
+    pub(crate) const MEBI: u128 = 1_048_576;
+    pub(crate) const TEBI: u128 = 1_099_511_627_776;
+}
 
 /// A `Prefix` is essentially a multiplier for an `Atom` within a `Term`; ex.
 /// the "c" in "cm" modifies meter by 0.01. The UCUM spec says these should
