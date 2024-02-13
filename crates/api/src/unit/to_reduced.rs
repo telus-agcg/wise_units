@@ -64,10 +64,10 @@ impl ToReduced for Unit {
                 let mut new_terms: Vec<Term> =
                     Vec::with_capacity(new_numerators.len() + new_denominators.len());
                 new_terms.extend_from_slice(&new_numerators);
-                let denom_unit = Self {
-                    terms: Cow::Owned(new_denominators),
-                };
-                new_terms.extend_from_slice(&denom_unit.inv().terms);
+
+                let new_denominators =
+                    crate::parser::term::num_traits::inv::inv_terms_into(new_denominators);
+                new_terms.extend_from_slice(&new_denominators);
 
                 Self::new(super::term_reducing::reduce_terms(&new_terms))
             }

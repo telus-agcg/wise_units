@@ -39,19 +39,18 @@ impl AstTerm {
         match pairs.next() {
             Some(third) => match third.as_rule() {
                 Rule::term => {
-                    let new_terms: Vec<Term> = Self::visit(third)?.finish();
-                    let mut u = crate::Unit::new(new_terms);
+                    let mut new_terms: Vec<Term> = Self::visit(third)?.finish();
 
                     match op {
                         SecondToken::Dot => (),
                         SecondToken::Slash => {
-                            let _ = Inv::inv(&mut u);
+                            crate::parser::term::num_traits::inv::inv_terms(&mut new_terms);
                         }
                     }
 
                     Ok(Self {
                         component,
-                        terms: u.into_terms().to_vec(),
+                        terms: new_terms,
                     })
                 }
                 _ => unreachable!(),

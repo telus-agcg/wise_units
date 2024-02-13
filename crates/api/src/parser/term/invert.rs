@@ -67,10 +67,7 @@ impl<'a> ToInverse for Cow<'a, [Term]> {
 #[cfg(test)]
 mod tests {
     mod term {
-        use crate::{
-            invert::{Invert, ToInverse},
-            Atom, Term,
-        };
+        use crate::invert::{Invert, ToInverse};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {
@@ -116,10 +113,7 @@ mod tests {
     }
 
     mod terms {
-        use crate::{
-            invert::{Invert, ToInverse},
-            Atom, Prefix, Term,
-        };
+        use crate::invert::{Invert, ToInverse};
 
         #[test]
         fn validate_invert_numerator_no_exponent() {

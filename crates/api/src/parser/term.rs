@@ -4,7 +4,7 @@ mod display;
 mod field_eq;
 mod invert;
 mod is_compatible_with;
-mod num_traits;
+pub(crate) mod num_traits;
 mod partial_eq;
 mod reducible;
 mod ucum_unit;

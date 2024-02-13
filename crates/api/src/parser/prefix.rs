@@ -48,8 +48,8 @@ pub(crate) mod u128 {
     pub(crate) const YOTTA: u128 = 1_000_000_000_000_000_000_000_000;
 
     pub(crate) const KIBI: u128 = 1024;
-    pub(crate) const GIBI: u128 = 1_073_741_824;
     pub(crate) const MEBI: u128 = 1_048_576;
+    pub(crate) const GIBI: u128 = 1_073_741_824;
     pub(crate) const TEBI: u128 = 1_099_511_627_776;
 }
 

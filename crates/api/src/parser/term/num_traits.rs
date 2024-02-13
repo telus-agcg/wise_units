@@ -1,2 +1,2 @@
-mod inv;
+pub(crate) mod inv;
 mod pow;

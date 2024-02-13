@@ -39,10 +39,22 @@ impl<'a> Inv for &'a mut Term {
     }
 }
 
+// This solves not being able to `impl Inv for &mut Vec<Term>`.
+//
+pub(crate) fn inv_terms(terms: &mut Vec<Term>) {
+    for term in terms {
+        let _ = term.inv();
+    }
+}
+
+// This solves not being able to `impl Inv for Vec<Term>`.
+//
+pub(crate) fn inv_terms_into(terms: Vec<Term>) -> Vec<Term> {
+    terms.into_iter().map(num_traits::Inv::inv).collect()
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::{Atom, Term};
-
     use super::*;
 
     macro_rules! test_inv {

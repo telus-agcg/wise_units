@@ -13,10 +13,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - PLCC-287: `impl num_traits::Inv for Measurement`, `Unit`, and `Term`.
 - PLCC-287: `impl num_traits::One for Measurement`.
 - PLCC-287: `impl From<&Measurement> for f64`.
-- PLCC-287: `impl num_traits::ToPrimitive for Measurement`.
-- PLCC-287: `impl num_traits::FromPrimitive for Measurement`.
+- PLCC-287: `impl num_traits::ToPrimitive for Measurement`, `Prefix`.
+- PLCC-287: `impl num_traits::FromPrimitive for Measurement`, `Prefix`.
 - PLCC-287: `impl num_traits::NumCast for Measurement`.
-- Added `Unit::into_terms()` for cases where you just need the `Term`s of the `Unit`.
+- PLCC-287: `impl num_traits::Pow<i32> for Measurement`, `Unit`, `Term`.
+- PLCC-287: `impl std::ops::Neg for Measurement`.
+- Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
 - Added `measurement!()` macro for wrapping `Measurement::try_new().unwrap()`.
@@ -41,7 +43,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Implemented `AsRef<Self>` for `Measurement` and `Unit`. Allows for downstream wrapper types to
   implement other functionality for all types via the `AsRef` implementation.
-- Implemented `TryFrom<&str> for Unit` (which just calls `from_str()`) to allow for downstream
+- Implemented `TryFrom<&str> for Unit` (which only calls `from_str()`) to allow for downstream
   wrapper implementations around `Unit`.
 - New `const` `Composition` methods: `new_dimless()`, `new_any()`.
 - New `composition` `const`s for common dimensional compositions.

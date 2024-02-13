@@ -19,7 +19,7 @@ macro_rules! term {
 
     ($prefix:ident, $atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = Term::new(Some(Prefix::$prefix), Some(Atom::$atom));
+            let mut term = $crate::Term::new(Some($crate::Prefix::$prefix), Some($crate::Atom::$atom));
             $(
                 term!(@params term, $attribute_name: $attribute_value);
             )+
@@ -28,12 +28,12 @@ macro_rules! term {
     };
 
     ($prefix:ident, $atom:ident) => {
-        Term::new(Some(Prefix::$prefix), Some(Atom::$atom))
+        $crate::Term::new(Some(Prefix::$prefix), Some($crate::Atom::$atom))
     };
 
     ($atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = Term::new(None, Some(Atom::$atom));
+            let mut term = $crate::Term::new(None, Some($crate::Atom::$atom));
             $(
                 term!(@params term, $attribute_name: $attribute_value);
             )+
@@ -42,12 +42,12 @@ macro_rules! term {
     };
 
     ($atom:ident) => {
-        Term::new(None, Some(Atom::$atom))
+        $crate::Term::new(None, Some($crate::Atom::$atom))
     };
 
     ($($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = Term::default();
+            let mut term = $crate::Term::default();
             $(
                 term!(@params term, $attribute_name: $attribute_value);
             )+
@@ -56,14 +56,14 @@ macro_rules! term {
     };
 
     () => {
-        Term::default()
+        $crate::Term::default()
     };
 }
 
 #[macro_export]
 macro_rules! terms {
     ($($term:expr),*) => {
-        std::borrow::Cow::<[Term]>::Owned(vec![$($term)*])
+        std::borrow::Cow::<[$crate::Term]>::Owned(vec![$($term)*])
     };
 }
 
