@@ -1,3 +1,5 @@
+use num_traits::One;
+
 use crate::{measurement::Measurement, reducible::Reducible, ucum_unit::UcumUnit};
 
 impl Reducible<f64> for Measurement {
@@ -5,7 +7,7 @@ impl Reducible<f64> for Measurement {
         if self.is_special() {
             self.unit.reduce_value(value)
         } else {
-            value * self.unit.reduce_value(1.0)
+            value * self.unit.reduce_value(One::one())
         }
     }
 
@@ -13,7 +15,7 @@ impl Reducible<f64> for Measurement {
         if self.is_special() {
             self.unit.calculate_magnitude(self.scalar())
         } else {
-            value * self.unit.calculate_magnitude(1.0)
+            value * self.unit.calculate_magnitude(One::one())
         }
     }
 }

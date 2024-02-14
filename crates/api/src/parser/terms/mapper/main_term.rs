@@ -1,9 +1,9 @@
-use super::{AstTerm, Finishable, Visit};
-use crate::{
-    invert::Invert,
-    parser::{terms::term_parser::Rule, Error, Term},
-};
+use num_traits::Inv;
 use pest::iterators::Pair;
+
+use crate::parser::{terms::term_parser::Rule, Error, Term};
+
+use super::{AstTerm, Finishable, Visit};
 
 pub(super) struct MainTerm {
     pub(super) terms: Vec<Term>,
@@ -32,12 +32,14 @@ impl Visit<Rule> for MainTerm {
         match pairs.next() {
             Some(second) => match second.as_rule() {
                 Rule::term => {
-                    let mut terms: Vec<Term> = AstTerm::visit(second)?.finish();
+                    let terms: Vec<Term> = AstTerm::visit(second)?.finish();
 
                     // If we're here it's because there was a leading slash, so invert.
-                    terms.invert();
+                    let u = crate::Unit::new(terms).inv();
 
-                    Ok(Self { terms })
+                    Ok(Self {
+                        terms: u.into_terms().to_vec(),
+                    })
                 }
                 _ => unreachable!(),
             },

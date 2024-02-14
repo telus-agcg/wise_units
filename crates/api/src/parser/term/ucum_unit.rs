@@ -1,7 +1,6 @@
-use super::Term;
 use crate::{reducible::Reducible, ucum_unit::UcumUnit};
 
-impl UcumUnit for Term {
+impl UcumUnit for super::Term {
     fn is_special(&self) -> bool {
         self.atom.map_or(false, |a| a.is_special())
     }
@@ -33,7 +32,7 @@ impl UcumUnit for Term {
     }
 
     fn scalar(&self) -> f64 {
-        self.reduce_value(1.0)
+        self.reduce_value(num_traits::One::one())
     }
 
     fn magnitude(&self) -> f64 {

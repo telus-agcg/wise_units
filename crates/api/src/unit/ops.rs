@@ -1,6 +1,10 @@
-use super::term_reducing;
-use crate::{invert::ToInverse, Term, Unit};
 use std::ops::{Div, Mul};
+
+use num_traits::Inv;
+
+use crate::{Term, Unit};
+
+use super::term_reducing;
 
 //-----------------------------------------------------------------------------
 // impl Div
@@ -10,7 +14,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     terms.extend_from_slice(lhs);
 
     for term in rhs {
-        terms.push(term.to_inverse());
+        terms.push(term.inv());
     }
 
     term_reducing::reduce_terms(&terms)

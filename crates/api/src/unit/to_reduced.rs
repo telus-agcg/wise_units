@@ -1,11 +1,15 @@
-use super::Unit;
+use std::borrow::Cow;
+
+use num_traits::Inv;
+
 use crate::{
     as_fraction::AsFraction,
-    invert::IntoInverse,
     parser::{Composable, Composition},
     reduce::ToReduced,
     Term,
 };
+
+use super::Unit;
 
 type OptionCombos = Vec<Option<(Term, Composition)>>;
 
@@ -60,7 +64,10 @@ impl ToReduced for Unit {
                 let mut new_terms: Vec<Term> =
                     Vec::with_capacity(new_numerators.len() + new_denominators.len());
                 new_terms.extend_from_slice(&new_numerators);
-                new_terms.extend_from_slice(&new_denominators.into_inverse());
+
+                let new_denominators =
+                    crate::parser::term::num_traits::inv::inv_terms_into(new_denominators);
+                new_terms.extend_from_slice(&new_denominators);
 
                 Self::new(super::term_reducing::reduce_terms(&new_terms))
             }

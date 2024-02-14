@@ -52,7 +52,7 @@ mod tests {
     use super::*;
     use crate::parser::{
         terms::term_parser::{Rule, TermParser},
-        Atom, Prefix, Term,
+        Prefix,
     };
     use pest::Parser;
 

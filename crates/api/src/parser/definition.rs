@@ -81,7 +81,7 @@ impl<V> Definition<V> {
 impl Reducible<f64> for Definition<f64> {
     fn reduce_value(&self, other_value: f64) -> f64 {
         match self {
-            Self::Base => 1.0,
+            Self::Base => One::one(),
             Self::NonDimensional(value) => *value,
             Self::Dimensional { value, terms } => value * terms.reduce_value(other_value),
             Self::NonDimensionalSpecial { function_set, .. }
@@ -93,7 +93,7 @@ impl Reducible<f64> for Definition<f64> {
 
     fn calculate_magnitude(&self, other_value: f64) -> f64 {
         match self {
-            Self::Base => 1.0,
+            Self::Base => One::one(),
             Self::NonDimensional(value) => *value,
             Self::Dimensional { value, terms } => value * terms.calculate_magnitude(other_value),
             Self::NonDimensionalSpecial { function_set, .. }

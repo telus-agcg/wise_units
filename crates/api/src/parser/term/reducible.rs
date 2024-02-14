@@ -1,7 +1,6 @@
-#![allow(clippy::large_enum_variant)]
-#![allow(clippy::result_large_err)]
-
 use std::borrow::Cow;
+
+use num_traits::One;
 
 use crate::{parser::ucum_symbol::UcumSymbol, reducible::Reducible};
 
@@ -9,15 +8,17 @@ use super::Term;
 
 impl Reducible<f64> for Term {
     fn reduce_value(&self, value: f64) -> f64 {
-        let atom_scalar = self.atom.map_or(1.0, |a| a.reduce_value(value));
-        let prefix_scalar = self.prefix.map_or(1.0, |p| p.definition_value());
+        let atom_scalar = self.atom.map_or_else(One::one, |a| a.reduce_value(value));
+        let prefix_scalar = self.prefix.map_or_else(One::one, |p| p.definition_value());
 
         combine_term_values(atom_scalar, prefix_scalar, self.factor, self.exponent)
     }
 
     fn calculate_magnitude(&self, value: f64) -> f64 {
-        let atom_magnitude = self.atom.map_or(1.0, |a| a.calculate_magnitude(value));
-        let prefix_magnitude = self.prefix.map_or(1.0, |p| p.definition_value());
+        let atom_magnitude = self
+            .atom
+            .map_or_else(One::one, |a| a.calculate_magnitude(value));
+        let prefix_magnitude = self.prefix.map_or_else(One::one, |p| p.definition_value());
 
         combine_term_values(atom_magnitude, prefix_magnitude, self.factor, self.exponent)
     }
@@ -26,12 +27,13 @@ impl Reducible<f64> for Term {
 impl<'a> Reducible<f64> for Cow<'a, [Term]> {
     fn reduce_value(&self, value: f64) -> f64 {
         self.iter()
-            .fold(1.0, |acc, term| acc * term.reduce_value(value))
+            .fold(One::one(), |acc, term| acc * term.reduce_value(value))
     }
 
     fn calculate_magnitude(&self, value: f64) -> f64 {
-        self.iter()
-            .fold(1.0, |acc, term| acc * term.calculate_magnitude(value))
+        self.iter().fold(One::one(), |acc, term| {
+            acc * term.calculate_magnitude(value)
+        })
     }
 }
 
@@ -54,10 +56,7 @@ fn combine_term_values(
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        parser::{Atom, Prefix, Term},
-        reducible::Reducible,
-    };
+    use crate::{parser::Prefix, reducible::Reducible};
     use approx::assert_relative_eq;
 
     macro_rules! validate_reduce_value {

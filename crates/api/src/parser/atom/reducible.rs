@@ -9,7 +9,7 @@ impl Reducible<f64> for Atom {
         if self.is_special() {
             self.definition().calculate_magnitude(value)
         } else {
-            1.0
+            num_traits::One::one()
         }
     }
 }

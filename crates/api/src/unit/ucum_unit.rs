@@ -73,7 +73,7 @@ impl UcumUnit for Unit {
     ///
     #[inline]
     fn scalar(&self) -> f64 {
-        self.reduce_value(1.0)
+        self.reduce_value(num_traits::One::one())
     }
 
     /// The scalar value of `self` in terms of `self`'s actual unit(s).

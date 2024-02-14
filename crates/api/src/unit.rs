@@ -6,6 +6,7 @@ mod field_eq;
 mod from_str;
 mod invert;
 mod is_compatible_with;
+mod num_traits;
 mod ops;
 mod partial_eq;
 mod partial_ord;
@@ -18,6 +19,7 @@ mod ucum_unit;
 
 #[cfg(feature = "cffi")]
 pub mod custom_ffi;
+
 #[cfg(feature = "serde")]
 mod serde;
 
@@ -90,7 +92,7 @@ impl Unit {
 
     /// Creates a new `Unit` that's equivalent to "1".
     ///
-    #[deprecated(since = "0.23.0", note = "Please use unit::UNITY instead")]
+    #[deprecated(since = "1.0.0", note = "Please use unit::UNITY instead")]
     #[must_use]
     pub const fn new_unity() -> Self {
         UNITY
@@ -101,6 +103,11 @@ impl Unit {
     #[must_use]
     pub const fn terms(&self) -> &Cow<'static, [Term]> {
         &self.terms
+    }
+
+    #[must_use]
+    pub fn into_terms(self) -> Cow<'static, [Term]> {
+        self.terms
     }
 
     /// A `Unit` is a unity `Unit` if represents "1", which technically means
@@ -114,7 +121,7 @@ impl Unit {
     ///
     #[must_use]
     pub fn is_unity(&self) -> bool {
-        self.terms.len() == 1 && self.terms[0].is_unity()
+        &*self.terms == term::UNITY_ARRAY_REF
     }
 
     /// Turns the Unit's Terms into Strings and combines them accordingly.

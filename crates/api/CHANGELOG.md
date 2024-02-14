@@ -10,12 +10,32 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - PCC-174: Derive `Hash` for `Atom`.
+- PLCC-287: `impl num_traits::Inv for Measurement`, `Unit`, and `Term`.
+- PLCC-287: `impl num_traits::One for Measurement`.
+- PLCC-287: `impl From<&Measurement> for f64`.
+- PLCC-287: `impl num_traits::ToPrimitive for Measurement`, `Prefix`.
+- PLCC-287: `impl num_traits::FromPrimitive for Measurement`, `Prefix`.
+- PLCC-287: `impl num_traits::NumCast for Measurement`.
+- PLCC-287: `impl num_traits::Pow<i32> for Measurement`, `Unit`, `Term`.
+- PLCC-287: `impl std::ops::Neg for Measurement`.
+- Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
+- Added `unit` constant: `UNITY`
+- Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
+- Added `measurement!()` macro for wrapping `Measurement::try_new().unwrap()`.
 
 ### Changed
 
 - Rust minimum version updated to `1.64.0`.
 - (Internal) Rust Codegen is now using `quote` instead of `handlebars` (the pest parser grammar is
   still generated using `handlebars`).
+- (Internal) `Definition` is now an enum and is generic over value type `V`.
+
+### Deprecated
+
+- PLCC-287: Deprecated traits `Invert`, `ToInverse`, `IntoInverse`; implementations of
+  `num_traits::Inv` cover these now.
+- The new `unit::UNITY` constant deprecates `Unit::is_unity()`.
+- The new `term::UNITY*` constants deprecate `Term::is_unity()`.
 
 ## [0.22.0] — 2022-03-23
 
@@ -23,7 +43,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Implemented `AsRef<Self>` for `Measurement` and `Unit`. Allows for downstream wrapper types to
   implement other functionality for all types via the `AsRef` implementation.
-- Implemented `TryFrom<&str> for Unit` (which just calls `from_str()`) to allow for downstream
+- Implemented `TryFrom<&str> for Unit` (which only calls `from_str()`) to allow for downstream
   wrapper implementations around `Unit`.
 - New `const` `Composition` methods: `new_dimless()`, `new_any()`.
 - New `composition` `const`s for common dimensional compositions.

@@ -1,9 +1,11 @@
 mod composable;
+mod convert;
 mod convertible;
 mod display;
 mod field_eq;
 mod invert;
 mod is_compatible_with;
+mod num_traits;
 mod ops;
 mod partial_eq;
 mod partial_ord;
@@ -13,8 +15,11 @@ mod ucum_unit;
 
 use crate::{reducible::Reducible, ucum_unit::UcumUnit, unit::Unit};
 
+use ::num_traits::One;
+
 #[cfg(feature = "cffi")]
 use ffi_common::derive::FFI;
+
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
@@ -106,7 +111,7 @@ impl Measurement {
         } else if other_unit.is_special() {
             other_unit.calculate_magnitude(self.value)
         } else {
-            self.scalar() / other_unit.reduce_value(1.0)
+            self.scalar() / other_unit.reduce_value(One::one())
         }
     }
 }
