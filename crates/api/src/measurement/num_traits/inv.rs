@@ -13,6 +13,17 @@ impl Inv for Measurement {
     }
 }
 
+impl<'a> Inv for &'a Measurement {
+    type Output = Measurement;
+
+    fn inv(self) -> Self::Output {
+        Measurement {
+            value: self.value.inv(),
+            unit: self.unit.clone().inv(),
+        }
+    }
+}
+
 impl<'a> Inv for &'a mut Measurement {
     type Output = Self;
 
@@ -36,6 +47,11 @@ mod tests {
                 let mut mut_borrowed = $subject.clone();
                 let _ = Inv::inv(&mut mut_borrowed);
                 assert_eq!(mut_borrowed, $expected);
+
+                // Test &Measurement impl
+                let owned = $subject;
+                let inverted = Inv::inv(&owned);
+                assert_eq!(inverted, $expected);
 
                 // Test Measurement impl
                 let owned = $subject;

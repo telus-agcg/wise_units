@@ -1,13 +1,25 @@
+use std::borrow::Cow;
+
 use num_traits::Inv;
 
-use crate::Unit;
+use crate::{parser::term, Unit};
 
 impl Inv for Unit {
     type Output = Self;
 
     fn inv(self) -> Self::Output {
         Self {
-            terms: self.terms.iter().map(Inv::inv).collect(),
+            terms: Cow::Owned(term::num_traits::inv::inv_terms_into(self.terms.to_vec())),
+        }
+    }
+}
+
+impl<'a> Inv for &'a Unit {
+    type Output = Unit;
+
+    fn inv(self) -> Self::Output {
+        Unit {
+            terms: Cow::Owned(term::num_traits::inv::inv_terms_into(self.terms.to_vec())),
         }
     }
 }
@@ -16,9 +28,7 @@ impl<'a> Inv for &'a mut Unit {
     type Output = Self;
 
     fn inv(self) -> Self::Output {
-        for term in self.terms.to_mut().iter_mut() {
-            let _ = term.inv();
-        }
+        term::num_traits::inv::inv_terms(self.terms.to_mut());
 
         self
     }
@@ -38,6 +48,11 @@ mod tests {
                 let mut mut_borrowed = $subject.clone();
                 let _ = Inv::inv(&mut mut_borrowed);
                 assert_eq!(mut_borrowed, $expected);
+
+                // Test &Unit impl
+                let owned = $subject;
+                let inverted = Inv::inv(&owned);
+                assert_eq!(inverted, $expected);
 
                 // Test Unit impl
                 let owned = $subject;
