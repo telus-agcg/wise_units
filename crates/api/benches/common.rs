@@ -1,4 +1,4 @@
-pub const UNIT_STRINGS: [&str; 25] = [
+pub const UNIT_STRINGS: [&str; 26] = [
     // The unity
     "1",
     // base, factor*base, factor*base^exponent
@@ -37,6 +37,8 @@ pub const UNIT_STRINGS: [&str; 25] = [
     "m/5s2",
     // factor*base^exponent/factor*base^exponent
     "10m3/5s2",
+    // Leading-slash term
+    "/10m3/5s2",
 ];
 
 pub const UNIT_PAIRS: [(&str, &str); 19] = [
