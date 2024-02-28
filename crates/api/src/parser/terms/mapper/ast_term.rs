@@ -1,4 +1,3 @@
-use num_traits::Inv;
 use pest::iterators::Pair;
 
 use crate::parser::terms::term_parser::Rule;
