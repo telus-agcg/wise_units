@@ -1,0 +1,92 @@
+main_term = { SOI ~ (leading_slash? ~ term) ~ EOI }
+  leading_slash = { "/" }
+
+term = { component ~ ( infix ~ component )* }
+
+infix = _{ dot | slash }
+  dot = { "." }
+  slash = { "/" }
+
+
+component = {
+  factor? ~ annotatable ~ annotation?
+  | annotation_component
+  | factor_component ~ annotation?
+}
+  annotation_component = { annotation }
+  factor_component = { factor }
+
+// <factor>
+factor = { ASCII_DIGIT+ ~ !not_factor  }
+  not_factor = _{ "*" | "^" }
+
+// // // // // // | "(" ~ term ~ ")"
+
+// <annotatable>
+annotatable = {
+  simple_unit ~ exponent*
+}
+  // <simple-unit>
+  simple_unit = { any_atom_symbol | prefix_symbol ~ metric_atom_symbol }
+    any_atom_symbol = _{ metric_atom_symbol | non_metric_atom_symbol }
+
+  // <exponent>
+  exponent = { sign? ~ digits }
+    // <sign>
+    sign = { "-" | "+" }
+    // <digits>
+    digits = { ASCII_DIGIT+ }
+
+// <annotation>
+annotation = _{ "{" ~ annotation_string ~ "}" }
+  annotation_string = { annotation_char+ }
+    annotation_char = _{
+        '!'..'z'  // 33-122
+            | "|" // 124
+            | "~" // 126
+    }
+
+// ╭──────────────────╮
+// │  <prefix_symbol> │
+// ╰──────────────────╯
+prefix_symbol = {
+  "Y"     // yotta
+  | "Z"   // zetta
+  | "E"   // exa
+  | "P"   // peta
+  | "T"   // tera
+  | "G"   // giga
+  | "M"   // mega
+  | "k"   // kilo
+  | "h"   // hecto
+  | "da"  // deka
+  | "d"   // deci
+  | "c"   // centi
+  | "m"   // milli
+  | "u"   // micro
+  | "n"   // nano
+  | "p"   // pico
+  | "f"   // femto
+  | "a"   // atto
+  | "z"   // zepto
+  | "y"   // yocto
+}
+
+// ╭─────────────────────────╮
+// │  metric <atom_symbol>   │
+// ╰─────────────────────────╯
+metric_atom_symbol = {
+  "m"       // meter
+  | "s"     // second
+  | "g"     // gram
+  | "rad"   // radian
+  | "K"     // kelvin
+  | "C"     // coulomb
+  | "cd"    // candela
+}
+
+non_metric_atom_symbol = {
+  "10*"     // the number ten for arbitrary powers
+  | "10^"   // the number ten for arbitrary powers
+  | "[pi]"  // the number pi
+}

@@ -56,9 +56,7 @@ pub(crate) fn parse(expression: &str) -> Result<Vec<Term>, Error> {
 
 #[inline]
 pub(crate) fn parse2(expression: &str) -> Result<crate::Unit, Error> {
-    let main_term = self::tokenizer::parse(expression);
-
-    crate::Unit::try_from(main_term)
+    self::tokenizer::parse(expression).and_then(crate::Unit::try_from)
 }
 
 trait Visit<R> {

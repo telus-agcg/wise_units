@@ -1,5 +1,6 @@
 use crate::parser::{
     symbols::symbol_parser::Rule as SymbolRule, terms::term_parser::Rule as TermRule,
+    tokenizer::Rule as UnitRule,
 };
 use pest::error::Error as PestError;
 
@@ -15,6 +16,10 @@ pub enum Error {
     #[error(transparent)]
     #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
     UnableToParseSymbol(#[from] PestError<SymbolRule>),
+
+    #[error(transparent)]
+    #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
+    UnableToParseUnit(#[from] PestError<UnitRule>),
 
     #[error(transparent)]
     #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
