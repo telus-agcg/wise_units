@@ -23,6 +23,8 @@ use self::{
 use crate::parser::{terms::term_parser::Rule, Atom, Error, Prefix, Term, Visit};
 use pest::iterators::{Pair, Pairs};
 
+// This is the entry point to the parser, really.
+//
 #[allow(clippy::large_enum_variant)]
 #[allow(clippy::result_large_err)]
 pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {

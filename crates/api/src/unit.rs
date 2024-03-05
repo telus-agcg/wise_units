@@ -71,6 +71,10 @@ pub struct Unit {
 /// ```
 ///
 impl Unit {
+    pub fn parse(expression: &str) -> Result<Self, Error> {
+        Ok(crate::parser::parse2(expression)?)
+    }
+
     /// ```
     /// use wise_units::{Unit, Term, Prefix, Atom};
     ///

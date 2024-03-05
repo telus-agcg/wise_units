@@ -1,4 +1,3 @@
-#[allow(clippy::too_many_lines)]
 pub(super) mod mapper;
 pub(super) mod symbol;
 pub(crate) mod symbol_parser;

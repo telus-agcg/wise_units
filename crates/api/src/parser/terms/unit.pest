@@ -1,0 +1,65 @@
+program = @{ SOI ~ main_term ~ EOI }
+
+main_term = { leading_slash{, 1} ~ term }
+  leading_slash = { "/" }
+
+term = { component ~ ( infix ~ component )* }
+
+infix = _{ dot | slash }
+  dot = { "." }
+  slash = { "/" }
+
+
+component = {
+  factor? ~ annotatable ~ annotation?
+  | annotation_component
+  | factor_component ~ annotation?
+}
+
+annotation_component = { annotation }
+factor_component = { factor }
+
+// // // // // // | "(" ~ term ~ ")"
+
+// <annotatable>
+annotatable = {
+  simple_unit ~ exponent*
+}
+  // <simple-unit>
+  simple_unit = {
+      "10^"
+          | "10*"
+          | symbol_char+
+  }
+    symbol_char = _{
+        "!" // 33
+            | '#'..'\'' // 35-39
+            | "*"       // 42
+            | ","       // 44
+            | ':'..'<'  // 58-60
+            | '>'..'z'  // 62-90
+            | "^"       // 94
+            | "|"       // 124
+            | "~"       // 126
+    }
+  // <exponent>
+  exponent = { sign? ~ digits }
+
+// <annotation>
+annotation = _{ "{" ~ annotation_string ~ "}" }
+  annotation_string = { annotation_char+ }
+    annotation_char = _{
+        '!'..'z'  // 33-122
+            | "|" // 124
+            | "~" // 126
+    }
+
+// <factor>
+factor = { ASCII_DIGIT+ ~ !not_factor  }
+  not_factor = _{ "*" | "^" }
+
+// <digits>
+digits = { ASCII_DIGIT+ }
+
+// <sign>
+sign = { "-" | "+" }
