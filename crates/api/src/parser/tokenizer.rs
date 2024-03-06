@@ -354,7 +354,7 @@ mod tests {
     }
 
     mod multi_dot_term {
-        use crate::parser::tokenizer::term::Op;
+        use crate::parser::tokenizer::term::{MultiTerm, Op};
 
         use super::*;
 
@@ -362,7 +362,7 @@ mod tests {
         fn atom_2_test() {
             pretty_assertions::assert_eq!(
                 parse("m.g").unwrap(),
-                MainTerm::Term(Term::Multi {
+                MainTerm::Term(Term::Multi(MultiTerm {
                     lhs: Box::new(Term::Single(Component::Annotatable {
                         factor: None,
                         annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("m")),
@@ -374,7 +374,7 @@ mod tests {
                         annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("g")),
                         annotation: None
                     }))
-                })
+                }))
             );
         }
 
@@ -382,8 +382,8 @@ mod tests {
         fn atom_3_test() {
             pretty_assertions::assert_eq!(
                 parse("m.g.K").unwrap(),
-                MainTerm::Term(Term::Multi {
-                    lhs: Box::new(Term::Multi {
+                MainTerm::Term(Term::Multi(MultiTerm {
+                    lhs: Box::new(Term::Multi(MultiTerm {
                         lhs: Box::new(Term::Single(Component::Annotatable {
                             factor: None,
                             annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("m")),
@@ -395,20 +395,20 @@ mod tests {
                             annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("g")),
                             annotation: None
                         }))
-                    }),
+                    })),
                     op: Op::Dot,
                     rhs: Box::new(Term::Single(Component::Annotatable {
                         factor: None,
                         annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("K")),
                         annotation: None
                     }))
-                })
+                }))
             );
         }
     }
 
     mod multi_slash_term {
-        use crate::parser::tokenizer::term::Op;
+        use crate::parser::tokenizer::term::{MultiTerm, Op};
 
         use super::*;
 
@@ -416,7 +416,7 @@ mod tests {
         fn atom_2_test() {
             pretty_assertions::assert_eq!(
                 parse("m/g").unwrap(),
-                MainTerm::Term(Term::Multi {
+                MainTerm::Term(Term::Multi(MultiTerm {
                     lhs: Box::new(Term::Single(Component::Annotatable {
                         factor: None,
                         annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("m")),
@@ -428,7 +428,7 @@ mod tests {
                         annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("g")),
                         annotation: None
                     }))
-                })
+                }))
             );
         }
 
@@ -436,8 +436,8 @@ mod tests {
         fn atom_3_test() {
             pretty_assertions::assert_eq!(
                 parse("m/g/K").unwrap(),
-                MainTerm::Term(Term::Multi {
-                    lhs: Box::new(Term::Multi {
+                MainTerm::Term(Term::Multi(MultiTerm {
+                    lhs: Box::new(Term::Multi(MultiTerm {
                         lhs: Box::new(Term::Single(Component::Annotatable {
                             factor: None,
                             annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("m")),
@@ -449,14 +449,14 @@ mod tests {
                             annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("g")),
                             annotation: None
                         }))
-                    }),
+                    })),
                     op: Op::Slash,
                     rhs: Box::new(Term::Single(Component::Annotatable {
                         factor: None,
                         annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom("K")),
                         annotation: None
                     }))
-                })
+                }))
             );
         }
     }

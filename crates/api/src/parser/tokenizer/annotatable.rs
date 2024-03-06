@@ -1,4 +1,8 @@
+use std::num::ParseIntError;
+
 use pest::{iterators::Pairs, pratt_parser::PrattParser};
+
+use crate::parser::term;
 
 use super::{Parse, Rule, SimpleUnit};
 
@@ -60,5 +64,25 @@ impl<'i> Parse<'i> for Exponent<'i> {
                 rule => unreachable!("expected factor, found {rule:?}"),
             })
             .parse(pairs)
+    }
+}
+
+impl<'i> TryFrom<Exponent<'i>> for term::Exponent {
+    type Error = ParseIntError;
+
+    fn try_from(value: Exponent<'i>) -> Result<Self, Self::Error> {
+        match value {
+            Exponent::SignDigits { sign, digits } => {
+                let n = digits.parse::<Self>()?;
+
+                // This is ok because the parser already sussed out bad signs.
+                match sign {
+                    "-" => Ok(-n),
+                    "+" => Ok(n),
+                    _ => unreachable!("unknown sign token: {sign}"),
+                }
+            }
+            Exponent::Digits(digits) => digits.parse::<Self>(),
+        }
     }
 }

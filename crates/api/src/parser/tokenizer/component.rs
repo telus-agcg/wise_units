@@ -1,5 +1,7 @@
 use pest::{iterators::Pairs, pratt_parser::PrattParser};
 
+use crate::parser::term::Exponent;
+
 use super::{Annotatable, Parse, Rule};
 
 #[derive(Debug, PartialEq)]
@@ -97,7 +99,21 @@ impl TryFrom<Component<'_>> for crate::Term {
                     None => None,
                 };
 
-                let (prefix, atom, exponent) = { todo!() };
+                let (prefix, atom, exponent) = {
+                    match annotatable {
+                        Annotatable::SimpleUnitExponent {
+                            simple_unit,
+                            exponent,
+                        } => {
+                            let (prefix, atom) = simple_unit.into();
+                            (prefix, atom, Some(Exponent::try_from(exponent)?))
+                        }
+                        Annotatable::SimpleUnit(simple_unit) => {
+                            let (prefix, atom) = simple_unit.into();
+                            (prefix, atom, None)
+                        }
+                    }
+                };
 
                 Ok(Self {
                     factor: maybe_factor,
