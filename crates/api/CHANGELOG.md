@@ -22,6 +22,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
 - Added `measurement!()` macro for wrapping `Measurement::try_new().unwrap()`.
+- Added `crate::parser::term::Exponent` type alias for `i32`.
 
 ### Changed
 

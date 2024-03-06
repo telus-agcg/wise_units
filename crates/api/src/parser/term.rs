@@ -23,6 +23,8 @@ pub const UNITY: Term = {
 pub const UNITY_ARRAY: [Term; 1] = [UNITY];
 pub const UNITY_ARRAY_REF: &[Term; 1] = &UNITY_ARRAY;
 
+pub type Exponent = i32;
+
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an
 /// Atom-less Term, which would simple be a Factor (with or without an
@@ -33,7 +35,7 @@ pub struct Term {
     pub factor: Option<u32>,
     pub prefix: Option<Prefix>,
     pub atom: Option<Atom>,
-    pub exponent: Option<i32>,
+    pub exponent: Option<Exponent>,
     pub annotation: Option<String>,
 }
 

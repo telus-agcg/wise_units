@@ -1,7 +1,5 @@
-use super::Dimension;
+use super::{term::Exponent, Dimension};
 use std::{fmt, ops::Mul};
-
-type Exponent = i32;
 
 pub const DIMLESS: Composition = Composition::new_dimless();
 
@@ -78,8 +76,8 @@ pub struct Composition {
 macro_rules! def_mul_exponent {
     ($meth_name:ident, $composition_method:ident) => {
         fn $meth_name(
-            original_value: Option<i32>,
-            exponent: i32,
+            original_value: Option<Exponent>,
+            exponent: Exponent,
             new_composition: &mut Composition,
         ) {
             if let Some(self_exponent) = original_value {
@@ -107,7 +105,7 @@ macro_rules! insert_exponent {
 macro_rules! def_add_dimension {
     ($meth_name:ident, $composition_method:ident) => {
         fn $meth_name(
-            original_value: Option<i32>,
+            original_value: Option<Exponent>,
             rhs_composition: Composition,
             new_composition: &mut Composition,
         ) {
@@ -122,7 +120,7 @@ macro_rules! def_add_dimension {
 
 impl Composition {
     #[must_use]
-    pub const fn new(dimension: Dimension, exponent: i32) -> Self {
+    pub const fn new(dimension: Dimension, exponent: Exponent) -> Self {
         match dimension {
             Dimension::ElectricCharge => Self::new_electric_charge(exponent),
             Dimension::Length => Self::new_length(exponent),
@@ -148,7 +146,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub const fn new_electric_charge(exponent: i32) -> Self {
+    pub const fn new_electric_charge(exponent: Exponent) -> Self {
         Self {
             electric_charge: Some(exponent),
             length: None,
@@ -161,7 +159,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub const fn new_length(exponent: i32) -> Self {
+    pub const fn new_length(exponent: Exponent) -> Self {
         Self {
             electric_charge: None,
             length: Some(exponent),
@@ -174,7 +172,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub const fn new_luminous_intensity(exponent: i32) -> Self {
+    pub const fn new_luminous_intensity(exponent: Exponent) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -187,7 +185,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub const fn new_mass(exponent: i32) -> Self {
+    pub const fn new_mass(exponent: Exponent) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -200,7 +198,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub const fn new_plane_angle(exponent: i32) -> Self {
+    pub const fn new_plane_angle(exponent: Exponent) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -213,7 +211,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub const fn new_temperature(exponent: i32) -> Self {
+    pub const fn new_temperature(exponent: Exponent) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -226,7 +224,7 @@ impl Composition {
     }
 
     #[must_use]
-    pub const fn new_time(exponent: i32) -> Self {
+    pub const fn new_time(exponent: Exponent) -> Self {
         Self {
             electric_charge: None,
             length: None,
@@ -240,13 +238,13 @@ impl Composition {
 
     #[must_use]
     pub const fn new_any(
-        electric_charge: Option<i32>,
-        length: Option<i32>,
-        luminous_intensity: Option<i32>,
-        mass: Option<i32>,
-        plane_angle: Option<i32>,
-        temperature: Option<i32>,
-        time: Option<i32>,
+        electric_charge: Option<Exponent>,
+        length: Option<Exponent>,
+        luminous_intensity: Option<Exponent>,
+        mass: Option<Exponent>,
+        plane_angle: Option<Exponent>,
+        temperature: Option<Exponent>,
+        time: Option<Exponent>,
     ) -> Self {
         Self {
             electric_charge,
@@ -259,7 +257,7 @@ impl Composition {
         }
     }
 
-    pub fn insert(&mut self, dimension: Dimension, exponent: i32) {
+    pub fn insert(&mut self, dimension: Dimension, exponent: Exponent) {
         if exponent == 0 {
             return;
         }
@@ -275,31 +273,31 @@ impl Composition {
         }
     }
 
-    fn insert_electric_charge(&mut self, exponent: i32) {
+    fn insert_electric_charge(&mut self, exponent: Exponent) {
         self.electric_charge = insert_exponent!(self, electric_charge, exponent);
     }
 
-    fn insert_length(&mut self, exponent: i32) {
+    fn insert_length(&mut self, exponent: Exponent) {
         self.length = insert_exponent!(self, length, exponent);
     }
 
-    fn insert_luminous_intensity(&mut self, exponent: i32) {
+    fn insert_luminous_intensity(&mut self, exponent: Exponent) {
         self.luminous_intensity = insert_exponent!(self, luminous_intensity, exponent);
     }
 
-    fn insert_mass(&mut self, exponent: i32) {
+    fn insert_mass(&mut self, exponent: Exponent) {
         self.mass = insert_exponent!(self, mass, exponent);
     }
 
-    fn insert_plane_angle(&mut self, exponent: i32) {
+    fn insert_plane_angle(&mut self, exponent: Exponent) {
         self.plane_angle = insert_exponent!(self, plane_angle, exponent);
     }
 
-    fn insert_temperature(&mut self, exponent: i32) {
+    fn insert_temperature(&mut self, exponent: Exponent) {
         self.temperature = insert_exponent!(self, temperature, exponent);
     }
 
-    fn insert_time(&mut self, exponent: i32) {
+    fn insert_time(&mut self, exponent: Exponent) {
         self.time = insert_exponent!(self, time, exponent);
     }
 
@@ -337,7 +335,7 @@ impl fmt::Display for Composition {
 }
 
 fn push_display_expression(
-    composition_value: Option<i32>,
+    composition_value: Option<Exponent>,
     expressions: &mut Vec<String>,
     dimension_str: &str,
 ) {
@@ -399,10 +397,10 @@ def_add_dimension!(add_time, time);
 /// assert_eq!(&t.composition().to_string(), "L6");
 /// ```
 ///
-impl Mul<i32> for Composition {
+impl Mul<Exponent> for Composition {
     type Output = Self;
 
-    fn mul(self, rhs: i32) -> Self::Output {
+    fn mul(self, rhs: Exponent) -> Self::Output {
         let mut new_composition = Self::default();
 
         mul_electric_charge(self.electric_charge, rhs, &mut new_composition);
@@ -428,7 +426,7 @@ def_mul_exponent!(mul_time, time);
 /// Used internally for disallowing setting any of the dimensions' exponents to 0 (it should
 /// be `None` in that case).
 ///
-const fn set_exponent(exponent: i32) -> Option<i32> {
+const fn set_exponent(exponent: Exponent) -> Option<Exponent> {
     if exponent == 0 {
         None
     } else {

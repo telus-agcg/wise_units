@@ -1,12 +1,12 @@
 use super::{Atom, Error, Exponent, Prefix, SimpleUnit, Visit};
-use crate::parser::terms::term_parser::Rule as TermRule;
+use crate::parser::{term, terms::term_parser::Rule as TermRule};
 use pest::iterators::Pair;
 
 pub(super) enum Annotatable {
     PrefixedWithExponent {
         prefix: Prefix,
         atom: Atom,
-        exponent: i32,
+        exponent: term::Exponent,
     },
     Prefixed {
         prefix: Prefix,
@@ -14,7 +14,7 @@ pub(super) enum Annotatable {
     },
     BasicWithExponent {
         atom: Atom,
-        exponent: i32,
+        exponent: term::Exponent,
     },
     Basic {
         atom: Atom,
