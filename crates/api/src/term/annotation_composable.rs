@@ -1,7 +1,6 @@
-use crate::parser::{
-    annotation_composition::{AnnotationComposable, AnnotationComposition},
-    Term,
-};
+use crate::Term;
+
+use super::annotation_composition::{AnnotationComposable, AnnotationComposition};
 
 /// Similar to `Composable`, this is only to allow for checking compatibility on `Unit`s whose
 /// `Term`s have annotations. For those cases, we want to be able to ensure that, for example,
@@ -40,7 +39,7 @@ impl<'a> AnnotationComposable for &'a [Term] {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::annotation_composition::{AnnotationComposable, AnnotationComposition};
+    use super::*;
 
     mod without_annotations {
         use super::*;

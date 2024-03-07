@@ -128,9 +128,9 @@ mod tests {
 
     use approx::{assert_relative_eq, assert_ulps_eq};
 
-    use crate::{Atom, Unit};
+    use crate::{Atom, Term, Unit};
 
-    use super::{super::parser::Term, *};
+    use super::*;
 
     #[test]
     fn validate_new() {

@@ -12,8 +12,6 @@
         clippy::non_ascii_literal
     )
 )]
-mod annotation_composition;
 mod error;
-pub(crate) mod term;
 
-pub use self::{annotation_composition::AnnotationComposition, error::Error, term::Term};
+pub use self::error::Error;

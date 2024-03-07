@@ -1,8 +1,6 @@
 use std::borrow::Cow;
 
-use crate::{
-    is_compatible_with::IsCompatibleWith, measurement::Measurement, parser::Term, unit::Unit,
-};
+use crate::{measurement::Measurement, IsCompatibleWith, Term, Unit};
 
 #[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl IsCompatibleWith for Unit {

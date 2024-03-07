@@ -1,6 +1,6 @@
 use pest::{iterators::Pairs, pratt_parser::PrattParser};
 
-use crate::parser::term::Exponent;
+use crate::term::Exponent;
 
 use super::{Annotatable, Parse, Rule};
 

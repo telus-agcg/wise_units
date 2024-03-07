@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::term::Exponent;
+use super::Exponent;
 
 pub type AnnotationComposition = HashMap<String, Exponent>;
 

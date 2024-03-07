@@ -1,4 +1,5 @@
 mod annotation_composable;
+mod annotation_composition;
 mod composable;
 mod display;
 mod field_eq;

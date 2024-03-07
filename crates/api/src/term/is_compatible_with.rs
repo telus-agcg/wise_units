@@ -1,9 +1,8 @@
 use std::borrow::Cow;
 
-use crate::{
-    parser::{annotation_composition::AnnotationComposable, Term},
-    Composable, IsCompatibleWith,
-};
+use crate::{Composable, IsCompatibleWith, Term};
+
+use super::annotation_composition::AnnotationComposable;
 
 /// In order to enforce compatibility on "non-units" (ex. `{each}`, `{total}`, `{heartbeats}`),
 /// `Term`s need to compare their annotations along with their `Composition`s. In practice, and

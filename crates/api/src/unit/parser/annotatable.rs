@@ -2,7 +2,7 @@ use std::num::ParseIntError;
 
 use pest::{iterators::Pairs, pratt_parser::PrattParser};
 
-use crate::parser::term;
+use crate::term;
 
 use super::{Parse, Rule, SimpleUnit};
 
