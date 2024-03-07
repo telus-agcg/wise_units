@@ -82,7 +82,7 @@ impl<'a> Parse<'a> for Component<'a> {
 }
 
 impl TryFrom<Component<'_>> for crate::Term {
-    type Error = crate::parser::Error;
+    type Error = super::Error;
 
     fn try_from(component: Component<'_>) -> Result<Self, Self::Error> {
         match component {

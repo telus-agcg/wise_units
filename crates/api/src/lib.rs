@@ -34,7 +34,6 @@ pub mod field_eq;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
-pub mod parser;
 mod prefix;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;

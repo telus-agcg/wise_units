@@ -10,10 +10,7 @@ pub(in crate::unit) enum MainTerm<'i> {
 }
 
 impl<'i> TryParse<'i> for MainTerm<'i> {
-    fn try_parse(
-        pairs: Pairs<'i, Rule>,
-        pratt: &PrattParser<Rule>,
-    ) -> Result<Self, crate::parser::Error> {
+    fn try_parse(pairs: Pairs<'i, Rule>, pratt: &PrattParser<Rule>) -> Result<Self, super::Error> {
         pratt
             .map_primary(|primary| match primary.as_rule() {
                 Rule::term => Ok(MainTerm::Term(Term::parse(primary.into_inner(), pratt))),
@@ -28,7 +25,7 @@ impl<'i> TryParse<'i> for MainTerm<'i> {
             })
             .map_postfix(|main_term, op| match op.as_rule() {
                 Rule::EOI => main_term,
-                rule => Err(crate::parser::Error::UnknownUnitString(format!(
+                rule => Err(super::Error::UnknownUnitString(format!(
                     "expected EOI, found {rule:?}"
                 ))),
             })
@@ -37,7 +34,7 @@ impl<'i> TryParse<'i> for MainTerm<'i> {
 }
 
 impl TryFrom<MainTerm<'_>> for crate::Unit {
-    type Error = crate::parser::Error;
+    type Error = super::Error;
 
     fn try_from(main_term: MainTerm<'_>) -> Result<Self, Self::Error> {
         match main_term {

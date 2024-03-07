@@ -96,7 +96,7 @@ impl<'i> Parse<'i> for Term<'i> {
 }
 
 impl TryFrom<Term<'_>> for crate::Unit {
-    type Error = crate::parser::Error;
+    type Error = super::Error;
 
     fn try_from(term: Term<'_>) -> Result<Self, Self::Error> {
         match term {

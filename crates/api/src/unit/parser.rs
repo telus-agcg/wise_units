@@ -1,12 +1,13 @@
 mod annotatable;
 mod component;
+mod error;
 mod main_term;
 mod simple_unit;
 mod term;
 
 use pest::{iterators::Pairs, pratt_parser::PrattParser, Parser as _};
 
-use crate::parser;
+pub use self::error::Error;
 
 use self::{
     annotatable::Annotatable, component::Component, main_term::MainTerm, simple_unit::SimpleUnit,
@@ -33,13 +34,10 @@ trait Parse<'i> {
 }
 
 trait TryParse<'i>: Sized {
-    fn try_parse(
-        pairs: Pairs<'i, Rule>,
-        pratt: &PrattParser<Rule>,
-    ) -> Result<Self, crate::parser::Error>;
+    fn try_parse(pairs: Pairs<'i, Rule>, pratt: &PrattParser<Rule>) -> Result<Self, Error>;
 }
 
-pub(super) fn parse(expr: &str) -> Result<MainTerm<'_>, parser::Error> {
+pub(super) fn parse(expr: &str) -> Result<MainTerm<'_>, Error> {
     let pairs = UnitParser::parse(Rule::main_term, expr)?;
 
     UNIT_PARSER
@@ -55,7 +53,7 @@ mod pratt_tests {
     use super::*;
 
     mod single_term {
-        use crate::unit::parser::annotatable::Exponent;
+        use crate::unit::parser::{self, annotatable::Exponent};
 
         use super::*;
 
