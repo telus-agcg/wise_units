@@ -14,11 +14,10 @@ mod reducible;
 use self::{definition::Definition, function_set::FunctionSet};
 
 use crate::{
-    is_compatible_with::DefaultCompatibility,
-    parser::{Property, UcumSymbol},
-    reducible::Reducible,
-    Classification, UcumUnit, Unit,
+    is_compatible_with::DefaultCompatibility, parser::Property, reducible::Reducible,
+    Classification, UcumSymbol, UcumUnit, Unit,
 };
+
 #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
 pub enum Atom {
     Meter,

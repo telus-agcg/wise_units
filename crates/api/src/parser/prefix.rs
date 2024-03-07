@@ -1,11 +1,11 @@
 mod num_traits;
 
-use crate::{
-    parser::ucum_symbol::UcumSymbol,
-    unit::{self, Unit},
-    Classification,
-};
 use std::fmt;
+
+use crate::{
+    unit::{self, Unit},
+    Classification, UcumSymbol,
+};
 
 const DECI: f64 = 1.0e-1;
 const CENTI: f64 = 1.0e-2;
@@ -231,9 +231,11 @@ impl fmt::Display for Prefix {
 
 #[cfg(test)]
 mod tests {
-    use super::Prefix;
-    use crate::parser::ucum_symbol::UcumSymbol;
     use approx::{assert_relative_eq, assert_ulps_eq};
+
+    use crate::UcumSymbol;
+
+    use super::*;
 
     macro_rules! validate_value {
         ($test_name:ident, $variant:ident, $value:expr) => {

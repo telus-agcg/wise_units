@@ -20,9 +20,8 @@ mod annotation_composition;
 mod error;
 mod prefix;
 pub(crate) mod term;
-mod ucum_symbol;
 
 pub use self::{
     annotation_composition::AnnotationComposition, composition::Composition, error::Error,
-    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
+    prefix::Prefix, property::Property, term::Term,
 };
