@@ -349,7 +349,7 @@ impl Atom {
             Self::PartsPerMillion => Definition::new_dimensional(1f64, "10*-6"),
             Self::PartsPerBillion => Definition::new_dimensional(1f64, "10*-9"),
             Self::PartsPerTrillion => Definition::new_dimensional(1f64, "10*-12"),
-            Self::Mole => Definition::new_dimensional(6.0221367f64, "10*23"),
+            Self::Mole => Definition::new_dimensional(6.022_136_7_f64, "10*23"),
             Self::Steradian => Definition::new_dimensional(1f64, "rad2"),
             Self::Hertz => Definition::new_dimensional(1f64, "s-1"),
             Self::Newton => Definition::new_dimensional(1f64, "kg.m/s2"),
@@ -397,38 +397,38 @@ impl Atom {
             Self::MeanGregorianMonth => Definition::new_dimensional(1f64, "a_g/12"),
             Self::Month => Definition::new_dimensional(1f64, "mo_j"),
             Self::Tonne => Definition::new_dimensional(1000f64, "kg"),
-            Self::Bar => Definition::new_dimensional(100000f64, "Pa"),
+            Self::Bar => Definition::new_dimensional(100_000_f64, "Pa"),
             Self::UnifiedAtomicMassUnit => {
-                Definition::new_dimensional(0.0000000000000000000000016605402f64, "g")
+                Definition::new_dimensional(0.000_000_000_000_000_000_000_001_660_540_2_f64, "g")
             }
             Self::Electronvolt => Definition::new_dimensional(1f64, "[e].V"),
-            Self::AstronomicUnit => Definition::new_dimensional(149597.870691f64, "Mm"),
-            Self::Parsec => Definition::new_dimensional(30856780000000000f64, "m"),
-            Self::VelocityOfLight => Definition::new_dimensional(299792458f64, "m/s"),
+            Self::AstronomicUnit => Definition::new_dimensional(149_597.870_691_f64, "Mm"),
+            Self::Parsec => Definition::new_dimensional(30_856_780_000_000_000_f64, "m"),
+            Self::VelocityOfLight => Definition::new_dimensional(299_792_458_f64, "m/s"),
             Self::PlanckConstant => {
-                Definition::new_dimensional(0.00000000000000000000000000000000066260755f64, "J.s")
+                Definition::new_dimensional(0.000_000_000_000_000_000_000_000_000_000_000_662_607_55_f64, "J.s")
             }
             Self::BoltzmannConstant => {
-                Definition::new_dimensional(0.00000000000000000000001380658f64, "J/K")
+                Definition::new_dimensional(0.000_000_000_000_000_000_000_013_806_58_f64, "J/K")
             }
             Self::PermittivityOfVacuum => {
-                Definition::new_dimensional(0.000000000008854187817f64, "F/m")
+                Definition::new_dimensional(0.000_000_000_008_854_187_817_f64, "F/m")
             }
             Self::PermeabilityOfVacuum => Definition::new_dimensional(1f64, "4.[pi].10*-7.N/A2"),
             Self::ElementaryCharge => {
-                Definition::new_dimensional(0.000000000000000000160217733f64, "C")
+                Definition::new_dimensional(0.000_000_000_000_000_000_160_217_733_f64, "C")
             }
             Self::ElectronMass => {
-                Definition::new_dimensional(0.00000000000000000000000000091093897f64, "g")
+                Definition::new_dimensional(0.000_000_000_000_000_000_000_000_000_910_938_97_f64, "g")
             }
             Self::ProtonMass => {
-                Definition::new_dimensional(0.0000000000000000000000016726231f64, "g")
+                Definition::new_dimensional(0.000_000_000_000_000_000_000_001_672_623_1_f64, "g")
             }
             Self::NewtonianConstantOfGravitation => {
-                Definition::new_dimensional(0.0000000000667259f64, "m3.kg-1.s-2")
+                Definition::new_dimensional(0.000_000_000_066_725_9_f64, "m3.kg-1.s-2")
             }
             Self::StandardAccelerationOfFreeFall => Definition::new_dimensional(9.80665f64, "m/s2"),
-            Self::StandardAtmosphere => Definition::new_dimensional(101325f64, "Pa"),
+            Self::StandardAtmosphere => Definition::new_dimensional(101_325_f64, "Pa"),
             Self::LightYear => Definition::new_dimensional(1f64, "[c].a_j"),
             Self::GramForce => Definition::new_dimensional(1f64, "g.[g]"),
             Self::PoundForceAvoirdupois => Definition::new_dimensional(1f64, "[lb_av].[g]"),
@@ -439,15 +439,15 @@ impl Atom {
             Self::Poise => Definition::new_dimensional(1f64, "dyn.s/cm2"),
             Self::Biot => Definition::new_dimensional(10f64, "A"),
             Self::Stokes => Definition::new_dimensional(1f64, "cm2/s"),
-            Self::Maxwell => Definition::new_dimensional(0.00000001f64, "Wb"),
+            Self::Maxwell => Definition::new_dimensional(0.000_000_01_f64, "Wb"),
             Self::Gauss => Definition::new_dimensional(0.0001f64, "T"),
             Self::Oersted => Definition::new_dimensional(250f64, "/[pi].A/m"),
             Self::Gilbert => Definition::new_dimensional(1f64, "Oe.cm"),
             Self::Stilb => Definition::new_dimensional(1f64, "cd/cm2"),
             Self::Lambert => Definition::new_dimensional(1f64, "cd/cm2/[pi]"),
             Self::Phot => Definition::new_dimensional(0.0001f64, "lx"),
-            Self::Curie => Definition::new_dimensional(37000000000f64, "Bq"),
-            Self::Roentgen => Definition::new_dimensional(0.000258f64, "C/kg"),
+            Self::Curie => Definition::new_dimensional(37_000_000_000_f64, "Bq"),
+            Self::Roentgen => Definition::new_dimensional(0.000_258_f64, "C/kg"),
             Self::RadiationAbsorbedDose => Definition::new_dimensional(100f64, "erg/g"),
             Self::RadiationEquivalentMan => Definition::new_dimensional(1f64, "RAD"),
             Self::InchInternational => Definition::new_dimensional(2.54f64, "cm"),
@@ -485,7 +485,7 @@ impl Atom {
             Self::Section => Definition::new_dimensional(1f64, "[mi_us]2"),
             Self::Township => Definition::new_dimensional(36f64, "[sct]"),
             Self::MilUS => Definition::new_dimensional(0.001f64, "[in_us]"),
-            Self::InchBritish => Definition::new_dimensional(2.539998f64, "cm"),
+            Self::InchBritish => Definition::new_dimensional(2.539_998_f64, "cm"),
             Self::FootBritish => Definition::new_dimensional(12f64, "[in_br]"),
             Self::RodBritish => Definition::new_dimensional(16.5f64, "[ft_br]"),
             Self::GuntersChainBritish => Definition::new_dimensional(4f64, "[rd_br]"),
@@ -547,7 +547,7 @@ impl Atom {
             Self::Line => Definition::new_dimensional(1f64, "[in_i]/12"),
             Self::Point => Definition::new_dimensional(1f64, "[lne]/6"),
             Self::Pica => Definition::new_dimensional(12f64, "[pnt]"),
-            Self::PrintersPoint => Definition::new_dimensional(0.013837f64, "[in_i]"),
+            Self::PrintersPoint => Definition::new_dimensional(0.013_837_f64, "[in_i]"),
             Self::PrintersPica => Definition::new_dimensional(12f64, "[pnt_pr]"),
             Self::Pied => Definition::new_dimensional(32.48f64, "cm"),
             Self::Pouce => Definition::new_dimensional(1f64, "[pied]/12"),
@@ -583,7 +583,7 @@ impl Atom {
             Self::BritishThermalUnitAt60F => Definition::new_dimensional(1.05468f64, "kJ"),
             Self::MeanBritishThermalUnit => Definition::new_dimensional(1.05587f64, "kJ"),
             Self::InternationalTableBritishThermalUnit => {
-                Definition::new_dimensional(1.05505585262f64, "kJ")
+                Definition::new_dimensional(1.055_055_852_62_f64, "kJ")
             }
             Self::ThermochemicalBritishThermalUnit => Definition::new_dimensional(1.05435f64, "kJ"),
             Self::BritishThermalUnit => Definition::new_dimensional(1f64, "[Btu_th]"),
