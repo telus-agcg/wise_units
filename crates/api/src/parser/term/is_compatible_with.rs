@@ -1,8 +1,8 @@
 use std::borrow::Cow;
 
 use crate::{
-    is_compatible_with::IsCompatibleWith,
-    parser::{annotation_composition::AnnotationComposable, Composable, Term},
+    parser::{annotation_composition::AnnotationComposable, Term},
+    Composable, IsCompatibleWith,
 };
 
 /// In order to enforce compatibility on "non-units" (ex. `{each}`, `{total}`, `{heartbeats}`),

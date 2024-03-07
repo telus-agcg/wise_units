@@ -1,9 +1,4 @@
-use crate::{
-    as_fraction::AsFraction,
-    parser::{Composable, Composition},
-    reduce::ToReduced,
-    Term,
-};
+use crate::{as_fraction::AsFraction, parser::Composition, reduce::ToReduced, Composable, Term};
 
 use super::Unit;
 

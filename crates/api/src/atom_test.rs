@@ -5,9 +5,9 @@
 use approx::{assert_relative_eq, assert_ulps_eq};
 
 use crate::{
-    parser::{term::UNITY_ARRAY, Composable, Composition, Dimension, UcumSymbol},
+    parser::{term::UNITY_ARRAY, Composition, Dimension, UcumSymbol},
     ucum_unit::UcumUnit,
-    Atom, Classification,
+    Atom, Classification, Composable,
 };
 
 macro_rules! validate_definition {
