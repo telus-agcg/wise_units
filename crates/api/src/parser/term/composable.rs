@@ -34,7 +34,7 @@ impl<'a> Composable for Cow<'a, [Term]> {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::{Composable, Composition, Dimension, Prefix};
+    use crate::parser::{Composable, Composition, Dimension};
 
     macro_rules! validate_composition {
         ($test_name:ident, $term:expr, $expected_value:expr) => {

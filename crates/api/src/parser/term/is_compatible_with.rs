@@ -52,7 +52,7 @@ impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{is_compatible_with::IsCompatibleWith, parser::Prefix};
+    use crate::is_compatible_with::IsCompatibleWith;
 
     mod without_annotations {
         use super::*;

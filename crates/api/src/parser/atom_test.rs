@@ -4,8 +4,7 @@
 
 use crate::{
     parser::{
-        term::UNITY_ARRAY, Atom, Classification, Composable, Composition, Dimension, Prefix,
-        UcumSymbol,
+        term::UNITY_ARRAY, Atom, Classification, Composable, Composition, Dimension, UcumSymbol,
     },
     ucum_unit::UcumUnit,
 };
