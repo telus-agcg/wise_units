@@ -646,3 +646,41 @@ impl Visit<SymbolRule> for Atom {
         Ok(atom)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::Unit;
+
+    use super::*;
+
+    #[test]
+    fn meow_test() {
+        assert_eq!(parse2("m").unwrap(), Unit::new(vec![term!(Meter)]));
+        assert_eq!(
+            parse2("2m").unwrap(),
+            Unit::new(vec![term!(Meter, factor: 2)])
+        );
+        assert_eq!(
+            parse2("2m2").unwrap(),
+            Unit::new(vec![term!(Meter, factor: 2, exponent: 2)])
+        );
+        assert_eq!(
+            parse2("2m2/m3").unwrap(),
+            Unit::new(vec![
+                term!(Meter, factor: 2, exponent: 2),
+                term!(Meter, exponent: -3),
+            ])
+        );
+        assert_eq!(parse2("L").unwrap(), Unit::new(vec![term!(Liter)]));
+        assert_eq!(parse2("l").unwrap(), Unit::new(vec![term!(Liter)]));
+        assert_eq!(parse2("har").unwrap(), Unit::new(vec![term!(Hecto, Are)]));
+        assert_eq!(
+            parse2("km/m2.cm").unwrap(),
+            Unit::new(vec![
+                term!(Kilo, Meter),
+                term!(Meter, exponent: -2),
+                term!(Centi, Meter),
+            ])
+        );
+    }
+}

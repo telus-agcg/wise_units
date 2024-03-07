@@ -34,14 +34,11 @@ impl<'i> MultiTerm<'i> {
             }
             (Term::Multi(lhs), Op::Slash, Term::Multi(rhs)) => {
                 let mut lhs_vec: Vec<_> = lhs.flatten();
-                let rhs_vec: Vec<_> = rhs
-                    .flatten()
-                    .into_iter()
-                    .map(|(op, t)| match op {
-                        Op::Dot => (Op::Slash, t),
-                        Op::Slash => (Op::Dot, t),
-                    })
-                    .collect();
+                let mut rhs_vec: Vec<_> = rhs.flatten();
+                match rhs_vec.first_mut() {
+                    Some((op, _)) => *op = Op::Slash,
+                    None => unreachable!(),
+                }
                 lhs_vec.extend(rhs_vec);
                 lhs_vec
             }
@@ -59,14 +56,11 @@ impl<'i> MultiTerm<'i> {
                 vec![(Op::Dot, lhs), (Op::Dot, rhs)]
             }
             (Term::Single(lhs), Op::Slash, Term::Multi(rhs)) => {
-                let mut output: Vec<_> = rhs
-                    .flatten()
-                    .into_iter()
-                    .map(|(op, t)| match op {
-                        Op::Dot => (Op::Slash, t),
-                        Op::Slash => (Op::Dot, t),
-                    })
-                    .collect();
+                let mut output: Vec<_> = rhs.flatten();
+                match output.first_mut() {
+                    Some((op, _)) => *op = Op::Slash,
+                    None => unreachable!(),
+                }
                 output.insert(0, (Op::Dot, lhs));
                 output
             }

@@ -106,6 +106,22 @@ mod tests {
         }
 
         #[test]
+        fn prefix_atom_test() {
+            // metric atom
+            pretty_assertions::assert_eq!(
+                parse("har").unwrap(),
+                MainTerm::Term(Term::Single(Component::Annotatable {
+                    factor: None,
+                    annotatable: Annotatable::SimpleUnit(SimpleUnit::PrefixAtom {
+                        prefix_symbol: "h",
+                        atom_symbol: "ar"
+                    }),
+                    annotation: None
+                }))
+            );
+        }
+
+        #[test]
         fn atom_exponent_test() {
             // metric atom
             pretty_assertions::assert_eq!(

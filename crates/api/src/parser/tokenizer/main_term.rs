@@ -49,21 +49,3 @@ impl TryFrom<MainTerm<'_>> for crate::Unit {
         }
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use crate::parser::tokenizer;
-
-    #[test]
-    fn meow_test() {
-        let main_term = tokenizer::parse("m").unwrap();
-        let _ = crate::Unit::try_from(main_term).unwrap();
-
-        let main_term = tokenizer::parse("2m").unwrap();
-        let _ = crate::Unit::try_from(main_term).unwrap();
-
-        let main_term = tokenizer::parse("2m2/m3").unwrap();
-        let unit = crate::Unit::try_from(main_term).unwrap();
-        panic!("{unit:#?}")
-    }
-}
