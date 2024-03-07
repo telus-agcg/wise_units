@@ -1,13 +1,16 @@
 use num_traits::Zero;
 
-use crate::parser::{term, Atom, Prefix, Term};
+use crate::parser::{
+    term::{self, Factor},
+    Atom, Prefix, Term,
+};
 use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.
 ///
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
 struct ComposableTerm {
-    factor: Option<u32>,
+    factor: Option<Factor>,
     prefix: Option<Prefix>,
     atom: Option<Atom>,
     annotation: Option<String>,
