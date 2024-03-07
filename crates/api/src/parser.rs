@@ -12,7 +12,6 @@
         clippy::non_ascii_literal
     )
 )]
-pub mod composition;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;
 
@@ -21,6 +20,5 @@ mod error;
 pub(crate) mod term;
 
 pub use self::{
-    annotation_composition::AnnotationComposition, composition::Composition, error::Error,
-    property::Property, term::Term,
+    annotation_composition::AnnotationComposition, error::Error, property::Property, term::Term,
 };

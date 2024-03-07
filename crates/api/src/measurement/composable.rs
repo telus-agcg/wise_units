@@ -1,4 +1,4 @@
-use crate::{parser::Composition, Composable, Measurement};
+use crate::{Composable, Composition, Measurement};
 
 //-----------------------------------------------------------------------------
 // impl Composable

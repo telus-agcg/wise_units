@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 
-use crate::{parser::Composition, Composable};
+use crate::{Composable, Composition};
 
 use super::Term;
 

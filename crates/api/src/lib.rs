@@ -26,6 +26,7 @@ pub mod atom;
 mod atom_test;
 pub mod classification;
 mod composable;
+pub mod composition;
 pub mod convertible;
 mod dimension;
 pub mod error;
@@ -46,13 +47,14 @@ pub use crate::{
     atom::Atom,
     classification::Classification,
     composable::Composable,
+    composition::Composition,
     convertible::Convertible,
     dimension::Dimension,
     error::Error,
     field_eq::FieldEq,
     is_compatible_with::IsCompatibleWith,
     measurement::Measurement,
-    parser::{composition, Composition, Property, Term},
+    parser::{Property, Term},
     prefix::Prefix,
     ucum_symbol::UcumSymbol,
     ucum_unit::UcumUnit,
