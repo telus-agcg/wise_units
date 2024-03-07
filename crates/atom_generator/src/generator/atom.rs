@@ -35,8 +35,8 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
         };
 
         use crate::{
-            is_compatible_with::DefaultCompatibility, parser::Property, reducible::Reducible,
-            Classification, UcumSymbol, UcumUnit, Unit,
+            is_compatible_with::DefaultCompatibility, reducible::Reducible, Classification, Property,
+            UcumSymbol, UcumUnit, Unit,
         };
 
         #atom_enum

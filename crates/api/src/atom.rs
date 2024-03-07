@@ -14,8 +14,8 @@ mod reducible;
 use self::{definition::Definition, function_set::FunctionSet};
 
 use crate::{
-    is_compatible_with::DefaultCompatibility, parser::Property, reducible::Reducible,
-    Classification, UcumSymbol, UcumUnit, Unit,
+    is_compatible_with::DefaultCompatibility, reducible::Reducible, Classification, Property,
+    UcumSymbol, UcumUnit, Unit,
 };
 
 #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]

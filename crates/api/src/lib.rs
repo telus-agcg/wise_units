@@ -36,6 +36,8 @@ pub mod is_compatible_with;
 pub mod measurement;
 pub mod parser;
 mod prefix;
+#[allow(clippy::non_ascii_literal)]
+pub mod property;
 pub mod reduce;
 mod ucum_symbol;
 pub mod unit;
@@ -44,19 +46,8 @@ mod reducible;
 mod ucum_unit;
 
 pub use crate::{
-    atom::Atom,
-    classification::Classification,
-    composable::Composable,
-    composition::Composition,
-    convertible::Convertible,
-    dimension::Dimension,
-    error::Error,
-    field_eq::FieldEq,
-    is_compatible_with::IsCompatibleWith,
-    measurement::Measurement,
-    parser::{Property, Term},
-    prefix::Prefix,
-    ucum_symbol::UcumSymbol,
-    ucum_unit::UcumUnit,
-    unit::Unit,
+    atom::Atom, classification::Classification, composable::Composable, composition::Composition,
+    convertible::Convertible, dimension::Dimension, error::Error, field_eq::FieldEq,
+    is_compatible_with::IsCompatibleWith, measurement::Measurement, parser::Term, prefix::Prefix,
+    property::Property, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit, unit::Unit,
 };
