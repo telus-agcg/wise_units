@@ -1,12 +1,12 @@
 #![allow(clippy::large_enum_variant)]
 #![allow(clippy::result_large_err)]
 
-use std::borrow::Cow;
+use std::{borrow::Cow, str::FromStr};
 
 use num_traits::One;
 
 use crate::{
-    parser::{function_set::FunctionSet, Error, Term},
+    parser::{function_set::FunctionSet, Term},
     reducible::Reducible,
 };
 
@@ -35,23 +35,29 @@ pub(crate) enum Definition<V> {
 }
 
 impl<V> Definition<V> {
-    pub(crate) fn try_new_dimensional(value: V, expression: &'static str) -> Result<Self, Error> {
-        Ok(Self::Dimensional {
+    pub(crate) fn new_dimensional(value: V, expression: &'static str) -> Self {
+        Self::Dimensional {
             value,
-            terms: Cow::Owned(super::parse(expression)?),
-        })
+            terms: crate::Unit::from_str(expression).map_or_else(
+                |_| unreachable!("expected valid unit definition string: {expression}"),
+                crate::Unit::into_terms,
+            ),
+        }
     }
 
-    pub(crate) fn try_new_dimensional_special(
+    pub(crate) fn new_dimensional_special(
         value: V,
         expression: &'static str,
         function_set: FunctionSet<V>,
-    ) -> Result<Self, Error> {
-        Ok(Self::DimensionalSpecial {
+    ) -> Self {
+        Self::DimensionalSpecial {
             value,
-            terms: Cow::Owned(super::parse(expression)?),
+            terms: crate::Unit::from_str(expression).map_or_else(
+                |_| unreachable!("expected valid unit definition string: {expression}"),
+                crate::Unit::into_terms,
+            ),
             function_set,
-        })
+        }
     }
 
     pub(crate) fn value(&self) -> V

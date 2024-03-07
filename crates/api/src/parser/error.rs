@@ -1,7 +1,4 @@
-use crate::{
-    parser::{symbols::symbol_parser::Rule as SymbolRule, terms::term_parser::Rule as TermRule},
-    unit::parser::Rule as UnitRule,
-};
+use crate::unit::parser::Rule as UnitRule;
 use pest::error::Error as PestError;
 
 /// Errors when trying to convert between types that aren't commensurable.
@@ -9,14 +6,6 @@ use pest::error::Error as PestError;
 #[derive(Clone, thiserror::Error, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 pub enum Error {
-    #[error(transparent)]
-    #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
-    UnableToParseTerm(#[from] PestError<TermRule>),
-
-    #[error(transparent)]
-    #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
-    UnableToParseSymbol(#[from] PestError<SymbolRule>),
-
     #[error(transparent)]
     #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
     UnableToParseUnit(#[from] PestError<UnitRule>),

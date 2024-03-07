@@ -331,36 +331,36 @@ pub enum Atom {
 }
 impl Atom {
     pub(crate) fn definition(self) -> Definition<f64> {
-        let result = match self {
-            Self::Meter => Ok(Definition::Base),
-            Self::Second => Ok(Definition::Base),
-            Self::Gram => Ok(Definition::Base),
-            Self::Radian => Ok(Definition::Base),
-            Self::Kelvin => Ok(Definition::Base),
-            Self::Coulomb => Ok(Definition::Base),
-            Self::Candela => Ok(Definition::Base),
-            Self::TheNumberTenForArbitraryPowersStar => Ok(Definition::NonDimensional(10f64)),
-            Self::TheNumberTenForArbitraryPowersCaret => Ok(Definition::NonDimensional(10f64)),
-            Self::TheNumberPi => Ok(Definition::NonDimensional(::std::f64::consts::PI)),
-            Self::Percent => Ok(Definition::NonDimensional(0.01)),
-            Self::PartsPerThousand => Definition::try_new_dimensional(1f64, "10*-3"),
-            Self::PartsPerMillion => Definition::try_new_dimensional(1f64, "10*-6"),
-            Self::PartsPerBillion => Definition::try_new_dimensional(1f64, "10*-9"),
-            Self::PartsPerTrillion => Definition::try_new_dimensional(1f64, "10*-12"),
-            Self::Mole => Definition::try_new_dimensional(6.0221367f64, "10*23"),
-            Self::Steradian => Definition::try_new_dimensional(1f64, "rad2"),
-            Self::Hertz => Definition::try_new_dimensional(1f64, "s-1"),
-            Self::Newton => Definition::try_new_dimensional(1f64, "kg.m/s2"),
-            Self::Pascal => Definition::try_new_dimensional(1f64, "N/m2"),
-            Self::Joule => Definition::try_new_dimensional(1f64, "N.m"),
-            Self::Watt => Definition::try_new_dimensional(1f64, "J/s"),
-            Self::Ampere => Definition::try_new_dimensional(1f64, "C/s"),
-            Self::Volt => Definition::try_new_dimensional(1f64, "J/C"),
-            Self::Farad => Definition::try_new_dimensional(1f64, "C/V"),
-            Self::Ohm => Definition::try_new_dimensional(1f64, "V/A"),
-            Self::Siemens => Definition::try_new_dimensional(1f64, "Ohm-1"),
-            Self::Weber => Definition::try_new_dimensional(1f64, "V.s"),
-            Self::DegreeCelsius => Definition::try_new_dimensional_special(
+        match self {
+            Self::Meter => Definition::Base,
+            Self::Second => Definition::Base,
+            Self::Gram => Definition::Base,
+            Self::Radian => Definition::Base,
+            Self::Kelvin => Definition::Base,
+            Self::Coulomb => Definition::Base,
+            Self::Candela => Definition::Base,
+            Self::TheNumberTenForArbitraryPowersStar => Definition::NonDimensional(10f64),
+            Self::TheNumberTenForArbitraryPowersCaret => Definition::NonDimensional(10f64),
+            Self::TheNumberPi => Definition::NonDimensional(::std::f64::consts::PI),
+            Self::Percent => Definition::NonDimensional(0.01),
+            Self::PartsPerThousand => Definition::new_dimensional(1f64, "10*-3"),
+            Self::PartsPerMillion => Definition::new_dimensional(1f64, "10*-6"),
+            Self::PartsPerBillion => Definition::new_dimensional(1f64, "10*-9"),
+            Self::PartsPerTrillion => Definition::new_dimensional(1f64, "10*-12"),
+            Self::Mole => Definition::new_dimensional(6.0221367f64, "10*23"),
+            Self::Steradian => Definition::new_dimensional(1f64, "rad2"),
+            Self::Hertz => Definition::new_dimensional(1f64, "s-1"),
+            Self::Newton => Definition::new_dimensional(1f64, "kg.m/s2"),
+            Self::Pascal => Definition::new_dimensional(1f64, "N/m2"),
+            Self::Joule => Definition::new_dimensional(1f64, "N.m"),
+            Self::Watt => Definition::new_dimensional(1f64, "J/s"),
+            Self::Ampere => Definition::new_dimensional(1f64, "C/s"),
+            Self::Volt => Definition::new_dimensional(1f64, "J/C"),
+            Self::Farad => Definition::new_dimensional(1f64, "C/V"),
+            Self::Ohm => Definition::new_dimensional(1f64, "V/A"),
+            Self::Siemens => Definition::new_dimensional(1f64, "Ohm-1"),
+            Self::Weber => Definition::new_dimensional(1f64, "V.s"),
+            Self::DegreeCelsius => Definition::new_dimensional_special(
                 1f64,
                 "K",
                 FunctionSet {
@@ -368,204 +368,191 @@ impl Atom {
                     convert_to: |value: f64| value + 273.15,
                 },
             ),
-            Self::Tesla => Definition::try_new_dimensional(1f64, "Wb/m2"),
-            Self::Henry => Definition::try_new_dimensional(1f64, "Wb/A"),
-            Self::Lumen => Definition::try_new_dimensional(1f64, "cd.sr"),
-            Self::Lux => Definition::try_new_dimensional(1f64, "lm/m2"),
-            Self::Becquerel => Definition::try_new_dimensional(1f64, "s-1"),
-            Self::Gray => Definition::try_new_dimensional(1f64, "J/kg"),
-            Self::Sievert => Definition::try_new_dimensional(1f64, "J/kg"),
-            Self::Gon => Definition::try_new_dimensional(0.9f64, "deg"),
-            Self::Degree => Definition::try_new_dimensional(2f64, "[pi].rad/360"),
-            Self::MinuteAngle => Definition::try_new_dimensional(1f64, "deg/60"),
-            Self::SecondAngle => Definition::try_new_dimensional(1f64, "'/60"),
-            Self::Liter => Definition::try_new_dimensional(1f64, "dm3"),
-            Self::LiterSecondary => Definition::try_new_dimensional(1f64, "l"),
-            Self::Are => Definition::try_new_dimensional(100f64, "m2"),
-            Self::Minute => Definition::try_new_dimensional(60f64, "s"),
-            Self::Hour => Definition::try_new_dimensional(60f64, "min"),
-            Self::Day => Definition::try_new_dimensional(24f64, "h"),
-            Self::TropicalYear => Definition::try_new_dimensional(365.24219f64, "d"),
-            Self::MeanJulianYear => Definition::try_new_dimensional(365.25f64, "d"),
-            Self::MeanGregorianYear => Definition::try_new_dimensional(365.2425f64, "d"),
-            Self::Year => Definition::try_new_dimensional(1f64, "a_j"),
-            Self::Week => Definition::try_new_dimensional(7f64, "d"),
-            Self::SynodalMonth => Definition::try_new_dimensional(29.53059f64, "d"),
-            Self::MeanJulianMonth => Definition::try_new_dimensional(1f64, "a_j/12"),
-            Self::MeanGregorianMonth => Definition::try_new_dimensional(1f64, "a_g/12"),
-            Self::Month => Definition::try_new_dimensional(1f64, "mo_j"),
-            Self::Tonne => Definition::try_new_dimensional(1000f64, "kg"),
-            Self::Bar => Definition::try_new_dimensional(100000f64, "Pa"),
+            Self::Tesla => Definition::new_dimensional(1f64, "Wb/m2"),
+            Self::Henry => Definition::new_dimensional(1f64, "Wb/A"),
+            Self::Lumen => Definition::new_dimensional(1f64, "cd.sr"),
+            Self::Lux => Definition::new_dimensional(1f64, "lm/m2"),
+            Self::Becquerel => Definition::new_dimensional(1f64, "s-1"),
+            Self::Gray => Definition::new_dimensional(1f64, "J/kg"),
+            Self::Sievert => Definition::new_dimensional(1f64, "J/kg"),
+            Self::Gon => Definition::new_dimensional(0.9f64, "deg"),
+            Self::Degree => Definition::new_dimensional(2f64, "[pi].rad/360"),
+            Self::MinuteAngle => Definition::new_dimensional(1f64, "deg/60"),
+            Self::SecondAngle => Definition::new_dimensional(1f64, "'/60"),
+            Self::Liter => Definition::new_dimensional(1f64, "dm3"),
+            Self::LiterSecondary => Definition::new_dimensional(1f64, "l"),
+            Self::Are => Definition::new_dimensional(100f64, "m2"),
+            Self::Minute => Definition::new_dimensional(60f64, "s"),
+            Self::Hour => Definition::new_dimensional(60f64, "min"),
+            Self::Day => Definition::new_dimensional(24f64, "h"),
+            Self::TropicalYear => Definition::new_dimensional(365.24219f64, "d"),
+            Self::MeanJulianYear => Definition::new_dimensional(365.25f64, "d"),
+            Self::MeanGregorianYear => Definition::new_dimensional(365.2425f64, "d"),
+            Self::Year => Definition::new_dimensional(1f64, "a_j"),
+            Self::Week => Definition::new_dimensional(7f64, "d"),
+            Self::SynodalMonth => Definition::new_dimensional(29.53059f64, "d"),
+            Self::MeanJulianMonth => Definition::new_dimensional(1f64, "a_j/12"),
+            Self::MeanGregorianMonth => Definition::new_dimensional(1f64, "a_g/12"),
+            Self::Month => Definition::new_dimensional(1f64, "mo_j"),
+            Self::Tonne => Definition::new_dimensional(1000f64, "kg"),
+            Self::Bar => Definition::new_dimensional(100000f64, "Pa"),
             Self::UnifiedAtomicMassUnit => {
-                Definition::try_new_dimensional(0.0000000000000000000000016605402f64, "g")
+                Definition::new_dimensional(0.0000000000000000000000016605402f64, "g")
             }
-            Self::Electronvolt => Definition::try_new_dimensional(1f64, "[e].V"),
-            Self::AstronomicUnit => Definition::try_new_dimensional(149597.870691f64, "Mm"),
-            Self::Parsec => Definition::try_new_dimensional(30856780000000000f64, "m"),
-            Self::VelocityOfLight => Definition::try_new_dimensional(299792458f64, "m/s"),
-            Self::PlanckConstant => Definition::try_new_dimensional(
-                0.00000000000000000000000000000000066260755f64,
-                "J.s",
-            ),
+            Self::Electronvolt => Definition::new_dimensional(1f64, "[e].V"),
+            Self::AstronomicUnit => Definition::new_dimensional(149597.870691f64, "Mm"),
+            Self::Parsec => Definition::new_dimensional(30856780000000000f64, "m"),
+            Self::VelocityOfLight => Definition::new_dimensional(299792458f64, "m/s"),
+            Self::PlanckConstant => {
+                Definition::new_dimensional(0.00000000000000000000000000000000066260755f64, "J.s")
+            }
             Self::BoltzmannConstant => {
-                Definition::try_new_dimensional(0.00000000000000000000001380658f64, "J/K")
+                Definition::new_dimensional(0.00000000000000000000001380658f64, "J/K")
             }
             Self::PermittivityOfVacuum => {
-                Definition::try_new_dimensional(0.000000000008854187817f64, "F/m")
+                Definition::new_dimensional(0.000000000008854187817f64, "F/m")
             }
-            Self::PermeabilityOfVacuum => {
-                Definition::try_new_dimensional(1f64, "4.[pi].10*-7.N/A2")
-            }
+            Self::PermeabilityOfVacuum => Definition::new_dimensional(1f64, "4.[pi].10*-7.N/A2"),
             Self::ElementaryCharge => {
-                Definition::try_new_dimensional(0.000000000000000000160217733f64, "C")
+                Definition::new_dimensional(0.000000000000000000160217733f64, "C")
             }
             Self::ElectronMass => {
-                Definition::try_new_dimensional(0.00000000000000000000000000091093897f64, "g")
+                Definition::new_dimensional(0.00000000000000000000000000091093897f64, "g")
             }
             Self::ProtonMass => {
-                Definition::try_new_dimensional(0.0000000000000000000000016726231f64, "g")
+                Definition::new_dimensional(0.0000000000000000000000016726231f64, "g")
             }
             Self::NewtonianConstantOfGravitation => {
-                Definition::try_new_dimensional(0.0000000000667259f64, "m3.kg-1.s-2")
+                Definition::new_dimensional(0.0000000000667259f64, "m3.kg-1.s-2")
             }
-            Self::StandardAccelerationOfFreeFall => {
-                Definition::try_new_dimensional(9.80665f64, "m/s2")
-            }
-            Self::StandardAtmosphere => Definition::try_new_dimensional(101325f64, "Pa"),
-            Self::LightYear => Definition::try_new_dimensional(1f64, "[c].a_j"),
-            Self::GramForce => Definition::try_new_dimensional(1f64, "g.[g]"),
-            Self::PoundForceAvoirdupois => Definition::try_new_dimensional(1f64, "[lb_av].[g]"),
-            Self::Kayser => Definition::try_new_dimensional(1f64, "cm-1"),
-            Self::Gal => Definition::try_new_dimensional(1f64, "cm/s2"),
-            Self::Dyne => Definition::try_new_dimensional(1f64, "g.cm/s2"),
-            Self::Erg => Definition::try_new_dimensional(1f64, "dyn.cm"),
-            Self::Poise => Definition::try_new_dimensional(1f64, "dyn.s/cm2"),
-            Self::Biot => Definition::try_new_dimensional(10f64, "A"),
-            Self::Stokes => Definition::try_new_dimensional(1f64, "cm2/s"),
-            Self::Maxwell => Definition::try_new_dimensional(0.00000001f64, "Wb"),
-            Self::Gauss => Definition::try_new_dimensional(0.0001f64, "T"),
-            Self::Oersted => Definition::try_new_dimensional(250f64, "/[pi].A/m"),
-            Self::Gilbert => Definition::try_new_dimensional(1f64, "Oe.cm"),
-            Self::Stilb => Definition::try_new_dimensional(1f64, "cd/cm2"),
-            Self::Lambert => Definition::try_new_dimensional(1f64, "cd/cm2/[pi]"),
-            Self::Phot => Definition::try_new_dimensional(0.0001f64, "lx"),
-            Self::Curie => Definition::try_new_dimensional(37000000000f64, "Bq"),
-            Self::Roentgen => Definition::try_new_dimensional(0.000258f64, "C/kg"),
-            Self::RadiationAbsorbedDose => Definition::try_new_dimensional(100f64, "erg/g"),
-            Self::RadiationEquivalentMan => Definition::try_new_dimensional(1f64, "RAD"),
-            Self::InchInternational => Definition::try_new_dimensional(2.54f64, "cm"),
-            Self::FootInternational => Definition::try_new_dimensional(12f64, "[in_i]"),
-            Self::YardInternational => Definition::try_new_dimensional(3f64, "[ft_i]"),
-            Self::MileInternational => Definition::try_new_dimensional(5280f64, "[ft_i]"),
-            Self::FathomInternational => Definition::try_new_dimensional(6f64, "[ft_i]"),
-            Self::NauticalMileInternational => Definition::try_new_dimensional(1852f64, "m"),
-            Self::KnotInternational => Definition::try_new_dimensional(1f64, "[nmi_i]/h"),
-            Self::SquareInchInternational => Definition::try_new_dimensional(1f64, "[in_i]2"),
-            Self::SquareFootInternational => Definition::try_new_dimensional(1f64, "[ft_i]2"),
-            Self::SquareYardInternational => Definition::try_new_dimensional(1f64, "[yd_i]2"),
-            Self::CubicInchInternational => Definition::try_new_dimensional(1f64, "[in_i]3"),
-            Self::CubicFootInternational => Definition::try_new_dimensional(1f64, "[ft_i]3"),
-            Self::CubicYardInternational => Definition::try_new_dimensional(1f64, "[yd_i]3"),
-            Self::BoardFootInternational => Definition::try_new_dimensional(144f64, "[in_i]3"),
-            Self::CordInternational => Definition::try_new_dimensional(128f64, "[ft_i]3"),
-            Self::MilInternational => Definition::try_new_dimensional(0.001f64, "[in_i]"),
-            Self::CircularMilInternational => {
-                Definition::try_new_dimensional(1f64, "[pi]/4.[mil_i]2")
-            }
-            Self::HandInternational => Definition::try_new_dimensional(4f64, "[in_i]"),
-            Self::FootUS => Definition::try_new_dimensional(1200f64, "m/3937"),
-            Self::YardUS => Definition::try_new_dimensional(3f64, "[ft_us]"),
-            Self::InchUS => Definition::try_new_dimensional(1f64, "[ft_us]/12"),
-            Self::RodUS => Definition::try_new_dimensional(16.5f64, "[ft_us]"),
-            Self::GuntersChainUS => Definition::try_new_dimensional(4f64, "[rd_us]"),
-            Self::LinkForGuntersChainUS => Definition::try_new_dimensional(1f64, "[ch_us]/100"),
-            Self::RamdensChainUS => Definition::try_new_dimensional(100f64, "[ft_us]"),
-            Self::LinkForRamdensChainUS => Definition::try_new_dimensional(1f64, "[rch_us]/100"),
-            Self::FathomUS => Definition::try_new_dimensional(6f64, "[ft_us]"),
-            Self::FurlongUS => Definition::try_new_dimensional(40f64, "[rd_us]"),
-            Self::MileUS => Definition::try_new_dimensional(8f64, "[fur_us]"),
-            Self::AcreUS => Definition::try_new_dimensional(160f64, "[rd_us]2"),
-            Self::SquareRodUS => Definition::try_new_dimensional(1f64, "[rd_us]2"),
-            Self::SquareMileUS => Definition::try_new_dimensional(1f64, "[mi_us]2"),
-            Self::Section => Definition::try_new_dimensional(1f64, "[mi_us]2"),
-            Self::Township => Definition::try_new_dimensional(36f64, "[sct]"),
-            Self::MilUS => Definition::try_new_dimensional(0.001f64, "[in_us]"),
-            Self::InchBritish => Definition::try_new_dimensional(2.539998f64, "cm"),
-            Self::FootBritish => Definition::try_new_dimensional(12f64, "[in_br]"),
-            Self::RodBritish => Definition::try_new_dimensional(16.5f64, "[ft_br]"),
-            Self::GuntersChainBritish => Definition::try_new_dimensional(4f64, "[rd_br]"),
-            Self::LinkForGuntersChainBritish => {
-                Definition::try_new_dimensional(1f64, "[ch_br]/100")
-            }
-            Self::FathomBritish => Definition::try_new_dimensional(6f64, "[ft_br]"),
-            Self::PaceBritish => Definition::try_new_dimensional(2.5f64, "[ft_br]"),
-            Self::YardBritish => Definition::try_new_dimensional(3f64, "[ft_br]"),
-            Self::MileBritish => Definition::try_new_dimensional(5280f64, "[ft_br]"),
-            Self::NauticalMileBritish => Definition::try_new_dimensional(6080f64, "[ft_br]"),
-            Self::KnotBritish => Definition::try_new_dimensional(1f64, "[nmi_br]/h"),
-            Self::AcreBritish => Definition::try_new_dimensional(4840f64, "[yd_br]2"),
-            Self::QueenAnnesWineGallonUS => Definition::try_new_dimensional(231f64, "[in_i]3"),
-            Self::BarrelUS => Definition::try_new_dimensional(42f64, "[gal_us]"),
-            Self::QuartUS => Definition::try_new_dimensional(1f64, "[gal_us]/4"),
-            Self::PintUS => Definition::try_new_dimensional(1f64, "[qt_us]/2"),
-            Self::GillUS => Definition::try_new_dimensional(1f64, "[pt_us]/4"),
-            Self::FluidOunceUS => Definition::try_new_dimensional(1f64, "[gil_us]/4"),
-            Self::FluidDramUS => Definition::try_new_dimensional(1f64, "[foz_us]/8"),
-            Self::MinimUS => Definition::try_new_dimensional(1f64, "[fdr_us]/60"),
-            Self::CordUS => Definition::try_new_dimensional(128f64, "[ft_i]3"),
-            Self::BushelUS => Definition::try_new_dimensional(2150.42f64, "[in_i]3"),
-            Self::HistoricalWinchesterGallon => Definition::try_new_dimensional(1f64, "[bu_us]/8"),
-            Self::PeckUS => Definition::try_new_dimensional(1f64, "[bu_us]/4"),
-            Self::DryQuartUS => Definition::try_new_dimensional(1f64, "[pk_us]/8"),
-            Self::DryPintUS => Definition::try_new_dimensional(1f64, "[dqt_us]/2"),
-            Self::TablespoonUS => Definition::try_new_dimensional(1f64, "[foz_us]/2"),
-            Self::TeaspoonUS => Definition::try_new_dimensional(1f64, "[tbs_us]/3"),
-            Self::CupUS => Definition::try_new_dimensional(16f64, "[tbs_us]"),
-            Self::MetricFluidOunce => Definition::try_new_dimensional(30f64, "mL"),
-            Self::MetricCup => Definition::try_new_dimensional(240f64, "mL"),
-            Self::MetricTeaspoon => Definition::try_new_dimensional(5f64, "mL"),
-            Self::MetricTablespoon => Definition::try_new_dimensional(15f64, "mL"),
-            Self::GallonBritish => Definition::try_new_dimensional(4.54609f64, "l"),
-            Self::PeckBritish => Definition::try_new_dimensional(2f64, "[gal_br]"),
-            Self::BushelBritish => Definition::try_new_dimensional(4f64, "[pk_br]"),
-            Self::QuartBritish => Definition::try_new_dimensional(1f64, "[gal_br]/4"),
-            Self::PintBritish => Definition::try_new_dimensional(1f64, "[qt_br]/2"),
-            Self::GillBritish => Definition::try_new_dimensional(1f64, "[pt_br]/4"),
-            Self::FluidOunceBritish => Definition::try_new_dimensional(1f64, "[gil_br]/5"),
-            Self::FluidDramBritish => Definition::try_new_dimensional(1f64, "[foz_br]/8"),
-            Self::MinimBritish => Definition::try_new_dimensional(1f64, "[fdr_br]/60"),
-            Self::Grain => Definition::try_new_dimensional(64.79891f64, "mg"),
-            Self::PoundAvoirdupois => Definition::try_new_dimensional(7000f64, "[gr]"),
-            Self::OunceAvoirdupois => Definition::try_new_dimensional(1f64, "[lb_av]/16"),
-            Self::DramAvoirdupois => Definition::try_new_dimensional(1f64, "[oz_av]/16"),
-            Self::ShortHundredweightAvoirdupois => {
-                Definition::try_new_dimensional(100f64, "[lb_av]")
-            }
-            Self::LongHunderdweightAvoirdupois => {
-                Definition::try_new_dimensional(112f64, "[lb_av]")
-            }
-            Self::ShortTonAvoirdupois => Definition::try_new_dimensional(20f64, "[scwt_av]"),
-            Self::LongTonAvoirdupois => Definition::try_new_dimensional(20f64, "[lcwt_av]"),
-            Self::StoneAvoirdupois => Definition::try_new_dimensional(14f64, "[lb_av]"),
-            Self::PennyweightTroy => Definition::try_new_dimensional(24f64, "[gr]"),
-            Self::OunceTroy => Definition::try_new_dimensional(20f64, "[pwt_tr]"),
-            Self::PoundTroy => Definition::try_new_dimensional(12f64, "[oz_tr]"),
-            Self::ScrupleApothecaries => Definition::try_new_dimensional(20f64, "[gr]"),
-            Self::DramApothecaries => Definition::try_new_dimensional(3f64, "[sc_ap]"),
-            Self::OunceApothecaries => Definition::try_new_dimensional(8f64, "[dr_ap]"),
-            Self::PoundApothecaries => Definition::try_new_dimensional(12f64, "[oz_ap]"),
-            Self::MetricOunce => Definition::try_new_dimensional(28f64, "g"),
-            Self::Line => Definition::try_new_dimensional(1f64, "[in_i]/12"),
-            Self::Point => Definition::try_new_dimensional(1f64, "[lne]/6"),
-            Self::Pica => Definition::try_new_dimensional(12f64, "[pnt]"),
-            Self::PrintersPoint => Definition::try_new_dimensional(0.013837f64, "[in_i]"),
-            Self::PrintersPica => Definition::try_new_dimensional(12f64, "[pnt_pr]"),
-            Self::Pied => Definition::try_new_dimensional(32.48f64, "cm"),
-            Self::Pouce => Definition::try_new_dimensional(1f64, "[pied]/12"),
-            Self::Ligne => Definition::try_new_dimensional(1f64, "[pouce]/12"),
-            Self::Didot => Definition::try_new_dimensional(1f64, "[ligne]/6"),
-            Self::Cicero => Definition::try_new_dimensional(12f64, "[didot]"),
-            Self::DegreeFahrenheit => Definition::try_new_dimensional_special(
+            Self::StandardAccelerationOfFreeFall => Definition::new_dimensional(9.80665f64, "m/s2"),
+            Self::StandardAtmosphere => Definition::new_dimensional(101325f64, "Pa"),
+            Self::LightYear => Definition::new_dimensional(1f64, "[c].a_j"),
+            Self::GramForce => Definition::new_dimensional(1f64, "g.[g]"),
+            Self::PoundForceAvoirdupois => Definition::new_dimensional(1f64, "[lb_av].[g]"),
+            Self::Kayser => Definition::new_dimensional(1f64, "cm-1"),
+            Self::Gal => Definition::new_dimensional(1f64, "cm/s2"),
+            Self::Dyne => Definition::new_dimensional(1f64, "g.cm/s2"),
+            Self::Erg => Definition::new_dimensional(1f64, "dyn.cm"),
+            Self::Poise => Definition::new_dimensional(1f64, "dyn.s/cm2"),
+            Self::Biot => Definition::new_dimensional(10f64, "A"),
+            Self::Stokes => Definition::new_dimensional(1f64, "cm2/s"),
+            Self::Maxwell => Definition::new_dimensional(0.00000001f64, "Wb"),
+            Self::Gauss => Definition::new_dimensional(0.0001f64, "T"),
+            Self::Oersted => Definition::new_dimensional(250f64, "/[pi].A/m"),
+            Self::Gilbert => Definition::new_dimensional(1f64, "Oe.cm"),
+            Self::Stilb => Definition::new_dimensional(1f64, "cd/cm2"),
+            Self::Lambert => Definition::new_dimensional(1f64, "cd/cm2/[pi]"),
+            Self::Phot => Definition::new_dimensional(0.0001f64, "lx"),
+            Self::Curie => Definition::new_dimensional(37000000000f64, "Bq"),
+            Self::Roentgen => Definition::new_dimensional(0.000258f64, "C/kg"),
+            Self::RadiationAbsorbedDose => Definition::new_dimensional(100f64, "erg/g"),
+            Self::RadiationEquivalentMan => Definition::new_dimensional(1f64, "RAD"),
+            Self::InchInternational => Definition::new_dimensional(2.54f64, "cm"),
+            Self::FootInternational => Definition::new_dimensional(12f64, "[in_i]"),
+            Self::YardInternational => Definition::new_dimensional(3f64, "[ft_i]"),
+            Self::MileInternational => Definition::new_dimensional(5280f64, "[ft_i]"),
+            Self::FathomInternational => Definition::new_dimensional(6f64, "[ft_i]"),
+            Self::NauticalMileInternational => Definition::new_dimensional(1852f64, "m"),
+            Self::KnotInternational => Definition::new_dimensional(1f64, "[nmi_i]/h"),
+            Self::SquareInchInternational => Definition::new_dimensional(1f64, "[in_i]2"),
+            Self::SquareFootInternational => Definition::new_dimensional(1f64, "[ft_i]2"),
+            Self::SquareYardInternational => Definition::new_dimensional(1f64, "[yd_i]2"),
+            Self::CubicInchInternational => Definition::new_dimensional(1f64, "[in_i]3"),
+            Self::CubicFootInternational => Definition::new_dimensional(1f64, "[ft_i]3"),
+            Self::CubicYardInternational => Definition::new_dimensional(1f64, "[yd_i]3"),
+            Self::BoardFootInternational => Definition::new_dimensional(144f64, "[in_i]3"),
+            Self::CordInternational => Definition::new_dimensional(128f64, "[ft_i]3"),
+            Self::MilInternational => Definition::new_dimensional(0.001f64, "[in_i]"),
+            Self::CircularMilInternational => Definition::new_dimensional(1f64, "[pi]/4.[mil_i]2"),
+            Self::HandInternational => Definition::new_dimensional(4f64, "[in_i]"),
+            Self::FootUS => Definition::new_dimensional(1200f64, "m/3937"),
+            Self::YardUS => Definition::new_dimensional(3f64, "[ft_us]"),
+            Self::InchUS => Definition::new_dimensional(1f64, "[ft_us]/12"),
+            Self::RodUS => Definition::new_dimensional(16.5f64, "[ft_us]"),
+            Self::GuntersChainUS => Definition::new_dimensional(4f64, "[rd_us]"),
+            Self::LinkForGuntersChainUS => Definition::new_dimensional(1f64, "[ch_us]/100"),
+            Self::RamdensChainUS => Definition::new_dimensional(100f64, "[ft_us]"),
+            Self::LinkForRamdensChainUS => Definition::new_dimensional(1f64, "[rch_us]/100"),
+            Self::FathomUS => Definition::new_dimensional(6f64, "[ft_us]"),
+            Self::FurlongUS => Definition::new_dimensional(40f64, "[rd_us]"),
+            Self::MileUS => Definition::new_dimensional(8f64, "[fur_us]"),
+            Self::AcreUS => Definition::new_dimensional(160f64, "[rd_us]2"),
+            Self::SquareRodUS => Definition::new_dimensional(1f64, "[rd_us]2"),
+            Self::SquareMileUS => Definition::new_dimensional(1f64, "[mi_us]2"),
+            Self::Section => Definition::new_dimensional(1f64, "[mi_us]2"),
+            Self::Township => Definition::new_dimensional(36f64, "[sct]"),
+            Self::MilUS => Definition::new_dimensional(0.001f64, "[in_us]"),
+            Self::InchBritish => Definition::new_dimensional(2.539998f64, "cm"),
+            Self::FootBritish => Definition::new_dimensional(12f64, "[in_br]"),
+            Self::RodBritish => Definition::new_dimensional(16.5f64, "[ft_br]"),
+            Self::GuntersChainBritish => Definition::new_dimensional(4f64, "[rd_br]"),
+            Self::LinkForGuntersChainBritish => Definition::new_dimensional(1f64, "[ch_br]/100"),
+            Self::FathomBritish => Definition::new_dimensional(6f64, "[ft_br]"),
+            Self::PaceBritish => Definition::new_dimensional(2.5f64, "[ft_br]"),
+            Self::YardBritish => Definition::new_dimensional(3f64, "[ft_br]"),
+            Self::MileBritish => Definition::new_dimensional(5280f64, "[ft_br]"),
+            Self::NauticalMileBritish => Definition::new_dimensional(6080f64, "[ft_br]"),
+            Self::KnotBritish => Definition::new_dimensional(1f64, "[nmi_br]/h"),
+            Self::AcreBritish => Definition::new_dimensional(4840f64, "[yd_br]2"),
+            Self::QueenAnnesWineGallonUS => Definition::new_dimensional(231f64, "[in_i]3"),
+            Self::BarrelUS => Definition::new_dimensional(42f64, "[gal_us]"),
+            Self::QuartUS => Definition::new_dimensional(1f64, "[gal_us]/4"),
+            Self::PintUS => Definition::new_dimensional(1f64, "[qt_us]/2"),
+            Self::GillUS => Definition::new_dimensional(1f64, "[pt_us]/4"),
+            Self::FluidOunceUS => Definition::new_dimensional(1f64, "[gil_us]/4"),
+            Self::FluidDramUS => Definition::new_dimensional(1f64, "[foz_us]/8"),
+            Self::MinimUS => Definition::new_dimensional(1f64, "[fdr_us]/60"),
+            Self::CordUS => Definition::new_dimensional(128f64, "[ft_i]3"),
+            Self::BushelUS => Definition::new_dimensional(2150.42f64, "[in_i]3"),
+            Self::HistoricalWinchesterGallon => Definition::new_dimensional(1f64, "[bu_us]/8"),
+            Self::PeckUS => Definition::new_dimensional(1f64, "[bu_us]/4"),
+            Self::DryQuartUS => Definition::new_dimensional(1f64, "[pk_us]/8"),
+            Self::DryPintUS => Definition::new_dimensional(1f64, "[dqt_us]/2"),
+            Self::TablespoonUS => Definition::new_dimensional(1f64, "[foz_us]/2"),
+            Self::TeaspoonUS => Definition::new_dimensional(1f64, "[tbs_us]/3"),
+            Self::CupUS => Definition::new_dimensional(16f64, "[tbs_us]"),
+            Self::MetricFluidOunce => Definition::new_dimensional(30f64, "mL"),
+            Self::MetricCup => Definition::new_dimensional(240f64, "mL"),
+            Self::MetricTeaspoon => Definition::new_dimensional(5f64, "mL"),
+            Self::MetricTablespoon => Definition::new_dimensional(15f64, "mL"),
+            Self::GallonBritish => Definition::new_dimensional(4.54609f64, "l"),
+            Self::PeckBritish => Definition::new_dimensional(2f64, "[gal_br]"),
+            Self::BushelBritish => Definition::new_dimensional(4f64, "[pk_br]"),
+            Self::QuartBritish => Definition::new_dimensional(1f64, "[gal_br]/4"),
+            Self::PintBritish => Definition::new_dimensional(1f64, "[qt_br]/2"),
+            Self::GillBritish => Definition::new_dimensional(1f64, "[pt_br]/4"),
+            Self::FluidOunceBritish => Definition::new_dimensional(1f64, "[gil_br]/5"),
+            Self::FluidDramBritish => Definition::new_dimensional(1f64, "[foz_br]/8"),
+            Self::MinimBritish => Definition::new_dimensional(1f64, "[fdr_br]/60"),
+            Self::Grain => Definition::new_dimensional(64.79891f64, "mg"),
+            Self::PoundAvoirdupois => Definition::new_dimensional(7000f64, "[gr]"),
+            Self::OunceAvoirdupois => Definition::new_dimensional(1f64, "[lb_av]/16"),
+            Self::DramAvoirdupois => Definition::new_dimensional(1f64, "[oz_av]/16"),
+            Self::ShortHundredweightAvoirdupois => Definition::new_dimensional(100f64, "[lb_av]"),
+            Self::LongHunderdweightAvoirdupois => Definition::new_dimensional(112f64, "[lb_av]"),
+            Self::ShortTonAvoirdupois => Definition::new_dimensional(20f64, "[scwt_av]"),
+            Self::LongTonAvoirdupois => Definition::new_dimensional(20f64, "[lcwt_av]"),
+            Self::StoneAvoirdupois => Definition::new_dimensional(14f64, "[lb_av]"),
+            Self::PennyweightTroy => Definition::new_dimensional(24f64, "[gr]"),
+            Self::OunceTroy => Definition::new_dimensional(20f64, "[pwt_tr]"),
+            Self::PoundTroy => Definition::new_dimensional(12f64, "[oz_tr]"),
+            Self::ScrupleApothecaries => Definition::new_dimensional(20f64, "[gr]"),
+            Self::DramApothecaries => Definition::new_dimensional(3f64, "[sc_ap]"),
+            Self::OunceApothecaries => Definition::new_dimensional(8f64, "[dr_ap]"),
+            Self::PoundApothecaries => Definition::new_dimensional(12f64, "[oz_ap]"),
+            Self::MetricOunce => Definition::new_dimensional(28f64, "g"),
+            Self::Line => Definition::new_dimensional(1f64, "[in_i]/12"),
+            Self::Point => Definition::new_dimensional(1f64, "[lne]/6"),
+            Self::Pica => Definition::new_dimensional(12f64, "[pnt]"),
+            Self::PrintersPoint => Definition::new_dimensional(0.013837f64, "[in_i]"),
+            Self::PrintersPica => Definition::new_dimensional(12f64, "[pnt_pr]"),
+            Self::Pied => Definition::new_dimensional(32.48f64, "cm"),
+            Self::Pouce => Definition::new_dimensional(1f64, "[pied]/12"),
+            Self::Ligne => Definition::new_dimensional(1f64, "[pouce]/12"),
+            Self::Didot => Definition::new_dimensional(1f64, "[ligne]/6"),
+            Self::Cicero => Definition::new_dimensional(12f64, "[didot]"),
+            Self::DegreeFahrenheit => Definition::new_dimensional_special(
                 5f64,
                 "K/9",
                 FunctionSet {
@@ -573,8 +560,8 @@ impl Atom {
                     convert_to: |value: f64| 5.0 / 9.0 * (value + 459.67),
                 },
             ),
-            Self::DegreeRankine => Definition::try_new_dimensional(5f64, "K/9"),
-            Self::DegreeReaumur => Definition::try_new_dimensional_special(
+            Self::DegreeRankine => Definition::new_dimensional(5f64, "K/9"),
+            Self::DegreeReaumur => Definition::new_dimensional_special(
                 5f64,
                 "K/4",
                 FunctionSet {
@@ -582,37 +569,35 @@ impl Atom {
                     convert_to: |value: f64| (value / 0.8) + 273.15,
                 },
             ),
-            Self::CalorieAt15C => Definition::try_new_dimensional(4.1858f64, "J"),
-            Self::CalorieAt20C => Definition::try_new_dimensional(4.1819f64, "J"),
-            Self::MeanCalorie => Definition::try_new_dimensional(4.19002f64, "J"),
-            Self::InternationalTableCalorie => Definition::try_new_dimensional(4.1868f64, "J"),
-            Self::ThermochemicalCalorie => Definition::try_new_dimensional(4.184f64, "J"),
-            Self::Calorie => Definition::try_new_dimensional(1f64, "cal_th"),
-            Self::NutritionLabelCalories => Definition::try_new_dimensional(1f64, "kcal_th"),
-            Self::BritishThermalUnitAt39F => Definition::try_new_dimensional(1.05967f64, "kJ"),
-            Self::BritishThermalUnitAt59F => Definition::try_new_dimensional(1.0548f64, "kJ"),
-            Self::BritishThermalUnitAt60F => Definition::try_new_dimensional(1.05468f64, "kJ"),
-            Self::MeanBritishThermalUnit => Definition::try_new_dimensional(1.05587f64, "kJ"),
+            Self::CalorieAt15C => Definition::new_dimensional(4.1858f64, "J"),
+            Self::CalorieAt20C => Definition::new_dimensional(4.1819f64, "J"),
+            Self::MeanCalorie => Definition::new_dimensional(4.19002f64, "J"),
+            Self::InternationalTableCalorie => Definition::new_dimensional(4.1868f64, "J"),
+            Self::ThermochemicalCalorie => Definition::new_dimensional(4.184f64, "J"),
+            Self::Calorie => Definition::new_dimensional(1f64, "cal_th"),
+            Self::NutritionLabelCalories => Definition::new_dimensional(1f64, "kcal_th"),
+            Self::BritishThermalUnitAt39F => Definition::new_dimensional(1.05967f64, "kJ"),
+            Self::BritishThermalUnitAt59F => Definition::new_dimensional(1.0548f64, "kJ"),
+            Self::BritishThermalUnitAt60F => Definition::new_dimensional(1.05468f64, "kJ"),
+            Self::MeanBritishThermalUnit => Definition::new_dimensional(1.05587f64, "kJ"),
             Self::InternationalTableBritishThermalUnit => {
-                Definition::try_new_dimensional(1.05505585262f64, "kJ")
+                Definition::new_dimensional(1.05505585262f64, "kJ")
             }
-            Self::ThermochemicalBritishThermalUnit => {
-                Definition::try_new_dimensional(1.05435f64, "kJ")
-            }
-            Self::BritishThermalUnit => Definition::try_new_dimensional(1f64, "[Btu_th]"),
-            Self::Horsepower => Definition::try_new_dimensional(550f64, "[ft_i].[lbf_av]/s"),
-            Self::Tex => Definition::try_new_dimensional(1f64, "g/km"),
-            Self::Denier => Definition::try_new_dimensional(1f64, "g/9/km"),
-            Self::MeterOfWaterColumn => Definition::try_new_dimensional(9.80665f64, "kPa"),
-            Self::MeterOfMercuryColumn => Definition::try_new_dimensional(133.322f64, "kPa"),
-            Self::InchOfWaterColumn => Definition::try_new_dimensional(1f64, "m[H2O].[in_i]/m"),
-            Self::InchOfMercuryColumn => Definition::try_new_dimensional(1f64, "m[Hg].[in_i]/m"),
+            Self::ThermochemicalBritishThermalUnit => Definition::new_dimensional(1.05435f64, "kJ"),
+            Self::BritishThermalUnit => Definition::new_dimensional(1f64, "[Btu_th]"),
+            Self::Horsepower => Definition::new_dimensional(550f64, "[ft_i].[lbf_av]/s"),
+            Self::Tex => Definition::new_dimensional(1f64, "g/km"),
+            Self::Denier => Definition::new_dimensional(1f64, "g/9/km"),
+            Self::MeterOfWaterColumn => Definition::new_dimensional(9.80665f64, "kPa"),
+            Self::MeterOfMercuryColumn => Definition::new_dimensional(133.322f64, "kPa"),
+            Self::InchOfWaterColumn => Definition::new_dimensional(1f64, "m[H2O].[in_i]/m"),
+            Self::InchOfMercuryColumn => Definition::new_dimensional(1f64, "m[Hg].[in_i]/m"),
             Self::PeripheralVascularResistanceUnit => {
-                Definition::try_new_dimensional(1f64, "mm[Hg].s/ml")
+                Definition::new_dimensional(1f64, "mm[Hg].s/ml")
             }
-            Self::WoodUnit => Definition::try_new_dimensional(1f64, "mm[Hg].min/L"),
-            Self::Diopter => Definition::try_new_dimensional(1f64, "/m"),
-            Self::PrismDiopter => Definition::try_new_dimensional_special(
+            Self::WoodUnit => Definition::new_dimensional(1f64, "mm[Hg].min/L"),
+            Self::Diopter => Definition::new_dimensional(1f64, "/m"),
+            Self::PrismDiopter => Definition::new_dimensional_special(
                 1f64,
                 "rad",
                 FunctionSet {
@@ -620,7 +605,7 @@ impl Atom {
                     convert_to: |value: f64| value.tan() * 100.0,
                 },
             ),
-            Self::PercentOfSlope => Definition::try_new_dimensional_special(
+            Self::PercentOfSlope => Definition::new_dimensional_special(
                 1f64,
                 "deg",
                 FunctionSet {
@@ -628,74 +613,68 @@ impl Atom {
                     convert_to: |value: f64| value.tan() * 100.0,
                 },
             ),
-            Self::MeshInternational => Definition::try_new_dimensional(1f64, "/[in_i]"),
-            Self::Charriere => Definition::try_new_dimensional(1f64, "mm/3"),
-            Self::Drop => Definition::try_new_dimensional(1f64, "ml/20"),
-            Self::HounsfieldUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::MetabolicEquivalent => Definition::try_new_dimensional(3.5f64, "mL/min/kg"),
-            Self::HomeopathicPotencyOfDecimalSeriesRetired => {
-                Ok(Definition::NonDimensionalSpecial {
-                    value: 1f64,
-                    function_set: FunctionSet {
-                        convert_from: |value: f64| -value.log10(),
-                        convert_to: |value: f64| 10_f64.powf(-value),
-                    },
-                })
-            }
+            Self::MeshInternational => Definition::new_dimensional(1f64, "/[in_i]"),
+            Self::Charriere => Definition::new_dimensional(1f64, "mm/3"),
+            Self::Drop => Definition::new_dimensional(1f64, "ml/20"),
+            Self::HounsfieldUnit => Definition::NonDimensional(1.0),
+            Self::MetabolicEquivalent => Definition::new_dimensional(3.5f64, "mL/min/kg"),
+            Self::HomeopathicPotencyOfDecimalSeriesRetired => Definition::NonDimensionalSpecial {
+                value: 1f64,
+                function_set: FunctionSet {
+                    convert_from: |value: f64| -value.log10(),
+                    convert_to: |value: f64| 10_f64.powf(-value),
+                },
+            },
             Self::HomeopathicPotencyOfCentesimalSeriesRetired => {
-                Ok(Definition::NonDimensionalSpecial {
+                Definition::NonDimensionalSpecial {
                     value: 1f64,
                     function_set: FunctionSet {
                         convert_from: |value: f64| -value.ln() / 100_f64.ln(),
                         convert_to: |value: f64| 100_f64.powf(-value),
                     },
-                })
+                }
             }
             Self::HomeopathicPotencyOfMillesimalSeriesRetired => {
-                Ok(Definition::NonDimensionalSpecial {
+                Definition::NonDimensionalSpecial {
                     value: 1f64,
                     function_set: FunctionSet {
                         convert_from: |value: f64| -value.ln() / 1_000_f64.ln(),
                         convert_to: |value: f64| 1_000_f64.powf(-value),
                     },
-                })
+                }
             }
             Self::HomeopathicPotencyOfQuintamillesimalSeriesRetired => {
-                Ok(Definition::NonDimensionalSpecial {
+                Definition::NonDimensionalSpecial {
                     value: 1f64,
                     function_set: FunctionSet {
                         convert_from: |value: f64| -value.ln() / 50_000_f64.ln(),
                         convert_to: |value: f64| 50_000_f64.powf(-value),
                     },
-                })
+                }
             }
-            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => {
-                Ok(Definition::NonDimensional(1.0))
-            }
+            Self::HomeopathicPotencyOfDecimalHahnemannianSeries => Definition::NonDimensional(1.0),
             Self::HomeopathicPotencyOfCentesimalHahnemannianSeries => {
-                Ok(Definition::NonDimensional(1.0))
+                Definition::NonDimensional(1.0)
             }
             Self::HomeopathicPotencyOfMillesimalHahnemannianSeries => {
-                Ok(Definition::NonDimensional(1.0))
+                Definition::NonDimensional(1.0)
             }
             Self::HomeopathicPotencyOfQuintamillesimalHahnemannianSeries => {
-                Ok(Definition::NonDimensional(1.0))
+                Definition::NonDimensional(1.0)
             }
-            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => {
-                Ok(Definition::NonDimensional(1.0))
-            }
+            Self::HomeopathicPotencyOfDecimalKorsakovianSeries => Definition::NonDimensional(1.0),
             Self::HomeopathicPotencyOfCentesimalKorsakovianSeries => {
-                Ok(Definition::NonDimensional(1.0))
+                Definition::NonDimensional(1.0)
             }
             Self::HomeopathicPotencyOfMillesimalKorsakovianSeries => {
-                Ok(Definition::NonDimensional(1.0))
+                Definition::NonDimensional(1.0)
             }
             Self::HomeopathicPotencyOfQuintamillesimalKorsakovianSeries => {
-                Ok(Definition::NonDimensional(1.0))
+                Definition::NonDimensional(1.0)
             }
-            Self::Equivalents => Definition::try_new_dimensional(1f64, "mol"),
-            Self::Osmole => Definition::try_new_dimensional(1f64, "mol"),
-            Self::PH => Definition::try_new_dimensional_special(
+            Self::Equivalents => Definition::new_dimensional(1f64, "mol"),
+            Self::Osmole => Definition::new_dimensional(1f64, "mol"),
+            Self::PH => Definition::new_dimensional_special(
                 1f64,
                 "mol/l",
                 FunctionSet {
@@ -703,60 +682,60 @@ impl Atom {
                     convert_to: |value: f64| -value.log10(),
                 },
             ),
-            Self::GramPercent => Definition::try_new_dimensional(1f64, "g/dl"),
-            Self::SvedbergUnit => Definition::try_new_dimensional(1f64, "10*-13.s"),
-            Self::HighPowerField => Ok(Definition::NonDimensional(1.0)),
-            Self::LowPowerField => Ok(Definition::NonDimensional(100.0)),
-            Self::Katal => Definition::try_new_dimensional(1f64, "mol/s"),
-            Self::Unit => Definition::try_new_dimensional(1f64, "umol/min"),
-            Self::InternationalUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::InternationalUnitSecondary => Definition::try_new_dimensional(1f64, "[iU]"),
-            Self::ArbitraryUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::UnitedStatesPharmacopeiaUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::GplUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::MplUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::AplUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::BethesdaUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::AntiFactorXaUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::ToddUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::DyeUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::SomogyiUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::BodanskyUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::KingArmstrongUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::KunkelUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::MacLaganUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::TuberculinUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::CellCultureInfectiousDose => Ok(Definition::NonDimensional(1.0)),
-            Self::TissueCultureInfectiousDose => Ok(Definition::NonDimensional(1.0)),
-            Self::EmbryoInfectiousDose => Ok(Definition::NonDimensional(1.0)),
-            Self::PlaqueFormingUnits => Ok(Definition::NonDimensional(1.0)),
-            Self::FocusFormingUnits => Ok(Definition::NonDimensional(1.0)),
-            Self::ColonyFormingUnits => Ok(Definition::NonDimensional(1.0)),
-            Self::IndexOfReactivity => Ok(Definition::NonDimensional(1.0)),
-            Self::BioequivalentAllergenUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::AllergenUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::AllergenUnitForAmbrosiaArtemisiifolia => Ok(Definition::NonDimensional(1.0)),
-            Self::ProteinNitrogenUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::LimitOfFlocculation => Ok(Definition::NonDimensional(1.0)),
-            Self::DAntigenUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::FibrinogenEquivalentUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::ElisaUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::EhrlichUnit => Ok(Definition::NonDimensional(1.0)),
-            Self::Neper => Ok(Definition::NonDimensionalSpecial {
+            Self::GramPercent => Definition::new_dimensional(1f64, "g/dl"),
+            Self::SvedbergUnit => Definition::new_dimensional(1f64, "10*-13.s"),
+            Self::HighPowerField => Definition::NonDimensional(1.0),
+            Self::LowPowerField => Definition::NonDimensional(100.0),
+            Self::Katal => Definition::new_dimensional(1f64, "mol/s"),
+            Self::Unit => Definition::new_dimensional(1f64, "umol/min"),
+            Self::InternationalUnit => Definition::NonDimensional(1.0),
+            Self::InternationalUnitSecondary => Definition::new_dimensional(1f64, "[iU]"),
+            Self::ArbitraryUnit => Definition::NonDimensional(1.0),
+            Self::UnitedStatesPharmacopeiaUnit => Definition::NonDimensional(1.0),
+            Self::GplUnit => Definition::NonDimensional(1.0),
+            Self::MplUnit => Definition::NonDimensional(1.0),
+            Self::AplUnit => Definition::NonDimensional(1.0),
+            Self::BethesdaUnit => Definition::NonDimensional(1.0),
+            Self::AntiFactorXaUnit => Definition::NonDimensional(1.0),
+            Self::ToddUnit => Definition::NonDimensional(1.0),
+            Self::DyeUnit => Definition::NonDimensional(1.0),
+            Self::SomogyiUnit => Definition::NonDimensional(1.0),
+            Self::BodanskyUnit => Definition::NonDimensional(1.0),
+            Self::KingArmstrongUnit => Definition::NonDimensional(1.0),
+            Self::KunkelUnit => Definition::NonDimensional(1.0),
+            Self::MacLaganUnit => Definition::NonDimensional(1.0),
+            Self::TuberculinUnit => Definition::NonDimensional(1.0),
+            Self::CellCultureInfectiousDose => Definition::NonDimensional(1.0),
+            Self::TissueCultureInfectiousDose => Definition::NonDimensional(1.0),
+            Self::EmbryoInfectiousDose => Definition::NonDimensional(1.0),
+            Self::PlaqueFormingUnits => Definition::NonDimensional(1.0),
+            Self::FocusFormingUnits => Definition::NonDimensional(1.0),
+            Self::ColonyFormingUnits => Definition::NonDimensional(1.0),
+            Self::IndexOfReactivity => Definition::NonDimensional(1.0),
+            Self::BioequivalentAllergenUnit => Definition::NonDimensional(1.0),
+            Self::AllergenUnit => Definition::NonDimensional(1.0),
+            Self::AllergenUnitForAmbrosiaArtemisiifolia => Definition::NonDimensional(1.0),
+            Self::ProteinNitrogenUnit => Definition::NonDimensional(1.0),
+            Self::LimitOfFlocculation => Definition::NonDimensional(1.0),
+            Self::DAntigenUnit => Definition::NonDimensional(1.0),
+            Self::FibrinogenEquivalentUnit => Definition::NonDimensional(1.0),
+            Self::ElisaUnit => Definition::NonDimensional(1.0),
+            Self::EhrlichUnit => Definition::NonDimensional(1.0),
+            Self::Neper => Definition::NonDimensionalSpecial {
                 value: 1.0,
                 function_set: FunctionSet {
                     convert_from: f64::ln,
                     convert_to: f64::exp,
                 },
-            }),
-            Self::Bel => Ok(Definition::NonDimensionalSpecial {
+            },
+            Self::Bel => Definition::NonDimensionalSpecial {
                 value: 1.0,
                 function_set: FunctionSet {
                     convert_from: f64::log10,
                     convert_to: |value: f64| 10_f64.powf(value),
                 },
-            }),
-            Self::BelSoundPressure => Definition::try_new_dimensional_special(
+            },
+            Self::BelSoundPressure => Definition::new_dimensional_special(
                 2f64,
                 "10*-5.Pa",
                 FunctionSet {
@@ -764,7 +743,7 @@ impl Atom {
                     convert_to: |value: f64| 10_f64.powf(value / 2.0),
                 },
             ),
-            Self::BelVolt => Definition::try_new_dimensional_special(
+            Self::BelVolt => Definition::new_dimensional_special(
                 1f64,
                 "V",
                 FunctionSet {
@@ -772,7 +751,7 @@ impl Atom {
                     convert_to: |value: f64| 10_f64.powf(value / 2.0),
                 },
             ),
-            Self::BelMillivolt => Definition::try_new_dimensional_special(
+            Self::BelMillivolt => Definition::new_dimensional_special(
                 1f64,
                 "mV",
                 FunctionSet {
@@ -780,7 +759,7 @@ impl Atom {
                     convert_to: |value: f64| 10_f64.powf(value / 2.0),
                 },
             ),
-            Self::BelMicrovolt => Definition::try_new_dimensional_special(
+            Self::BelMicrovolt => Definition::new_dimensional_special(
                 1f64,
                 "uV",
                 FunctionSet {
@@ -788,7 +767,7 @@ impl Atom {
                     convert_to: |value: f64| 10_f64.powf(value / 2.0),
                 },
             ),
-            Self::Bel10Nanovolt => Definition::try_new_dimensional_special(
+            Self::Bel10Nanovolt => Definition::new_dimensional_special(
                 10f64,
                 "nV",
                 FunctionSet {
@@ -796,7 +775,7 @@ impl Atom {
                     convert_to: |value: f64| 10_f64.powf(value / 2.0),
                 },
             ),
-            Self::BelWatt => Definition::try_new_dimensional_special(
+            Self::BelWatt => Definition::new_dimensional_special(
                 1f64,
                 "W",
                 FunctionSet {
@@ -804,7 +783,7 @@ impl Atom {
                     convert_to: |value: f64| 10_f64.powf(value),
                 },
             ),
-            Self::BelKilowatt => Definition::try_new_dimensional_special(
+            Self::BelKilowatt => Definition::new_dimensional_special(
                 1f64,
                 "kW",
                 FunctionSet {
@@ -812,39 +791,36 @@ impl Atom {
                     convert_to: |value: f64| 10_f64.powf(value),
                 },
             ),
-            Self::Stere => Definition::try_new_dimensional(1f64, "m3"),
-            Self::Angstrom => Definition::try_new_dimensional(0.1f64, "nm"),
-            Self::Barn => Definition::try_new_dimensional(100f64, "fm2"),
-            Self::TechnicalAtmosphere => Definition::try_new_dimensional(1f64, "kgf/cm2"),
-            Self::Mho => Definition::try_new_dimensional(1f64, "S"),
-            Self::PoundPerSqareInch => Definition::try_new_dimensional(1f64, "[lbf_av]/[in_i]2"),
-            Self::Circle => Definition::try_new_dimensional(2f64, "[pi].rad"),
-            Self::Spere => Definition::try_new_dimensional(4f64, "[pi].sr"),
-            Self::MetricCarat => Definition::try_new_dimensional(0.2f64, "g"),
-            Self::CaratOfGoldAlloys => Definition::try_new_dimensional(1f64, "/24"),
-            Self::Smoot => Definition::try_new_dimensional(67f64, "[in_i]"),
-            Self::MeterPerSquareSecondsPerSquareRootOfHertz => {
-                Definition::try_new_dimensional_special(
-                    1f64,
-                    "m2/s4/Hz",
-                    FunctionSet {
-                        convert_from: f64::sqrt,
-                        convert_to: |value: f64| value * value,
-                    },
-                )
-            }
-            Self::BitLogarithmusDualis => Ok(Definition::NonDimensionalSpecial {
+            Self::Stere => Definition::new_dimensional(1f64, "m3"),
+            Self::Angstrom => Definition::new_dimensional(0.1f64, "nm"),
+            Self::Barn => Definition::new_dimensional(100f64, "fm2"),
+            Self::TechnicalAtmosphere => Definition::new_dimensional(1f64, "kgf/cm2"),
+            Self::Mho => Definition::new_dimensional(1f64, "S"),
+            Self::PoundPerSqareInch => Definition::new_dimensional(1f64, "[lbf_av]/[in_i]2"),
+            Self::Circle => Definition::new_dimensional(2f64, "[pi].rad"),
+            Self::Spere => Definition::new_dimensional(4f64, "[pi].sr"),
+            Self::MetricCarat => Definition::new_dimensional(0.2f64, "g"),
+            Self::CaratOfGoldAlloys => Definition::new_dimensional(1f64, "/24"),
+            Self::Smoot => Definition::new_dimensional(67f64, "[in_i]"),
+            Self::MeterPerSquareSecondsPerSquareRootOfHertz => Definition::new_dimensional_special(
+                1f64,
+                "m2/s4/Hz",
+                FunctionSet {
+                    convert_from: f64::sqrt,
+                    convert_to: |value: f64| value * value,
+                },
+            ),
+            Self::BitLogarithmusDualis => Definition::NonDimensionalSpecial {
                 value: 1f64,
                 function_set: FunctionSet {
                     convert_from: f64::log2,
                     convert_to: f64::exp2,
                 },
-            }),
-            Self::Bit => Ok(Definition::NonDimensional(1.0)),
-            Self::Byte => Definition::try_new_dimensional(8f64, "bit"),
-            Self::Baud => Definition::try_new_dimensional(1f64, "/s"),
-        };
-        result.expect("BUG! Bad Atom -> Definition mapping!")
+            },
+            Self::Bit => Definition::NonDimensional(1.0),
+            Self::Byte => Definition::new_dimensional(8f64, "bit"),
+            Self::Baud => Definition::new_dimensional(1f64, "/s"),
+        }
     }
     #[must_use]
     pub const fn property(self) -> Property {

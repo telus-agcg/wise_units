@@ -83,6 +83,7 @@ fn prefix_symbol_to_prefix(prefix_symbol: &str) -> Prefix {
 // We can skip error handling here because the `atom_symbol` was picked up by the parser, and all
 // of those strings must match a `crate::Atom`'s `primary_symbol`.
 //
+#[allow(clippy::too_many_lines)]
 fn atom_symbol_to_atom(atom_symbol: &str) -> Atom {
     match atom_symbol {
         "m" => Atom::Meter,

@@ -72,6 +72,12 @@ pub struct Unit {
 /// ```
 ///
 impl Unit {
+    /// A convenience method around `Self::from_str()` (so you don't have to import `FromStr`).
+    ///
+    /// # Errors
+    ///
+    /// Errors if `expression` doesn't represent a valid UCUM unit string.
+    ///
     pub fn parse(expression: &str) -> Result<Self, Error> {
         Self::from_str(expression)
     }
