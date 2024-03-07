@@ -9,7 +9,7 @@ mod partial_eq;
 mod reducible;
 mod ucum_unit;
 
-use crate::parser::{Atom, Prefix};
+use crate::{parser::Prefix, Atom};
 
 pub const UNITY: Term = {
     Term {

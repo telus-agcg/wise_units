@@ -4,15 +4,18 @@
 //-----------------------------------------------------------------------------
 
 mod composable;
+mod definition;
 mod display;
+mod function_set;
 mod hash;
 mod partial_eq;
 mod reducible;
+
+use self::{definition::Definition, function_set::FunctionSet};
+
 use crate::{
     is_compatible_with::DefaultCompatibility,
-    parser::{
-        definition::Definition, function_set::FunctionSet, Classification, Property, UcumSymbol,
-    },
+    parser::{Classification, Property, UcumSymbol},
     reducible::Reducible,
     UcumUnit, Unit,
 };

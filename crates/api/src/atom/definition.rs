@@ -5,12 +5,10 @@ use std::{borrow::Cow, str::FromStr};
 
 use num_traits::One;
 
-use crate::{
-    parser::{function_set::FunctionSet, Term},
-    reducible::Reducible,
-};
+use crate::parser::term;
+use crate::{parser::Term, reducible::Reducible};
 
-use super::term;
+use super::function_set::FunctionSet;
 
 /// A `Definition` is a slimmed-down version of a `Measurement` that is used to
 /// define `Atom`s in terms of other `Atom`s (ex. an `"[in_i]"` has a

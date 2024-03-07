@@ -13,6 +13,8 @@ mod partial_eq;
 mod partial_ord;
 mod reducible;
 mod term_reducing;
+#[cfg(test)]
+mod testing;
 mod to_reduced;
 
 #[allow(clippy::module_name_repetitions)]

@@ -12,26 +12,21 @@
         clippy::non_ascii_literal
     )
 )]
-pub mod atom;
 pub mod classification;
 pub mod composition;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;
 
 mod annotation_composition;
-#[cfg(test)]
-mod atom_test;
 mod composable;
-mod definition;
 mod dimension;
 mod error;
-mod function_set;
 mod prefix;
 pub(crate) mod term;
 mod ucum_symbol;
 
 pub use self::{
-    annotation_composition::AnnotationComposition, atom::Atom, classification::Classification,
+    annotation_composition::AnnotationComposition, classification::Classification,
     composable::Composable, composition::Composition, dimension::Dimension, error::Error,
     prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
 };

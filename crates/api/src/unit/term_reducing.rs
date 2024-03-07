@@ -1,8 +1,11 @@
 use num_traits::Zero;
 
-use crate::parser::{
-    term::{self, Factor},
-    Atom, Prefix, Term,
+use crate::{
+    parser::{
+        term::{self, Factor},
+        Prefix, Term,
+    },
+    Atom,
 };
 use std::collections::BTreeMap;
 

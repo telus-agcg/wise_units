@@ -69,7 +69,10 @@ macro_rules! terms {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::{Atom, Prefix, Term};
+    use crate::{
+        parser::{Prefix, Term},
+        Atom,
+    };
 
     #[test]
     fn validate_term_macro() {

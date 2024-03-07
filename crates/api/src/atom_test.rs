@@ -2,13 +2,13 @@
 //!
 #![cfg(test)]
 
-use crate::{
-    parser::{
-        term::UNITY_ARRAY, Atom, Classification, Composable, Composition, Dimension, UcumSymbol,
-    },
-    ucum_unit::UcumUnit,
-};
 use approx::{assert_relative_eq, assert_ulps_eq};
+
+use crate::{
+    parser::{term::UNITY_ARRAY, Classification, Composable, Composition, Dimension, UcumSymbol},
+    ucum_unit::UcumUnit,
+    Atom,
+};
 
 macro_rules! validate_definition {
     (

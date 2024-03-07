@@ -12,7 +12,7 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
     let display = property_list.display();
 
     let tokens = quote! {
-        use crate::parser::Atom;
+        use crate::Atom;
         use std::fmt;
 
         /// Property categorizes the unit by use. Not much mention of it in the UCUM

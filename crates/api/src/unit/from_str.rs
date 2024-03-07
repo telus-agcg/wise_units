@@ -71,16 +71,13 @@ mod tests {
 #[cfg(test)]
 mod old_mapper_tests {
     use super::*;
-    use crate::parser::terms::term_parser::{Rule, TermParser};
-    use pest::Parser;
 
     macro_rules! validate_interpret {
         ($test_name:ident, $input:expr, $($terms:expr),+) => {
             #[test]
             fn $test_name() {
-                let pairs = TermParser::parse(Rule::main_term, $input).unwrap();
-                let actual = map(pairs).unwrap();
-                let expected = vec![$($terms),+];
+                let actual = Unit::from_str($input).unwrap();
+                let expected = Unit::new(vec![$($terms),+]);
 
                 assert_eq!(actual, expected);
             }
@@ -89,20 +86,16 @@ mod old_mapper_tests {
 
     #[test]
     fn validate_exponent() {
-        let pairs = TermParser::parse(Rule::main_term, "m-3").unwrap();
-        let actual = map(pairs).unwrap();
-
-        let expected_term = term!(Meter, exponent: -3);
-        let expected = vec![expected_term];
+        let actual = Unit::from_str("m-3").unwrap();
+        let expected = Unit::new(vec![term!(Meter, exponent: -3)]);
 
         assert_eq!(actual, expected);
 
-        let pairs = TermParser::parse(Rule::main_term, "km2/m-3").unwrap();
-        let actual = map(pairs).unwrap();
+        let actual = Unit::from_str("km2/m-3").unwrap();
 
         let term1 = term!(Kilo, Meter, exponent: 2);
         let term2 = term!(Meter, exponent: 3);
-        let expected = vec![term1, term2];
+        let expected = Unit::new(vec![term1, term2]);
 
         assert_eq!(actual, expected);
     }
@@ -265,14 +258,13 @@ mod old_mapper_tests {
     #[test]
     #[ignore]
     fn validate_custom_atom() {
-        let pairs = TermParser::parse(Rule::main_term, "[meow]").unwrap();
+        let actual = Unit::from_str("[meow]").unwrap();
 
-        let actual = map(pairs).unwrap();
         let acre_term = term!(AcreUS);
         let inch_term = term!(InchInternational);
         let acre_inverse_term = term!(AcreUS, exponent: -1);
 
-        let expected = vec![acre_term, inch_term, acre_inverse_term];
+        let expected = Unit::new(vec![acre_term, inch_term, acre_inverse_term]);
 
         assert_eq!(actual, expected);
     }
