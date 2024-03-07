@@ -1,8 +1,9 @@
 mod num_traits;
 
 use crate::{
-    parser::{ucum_symbol::UcumSymbol, Classification},
+    parser::ucum_symbol::UcumSymbol,
     unit::{self, Unit},
+    Classification,
 };
 use std::fmt;
 

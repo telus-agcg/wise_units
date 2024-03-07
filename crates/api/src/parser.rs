@@ -12,7 +12,6 @@
         clippy::non_ascii_literal
     )
 )]
-pub mod classification;
 pub mod composition;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;
@@ -26,7 +25,7 @@ pub(crate) mod term;
 mod ucum_symbol;
 
 pub use self::{
-    annotation_composition::AnnotationComposition, classification::Classification,
-    composable::Composable, composition::Composition, dimension::Dimension, error::Error,
-    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
+    annotation_composition::AnnotationComposition, composable::Composable,
+    composition::Composition, dimension::Dimension, error::Error, prefix::Prefix,
+    property::Property, term::Term, ucum_symbol::UcumSymbol,
 };

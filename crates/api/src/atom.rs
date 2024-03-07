@@ -15,9 +15,9 @@ use self::{definition::Definition, function_set::FunctionSet};
 
 use crate::{
     is_compatible_with::DefaultCompatibility,
-    parser::{Classification, Property, UcumSymbol},
+    parser::{Property, UcumSymbol},
     reducible::Reducible,
-    UcumUnit, Unit,
+    Classification, UcumUnit, Unit,
 };
 #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
 pub enum Atom {
