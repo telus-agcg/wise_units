@@ -3,9 +3,9 @@ use num_traits::Zero;
 use crate::{
     parser::{
         term::{self, Factor},
-        Prefix, Term,
+        Term,
     },
-    Atom,
+    Atom, Prefix,
 };
 use std::collections::BTreeMap;
 

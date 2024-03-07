@@ -18,10 +18,9 @@ pub mod property;
 
 mod annotation_composition;
 mod error;
-mod prefix;
 pub(crate) mod term;
 
 pub use self::{
     annotation_composition::AnnotationComposition, composition::Composition, error::Error,
-    prefix::Prefix, property::Property, term::Term,
+    property::Property, term::Term,
 };
