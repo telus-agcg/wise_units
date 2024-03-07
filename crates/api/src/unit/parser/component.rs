@@ -5,7 +5,7 @@ use crate::parser::term::Exponent;
 use super::{Annotatable, Parse, Rule};
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) enum Component<'i> {
+pub(in crate::unit) enum Component<'i> {
     Annotatable {
         factor: Option<&'i str>,
         annotatable: Annotatable<'i>,

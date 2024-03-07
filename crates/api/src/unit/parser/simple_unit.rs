@@ -5,7 +5,7 @@ use crate::{Atom, Prefix};
 use super::{Parse, Rule};
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) enum SimpleUnit<'i> {
+pub(in crate::unit) enum SimpleUnit<'i> {
     PrefixAtom {
         prefix_symbol: &'i str,
         atom_symbol: &'i str,

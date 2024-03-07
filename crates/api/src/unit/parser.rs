@@ -55,7 +55,7 @@ mod tests {
     use super::*;
 
     mod single_term {
-        use crate::parser::tokenizer::annotatable::Exponent;
+        use crate::unit::parser::annotatable::Exponent;
 
         use super::*;
 

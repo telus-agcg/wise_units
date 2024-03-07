@@ -1,6 +1,6 @@
-use crate::parser::{
-    symbols::symbol_parser::Rule as SymbolRule, terms::term_parser::Rule as TermRule,
-    tokenizer::Rule as UnitRule,
+use crate::{
+    parser::{symbols::symbol_parser::Rule as SymbolRule, terms::term_parser::Rule as TermRule},
+    unit::parser::Rule as UnitRule,
 };
 use pest::error::Error as PestError;
 

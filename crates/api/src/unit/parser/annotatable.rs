@@ -7,7 +7,7 @@ use crate::parser::term;
 use super::{Parse, Rule, SimpleUnit};
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) enum Annotatable<'i> {
+pub(in crate::unit) enum Annotatable<'i> {
     SimpleUnitExponent {
         simple_unit: SimpleUnit<'i>,
         exponent: Exponent<'i>,
@@ -41,7 +41,7 @@ impl<'i> Parse<'i> for Annotatable<'i> {
 }
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) enum Exponent<'i> {
+pub(in crate::unit) enum Exponent<'i> {
     SignDigits { sign: &'i str, digits: &'i str },
     Digits(&'i str),
 }

@@ -8,6 +8,7 @@ mod invert;
 mod is_compatible_with;
 mod num_traits;
 mod ops;
+pub(crate) mod parser;
 mod partial_eq;
 mod partial_ord;
 mod reducible;
@@ -72,7 +73,7 @@ pub struct Unit {
 ///
 impl Unit {
     pub fn parse(expression: &str) -> Result<Self, Error> {
-        Ok(crate::parser::parse2(expression)?)
+        Self::from_str(expression)
     }
 
     /// ```

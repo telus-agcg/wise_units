@@ -31,7 +31,6 @@ mod function_set;
 mod prefix;
 pub(crate) mod term;
 mod terms;
-mod tokenizer;
 mod ucum_symbol;
 
 pub use self::{
@@ -52,11 +51,6 @@ pub(crate) fn parse(expression: &str) -> Result<Vec<Term>, Error> {
         Ok(pairs) => Ok(terms::mapper::map(pairs)?),
         Err(_) => Err(Error::UnknownUnitString(expression.to_string())),
     }
-}
-
-#[inline]
-pub(crate) fn parse2(expression: &str) -> Result<crate::Unit, Error> {
-    self::tokenizer::parse(expression).and_then(crate::Unit::try_from)
 }
 
 trait Visit<R> {

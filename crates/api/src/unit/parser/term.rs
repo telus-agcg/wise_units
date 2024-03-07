@@ -4,16 +4,16 @@ use pest::{iterators::Pairs, pratt_parser::PrattParser};
 use super::{Component, Parse, Rule};
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) enum Term<'i> {
+pub(in crate::unit) enum Term<'i> {
     Multi(MultiTerm<'i>),
     Single(Component<'i>),
 }
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) struct MultiTerm<'i> {
-    pub(in crate::parser) lhs: Box<Term<'i>>,
-    pub(in crate::parser) op: Op,
-    pub(in crate::parser) rhs: Box<Term<'i>>,
+pub(in crate::unit) struct MultiTerm<'i> {
+    pub(in crate::unit::parser) lhs: Box<Term<'i>>,
+    pub(in crate::unit::parser) op: Op,
+    pub(in crate::unit::parser) rhs: Box<Term<'i>>,
 }
 
 impl<'i> MultiTerm<'i> {
@@ -124,7 +124,7 @@ impl TryFrom<Term<'_>> for crate::Unit {
 }
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) enum Op {
+pub(in crate::unit::parser) enum Op {
     Dot,
     Slash,
 }

@@ -4,7 +4,7 @@ use pest::{iterators::Pairs, pratt_parser::PrattParser};
 use super::{Parse, Rule, Term, TryParse};
 
 #[derive(Debug, PartialEq)]
-pub(in crate::parser) enum MainTerm<'i> {
+pub(in crate::unit) enum MainTerm<'i> {
     SlashTerm(Term<'i>),
     Term(Term<'i>),
 }

@@ -9,7 +9,7 @@ impl FromStr for Unit {
 
     #[inline]
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        Ok(crate::parser::parse2(expression)?)
+        Ok(super::parser::parse(expression).and_then(Self::try_from)?)
     }
 }
 
