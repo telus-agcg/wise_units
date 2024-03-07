@@ -1,5 +1,8 @@
-use super::{term::Exponent, Dimension};
 use std::{fmt, ops::Mul};
+
+use crate::Dimension;
+
+use super::term::Exponent;
 
 pub const DIMLESS: Composition = Composition::new_dimless();
 
@@ -436,7 +439,7 @@ const fn set_exponent(exponent: Exponent) -> Option<Exponent> {
 
 #[cfg(test)]
 mod tests {
-    use super::{super::Dimension, Composition};
+    use super::*;
 
     #[test]
     fn validate_default() {

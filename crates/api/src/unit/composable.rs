@@ -16,7 +16,7 @@ mod tests {
 
     use std::str::FromStr;
 
-    use crate::{parser::Dimension, Unit};
+    use crate::{Dimension, Unit};
 
     macro_rules! build_composition {
         (

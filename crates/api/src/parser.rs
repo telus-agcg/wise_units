@@ -17,13 +17,12 @@ pub mod composition;
 pub mod property;
 
 mod annotation_composition;
-mod dimension;
 mod error;
 mod prefix;
 pub(crate) mod term;
 mod ucum_symbol;
 
 pub use self::{
-    annotation_composition::AnnotationComposition, composition::Composition, dimension::Dimension,
-    error::Error, prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
+    annotation_composition::AnnotationComposition, composition::Composition, error::Error,
+    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
 };

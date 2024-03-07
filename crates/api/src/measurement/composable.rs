@@ -17,7 +17,7 @@ impl Composable for Measurement {
 mod tests {
     use super::*;
 
-    use crate::parser::Dimension;
+    use crate::Dimension;
 
     #[test]
     fn validate_composition() {
