@@ -8,7 +8,7 @@ use pest::error::Error as PestError;
 pub enum Error {
     #[error(transparent)]
     #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
-    UnableToParseUnit(#[from] PestError<UnitRule>),
+    UnableToParseUnit(Box<PestError<UnitRule>>),
 
     #[error(transparent)]
     #[cfg_attr(feature = "serde", serde(serialize_with = "stringify"))]
@@ -21,6 +21,12 @@ pub enum Error {
     ///
     #[error("Unknown unit string: {0}")]
     UnknownUnitString(String),
+}
+
+impl From<PestError<UnitRule>> for Error {
+    fn from(value: PestError<UnitRule>) -> Self {
+        Self::UnableToParseUnit(Box::new(value))
+    }
 }
 
 #[cfg(feature = "serde")]

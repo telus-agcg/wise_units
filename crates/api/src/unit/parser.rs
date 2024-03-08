@@ -326,13 +326,13 @@ mod pratt_tests {
             // prefix + non-metric atom
             pretty_assertions::assert_eq!(
                 parse("3k[pi]2{please_work}").unwrap_err(),
-                parser::Error::UnableToParseUnit(pest::error::Error::new_from_pos(
+                parser::Error::UnableToParseUnit(Box::new(pest::error::Error::new_from_pos(
                     pest::error::ErrorVariant::ParsingError {
                         positives: vec![Rule::metric_atom_symbol],
                         negatives: vec![]
                     },
                     pest::Position::new("3k[pi]2{please_work}", 2).unwrap()
-                ))
+                )))
             );
         }
 

@@ -332,6 +332,7 @@ pub enum Atom {
     Baud,
 }
 impl Atom {
+    #[allow(clippy::too_many_lines, clippy::match_same_arms)]
     pub(crate) fn definition(self) -> Definition<f64> {
         match self {
             Self::Meter => Definition::Base,
@@ -405,9 +406,10 @@ impl Atom {
             Self::AstronomicUnit => Definition::new_dimensional(149_597.870_691_f64, "Mm"),
             Self::Parsec => Definition::new_dimensional(30_856_780_000_000_000_f64, "m"),
             Self::VelocityOfLight => Definition::new_dimensional(299_792_458_f64, "m/s"),
-            Self::PlanckConstant => {
-                Definition::new_dimensional(0.000_000_000_000_000_000_000_000_000_000_000_662_607_55_f64, "J.s")
-            }
+            Self::PlanckConstant => Definition::new_dimensional(
+                0.000_000_000_000_000_000_000_000_000_000_000_662_607_55_f64,
+                "J.s",
+            ),
             Self::BoltzmannConstant => {
                 Definition::new_dimensional(0.000_000_000_000_000_000_000_013_806_58_f64, "J/K")
             }
@@ -418,9 +420,10 @@ impl Atom {
             Self::ElementaryCharge => {
                 Definition::new_dimensional(0.000_000_000_000_000_000_160_217_733_f64, "C")
             }
-            Self::ElectronMass => {
-                Definition::new_dimensional(0.000_000_000_000_000_000_000_000_000_910_938_97_f64, "g")
-            }
+            Self::ElectronMass => Definition::new_dimensional(
+                0.000_000_000_000_000_000_000_000_000_910_938_97_f64,
+                "g",
+            ),
             Self::ProtonMass => {
                 Definition::new_dimensional(0.000_000_000_000_000_000_000_001_672_623_1_f64, "g")
             }
@@ -824,6 +827,7 @@ impl Atom {
             Self::Baud => Definition::new_dimensional(1f64, "/s"),
         }
     }
+    #[allow(clippy::too_many_lines, clippy::match_same_arms)]
     #[must_use]
     pub const fn property(self) -> Property {
         match self {
@@ -1191,6 +1195,7 @@ impl Atom {
     }
 }
 impl UcumSymbol for Atom {
+    #[allow(clippy::too_many_lines, clippy::match_same_arms)]
     fn classification(&self) -> Classification {
         match *self {
             Self::Meter => Classification::Si,
@@ -1507,6 +1512,7 @@ impl UcumSymbol for Atom {
             Self::Baud => Classification::Infotech,
         }
     }
+    #[allow(clippy::too_many_lines, clippy::match_same_arms)]
     fn names(&self) -> Vec<&'static str> {
         match *self {
             Self::Meter => vec!["meter"],
@@ -1869,6 +1875,7 @@ impl UcumSymbol for Atom {
             Self::Baud => vec!["baud"],
         }
     }
+    #[allow(clippy::too_many_lines)]
     fn primary_code(&self) -> &'static str {
         match *self {
             Self::Meter => "m",
@@ -2183,6 +2190,7 @@ impl UcumSymbol for Atom {
             Self::Baud => "Bd",
         }
     }
+    #[allow(clippy::too_many_lines, clippy::match_same_arms)]
     fn print_symbol(&self) -> Option<&'static str> {
         match *self {
             Self::Meter => Some("m"),
@@ -2389,6 +2397,7 @@ impl UcumSymbol for Atom {
             _ => None,
         }
     }
+    #[allow(clippy::too_many_lines, clippy::match_same_arms)]
     fn secondary_code(&self) -> Option<&'static str> {
         match *self {
             Self::Meter => Some("M"),

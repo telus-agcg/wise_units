@@ -42,20 +42,27 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
         #atom_enum
 
         impl Atom {
+            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #definition_method
 
+            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #property_method
         }
 
         impl UcumSymbol for Atom {
+            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #classification_method
 
+            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #names_method
 
+            #[allow(clippy::too_many_lines)]
             #primary_code_method
 
+            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #print_symbol_method
 
+            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #secondary_code_method
 
             fn definition_value(&self) -> f64 {
