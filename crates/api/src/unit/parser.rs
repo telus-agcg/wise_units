@@ -49,8 +49,99 @@ pub(super) fn parse(expr: &str) -> Result<MainTerm<'_>, Error> {
 }
 
 #[cfg(test)]
-mod pratt_tests {
+mod tests {
     use super::*;
+
+    mod unit_parser_tests {
+        use pest::{consumes_to, parses_to};
+
+        use crate::unit;
+
+        use super::*;
+
+        mod single_atom_symbols {
+            use super::*;
+
+            macro_rules! validate_ok {
+                ($atom_symbol:expr, $rule:expr) => {
+                    let pairs = UnitParser::parse($rule, $atom_symbol);
+                    assert!(
+                        pairs.is_ok(),
+                        "Failed to parse atom \"{}\": {pairs:#?}",
+                        $atom_symbol
+                    );
+                };
+            }
+
+            macro_rules! validate_tree {
+                ($atom_symbol:expr, $token:ident) => {
+                    let len = $atom_symbol.len();
+
+                    parses_to! {
+                        parser: UnitParser,
+                        input: $atom_symbol,
+                        rule: Rule::main_term,
+                        tokens: [
+                            main_term(0, len, [
+                                term(0, len, [
+                                    component(0, len, [
+                                        annotatable(0, len, [
+                                            simple_unit(0, len, [
+                                                $token(0, len)
+                                            ])
+                                        ])
+                                    ])
+                                ]), EOI(len, len)
+                            ])
+                        ]
+                    }
+                };
+            }
+
+            #[test]
+            fn metric_atom_ok_test() {
+                for (i, atom_symbol) in unit::testing::METRIC_ATOM_SYMBOLS.iter().enumerate() {
+                    eprintln!("Basic validate {i}: {atom_symbol:#?}");
+                    validate_ok!(atom_symbol, Rule::metric_atom_symbol);
+                    validate_ok!(atom_symbol, Rule::any_atom_symbol);
+                    validate_ok!(atom_symbol, Rule::simple_unit);
+                    validate_ok!(atom_symbol, Rule::annotatable);
+                    validate_ok!(atom_symbol, Rule::component);
+                    validate_ok!(atom_symbol, Rule::term);
+                    validate_ok!(atom_symbol, Rule::main_term);
+                }
+            }
+
+            #[test]
+            fn non_metric_atom_ok_test() {
+                for (i, atom_symbol) in unit::testing::NON_METRIC_ATOM_SYMBOLS.iter().enumerate() {
+                    eprintln!("Basic validate {i}: {atom_symbol:#?}");
+                    validate_ok!(atom_symbol, Rule::any_atom_symbol);
+                    validate_ok!(atom_symbol, Rule::simple_unit);
+                    validate_ok!(atom_symbol, Rule::annotatable);
+                    validate_ok!(atom_symbol, Rule::component);
+                    validate_ok!(atom_symbol, Rule::term);
+                    validate_ok!(atom_symbol, Rule::main_term);
+                }
+            }
+
+            #[allow(clippy::cognitive_complexity)]
+            #[test]
+            fn metric_tree_test() {
+                for atom_symbol in unit::testing::METRIC_ATOM_SYMBOLS {
+                    validate_tree!(atom_symbol, any_atom_symbol);
+                }
+            }
+
+            #[allow(clippy::cognitive_complexity)]
+            #[test]
+            fn non_metric_tree_test() {
+                for atom_symbol in unit::testing::NON_METRIC_ATOM_SYMBOLS {
+                    validate_tree!(atom_symbol, any_atom_symbol);
+                }
+            }
+        }
+    }
 
     mod single_term {
         use crate::unit::parser::{self, annotatable::Exponent};

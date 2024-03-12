@@ -17,7 +17,7 @@ impl<'i> Parse<'i> for SimpleUnit<'i> {
     fn parse(pairs: Pairs<'i, Rule>, pratt: &PrattParser<Rule>) -> Self {
         pratt
             .map_primary(|primary| match primary.as_rule() {
-                Rule::metric_atom_symbol | Rule::non_metric_atom_symbol => {
+                Rule::metric_atom_symbol | Rule::any_atom_symbol => {
                     SimpleUnit::Atom(primary.as_str())
                 }
                 rule => unreachable!("expected *atom_symbol, found {rule:?}"),
