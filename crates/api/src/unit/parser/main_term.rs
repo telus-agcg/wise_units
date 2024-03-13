@@ -23,12 +23,6 @@ impl<'i> TryParse<'i> for MainTerm<'i> {
                 },
                 rule => unreachable!("expected leading_slash, found {rule:?}"),
             })
-            .map_postfix(|main_term, op| match op.as_rule() {
-                Rule::EOI => main_term,
-                rule => Err(super::Error::UnknownUnitString(format!(
-                    "expected EOI, found {rule:?}"
-                ))),
-            })
             .parse(pairs)
     }
 }

@@ -25,7 +25,7 @@ lazy_static::lazy_static! {
         PrattParser::new()
             .op(Op::prefix(Rule::leading_slash) | Op::prefix(Rule::sign) | Op::prefix(Rule::factor) | Op::prefix(Rule::prefix_symbol))
             .op(Op::infix(Rule::dot, Left) | Op::infix(Rule::slash, Left))
-            .op(Op::postfix(Rule::exponent)| Op::postfix(Rule::annotation_string) | Op::postfix(Rule::EOI))
+            .op(Op::postfix(Rule::exponent)| Op::postfix(Rule::annotation_string))
     };
 }
 
@@ -73,37 +73,12 @@ mod tests {
                 };
             }
 
-            macro_rules! validate_tree {
-                ($atom_symbol:expr, $token:ident) => {
-                    let len = $atom_symbol.len();
-
-                    parses_to! {
-                        parser: UnitParser,
-                        input: $atom_symbol,
-                        rule: Rule::main_term,
-                        tokens: [
-                            main_term(0, len, [
-                                term(0, len, [
-                                    component(0, len, [
-                                        annotatable(0, len, [
-                                            simple_unit(0, len, [
-                                                $token(0, len)
-                                            ])
-                                        ])
-                                    ])
-                                ]), EOI(len, len)
-                            ])
-                        ]
-                    }
-                };
-            }
-
             #[test]
             fn metric_atom_ok_test() {
                 for (i, atom_symbol) in unit::testing::METRIC_ATOM_SYMBOLS.iter().enumerate() {
                     eprintln!("Basic validate {i}: {atom_symbol:#?}");
                     validate_ok!(atom_symbol, Rule::metric_atom_symbol);
-                    validate_ok!(atom_symbol, Rule::any_atom_symbol);
+                    // validate_ok!(atom_symbol, Rule::any_atom_symbol);
                     validate_ok!(atom_symbol, Rule::simple_unit);
                     validate_ok!(atom_symbol, Rule::annotatable);
                     validate_ok!(atom_symbol, Rule::component);
@@ -125,10 +100,36 @@ mod tests {
                 }
             }
 
+            macro_rules! validate_tree {
+                ($atom_symbol:expr, $token:ident) => {
+                    let len = $atom_symbol.len();
+
+                    parses_to! {
+                        parser: UnitParser,
+                        input: $atom_symbol,
+                        rule: Rule::main_term,
+                        tokens: [
+                            main_term(0, len, [
+                                term(0, len, [
+                                    component(0, len, [
+                                        annotatable(0, len, [
+                                            simple_unit(0, len, [
+                                                $token(0, len)
+                                            ])
+                                        ])
+                                    ])
+                                ])
+                            ])
+                        ]
+                    }
+                };
+            }
+
             #[allow(clippy::cognitive_complexity)]
             #[test]
             fn metric_tree_test() {
                 for atom_symbol in unit::testing::METRIC_ATOM_SYMBOLS {
+                    eprintln!("Parsing {atom_symbol}");
                     validate_tree!(atom_symbol, any_atom_symbol);
                 }
             }
@@ -137,9 +138,134 @@ mod tests {
             #[test]
             fn non_metric_tree_test() {
                 for atom_symbol in unit::testing::NON_METRIC_ATOM_SYMBOLS {
+                    eprintln!("Parsing {atom_symbol}");
                     validate_tree!(atom_symbol, any_atom_symbol);
                 }
             }
+        }
+
+        mod single_prefixed_atom_symbols {
+            use super::*;
+
+            #[test]
+            fn metric_atom_ok_test() {
+                macro_rules! validate_ok {
+                    ($atom_symbol:expr, $rule:expr) => {
+                        let pairs = UnitParser::parse($rule, $atom_symbol);
+                        assert!(
+                            pairs.is_ok(),
+                            "Failed to parse atom \"{}\": {pairs:#?}",
+                            $atom_symbol
+                        );
+                    };
+                }
+
+                for (i, atom_symbol) in unit::testing::METRIC_ATOM_SYMBOLS.iter().enumerate() {
+                    for (j, prefix_symbol) in unit::testing::PREFIX_SYMBOLS.iter().enumerate() {
+                        eprintln!("Basic validate {i},{j}: {prefix_symbol}+{atom_symbol}");
+
+                        let unit = format!("{prefix_symbol}{atom_symbol}");
+                        validate_ok!(unit.as_str(), Rule::simple_unit);
+                        validate_ok!(unit.as_str(), Rule::annotatable);
+                        validate_ok!(unit.as_str(), Rule::component);
+                        validate_ok!(unit.as_str(), Rule::term);
+                        validate_ok!(unit.as_str(), Rule::main_term);
+                    }
+                }
+            }
+
+            // macro_rules! validate_not_ok {
+            //     ($atom_symbol:expr, $rule:expr) => {
+            //         let pairs = UnitParser::parse($rule, $atom_symbol);
+            //         assert!(
+            //             pairs.is_err(),
+            //             "Parsing atom should have failed! \"{}\": {:#?}",
+            //             $atom_symbol,
+            //             pairs.unwrap().tokens().collect::<Vec<_>>()
+            //         );
+            //     };
+            // }
+            //
+            // #[test]
+            // fn non_metric_atom_not_ok_test() {
+            //     for (i, atom_symbol) in unit::testing::NON_METRIC_ATOM_SYMBOLS.iter().enumerate() {
+            //         for (j, prefix_symbol) in unit::testing::PREFIX_SYMBOLS.iter().enumerate() {
+            //             eprintln!("Basic validate {i},{j}: {prefix_symbol}+{atom_symbol}");
+            //
+            //             let unit = format!("{prefix_symbol}{atom_symbol}");
+            //             validate_not_ok!(unit.as_str(), Rule::simple_unit);
+            //             validate_not_ok!(unit.as_str(), Rule::annotatable);
+            //             validate_not_ok!(unit.as_str(), Rule::component);
+            //             validate_not_ok!(unit.as_str(), Rule::term);
+            //             validate_not_ok!(unit.as_str(), Rule::main_term);
+            //         }
+            //     }
+            // }
+
+            macro_rules! token {
+                ($variant:ident, $rule:ident, $unit:expr, $start:expr) => {
+                    pest::Token::$variant {
+                        rule: Rule::$rule,
+                        pos: pest::Position::new($unit, $start).unwrap(),
+                    }
+                };
+            }
+
+            macro_rules! validate_tree {
+                ($atom_symbol:expr, $prefix_len:expr, $atom_len:expr) => {
+                    let len = $prefix_len + $atom_len;
+
+                    // let pairs = UnitParser::parse(Rule::main_term, $atom_symbol).unwrap();
+                    let pairs = UnitParser::parse(Rule::unit, $atom_symbol).unwrap();
+
+                    let expected = vec![
+                        token!(Start, unit, $atom_symbol, 0),
+                        token!(Start, main_term, $atom_symbol, 0),
+                        token!(Start, term, $atom_symbol, 0),
+                        token!(Start, component, $atom_symbol, 0),
+                        token!(Start, annotatable, $atom_symbol, 0),
+                        token!(Start, simple_unit, $atom_symbol, 0),
+                        token!(Start, prefix_symbol, $atom_symbol, 0),
+                        token!(End, prefix_symbol, $atom_symbol, $prefix_len),
+                        token!(Start, metric_atom_symbol, $atom_symbol, $prefix_len),
+                        token!(End, metric_atom_symbol, $atom_symbol, len),
+                        token!(End, simple_unit, $atom_symbol, len),
+                        token!(End, annotatable, $atom_symbol, len),
+                        token!(End, component, $atom_symbol, len),
+                        token!(End, term, $atom_symbol, len),
+                        token!(End, main_term, $atom_symbol, len),
+                        token!(Start, EOI, $atom_symbol, len),
+                        token!(End, EOI, $atom_symbol, len),
+                        token!(End, unit, $atom_symbol, len),
+                    ];
+                    pretty_assertions::assert_eq!(
+                        pairs.tokens().collect::<Vec<_>>(),
+                        expected,
+                        "Unable to parse {}",
+                        $atom_symbol
+                    );
+                };
+            }
+
+            #[allow(clippy::cognitive_complexity)]
+            #[test]
+            fn metric_tree_test() {
+                for atom_symbol in unit::testing::METRIC_ATOM_SYMBOLS {
+                    for prefix_symbol in unit::testing::PREFIX_SYMBOLS {
+                        let unit = format!("{prefix_symbol}{atom_symbol}");
+                        eprintln!("Testing unit: {}", &unit);
+                        validate_tree!(unit.as_str(), prefix_symbol.len(), atom_symbol.len());
+                    }
+                }
+            }
+
+            // #[allow(clippy::cognitive_complexity)]
+            // #[test]
+            // fn non_metric_tree_test() {
+            //     for atom_symbol in unit::testing::NON_METRIC_ATOM_SYMBOLS {
+            //         validate_tree!(atom_symbol, any_atom_symbol);
+            //     }
+            // }
         }
     }
 

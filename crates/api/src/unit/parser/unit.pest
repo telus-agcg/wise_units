@@ -1,17 +1,27 @@
-main_term = { SOI ~ (leading_slash? ~ term) ~ EOI }
-  leading_slash = { "/" }
+unit = ${ SOI ~ main_term ~ EOI }
 
-term = { component ~ ( infix ~ component )* }
+main_term = ${ slash_term | term }
+  slash_term = _{ leading_slash ~ term }
+    leading_slash = { "/" }
+
+term = ${ component ~ ( &infix ~ term )* }
 
 infix = _{ dot | slash }
   dot = { "." }
   slash = { "/" }
 
-
+// component = ${
+//    factor? ~ annotatable ~ annotation?
+//    | annotation_component
+//    | factor_component ~ annotation?
+//    | "(" ~ term ~ ")"
+// }
 component = {
-  factor? ~ annotatable ~ annotation?
+  (annotatable ~ annotation_component)
+  | annotatable
   | annotation_component
-  | factor_component ~ annotation?
+  | factor_component
+  | "(" ~ term ~ ")"
 }
   annotation_component = { annotation }
   factor_component = { factor }
@@ -20,17 +30,14 @@ component = {
 factor = { ASCII_DIGIT+ ~ !not_factor  }
   not_factor = _{ "*" | "^" }
 
-// // // // // // | "(" ~ term ~ ")"
-
 // <annotatable>
-annotatable = {
-  simple_unit ~ exponent*
-}
+annotatable = ${ (simple_unit ~ exponent) | simple_unit }
   // <simple-unit>
-  simple_unit = { any_atom_symbol | (prefix_symbol ~ metric_atom_symbol) }
+  // simple_unit = ${ any_atom_symbol | prefix_symbol ~ metric_atom_symbol }
+  simple_unit = ${ (prefix_symbol? ~ metric_atom_symbol) | any_atom_symbol }
 
   // <exponent>
-  exponent = { sign? ~ digits }
+  exponent = ${ sign? ~ digits }
     // <sign>
     sign = { "-" | "+" }
     // <digits>
@@ -220,7 +227,7 @@ any_atom_symbol = {
     | "[pnt_pr]"
     | "[pca_pr]"
     | "[cicero]"
-    | "cal_[15]"
+    // | "cal_[15]"
     | "cal_[20]"
     | "[Btu_39]"
     | "[Btu_59]"
@@ -468,7 +475,7 @@ any_atom_symbol = {
     | "V"
     | "F"
     | "S"
-    | "T"
+    // | "T"
     | "H"
     | "'"
     | "l"
@@ -478,8 +485,8 @@ any_atom_symbol = {
     | "a"
     | "t"
     | "u"
-    | "P"
-    | "G"
+    // | "P"
+    // | "G"
     | "R"
     | "U"
     | "B"
