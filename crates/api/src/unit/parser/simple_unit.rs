@@ -54,7 +54,7 @@ impl<'i> From<SimpleUnit<'i>> for (Option<Prefix>, Option<Atom>) {
 // We can skip error handling here because the `prefix_symbol` was picked up by the parser, and all
 // of those strings must match a `crate::Prefix`'s `primary_symbol`.
 //
-fn prefix_symbol_to_prefix(prefix_symbol: &str) -> Prefix {
+pub(crate) fn prefix_symbol_to_prefix(prefix_symbol: &str) -> Prefix {
     match prefix_symbol {
         "Y" => Prefix::Yotta,
         "Z" => Prefix::Zetta,
@@ -84,7 +84,7 @@ fn prefix_symbol_to_prefix(prefix_symbol: &str) -> Prefix {
 // of those strings must match a `crate::Atom`'s `primary_symbol`.
 //
 #[allow(clippy::too_many_lines)]
-fn atom_symbol_to_atom(atom_symbol: &str) -> Atom {
+pub(crate) fn atom_symbol_to_atom(atom_symbol: &str) -> Atom {
     match atom_symbol {
         "m" => Atom::Meter,
         "s" => Atom::Second,

@@ -9,6 +9,7 @@ mod is_compatible_with;
 mod num_traits;
 mod ops;
 pub(crate) mod parser;
+pub(crate) mod parser2;
 mod partial_eq;
 mod partial_ord;
 mod reducible;

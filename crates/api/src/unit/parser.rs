@@ -2,7 +2,7 @@ mod annotatable;
 mod component;
 mod error;
 mod main_term;
-mod simple_unit;
+pub(crate) mod simple_unit;
 mod term;
 
 use pest::{iterators::Pairs, pratt_parser::PrattParser, Parser as _};

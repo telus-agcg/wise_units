@@ -327,13 +327,13 @@ pub(crate) const NON_METRIC_ATOM_SYMBOLS: [&str; 213] = [
     "[S]",
     "att",
     "sph",
-    "\'\'",
+    "''",
     "wk",
     "mo",
     "AU",
     "Ao",
     "%",
-    "\'",
+    "'",
     "h",
     "d",
     "a",
@@ -354,11 +354,41 @@ pub(crate) const fn all_atom_symbols() -> [&'static str; 309] {
 
     let mut j = 0;
 
-    while i < NON_METRIC_ATOM_SYMBOLS.len() {
+    while j < NON_METRIC_ATOM_SYMBOLS.len() {
         output[i] = NON_METRIC_ATOM_SYMBOLS[j];
         i += 1;
         j += 1;
     }
 
     output
+}
+
+// Sorts all atoms, first by length (longest first), then for atoms of equal length, those are
+// sorted alphabetically.
+//
+pub(crate) fn all_atom_symbols_sorted() -> [&'static str; 309] {
+    let mut sorted = all_atom_symbols();
+
+    sorted.sort_by(|a, b| match a.len().cmp(&b.len()) {
+        std::cmp::Ordering::Less => std::cmp::Ordering::Greater,
+        std::cmp::Ordering::Equal => a.cmp(b),
+        std::cmp::Ordering::Greater => std::cmp::Ordering::Less,
+    });
+
+    sorted
+}
+
+// Sorts only metric atoms, first by length (longest first), then for atoms of equal length, those
+// are sorted alphabetically.
+//
+pub(crate) fn metric_atom_symbols_sorted() -> [&'static str; 96] {
+    let mut sorted = METRIC_ATOM_SYMBOLS;
+
+    sorted.sort_by(|a, b| match a.len().cmp(&b.len()) {
+        std::cmp::Ordering::Less => std::cmp::Ordering::Greater,
+        std::cmp::Ordering::Equal => a.cmp(b),
+        std::cmp::Ordering::Greater => std::cmp::Ordering::Less,
+    });
+
+    sorted
 }

@@ -55,15 +55,9 @@ annotation = _{ "{" ~ annotation_string ~ "}" }
 // ╭──────────────────╮
 // │  <prefix_symbol> │
 // ╰──────────────────╯
+// TODO: Order these from closest to 0 out to the extremes
 prefix_symbol = {
   "da"    // deka
-  | "Y"   // yotta
-  | "Z"   // zetta
-  | "E"   // exa
-  | "P"   // peta
-  | "T"   // tera
-  | "G"   // giga
-  | "M"   // mega
   | "k"   // kilo
   | "h"   // hecto
   | "d"   // deci
@@ -72,6 +66,13 @@ prefix_symbol = {
   | "u"   // micro
   | "n"   // nano
   | "p"   // pico
+  | "Y"   // yotta
+  | "Z"   // zetta
+  | "E"   // exa
+  | "P"   // peta
+  | "T"   // tera
+  | "G"   // giga
+  | "M"   // mega
   | "f"   // femto
   | "a"   // atto
   | "z"   // zepto
@@ -227,7 +228,7 @@ any_atom_symbol = {
     | "[pnt_pr]"
     | "[pca_pr]"
     | "[cicero]"
-    // | "cal_[15]"
+    | "cal_[15]"
     | "cal_[20]"
     | "[Btu_39]"
     | "[Btu_59]"
@@ -475,7 +476,7 @@ any_atom_symbol = {
     | "V"
     | "F"
     | "S"
-    // | "T"
+    | "T"
     | "H"
     | "'"
     | "l"
@@ -485,8 +486,8 @@ any_atom_symbol = {
     | "a"
     | "t"
     | "u"
-    // | "P"
-    // | "G"
+    | "P"
+    | "G"
     | "R"
     | "U"
     | "B"
