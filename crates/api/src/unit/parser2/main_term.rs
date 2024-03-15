@@ -33,7 +33,7 @@ mod tests {
                 annotatable::Annotatable,
                 component::Component,
                 simple_unit::SimpleUnit,
-                term::{MultiTerm, Op},
+                term::{Op, Term},
             },
         },
         Atom,
@@ -49,11 +49,13 @@ mod tests {
             validate_parse!(
                 unit_str: atom_symbol,
                 parser: parse,
-                expected: MainTerm::Term(Term::Single(Component::Annotatable(
-                     Annotatable::SimpleUnit(SimpleUnit::Atom(
-                         unit::parser::simple_unit::atom_symbol_to_atom(atom_symbol)
-                     ))
-                 )))
+                expected: MainTerm::Term(Term {
+                    lhs: Component::Annotatable(
+                        Annotatable::SimpleUnit(SimpleUnit::Atom(
+                                unit::parser::simple_unit::atom_symbol_to_atom(atom_symbol)
+                        ))),
+                    rhs: None,
+                })
             );
         }
     }
@@ -71,13 +73,14 @@ mod tests {
                 validate_parse!(
                     unit_str: unit,
                     parser: parse,
-                    expected: MainTerm::Term(Term::Single(
-                        Component::Annotatable(
+                    expected: MainTerm::Term(Term {
+                        lhs: Component::Annotatable(
                             Annotatable::SimpleUnit(
                                 SimpleUnit::PrefixAtom { prefix, atom },
                             ),
                         ),
-                    ))
+                        rhs: None,
+                    })
                 );
             }
         }
@@ -89,17 +92,20 @@ mod tests {
         validate_parse!(
             unit_str: "m.g",
             parser: parse,
-            expected: MainTerm::Term(Term::Multi(MultiTerm {
+            expected: MainTerm::Term(Term {
                 lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(
                     Atom::Meter
                 ))),
-                rhs: vec![(
+                rhs: Some((
                     Op::Dot,
-                    Term::Single(Component::Annotatable(Annotatable::SimpleUnit(
-                        SimpleUnit::Atom(Atom::Gram)
-                    )))
-                )]
-            }))
+                    Box::new(Term {
+                        lhs: Component::Annotatable(Annotatable::SimpleUnit(
+                            SimpleUnit::Atom(Atom::Gram)
+                        )),
+                        rhs: None
+                    })
+                ))
+            })
         );
     }
 
@@ -115,17 +121,20 @@ mod tests {
             validate_parse!(
                 unit_str: unit,
                 parser: parse,
-                expected: MainTerm::Term(Term::Multi(MultiTerm {
+                expected: MainTerm::Term(Term{
                     lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(
                         unit::parser::simple_unit::atom_symbol_to_atom(lhs),
                     ))),
-                    rhs: vec![(
-                        Op::Dot,
-                        Term::Single(Component::Annotatable(Annotatable::SimpleUnit(
-                            SimpleUnit::Atom(unit::parser::simple_unit::atom_symbol_to_atom(rhs))
-                        )))
-                    )]
-                }))
+                    rhs: Some((
+                            Op::Dot,
+                            Box::new(Term {
+                                lhs: Component::Annotatable(Annotatable::SimpleUnit(
+                                             SimpleUnit::Atom(unit::parser::simple_unit::atom_symbol_to_atom(rhs))
+                                     )),
+                                     rhs: None,
+                            })
+                    ))
+                })
             );
         }
     }
@@ -137,23 +146,26 @@ mod tests {
 
         pretty_assertions::assert_eq!(
             output,
-            MainTerm::Term(Term::Multi(MultiTerm {
+            MainTerm::Term(Term {
                 lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(Atom::Meter))),
-                rhs: vec![(
+                rhs: Some((
                     Op::Dot,
-                    Term::Multi(MultiTerm {
+                    Box::new(Term {
                         lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(
                             Atom::Gram
                         ))),
-                        rhs: vec![(
+                        rhs: Some((
                             Op::Dot,
-                            Term::Single(Component::Annotatable(Annotatable::SimpleUnit(
-                                SimpleUnit::Atom(Atom::Kelvin)
-                            )))
-                        )]
+                            Box::new(Term {
+                                lhs: Component::Annotatable(Annotatable::SimpleUnit(
+                                    SimpleUnit::Atom(Atom::Kelvin)
+                                )),
+                                rhs: None
+                            })
+                        ))
                     })
-                )]
-            }))
+                ))
+            })
         );
     }
 
