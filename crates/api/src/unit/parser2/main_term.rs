@@ -50,14 +50,34 @@ mod tests {
                 unit_str: atom_symbol,
                 parser: parse,
                 expected: MainTerm::Term(Term {
-                    lhs: Component::Annotatable(
-                        Annotatable::SimpleUnit(SimpleUnit::Atom(
-                                unit::parser::simple_unit::atom_symbol_to_atom(atom_symbol)
-                        ))),
+                    lhs: Component::Annotatable {
+                        factor: None,
+                        annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(
+                                             unit::parser::simple_unit::atom_symbol_to_atom(atom_symbol)
+                                     )),annotation: None
+                    },
                     rhs: None,
                 })
             );
         }
+    }
+
+    #[test]
+    #[allow(clippy::string_lit_as_bytes)]
+    fn two_meter_test() {
+        validate_parse!(
+            unit_str: "2m",
+            parser: parse,
+            expected: MainTerm::Term(Term {
+                lhs: Component::Annotatable{
+                    factor: Some(2),
+                    annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(
+                             Atom::Meter
+                     )),annotation: None
+                },
+                rhs: None
+            })
+        );
     }
 
     #[test]
@@ -74,11 +94,13 @@ mod tests {
                     unit_str: unit,
                     parser: parse,
                     expected: MainTerm::Term(Term {
-                        lhs: Component::Annotatable(
-                            Annotatable::SimpleUnit(
+                        lhs: Component::Annotatable {
+                            factor: None,
+                            annotatable: Annotatable::SimpleUnit(
                                 SimpleUnit::PrefixAtom { prefix, atom },
-                            ),
-                        ),
+                                ),
+                                annotation: None
+                        },
                         rhs: None,
                     })
                 );
@@ -93,15 +115,22 @@ mod tests {
             unit_str: "m.g",
             parser: parse,
             expected: MainTerm::Term(Term {
-                lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(
-                    Atom::Meter
-                ))),
+                lhs: Component::Annotatable{
+                    factor: None,
+                    annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(
+                             Atom::Meter
+                     )),annotation: None
+                },
                 rhs: Some((
                     Op::Dot,
                     Box::new(Term {
-                        lhs: Component::Annotatable(Annotatable::SimpleUnit(
-                            SimpleUnit::Atom(Atom::Gram)
-                        )),
+                        lhs: Component::Annotatable{
+                            factor: None,
+                            annotatable: Annotatable::SimpleUnit(
+                                 SimpleUnit::Atom(Atom::Gram)
+                             ),
+                             annotation: None
+                        },
                         rhs: None
                     })
                 ))
@@ -122,16 +151,17 @@ mod tests {
                 unit_str: unit,
                 parser: parse,
                 expected: MainTerm::Term(Term{
-                    lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(
-                        unit::parser::simple_unit::atom_symbol_to_atom(lhs),
-                    ))),
+                    lhs: Component::Annotatable{ factor: None, annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(
+                                 unit::parser::simple_unit::atom_symbol_to_atom(lhs),
+                                 )),annotation: None},
                     rhs: Some((
                             Op::Dot,
                             Box::new(Term {
-                                lhs: Component::Annotatable(Annotatable::SimpleUnit(
-                                             SimpleUnit::Atom(unit::parser::simple_unit::atom_symbol_to_atom(rhs))
-                                     )),
-                                     rhs: None,
+                                lhs: Component::Annotatable{ factor: None, annotatable: Annotatable::SimpleUnit(
+                                         SimpleUnit::Atom(unit::parser::simple_unit::atom_symbol_to_atom(rhs))
+                                     ), annotation: None
+                                },
+                                rhs: None,
                             })
                     ))
                 })
@@ -147,19 +177,29 @@ mod tests {
         pretty_assertions::assert_eq!(
             output,
             MainTerm::Term(Term {
-                lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(Atom::Meter))),
+                lhs: Component::Annotatable {
+                    factor: None,
+                    annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(Atom::Meter)),
+                    annotation: None
+                },
                 rhs: Some((
                     Op::Dot,
                     Box::new(Term {
-                        lhs: Component::Annotatable(Annotatable::SimpleUnit(SimpleUnit::Atom(
-                            Atom::Gram
-                        ))),
+                        lhs: Component::Annotatable {
+                            factor: None,
+                            annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(Atom::Gram)),
+                            annotation: None
+                        },
                         rhs: Some((
                             Op::Dot,
                             Box::new(Term {
-                                lhs: Component::Annotatable(Annotatable::SimpleUnit(
-                                    SimpleUnit::Atom(Atom::Kelvin)
-                                )),
+                                lhs: Component::Annotatable {
+                                    factor: None,
+                                    annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(
+                                        Atom::Kelvin
+                                    )),
+                                    annotation: None
+                                },
                                 rhs: None
                             })
                         ))

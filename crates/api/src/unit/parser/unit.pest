@@ -10,18 +10,11 @@ infix = _{ dot | slash }
   dot = { "." }
   slash = { "/" }
 
-// component = ${
-//    factor? ~ annotatable ~ annotation?
-//    | annotation_component
-//    | factor_component ~ annotation?
-//    | "(" ~ term ~ ")"
-// }
-component = {
-  (annotatable ~ annotation_component)
-  | annotatable
-  | annotation_component
-  | factor_component
-  | "(" ~ term ~ ")"
+component = ${
+   factor? ~ annotatable ~ annotation?
+   | annotation_component
+   | factor_component ~ annotation?
+   | "(" ~ term ~ ")"
 }
   annotation_component = { annotation }
   factor_component = { factor }
