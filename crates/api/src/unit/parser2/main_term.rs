@@ -1,24 +1,41 @@
-use nom::{character::complete::char, combinator::opt, IResult};
+use nom::{
+    character::complete::char,
+    combinator::{all_consuming, opt},
+    sequence::pair,
+    IResult,
+};
 
 use super::term::Term;
 
 #[derive(Debug, PartialEq)]
-pub(super) enum MainTerm<'i> {
+pub(in crate::unit) enum MainTerm<'i> {
     SlashTerm(Term<'i>),
     Term(Term<'i>),
 }
 
-pub(super) fn parse(input: &[u8]) -> IResult<&[u8], MainTerm<'_>> {
-    match opt(char('/'))(input)? {
-        (tail, Some(_)) => {
-            let (tail, term) = super::term::parse(tail)?;
+impl TryFrom<MainTerm<'_>> for crate::Unit {
+    type Error = ();
 
-            Ok((tail, MainTerm::SlashTerm(term)))
+    fn try_from(main_term: MainTerm<'_>) -> Result<Self, Self::Error> {
+        match main_term {
+            MainTerm::SlashTerm(term) => {
+                // let unit = Self::try_from(term)?;
+                let unit = Self::try_from(term).unwrap();
+                Ok(num_traits::Inv::inv(unit))
+            }
+            MainTerm::Term(term) => Self::try_from(term),
         }
-        (tail, None) => {
-            let (tail, term) = super::term::parse(tail)?;
-            Ok((tail, MainTerm::Term(term)))
-        }
+    }
+}
+
+pub(super) fn parse(input: &[u8]) -> IResult<&[u8], MainTerm<'_>> {
+    let (tail, (maybe_slash, term)) =
+        all_consuming(pair(opt(char('/')), super::term::parse))(input)?;
+
+    if maybe_slash.is_some() {
+        Ok((tail, MainTerm::SlashTerm(term)))
+    } else {
+        Ok((tail, MainTerm::Term(term)))
     }
 }
 

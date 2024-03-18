@@ -24,9 +24,8 @@ mod main_term;
 mod simple_unit;
 mod term;
 
-use nom::{combinator::all_consuming, IResult};
+pub(super) fn parse(input: &str) -> Result<self::main_term::MainTerm<'_>, ()> {
+    let (_, main_term) = main_term::parse(input.as_bytes()).unwrap();
 
-pub(super) fn parse_unit(input: &str) -> IResult<&[u8], crate::Unit> {
-    let _main_term = all_consuming(main_term::parse)(input.as_bytes())?;
-    todo!();
+    Ok(main_term)
 }

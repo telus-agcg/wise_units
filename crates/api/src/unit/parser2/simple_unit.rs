@@ -8,9 +8,18 @@ use nom::{
 use crate::{unit, Atom, Prefix};
 
 #[derive(Debug, PartialEq)]
-pub(super) enum SimpleUnit {
+pub(in crate::unit) enum SimpleUnit {
     PrefixAtom { prefix: Prefix, atom: Atom },
     Atom(Atom),
+}
+
+impl SimpleUnit {
+    pub(super) const fn extract_for_term(self) -> (Option<Prefix>, Atom) {
+        match self {
+            Self::PrefixAtom { prefix, atom } => (Some(prefix), atom),
+            Self::Atom(atom) => (None, atom),
+        }
+    }
 }
 
 // Docs:

@@ -26,6 +26,48 @@ pub(in crate::unit) enum Component<'i> {
     Term(Box<Term<'i>>),
 }
 
+impl TryFrom<Component<'_>> for crate::Unit {
+    type Error = ();
+
+    fn try_from(value: Component<'_>) -> Result<Self, Self::Error> {
+        match value {
+            Component::Annotatable {
+                factor,
+                annotatable,
+                annotation,
+            } => {
+                let s = annotation.map(|a| std::str::from_utf8(a).unwrap().to_string());
+
+                let (prefix, atom, exponent) = annotatable.extract_for_term();
+
+                Ok(Self::new(vec![crate::Term {
+                    factor,
+                    prefix,
+                    atom: Some(atom),
+                    exponent,
+                    annotation: s,
+                }]))
+            }
+            Component::Factor { factor, annotation } => {
+                let s = annotation.map(|a| std::str::from_utf8(a).unwrap().to_string());
+
+                Ok(Self::new(vec![crate::Term {
+                    factor: Some(factor),
+                    prefix: None,
+                    atom: None,
+                    exponent: None,
+                    annotation: s,
+                }]))
+            }
+            Component::Annotation(annotation) => {
+                let s = std::str::from_utf8(annotation).unwrap();
+                Ok(Self::new(vec![term!(annotation: s.to_string())]))
+            }
+            Component::Term(t) => Self::try_from(*t),
+        }
+    }
+}
+
 pub(super) fn parse(input: &[u8]) -> IResult<&[u8], Component<'_>> {
     alt((
         parse_annotatable_component,
