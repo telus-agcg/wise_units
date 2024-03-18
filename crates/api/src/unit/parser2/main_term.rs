@@ -53,7 +53,7 @@ mod tests {
                 term::{Op, Term},
             },
         },
-        Atom,
+        Atom, Prefix,
     };
 
     use super::*;
@@ -86,11 +86,53 @@ mod tests {
             unit_str: "2m",
             parser: parse,
             expected: MainTerm::Term(Term {
+                lhs: Component::Annotatable {
+                    factor: Some(2),
+                    annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(Atom::Meter)),
+                    annotation: None
+                },
+                rhs: None
+            })
+        );
+    }
+
+    #[test]
+    #[allow(clippy::string_lit_as_bytes)]
+    fn two_meter_square_test() {
+        validate_parse!(
+            unit_str: "2m3",
+            parser: parse,
+            expected: MainTerm::Term(Term {
                 lhs: Component::Annotatable{
                     factor: Some(2),
-                    annotatable: Annotatable::SimpleUnit(SimpleUnit::Atom(
-                             Atom::Meter
-                     )),annotation: None
+                    annotatable: Annotatable::SimpleUnitExponent {
+                        simple_unit: SimpleUnit::Atom(Atom::Meter),
+                        exponent: 3
+                    },
+                    annotation: None
+                },
+                rhs: None
+            })
+        );
+    }
+
+    #[test]
+    #[allow(clippy::string_lit_as_bytes)]
+    fn two_centimeter_square_test() {
+        validate_parse!(
+            unit_str: "2cm3",
+            parser: parse,
+            expected: MainTerm::Term(Term {
+                lhs: Component::Annotatable{
+                    factor: Some(2),
+                    annotatable: Annotatable::SimpleUnitExponent {
+                        simple_unit: SimpleUnit::PrefixAtom {
+                            prefix: Prefix::Centi,
+                            atom: Atom::Meter,
+                        },
+                        exponent: 3
+                    },
+                    annotation: None
                 },
                 rhs: None
             })
