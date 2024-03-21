@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
-pub type AnnotationComposition = HashMap<String, i32>;
+use super::term::Exponent;
+
+pub type AnnotationComposition = HashMap<String, Exponent>;
 
 /// Similar to `Composable`, this is only to allow for checking compatibility on `Unit`s that have
 /// annotations. For those cases, we want to be able to ensure that, for example, `m{foo}` is not

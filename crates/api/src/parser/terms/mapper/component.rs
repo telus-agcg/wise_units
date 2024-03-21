@@ -1,9 +1,11 @@
-use super::{BasicComponent, Error, Factor, Finishable, Term, Visit};
-use crate::parser::terms::term_parser::Rule;
 use pest::iterators::Pair;
 
+use crate::parser::{term::Factor, terms::term_parser::Rule};
+
+use super::{BasicComponent, Error, Finishable, Term, Visit};
+
 pub(super) struct Component {
-    pub(super) factor: Option<u32>,
+    pub(super) factor: Option<Factor>,
     pub(super) terms: Vec<Term>,
 }
 

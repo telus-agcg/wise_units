@@ -18,7 +18,7 @@ mod simple_unit;
 use self::{
     annotatable::Annotatable, annotation::Annotation, ast_term::AstTerm,
     basic_component::BasicComponent, component::Component, digits::Digits, exponent::Exponent,
-    factor::Factor, finishable::Finishable, main_term::MainTerm, simple_unit::SimpleUnit,
+    finishable::Finishable, main_term::MainTerm, simple_unit::SimpleUnit,
 };
 use crate::parser::{terms::term_parser::Rule, Atom, Error, Prefix, Term, Visit};
 use pest::iterators::{Pair, Pairs};

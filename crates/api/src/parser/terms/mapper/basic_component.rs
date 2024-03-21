@@ -1,9 +1,11 @@
-use super::{Annotatable, Annotation, AstTerm, Error, Factor, Finishable, Term, Visit};
-use crate::parser::terms::term_parser::Rule;
 use pest::iterators::Pair;
 
+use crate::parser::{term::Factor, terms::term_parser::Rule};
+
+use super::{Annotatable, Annotation, AstTerm, Error, Finishable, Term, Visit};
+
 pub(super) struct BasicComponent {
-    pub(super) factor: Option<u32>,
+    pub(super) factor: Option<Factor>,
     pub(super) annotatable: Option<Annotatable>,
     pub(super) annotation: Option<String>,
     pub(super) terms: Vec<Term>,
@@ -68,7 +70,7 @@ impl Visit<Rule> for BasicComponent {
 
 enum FirstToken {
     Annotatable(Annotatable),
-    Factor(u32),
+    Factor(Factor),
 }
 
 impl Finishable for BasicComponent {

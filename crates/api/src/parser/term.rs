@@ -23,6 +23,9 @@ pub const UNITY: Term = {
 pub const UNITY_ARRAY: [Term; 1] = [UNITY];
 pub const UNITY_ARRAY_REF: &[Term; 1] = &UNITY_ARRAY;
 
+pub type Factor = u32;
+pub type Exponent = i32;
+
 /// A Term makes up an Atom (at its core) along with any Atom modifiers
 /// (anything that can change its scalar). It is, however, possible to have an
 /// Atom-less Term, which would simple be a Factor (with or without an
@@ -30,10 +33,10 @@ pub const UNITY_ARRAY_REF: &[Term; 1] = &UNITY_ARRAY;
 ///
 #[derive(Clone, Debug, Eq, Default)]
 pub struct Term {
-    pub factor: Option<u32>,
+    pub factor: Option<Factor>,
     pub prefix: Option<Prefix>,
     pub atom: Option<Atom>,
-    pub exponent: Option<i32>,
+    pub exponent: Option<Exponent>,
     pub annotation: Option<String>,
 }
 
@@ -115,7 +118,7 @@ impl Term {
         }
     }
 
-    pub fn factor_and_is_not_one<F: FnOnce(u32)>(&self, f: F) {
+    pub fn factor_and_is_not_one<F: FnOnce(Factor)>(&self, f: F) {
         if let Some(factor) = self.factor {
             if factor != 1 {
                 f(factor);
@@ -124,7 +127,7 @@ impl Term {
     }
 
     #[must_use]
-    pub fn factor_as_u32(&self) -> u32 {
+    pub fn factor_as_u32(&self) -> Factor {
         self.factor.unwrap_or(1)
     }
 }

@@ -4,7 +4,7 @@ use num_traits::One;
 
 use crate::{parser::ucum_symbol::UcumSymbol, reducible::Reducible};
 
-use super::Term;
+use super::{Exponent, Factor, Term};
 
 impl Reducible<f64> for Term {
     fn reduce_value(&self, value: f64) -> f64 {
@@ -40,8 +40,8 @@ impl<'a> Reducible<f64> for Cow<'a, [Term]> {
 fn combine_term_values(
     calculated_atom: f64,
     calculated_prefix: f64,
-    factor: Option<u32>,
-    exponent: Option<i32>,
+    factor: Option<Factor>,
+    exponent: Option<Exponent>,
 ) -> f64 {
     let a_p_product = calculated_atom * calculated_prefix;
 
