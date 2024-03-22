@@ -1,11 +1,11 @@
 use num_traits::Pow;
 
-use crate::Measurement;
+use crate::{parser::term::Exponent, Measurement};
 
-impl Pow<i32> for Measurement {
+impl Pow<Exponent> for Measurement {
     type Output = Self;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         Self {
             value: self.value.pow(rhs),
             unit: self.unit.pow(rhs),
@@ -13,10 +13,10 @@ impl Pow<i32> for Measurement {
     }
 }
 
-impl<'a> Pow<i32> for &'a Measurement {
+impl<'a> Pow<Exponent> for &'a Measurement {
     type Output = Measurement;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         Measurement {
             value: self.value.pow(rhs),
             unit: self.unit.clone().pow(rhs),
@@ -24,10 +24,10 @@ impl<'a> Pow<i32> for &'a Measurement {
     }
 }
 
-impl<'a> Pow<i32> for &'a mut Measurement {
+impl<'a> Pow<Exponent> for &'a mut Measurement {
     type Output = Self;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         self.value = self.value.pow(rhs);
         let _ = Pow::pow(&mut self.unit, rhs);
         self

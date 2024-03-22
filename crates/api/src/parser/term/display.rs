@@ -1,5 +1,6 @@
-use super::Term;
 use std::fmt;
+
+use super::{Factor, Term};
 
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -23,7 +24,7 @@ fn extract_term_string(term: &Term) -> String {
     term_string
 }
 
-fn extract_term_string_factor(term_string: &mut String, term_factor: Option<u32>) {
+fn extract_term_string_factor(term_string: &mut String, term_factor: Option<Factor>) {
     if let Some(factor) = term_factor {
         if factor != 1 {
             term_string.push_str(&factor.to_string());

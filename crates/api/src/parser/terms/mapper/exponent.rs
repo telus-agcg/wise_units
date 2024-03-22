@@ -1,8 +1,10 @@
-use super::{Digits, Error, Visit};
-use crate::parser::terms::term_parser::Rule as TermRule;
 use pest::iterators::Pair;
 
-pub(super) struct Exponent(pub(super) i32);
+use crate::parser::{term, terms::term_parser::Rule as TermRule};
+
+use super::{Digits, Error, Visit};
+
+pub(super) struct Exponent(pub(super) term::Exponent);
 
 impl Visit<TermRule> for Exponent {
     fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
@@ -48,5 +50,5 @@ fn parse_second_token(next: Option<Pair<'_, TermRule>>) -> Result<Digits, Error>
 enum FirstToken {
     PositiveSign,
     NegativeSign,
-    Exponent(i32),
+    Exponent(term::Exponent),
 }
