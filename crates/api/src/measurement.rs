@@ -302,7 +302,7 @@ mod tests {
                 let scalar = 123.456;
                 let expression = "kg/[lb_av]";
                 let unit = crate::unit::custom_ffi::unit_init(core::ffi_string!(expression));
-                let unit_for_measurement = crate::unit::custom_ffi::clone_unit(unit) as *mut Unit;
+                let unit_for_measurement = crate::unit::custom_ffi::clone_unit(unit).cast_mut();
                 let measurement =
                     measurement_ffi::measurement_rust_ffi_init(scalar, unit_for_measurement);
                 let retrieved_value = measurement_ffi::get_measurement_value(measurement);

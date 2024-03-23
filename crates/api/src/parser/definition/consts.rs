@@ -730,7 +730,7 @@ pub(in crate::parser) const MIL_US: Definition<f64> = Definition::ValueTerms {
 };
 
 pub(in crate::parser) const INCH_BRITISH: Definition<f64> = Definition::ValueTerms {
-    value: 2.539998,
+    value: 2.539_998,
     terms: Cow::Borrowed(&[Term {
         factor: None,
         prefix: Some(Prefix::Centi),
@@ -1316,7 +1316,7 @@ pub(in crate::parser) const MEAN_BRITISH_THERMAL_UNIT: Definition<f64> = Definit
 
 pub(in crate::parser) const INTERNATIONAL_TABLE_BRITISH_THERMAL_UNIT: Definition<f64> =
     Definition::ValueTerms {
-        value: 1.05505585262,
+        value: 1.055_055_852_62,
         terms: Cow::Borrowed(&[Term {
             factor: None,
             prefix: Some(Prefix::Kilo),
