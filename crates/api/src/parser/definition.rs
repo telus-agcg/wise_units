@@ -1,12 +1,14 @@
 #![allow(clippy::large_enum_variant)]
 #![allow(clippy::result_large_err)]
 
-use std::borrow::Cow;
+pub(super) mod consts;
+
+use std::{borrow::Cow, str::FromStr};
 
 use num_traits::One;
 
 use crate::{
-    parser::{function_set::FunctionSet, Error, Term},
+    parser::{function_set::FunctionSet, Term},
     reducible::Reducible,
 };
 
@@ -18,16 +20,16 @@ use super::term;
 ///
 pub(crate) enum Definition<V> {
     Base,
-    NonDimensional(V),
-    NonDimensionalSpecial {
+    Value(V),
+    ValueSpecial {
         value: V,
         function_set: FunctionSet<V>,
     },
-    Dimensional {
+    ValueTerms {
         value: V,
         terms: Cow<'static, [Term]>,
     },
-    DimensionalSpecial {
+    ValueTermsSpecial {
         value: V,
         terms: Cow<'static, [Term]>,
         function_set: FunctionSet<V>,
@@ -35,23 +37,29 @@ pub(crate) enum Definition<V> {
 }
 
 impl<V> Definition<V> {
-    pub(crate) fn try_new_dimensional(value: V, expression: &'static str) -> Result<Self, Error> {
-        Ok(Self::Dimensional {
+    pub(crate) fn new_value_terms(value: V, expression: &'static str) -> Self {
+        Self::ValueTerms {
             value,
-            terms: Cow::Owned(super::parse(expression)?),
-        })
+            terms: crate::Unit::from_str(expression).map_or_else(
+                |_| unreachable!("expected valid unit definition string: {expression}"),
+                crate::Unit::into_terms,
+            ),
+        }
     }
 
-    pub(crate) fn try_new_dimensional_special(
+    pub(crate) fn new_value_terms_special(
         value: V,
         expression: &'static str,
         function_set: FunctionSet<V>,
-    ) -> Result<Self, Error> {
-        Ok(Self::DimensionalSpecial {
+    ) -> Self {
+        Self::ValueTermsSpecial {
             value,
-            terms: Cow::Owned(super::parse(expression)?),
+            terms: crate::Unit::from_str(expression).map_or_else(
+                |_| unreachable!("expected valid unit definition string: {expression}"),
+                crate::Unit::into_terms,
+            ),
             function_set,
-        })
+        }
     }
 
     pub(crate) fn value(&self) -> V
@@ -60,20 +68,19 @@ impl<V> Definition<V> {
     {
         match self {
             Self::Base => <V as One>::one(),
-            Self::NonDimensional(value) => value.clone(),
-            Self::NonDimensionalSpecial { value, .. }
-            | Self::Dimensional { value, .. }
-            | Self::DimensionalSpecial { value, .. } => (*value).clone(),
+            Self::Value(value) => value.clone(),
+            Self::ValueSpecial { value, .. }
+            | Self::ValueTerms { value, .. }
+            | Self::ValueTermsSpecial { value, .. } => (*value).clone(),
         }
     }
 
     pub(crate) const fn terms(&self) -> &Cow<'static, [Term]> {
         match self {
-            Self::Base => &Cow::Borrowed(term::UNITY_ARRAY_REF),
-            Self::NonDimensional(_) | Self::NonDimensionalSpecial { .. } => {
+            Self::Value(_) | Self::ValueSpecial { .. } | Self::Base => {
                 &Cow::Borrowed(term::UNITY_ARRAY_REF)
             }
-            Self::Dimensional { terms, .. } | Self::DimensionalSpecial { terms, .. } => terms,
+            Self::ValueTerms { terms, .. } | Self::ValueTermsSpecial { terms, .. } => terms,
         }
     }
 }
@@ -82,10 +89,10 @@ impl Reducible<f64> for Definition<f64> {
     fn reduce_value(&self, other_value: f64) -> f64 {
         match self {
             Self::Base => One::one(),
-            Self::NonDimensional(value) => *value,
-            Self::Dimensional { value, terms } => value * terms.reduce_value(other_value),
-            Self::NonDimensionalSpecial { function_set, .. }
-            | Self::DimensionalSpecial { function_set, .. } => {
+            Self::Value(value) => *value,
+            Self::ValueTerms { value, terms } => value * terms.reduce_value(other_value),
+            Self::ValueSpecial { function_set, .. }
+            | Self::ValueTermsSpecial { function_set, .. } => {
                 (function_set.convert_to)(other_value)
             }
         }
@@ -94,10 +101,10 @@ impl Reducible<f64> for Definition<f64> {
     fn calculate_magnitude(&self, other_value: f64) -> f64 {
         match self {
             Self::Base => One::one(),
-            Self::NonDimensional(value) => *value,
-            Self::Dimensional { value, terms } => value * terms.calculate_magnitude(other_value),
-            Self::NonDimensionalSpecial { function_set, .. }
-            | Self::DimensionalSpecial { function_set, .. } => {
+            Self::Value(value) => *value,
+            Self::ValueTerms { value, terms } => value * terms.calculate_magnitude(other_value),
+            Self::ValueSpecial { function_set, .. }
+            | Self::ValueTermsSpecial { function_set, .. } => {
                 (function_set.convert_from)(other_value)
             }
         }

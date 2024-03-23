@@ -2,6 +2,8 @@
 //!
 #![cfg(test)]
 
+use approx::{assert_relative_eq, assert_ulps_eq};
+
 use crate::{
     parser::{
         term::UNITY_ARRAY, Atom, Classification, Composable, Composition, Dimension, Prefix,
@@ -9,7 +11,6 @@ use crate::{
     },
     ucum_unit::UcumUnit,
 };
-use approx::{assert_relative_eq, assert_ulps_eq};
 
 macro_rules! validate_definition {
     (
