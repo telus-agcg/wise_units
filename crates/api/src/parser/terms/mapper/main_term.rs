@@ -1,7 +1,10 @@
 use num_traits::Inv;
 use pest::iterators::Pair;
 
-use crate::parser::{terms::term_parser::Rule, Error, Term, Visit};
+use crate::{
+    parser::{terms::term_parser::Rule, Error, Visit},
+    Term,
+};
 
 use super::{AstTerm, Finishable};
 

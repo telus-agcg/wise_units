@@ -7,10 +7,7 @@ use std::{borrow::Cow, str::FromStr};
 
 use num_traits::One;
 
-use crate::{
-    parser::{term, Term},
-    reducible::Reducible,
-};
+use crate::{reducible::Reducible, term, Term};
 
 use super::function_set::FunctionSet;
 

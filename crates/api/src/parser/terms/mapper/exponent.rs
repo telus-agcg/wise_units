@@ -1,6 +1,9 @@
 use pest::iterators::Pair;
 
-use crate::parser::{term, terms::term_parser::Rule as TermRule, Error, Visit};
+use crate::{
+    parser::{terms::term_parser::Rule as TermRule, Error, Visit},
+    term,
+};
 
 use super::Digits;
 

@@ -43,7 +43,7 @@ impl AstTerm {
                     match op {
                         SecondToken::Dot => (),
                         SecondToken::Slash => {
-                            crate::parser::term::num_traits::inv::inv_terms(&mut new_terms);
+                            crate::term::num_traits::inv::inv_terms(&mut new_terms);
                         }
                     }
 

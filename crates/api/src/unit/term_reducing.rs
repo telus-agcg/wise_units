@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use num_traits::Zero;
 
 use crate::{
-    parser::term::{self, Exponent, Factor},
+    term::{self, Exponent, Factor},
     Atom, Prefix, Term,
 };
 

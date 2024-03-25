@@ -28,10 +28,7 @@ use std::{borrow::Cow, str::FromStr};
 #[cfg(feature = "cffi")]
 use ffi_common::derive::FFI;
 
-use crate::{
-    parser::{term, Term},
-    Error,
-};
+use crate::{term, Error, Term};
 
 pub const UNITY: Unit = Unit {
     terms: Cow::Borrowed(term::UNITY_ARRAY_REF),

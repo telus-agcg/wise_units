@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use num_traits::Inv;
 
-use crate::{parser::term, Unit};
+use crate::{term, Unit};
 
 impl Inv for Unit {
     type Output = Self;

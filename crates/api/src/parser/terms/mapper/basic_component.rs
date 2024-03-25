@@ -1,6 +1,9 @@
 use pest::iterators::Pair;
 
-use crate::parser::{term::Factor, terms::term_parser::Rule, Error, Visit};
+use crate::{
+    parser::{terms::term_parser::Rule, Error, Visit},
+    term::Factor,
+};
 
 use super::{Annotatable, Annotation, AstTerm, Finishable, Term};
 

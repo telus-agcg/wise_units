@@ -1,5 +1,5 @@
-use crate::parser::{
-    annotation_composition::{AnnotationComposable, AnnotationComposition},
+use crate::{
+    parser::annotation_composition::{AnnotationComposable, AnnotationComposition},
     Term,
 };
 
