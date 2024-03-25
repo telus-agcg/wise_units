@@ -5,7 +5,7 @@
 use approx::{assert_relative_eq, assert_ulps_eq};
 
 use crate::{
-    parser::{term::UNITY_ARRAY, Composition, Dimension, Prefix},
+    parser::{term::UNITY_ARRAY, Composition, Dimension},
     ucum_unit::UcumUnit,
     Atom, Classification, Composable, UcumSymbol,
 };

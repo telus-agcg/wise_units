@@ -1,7 +1,4 @@
-use crate::{
-    parser::{Composable, Composition},
-    unit::Unit,
-};
+use crate::{parser::Composition, Composable, Unit};
 
 //-----------------------------------------------------------------------------
 // impl Composable
@@ -15,11 +12,11 @@ impl Composable for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        parser::{Composable, Composition, Dimension},
-        unit::Unit,
-    };
     use std::str::FromStr;
+
+    use crate::Dimension;
+
+    use super::*;
 
     macro_rules! build_composition {
         (

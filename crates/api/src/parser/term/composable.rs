@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 
-use crate::parser::{Composable, Composition};
+use crate::{parser::Composition, Composable};
 
 use super::Term;
 
@@ -34,7 +34,9 @@ impl<'a> Composable for Cow<'a, [Term]> {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::{Composable, Composition, Dimension, Prefix};
+    use crate::Dimension;
+
+    use super::*;
 
     macro_rules! validate_composition {
         ($test_name:ident, $term:expr, $expected_value:expr) => {

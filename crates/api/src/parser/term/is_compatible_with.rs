@@ -1,8 +1,8 @@
 use std::borrow::Cow;
 
 use crate::{
-    is_compatible_with::IsCompatibleWith,
-    parser::{annotation_composition::AnnotationComposable, Composable, Term},
+    parser::{annotation_composition::AnnotationComposable, Term},
+    Composable, IsCompatibleWith,
 };
 
 /// In order to enforce compatibility on "non-units" (ex. `{each}`, `{total}`, `{heartbeats}`),
@@ -52,7 +52,7 @@ impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{is_compatible_with::IsCompatibleWith, parser::Prefix};
+    use crate::is_compatible_with::IsCompatibleWith;
 
     mod without_annotations {
         use super::*;
