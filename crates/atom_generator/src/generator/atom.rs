@@ -21,6 +21,8 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
     let is_metric_method = atom_list.is_metric_method();
 
     let tokens = quote! {
+        #![allow(clippy::unreadable_literal, clippy::too_many_lines, clippy::match_same_arms)]
+
         mod composable;
         mod display;
         mod hash;
