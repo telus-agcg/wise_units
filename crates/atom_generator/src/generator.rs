@@ -44,7 +44,7 @@ pub(crate) fn generate_files(rust_atom_list: &RustAtomList) {
 
 fn generate_classification_file(rust_atom_list: &RustAtomList) {
     let file_body = self::classification::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("parser/classification.rs");
+    let file_path = build_file_path("classification.rs");
     write_project_file(&file_path, &file_body, true);
 }
 

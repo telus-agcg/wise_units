@@ -16,9 +16,9 @@ mod atom_test;
 
 use crate::{
     is_compatible_with::DefaultCompatibility,
-    parser::{Classification, Property, UcumSymbol},
+    parser::{Property, UcumSymbol},
     reducible::Reducible,
-    UcumUnit, Unit,
+    Classification, UcumUnit, Unit,
 };
 
 #[allow(clippy::wildcard_imports)]

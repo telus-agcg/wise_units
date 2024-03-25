@@ -23,6 +23,7 @@ mod macros;
 
 pub mod as_fraction;
 pub mod atom;
+pub mod classification;
 pub mod convertible;
 pub mod error;
 pub mod field_eq;
@@ -38,15 +39,13 @@ mod ucum_unit;
 
 pub use crate::{
     atom::Atom,
+    classification::Classification,
     convertible::Convertible,
     error::Error,
     field_eq::FieldEq,
     is_compatible_with::IsCompatibleWith,
     measurement::Measurement,
-    parser::{
-        composition, Classification, Composable, Composition, Dimension, Prefix, Property, Term,
-        UcumSymbol,
-    },
+    parser::{composition, Composable, Composition, Dimension, Prefix, Property, Term, UcumSymbol},
     ucum_unit::UcumUnit,
     unit::Unit,
 };

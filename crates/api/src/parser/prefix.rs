@@ -1,12 +1,16 @@
 mod num_traits;
 
-use super::{Error, Visit};
-use crate::{
-    parser::{symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol, Classification},
-    unit::{self, Unit},
-};
-use pest::iterators::Pair;
 use std::fmt;
+
+use pest::iterators::Pair;
+
+use crate::{
+    parser::{symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol},
+    unit::{self, Unit},
+    Classification,
+};
+
+use super::{Error, Visit};
 
 const DECI: f64 = 1.0e-1;
 const CENTI: f64 = 1.0e-2;
