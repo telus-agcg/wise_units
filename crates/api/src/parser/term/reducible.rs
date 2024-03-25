@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use num_traits::One;
 
-use crate::{parser::ucum_symbol::UcumSymbol, reducible::Reducible};
+use crate::{reducible::Reducible, UcumSymbol};
 
 use super::{Exponent, Factor, Term};
 

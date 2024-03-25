@@ -5,9 +5,9 @@ use std::fmt;
 use pest::iterators::Pair;
 
 use crate::{
-    parser::{symbols::symbol_parser::Rule, ucum_symbol::UcumSymbol},
+    parser::symbols::symbol_parser::Rule,
     unit::{self, Unit},
-    Classification,
+    Classification, UcumSymbol,
 };
 
 use super::{Error, Visit};
@@ -272,9 +272,11 @@ impl fmt::Display for Prefix {
 
 #[cfg(test)]
 mod tests {
-    use super::Prefix;
-    use crate::parser::ucum_symbol::UcumSymbol;
     use approx::{assert_relative_eq, assert_ulps_eq};
+
+    use super::*;
+
+    use crate::UcumSymbol;
 
     macro_rules! validate_value {
         ($test_name:ident, $variant:ident, $value:expr) => {

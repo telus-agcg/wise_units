@@ -32,6 +32,7 @@ pub mod is_compatible_with;
 pub mod measurement;
 pub mod parser;
 pub mod reduce;
+mod ucum_symbol;
 pub mod unit;
 
 mod reducible;
@@ -45,7 +46,8 @@ pub use crate::{
     field_eq::FieldEq,
     is_compatible_with::IsCompatibleWith,
     measurement::Measurement,
-    parser::{composition, Composable, Composition, Dimension, Prefix, Property, Term, UcumSymbol},
+    parser::{composition, Composable, Composition, Dimension, Prefix, Property, Term},
+    ucum_symbol::UcumSymbol,
     ucum_unit::UcumUnit,
     unit::Unit,
 };

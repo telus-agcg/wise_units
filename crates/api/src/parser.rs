@@ -25,7 +25,6 @@ mod error;
 mod prefix;
 pub(crate) mod term;
 mod terms;
-mod ucum_symbol;
 
 use pest::{iterators::Pair, Parser};
 
@@ -34,7 +33,7 @@ use crate::Atom;
 pub use self::{
     annotation_composition::AnnotationComposition, composable::Composable,
     composition::Composition, dimension::Dimension, error::Error, prefix::Prefix,
-    property::Property, term::Term, ucum_symbol::UcumSymbol,
+    property::Property, term::Term,
 };
 
 use self::{

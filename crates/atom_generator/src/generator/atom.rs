@@ -28,10 +28,8 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
         mod reducible;
 
         use crate::{
-            is_compatible_with::DefaultCompatibility,
-            parser::{Property, UcumSymbol},
-            reducible::Reducible,
-            Classification, UcumUnit, Unit,
+            is_compatible_with::DefaultCompatibility, parser::Property, reducible::Reducible,
+            Classification, UcumSymbol, UcumUnit, Unit,
         };
 
         #[allow(clippy::wildcard_imports)]
