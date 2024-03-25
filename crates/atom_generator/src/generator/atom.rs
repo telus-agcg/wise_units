@@ -29,11 +29,15 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
 
         use crate::{
             is_compatible_with::DefaultCompatibility,
-            parser::{
-                definition::Definition, function_set::FunctionSet, Classification, Property, UcumSymbol,
-            },
+            parser::{Classification, Property, UcumSymbol},
             reducible::Reducible,
             UcumUnit, Unit,
+        };
+
+        #[allow(clippy::wildcard_imports)]
+        use self::{
+            definition::{consts::*, Definition},
+            function_set::FunctionSet,
         };
 
         #atom_enum

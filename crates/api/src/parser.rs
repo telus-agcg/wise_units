@@ -12,7 +12,6 @@
         clippy::non_ascii_literal
     )
 )]
-pub mod atom;
 pub mod classification;
 pub mod composition;
 #[allow(clippy::non_ascii_literal)]
@@ -21,20 +20,20 @@ pub mod property;
 mod symbols;
 
 mod annotation_composition;
-#[cfg(test)]
-mod atom_test;
 mod composable;
-mod definition;
 mod dimension;
 mod error;
-mod function_set;
 mod prefix;
 pub(crate) mod term;
 mod terms;
 mod ucum_symbol;
 
+use pest::{iterators::Pair, Parser};
+
+use crate::Atom;
+
 pub use self::{
-    annotation_composition::AnnotationComposition, atom::Atom, classification::Classification,
+    annotation_composition::AnnotationComposition, classification::Classification,
     composable::Composable, composition::Composition, dimension::Dimension, error::Error,
     prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
 };
@@ -43,7 +42,6 @@ use self::{
     symbols::symbol_parser::Rule as SymbolRule,
     terms::term_parser::{Rule as TermRule, TermParser},
 };
-use pest::{iterators::Pair, Parser};
 
 #[inline]
 pub(crate) fn parse(expression: &str) -> Result<Vec<Term>, Error> {

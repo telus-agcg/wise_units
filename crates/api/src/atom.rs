@@ -4,20 +4,28 @@
 //-----------------------------------------------------------------------------
 
 mod composable;
+mod definition;
 mod display;
+mod function_set;
 mod hash;
 mod partial_eq;
 mod reducible;
+
+#[cfg(test)]
+mod atom_test;
+
 use crate::{
     is_compatible_with::DefaultCompatibility,
-    parser::{
-        definition::Definition, function_set::FunctionSet, Classification, Property, UcumSymbol,
-    },
+    parser::{Classification, Property, UcumSymbol},
     reducible::Reducible,
     UcumUnit, Unit,
 };
 
-use super::definition::consts::*;
+#[allow(clippy::wildcard_imports)]
+use self::{
+    definition::{consts::*, Definition},
+    function_set::FunctionSet,
+};
 
 #[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
 pub enum Atom {
