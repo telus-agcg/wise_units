@@ -12,7 +12,6 @@
         clippy::non_ascii_literal
     )
 )]
-pub mod composition;
 #[allow(clippy::non_ascii_literal)]
 pub mod property;
 
@@ -30,8 +29,8 @@ use pest::{iterators::Pair, Parser};
 use crate::Atom;
 
 pub use self::{
-    annotation_composition::AnnotationComposition, composition::Composition, dimension::Dimension,
-    error::Error, prefix::Prefix, property::Property, term::Term,
+    annotation_composition::AnnotationComposition, dimension::Dimension, error::Error,
+    prefix::Prefix, property::Property, term::Term,
 };
 
 use self::{

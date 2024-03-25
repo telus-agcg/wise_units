@@ -1,5 +1,6 @@
-use super::{term::Exponent, Dimension};
 use std::{fmt, ops::Mul};
+
+use crate::parser::{term::Exponent, Dimension};
 
 pub const DIMLESS: Composition = Composition::new_dimless();
 
