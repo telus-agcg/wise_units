@@ -48,7 +48,7 @@ pub unsafe extern "C" fn unit_new(expression: *const c_char) -> *const Unit {
 ///
 #[no_mangle]
 pub unsafe extern "C" fn unit_destroy(data: *const Unit) {
-    drop(Box::from_raw(data as *mut Unit));
+    drop(Box::from_raw(data.cast_mut()));
 }
 
 /// Essentially checks if the two `Unit`'s scalar values are equal.
@@ -274,7 +274,7 @@ mod tests {
         let expression_c = CString::new(expression).expect("CString::new failed");
         unsafe {
             let u = unit_new(expression_c.as_ptr());
-            let boxed_u = Box::from_raw(u as *mut Unit);
+            let boxed_u = Box::from_raw(u.cast_mut());
             assert_eq!(expression, boxed_u.expression());
         }
     }
@@ -417,7 +417,7 @@ mod tests {
             let u = unit_new(base_expression.as_ptr());
             let d = unit_new(divisor_expression.as_ptr());
             let result = unit_div(u, d);
-            assert_eq!(expected, Box::from_raw(result as *mut Unit).expression());
+            assert_eq!(expected, Box::from_raw(result.cast_mut()).expression());
         }
     }
 
@@ -429,7 +429,7 @@ mod tests {
         unsafe {
             let u = unit_new(base_expression.as_ptr());
             let m = unit_new(multiplier_expression.as_ptr());
-            let result = Box::from_raw(unit_mul(u, m) as *mut Unit);
+            let result = Box::from_raw(unit_mul(u, m).cast_mut());
             assert_eq!(expected, result.expression());
         }
     }

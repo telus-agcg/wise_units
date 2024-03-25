@@ -43,7 +43,7 @@ pub unsafe extern "C" fn measurement_new(
 ///
 #[no_mangle]
 pub unsafe extern "C" fn measurement_destroy(data: *const Measurement) {
-    drop(Box::from_raw(data as *mut Measurement));
+    drop(Box::from_raw(data.cast_mut()));
 }
 
 /// Essentially checks if the two `Measurement`'s scalar values are equal.
@@ -312,7 +312,7 @@ mod tests {
         let expression = CString::new("m").expect("CString::new failed");
         unsafe {
             let m = measurement_new(value, expression.as_ptr());
-            let boxed_m = Box::from_raw(m as *mut Measurement);
+            let boxed_m = Box::from_raw(m.cast_mut());
             assert_relative_eq!(value, boxed_m.value());
             assert_ulps_eq!(value, boxed_m.value());
         }
@@ -345,7 +345,7 @@ mod tests {
         unsafe {
             let m = measurement_new(1.0, expression_c.as_ptr());
             let unit = measurement_get_unit(m);
-            let boxed_unit = Box::from_raw(unit as *mut Unit);
+            let boxed_unit = Box::from_raw(unit.cast_mut());
             assert_eq!(expression, boxed_unit.expression());
         }
     }
@@ -392,7 +392,7 @@ mod tests {
         unsafe {
             let m = measurement_new(value, expression1.as_ptr());
             let converted =
-                Box::from_raw(measurement_convert_to(m, expression2.as_ptr()) as *mut Measurement);
+                Box::from_raw(measurement_convert_to(m, expression2.as_ptr()).cast_mut());
             assert_relative_eq!(converted.value(), expected);
             assert_ulps_eq!(converted.value(), expected);
         }
@@ -423,7 +423,7 @@ mod tests {
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_add(m1, m2) as *mut Measurement);
+            let result = Box::from_raw(measurement_add(m1, m2).cast_mut());
             assert_relative_eq!(result.value(), expected);
             assert_ulps_eq!(result.value(), expected);
         }
@@ -439,7 +439,7 @@ mod tests {
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_sub(m1, m2) as *mut Measurement);
+            let result = Box::from_raw(measurement_sub(m1, m2).cast_mut());
             assert_relative_eq!(result.value(), expected);
             assert_ulps_eq!(result.value(), expected);
         }
@@ -455,7 +455,7 @@ mod tests {
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_mul(m1, m2) as *mut Measurement);
+            let result = Box::from_raw(measurement_mul(m1, m2).cast_mut());
             assert_relative_eq!(result.value(), expected);
             assert_ulps_eq!(result.value(), expected);
         }
@@ -469,7 +469,7 @@ mod tests {
         let expected = 204.683_834;
         unsafe {
             let m1 = measurement_new(value1, expression.as_ptr());
-            let result = Box::from_raw(measurement_mul_scalar(m1, scalar) as *mut Measurement);
+            let result = Box::from_raw(measurement_mul_scalar(m1, scalar).cast_mut());
             assert_relative_eq!(result.value(), expected);
             assert_ulps_eq!(result.value(), expected);
         }
@@ -485,7 +485,7 @@ mod tests {
         unsafe {
             let m1 = measurement_new(value1, expression1.as_ptr());
             let m2 = measurement_new(value2, expression2.as_ptr());
-            let result = Box::from_raw(measurement_div(m1, m2) as *mut Measurement);
+            let result = Box::from_raw(measurement_div(m1, m2).cast_mut());
             assert_relative_eq!(result.value(), expected);
             assert_ulps_eq!(result.value(), expected);
         }
@@ -499,7 +499,7 @@ mod tests {
         let expected = 8.792_439_378_238_342;
         unsafe {
             let m1 = measurement_new(value1, expression.as_ptr());
-            let result = Box::from_raw(measurement_div_scalar(m1, scalar) as *mut Measurement);
+            let result = Box::from_raw(measurement_div_scalar(m1, scalar).cast_mut());
             assert_relative_eq!(result.value(), expected);
             assert_ulps_eq!(result.value(), expected);
         }

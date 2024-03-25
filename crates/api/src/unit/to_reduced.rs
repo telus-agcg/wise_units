@@ -1,7 +1,3 @@
-use std::borrow::Cow;
-
-use num_traits::Inv;
-
 use crate::{
     as_fraction::AsFraction,
     parser::{Composable, Composition},
