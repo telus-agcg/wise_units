@@ -18,7 +18,6 @@ pub mod property;
 mod symbols;
 
 mod annotation_composition;
-mod dimension;
 mod error;
 mod prefix;
 pub(crate) mod term;
@@ -29,8 +28,8 @@ use pest::{iterators::Pair, Parser};
 use crate::Atom;
 
 pub use self::{
-    annotation_composition::AnnotationComposition, dimension::Dimension, error::Error,
-    prefix::Prefix, property::Property, term::Term,
+    annotation_composition::AnnotationComposition, error::Error, prefix::Prefix,
+    property::Property, term::Term,
 };
 
 use self::{

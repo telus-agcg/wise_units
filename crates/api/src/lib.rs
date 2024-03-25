@@ -27,6 +27,7 @@ pub mod classification;
 mod composable;
 pub mod composition;
 pub mod convertible;
+mod dimension;
 pub mod error;
 pub mod field_eq;
 pub mod invert;
@@ -46,11 +47,12 @@ pub use crate::{
     composable::Composable,
     composition::Composition,
     convertible::Convertible,
+    dimension::Dimension,
     error::Error,
     field_eq::FieldEq,
     is_compatible_with::IsCompatibleWith,
     measurement::Measurement,
-    parser::{Dimension, Prefix, Property, Term},
+    parser::{Prefix, Property, Term},
     ucum_symbol::UcumSymbol,
     ucum_unit::UcumUnit,
     unit::Unit,
