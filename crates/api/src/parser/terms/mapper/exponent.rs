@@ -1,8 +1,8 @@
 use pest::iterators::Pair;
 
-use crate::parser::{term, terms::term_parser::Rule as TermRule};
+use crate::parser::{term, terms::term_parser::Rule as TermRule, Error, Visit};
 
-use super::{Digits, Error, Visit};
+use super::Digits;
 
 pub(super) struct Exponent(pub(super) term::Exponent);
 

@@ -15,13 +15,20 @@ mod finishable;
 mod main_term;
 mod simple_unit;
 
+use pest::iterators::{Pair, Pairs};
+
+use crate::{
+    parser::{Error, Visit},
+    Atom, Prefix, Term,
+};
+
 use self::{
     annotatable::Annotatable, annotation::Annotation, ast_term::AstTerm,
     basic_component::BasicComponent, component::Component, digits::Digits, exponent::Exponent,
     finishable::Finishable, main_term::MainTerm, simple_unit::SimpleUnit,
 };
-use crate::parser::{terms::term_parser::Rule, Atom, Error, Prefix, Term, Visit};
-use pest::iterators::{Pair, Pairs};
+
+use super::term_parser::Rule;
 
 #[allow(clippy::large_enum_variant)]
 #[allow(clippy::result_large_err)]

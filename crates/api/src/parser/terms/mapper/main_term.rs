@@ -1,9 +1,9 @@
 use num_traits::Inv;
 use pest::iterators::Pair;
 
-use crate::parser::{terms::term_parser::Rule, Error, Term};
+use crate::parser::{terms::term_parser::Rule, Error, Term, Visit};
 
-use super::{AstTerm, Finishable, Visit};
+use super::{AstTerm, Finishable};
 
 pub(super) struct MainTerm {
     pub(super) terms: Vec<Term>,

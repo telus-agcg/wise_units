@@ -1,8 +1,10 @@
 use pest::iterators::Pair;
 
-use crate::parser::{term::Exponent as IExponent, terms::term_parser::Rule as TermRule};
+use crate::parser::{
+    term::Exponent as IExponent, terms::term_parser::Rule as TermRule, Error, Visit,
+};
 
-use super::{Atom, Error, Exponent, Prefix, SimpleUnit, Visit};
+use super::{Atom, Exponent, Prefix, SimpleUnit};
 
 pub(super) enum Annotatable {
     PrefixedWithExponent {

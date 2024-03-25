@@ -34,6 +34,7 @@ pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
 pub mod parser;
+mod prefix;
 pub mod reduce;
 mod ucum_symbol;
 pub mod unit;
@@ -52,7 +53,8 @@ pub use crate::{
     field_eq::FieldEq,
     is_compatible_with::IsCompatibleWith,
     measurement::Measurement,
-    parser::{Prefix, Property, Term},
+    parser::{Property, Term},
+    prefix::Prefix,
     ucum_symbol::UcumSymbol,
     ucum_unit::UcumUnit,
     unit::Unit,

@@ -1,6 +1,6 @@
 use num_traits::{FromPrimitive, ToPrimitive, Zero};
 
-use crate::{parser::prefix, Prefix, UcumSymbol};
+use crate::{prefix, Prefix, UcumSymbol};
 
 impl ToPrimitive for Prefix {
     fn to_u64(&self) -> Option<u64> {

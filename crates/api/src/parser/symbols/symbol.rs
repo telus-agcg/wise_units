@@ -1,5 +1,9 @@
-use crate::parser::{symbols::symbol_parser::Rule, Atom, Error, Prefix, Visit};
 use pest::iterators::Pair;
+
+use crate::{
+    parser::{symbols::symbol_parser::Rule, Error, Visit},
+    Atom, Prefix,
+};
 
 // Technically there should never be a symbol without an atom.
 #[derive(Debug)]

@@ -1,8 +1,6 @@
 use pest::iterators::Pair;
 
-use crate::parser::{term, terms::term_parser::Rule as TermRule};
-
-use super::{Error, Visit};
+use crate::parser::{term, terms::term_parser::Rule as TermRule, Error, Visit};
 
 impl Visit<TermRule> for term::Factor {
     fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
