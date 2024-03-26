@@ -1,6 +1,6 @@
 use pest::iterators::Pair;
 
-use crate::parser::{terms::term_parser::Rule, Error, Visit};
+use crate::unit::parser::{terms::term_parser::Rule, Error, Visit};
 
 use super::{Component, Finishable, Term};
 

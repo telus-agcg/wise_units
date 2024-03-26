@@ -3,7 +3,7 @@
 use pest_derive::Parser;
 
 #[derive(Parser)]
-#[grammar = "parser/terms/term.pest"]
+#[grammar = "unit/parser/terms/term.pest"]
 pub(crate) struct TermParser;
 
 #[cfg(test)]

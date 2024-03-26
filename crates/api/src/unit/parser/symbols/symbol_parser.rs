@@ -3,5 +3,5 @@
 use pest_derive::Parser;
 
 #[derive(Parser)]
-#[grammar = "parser/symbols/symbol.pest"]
+#[grammar = "unit/parser/symbols/symbol.pest"]
 pub(crate) struct SymbolParser;

@@ -3,8 +3,9 @@
 #![cfg(test)]
 #![allow(clippy::cognitive_complexity, non_fmt_panics)]
 
-use crate::parser::symbols::symbol_parser::{Rule, SymbolParser};
 use pest::{consumes_to, fails_with, parses_to, Parser};
+
+use crate::unit::parser::symbols::symbol_parser::{Rule, SymbolParser};
 
 #[test]
 fn validate_prefixes() {
