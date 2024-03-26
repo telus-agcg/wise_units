@@ -1,6 +1,7 @@
-use crate::Term;
-
-use super::annotation_composition::{AnnotationComposable, AnnotationComposition};
+use crate::{
+    term::annotation_composition::{AnnotationComposable, AnnotationComposition},
+    Term,
+};
 
 /// Similar to `Composable`, this is only to allow for checking compatibility on `Unit`s whose
 /// `Term`s have annotations. For those cases, we want to be able to ensure that, for example,
@@ -118,3 +119,4 @@ mod tests {
         }
     }
 }
+

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::Exponent;
+use crate::term::Exponent;
 
 pub type AnnotationComposition = HashMap<String, Exponent>;
 
@@ -11,3 +11,4 @@ pub type AnnotationComposition = HashMap<String, Exponent>;
 pub(crate) trait AnnotationComposable {
     fn annotation_composition(self) -> Option<AnnotationComposition>;
 }
+

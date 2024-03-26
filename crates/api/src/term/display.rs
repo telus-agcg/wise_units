@@ -1,5 +1,6 @@
-use super::{Factor, Term};
 use std::fmt;
+
+use super::{Factor, Term};
 
 impl fmt::Display for Term {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -140,3 +141,4 @@ mod tests {
         "10km-1{seed}"
     );
 }
+

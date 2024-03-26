@@ -1,10 +1,11 @@
+use std::collections::BTreeMap;
+
 use num_traits::Zero;
 
 use crate::{
-    term::{self, Factor, Term},
-    Atom, Prefix,
+    term::{self, Exponent, Factor},
+    Atom, Prefix, Term,
 };
-use std::collections::BTreeMap;
 
 /// Internal struct used for reducing `Term`s.
 ///
@@ -33,7 +34,7 @@ impl<'a> From<&'a Term> for ComposableTerm {
     }
 }
 
-type Parts = (ComposableTerm, i32);
+type Parts = (ComposableTerm, Exponent);
 
 impl From<Parts> for Term {
     fn from(parts: Parts) -> Self {
@@ -67,7 +68,7 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
 /// uniqueness (`atom`, `prefix`, `factor`), and sums those exponents. This is the destructuring
 /// part of `reduce_terms()`.
 ///
-fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
+fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, Exponent> {
     terms
         .iter()
         .map(|term| {
@@ -77,7 +78,7 @@ fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, i32> {
             )
         })
         .fold(
-            BTreeMap::<ComposableTerm, i32>::new(),
+            BTreeMap::<ComposableTerm, Exponent>::new(),
             |mut map, (key, exponent)| {
                 let _ = map
                     .entry(key)

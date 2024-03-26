@@ -15,9 +15,9 @@ impl Composable for Measurement {
 //
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     use crate::Dimension;
+
+    use super::*;
 
     #[test]
     fn validate_composition() {
@@ -32,3 +32,4 @@ mod tests {
         assert_eq!(m.composition(), expected);
     }
 }
+

@@ -233,9 +233,9 @@ impl fmt::Display for Prefix {
 mod tests {
     use approx::{assert_relative_eq, assert_ulps_eq};
 
-    use crate::UcumSymbol;
-
     use super::*;
+
+    use crate::UcumSymbol;
 
     macro_rules! validate_value {
         ($test_name:ident, $variant:ident, $value:expr) => {

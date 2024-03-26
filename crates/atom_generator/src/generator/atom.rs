@@ -21,48 +21,42 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
     let is_metric_method = atom_list.is_metric_method();
 
     let tokens = quote! {
+        #![allow(clippy::unreadable_literal, clippy::too_many_lines, clippy::match_same_arms)]
+
         mod composable;
-        mod definition;
         mod display;
-        mod function_set;
         mod hash;
         mod partial_eq;
         mod reducible;
-
-        use self::{
-            definition::Definition,
-            function_set::FunctionSet,
-        };
 
         use crate::{
             is_compatible_with::DefaultCompatibility, reducible::Reducible, Classification, Property,
             UcumSymbol, UcumUnit, Unit,
         };
 
+        #[allow(clippy::wildcard_imports)]
+        use self::{
+            definition::{consts::*, Definition},
+            function_set::FunctionSet,
+        };
+
         #atom_enum
 
         impl Atom {
-            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #definition_method
 
-            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #property_method
         }
 
         impl UcumSymbol for Atom {
-            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #classification_method
 
-            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #names_method
 
-            #[allow(clippy::too_many_lines)]
             #primary_code_method
 
-            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #print_symbol_method
 
-            #[allow(clippy::too_many_lines, clippy::match_same_arms)]
             #secondary_code_method
 
             fn definition_value(&self) -> f64 {
@@ -95,3 +89,4 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
 
     super::pretty_format(&tokens)
 }
+

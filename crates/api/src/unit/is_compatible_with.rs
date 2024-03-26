@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 
-use crate::{measurement::Measurement, IsCompatibleWith, Term, Unit};
+use crate::{IsCompatibleWith, Measurement, Term, Unit};
 
 #[cfg_attr(feature = "cffi", ffi_common::derive::expose_impl)]
 impl IsCompatibleWith for Unit {
@@ -104,3 +104,4 @@ mod tests {
         assert!(!meter.is_compatible_with(&km_per_10m));
     }
 }
+

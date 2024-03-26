@@ -1,6 +1,6 @@
 use num_traits::Inv;
 
-use crate::{as_fraction::AsFraction, unit::Unit, Term};
+use crate::{as_fraction::AsFraction, Term, Unit};
 
 impl AsFraction for Unit {
     type Numerator = Option<Self>;
@@ -128,3 +128,4 @@ mod tests {
         }
     }
 }
+

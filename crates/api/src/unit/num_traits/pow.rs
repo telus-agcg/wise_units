@@ -1,11 +1,11 @@
 use num_traits::Pow;
 
-use crate::Unit;
+use crate::{term::Exponent, Unit};
 
-impl Pow<i32> for Unit {
+impl Pow<Exponent> for Unit {
     type Output = Self;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         Self::new(
             self.terms
                 .iter()
@@ -16,10 +16,10 @@ impl Pow<i32> for Unit {
     }
 }
 
-impl<'a> Pow<i32> for &'a Unit {
+impl<'a> Pow<Exponent> for &'a Unit {
     type Output = Unit;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         Unit::new(
             self.terms
                 .iter()
@@ -29,10 +29,10 @@ impl<'a> Pow<i32> for &'a Unit {
     }
 }
 
-impl<'a> Pow<i32> for &'a mut Unit {
+impl<'a> Pow<Exponent> for &'a mut Unit {
     type Output = Self;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         self.terms.to_mut().iter_mut().for_each(|term| {
             let _ = Pow::pow(term, rhs);
         });

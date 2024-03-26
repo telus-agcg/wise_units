@@ -12,11 +12,11 @@ impl Composable for Unit {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     use std::str::FromStr;
 
-    use crate::{Dimension, Unit};
+    use crate::Dimension;
+
+    use super::*;
 
     macro_rules! build_composition {
         (
@@ -79,3 +79,4 @@ mod tests {
     valdiate_composition!(validate_composition_per_1, "/1");
     valdiate_composition!(validate_composition_per_annotation, "/{tot}");
 }
+

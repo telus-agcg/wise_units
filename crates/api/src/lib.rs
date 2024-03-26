@@ -22,8 +22,6 @@ mod macros;
 
 pub mod as_fraction;
 pub mod atom;
-#[cfg(test)]
-mod atom_test;
 pub mod classification;
 mod composable;
 pub mod composition;
@@ -35,7 +33,6 @@ pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
 mod prefix;
-#[allow(clippy::non_ascii_literal)]
 pub mod property;
 pub mod reduce;
 pub(crate) mod term;
@@ -51,3 +48,4 @@ pub use crate::{
     is_compatible_with::IsCompatibleWith, measurement::Measurement, prefix::Prefix,
     property::Property, term::Term, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit, unit::Unit,
 };
+

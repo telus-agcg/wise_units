@@ -8,21 +8,18 @@
 
 mod atom;
 mod classification;
-mod handlebars;
 mod property;
-mod symbol_grammar;
 
 use proc_macro2::TokenStream;
 
-use self::handlebars::HANDLEBARS;
-
-use crate::rust_structs::RustAtomList;
 use std::{
     fs::File,
     io::{self, Write},
     path::{Path, PathBuf},
     process::Command,
 };
+
+use crate::rust_structs::RustAtomList;
 
 const BANNER: &str =
     "//-----------------------------------------------------------------------------
@@ -43,13 +40,13 @@ pub(crate) fn generate_files(rust_atom_list: &RustAtomList) {
 
 fn generate_classification_file(rust_atom_list: &RustAtomList) {
     let file_body = self::classification::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("parser/classification.rs");
+    let file_path = build_file_path("classification.rs");
     write_project_file(&file_path, &file_body, true);
 }
 
 fn generate_property_file(rust_atom_list: &RustAtomList) {
     let file_body = self::property::generate_file_body(rust_atom_list);
-    let file_path = build_file_path("parser/property.rs");
+    let file_path = build_file_path("property.rs");
     write_project_file(&file_path, &file_body, true);
 }
 

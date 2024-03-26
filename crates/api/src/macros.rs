@@ -80,3 +80,4 @@ mod tests {
         assert_eq!(term!(Kilo, Meter), expected);
     }
 }
+

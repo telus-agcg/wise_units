@@ -1,11 +1,11 @@
 use num_traits::Pow;
 
-use crate::Term;
+use crate::{term::Exponent, Term};
 
-impl Pow<i32> for Term {
+impl Pow<Exponent> for Term {
     type Output = Self;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         let exponent = self.exponent.map_or(rhs, |exp| exp * rhs);
 
         Self {
@@ -18,10 +18,10 @@ impl Pow<i32> for Term {
     }
 }
 
-impl<'a> Pow<i32> for &'a Term {
+impl<'a> Pow<Exponent> for &'a Term {
     type Output = Term;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         let exponent = self.exponent.map_or(rhs, |exp| exp * rhs);
 
         Term {
@@ -34,10 +34,10 @@ impl<'a> Pow<i32> for &'a Term {
     }
 }
 
-impl<'a> Pow<i32> for &'a mut Term {
+impl<'a> Pow<Exponent> for &'a mut Term {
     type Output = Self;
 
-    fn pow(self, rhs: i32) -> Self::Output {
+    fn pow(self, rhs: Exponent) -> Self::Output {
         self.exponent = Some(self.exponent.map_or(rhs, |exp| exp * rhs));
 
         self
