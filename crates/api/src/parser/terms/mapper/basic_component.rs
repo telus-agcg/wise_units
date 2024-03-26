@@ -1,8 +1,11 @@
 use pest::iterators::Pair;
 
-use crate::parser::{term::Factor, terms::term_parser::Rule};
+use crate::{
+    parser::{terms::term_parser::Rule, Error, Visit},
+    term::Factor,
+};
 
-use super::{Annotatable, Annotation, AstTerm, Error, Finishable, Term, Visit};
+use super::{Annotatable, Annotation, AstTerm, Finishable, Term};
 
 pub(super) struct BasicComponent {
     pub(super) factor: Option<Factor>,

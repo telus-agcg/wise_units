@@ -1,9 +1,4 @@
-use crate::{
-    as_fraction::AsFraction,
-    parser::{Composable, Composition},
-    reduce::ToReduced,
-    Term,
-};
+use crate::{as_fraction::AsFraction, reduce::ToReduced, Composable, Composition, Term};
 
 use super::Unit;
 
@@ -62,7 +57,7 @@ impl ToReduced for Unit {
                 new_terms.extend_from_slice(&new_numerators);
 
                 let new_denominators =
-                    crate::parser::term::num_traits::inv::inv_terms_into(new_denominators);
+                    crate::term::num_traits::inv::inv_terms_into(new_denominators);
                 new_terms.extend_from_slice(&new_denominators);
 
                 Self::new(super::term_reducing::reduce_terms(&new_terms))

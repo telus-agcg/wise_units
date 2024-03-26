@@ -1,49 +1,21 @@
 #![allow(clippy::large_enum_variant)]
 #![allow(clippy::result_large_err)]
 
-// Because long numbers are generated, there's no way (that I know of) to
-// generate them using underscores (to make them pass the clippy lint).
-#[cfg_attr(
-    feature = "cargo-clippy",
-    allow(
-        clippy::unreadable_literal,
-        clippy::match_same_arms,
-        clippy::too_many_lines,
-        clippy::non_ascii_literal
-    )
-)]
-pub mod atom;
-pub mod classification;
-pub mod composition;
-#[allow(clippy::non_ascii_literal)]
-pub mod property;
-
-mod symbols;
-
-mod annotation_composition;
-#[cfg(test)]
-mod atom_test;
-mod composable;
-mod definition;
-mod dimension;
+pub(crate) mod annotation_composition;
 mod error;
-mod function_set;
-mod prefix;
-pub(crate) mod term;
+mod symbols;
 mod terms;
-mod ucum_symbol;
 
-pub use self::{
-    annotation_composition::AnnotationComposition, atom::Atom, classification::Classification,
-    composable::Composable, composition::Composition, dimension::Dimension, error::Error,
-    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol,
-};
+use pest::{iterators::Pair, Parser};
+
+use crate::{Atom, Prefix, Term};
+
+pub use self::{annotation_composition::AnnotationComposition, error::Error};
 
 use self::{
     symbols::symbol_parser::Rule as SymbolRule,
     terms::term_parser::{Rule as TermRule, TermParser},
 };
-use pest::{iterators::Pair, Parser};
 
 #[inline]
 pub(crate) fn parse(expression: &str) -> Result<Vec<Term>, Error> {
@@ -57,6 +29,41 @@ trait Visit<R> {
     fn visit(pair: Pair<'_, R>) -> Result<Self, Error>
     where
         Self: Sized;
+}
+
+impl Visit<SymbolRule> for Prefix {
+    fn visit(pair: Pair<'_, SymbolRule>) -> Result<Self, Error> {
+        let prefix = match pair.as_rule() {
+            SymbolRule::pri_atto | SymbolRule::sec_atto => Self::Atto,
+            SymbolRule::pri_centi | SymbolRule::sec_centi => Self::Centi,
+            SymbolRule::pri_deci | SymbolRule::sec_deci => Self::Deci,
+            SymbolRule::pri_deka | SymbolRule::sec_deka => Self::Deka,
+            SymbolRule::pri_exa | SymbolRule::sec_exa => Self::Exa,
+            SymbolRule::pri_femto | SymbolRule::sec_femto => Self::Femto,
+            SymbolRule::pri_gibi | SymbolRule::sec_gibi => Self::Gibi,
+            SymbolRule::pri_giga | SymbolRule::sec_giga => Self::Giga,
+            SymbolRule::pri_hecto | SymbolRule::sec_hecto => Self::Hecto,
+            SymbolRule::pri_kibi | SymbolRule::sec_kibi => Self::Kibi,
+            SymbolRule::pri_kilo | SymbolRule::sec_kilo => Self::Kilo,
+            SymbolRule::pri_mebi | SymbolRule::sec_mebi => Self::Mebi,
+            SymbolRule::pri_mega | SymbolRule::sec_mega => Self::Mega,
+            SymbolRule::pri_micro | SymbolRule::sec_micro => Self::Micro,
+            SymbolRule::pri_milli | SymbolRule::sec_milli => Self::Milli,
+            SymbolRule::pri_nano | SymbolRule::sec_nano => Self::Nano,
+            SymbolRule::pri_peta | SymbolRule::sec_peta => Self::Peta,
+            SymbolRule::pri_tebi | SymbolRule::sec_tebi => Self::Tebi,
+            SymbolRule::pri_tera | SymbolRule::sec_tera => Self::Tera,
+            SymbolRule::pri_yocto | SymbolRule::sec_yocto => Self::Yocto,
+            SymbolRule::pri_yotta | SymbolRule::sec_yotta => Self::Yotta,
+            SymbolRule::pri_zepto | SymbolRule::sec_zepto => Self::Zepto,
+            SymbolRule::pri_zetta | SymbolRule::sec_zetta => Self::Zetta,
+            t => {
+                unreachable!("expected prefix symbol, got {t:?}");
+            }
+        };
+
+        Ok(prefix)
+    }
 }
 
 // TODO: Move to atom_generator.
@@ -629,11 +636,8 @@ impl Visit<SymbolRule> for Atom {
             }
             SymbolRule::pri_yard_us | SymbolRule::sec_yard_us => Self::YardUS,
             SymbolRule::pri_year | SymbolRule::sec_year => Self::Year,
-            _ => {
-                return Err(Error::BadFragment {
-                    fragment: pair.as_span().as_str().to_string(),
-                    position: pair.as_span().start(),
-                });
+            t => {
+                unreachable!("expected atom symbol, got {t:?}");
             }
         };
 

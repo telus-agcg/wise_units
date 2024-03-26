@@ -1,13 +1,17 @@
-use super::{Atom, Error, Prefix, Visit};
-use crate::parser::{
-    symbols::{
-        mapper as symbol_mapper,
-        symbol_parser::{Rule as SymbolRule, SymbolParser},
-        Symbol,
-    },
-    terms::term_parser::Rule as TermRule,
-};
 use pest::{iterators::Pair, Parser};
+
+use crate::{
+    parser::{
+        symbols::{
+            mapper as symbol_mapper,
+            symbol_parser::{Rule as SymbolRule, SymbolParser},
+            Symbol,
+        },
+        terms::term_parser::Rule as TermRule,
+        Error, Visit,
+    },
+    Atom, Prefix,
+};
 
 pub(super) enum SimpleUnit {
     Prefixed { prefix: Prefix, atom: Atom },

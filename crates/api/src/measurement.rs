@@ -124,13 +124,13 @@ impl AsRef<Self> for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        super::parser::{Atom, Term},
-        *,
-    };
-    use crate::unit::Unit;
-    use approx::{assert_relative_eq, assert_ulps_eq};
     use std::{convert::Infallible, str::FromStr};
+
+    use approx::{assert_relative_eq, assert_ulps_eq};
+
+    use crate::{Atom, Term, Unit};
+
+    use super::*;
 
     #[test]
     fn validate_new() {

@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use num_traits::One;
 
-use crate::{parser::ucum_symbol::UcumSymbol, reducible::Reducible};
+use crate::{reducible::Reducible, UcumSymbol};
 
 use super::{Exponent, Factor, Term};
 
@@ -56,7 +56,7 @@ fn combine_term_values(
 
 #[cfg(test)]
 mod tests {
-    use crate::{parser::Prefix, reducible::Reducible};
+    use crate::reducible::Reducible;
     use approx::assert_relative_eq;
 
     macro_rules! validate_reduce_value {

@@ -1,6 +1,6 @@
 use num_traits::Pow;
 
-use crate::{parser::term::Exponent, Unit};
+use crate::{term::Exponent, Unit};
 
 impl Pow<Exponent> for Unit {
     type Output = Self;

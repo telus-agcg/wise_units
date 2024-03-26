@@ -22,29 +22,31 @@
 mod macros;
 
 pub mod as_fraction;
+pub mod atom;
+pub mod classification;
+mod composable;
+pub mod composition;
 pub mod convertible;
+mod dimension;
 pub mod error;
 pub mod field_eq;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
 pub mod parser;
+mod prefix;
+pub mod property;
 pub mod reduce;
+pub(crate) mod term;
+mod ucum_symbol;
 pub mod unit;
 
 mod reducible;
 mod ucum_unit;
 
 pub use crate::{
-    convertible::Convertible,
-    error::Error,
-    field_eq::FieldEq,
-    is_compatible_with::IsCompatibleWith,
-    measurement::Measurement,
-    parser::{
-        composition, Atom, Classification, Composable, Composition, Dimension, Prefix, Property,
-        Term, UcumSymbol,
-    },
-    ucum_unit::UcumUnit,
-    unit::Unit,
+    atom::Atom, classification::Classification, composable::Composable, composition::Composition,
+    convertible::Convertible, dimension::Dimension, error::Error, field_eq::FieldEq,
+    is_compatible_with::IsCompatibleWith, measurement::Measurement, prefix::Prefix,
+    property::Property, term::Term, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit, unit::Unit,
 };

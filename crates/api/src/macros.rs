@@ -28,7 +28,7 @@ macro_rules! term {
     };
 
     ($prefix:ident, $atom:ident) => {
-        $crate::Term::new(Some(Prefix::$prefix), Some($crate::Atom::$atom))
+        $crate::Term::new(Some($crate::Prefix::$prefix), Some($crate::Atom::$atom))
     };
 
     ($atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {
@@ -69,7 +69,7 @@ macro_rules! terms {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::{Atom, Prefix, Term};
+    use crate::{Term, Atom, Prefix};
 
     #[test]
     fn validate_term_macro() {

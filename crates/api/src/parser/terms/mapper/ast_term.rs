@@ -1,8 +1,8 @@
 use pest::iterators::Pair;
 
-use crate::parser::terms::term_parser::Rule;
+use crate::parser::{terms::term_parser::Rule, Error, Visit};
 
-use super::{Component, Error, Finishable, Term, Visit};
+use super::{Component, Finishable, Term};
 
 pub(super) struct AstTerm {
     pub(super) component: Component,
@@ -43,7 +43,7 @@ impl AstTerm {
                     match op {
                         SecondToken::Dot => (),
                         SecondToken::Slash => {
-                            crate::parser::term::num_traits::inv::inv_terms(&mut new_terms);
+                            crate::term::num_traits::inv::inv_terms(&mut new_terms);
                         }
                     }
 
