@@ -1,6 +1,6 @@
 use pest::iterators::Pair;
 
-use crate::parser::{terms::term_parser::Rule as TermRule, Error, Visit};
+use crate::unit::parser::{terms::term_parser::Rule as TermRule, Error, Visit};
 
 pub(super) type Annotation = String;
 

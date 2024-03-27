@@ -1,7 +1,7 @@
 use pest::iterators::Pair;
 
 use crate::{
-    parser::{symbols::symbol_parser::Rule, Error, Visit},
+    unit::parser::{symbols::symbol_parser::Rule, Error, Visit},
     Atom, Prefix,
 };
 

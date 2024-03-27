@@ -1,8 +1,9 @@
-use crate::parser::{
+use pest::iterators::Pair;
+
+use crate::unit::parser::{
     symbols::{symbol_parser::Rule, Symbol},
     Error, Visit,
 };
-use pest::iterators::Pair;
 
 pub(in super::super) fn map(pair: Pair<'_, Rule>) -> Result<Symbol, Error> {
     if pair.as_rule() == Rule::symbol {

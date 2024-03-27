@@ -1,7 +1,8 @@
-use crate::parser::{
+use pest::error::Error as PestError;
+
+use crate::unit::parser::{
     symbols::symbol_parser::Rule as SymbolRule, terms::term_parser::Rule as TermRule,
 };
-use pest::error::Error as PestError;
 
 /// Errors when trying to convert between types that aren't commensurable.
 ///

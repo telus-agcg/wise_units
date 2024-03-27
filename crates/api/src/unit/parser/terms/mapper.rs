@@ -18,7 +18,7 @@ mod simple_unit;
 use pest::iterators::{Pair, Pairs};
 
 use crate::{
-    parser::{Error, Visit},
+    unit::parser::{Error, Visit},
     Atom, Prefix, Term,
 };
 
@@ -58,7 +58,7 @@ pub(crate) fn map(mut pairs: Pairs<'_, Rule>) -> Result<Vec<Term>, Error> {
 mod tests {
     use pest::Parser;
 
-    use crate::parser::terms::term_parser::{Rule, TermParser};
+    use crate::unit::parser::terms::term_parser::TermParser;
 
     use super::*;
 

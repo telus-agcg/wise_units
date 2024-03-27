@@ -1,5 +1,6 @@
-use crate::{Error, Unit};
 use std::str::FromStr;
+
+use crate::{Error, Unit};
 
 //-----------------------------------------------------------------------------
 // impl FromStr
@@ -9,7 +10,7 @@ impl FromStr for Unit {
 
     #[inline]
     fn from_str(expression: &str) -> Result<Self, Self::Err> {
-        Ok(Self::new(crate::parser::parse(expression)?))
+        Ok(Self::new(super::parser::parse(expression)?))
     }
 }
 

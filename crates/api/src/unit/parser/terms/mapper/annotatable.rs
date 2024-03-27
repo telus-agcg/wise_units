@@ -1,8 +1,8 @@
 use pest::iterators::Pair;
 
 use crate::{
-    parser::{terms::term_parser::Rule as TermRule, Error, Visit},
     term::Exponent as IExponent,
+    unit::parser::{terms::term_parser::Rule as TermRule, Error, Visit},
 };
 
 use super::{Atom, Exponent, Prefix, SimpleUnit};

@@ -21,6 +21,7 @@
 #[macro_use]
 mod macros;
 
+pub(crate) mod annotation_composition;
 pub mod as_fraction;
 pub mod atom;
 pub mod classification;
@@ -33,7 +34,6 @@ pub mod field_eq;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
-pub mod parser;
 mod prefix;
 pub mod property;
 pub mod reduce;

@@ -1,7 +1,6 @@
 #![allow(clippy::large_enum_variant)]
 #![allow(clippy::result_large_err)]
 
-pub(crate) mod annotation_composition;
 mod error;
 mod symbols;
 mod terms;
@@ -10,7 +9,7 @@ use pest::{iterators::Pair, Parser};
 
 use crate::{Atom, Prefix, Term};
 
-pub use self::{annotation_composition::AnnotationComposition, error::Error};
+pub use self::error::Error;
 
 use self::{
     symbols::symbol_parser::Rule as SymbolRule,

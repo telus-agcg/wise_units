@@ -1,4 +1,4 @@
-use crate::parser::Error as ParserError;
+use crate::unit::ParserError;
 
 #[derive(Clone, Debug, thiserror::Error, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]

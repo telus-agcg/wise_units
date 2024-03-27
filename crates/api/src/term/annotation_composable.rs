@@ -1,5 +1,5 @@
 use crate::{
-    parser::annotation_composition::{AnnotationComposable, AnnotationComposition},
+    annotation_composition::{AnnotationComposable, AnnotationComposition},
     Term,
 };
 
@@ -40,7 +40,7 @@ impl<'a> AnnotationComposable for &'a [Term] {
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::annotation_composition::{AnnotationComposable, AnnotationComposition};
+    use super::*;
 
     mod without_annotations {
         use super::*;

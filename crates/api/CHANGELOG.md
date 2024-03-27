@@ -22,8 +22,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
 - Added `measurement!()` macro for wrapping `Measurement::try_new().unwrap()`.
-- Added `crate::parser::term::Factor` type alias for `u32`.
-- Added `crate::parser::term::Exponent` type alias for `i32`.
+- Added `crate::term::Factor` type alias for `u32`.
+- Added `crate::term::Exponent` type alias for `i32`.
 - (Internal) Added constants for many but not all internal `Definition`s.
 
 ### Changed
@@ -33,6 +33,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   still generated using `handlebars`).
 - (Internal) `Definition` is now an enum and is generic over value type `V`.
 - (Internal) `Definition` resolution uses `uncreachable!()` for all `Definition` unit strings.
+- (Internal) Moved the following modules from `crate::parser::` to `crate::`:
+  - `annotation_composition`
+  - `atom`
+  - `classification`
+  - `composable`
+  - `composition`
+  - `dimension`
+  - `prefix`
+  - `property`
+  - `term`
+  - `ucum_symbol`
+- (Internal) Moved `crate::parser` to `crate::unit::parser`.
 
 ### Deprecated
 

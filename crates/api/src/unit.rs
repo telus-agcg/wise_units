@@ -8,6 +8,7 @@ mod invert;
 mod is_compatible_with;
 mod num_traits;
 mod ops;
+mod parser;
 mod partial_eq;
 mod partial_ord;
 mod reducible;
@@ -27,6 +28,8 @@ use std::{borrow::Cow, str::FromStr};
 
 #[cfg(feature = "cffi")]
 use ffi_common::derive::FFI;
+
+pub(crate) use self::parser::Error as ParserError;
 
 use crate::{term, Error, Term};
 
