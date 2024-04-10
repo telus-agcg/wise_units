@@ -15,12 +15,26 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  CARGO_REGISTRIES_AGRIAN_REGISTRY_INDEX: ${{ secrets.AGRIAN_CRATES_REGISTRY }}
 
 jobs:
   security-audit:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.TELUS_AGCG_MACHINE_USER_KEY }}
       - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Security audit
         uses: actions-rs/audit-check@v1
         with:
