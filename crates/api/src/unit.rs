@@ -135,7 +135,7 @@ impl Unit {
     /// use wise_units::Unit;
     ///
     /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
-    /// assert_eq!(u.expression().as_str(), "[acr_us].[in_i]/[acr_us]");
+    /// assert_eq!(u.expression(), "[acr_us].[in_i]/[acr_us]");
     /// ```
     ///
     #[inline]
@@ -153,7 +153,7 @@ impl Unit {
     /// use wise_units::Unit;
     ///
     /// let u = Unit::from_str("[acr_us].[in_i]/[acr_us]").unwrap();
-    /// assert_eq!(u.expression_reduced().as_str(), "[in_i]");
+    /// assert_eq!(u.expression_reduced(), "[in_i]");
     /// ```
     ///
     #[inline]
@@ -205,55 +205,55 @@ mod tests {
     #[test]
     fn validate_expression_reduced() {
         let unit = Unit::from_str("m").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "m");
+        assert_eq!(unit.expression_reduced(), "m");
 
         let unit = Unit::from_str("M").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "m");
+        assert_eq!(unit.expression_reduced(), "m");
 
         let unit = Unit::from_str("km/10m").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "km/10m");
+        assert_eq!(unit.expression_reduced(), "km/10m");
 
         let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "/m");
+        assert_eq!(unit.expression_reduced(), "/m");
 
         let unit = Unit::from_str("10m").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "10m");
+        assert_eq!(unit.expression_reduced(), "10m");
 
         let unit = Unit::from_str("10km").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "10km");
+        assert_eq!(unit.expression_reduced(), "10km");
 
         let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "/10km");
+        assert_eq!(unit.expression_reduced(), "/10km");
 
         let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "/m2.km");
+        assert_eq!(unit.expression_reduced(), "/m2.km");
 
         let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "km/m2.cm");
+        assert_eq!(unit.expression_reduced(), "km/m2.cm");
 
         let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "/m2.cm.km");
+        assert_eq!(unit.expression_reduced(), "/m2.cm.km");
 
         let unit = Unit::from_str("m/s2").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "m/s2");
+        assert_eq!(unit.expression_reduced(), "m/s2");
 
         let unit = Unit::from_str("km3/nm2").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "km3/nm2");
+        assert_eq!(unit.expression_reduced(), "km3/nm2");
 
         let unit = Unit::from_str("Kibit").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "Kibit");
+        assert_eq!(unit.expression_reduced(), "Kibit");
 
         let unit = Unit::from_str("KiBy").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "KiBy");
+        assert_eq!(unit.expression_reduced(), "KiBy");
 
         let unit = Unit::from_str("MiBy").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "MiBy");
+        assert_eq!(unit.expression_reduced(), "MiBy");
 
         let unit = Unit::from_str("GiBy").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "GiBy");
+        assert_eq!(unit.expression_reduced(), "GiBy");
 
         let unit = Unit::from_str("TiBy").unwrap();
-        assert_eq!(unit.expression_reduced().as_str(), "TiBy");
+        assert_eq!(unit.expression_reduced(), "TiBy");
     }
 
     #[cfg(feature = "cffi")]
@@ -267,7 +267,7 @@ mod tests {
             let unit = unsafe { custom_ffi::unit_init(core::ffi_string!(expression)) };
             let c_expression = unsafe { custom_ffi::get_unit_expression(unit) };
             assert_eq!(expression, unsafe {
-                ffi_common::core::string::string_from_c(c_expression)
+                core::string::string_from_c(c_expression)
             });
             unsafe { unit_ffi::unit_free(unit) };
         }
