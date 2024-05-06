@@ -165,6 +165,8 @@ impl Unit {
     }
 }
 
+// TODO: This is silly; remove.
+//
 impl AsRef<Self> for Unit {
     fn as_ref(&self) -> &Self {
         self

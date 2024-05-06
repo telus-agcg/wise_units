@@ -24,7 +24,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added `measurement!()` macro for wrapping `Measurement::try_new().unwrap()`.
 - Added `crate::term::Factor` type alias for `u32`.
 - Added `crate::term::Exponent` type alias for `i32`.
-- Added `crate::Term::as_str()`.
+- NAUM-5: Added `crate::Term::as_cow_str()`.
 - (Internal) Added constants for many but not all internal `Definition`s.
 
 ### Changed
@@ -46,7 +46,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `term`
   - `ucum_symbol`
 - (Internal) Moved `crate::parser` to `crate::unit::parser`.
-- (Internal) `Display` implementation for `Unit` now uses `Term::as_str()` logic.
+- NAUM-5: (Internal) `Display` implementation for `Unit` now uses `Term::as_cow_str()` logic.
 
 ### Deprecated
 
