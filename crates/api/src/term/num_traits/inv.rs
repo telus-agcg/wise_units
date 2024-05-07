@@ -50,7 +50,7 @@ pub(crate) fn inv_terms(terms: &mut Vec<Term>) {
 // This solves not being able to `impl Inv for Vec<Term>`.
 //
 pub(crate) fn inv_terms_into(terms: Vec<Term>) -> Vec<Term> {
-    terms.into_iter().map(num_traits::Inv::inv).collect()
+    terms.into_iter().map(Inv::inv).collect()
 }
 
 #[cfg(test)]

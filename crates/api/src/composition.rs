@@ -484,13 +484,13 @@ mod tests {
     fn validate_insert() {
         let mut composition = Composition::default();
         composition.insert(Dimension::Mass, 3);
-        assert_eq!(composition.to_string().as_str(), "M3");
+        assert_eq!(composition.to_string(), "M3");
 
         composition.insert(Dimension::Mass, 3);
-        assert_eq!(composition.to_string().as_str(), "M6");
+        assert_eq!(composition.to_string(), "M6");
 
         composition.insert(Dimension::Mass, -6);
-        assert_eq!(composition.to_string().as_str(), "");
+        assert_eq!(composition.to_string(), "");
 
         let mut composition = Composition::default();
         composition.insert(Dimension::Mass, -1);
@@ -500,10 +500,7 @@ mod tests {
         composition.insert(Dimension::Length, -5);
         composition.insert(Dimension::PlaneAngle, -6);
         composition.insert(Dimension::LuminousIntensity, -7);
-        assert_eq!(
-            composition.to_string().as_str(),
-            "Q-3.L-5.F-7.M-1.A-6.C-2.T-4"
-        );
+        assert_eq!(composition.to_string(), "Q-3.L-5.F-7.M-1.A-6.C-2.T-4");
     }
 
     #[test]
