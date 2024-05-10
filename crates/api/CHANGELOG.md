@@ -22,6 +22,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - NAUM-4: Derive `PartialOrd` for `Composition`
 - NAUM-4: `impl From<Dimension> for Composition`
 - NAUM-4: Derive `Hash` for `Property`
+- NAUM-4: `impl PartialOrd for Term`
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.

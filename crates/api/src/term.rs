@@ -6,6 +6,7 @@ mod invert;
 mod is_compatible_with;
 pub(crate) mod num_traits;
 mod partial_eq;
+mod partial_ord;
 mod reducible;
 mod ucum_unit;
 
