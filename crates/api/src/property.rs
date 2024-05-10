@@ -9,7 +9,7 @@ use std::fmt;
 /// HTML spec, but is used throughout the
 /// [XML description](http://unitsofmeasure.org/ucum-essence.xml).
 ///
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Property {
     Acceleration,
     Acidity,

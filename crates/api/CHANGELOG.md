@@ -18,13 +18,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - PLCC-287: `impl num_traits::NumCast for Measurement`.
 - PLCC-287: `impl num_traits::Pow<i32> for Measurement`, `Unit`, `Term`.
 - PLCC-287: `impl std::ops::Neg for Measurement`.
+- NAUM-5: Added `crate::Term::as_cow_str()`.
+- NAUM-4: Derive `PartialOrd` for `Composition`
+- NAUM-4: `impl From<Dimension> for Composition`
+- NAUM-4: Derive `Hash` for `Property`
+- NAUM-4: `impl PartialOrd for Term`
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
 - Added `measurement!()` macro for wrapping `Measurement::try_new().unwrap()`.
 - Added `crate::term::Factor` type alias for `u32`.
 - Added `crate::term::Exponent` type alias for `i32`.
-- NAUM-5: Added `crate::Term::as_cow_str()`.
 - (Internal) Added constants for many but not all internal `Definition`s.
 
 ### Changed
