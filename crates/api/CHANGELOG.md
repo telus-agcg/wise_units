@@ -18,6 +18,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - PLCC-287: `impl num_traits::NumCast for Measurement`.
 - PLCC-287: `impl num_traits::Pow<i32> for Measurement`, `Unit`, `Term`.
 - PLCC-287: `impl std::ops::Neg for Measurement`.
+- NAUM-4: Derive `PartialOrd` for `Composition`
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.

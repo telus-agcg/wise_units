@@ -63,7 +63,7 @@ pub const SPECIFIC_HEAT: Composition =
 ///
 /// For more info, see [https://en.wikipedia.org/wiki/Dimensional_analysis](https://en.wikipedia.org/wiki/Dimensional_analysis).
 ///
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Hash, Default)]
 pub struct Composition {
     electric_charge: Option<Exponent>,
     length: Option<Exponent>,
