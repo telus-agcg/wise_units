@@ -21,6 +21,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - NAUM-5: Added `crate::Term::as_cow_str()`.
 - NAUM-4: Derive `PartialOrd` for `Composition`
 - NAUM-4: `impl From<Dimension> for Composition`
+- NAUM-4: Derive `Hash` for `Property`
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
