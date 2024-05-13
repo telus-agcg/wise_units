@@ -43,21 +43,17 @@ impl AsFraction for Unit {
 
 #[cfg(test)]
 mod tests {
-    use super::Unit;
     use std::str::FromStr;
 
-    lazy_static::lazy_static! {
-        static ref METER: Unit = Unit::from_str("m").unwrap();
-        static ref SECOND: Unit = Unit::from_str("s").unwrap();
-        static ref GRAM_METER: Unit = Unit::from_str("g.m").unwrap();
-        static ref METER_PER_SECOND: Unit = Unit::from_str("m/s").unwrap();
-        static ref PER_SECOND: Unit = Unit::from_str("/s").unwrap();
-        static ref PER_GRAM_METER: Unit = Unit::from_str("/g.m").unwrap();
-    }
+    use crate::{
+        as_fraction::AsFraction,
+        testing::const_units::{GRAM_METER, METER, METER_PER_SECOND, PER_SECOND},
+    };
+
+    use super::Unit;
 
     #[test]
     fn validate_as_fraction() {
-        use crate::as_fraction::AsFraction;
         let (num, den) = Unit::from_str("m/s").unwrap().as_fraction();
 
         assert!(num.is_some());
@@ -66,24 +62,23 @@ mod tests {
 
     mod numerator {
         use super::*;
-        use crate::as_fraction::AsFraction;
 
         #[test]
         fn validate_one_numerator_term() {
             let numerator = METER.numerator().unwrap();
-            assert_eq!(&numerator, &*METER);
+            assert_eq!(numerator, METER);
         }
 
         #[test]
         fn validate_two_numerator_terms() {
             let numerator = GRAM_METER.numerator().unwrap();
-            assert_eq!(&numerator, &*GRAM_METER);
+            assert_eq!(numerator, GRAM_METER);
         }
 
         #[test]
         fn validate_one_numerator_term_one_denominator_term() {
             let numerator = METER_PER_SECOND.numerator().unwrap();
-            assert_eq!(&numerator, &*METER);
+            assert_eq!(numerator, METER);
         }
 
         #[test]
@@ -94,8 +89,9 @@ mod tests {
     }
 
     mod denominator {
+        use crate::testing::const_units::{PER_GRAM_METER, SECOND};
+
         use super::*;
-        use crate::as_fraction::AsFraction;
 
         #[test]
         fn validate_one_numerator_term() {
@@ -112,19 +108,19 @@ mod tests {
         #[test]
         fn validate_one_numerator_term_one_denominator_term() {
             let denominator = METER_PER_SECOND.denominator().unwrap();
-            assert_eq!(&denominator, &*SECOND);
+            assert_eq!(denominator, SECOND);
         }
 
         #[test]
         fn validate_one_denominator_term() {
             let denominator = PER_SECOND.denominator().unwrap();
-            assert_eq!(&denominator, &*SECOND);
+            assert_eq!(denominator, SECOND);
         }
 
         #[test]
         fn validate_two_denominator_terms() {
             let denominator = PER_GRAM_METER.denominator().unwrap();
-            assert_eq!(&denominator, &*GRAM_METER);
+            assert_eq!(denominator, GRAM_METER);
         }
     }
 }

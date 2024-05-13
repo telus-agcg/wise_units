@@ -42,6 +42,8 @@ mod ucum_symbol;
 pub mod unit;
 
 mod reducible;
+#[cfg(test)]
+mod testing;
 mod ucum_unit;
 
 pub use crate::{

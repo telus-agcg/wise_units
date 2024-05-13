@@ -48,7 +48,7 @@ pub const UNITY: Unit = Unit {
 )]
 #[derive(Clone, Debug)]
 pub struct Unit {
-    terms: Cow<'static, [Term]>,
+    pub(crate) terms: Cow<'static, [Term]>,
 }
 
 /// A `Unit` is the piece of data that represents a *valid* UCUM unit or
