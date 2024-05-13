@@ -6,6 +6,43 @@ impl AsFraction for Unit {
     type Numerator = Option<Self>;
     type Denominator = Option<Self>;
 
+    fn as_fraction(&self) -> (Self::Numerator, Self::Denominator) {
+        use crate::Term;
+
+        #[derive(Default)]
+        struct Parts {
+            numerators: Vec<Term>,
+            denominators: Vec<Term>,
+        }
+
+        let mut parts = Parts::default();
+
+        for term in &*self.terms {
+            match term.exponent {
+                Some(e) => {
+                    if e.is_negative() {
+                        parts.denominators.push(term.inv());
+                    } else {
+                        parts.numerators.push(term.clone());
+                    }
+                }
+                None => {
+                    parts.numerators.push(term.clone());
+                }
+            }
+        }
+
+        match (parts.numerators.is_empty(), parts.denominators.is_empty()) {
+            (true, true) => (None, None),
+            (true, _) => (None, Some(Self::new(parts.denominators))),
+            (_, true) => (Some(Self::new(parts.numerators)), None),
+            (_, _) => (
+                Some(Self::new(parts.numerators)),
+                Some(Self::new(parts.denominators)),
+            ),
+        }
+    }
+
     #[inline]
     fn numerator(&self) -> Self::Numerator {
         let positive_terms: Vec<Term> = self

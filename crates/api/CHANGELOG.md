@@ -51,6 +51,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `ucum_symbol`
 - (Internal) Moved `crate::parser` to `crate::unit::parser`.
 - NAUM-5: (Internal) `Display` implementation for `Unit` now uses `Term::as_cow_str()` logic.
+- NAUM-6: Updated `AsFraction::as_fraction()` implementation to iterate through `Term`s once instead
+  of twice for building the numerator and denominator.
 
 ### Deprecated
 
