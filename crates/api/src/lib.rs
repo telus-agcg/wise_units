@@ -21,29 +21,32 @@
 #[macro_use]
 mod macros;
 
-pub(crate) mod annotation_composition;
 pub mod as_fraction;
 pub mod atom;
 pub mod classification;
-mod composable;
 pub mod composition;
 pub mod convertible;
-mod dimension;
 pub mod error;
 pub mod field_eq;
 pub mod invert;
 pub mod is_compatible_with;
 pub mod measurement;
-mod prefix;
 pub mod property;
 pub mod reduce;
-pub(crate) mod term;
-mod ucum_symbol;
 pub mod unit;
+#[cfg(feature = "v2")]
+pub mod v2;
 
+pub(crate) mod annotation_composition;
+pub(crate) mod term;
+
+mod composable;
+mod dimension;
+mod prefix;
 mod reducible;
 #[cfg(test)]
 mod testing;
+mod ucum_symbol;
 mod ucum_unit;
 
 pub use crate::{

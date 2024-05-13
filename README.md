@@ -34,6 +34,12 @@ This feature is disabled by default. To enable it:
 wise_units = { version = "0.22", features = ["serde"] }
 ```
 
+### Feature `v2`
+
+The `v2` feature makes some new traits available--traits that are "fixed" versions of existing
+traits. Putting these behind this feature flag allows us to try out these new traits in downstream
+crates before switching them to be the main traits in `wise_units`.
+
 ## Examples
 
 A `Measurement` is made up of some quantifier, the `value`, and the unit of measure,
