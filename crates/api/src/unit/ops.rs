@@ -117,37 +117,39 @@ impl<'a> Mul<Unit> for &'a Unit {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use std::str::FromStr;
 
-    lazy_static::lazy_static! {
-        static ref ACRE: Unit = Unit::from_str("[acr_us]").unwrap();
-        static ref METER: Unit = Unit::from_str("m").unwrap();
-        static ref KILOMETER: Unit = Unit::from_str("km").unwrap();
-        static ref SEED: Unit = Unit::from_str("{seed}").unwrap();
-        static ref UNITY: Unit = Unit::from_str("1").unwrap();
+    use crate::{
+        testing::const_units::{ACRE, KILOMETER, METER},
+        unit::UNITY,
+    };
+
+    use super::*;
+
+    fn seed() -> Unit {
+        Unit::from_str("{seed}").unwrap()
     }
 
     #[test]
     #[allow(clippy::eq_op)]
     fn validate_div() {
         let expected = Unit::from_str("m/km").unwrap();
-        assert_eq!(&*METER / &*KILOMETER, expected);
+        assert_eq!(METER / KILOMETER, expected);
 
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
         let expected = Unit::from_str("10m/20m").unwrap();
         assert_eq!(unit / other, expected);
 
-        assert_eq!(&*SEED / &*SEED, *UNITY);
-        assert_eq!(&*UNITY / &*SEED, Unit::from_str("/{seed}").unwrap());
-        assert_eq!(&*SEED / &*ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+        assert_eq!(seed() / seed(), UNITY);
+        assert_eq!(UNITY / seed(), Unit::from_str("/{seed}").unwrap());
+        assert_eq!(seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
     }
 
     #[test]
     fn validate_mul() {
         let expected = Unit::from_str("m.km").unwrap();
-        assert_eq!(&*METER * &*KILOMETER, expected);
+        assert_eq!(METER * KILOMETER, expected);
 
         let unit = Unit::from_str("10m").unwrap();
         let other = Unit::from_str("20m").unwrap();
@@ -155,9 +157,9 @@ mod tests {
         assert_eq!(unit * other, expected);
 
         let per_seed = Unit::from_str("/{seed}").unwrap();
-        assert_eq!(&*SEED * &per_seed, *UNITY);
+        assert_eq!(seed() * &per_seed, UNITY);
 
         let seed_per_acre = Unit::from_str("{seed}/[acr_us]").unwrap();
-        assert_eq!(seed_per_acre * &*ACRE, *SEED);
+        assert_eq!(seed_per_acre * ACRE, seed());
     }
 }
