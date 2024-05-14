@@ -26,6 +26,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - NAUM-6
   - Add new `"v2"` feature.
   - Add `v2::convert::ToFraction` trait.
+  - Implemented `v2::convert::ToFraction` trait for `Unit`, `Measurement`.
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.

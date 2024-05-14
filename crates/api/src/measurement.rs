@@ -12,6 +12,8 @@ mod partial_ord;
 mod reducible;
 mod to_reduced;
 mod ucum_unit;
+#[cfg(feature = "v2")]
+mod v2;
 
 use crate::{reducible::Reducible, ucum_unit::UcumUnit, unit::Unit};
 
