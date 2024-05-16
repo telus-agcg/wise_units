@@ -24,9 +24,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - NAUM-4: `impl PartialOrd for Term`
 - NAUM-5: Added `crate::Term::as_cow_str()`.
 - NAUM-6
-  - Add new `"v2"` feature.
-  - Add `v2::convert::ToFraction` trait.
+  - Added new `"v2"` feature.
+  - Added `v2::convert::ToFraction` trait.
   - Implemented `v2::convert::ToFraction` trait for `Unit`, `Measurement`.
+- NAUM-7: Added traits `v2::convert::ConvertTo<U, O>` and `v2::convert::TryConvertTo<U, O>` and
+  implemented for `Measurement`.
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
@@ -57,6 +59,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - NAUM-5: (Internal) `Display` implementation for `Unit` now uses `Term::as_cow_str()` logic.
 - NAUM-6: Updated `AsFraction::as_fraction()` implementation to iterate through `Term`s once instead
   of twice for building the numerator and denominator.
+- NAUM-7 (Internal): Updated `Convertible` implementation for `Measurement` to:
+  1. skip the `field_eq()` check when converting,
+  2. remove unnecessary `.clone()` call when converting from a `&str`.
 
 ### Deprecated
 
