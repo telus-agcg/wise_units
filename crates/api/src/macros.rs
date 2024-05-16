@@ -5,6 +5,13 @@ macro_rules! measurement {
     };
 }
 
+#[macro_export]
+macro_rules! unit {
+    ($($term:expr),+) => {
+        $crate::Unit::new(vec![$($term)+])
+    };
+}
+
 /// The `term!` macro makes building `Term`s slightly more ergonomic and terse.
 /// It was initially made for testing purposes (since `Term`s are really mainly
 /// used by internal APIs), but since they are used all over the place, it may
