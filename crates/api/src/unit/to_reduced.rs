@@ -1,8 +1,10 @@
-use crate::{as_fraction::AsFraction, reduce::ToReduced, Composable, Composition, Term};
+use std::borrow::Cow;
+
+use num_traits::Inv;
+
+use crate::{reduce::ToReduced, Composable, Term};
 
 use super::Unit;
-
-type OptionCombos = Vec<Option<(Term, Composition)>>;
 
 /// The implementation here checks for `Unit`s in `self`'s numerator and denominator that have the
 /// same `Composition` (aka "dimension"). For example, if `self` is effectively
@@ -47,78 +49,59 @@ impl ToReduced for Unit {
     ///
     #[inline]
     fn to_reduced(&self) -> Self::Output {
-        match self.as_fraction() {
-            (Some(numerator), Some(denominator)) => {
-                let (new_numerators, new_denominators) =
-                    build_unit_parts(&numerator.terms, &denominator.terms);
+        let mut terms: Vec<_> = self.terms.iter().map(|t| Some(Cow::Borrowed(t))).collect();
 
-                let mut new_terms: Vec<Term> =
-                    Vec::with_capacity(new_numerators.len() + new_denominators.len());
-                new_terms.extend_from_slice(&new_numerators);
-
-                let new_denominators =
-                    crate::term::num_traits::inv::inv_terms_into(new_denominators);
-                new_terms.extend_from_slice(&new_denominators);
-
-                Self::new(super::term_reducing::reduce_terms(&new_terms))
+        'outer: for (i, outer_term) in self.terms.iter().enumerate() {
+            if terms[i].is_none() {
+                continue 'outer;
             }
-            (_, _) => Self::new(super::term_reducing::reduce_terms(&self.terms)),
-        }
-    }
-}
 
-/// Iterates through `numerator_terms` and `denominator_terms`, comparing each `Term`s
-/// `Composition`. If the `Composition` from the numerator matches one in the denominator, the
-/// `Term`s are excluded from the resulting sets of `Term`s.
-///
-fn build_unit_parts(
-    numerator_terms: &[Term],
-    denominator_terms: &[Term],
-) -> (Vec<Term>, Vec<Term>) {
-    let mut new_numerator_combos = build_terms_and_compositions(numerator_terms);
-    let mut new_denominator_combos = build_terms_and_compositions(denominator_terms);
+            let next_outer = i + 1;
+            let remainder = &self.terms[next_outer..];
 
-    'outer: for numerator_combo in new_numerator_combos.iter_mut().rev() {
-        'inner: for new_denominator_combo in &mut new_denominator_combos {
-            match (&numerator_combo, &new_denominator_combo) {
-                (Some(nc), Some(dc)) => {
-                    if nc.1 == dc.1 {
-                        *numerator_combo = None;
-                        *new_denominator_combo = None;
-                        continue 'outer;
-                    }
+            'inner: for (j, inner_term) in remainder.iter().enumerate() {
+                let terms_offset = next_outer + j;
+
+                if terms[terms_offset].is_none() {
+                    continue 'inner;
                 }
-                (None, Some(_)) => continue 'outer,
-                (_, None) => continue 'inner,
+
+                if outer_term.composition() == inner_term.composition().inv() {
+                    terms[i] = None;
+                    terms[terms_offset] = None;
+                    continue 'outer;
+                }
+
+                if outer_term.atom == inner_term.atom
+                    && outer_term.factor == inner_term.factor
+                    && outer_term.annotation == inner_term.annotation
+                {
+                    let mut new_term = outer_term.clone();
+
+                    new_term.exponent = match (new_term.exponent, inner_term.exponent) {
+                        (None, None) => None,
+                        (None, Some(rhs)) => Some(rhs),
+                        (Some(lhs), None) => Some(lhs),
+                        (Some(lhs), Some(rhs)) => {
+                            let x = lhs + rhs;
+
+                            if x == 0 || x == 1 {
+                                None
+                            } else {
+                                Some(x)
+                            }
+                        }
+                    };
+                    terms[i] = Some(Cow::Owned(new_term));
+                    terms[next_outer] = None;
+                    continue 'outer;
+                }
             }
         }
+
+        let terms: Vec<Term> = terms.into_iter().flatten().map(Cow::into_owned).collect();
+        Self::new(terms)
     }
-
-    (
-        filter_results(new_numerator_combos),
-        filter_results(new_denominator_combos),
-    )
-}
-
-/// Takes each `Term` and builds an `Option<(Term, Composition)>`, where each will be used to
-/// compare against each numerator/denominator `Term`'s `Composition`. They're wrapped in an
-/// `Option` so that when one needs to be removed from the result set, it can just be set to a
-/// `None`.
-///
-fn build_terms_and_compositions(terms: &[Term]) -> OptionCombos {
-    terms
-        .iter()
-        .map(|term| Some((term.clone(), term.composition())))
-        .collect()
-}
-
-/// Builds a set of `Terms` from the reduced `option_combos`.
-///
-fn filter_results(option_combos: OptionCombos) -> Vec<Term> {
-    option_combos
-        .into_iter()
-        .filter_map(|combo| combo.map(|c| c.0))
-        .collect()
 }
 
 #[cfg(test)]
@@ -130,38 +113,38 @@ mod tests {
         use std::str::FromStr;
 
         macro_rules! validate_reduction {
-            ($test_name:ident, $input:expr, $expected:expr) => {
+            ($test_name:ident, $input:expr, expected: $expected:expr) => {
                 #[test]
                 fn $test_name() {
                     let unit = Unit::from_str($input).unwrap();
                     let actual = unit.to_reduced();
                     let expected = Unit::from_str($expected).unwrap();
 
-                    assert_eq!(&actual, &expected);
                     assert_eq!(actual.expression(), expected.expression());
+                    assert_eq!(&actual, &expected);
                 }
             };
         }
 
-        validate_reduction!(validate_m, "m", "m");
-        validate_reduction!(validate_m2_per_m, "m2/m", "m");
-        validate_reduction!(validate_100m2_per_m, "100m2/m", "100m2/m");
-        validate_reduction!(validate_m2_dot_m2, "m2.m2", "m4");
-        validate_reduction!(validate_m2_dot_m2_per_s_dot_s, "m2.m2/s.s", "m4/s2");
-        validate_reduction!(validate_m2_dot_s_per_s_dot_m2, "m2.s/s.m2", "1");
+        validate_reduction!(validate_m, "m", expected: "m");
+        validate_reduction!(validate_m2_per_m, "m2/m", expected: "m");
+        validate_reduction!(validate_100m2_per_m, "100m2/m", expected: "100m2/m");
+        validate_reduction!(validate_m2_dot_m2, "m2.m2", expected: "m4");
+        validate_reduction!(validate_m2_dot_m2_per_s_dot_s, "m2.m2/s.s", expected: "m4/s2");
+        validate_reduction!(validate_m2_dot_s_per_s_dot_m2, "m2.s/s.m2", expected: "1");
 
-        validate_reduction!(validate_lb_av_dot_har_per_m2, "[lb_av].har/m2", "[lb_av]");
-        validate_reduction!(validate_lb_av_dot_har_per_m2_dot_g, "[lb_av].har/m2.g", "1");
+        validate_reduction!(validate_lb_av_dot_har_per_m2, "[lb_av].har/m2", expected: "[lb_av]");
+        validate_reduction!(validate_lb_av_dot_har_per_m2_dot_g, "[lb_av].har/m2.g", expected: "1");
 
         validate_reduction!(
             validate_acr_us_per_m2_per_har,
             "[acr_us]/m2/har",
-            "[acr_us]"
+            expected: "har"
         );
         validate_reduction!(
             validate_acr_us_per_m2_per_har_per_sft_i,
             "[acr_us]/m2/har/[sft_i]",
-            "1"
+            expected: "1"
         );
     }
 
@@ -194,11 +177,7 @@ mod tests {
         validate_reduction!(validate_lb_av_dot_har_per_m2, "[lb_av].har/m2", "[lb_av]");
         validate_reduction!(validate_lb_av_dot_har_per_m2_dot_g, "[lb_av].har/m2.g", "1");
 
-        validate_reduction!(
-            validate_acr_us_per_m2_per_har,
-            "[acr_us]/m2/har",
-            "[acr_us]"
-        );
+        validate_reduction!(validate_acr_us_per_m2_per_har, "[acr_us]/m2/har", "har");
         validate_reduction!(
             validate_acr_us_per_m2_per_har_per_sft_i,
             "[acr_us]/m2/har/[sft_i]",
