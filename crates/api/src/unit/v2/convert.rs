@@ -1,4 +1,8 @@
-use crate::{as_fraction::AsFraction, v2::convert::ToFraction, Unit};
+use crate::{
+    as_fraction::AsFraction,
+    v2::convert::{ToFraction, ToReduced},
+    Unit,
+};
 
 impl ToFraction for Unit {
     fn to_fraction(&self) -> (Option<Self>, Option<Self>) {
@@ -14,6 +18,13 @@ impl ToFraction for Unit {
     fn to_denominator(&self) -> Option<Self> {
         // Just delegate to the old trait impl for now.
         AsFraction::denominator(self)
+    }
+}
+
+impl ToReduced for Unit {
+    fn to_reduced(&self) -> Self {
+        // Just delegate to the old trait impl for now.
+        crate::reduce::ToReduced::to_reduced(self)
     }
 }
 
