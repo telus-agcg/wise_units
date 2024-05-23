@@ -1,5 +1,7 @@
 use std::{fmt, ops::Mul};
 
+use num_traits::Inv;
+
 use crate::{term::Exponent, Dimension};
 
 pub const DIMLESS: Composition = Composition::new_dimless();
@@ -449,6 +451,22 @@ impl From<Dimension> for Composition {
             Dimension::PlaneAngle => Self::new_plane_angle(1),
             Dimension::Temperature => Self::new_temperature(1),
             Dimension::Time => Self::new_time(1),
+        }
+    }
+}
+
+impl Inv for Composition {
+    type Output = Self;
+
+    fn inv(self) -> Self::Output {
+        Self {
+            electric_charge: self.electric_charge.map(|e| -e),
+            length: self.length.map(|e| -e),
+            luminous_intensity: self.luminous_intensity.map(|e| -e),
+            mass: self.mass.map(|e| -e),
+            plane_angle: self.plane_angle.map(|e| -e),
+            temperature: self.temperature.map(|e| -e),
+            time: self.time.map(|e| -e),
         }
     }
 }

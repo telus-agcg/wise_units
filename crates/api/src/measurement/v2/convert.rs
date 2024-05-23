@@ -1,6 +1,6 @@
 use crate::{
     unit,
-    v2::convert::{ToFraction, TryConvertTo},
+    v2::convert::{ToFraction, TryConvertTo, TryToReduced},
     Error, Measurement, Unit,
 };
 
@@ -44,6 +44,15 @@ impl<'a> TryConvertTo<&'a Unit> for Measurement {
     fn try_convert_to(&self, rhs: &'a Unit) -> Result<Self, Self::Error> {
         // Delegate to old implementation for now.
         crate::Convertible::convert_to(self, rhs)
+    }
+}
+
+impl TryToReduced for Measurement {
+    type Error = Error;
+
+    fn try_to_reduced(&self) -> Result<Self, Self::Error> {
+        // Just delegate to the old trait impl for now.
+        crate::reduce::ToReduced::to_reduced(self)
     }
 }
 

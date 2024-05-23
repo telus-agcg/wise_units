@@ -40,3 +40,53 @@ pub trait TryConvertTo<U, O = Self> {
     ///
     fn try_convert_to(&self, rhs: U) -> Result<O, Self::Error>;
 }
+
+/// Trait for implementing infallible unit reduction.
+///
+/// NOTE: This differs from the old implementation in that it allows for reducing to more than one
+/// output type.
+///
+pub trait ToReduced<T = Self> {
+    fn to_reduced(&self) -> T;
+}
+
+/// Analog to `ToReduced`, this consumes the caller. Useful for if you don't care about keeping the
+/// old `Self` around after reducing.
+///
+/// NOTE: This is automatically implemented for all types that `impl ToReduced<U> for T`.
+///
+pub trait IntoReduced<T = Self> {
+    fn into_reduced(self) -> T;
+}
+
+impl<T, U> IntoReduced<U> for T
+where
+    T: ToReduced<U>,
+{
+    fn into_reduced(self) -> U {
+        ToReduced::to_reduced(&self)
+    }
+}
+
+/// Trait for implementing fallible unit reduction.
+///
+pub trait TryToReduced<T = Self> {
+    type Error;
+
+    /// # Errors
+    ///
+    /// This should error if/when a type's units can't be reduced to the output type `T`.
+    ///
+    fn try_to_reduced(&self) -> Result<T, Self::Error>;
+}
+
+impl<T, U> TryToReduced<U> for T
+where
+    T: ToReduced<U>,
+{
+    type Error = std::convert::Infallible;
+
+    fn try_to_reduced(&self) -> Result<U, Self::Error> {
+        Ok(ToReduced::to_reduced(self))
+    }
+}

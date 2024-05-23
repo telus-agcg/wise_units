@@ -29,6 +29,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Implemented `v2::convert::ToFraction` trait for `Unit`, `Measurement`.
 - NAUM-7: Added traits `v2::convert::ConvertTo<U, O>` and `v2::convert::TryConvertTo<U, O>` and
   implemented for `Measurement`.
+- NAUM-8: Added traits `v2::convert::ToReduced<T>` and `TryToReduced<T>`, and implemented for `Unit`
+  and `Measurement`, respectively.
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
@@ -62,6 +64,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - NAUM-7 (Internal): Updated `Convertible` implementation for `Measurement` to:
   1. skip the `field_eq()` check when converting,
   2. remove unnecessary `.clone()` call when converting from a `&str`.
+- _BREAKING_ NAUM-8 (Internal): Refactored `convert::ToReduced` to simplify and speed up. The
+  potentially breaking part here is that where units of opposing dimensions (ex. `[acr_us]/m2/har`)
+  used to reduce to the first remainder unit (ex. `[acr_us]`), they now reduce to the last.
 
 ### Deprecated
 
