@@ -18,12 +18,12 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.TELUS_AGCG_MACHINE_USER_KEY }}
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
@@ -45,12 +45,12 @@ jobs:
     env:
       DYLD_ROOT_PATH: "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
     steps:
+      - uses: actions/checkout@v4
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.TELUS_AGCG_MACHINE_USER_KEY }}
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/bin/
