@@ -41,11 +41,8 @@ impl IsCompatibleWith for Term {
 
 impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
-        let lhs_annotation_composition = self.annotation_composition();
-        let rhs_annotation_composition = rhs.annotation_composition();
-
         self.composition() == rhs.composition()
-            && rhs_annotation_composition == lhs_annotation_composition
+            && self.annotation_composition() == rhs.annotation_composition()
     }
 }
 

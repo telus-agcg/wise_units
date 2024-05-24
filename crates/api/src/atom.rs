@@ -16,6 +16,9 @@ mod hash;
 mod partial_eq;
 mod reducible;
 
+#[cfg(feature = "v2")]
+mod v2;
+
 #[cfg(test)]
 mod atom_test;
 

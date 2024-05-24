@@ -24,10 +24,18 @@ pub(super) fn generate_file_body(atom_list: &RustAtomList) -> String {
         #![allow(clippy::unreadable_literal, clippy::too_many_lines, clippy::match_same_arms)]
 
         mod composable;
+        mod definition;
         mod display;
+        mod function_set;
         mod hash;
         mod partial_eq;
         mod reducible;
+
+        #[cfg(feature = "v2")]
+        mod v2;
+
+        #[cfg(test)]
+        mod atom_test;
 
         use crate::{
             is_compatible_with::DefaultCompatibility, reducible::Reducible, Classification, Property,

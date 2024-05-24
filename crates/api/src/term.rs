@@ -9,6 +9,8 @@ mod partial_eq;
 mod partial_ord;
 mod reducible;
 mod ucum_unit;
+#[cfg(feature = "v2")]
+mod v2;
 
 use std::borrow::Cow;
 
