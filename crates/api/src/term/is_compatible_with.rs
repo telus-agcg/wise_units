@@ -1,6 +1,8 @@
 use std::borrow::Cow;
 
-use crate::{annotation_composition::AnnotationComposable, Composable, IsCompatibleWith, Term};
+use crate::{Composable, IsCompatibleWith, Term};
+
+use super::annotation_composable::AnnotationComposable;
 
 /// In order to enforce compatibility on "non-units" (ex. `{each}`, `{total}`, `{heartbeats}`),
 /// `Term`s need to compare their annotations along with their `Composition`s. In practice, and
@@ -39,11 +41,8 @@ impl IsCompatibleWith for Term {
 
 impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
-        let lhs_annotation_composition = self.annotation_composition();
-        let rhs_annotation_composition = rhs.annotation_composition();
-
         self.composition() == rhs.composition()
-            && rhs_annotation_composition == lhs_annotation_composition
+            && self.annotation_composition() == rhs.annotation_composition()
     }
 }
 

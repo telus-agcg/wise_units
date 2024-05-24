@@ -37,7 +37,6 @@ pub mod unit;
 #[cfg(feature = "v2")]
 pub mod v2;
 
-pub(crate) mod annotation_composition;
 pub(crate) mod term;
 
 mod composable;
