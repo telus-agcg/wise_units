@@ -92,9 +92,9 @@ mod tests {
         );
 
         validate_reduction!(
-            validate_acr_us_per_m2_per_har,
+            validate_har_per_m2_per_acr_us,
             1.0,
-            "[acr_us]/m2/har",
+            "har/m2/[acr_us]",
             10_000.0,
             "[acr_us]"
         );
@@ -160,9 +160,9 @@ mod tests {
         );
 
         validate_reduction!(
-            validate_acr_us_per_m2_per_har,
+            validate_har_per_m2_per_acr_us,
             1.0,
-            "[acr_us]/m2/har",
+            "har/m2/[acr_us]",
             10_000.0,
             "[acr_us]"
         );

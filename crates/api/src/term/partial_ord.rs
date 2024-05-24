@@ -1,13 +1,12 @@
-use approx::ulps_eq;
-
 use crate::{is_compatible_with::IsCompatibleWith, ucum_unit::UcumUnit, Term};
 
-/// `Term`s are `PartialEq` if
+/// `Term`s are `PartialOrd` if
 ///
 /// a) they are compatible
-/// b) their `scalar()` values are equal
+/// b) their `scalar()` values are comparable
 ///
 /// ```rust
+/// use std::cmp::Ordering;
 /// use wise_units::{Atom, Prefix, Term};
 ///
 /// let lhs = Term {
@@ -24,7 +23,7 @@ use crate::{is_compatible_with::IsCompatibleWith, ucum_unit::UcumUnit, Term};
 ///     exponent: None,
 ///     annotation: None
 /// };
-/// assert!(lhs == rhs);
+/// assert_eq!(lhs.partial_cmp(&rhs), Some(Ordering::Equal));
 ///
 /// let lhs = Term {
 ///     factor: None,
@@ -40,16 +39,31 @@ use crate::{is_compatible_with::IsCompatibleWith, ucum_unit::UcumUnit, Term};
 ///     exponent: None,
 ///     annotation: None
 /// };
-/// assert!(lhs != rhs);
+/// assert_eq!(lhs.partial_cmp(&rhs), Some(Ordering::Less));
+///
+/// let lhs = Term {
+///     factor: None,
+///     prefix: None,
+///     atom: Some(Atom::Meter),
+///     exponent: None,
+///     annotation: None
+/// };
+/// let rhs = Term {
+///     factor: None,
+///     prefix: None,
+///     atom: Some(Atom::Gram),
+///     exponent: None,
+///     annotation: None
+/// };
+/// assert_eq!(lhs.partial_cmp(&rhs), None);
 /// ```
 ///
-impl PartialEq for Term {
-    #[inline]
-    fn eq(&self, other: &Self) -> bool {
+impl PartialOrd for Term {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         if !self.is_compatible_with(other) {
-            return false;
+            return None;
         }
 
-        ulps_eq!(self.scalar(), other.scalar())
+        self.scalar().partial_cmp(&other.scalar())
     }
 }

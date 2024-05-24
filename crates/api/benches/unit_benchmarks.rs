@@ -6,7 +6,7 @@ mod common;
 
 use criterion::{BenchmarkId, Criterion};
 use std::str::FromStr;
-use wise_units::{Composable, IsCompatibleWith, UcumUnit, Unit};
+use wise_units::{reduce::ToReduced, Composable, IsCompatibleWith, UcumUnit, Unit};
 
 macro_rules! bench_over_inputs_method {
     ($function_name:ident, $test_name:expr, $method_name:ident) => {
@@ -63,6 +63,34 @@ bench_over_inputs_method!(
     "Unit::expression_reduced()",
     expression_reduced
 );
+
+fn to_reduced_group(c: &mut Criterion) {
+    const REDUCIBLES: [&str; 7] = [
+        "m2",
+        "m4/m2",
+        "har/m2",
+        "har2/m2",
+        "g.m2/har",
+        "g.m4/har",
+        "[acr_us]/m2/har/[sft_i]",
+    ];
+
+    let mut group = c.benchmark_group("Unit::to_reduced()");
+
+    for unit_str in REDUCIBLES {
+        group.bench_with_input(
+            BenchmarkId::new("to_reduced", unit_str),
+            &unit_str,
+            |b, unit_str| {
+                let unit = Unit::from_str(unit_str).unwrap();
+
+                b.iter(|| unit.to_reduced());
+            },
+        );
+    }
+
+    group.finish()
+}
 
 //-----------------------------------------------------------------------------
 // impl Composable
@@ -139,6 +167,7 @@ criterion_group!(
     magnitude_group,
     expression_group,
     expression_reduced_group,
+    to_reduced_group,
     composition_group,
     is_compatible_with_group,
     display_group,

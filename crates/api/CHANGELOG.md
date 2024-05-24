@@ -18,6 +18,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - PLCC-287: `impl num_traits::NumCast for Measurement`.
 - PLCC-287: `impl num_traits::Pow<i32> for Measurement`, `Unit`, `Term`.
 - PLCC-287: `impl std::ops::Neg for Measurement`.
+- NAUM-4: Derive `PartialOrd` for `Composition`
+- NAUM-4: `impl From<Dimension> for Composition`
+- NAUM-4: Derive `Hash` for `Property`
+- NAUM-4: `impl PartialOrd for Term`
+- NAUM-5: Added `crate::Term::as_cow_str()`.
+- NAUM-6
+  - Added new `"v2"` feature.
+  - Added `v2::convert::ToFraction` trait.
+  - Implemented `v2::convert::ToFraction` trait for `Unit`, `Measurement`.
+- NAUM-7: Added traits `v2::convert::ConvertTo<U, O>` and `v2::convert::TryConvertTo<U, O>` and
+  implemented for `Measurement`.
+- NAUM-8: Added traits `v2::convert::ToReduced<T>` and `TryToReduced<T>`, and implemented for `Unit`
+  and `Measurement`, respectively.
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.
@@ -45,6 +58,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `term`
   - `ucum_symbol`
 - (Internal) Moved `crate::parser` to `crate::unit::parser`.
+- NAUM-5: (Internal) `Display` implementation for `Unit` now uses `Term::as_cow_str()` logic.
+- NAUM-6: Updated `AsFraction::as_fraction()` implementation to iterate through `Term`s once instead
+  of twice for building the numerator and denominator.
+- NAUM-7 (Internal): Updated `Convertible` implementation for `Measurement` to:
+  1. skip the `field_eq()` check when converting,
+  2. remove unnecessary `.clone()` call when converting from a `&str`.
+- _BREAKING_ NAUM-8 (Internal): Refactored `convert::ToReduced` to simplify and speed up. The
+  potentially breaking part here is that where units of opposing dimensions (ex. `[acr_us]/m2/har`)
+  used to reduce to the first remainder unit (ex. `[acr_us]`), they now reduce to the last.
 
 ### Deprecated
 

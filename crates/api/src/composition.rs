@@ -1,5 +1,7 @@
 use std::{fmt, ops::Mul};
 
+use num_traits::Inv;
+
 use crate::{term::Exponent, Dimension};
 
 pub const DIMLESS: Composition = Composition::new_dimless();
@@ -63,7 +65,7 @@ pub const SPECIFIC_HEAT: Composition =
 ///
 /// For more info, see [https://en.wikipedia.org/wiki/Dimensional_analysis](https://en.wikipedia.org/wiki/Dimensional_analysis).
 ///
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Hash, Default)]
 pub struct Composition {
     electric_charge: Option<Exponent>,
     length: Option<Exponent>,
@@ -314,7 +316,9 @@ impl Composition {
     }
 }
 
-// impl Display
+// ╭──────────────╮
+// │ impl Display │
+// ╰──────────────╯
 impl fmt::Display for Composition {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         if self.is_empty() {
@@ -349,10 +353,12 @@ fn push_display_expression(
     }
 }
 
-// impl Mul
+// ╭──────────╮
+// │ impl Mul │
+// ╰──────────╯
 /// Used for combining two `Compositions`.
 ///
-#[cfg_attr(feature = "cargo-clippy", allow(clippy::suspicious_arithmetic_impl))]
+#[allow(clippy::suspicious_arithmetic_impl)]
 impl Mul for Composition {
     type Output = Self;
 
@@ -435,6 +441,36 @@ const fn set_exponent(exponent: Exponent) -> Option<Exponent> {
     }
 }
 
+impl From<Dimension> for Composition {
+    fn from(value: Dimension) -> Self {
+        match value {
+            Dimension::ElectricCharge => Self::new_electric_charge(1),
+            Dimension::Length => Self::new_length(1),
+            Dimension::LuminousIntensity => Self::new_luminous_intensity(1),
+            Dimension::Mass => Self::new_mass(1),
+            Dimension::PlaneAngle => Self::new_plane_angle(1),
+            Dimension::Temperature => Self::new_temperature(1),
+            Dimension::Time => Self::new_time(1),
+        }
+    }
+}
+
+impl Inv for Composition {
+    type Output = Self;
+
+    fn inv(self) -> Self::Output {
+        Self {
+            electric_charge: self.electric_charge.map(|e| -e),
+            length: self.length.map(|e| -e),
+            luminous_intensity: self.luminous_intensity.map(|e| -e),
+            mass: self.mass.map(|e| -e),
+            plane_angle: self.plane_angle.map(|e| -e),
+            temperature: self.temperature.map(|e| -e),
+            time: self.time.map(|e| -e),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::{super::Dimension, Composition};
@@ -484,13 +520,13 @@ mod tests {
     fn validate_insert() {
         let mut composition = Composition::default();
         composition.insert(Dimension::Mass, 3);
-        assert_eq!(composition.to_string().as_str(), "M3");
+        assert_eq!(composition.to_string(), "M3");
 
         composition.insert(Dimension::Mass, 3);
-        assert_eq!(composition.to_string().as_str(), "M6");
+        assert_eq!(composition.to_string(), "M6");
 
         composition.insert(Dimension::Mass, -6);
-        assert_eq!(composition.to_string().as_str(), "");
+        assert_eq!(composition.to_string(), "");
 
         let mut composition = Composition::default();
         composition.insert(Dimension::Mass, -1);
@@ -500,10 +536,7 @@ mod tests {
         composition.insert(Dimension::Length, -5);
         composition.insert(Dimension::PlaneAngle, -6);
         composition.insert(Dimension::LuminousIntensity, -7);
-        assert_eq!(
-            composition.to_string().as_str(),
-            "Q-3.L-5.F-7.M-1.A-6.C-2.T-4"
-        );
+        assert_eq!(composition.to_string(), "Q-3.L-5.F-7.M-1.A-6.C-2.T-4");
     }
 
     #[test]
@@ -720,5 +753,31 @@ mod tests {
 
         let product = subject * -2;
         assert_eq!(product.mass, Some(-4));
+    }
+
+    #[test]
+    fn from_dimension_test() {
+        assert_eq!(
+            Composition::from(Dimension::ElectricCharge),
+            Composition::new_electric_charge(1)
+        );
+        assert_eq!(
+            Composition::from(Dimension::Length),
+            Composition::new_length(1)
+        );
+        assert_eq!(
+            Composition::from(Dimension::LuminousIntensity),
+            Composition::new_luminous_intensity(1)
+        );
+        assert_eq!(Composition::from(Dimension::Mass), Composition::new_mass(1));
+        assert_eq!(
+            Composition::from(Dimension::PlaneAngle),
+            Composition::new_plane_angle(1)
+        );
+        assert_eq!(
+            Composition::from(Dimension::Temperature),
+            Composition::new_temperature(1)
+        );
+        assert_eq!(Composition::from(Dimension::Time), Composition::new_time(1));
     }
 }
