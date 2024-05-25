@@ -23,6 +23,16 @@ pub(crate) mod const_units {
         }]),
     };
 
+    pub(crate) const GRAM: Unit = Unit {
+        terms: Cow::Borrowed(&[Term {
+            factor: None,
+            prefix: None,
+            atom: Some(Atom::Gram),
+            exponent: None,
+            annotation: None,
+        }]),
+    };
+
     pub(crate) const GRAM_METER: Unit = Unit {
         terms: Cow::Borrowed(&[
             Term {

@@ -133,6 +133,8 @@ mod tests {
     #[test]
     #[allow(clippy::eq_op)]
     fn validate_div() {
+        assert_eq!(METER / METER, UNITY);
+
         let expected = Unit::from_str("m/km").unwrap();
         assert_eq!(METER / KILOMETER, expected);
 
