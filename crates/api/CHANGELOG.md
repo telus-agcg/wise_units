@@ -31,8 +31,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   implemented for `Measurement`.
 - NAUM-8: Added traits `v2::convert::ToReduced<T>` and `TryToReduced<T>`, and implemented for `Unit`
   and `Measurement`, respectively.
-- NAUM-9: Added traits `v2::dim::Dimension<D>` and `IsCommensurableWith<D, Rhs>` and implemented,
-  respectively for `Atom`, `Measurement`, `Term`, `Cow<'a, [Term]'>`, `Unit`.
+- NAUM-9: Added traits `v2::dim::Dimension<D>` and `IsCommensurableWith<D, Rhs>` and implemented for
+  `Atom`, `Measurement`, `Term`, `Cow<'a, [Term]'>`, `Unit`.
+- NAUM-10: Added trait `v2::ops::IsCommensurableWith` and implemented for `Measurement`, `Unit`,
+  `Term`, and `Atom`.
 - Added `Unit::into_terms()` for cases where you only need the `Term`s of the `Unit`.
 - Added `unit` constant: `UNITY`
 - Added `term` constants: `UNITY`, `UNITY_ARRAY`, and `UNITY_ARRAY_REF`.

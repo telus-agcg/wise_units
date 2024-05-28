@@ -145,6 +145,29 @@ fn from_str_group(c: &mut Criterion) {
 //-----------------------------------------------------------------------------
 bench_over_inputs_math!(partial_eq_group, "Unit::partial_eq()", ==);
 
+fn commensurable_eq_group(c: &mut Criterion) {
+    #[cfg(feature = "v2")]
+    {
+        use wise_units::v2::ops::CommensurableEq;
+
+        let mut group = c.benchmark_group("Unit::commensurable_eq()");
+
+        for pair in common::UNIT_PAIRS {
+            group.bench_with_input(
+                BenchmarkId::new("commensurable_eq", format!("{}->{}", pair.0, pair.1)),
+                &pair,
+                |b, (lhs_str, rhs_str)| {
+                    let lhs = Unit::from_str(lhs_str).unwrap();
+                    let rhs = Unit::from_str(rhs_str).unwrap();
+
+                    b.iter(|| lhs.commensurable_eq(&rhs));
+                },
+            );
+        }
+
+        group.finish()
+    }
+}
 //-----------------------------------------------------------------------------
 // impl PartialOrd
 //-----------------------------------------------------------------------------
@@ -173,6 +196,7 @@ criterion_group!(
     display_group,
     from_str_group,
     partial_eq_group,
+    commensurable_eq_group,
     mul_group,
     div_group,
     partial_ord_gt_group,
