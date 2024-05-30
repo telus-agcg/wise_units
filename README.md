@@ -7,7 +7,7 @@ terms. It's similar to Ruby's [unitwise](https://github.com/joshwlewis/unitwise)
 
 ## Prerequisites
 
-- Rust 1.56
+- Rust 1.64
   - Get it [here](https://rustup.rs/)
 
 ## Usage
@@ -33,6 +33,12 @@ This feature is disabled by default. To enable it:
 [dependencies]
 wise_units = { version = "0.22", features = ["serde"] }
 ```
+
+### Feature `v2`
+
+The `v2` feature makes some new traits available--traits that are "fixed" versions of existing
+traits. Putting these behind this feature flag allows us to try out these new traits in downstream
+crates before switching them to be the main traits in `wise_units`.
 
 ## Examples
 

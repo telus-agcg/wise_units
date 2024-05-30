@@ -1,7 +1,12 @@
 [workspace]
-members = [
-  "api",
-  "atom_generator",
-  "definition_fetcher",
-  "ffi",
-]
+members = ["crates/*"]
+resolver = "2"
+
+[workspace.package]
+rust-version = "1.64.0"
+
+[workspace.dependencies]
+approx = "0.5"
+ffi_common = { version = "0.7", registry = "agrian-registry" }
+lazy_static = "1.4"
+serde = { version = "1.0", features = ["derive"] }

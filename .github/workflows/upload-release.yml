@@ -1,13 +1,14 @@
+---
 name: Upload release
 
 on:
   push:
     tags:
-      - '*'
+      - "*"
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Git tag'
+        description: "Git tag"
         required: true
 
 env:
@@ -20,26 +21,23 @@ jobs:
     name: Upload Release Asset
     runs-on: ubuntu-latest
     steps:
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@ee29fafb6aa450493bac9136b346e51ea60a8b5e
-        with:
-          ssh-private-key: |
-            ${{ secrets.MAC_OS_BUILD_AGENT_PRIVATE_KEY }}
-            ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.TELUS_AGCG_MACHINE_USER_KEY }}
         with:
           ref: ${{ env.TAG }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
         with:
           path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
-            ${{ runner.os }}-cargo
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Build wise_units-ffi
         run: cargo build --release --package wise_units-ffi
       - name: Create Release

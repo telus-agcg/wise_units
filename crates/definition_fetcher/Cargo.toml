@@ -1,0 +1,13 @@
+[package]
+name = "wise_units-definition_fetcher"
+version = "0.20.0"
+authors = ["Steve Loveless <steve@agrian.com>"]
+edition = "2021"
+publish = false
+
+[dependencies]
+reqwest = "0.11"
+serde-transcode = "1.0"
+serde-xml-rs = "0.6"
+simple_logger = "4.2"
+toml = "0.7"
