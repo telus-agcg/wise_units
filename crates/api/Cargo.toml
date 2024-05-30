@@ -1,6 +1,6 @@
 [package]
 name = "wise_units"
-version = "0.22.0"
+version = "0.23.0"
 description = "Measure things using UCUM units"
 repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
