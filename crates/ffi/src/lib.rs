@@ -19,17 +19,18 @@
 // C bindings don't include the module name, so ffi functions will need it.
 #![allow(clippy::module_name_repetitions)]
 
-use ffi_common::core;
-use std::{convert::TryInto, os::raw::c_char, ptr};
 pub mod measurement;
 pub mod unit;
 
+use std::{convert::TryInto, os::raw::c_char, ptr};
+
+use ffi_common::core;
 pub use wise_units::{Measurement, Unit};
 
 #[allow(clippy::needless_pass_by_value)]
 fn set_error_and_return<T>(message: String) -> *const T {
     core::error::set_last_err_msg(&message);
-    std::ptr::null()
+    ptr::null()
 }
 
 #[allow(clippy::needless_pass_by_value)]
