@@ -33,17 +33,15 @@ jobs:
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: cargo test all
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --workspace --all-features
+        run: cargo test --workspace --all-features
 
   check-ios:
     name: Test (x86_64-apple-ios)
     runs-on: [self-hosted, macOS, xcode13]
     if: ${{ false }} # Disabling till PCC-221
     env:
-      DYLD_ROOT_PATH: "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
+      DYLD_ROOT_PATH: >
+        "/Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
     steps:
       - uses: actions/checkout@v4
       - name: Setup SSH
@@ -59,14 +57,11 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          profile: minimal
-          toolchain: stable
-          target: x86_64-apple-ios
-          override: true
+          targets: "x86_64-apple-ios"
       - name: cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --package wise_units-ffi --all-features --target x86_64-apple-ios
+        run: >
+          cargo test --package wise_units-ffi
+          --all-features
+          --target x86_64-apple-ios
