@@ -71,6 +71,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - _BREAKING_ NAUM-8 (Internal): Refactored `convert::ToReduced` to simplify and speed up. The
   potentially breaking part here is that where units of opposing dimensions (ex. `[acr_us]/m2/har`)
   used to reduce to the first remainder unit (ex. `[acr_us]`), they now reduce to the last.
+- _BREAKING_ NAUM-57: Fixed typos in `Atom` and `Property` enum variant names.
+- _BREAKING_ NAUM-61: Fixed typo in `composition::ENEGERY` constant.
 
 ### Deprecated
 

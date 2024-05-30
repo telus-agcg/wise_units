@@ -513,8 +513,8 @@ impl Visit<SymbolRule> for Atom {
             SymbolRule::pri_pound_force_avoirdupois | SymbolRule::sec_pound_force_avoirdupois => {
                 Self::PoundForceAvoirdupois
             }
-            SymbolRule::pri_pound_per_sqare_inch | SymbolRule::sec_pound_per_sqare_inch => {
-                Self::PoundPerSqareInch
+            SymbolRule::pri_pound_per_square_inch | SymbolRule::sec_pound_per_square_inch => {
+                Self::PoundPerSquareInch
             }
             SymbolRule::pri_pound_troy | SymbolRule::sec_pound_troy => Self::PoundTroy,
             SymbolRule::pri_printers_pica | SymbolRule::sec_printers_pica => Self::PrintersPica,

@@ -257,7 +257,7 @@ pri_atom = {
         | pri_point
         | pri_parts_per_billion
         | pri_parts_per_million
-        | pri_pound_per_sqare_inch
+        | pri_pound_per_square_inch
         | pri_section
         | pri_township
         | pri_bit_logarithmus_dualis
@@ -569,7 +569,7 @@ pri_pica = { "[pca]" }
 pri_point = { "[pnt]" }
 pri_parts_per_billion = { "[ppb]" }
 pri_parts_per_million = { "[ppm]" }
-pri_pound_per_sqare_inch = { "[psi]" }
+pri_pound_per_square_inch = { "[psi]" }
 pri_section = { "[sct]" }
 pri_township = { "[twp]" }
 pri_bit_logarithmus_dualis = { "bit_s" }
@@ -945,7 +945,7 @@ sec_atom = {
         | sec_parts_per_billion
         | sec_parts_per_million
         | sec_peripheral_vascular_resistance_unit
-        | sec_pound_per_sqare_inch
+        | sec_pound_per_square_inch
         | sec_radiation_absorbed_dose
         | sec_radiation_equivalent_man
         | sec_section
@@ -1256,7 +1256,7 @@ sec_protein_nitrogen_unit = { "[PNU]" }
 sec_parts_per_billion = { "[PPB]" }
 sec_parts_per_million = { "[PPM]" }
 sec_peripheral_vascular_resistance_unit = { "[PRU]" }
-sec_pound_per_sqare_inch = { "[PSI]" }
+sec_pound_per_square_inch = { "[PSI]" }
 sec_radiation_absorbed_dose = { "[RAD]" }
 sec_radiation_equivalent_man = { "[REM]" }
 sec_section = { "[SCT]" }

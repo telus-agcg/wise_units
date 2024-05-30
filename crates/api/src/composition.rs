@@ -38,7 +38,7 @@ pub const PRESSURE: Composition =
     Composition::new_any(None, Some(-1), None, Some(1), None, None, Some(-2));
 
 // M.L2.T-2
-pub const ENEGERY: Composition =
+pub const ENERGY: Composition =
     Composition::new_any(None, Some(2), None, Some(1), None, None, Some(-2));
 
 // M.L2.T-3
