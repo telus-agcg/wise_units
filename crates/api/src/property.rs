@@ -16,8 +16,8 @@ pub enum Property {
     Action,
     ActionArea,
     AmountOfAProliferatingOrganism,
-    AmountOfAnAllergenCallibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters,
-    AmountOfAnAllergenCallibratedThroughInVivoTestingUsingTheStallergenesMethod,
+    AmountOfAnAllergenCalibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters,
+    AmountOfAnAllergenCalibratedThroughInVivoTestingUsingTheStallergenesMethod,
     AmountOfAnInfectiousAgent,
     AmountOfFibrinogenBrokenDownIntoTheMeasuredDDimers,
     AmountOfInformation,
@@ -131,10 +131,10 @@ impl Property {
             Self::Action => vec![Atom::PlanckConstant,],
             Self::ActionArea => vec![Atom::Barn,],
             Self::AmountOfAProliferatingOrganism => vec![Atom::ColonyFormingUnits,],
-            Self::AmountOfAnAllergenCallibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters => {
+            Self::AmountOfAnAllergenCalibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters => {
                 vec![Atom::BioequivalentAllergenUnit,]
             }
-            Self::AmountOfAnAllergenCallibratedThroughInVivoTestingUsingTheStallergenesMethod => {
+            Self::AmountOfAnAllergenCalibratedThroughInVivoTestingUsingTheStallergenesMethod => {
                 vec![Atom::IndexOfReactivity,]
             }
             Self::AmountOfAnInfectiousAgent => {
@@ -345,7 +345,7 @@ impl Property {
                 vec![
                     Atom::Bar, Atom::InchOfMercuryColumn, Atom::InchOfWaterColumn,
                     Atom::MeterOfMercuryColumn, Atom::MeterOfWaterColumn, Atom::Pascal,
-                    Atom::PoundPerSqareInch, Atom::StandardAtmosphere,
+                    Atom::PoundPerSquareInch, Atom::StandardAtmosphere,
                     Atom::TechnicalAtmosphere,
                 ]
             }
@@ -426,11 +426,11 @@ impl fmt::Display for Property {
             Self::Action => "Action",
             Self::ActionArea => "ActionArea",
             Self::AmountOfAProliferatingOrganism => "AmountOfAProliferatingOrganism",
-            Self::AmountOfAnAllergenCallibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters => {
-                "AmountOfAnAllergenCallibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters"
+            Self::AmountOfAnAllergenCalibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters => {
+                "AmountOfAnAllergenCalibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters"
             }
-            Self::AmountOfAnAllergenCallibratedThroughInVivoTestingUsingTheStallergenesMethod => {
-                "AmountOfAnAllergenCallibratedThroughInVivoTestingUsingTheStallergenesMethod"
+            Self::AmountOfAnAllergenCalibratedThroughInVivoTestingUsingTheStallergenesMethod => {
+                "AmountOfAnAllergenCalibratedThroughInVivoTestingUsingTheStallergenesMethod"
             }
             Self::AmountOfAnInfectiousAgent => "AmountOfAnInfectiousAgent",
             Self::AmountOfFibrinogenBrokenDownIntoTheMeasuredDDimers => {

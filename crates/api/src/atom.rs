@@ -334,7 +334,7 @@ pub enum Atom {
     Barn,
     TechnicalAtmosphere,
     Mho,
-    PoundPerSqareInch,
+    PoundPerSquareInch,
     Circle,
     Spere,
     MetricCarat,
@@ -694,7 +694,7 @@ impl Atom {
             Self::Barn => BARN,
             Self::TechnicalAtmosphere => Definition::new_value_terms(1f64, "kgf/cm2"),
             Self::Mho => MHO,
-            Self::PoundPerSqareInch => Definition::new_value_terms(1f64, "[lbf_av]/[in_i]2"),
+            Self::PoundPerSquareInch => Definition::new_value_terms(1f64, "[lbf_av]/[in_i]2"),
             Self::Circle => Definition::new_value_terms(2f64, "[pi].rad"),
             Self::Spere => Definition::new_value_terms(4f64, "[pi].sr"),
             Self::MetricCarat => METRIC_CARAT,
@@ -1025,10 +1025,10 @@ impl Atom {
             Self::FocusFormingUnits => Property::AmountOfAnInfectiousAgent,
             Self::ColonyFormingUnits => Property::AmountOfAProliferatingOrganism,
             Self::IndexOfReactivity => {
-                Property::AmountOfAnAllergenCallibratedThroughInVivoTestingUsingTheStallergenesMethod
+                Property::AmountOfAnAllergenCalibratedThroughInVivoTestingUsingTheStallergenesMethod
             }
             Self::BioequivalentAllergenUnit => {
-                Property::AmountOfAnAllergenCallibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters
+                Property::AmountOfAnAllergenCalibratedThroughInVivoTestingBasedOnTheId50ealMethodOfIntradermalDilutionFor50mmSumOfErythemaDiameters
             }
             Self::AllergenUnit => {
                 Property::ProcedureDefinedAmountOfAnAllergenUsingSomeReferenceStandard
@@ -1064,7 +1064,7 @@ impl Atom {
             Self::Barn => Property::ActionArea,
             Self::TechnicalAtmosphere => Property::Pressure,
             Self::Mho => Property::ElectricConductance,
-            Self::PoundPerSqareInch => Property::Pressure,
+            Self::PoundPerSquareInch => Property::Pressure,
             Self::Circle => Property::PlaneAngle,
             Self::Spere => Property::SolidAngle,
             Self::MetricCarat => Property::Mass,
@@ -1384,7 +1384,7 @@ impl UcumSymbol for Atom {
             Self::Barn => Classification::Misc,
             Self::TechnicalAtmosphere => Classification::Misc,
             Self::Mho => Classification::Misc,
-            Self::PoundPerSqareInch => Classification::Misc,
+            Self::PoundPerSquareInch => Classification::Misc,
             Self::Circle => Classification::Misc,
             Self::Spere => Classification::Misc,
             Self::MetricCarat => Classification::Misc,
@@ -1744,7 +1744,7 @@ impl UcumSymbol for Atom {
             Self::Barn => vec!["barn"],
             Self::TechnicalAtmosphere => vec!["technical atmosphere"],
             Self::Mho => vec!["mho"],
-            Self::PoundPerSqareInch => vec!["pound per sqare inch"],
+            Self::PoundPerSquareInch => vec!["pound per square inch"],
             Self::Circle => vec!["circle"],
             Self::Spere => vec!["spere"],
             Self::MetricCarat => vec!["metric carat"],
@@ -2060,7 +2060,7 @@ impl UcumSymbol for Atom {
             Self::Barn => "b",
             Self::TechnicalAtmosphere => "att",
             Self::Mho => "mho",
-            Self::PoundPerSqareInch => "[psi]",
+            Self::PoundPerSquareInch => "[psi]",
             Self::Circle => "circ",
             Self::Spere => "sph",
             Self::MetricCarat => "[car_m]",
@@ -2267,7 +2267,7 @@ impl UcumSymbol for Atom {
             Self::Barn => Some("b"),
             Self::TechnicalAtmosphere => Some("at"),
             Self::Mho => Some("mho"),
-            Self::PoundPerSqareInch => Some("psi"),
+            Self::PoundPerSquareInch => Some("psi"),
             Self::Circle => Some("circ"),
             Self::Spere => Some("sph"),
             Self::MetricCarat => Some("ct<sub>m</sub>"),
@@ -2580,7 +2580,7 @@ impl UcumSymbol for Atom {
             Self::Barn => Some("BRN"),
             Self::TechnicalAtmosphere => Some("ATT"),
             Self::Mho => Some("MHO"),
-            Self::PoundPerSqareInch => Some("[PSI]"),
+            Self::PoundPerSquareInch => Some("[PSI]"),
             Self::Circle => Some("CIRC"),
             Self::Spere => Some("SPH"),
             Self::MetricCarat => Some("[CAR_M]"),
