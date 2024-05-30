@@ -1,14 +1,16 @@
-use crate::move_string_to_buffer;
-use ffi_common::core::error;
 use std::{
     ffi::{CStr, CString},
     os::raw::c_char,
     ptr,
     str::FromStr,
 };
+
+use ffi_common::core::error;
 use wise_units::{
-    is_compatible_with::IsCompatibleWith, parser::Composable, reduce::ToReduced, UcumUnit, Unit,
+    is_compatible_with::IsCompatibleWith, reduce::ToReduced, Composable, UcumUnit, Unit,
 };
+
+use crate::move_string_to_buffer;
 
 /// Create a new `Unit`. Note that you must call `unit_destroy(data: unit)` with
 /// this instance when you are done with it so that the the unit can be properly
@@ -265,7 +267,7 @@ pub unsafe extern "C" fn unit_composition_buf(
 mod tests {
     use super::*;
     use approx::{assert_relative_eq, assert_ulps_eq};
-    use ffi_common::core;
+
     use std::ffi::CString;
 
     #[test]
@@ -287,7 +289,7 @@ mod tests {
         unsafe {
             let u = unit_new(expression.as_ptr());
             assert_eq!(u, ptr::null());
-            let error = CStr::from_ptr(core::error::get_last_err_msg())
+            let error = CStr::from_ptr(error::get_last_err_msg())
                 .to_str()
                 .expect("Failed to get str from CStr.");
             assert_eq!(error, expected_error);
@@ -404,7 +406,7 @@ mod tests {
         unsafe {
             let unit = unit_new(expression.as_ptr());
             let reduced = unit_reduced(unit);
-            assert_eq!((*reduced).expression().as_str(), "/m2.cm.km");
+            assert_eq!((*reduced).expression().as_str(), "/km3.cm");
         }
     }
 
