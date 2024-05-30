@@ -1,5 +1,6 @@
-use ffi_common::core::error;
 use std::{ffi::CStr, os::raw::c_char, ptr};
+
+use ffi_common::core::error;
 use wise_units::{reduce::ToReduced, Convertible, Measurement, UcumUnit, Unit};
 
 /// Create a new `Measurement`. Note that you must call
@@ -400,7 +401,7 @@ mod tests {
 
     #[test]
     fn can_reduce() {
-        let expression = CString::new("[acr_us]/m2/har").expect("CString::new failed");
+        let expression = CString::new("har/m2/[acr_us]").expect("CString::new failed");
         let value = 1.0;
         let expected_expression = "[acr_us]";
         let expected_value = 10_000.0;
