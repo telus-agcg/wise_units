@@ -267,7 +267,7 @@ pub unsafe extern "C" fn unit_composition_buf(
 mod tests {
     use super::*;
     use approx::{assert_relative_eq, assert_ulps_eq};
-    use ffi_common::core;
+
     use std::ffi::CString;
 
     #[test]
@@ -289,7 +289,7 @@ mod tests {
         unsafe {
             let u = unit_new(expression.as_ptr());
             assert_eq!(u, ptr::null());
-            let error = CStr::from_ptr(core::error::get_last_err_msg())
+            let error = CStr::from_ptr(error::get_last_err_msg())
                 .to_str()
                 .expect("Failed to get str from CStr.");
             assert_eq!(error, expected_error);
