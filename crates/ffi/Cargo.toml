@@ -1,6 +1,6 @@
 [package]
 name = "wise_units-ffi"
-version = "0.22.1"
+version = "0.23.0"
 description = "FFI wrapper for wise_units"
 repository = "https://github.com/agrian-inc/wise_units"
 license = "MIT"
