@@ -11,7 +11,7 @@ mod reducible;
 mod ucum_unit;
 #[cfg(feature = "v2")]
 mod v2;
-pub(crate) mod variants;
+pub mod variants;
 
 use std::borrow::Cow;
 

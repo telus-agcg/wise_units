@@ -226,6 +226,13 @@ pub struct AtomAnnotation {
     pub(crate) annotation: Annotation,
 }
 
+impl AtomAnnotation {
+    #[must_use]
+    pub const fn new(atom: Atom, annotation: Annotation) -> Self {
+        Self { atom, annotation }
+    }
+}
+
 impl AssignFactorMut for AtomAnnotation {
     type Output = FactorAtomAnnotation;
 
@@ -348,6 +355,13 @@ pub struct AtomExponent {
     pub(crate) exponent: Exponent,
 }
 
+impl AtomExponent {
+    #[must_use]
+    pub const fn new(atom: Atom, exponent: Exponent) -> Self {
+        Self { atom, exponent }
+    }
+}
+
 impl AssignFactorMut for AtomExponent {
     type Output = FactorAtomExponent;
 
@@ -448,6 +462,17 @@ pub struct AtomExponentAnnotation {
     pub(crate) atom: Atom,
     pub(crate) exponent: Exponent,
     pub(crate) annotation: Annotation,
+}
+
+impl AtomExponentAnnotation {
+    #[must_use]
+    pub const fn new(atom: Atom, exponent: Exponent, annotation: Annotation) -> Self {
+        Self {
+            atom,
+            exponent,
+            annotation,
+        }
+    }
 }
 
 impl AssignFactorMut for AtomExponentAnnotation {
@@ -592,7 +617,8 @@ pub struct PrefixAtom {
 }
 
 impl PrefixAtom {
-    pub(crate) const fn new(prefix: Prefix, atom: Atom) -> Self {
+    #[must_use]
+    pub const fn new(prefix: Prefix, atom: Atom) -> Self {
         Self { prefix, atom }
     }
 }
@@ -687,6 +713,17 @@ pub struct PrefixAtomAnnotation {
     pub(crate) prefix: Prefix,
     pub(crate) atom: Atom,
     pub(crate) annotation: Annotation,
+}
+
+impl PrefixAtomAnnotation {
+    #[must_use]
+    pub const fn new(prefix: Prefix, atom: Atom, annotation: Annotation) -> Self {
+        Self {
+            prefix,
+            atom,
+            annotation,
+        }
+    }
 }
 
 impl AssignFactorMut for PrefixAtomAnnotation {
@@ -810,6 +847,17 @@ pub struct PrefixAtomExponent {
     pub(crate) exponent: Exponent,
 }
 
+impl PrefixAtomExponent {
+    #[must_use]
+    pub const fn new(prefix: Prefix, atom: Atom, exponent: Exponent) -> Self {
+        Self {
+            prefix,
+            atom,
+            exponent,
+        }
+    }
+}
+
 impl AssignFactorMut for PrefixAtomExponent {
     type Output = FactorPrefixAtomExponent;
 
@@ -920,6 +968,23 @@ pub struct PrefixAtomExponentAnnotation {
     pub(crate) atom: Atom,
     pub(crate) exponent: Exponent,
     pub(crate) annotation: Annotation,
+}
+
+impl PrefixAtomExponentAnnotation {
+    #[must_use]
+    pub const fn new(
+        prefix: Prefix,
+        atom: Atom,
+        exponent: Exponent,
+        annotation: Annotation,
+    ) -> Self {
+        Self {
+            prefix,
+            atom,
+            exponent,
+            annotation,
+        }
+    }
 }
 
 impl AssignFactorMut for PrefixAtomExponentAnnotation {
@@ -1089,6 +1154,13 @@ pub struct FactorAnnotation {
     pub(crate) annotation: Annotation,
 }
 
+impl FactorAnnotation {
+    #[must_use]
+    pub const fn new(factor: Factor, annotation: Annotation) -> Self {
+        Self { factor, annotation }
+    }
+}
+
 impl AssignExponent for FactorAnnotation {
     fn assign_exponent(self, exponent: Exponent) -> Term {
         Term::FactorExponentAnnotation(FactorExponentAnnotation {
@@ -1196,6 +1268,13 @@ pub struct FactorExponent {
     pub(crate) exponent: Exponent,
 }
 
+impl FactorExponent {
+    #[must_use]
+    pub const fn new(factor: Factor, exponent: Exponent) -> Self {
+        Self { factor, exponent }
+    }
+}
+
 impl_assign_exponent!(FactorExponent);
 
 impl UnassignExponent for FactorExponent {
@@ -1292,6 +1371,17 @@ pub struct FactorExponentAnnotation {
     pub(crate) factor: Factor,
     pub(crate) exponent: Exponent,
     pub(crate) annotation: Annotation,
+}
+
+impl FactorExponentAnnotation {
+    #[must_use]
+    pub const fn new(factor: Factor, exponent: Exponent, annotation: Annotation) -> Self {
+        Self {
+            factor,
+            exponent,
+            annotation,
+        }
+    }
 }
 
 impl_assign_exponent!(FactorExponentAnnotation);
@@ -1441,6 +1531,13 @@ pub struct FactorAtom {
     pub(crate) atom: Atom,
 }
 
+impl FactorAtom {
+    #[must_use]
+    pub const fn new(factor: Factor, atom: Atom) -> Self {
+        Self { factor, atom }
+    }
+}
+
 impl AssignExponent for FactorAtom {
     fn assign_exponent(self, exponent: Exponent) -> Term {
         Term::FactorAtomExponent(FactorAtomExponent {
@@ -1523,6 +1620,17 @@ pub struct FactorAtomAnnotation {
     pub(crate) factor: Factor,
     pub(crate) atom: Atom,
     pub(crate) annotation: Annotation,
+}
+
+impl FactorAtomAnnotation {
+    #[must_use]
+    pub const fn new(factor: Factor, atom: Atom, annotation: Annotation) -> Self {
+        Self {
+            factor,
+            atom,
+            annotation,
+        }
+    }
 }
 
 impl AssignExponent for FactorAtomAnnotation {
@@ -1637,6 +1745,17 @@ pub struct FactorAtomExponent {
     pub(crate) exponent: Exponent,
 }
 
+impl FactorAtomExponent {
+    #[must_use]
+    pub const fn new(factor: Factor, atom: Atom, exponent: Exponent) -> Self {
+        Self {
+            factor,
+            atom,
+            exponent,
+        }
+    }
+}
+
 impl_assign_exponent!(FactorAtomExponent);
 
 impl UnassignExponent for FactorAtomExponent {
@@ -1743,6 +1862,23 @@ pub struct FactorAtomExponentAnnotation {
     pub(crate) atom: Atom,
     pub(crate) exponent: Exponent,
     pub(crate) annotation: Annotation,
+}
+
+impl FactorAtomExponentAnnotation {
+    #[must_use]
+    pub const fn new(
+        factor: Factor,
+        atom: Atom,
+        exponent: Exponent,
+        annotation: Annotation,
+    ) -> Self {
+        Self {
+            factor,
+            atom,
+            exponent,
+            annotation,
+        }
+    }
 }
 
 impl_assign_exponent!(FactorAtomExponentAnnotation);
@@ -1910,6 +2046,17 @@ pub struct FactorPrefixAtom {
     pub(crate) atom: Atom,
 }
 
+impl FactorPrefixAtom {
+    #[must_use]
+    pub const fn new(factor: Factor, prefix: Prefix, atom: Atom) -> Self {
+        Self {
+            factor,
+            prefix,
+            atom,
+        }
+    }
+}
+
 impl AssignExponent for FactorPrefixAtom {
     fn assign_exponent(self, exponent: Exponent) -> Term {
         Term::FactorPrefixAtomExponent(FactorPrefixAtomExponent {
@@ -2002,6 +2149,18 @@ pub struct FactorPrefixAtomAnnotation {
     pub(crate) prefix: Prefix,
     pub(crate) atom: Atom,
     pub(crate) annotation: Annotation,
+}
+
+impl FactorPrefixAtomAnnotation {
+    #[must_use]
+    pub const fn new(factor: Factor, prefix: Prefix, atom: Atom, annotation: Annotation) -> Self {
+        Self {
+            factor,
+            prefix,
+            atom,
+            annotation,
+        }
+    }
 }
 
 impl AssignExponent for FactorPrefixAtomAnnotation {
@@ -2135,6 +2294,18 @@ pub struct FactorPrefixAtomExponent {
     pub(crate) exponent: Exponent,
 }
 
+impl FactorPrefixAtomExponent {
+    #[must_use]
+    pub const fn new(factor: Factor, prefix: Prefix, atom: Atom, exponent: Exponent) -> Self {
+        Self {
+            factor,
+            prefix,
+            atom,
+            exponent,
+        }
+    }
+}
+
 impl_assign_exponent!(FactorPrefixAtomExponent);
 
 impl UnassignExponent for FactorPrefixAtomExponent {
@@ -2261,6 +2432,25 @@ pub struct FactorPrefixAtomExponentAnnotation {
     pub(crate) atom: Atom,
     pub(crate) exponent: Exponent,
     pub(crate) annotation: Annotation,
+}
+
+impl FactorPrefixAtomExponentAnnotation {
+    #[must_use]
+    pub const fn new(
+        factor: Factor,
+        prefix: Prefix,
+        atom: Atom,
+        exponent: Exponent,
+        annotation: Annotation,
+    ) -> Self {
+        Self {
+            factor,
+            prefix,
+            atom,
+            exponent,
+            annotation,
+        }
+    }
 }
 
 impl_assign_exponent!(FactorPrefixAtomExponentAnnotation);

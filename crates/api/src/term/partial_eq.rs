@@ -8,38 +8,14 @@ use crate::{is_compatible_with::IsCompatibleWith, ucum_unit::UcumUnit, Term};
 /// b) their `scalar()` values are equal
 ///
 /// ```rust
-/// use wise_units::{Atom, Prefix, Term};
+/// use wise_units::{Atom, Prefix, Term, term::variants::{FactorAtom, PrefixAtom}};
 ///
-/// let lhs = Term {
-///     factor: Some(1000),
-///     prefix: None,
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
-/// let rhs = Term {
-///     factor: None,
-///     prefix: Some(Prefix::Kilo),
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
+/// let lhs = Term::FactorAtom(FactorAtom::new(1000, Atom::Meter));
+/// let rhs = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
 /// assert!(lhs == rhs);
 ///
-/// let lhs = Term {
-///     factor: None,
-///     prefix: None,
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
-/// let rhs = Term {
-///     factor: None,
-///     prefix: Some(Prefix::Kilo),
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
+/// let lhs = Term::Atom(Atom::Meter);
+/// let rhs = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
 /// assert!(lhs != rhs);
 /// ```
 ///

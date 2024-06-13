@@ -34,11 +34,10 @@ pub mod is_compatible_with;
 pub mod measurement;
 pub mod property;
 pub mod reduce;
+pub mod term;
 pub mod unit;
 #[cfg(feature = "v2")]
 pub mod v2;
-
-pub(crate) mod term;
 
 mod composable;
 mod dimension;

@@ -6,40 +6,19 @@ use crate::{field_eq::FieldEq, Term};
 /// This is for comparing `Term`s to see if they have the exact same fields.
 ///
 /// ```rust
-/// use wise_units::{Atom, FieldEq, Prefix, Term};
+/// use wise_units::{
+///     Atom, FieldEq, Prefix, Term,
+///     term::variants::{FactorAtom, FactorPrefixAtom, PrefixAtom}
+/// };
 ///
 /// // Both of these have the exact same field values.
-/// let lhs = Term {
-///     factor: Some(123),
-///     prefix: Some(Prefix::Deci),
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
-/// let rhs = Term {
-///     factor: Some(123),
-///     prefix: Some(Prefix::Deci),
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
+/// let lhs = Term::FactorPrefixAtom(FactorPrefixAtom::new(123, Prefix::Deci, Atom::Meter));
+/// let rhs = lhs.clone();
 /// assert!(lhs.field_eq(&rhs));
 ///
 /// // Both of these have the same scalar value, but have have different field values.
-/// let lhs = Term {
-///     factor: Some(1000),
-///     prefix: None,
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
-/// let rhs = Term {
-///     factor: None,
-///     prefix: Some(Prefix::Kilo),
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
+/// let lhs = Term::FactorAtom(FactorAtom::new(1000, Atom::Meter));
+/// let rhs = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
 /// assert!(!lhs.field_eq(&rhs));
 /// ```
 ///
