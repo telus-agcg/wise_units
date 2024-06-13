@@ -1,4 +1,5 @@
 mod annotation_composable;
+mod builder;
 mod composable;
 mod display;
 mod field_eq;
@@ -14,6 +15,8 @@ mod v2;
 pub mod variants;
 
 use std::borrow::Cow;
+
+pub use builder::Builder;
 
 use crate::{Annotation, Atom, Prefix};
 
@@ -458,199 +461,253 @@ impl Default for Term {
     }
 }
 
-#[derive(Default)]
-pub struct Builder {
-    factor: Option<Factor>,
-    prefix: Option<Prefix>,
-    atom: Option<Atom>,
-    exponent: Option<Exponent>,
-    annotation: Option<String>,
-}
-
-impl Builder {
-    pub fn factor(self, factor: Factor) -> Self {
-        Self {
-            factor: Some(factor),
-            ..self
-        }
-    }
-    pub fn prefix(self, prefix: Prefix) -> Self {
-        Self {
-            prefix: Some(prefix),
-            ..self
-        }
-    }
-    pub fn atom(self, atom: Atom) -> Self {
-        Self {
-            atom: Some(atom),
-            ..self
-        }
-    }
-    pub fn exponent(self, exponent: Exponent) -> Self {
-        Self {
-            exponent: Some(exponent),
-            ..self
-        }
-    }
-    pub fn annotation<T>(self, annotation: T) -> Self
-    where
-        T: ToString,
-    {
-        Self {
-            annotation: Some(annotation.to_string()),
-            ..self
-        }
-    }
-
-    pub fn build(self) -> Term {
-        match (
-            self.factor,
-            self.prefix,
-            self.atom,
-            self.exponent,
-            self.annotation,
-        ) {
-            (None, None, None, None, None)
-            | (None, None, None, Some(_), None)
-            | (None, None, None, Some(_), Some(_))
-            | (None, Some(_), None, None, None)
-            | (None, Some(_), None, None, Some(_))
-            | (None, Some(_), None, Some(_), None)
-            | (None, Some(_), None, Some(_), Some(_))
-            | (Some(_), Some(_), None, None, None)
-            | (Some(_), Some(_), None, None, Some(_))
-            | (Some(_), Some(_), None, Some(_), None)
-            | (Some(_), Some(_), None, Some(_), Some(_)) => panic!(),
-            (None, None, None, None, Some(annotation)) => {
-                Term::Annotation(Annotation::new(annotation))
-            }
-            (None, None, Some(atom), None, None) => Term::Atom(atom),
-            (None, None, Some(atom), None, Some(annotation)) => {
-                Term::AtomAnnotation(AtomAnnotation {
-                    atom,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (None, None, Some(atom), Some(exponent), None) => {
-                Term::AtomExponent(AtomExponent { atom, exponent })
-            }
-            (None, None, Some(atom), Some(exponent), Some(annotation)) => {
-                Term::AtomExponentAnnotation(AtomExponentAnnotation {
-                    atom,
-                    exponent,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (None, Some(prefix), Some(atom), None, None) => {
-                Term::PrefixAtom(PrefixAtom { prefix, atom })
-            }
-            (None, Some(prefix), Some(atom), None, Some(annotation)) => {
-                Term::PrefixAtomAnnotation(PrefixAtomAnnotation {
-                    prefix,
-                    atom,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (None, Some(prefix), Some(atom), Some(exponent), None) => {
-                Term::PrefixAtomExponent(PrefixAtomExponent {
-                    prefix,
-                    atom,
-                    exponent,
-                })
-            }
-            (None, Some(prefix), Some(atom), Some(exponent), Some(annotation)) => {
-                Term::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation {
-                    prefix,
-                    atom,
-                    exponent,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (Some(factor), None, None, None, None) => Term::Factor(factor),
-            (Some(factor), None, None, None, Some(annotation)) => {
-                Term::FactorAnnotation(FactorAnnotation {
-                    factor,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (Some(factor), None, None, Some(exponent), None) => {
-                Term::FactorExponent(FactorExponent { factor, exponent })
-            }
-            (Some(factor), None, None, Some(exponent), Some(annotation)) => {
-                Term::FactorExponentAnnotation(FactorExponentAnnotation {
-                    factor,
-                    exponent,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (Some(factor), None, Some(atom), None, None) => {
-                Term::FactorAtom(FactorAtom { factor, atom })
-            }
-            (Some(factor), None, Some(atom), None, Some(annotation)) => {
-                Term::FactorAtomAnnotation(FactorAtomAnnotation {
-                    factor,
-                    atom,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (Some(factor), None, Some(atom), Some(exponent), None) => {
-                Term::FactorAtomExponent(FactorAtomExponent {
-                    factor,
-                    atom,
-                    exponent,
-                })
-            }
-            (Some(factor), None, Some(atom), Some(exponent), Some(annotation)) => {
-                Term::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation {
-                    factor,
-                    atom,
-                    exponent,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (Some(factor), Some(prefix), Some(atom), None, None) => {
-                Term::FactorPrefixAtom(FactorPrefixAtom {
-                    factor,
-                    prefix,
-                    atom,
-                })
-            }
-            (Some(factor), Some(prefix), Some(atom), None, Some(annotation)) => {
-                Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation {
-                    factor,
-                    prefix,
-                    atom,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-            (Some(factor), Some(prefix), Some(atom), Some(exponent), None) => {
-                Term::FactorPrefixAtomExponent(FactorPrefixAtomExponent {
-                    factor,
-                    prefix,
-                    atom,
-                    exponent,
-                })
-            }
-            (Some(factor), Some(prefix), Some(atom), Some(exponent), Some(annotation)) => {
-                Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation {
-                    factor,
-                    prefix,
-                    atom,
-                    exponent,
-                    annotation: Annotation::new(annotation),
-                })
-            }
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    fn subject_annotation() -> Annotation {
+        Annotation::from("meow")
+    }
+
     #[test]
     fn validate_new_unity() {
         assert_eq!(UNITY.to_string(), "1");
+    }
+
+    mod factor {
+        use super::*;
+
+        macro_rules! assert_set_factor_no_factor {
+            ($subject:ident => $expected:expr) => {
+                assert!($subject.factor().is_none());
+
+                let _ = $subject.set_factor(42);
+                assert_eq!($subject.factor().unwrap(), 42);
+                assert_eq!($subject, $expected);
+            };
+        }
+
+        macro_rules! assert_set_factor_has_factor {
+            ($subject:ident) => {
+                assert_eq!($subject.factor().unwrap(), 42);
+                let _ = $subject.set_factor(1);
+                assert_eq!($subject.factor().unwrap(), 1);
+            };
+        }
+
+        #[test]
+        fn annotation_test() {
+            let mut subject = Term::Annotation(subject_annotation());
+            assert_set_factor_no_factor!(subject => Term::FactorAnnotation(FactorAnnotation::new(
+                42,
+                subject_annotation()
+            )));
+        }
+
+        #[test]
+        fn atom_test() {
+            let mut subject = Term::Atom(Atom::Meter);
+            assert_set_factor_no_factor!(subject => Term::FactorAtom(FactorAtom::new(42, Atom::Meter)));
+        }
+
+        #[test]
+        fn atom_annotation_test() {
+            let mut subject =
+                Term::AtomAnnotation(AtomAnnotation::new(Atom::Meter, subject_annotation()));
+
+            assert_set_factor_no_factor!(subject => Term::FactorAtomAnnotation(FactorAtomAnnotation::new(
+                            42,
+                            Atom::Meter,
+                            subject_annotation()
+                        ))
+            );
+        }
+
+        #[test]
+        fn atom_exponent_test() {
+            let mut subject = Term::AtomExponent(AtomExponent::new(Atom::Meter, 43));
+
+            assert_set_factor_no_factor!(
+                subject => Term::FactorAtomExponent(FactorAtomExponent::new(42, Atom::Meter, 43))
+            );
+        }
+
+        #[test]
+        fn atom_exponent_annotation_test() {
+            let mut subject = Term::AtomExponentAnnotation(AtomExponentAnnotation::new(
+                Atom::Meter,
+                43,
+                subject_annotation(),
+            ));
+
+            assert_set_factor_no_factor!(
+                subject => Term::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation::new(
+                    42,
+                    Atom::Meter,
+                    43,
+                    subject_annotation()))
+            );
+        }
+
+        #[test]
+        fn prefix_atom_test() {
+            let mut subject = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
+
+            assert_set_factor_no_factor!(
+                subject => Term::FactorPrefixAtom(FactorPrefixAtom::new(42, Prefix::Kilo, Atom::Meter,))
+            );
+        }
+
+        #[test]
+        fn prefix_atom_annotation_test() {
+            let mut subject = Term::PrefixAtomAnnotation(PrefixAtomAnnotation::new(
+                Prefix::Kilo,
+                Atom::Meter,
+                subject_annotation(),
+            ));
+            assert_set_factor_no_factor!(
+                subject => Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation::new(
+                    42,
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    subject_annotation()
+                ))
+            );
+        }
+
+        #[test]
+        fn prefix_atom_exponent_test() {
+            let mut subject =
+                Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, 43));
+
+            assert_set_factor_no_factor!(
+                subject => Term::FactorPrefixAtomExponent(
+                FactorPrefixAtomExponent::new(42, Prefix::Kilo, Atom::Meter, 43,)
+            ));
+        }
+
+        #[test]
+        fn prefix_atom_exponent_annotation_test() {
+            let mut subject =
+                Term::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation::new(
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    43,
+                    Annotation::from("meow"),
+                ));
+            assert_set_factor_no_factor!(
+                subject => Term::FactorPrefixAtomExponentAnnotation(
+                FactorPrefixAtomExponentAnnotation::new(
+                    42,
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    43,
+                    subject_annotation()
+                )
+            ));
+        }
+
+        #[test]
+        fn factor_test() {
+            let mut subject = Term::Factor(42);
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_annotation_test() {
+            let mut subject =
+                Term::FactorAnnotation(FactorAnnotation::new(42, Annotation::from("meow")));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_exponent_test() {
+            let mut subject = Term::FactorExponent(FactorExponent::new(42, 43));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_exponent_annotation_test() {
+            let mut subject = Term::FactorExponentAnnotation(FactorExponentAnnotation::new(
+                42,
+                43,
+                subject_annotation(),
+            ));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_atom_test() {
+            let mut subject = Term::FactorAtom(FactorAtom::new(42, Atom::Meter));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_atom_annotation_test() {
+            let mut subject = Term::FactorAtomAnnotation(FactorAtomAnnotation::new(
+                42,
+                Atom::Meter,
+                Annotation::from("meow"),
+            ));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_atom_exponent_test() {
+            let mut subject =
+                Term::FactorAtomExponent(FactorAtomExponent::new(42, Atom::Meter, 43));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_atom_exponent_annotation_test() {
+            let mut subject = Term::FactorAtomExponentAnnotation(
+                FactorAtomExponentAnnotation::new(42, Atom::Meter, 43, Annotation::from("meow")),
+            );
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_prefix_atom_test() {
+            let mut subject =
+                Term::FactorPrefixAtom(FactorPrefixAtom::new(42, Prefix::Kilo, Atom::Meter));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_prefix_atom_annotation_test() {
+            let mut subject = Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                Annotation::from("meow"),
+            ));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_prefix_atom_exponent_test() {
+            let mut subject = Term::FactorPrefixAtomExponent(FactorPrefixAtomExponent::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                43,
+            ));
+            assert_set_factor_has_factor!(subject);
+        }
+
+        #[test]
+        fn factor_prefix_atom_exponent_annotation_test() {
+            let mut subject =
+                Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
+                    42,
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    43,
+                    Annotation::from("meow"),
+                ));
+            assert_set_factor_has_factor!(subject);
+        }
     }
 
     #[test]
