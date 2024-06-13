@@ -4,23 +4,12 @@ use crate::Composable;
 /// compatible. Typically this comparison is made via each type's `Composition`, but the trait
 /// does not enforce that.
 ///
-pub trait IsCompatibleWith<RHS = Self> {
-    fn is_compatible_with(&self, rhs: &RHS) -> bool;
-}
-
-/// Marker trait to allow for auto-implementing `IsCompatibleWith` using the default implementation.
-///
-pub trait DefaultCompatibility {}
-
-/// Implements `IsCompatibleWith` for all types that are `Composable` and `DefaultCompatibility`.
-///
-impl<T, U> IsCompatibleWith<U> for T
+pub trait IsCompatibleWith<RHS = Self>: Composable
 where
-    T: Composable + DefaultCompatibility,
-    U: Composable + DefaultCompatibility,
+    RHS: Composable,
 {
     #[inline]
-    fn is_compatible_with(&self, rhs: &U) -> bool {
+    fn is_compatible_with(&self, rhs: &RHS) -> bool {
         self.composition() == rhs.composition()
     }
 }

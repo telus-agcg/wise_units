@@ -12,7 +12,7 @@ pub(super) struct Component {
     pub(super) terms: Vec<Term>,
 }
 
-impl Visit<Rule> for Component {
+impl Visit<'_, Rule> for Component {
     fn visit(pair: Pair<'_, Rule>) -> Result<Self, Error> {
         let mut pairs = pair.into_inner();
 
@@ -48,7 +48,7 @@ impl Finishable for Component {
         if let Some(factor) = self.factor {
             if factor != 1 {
                 if let Some(first_term) = self.terms.first_mut() {
-                    first_term.factor = Some(factor);
+                    let _ = first_term.set_factor(factor);
                 }
             }
         }

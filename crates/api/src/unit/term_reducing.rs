@@ -1,95 +1,289 @@
-use std::collections::BTreeMap;
-
-use num_traits::Zero;
+//!
+//! This module provides a single internal function for reducing the `Term`s that make up a `Unit`.
+//! It aims, for example, to turn a `Unit` that represents `"m3/m2"` into one that represents
+//! `"m"`.
+//!
+//! The main function here, `reduce_terms()` works by classifying `Term`s by all fields _except_
+//! their `exponent`. It adds up the exponents of each `Term`, which effectively reduces those
+//! `Term`s. Put differently, the algorithm will only reduce `Term`s that have all non-exponent
+//! fields in common. Some examples:
+//!
+//! 1. It won't reduce `10m3/m2`, but will reduce `10m3/10m2` (to `10m`).
+//! 2. It won't reduce `cm3/m2`, but will reduce `cm3/cm2` (to `cm`).
+//! 3. It won't reduce `cm3{foo}/cm2`, but will reduce `cm3{foo}/cm2{foo}` (to `cm{foo}`).
+//!
+use std::borrow::Cow;
 
 use crate::{
-    term::{self, Exponent, Factor},
-    Atom, Prefix, Term,
+    composable::ComposablyEq,
+    term::term_reduce::{ReducedTerm, TermReduce},
+    FieldEq, Term,
 };
-
-/// Internal struct used for reducing `Term`s.
-///
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord)]
-struct ComposableTerm {
-    factor: Option<Factor>,
-    prefix: Option<Prefix>,
-    atom: Option<Atom>,
-    annotation: Option<String>,
-}
-
-impl ComposableTerm {
-    const fn has_value(&self) -> bool {
-        self.atom.is_some() || self.factor.is_some() || self.annotation.is_some()
-    }
-}
-
-impl<'a> From<&'a Term> for ComposableTerm {
-    fn from(term: &'a Term) -> Self {
-        Self {
-            atom: term.atom,
-            prefix: term.prefix,
-            factor: term.factor,
-            annotation: term.annotation.clone(),
-        }
-    }
-}
-
-type Parts = (ComposableTerm, Exponent);
-
-impl From<Parts> for Term {
-    fn from(parts: Parts) -> Self {
-        let e = if parts.1 == 1 { None } else { Some(parts.1) };
-
-        Self {
-            atom: parts.0.atom,
-            prefix: parts.0.prefix,
-            factor: parts.0.factor,
-            exponent: e,
-            annotation: parts.0.annotation,
-        }
-    }
-}
 
 /// Function used in `Unit` for reducing its `Term`s.
 ///
-pub(super) fn reduce_terms(terms: &[Term]) -> Vec<Term> {
-    let map = reduce_to_map(terms);
+/// This takes `terms` by value due to how this function sits in relation to `Unit`: any time
+/// `reduce_terms()` is called, we're going from some set of terms to 1) the same set, 2) a set
+/// with some elements removed, or 3) a set without any elements. By taking the `Term`s by value
+/// here instead of references, there's a good chance we can reuse some of those `Term`s in the
+/// result of this call (if we passed a reference/slice instead, we'd have to clone the originals,
+/// and this is most likely to happen).
+///
+pub(super) fn reduce_terms(terms: &[Term]) -> Cow<'static, [Term]> {
+    let mut ids_to_remove = vec![];
+    let mut output = vec![];
 
+    'outer: for (i, lhs) in terms.iter().enumerate() {
+        if ids_to_remove.contains(&i) {
+            continue;
+        }
+
+        let mut offset = i + 1;
+        let mut new_term = lhs.clone();
+
+        'inner: for (j, rhs) in terms[offset..].iter().enumerate() {
+            if ids_to_remove.contains(&(offset + j)) {
+                continue 'inner;
+            }
+
+            match lhs.composably_eq(rhs) {
+                Some(0) => {
+                    ids_to_remove.push(i);
+                    ids_to_remove.push(offset);
+                    continue 'outer;
+                }
+                Some(exponent) => {
+                    let _ = new_term.set_exponent(exponent);
+
+                    ids_to_remove.push(offset);
+                }
+                None => (),
+            }
+
+            offset += 1;
+        }
+
+        output.push(new_term);
+    }
+
+    cleanup(output)
+}
+
+fn cleanup(mut output: Vec<Term>) -> Cow<'static, [Term]> {
     // If everything is reduced away, the effective Unit should be "1".
-    if map.is_empty() {
-        vec![term::UNITY]
+    if output.is_empty() {
+        Cow::Borrowed(crate::term::UNITY_ARRAY_REF)
     } else {
-        // Reconstructs the map into the Vec<Term>.
-        map.into_iter().map(Term::from).collect()
+        if output.len() > 1 {
+            output.retain(|t| !t.field_eq(&crate::term::UNITY));
+        }
+        output.into()
     }
 }
 
-/// Iterates through `terms`, finds `Term`s that have the same attributes that determine
-/// uniqueness (`atom`, `prefix`, `factor`), and sums those exponents. This is the destructuring
-/// part of `reduce_terms()`.
+/// This is the algorithm for determining if & how to combine or cancel out Terms when multiplying
+/// and dividing Units/Measurements.
 ///
-fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm, Exponent> {
-    terms
-        .iter()
-        .map(|term| {
-            (
-                ComposableTerm::from(term),
-                term.exponent.unwrap_or_else(num_traits::One::one),
-            )
-        })
-        .fold(
-            BTreeMap::<ComposableTerm, Exponent>::new(),
-            |mut map, (key, exponent)| {
-                let _ = map
-                    .entry(key)
-                    .and_modify(|entry| *entry += exponent)
-                    .or_insert(exponent);
+/// * `lhs_terms`: The `Term`s from the left-hand side of the operation.
+/// * `rhs_terms`: The `Term`s from the right-hand side of the operation.
+///
+pub(super) fn meow(lhs_terms: &[Term], rhs_terms: Vec<Term>) -> Cow<'static, [Term]> {
+    let mut output: Vec<Term> = vec![];
+    let mut remaining_rhs = rhs_terms;
 
-                map
+    for lhs in lhs_terms {
+        let what_to_keep = lhs_single_rhs(lhs, &remaining_rhs);
+
+        if what_to_keep.keep_lhs {
+            output.push(lhs.clone());
+        }
+
+        output.extend(what_to_keep.new_terms);
+        remaining_rhs = what_to_keep.kept_terms;
+
+        // Break if there is nothing left on the RHS to compare the LHS to.
+        if remaining_rhs.is_empty() {
+            break;
+        }
+    }
+
+    output.extend_from_slice(&remaining_rhs);
+
+    cleanup(output)
+}
+
+#[derive(Debug)]
+struct WhatToKeep {
+    keep_lhs: bool,
+    new_terms: Vec<Term>,
+    kept_terms: Vec<Term>,
+}
+
+impl Default for WhatToKeep {
+    fn default() -> Self {
+        Self {
+            keep_lhs: true,
+            new_terms: Vec::default(),
+            kept_terms: Vec::default(),
+        }
+    }
+}
+
+// TODO: Change back to Cow
+fn lhs_single_rhs(lhs: &Term, rhs_terms: &[Term]) -> WhatToKeep {
+    let mut what_to_keep = WhatToKeep::default();
+
+    for (i, rhs) in rhs_terms.iter().enumerate() {
+        match lhs.term_reduce(rhs) {
+            ReducedTerm::ReducedToTerm(new_term) => {
+                what_to_keep.new_terms.push(new_term);
+                what_to_keep.keep_lhs = false;
+
+                if let Some(things) = rhs_terms.get((i + 1)..) {
+                    what_to_keep.kept_terms.extend_from_slice(things);
+                }
+
+                break;
+            }
+            ReducedTerm::ReducedAway => {
+                what_to_keep.keep_lhs = false;
+
+                if let Some(things) = rhs_terms.get((i + 1)..) {
+                    what_to_keep.kept_terms.extend_from_slice(things);
+                }
+                break;
+            }
+            ReducedTerm::NotReducible => {
+                what_to_keep.kept_terms.push(rhs.clone());
+            }
+        }
+    }
+
+    what_to_keep
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        term::{
+            variants::{
+                FactorPrefixAtomAnnotation, FactorPrefixAtomExponentAnnotation, PrefixAtom,
+                PrefixAtomExponent,
             },
-        )
-        .into_iter()
-        // Filter out things that have no values
-        .filter(|(ct, exponent)| ct.has_value() && !exponent.is_zero())
-        .collect()
+            UNITY,
+        },
+        Annotation, Atom, Prefix,
+    };
+
+    use super::*;
+
+    #[test]
+    fn empty_terms_test() {
+        assert_eq!(reduce_terms(&[]), vec![UNITY]);
+    }
+
+    #[test]
+    fn single_term_test() {
+        let term =
+            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                3,
+                Annotation::from("foo"),
+            ));
+        assert_eq!(reduce_terms(&[term.clone()]), vec![term]);
+    }
+
+    // NOTE: The two terms only differ in their `annotation`s here. (and `exponent`, but that field
+    // isn't used in grouping terms);
+    //
+    #[test]
+    fn two_unrelated_term_test() {
+        let term1 =
+            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                3,
+                Annotation::from("foo"),
+            ));
+        let term2 =
+            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
+                42,
+                Prefix::Kilo,
+                Atom::Gram,
+                2,
+                Annotation::from("bar"),
+            ));
+        assert_eq!(
+            reduce_terms(&[term1.clone(), term2.clone()]),
+            vec![term1, term2]
+        );
+    }
+
+    #[test]
+    fn two_related_term_test() {
+        let term1 =
+            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                3,
+                Annotation::from("foo"),
+            ));
+        let term2 =
+            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                -2,
+                Annotation::from("foo"),
+            ));
+
+        assert_eq!(
+            reduce_terms(&[term1, term2]),
+            vec![Term::FactorPrefixAtomAnnotation(
+                FactorPrefixAtomAnnotation::new(
+                    42,
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    Annotation::from("foo")
+                )
+            )]
+        );
+    }
+
+    #[test]
+    fn three_related_term_test() {
+        let term1 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, 3));
+        let term2 =
+            Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, -2));
+        let term3 = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
+
+        assert_eq!(
+            reduce_terms(&[term1, term2, term3]),
+            vec![Term::PrefixAtomExponent(PrefixAtomExponent::new(
+                Prefix::Kilo,
+                Atom::Meter,
+                2
+            ))]
+        );
+    }
+
+    #[test]
+    fn three_term_two_related_test() {
+        let term1 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, 3));
+        let term2 =
+            Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, -2));
+        let term3 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2));
+
+        assert_eq!(
+            reduce_terms(&[term1, term2, term3]),
+            vec![
+                Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter,)),
+                Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2))
+            ]
+        );
+    }
 }

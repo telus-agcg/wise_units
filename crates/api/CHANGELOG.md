@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+
+- `crate::Annotation` now wraps `String`s inside `Term`s.
+- New type: `crate::term::Builder`. Intended for internal use only, but had to make public to
+  use it in the `term!()` macro.
+- Added `parse_unit!()` macro as a shortcut to `Unit::from_str(foo).unwrap()`.
+- Added `assert_field_eq!()` macro to allow checking exact equality of objects (since current
+  implementation of `PartialEq` does not do this).
+- `Composition` now derives `Ord`.
+
+### Changed
+
+- `Term` refactored from `struct` to `enum` to represent only valid combinations of `factor`,
+  `prefix`, `atom`, `exponent`, and `annotation`.
+- `Term` fields (`factor`, `prefix`, `atom`, `exponent`, `annotation`) now only accessible
+  via accessor method.
+- `Term::new()` panics if passed only a `Prefix` (and no `Atom`).
+- `Term::is_unity()` is now `const`.
+- `impl Default for Term` now returns `term::UNITY` instead of a `Term` with 0 fields set.
+- `term!()` can now take, for `annotation`, any `T: ToString`.
+- `IsCompatibleWith` now has default implementation that compares the `Composition` of the LHS and
+  RHS types. As a result, `IsCompatibleWith` now also requires both sides `impl Composable`.
+- (Internal) `AnnotationComposition` now uses `&str` instead of `String` when determining an
+  annotated `Term`'s composition.
+
+### Removed
+
+- `Term::has_value()` removed because this behavior is now encoded in the type.
+- Removed because was initially erroneously made `pub`, but now no longer used:
+  - `Term::exponent_is_positive()`
+  - `Term::exponent_is_negative()`
+  - `Term::factor_and_is_not_one()`
+  - `Term::factor_as_u32()`
+- Removed `is_compatible_with::DefaultCompatibility` trait.
+
 ## [0.23.0] — 2024-05-30
 
 ### Added

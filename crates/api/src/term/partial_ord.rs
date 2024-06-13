@@ -7,54 +7,18 @@ use crate::{is_compatible_with::IsCompatibleWith, ucum_unit::UcumUnit, Term};
 ///
 /// ```rust
 /// use std::cmp::Ordering;
-/// use wise_units::{Atom, Prefix, Term};
+/// use wise_units::{Atom, Prefix, Term, term::variants::{FactorAtom, PrefixAtom}};
 ///
-/// let lhs = Term {
-///     factor: Some(1000),
-///     prefix: None,
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
-/// let rhs = Term {
-///     factor: None,
-///     prefix: Some(Prefix::Kilo),
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
+/// let lhs = Term::FactorAtom(FactorAtom::new(1000, Atom::Meter));
+/// let rhs = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
 /// assert_eq!(lhs.partial_cmp(&rhs), Some(Ordering::Equal));
 ///
-/// let lhs = Term {
-///     factor: None,
-///     prefix: None,
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
-/// let rhs = Term {
-///     factor: None,
-///     prefix: Some(Prefix::Kilo),
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
+/// let lhs = Term::Atom(Atom::Meter);
+/// let rhs = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
 /// assert_eq!(lhs.partial_cmp(&rhs), Some(Ordering::Less));
 ///
-/// let lhs = Term {
-///     factor: None,
-///     prefix: None,
-///     atom: Some(Atom::Meter),
-///     exponent: None,
-///     annotation: None
-/// };
-/// let rhs = Term {
-///     factor: None,
-///     prefix: None,
-///     atom: Some(Atom::Gram),
-///     exponent: None,
-///     annotation: None
-/// };
+/// let lhs = Term::Atom(Atom::Meter);
+/// let rhs = Term::Atom(Atom::Gram);
 /// assert_eq!(lhs.partial_cmp(&rhs), None);
 /// ```
 ///

@@ -58,7 +58,7 @@ impl<'a> Convertible<&'a Unit> for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use crate::testing::const_units::{KILOMETER, METER};
+    use crate::testing::const_units::l1::{KILOMETER, METER};
 
     use super::*;
     use approx::{assert_relative_eq, assert_ulps_eq};

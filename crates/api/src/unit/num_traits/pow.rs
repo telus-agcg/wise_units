@@ -9,8 +9,7 @@ impl Pow<Exponent> for Unit {
         Self::new(
             self.terms
                 .iter()
-                .cloned()
-                .map(|term| term.pow(rhs))
+                .map(|term| Pow::pow(term, rhs))
                 .collect::<Vec<_>>(),
         )
     }

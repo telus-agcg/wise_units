@@ -17,7 +17,10 @@ impl CommensurableEq<Composition> for Measurement {
 
 #[cfg(test)]
 mod tests {
-    use crate::testing::const_units::{GRAM, KILOMETER, METER};
+    use crate::testing::const_units::{
+        l1::{KILOMETER, METER},
+        m1::GRAM,
+    };
 
     use super::*;
 

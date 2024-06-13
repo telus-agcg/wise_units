@@ -74,15 +74,15 @@ mod tests {
 
     #[test]
     fn from_primitive_test() {
-        let output = Measurement::from_u32(std::u32::MAX).unwrap();
+        let output = Measurement::from_u32(u32::MAX).unwrap();
         assert_eq!(
-            Measurement::new(std::u32::MAX.into(), crate::unit::UNITY),
+            Measurement::new(u32::MAX.into(), crate::unit::UNITY),
             output
         );
 
-        let output = Measurement::from_i32(std::i32::MAX).unwrap();
+        let output = Measurement::from_i32(i32::MAX).unwrap();
         assert_eq!(
-            Measurement::new(std::i32::MAX.into(), crate::unit::UNITY),
+            Measurement::new(i32::MAX.into(), crate::unit::UNITY),
             output
         );
     }
@@ -91,15 +91,15 @@ mod tests {
     fn numcast_test() {
         use num_traits::NumCast;
 
-        let output = <Measurement as NumCast>::from(std::u32::MAX).unwrap();
+        let output = <Measurement as NumCast>::from(u32::MAX).unwrap();
         assert_eq!(
-            Measurement::new(std::u32::MAX.into(), crate::unit::UNITY),
+            Measurement::new(u32::MAX.into(), crate::unit::UNITY),
             output
         );
 
-        let output = <Measurement as NumCast>::from(std::i32::MIN).unwrap();
+        let output = <Measurement as NumCast>::from(i32::MIN).unwrap();
         assert_eq!(
-            Measurement::new(std::i32::MIN.into(), crate::unit::UNITY),
+            Measurement::new(i32::MIN.into(), crate::unit::UNITY),
             output
         );
     }

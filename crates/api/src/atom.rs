@@ -13,6 +13,7 @@ mod definition;
 mod display;
 mod function_set;
 mod hash;
+mod is_compatible_with;
 mod partial_eq;
 mod reducible;
 
@@ -2781,4 +2782,3 @@ impl UcumUnit for Atom {
         )
     }
 }
-impl DefaultCompatibility for Atom {}

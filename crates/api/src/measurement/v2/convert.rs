@@ -62,7 +62,9 @@ mod tests {
 
     mod to_fraction {
         use crate::{
-            testing::const_units::{GRAM_METER, METER, METER_PER_SECOND, PER_SECOND, SECOND},
+            testing::const_units::{
+                l1::METER, l1m1::GRAM_METER, l1t_1::METER_PER_SECOND, t1::SECOND, t_1::PER_SECOND,
+            },
             unit::UNITY,
             Measurement,
         };
@@ -137,7 +139,7 @@ mod tests {
 
         use approx::{assert_relative_eq, assert_ulps_eq};
 
-        use crate::testing::const_units::{KILOMETER, METER};
+        use crate::testing::const_units::l1::{KILOMETER, METER};
 
         use super::*;
 

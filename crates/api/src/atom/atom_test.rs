@@ -1,6 +1,5 @@
 //! These tests are for the dynamically generated `symbol_parser` module.
 //!
-#![cfg(test)]
 
 use approx::{assert_relative_eq, assert_ulps_eq};
 

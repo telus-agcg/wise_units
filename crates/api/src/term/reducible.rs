@@ -2,25 +2,104 @@ use std::borrow::Cow;
 
 use num_traits::One;
 
-use crate::{reducible::Reducible, UcumSymbol};
+use crate::{reducible::Reducible, Atom, UcumSymbol};
 
-use super::{Exponent, Factor, Term};
+use super::{
+    variants::{
+        AtomAnnotation, AtomExponent, AtomExponentAnnotation, FactorAnnotation, FactorAtom,
+        FactorAtomAnnotation, FactorAtomExponent, FactorAtomExponentAnnotation, FactorExponent,
+        FactorExponentAnnotation, FactorPrefixAtom, FactorPrefixAtomAnnotation,
+        FactorPrefixAtomExponent, FactorPrefixAtomExponentAnnotation, PrefixAtom,
+        PrefixAtomAnnotation, PrefixAtomExponent, PrefixAtomExponentAnnotation,
+    },
+    Term,
+};
 
 impl Reducible<f64> for Term {
     fn reduce_value(&self, value: f64) -> f64 {
-        let atom_scalar = self.atom.map_or_else(One::one, |a| a.reduce_value(value));
-        let prefix_scalar = self.prefix.map_or_else(One::one, |p| p.definition_value());
-
-        combine_term_values(atom_scalar, prefix_scalar, self.factor, self.exponent)
+        calculate(self, value, Reducible::reduce_value)
     }
 
     fn calculate_magnitude(&self, value: f64) -> f64 {
-        let atom_magnitude = self
-            .atom
-            .map_or_else(One::one, |a| a.calculate_magnitude(value));
-        let prefix_magnitude = self.prefix.map_or_else(One::one, |p| p.definition_value());
+        calculate(self, value, Atom::calculate_magnitude)
+    }
+}
 
-        combine_term_values(atom_magnitude, prefix_magnitude, self.factor, self.exponent)
+fn calculate<F>(term: &Term, value: f64, atom_function: F) -> f64
+where
+    F: Fn(&Atom, f64) -> f64,
+{
+    match term {
+        Term::Annotation(_) => One::one(),
+        Term::Atom(atom) | Term::AtomAnnotation(AtomAnnotation { atom, .. }) => {
+            atom_function(atom, value)
+        }
+        Term::AtomExponent(AtomExponent { atom, exponent })
+        | Term::AtomExponentAnnotation(AtomExponentAnnotation { atom, exponent, .. }) => {
+            atom_function(atom, value).powi(*exponent)
+        }
+        Term::PrefixAtom(PrefixAtom { prefix, atom })
+        | Term::PrefixAtomAnnotation(PrefixAtomAnnotation { prefix, atom, .. }) => {
+            prefix.definition_value() * atom_function(atom, value)
+        }
+        Term::PrefixAtomExponent(PrefixAtomExponent {
+            prefix,
+            atom,
+            exponent,
+        })
+        | Term::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation {
+            prefix,
+            atom,
+            exponent,
+            ..
+        }) => (prefix.definition_value() * atom_function(atom, value)).powi(*exponent),
+        Term::Factor(factor) | Term::FactorAnnotation(FactorAnnotation { factor, .. }) => {
+            f64::from(*factor)
+        }
+        Term::FactorExponent(FactorExponent { factor, exponent })
+        | Term::FactorExponentAnnotation(FactorExponentAnnotation {
+            factor, exponent, ..
+        }) => f64::from(*factor).powi(*exponent),
+        Term::FactorAtom(FactorAtom { factor, atom })
+        | Term::FactorAtomAnnotation(FactorAtomAnnotation { factor, atom, .. }) => {
+            f64::from(*factor) * atom_function(atom, value)
+        }
+        Term::FactorAtomExponent(FactorAtomExponent {
+            factor,
+            atom,
+            exponent,
+        })
+        | Term::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation {
+            factor,
+            atom,
+            exponent,
+            ..
+        }) => (f64::from(*factor) * atom_function(atom, value)).powi(*exponent),
+        Term::FactorPrefixAtom(FactorPrefixAtom {
+            factor,
+            prefix,
+            atom,
+        })
+        | Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation {
+            factor,
+            prefix,
+            atom,
+            ..
+        }) => f64::from(*factor) * prefix.definition_value() * atom_function(atom, value),
+        Term::FactorPrefixAtomExponent(FactorPrefixAtomExponent {
+            factor,
+            prefix,
+            atom,
+            exponent,
+        })
+        | Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation {
+            factor,
+            prefix,
+            atom,
+            exponent,
+            ..
+        }) => (f64::from(*factor) * prefix.definition_value() * atom_function(atom, value))
+            .powi(*exponent),
     }
 }
 
@@ -35,23 +114,6 @@ impl<'a> Reducible<f64> for Cow<'a, [Term]> {
             acc * term.calculate_magnitude(value)
         })
     }
-}
-
-fn combine_term_values(
-    calculated_atom: f64,
-    calculated_prefix: f64,
-    factor: Option<Factor>,
-    exponent: Option<Exponent>,
-) -> f64 {
-    let a_p_product = calculated_atom * calculated_prefix;
-
-    factor.map_or_else(
-        || exponent.map_or(a_p_product, |e| a_p_product.powi(e)),
-        |f| {
-            let product = a_p_product * f64::from(f);
-            exponent.map_or(product, |e| product.powi(e))
-        },
-    )
 }
 
 #[cfg(test)]

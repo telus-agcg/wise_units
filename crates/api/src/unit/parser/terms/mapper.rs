@@ -19,7 +19,7 @@ use pest::iterators::{Pair, Pairs};
 
 use crate::{
     unit::parser::{Error, Visit},
-    Atom, Prefix, Term,
+    Term,
 };
 
 use self::{

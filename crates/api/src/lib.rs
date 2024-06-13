@@ -21,6 +21,7 @@
 #[macro_use]
 mod macros;
 
+pub(crate) mod annotation;
 pub mod as_fraction;
 pub mod atom;
 pub mod classification;
@@ -33,11 +34,10 @@ pub mod is_compatible_with;
 pub mod measurement;
 pub mod property;
 pub mod reduce;
+pub mod term;
 pub mod unit;
 #[cfg(feature = "v2")]
 pub mod v2;
-
-pub(crate) mod term;
 
 mod composable;
 mod dimension;
@@ -49,8 +49,11 @@ mod ucum_symbol;
 mod ucum_unit;
 
 pub use crate::{
-    atom::Atom, classification::Classification, composable::Composable, composition::Composition,
-    convertible::Convertible, dimension::Dimension, error::Error, field_eq::FieldEq,
-    is_compatible_with::IsCompatibleWith, measurement::Measurement, prefix::Prefix,
-    property::Property, term::Term, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit, unit::Unit,
+    annotation::Annotation, atom::Atom, classification::Classification, composable::Composable,
+    composition::Composition, convertible::Convertible, dimension::Dimension, error::Error,
+    field_eq::FieldEq, is_compatible_with::IsCompatibleWith, measurement::Measurement,
+    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit,
+    unit::Unit,
 };
+
+pub use num_traits;

@@ -116,6 +116,16 @@ impl Measurement {
             self.scalar() / other_unit.reduce_value(One::one())
         }
     }
+
+    /// Intended for comparing `Unit`s or `Measurements`, when the order of the `Term`s in a `Unit`
+    /// don't hold order (they're not sorted) after some operations. This allows tests to sort them
+    /// and thus tests to have valid expectations.
+    ///
+    #[cfg(test)]
+    pub(crate) fn sort_terms(&mut self) -> &mut Self {
+        let _ = self.unit.sort_terms();
+        self
+    }
 }
 
 impl AsRef<Self> for Measurement {
