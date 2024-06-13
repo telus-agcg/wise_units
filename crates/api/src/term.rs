@@ -348,7 +348,6 @@ impl Term {
             | Self::Factor(_)
             | Self::FactorAtom { .. }
             | Self::FactorExponent { .. }
-            | Self::FactorExponentAnnotation { .. }
             | Self::FactorAtomExponent { .. }
             | Self::FactorPrefixAtom { .. }
             | Self::FactorPrefixAtomExponent { .. } => None,
@@ -360,6 +359,7 @@ impl Term {
                 annotation, ..
             })
             | Self::FactorAnnotation(FactorAnnotation { annotation, .. })
+            | Self::FactorExponentAnnotation(FactorExponentAnnotation { annotation, .. })
             | Self::FactorAtomAnnotation(FactorAtomAnnotation { annotation, .. })
             | Self::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation {
                 annotation, ..
