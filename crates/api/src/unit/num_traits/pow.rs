@@ -9,8 +9,7 @@ impl Pow<Exponent> for Unit {
         Self::new(
             self.terms
                 .iter()
-                .cloned()
-                .map(|term| term.pow(rhs))
+                .map(|term| Pow::pow(term, rhs))
                 .collect::<Vec<_>>(),
         )
     }
@@ -34,7 +33,7 @@ impl<'a> Pow<Exponent> for &'a mut Unit {
 
     fn pow(self, rhs: Exponent) -> Self::Output {
         self.terms.to_mut().iter_mut().for_each(|term| {
-            let _ = Pow::pow(term.clone(), rhs);
+            let _ = Pow::pow(term, rhs);
         });
         self
     }
