@@ -34,7 +34,7 @@ impl<'a> Pow<Exponent> for &'a mut Unit {
 
     fn pow(self, rhs: Exponent) -> Self::Output {
         self.terms.to_mut().iter_mut().for_each(|term| {
-            let _ = Pow::pow(term, rhs);
+            let _ = Pow::pow(term.clone(), rhs);
         });
         self
     }

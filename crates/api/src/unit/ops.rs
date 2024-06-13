@@ -14,7 +14,7 @@ fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
     terms.extend_from_slice(lhs);
 
     for term in rhs {
-        terms.push(term.inv());
+        terms.push(term.clone().inv());
     }
 
     term_reducing::reduce_terms(&terms)

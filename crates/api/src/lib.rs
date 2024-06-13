@@ -21,6 +21,7 @@
 #[macro_use]
 mod macros;
 
+pub(crate) mod annotation;
 pub mod as_fraction;
 pub mod atom;
 pub mod classification;
@@ -49,8 +50,9 @@ mod ucum_symbol;
 mod ucum_unit;
 
 pub use crate::{
-    atom::Atom, classification::Classification, composable::Composable, composition::Composition,
-    convertible::Convertible, dimension::Dimension, error::Error, field_eq::FieldEq,
-    is_compatible_with::IsCompatibleWith, measurement::Measurement, prefix::Prefix,
-    property::Property, term::Term, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit, unit::Unit,
+    annotation::Annotation, atom::Atom, classification::Classification, composable::Composable,
+    composition::Composition, convertible::Convertible, dimension::Dimension, error::Error,
+    field_eq::FieldEq, is_compatible_with::IsCompatibleWith, measurement::Measurement,
+    prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit,
+    unit::Unit,
 };

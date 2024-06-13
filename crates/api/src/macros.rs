@@ -20,17 +20,20 @@ macro_rules! unit {
 #[macro_export]
 #[allow(clippy::field_reassign_with_default)]
 macro_rules! term {
-    (@params $term:expr, $attribute_name:ident: $attribute_value:expr) => {
-        $term.$attribute_name = Some($attribute_value);
+    (@params $builder:expr, $attribute_name:ident: $attribute_value:expr) => {
+        $builder = $builder.$attribute_name($attribute_value);
     };
 
     ($prefix:ident, $atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = $crate::Term::new(Some($crate::Prefix::$prefix), Some($crate::Atom::$atom));
+            let mut builder = $crate::term::Builder::default()
+                .prefix($crate::Prefix::$prefix)
+                .atom($crate::Atom::$atom);
+
             $(
-                term!(@params term, $attribute_name: $attribute_value);
+                term!(@params builder, $attribute_name: $attribute_value);
             )+
-            term
+            builder.build()
         }
     };
 
@@ -40,25 +43,26 @@ macro_rules! term {
 
     ($atom:ident, $($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = $crate::Term::new(None, Some($crate::Atom::$atom));
+            let mut builder = $crate::term::Builder::default()
+                .atom($crate::Atom::$atom);
             $(
-                term!(@params term, $attribute_name: $attribute_value);
+                term!(@params builder, $attribute_name: $attribute_value);
             )+
-            term
+            builder.build()
         }
     };
 
     ($atom:ident) => {
-        $crate::Term::new(None, Some($crate::Atom::$atom))
+        $crate::Term::Atom($crate::Atom::$atom)
     };
 
     ($($attribute_name:ident: $attribute_value:expr),+) => {
         {
-            let mut term = $crate::Term::default();
+            let mut builder = $crate::term::Builder::default();
             $(
-                term!(@params term, $attribute_name: $attribute_value);
+                term!(@params builder, $attribute_name: $attribute_value);
             )+
-            term
+            builder.build()
         }
     };
 

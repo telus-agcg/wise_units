@@ -18,17 +18,15 @@ impl AsFraction for Unit {
         let mut parts = Parts::default();
 
         for term in &*self.terms {
-            match term.exponent {
-                Some(e) => {
-                    if e.is_negative() {
-                        parts.denominators.push(term.inv());
+            match term.exponent() {
+                Some(exponent) => {
+                    if exponent.is_negative() {
+                        parts.denominators.push(term.clone().inv());
                     } else {
                         parts.numerators.push(term.clone());
                     }
                 }
-                None => {
-                    parts.numerators.push(term.clone());
-                }
+                None => parts.numerators.push(term.clone()),
             }
         }
 
@@ -48,7 +46,7 @@ impl AsFraction for Unit {
         let positive_terms: Vec<Term> = self
             .terms
             .iter()
-            .filter(|term| term.exponent.unwrap_or(1).is_positive())
+            .filter(|term| term.effective_exponent().is_positive())
             .cloned()
             .collect();
 
@@ -64,8 +62,8 @@ impl AsFraction for Unit {
         let negative_terms: Vec<Term> = self
             .terms
             .iter()
-            .filter_map(|term| match term.exponent {
-                Some(e) if e.is_negative() => Some(term.inv()),
+            .filter_map(|term| match term.exponent() {
+                Some(e) if e.is_negative() => Some(term.clone().inv()),
                 _ => None,
             })
             .collect();

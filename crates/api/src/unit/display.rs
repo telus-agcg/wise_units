@@ -21,17 +21,20 @@ fn decompose(terms: &[Term]) -> (Vec<Cow<'_, str>>, Vec<String>) {
     let mut denominators = Vec::new();
 
     for term in terms {
-        if let Some(exponent) = term.exponent {
-            if exponent.is_positive() {
+        match term.exponent() {
+            Some(exponent) if exponent.is_positive() => {
                 numerators.push(term.as_cow_str());
-            } else {
-                let mut positive_exponent_term = term.clone();
-                positive_exponent_term.exponent = Some(exponent.abs());
-
-                denominators.push(positive_exponent_term.to_string());
             }
-        } else {
-            numerators.push(term.as_cow_str());
+            Some(exponent) => {
+                let positive_exponent_term = term.clone();
+
+                denominators.push(
+                    positive_exponent_term
+                        .assign_exponent(exponent.abs())
+                        .to_string(),
+                );
+            }
+            None => numerators.push(term.as_cow_str()),
         }
     }
 

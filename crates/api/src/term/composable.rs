@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use crate::{Composable, Composition};
 
-use super::Term;
+use super::{variants::*, Term};
 
 impl Composable for Term {
     /// Combines the `Composition` from the `Term`'s `Atom` with its own `exponent` to build a
@@ -13,15 +13,43 @@ impl Composable for Term {
     //
     #[allow(clippy::redundant_closure)]
     fn composition(&self) -> Composition {
-        self.atom.map_or_else(
-            || Composition::default(),
-            |atom| {
-                let atom_composition = atom.composition();
-                self.exponent.map_or(atom_composition, |term_exponent| {
-                    atom_composition * term_exponent
-                })
-            },
-        )
+        match self {
+            Self::Annotation(_)
+            | Self::Factor(_)
+            | Self::FactorAnnotation { .. }
+            | Self::FactorExponent { .. }
+            | Self::FactorExponentAnnotation { .. } => Composition::default(),
+            Self::Atom(atom)
+            | Self::AtomAnnotation(AtomAnnotation { atom, .. })
+            | Self::PrefixAtom(PrefixAtom { atom, .. })
+            | Self::PrefixAtomAnnotation(PrefixAtomAnnotation { atom, .. })
+            | Self::FactorAtom(FactorAtom { atom, .. })
+            | Self::FactorAtomAnnotation(FactorAtomAnnotation { atom, .. })
+            | Self::FactorPrefixAtom(FactorPrefixAtom { atom, .. })
+            | Self::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation { atom, .. }) => {
+                atom.composition()
+            }
+            Self::AtomExponent(AtomExponent { atom, exponent })
+            | Self::AtomExponentAnnotation(AtomExponentAnnotation { atom, exponent, .. })
+            | Self::PrefixAtomExponent(PrefixAtomExponent { atom, exponent, .. })
+            | Self::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation {
+                atom,
+                exponent,
+                ..
+            })
+            | Self::FactorAtomExponent(FactorAtomExponent { atom, exponent, .. })
+            | Self::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation {
+                atom,
+                exponent,
+                ..
+            })
+            | Self::FactorPrefixAtomExponent(FactorPrefixAtomExponent { atom, exponent, .. })
+            | Self::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation {
+                atom,
+                exponent,
+                ..
+            }) => atom.composition() * *exponent,
+        }
     }
 }
 

@@ -28,8 +28,7 @@ mod tests {
     fn validate_annotation() {
         let unit = Unit::from_str("{foo}").unwrap();
         let term = unit.terms.first().unwrap();
-        let annotation = &term.annotation;
 
-        assert_eq!(annotation, &Some("foo".to_string()));
+        assert_eq!(term.annotation(), Some("foo"));
     }
 }

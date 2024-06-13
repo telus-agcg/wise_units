@@ -72,23 +72,26 @@ impl ToReduced for Unit {
                     continue 'outer;
                 }
 
-                if outer_term.atom == inner_term.atom
-                    && outer_term.factor == inner_term.factor
-                    && outer_term.annotation == inner_term.annotation
+                if outer_term.atom() == inner_term.atom()
+                    && outer_term.factor() == inner_term.factor()
+                    && outer_term.annotation() == inner_term.annotation()
                 {
                     let mut new_term = outer_term.clone();
 
-                    new_term.exponent = match (new_term.exponent, inner_term.exponent) {
-                        (None, None) => None,
-                        (None, Some(rhs)) => Some(rhs),
-                        (Some(lhs), None) => Some(lhs),
+                    match (outer_term.exponent(), inner_term.exponent()) {
+                        (None, None) => (),
+                        (None, Some(rhs)) => {
+                            new_term = new_term.assign_exponent(rhs);
+                        }
+                        (Some(lhs), None) => {
+                            new_term = new_term.assign_exponent(lhs);
+                        }
                         (Some(lhs), Some(rhs)) => {
                             let x = lhs + rhs;
 
                             if x == 0 || x == 1 {
-                                None
                             } else {
-                                Some(x)
+                                new_term = new_term.assign_exponent(x);
                             }
                         }
                     };

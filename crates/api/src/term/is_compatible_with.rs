@@ -35,7 +35,7 @@ use super::annotation_composable::AnnotationComposable;
 ///
 impl IsCompatibleWith for Term {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
-        self.composition() == rhs.composition() && self.annotation == rhs.annotation
+        self.composition() == rhs.composition() && self.annotation() == rhs.annotation()
     }
 }
 
