@@ -1,5 +1,3 @@
-use std::mem;
-
 use num_traits::Pow;
 
 use crate::{
@@ -118,7 +116,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 }
             },
             Term::AtomAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(()) => (),
                 PowOutput::Rest(atom_exponent_annotation) => {
                     *self = Term::AtomExponentAnnotation(atom_exponent_annotation);
@@ -130,7 +128,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 PowOutput::Rest(()) => (),
             },
             Term::AtomExponentAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(atom_annotation) => *self = Term::AtomAnnotation(atom_annotation),
                 PowOutput::Rest(()) => (),
             },
@@ -142,7 +140,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 }
             },
             Term::PrefixAtomAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(()) => (),
                 PowOutput::Rest(prefix_atom_exponent_annotation) => {
                     *self = Term::PrefixAtomExponentAnnotation(prefix_atom_exponent_annotation);
@@ -154,7 +152,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 PowOutput::Rest(()) => (),
             },
             Term::PrefixAtomExponentAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(prefix_atom_annotation) => {
                     *self = Term::PrefixAtomAnnotation(prefix_atom_annotation);
                 }
@@ -171,7 +169,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 }
             },
             Term::FactorAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(()) => (),
                 PowOutput::Rest(factor_exponent_annotation) => {
                     *self = Term::FactorExponentAnnotation(factor_exponent_annotation);
@@ -182,7 +180,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 PowOutput::Rest(()) => (),
             },
             Term::FactorExponentAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(factor_annotation) => {
                     *self = Term::FactorAnnotation(factor_annotation);
                 }
@@ -196,7 +194,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 }
             },
             Term::FactorAtomAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(()) => (),
                 PowOutput::Rest(factor_atom_exponent_annotation) => {
                     *self = Term::FactorAtomExponentAnnotation(factor_atom_exponent_annotation);
@@ -208,7 +206,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 PowOutput::Rest(()) => (),
             },
             Term::FactorAtomExponentAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(factor_atom_annotation) => {
                     *self = Term::FactorAtomAnnotation(factor_atom_annotation);
                 }
@@ -222,7 +220,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 }
             },
             Term::FactorPrefixAtomAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(()) => (),
                 PowOutput::Rest(factor_prefix_atom_exponent_annotation) => {
                     *self = Term::FactorPrefixAtomExponentAnnotation(
@@ -238,7 +236,7 @@ impl<'a> Pow<Exponent> for &'a mut Term {
                 PowOutput::Rest(()) => (),
             },
             Term::FactorPrefixAtomExponentAnnotation(inner) => match inner.pow(rhs) {
-                PowOutput::Zero(annotation) => *self = Term::Annotation(mem::take(annotation)),
+                PowOutput::Zero(annotation) => *self = Term::Annotation(annotation),
                 PowOutput::One(factor_prefix_atom_annotation) => {
                     *self = Term::FactorPrefixAtomAnnotation(factor_prefix_atom_annotation);
                 }

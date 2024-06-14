@@ -26,11 +26,11 @@ fn decompose(terms: &[Term]) -> (Vec<Cow<'_, str>>, Vec<String>) {
                 numerators.push(term.as_cow_str());
             }
             Some(exponent) => {
-                let positive_exponent_term = term.clone();
+                let mut positive_exponent_term = term.clone();
 
                 denominators.push(
                     positive_exponent_term
-                        .assign_exponent(exponent.abs())
+                        .set_exponent(exponent.abs())
                         .to_string(),
                 );
             }

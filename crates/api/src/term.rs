@@ -197,32 +197,31 @@ impl Term {
     pub(crate) fn set_factor(&mut self, new_factor: Factor) -> &mut Self {
         match self {
             Self::Annotation(annotation) => {
-                *self = Self::FactorAnnotation(annotation.assign_factor_mut(new_factor));
+                *self = Self::FactorAnnotation(annotation.assign_factor(new_factor));
             }
             Self::Atom(atom) => {
-                *self = Self::FactorAtom(atom.assign_factor_mut(new_factor));
+                *self = Self::FactorAtom(atom.assign_factor(new_factor));
             }
             Self::AtomAnnotation(inner) => {
-                *self = Self::FactorAtomAnnotation(inner.assign_factor_mut(new_factor));
+                *self = Self::FactorAtomAnnotation(inner.assign_factor(new_factor));
             }
             Self::AtomExponent(inner) => {
-                *self = Self::FactorAtomExponent(inner.assign_factor_mut(new_factor));
+                *self = Self::FactorAtomExponent(inner.assign_factor(new_factor));
             }
             Self::AtomExponentAnnotation(inner) => {
-                *self = Self::FactorAtomExponentAnnotation(inner.assign_factor_mut(new_factor));
+                *self = Self::FactorAtomExponentAnnotation(inner.assign_factor(new_factor));
             }
             Self::PrefixAtom(inner) => {
-                *self = Self::FactorPrefixAtom(inner.assign_factor_mut(new_factor));
+                *self = Self::FactorPrefixAtom(inner.assign_factor(new_factor));
             }
             Self::PrefixAtomAnnotation(inner) => {
-                *self = Self::FactorPrefixAtomAnnotation(inner.assign_factor_mut(new_factor));
+                *self = Self::FactorPrefixAtomAnnotation(inner.assign_factor(new_factor));
             }
             Self::PrefixAtomExponent(inner) => {
-                *self = Self::FactorPrefixAtomExponent(inner.assign_factor_mut(new_factor));
+                *self = Self::FactorPrefixAtomExponent(inner.assign_factor(new_factor));
             }
             Self::PrefixAtomExponentAnnotation(inner) => {
-                *self =
-                    Self::FactorPrefixAtomExponentAnnotation(inner.assign_factor_mut(new_factor));
+                *self = Self::FactorPrefixAtomExponentAnnotation(inner.assign_factor(new_factor));
             }
             Self::Factor(factor)
             | Self::FactorAnnotation(FactorAnnotation { factor, .. })
@@ -375,30 +374,113 @@ impl Term {
         }
     }
 
-    pub(crate) fn assign_exponent(self, exponent: Exponent) -> Self {
+    pub(crate) fn set_exponent(&mut self, exponent: Exponent) -> &mut Self {
         match self {
-            Self::Annotation(annotation) => annotation.assign_exponent(exponent),
-            Self::Atom(atom) => atom.assign_exponent(exponent),
-            Self::AtomAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::AtomExponent(inner) => inner.assign_exponent(exponent),
-            Self::AtomExponentAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::PrefixAtom(inner) => inner.assign_exponent(exponent),
-            Self::PrefixAtomAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::PrefixAtomExponent(inner) => inner.assign_exponent(exponent),
-            Self::PrefixAtomExponentAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::Factor(factor) => factor.assign_exponent(exponent),
-            Self::FactorAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::FactorExponent(inner) => inner.assign_exponent(exponent),
-            Self::FactorExponentAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::FactorAtom(inner) => inner.assign_exponent(exponent),
-            Self::FactorAtomAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::FactorAtomExponent(inner) => inner.assign_exponent(exponent),
-            Self::FactorAtomExponentAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::FactorPrefixAtomExponent(inner) => inner.assign_exponent(exponent),
-            Self::FactorPrefixAtomExponentAnnotation(inner) => inner.assign_exponent(exponent),
-            Self::FactorPrefixAtom(inner) => inner.assign_exponent(exponent),
-            Self::FactorPrefixAtomAnnotation(inner) => inner.assign_exponent(exponent),
+            Self::Annotation(annotation) => match annotation.set_exponent(exponent) {
+                PowOutput::Zero(()) | PowOutput::One(()) => (),
+                PowOutput::Rest(fea) => *self = Self::FactorExponentAnnotation(fea),
+            },
+            Self::Atom(atom) => match atom.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(ae) => *self = Self::AtomExponent(ae),
+            },
+            Self::AtomAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(aea) => *self = Self::AtomExponentAnnotation(aea),
+            },
+            Self::AtomExponent(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(atom) => *self = Self::Atom(atom),
+                PowOutput::Rest(()) => (),
+            },
+            Self::AtomExponentAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(atom_annotation) => *self = Self::AtomAnnotation(atom_annotation),
+                PowOutput::Rest(()) => (),
+            },
+            Self::PrefixAtom(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(pae) => *self = Self::PrefixAtomExponent(pae),
+            },
+            Self::PrefixAtomAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(paea) => *self = Self::PrefixAtomExponentAnnotation(paea),
+            },
+            Self::PrefixAtomExponent(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(prefix_atom) => *self = Self::PrefixAtom(prefix_atom),
+                PowOutput::Rest(()) => (),
+            },
+            Self::PrefixAtomExponentAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(paa) => *self = Self::PrefixAtomAnnotation(paa),
+                PowOutput::Rest(()) => (),
+            },
+            Self::Factor(factor) => match factor.set_exponent(exponent) {
+                PowOutput::Zero(()) | PowOutput::One(()) => (),
+                PowOutput::Rest(fe) => *self = Self::FactorExponent(fe),
+            },
+            Self::FactorAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(fea) => *self = Self::FactorExponentAnnotation(fea),
+            },
+            Self::FactorExponent(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) | PowOutput::One(factor) => *self = Self::Factor(factor),
+                PowOutput::Rest(()) => (),
+            },
+            Self::FactorExponentAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(factor_annotation) => *self = factor_annotation.into(),
+                PowOutput::Rest(()) => (),
+            },
+            Self::FactorAtom(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(fae) => *self = Self::FactorAtomExponent(fae),
+            },
+            Self::FactorAtomAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(faea) => *self = Self::FactorAtomExponentAnnotation(faea),
+            },
+            Self::FactorAtomExponent(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(factor_atom) => *self = Self::FactorAtom(factor_atom),
+                PowOutput::Rest(()) => (),
+            },
+            Self::FactorAtomExponentAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(faa) => *self = Self::FactorAtomAnnotation(faa),
+                PowOutput::Rest(()) => (),
+            },
+            Self::FactorPrefixAtomExponent(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(fpa) => *self = Self::FactorPrefixAtom(fpa),
+                PowOutput::Rest(()) => (),
+            },
+            Self::FactorPrefixAtomExponentAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(fpaa) => *self = Self::FactorPrefixAtomAnnotation(fpaa),
+                PowOutput::Rest(()) => (),
+            },
+            Self::FactorPrefixAtom(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(factor) => *self = Self::Factor(factor),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(fpae) => *self = fpae.into(),
+            },
+            Self::FactorPrefixAtomAnnotation(inner) => match inner.set_exponent(exponent) {
+                PowOutput::Zero(annotation) => *self = Self::Annotation(annotation),
+                PowOutput::One(()) => (),
+                PowOutput::Rest(fpaea) => *self = fpaea.into(),
+            },
         }
+
+        self
     }
 
     /// A `Term` is a unity `Term` if represents "1", which technically means
@@ -463,6 +545,8 @@ impl Default for Term {
 
 #[cfg(test)]
 mod tests {
+    use crate::FieldEq;
+
     use super::*;
 
     fn subject_annotation() -> Annotation {
@@ -483,7 +567,7 @@ mod tests {
 
                 let _ = $subject.set_factor(42);
                 assert_eq!($subject.factor().unwrap(), 42);
-                assert_eq!($subject, $expected);
+                assert!($subject.field_eq(&$expected));
             };
         }
 
@@ -593,7 +677,7 @@ mod tests {
                     Prefix::Kilo,
                     Atom::Meter,
                     43,
-                    Annotation::from("meow"),
+                    subject_annotation(),
                 ));
             assert_set_factor_no_factor!(
                 subject => Term::FactorPrefixAtomExponentAnnotation(
@@ -616,7 +700,7 @@ mod tests {
         #[test]
         fn factor_annotation_test() {
             let mut subject =
-                Term::FactorAnnotation(FactorAnnotation::new(42, Annotation::from("meow")));
+                Term::FactorAnnotation(FactorAnnotation::new(42, subject_annotation()));
             assert_set_factor_has_factor!(subject);
         }
 
@@ -647,7 +731,7 @@ mod tests {
             let mut subject = Term::FactorAtomAnnotation(FactorAtomAnnotation::new(
                 42,
                 Atom::Meter,
-                Annotation::from("meow"),
+                subject_annotation(),
             ));
             assert_set_factor_has_factor!(subject);
         }
@@ -662,7 +746,7 @@ mod tests {
         #[test]
         fn factor_atom_exponent_annotation_test() {
             let mut subject = Term::FactorAtomExponentAnnotation(
-                FactorAtomExponentAnnotation::new(42, Atom::Meter, 43, Annotation::from("meow")),
+                FactorAtomExponentAnnotation::new(42, Atom::Meter, 43, subject_annotation()),
             );
             assert_set_factor_has_factor!(subject);
         }
@@ -680,7 +764,7 @@ mod tests {
                 42,
                 Prefix::Kilo,
                 Atom::Meter,
-                Annotation::from("meow"),
+                subject_annotation(),
             ));
             assert_set_factor_has_factor!(subject);
         }
@@ -704,9 +788,242 @@ mod tests {
                     Prefix::Kilo,
                     Atom::Meter,
                     43,
-                    Annotation::from("meow"),
+                    subject_annotation(),
                 ));
             assert_set_factor_has_factor!(subject);
+        }
+    }
+
+    mod exponent {
+        use super::*;
+
+        macro_rules! assert_set_exponent_no_exponent {
+            ($subject:ident => $expected:expr) => {
+                assert!($subject.exponent().is_none());
+
+                let _ = $subject.set_exponent(3);
+                assert_eq!($subject.exponent().unwrap(), 3);
+                assert!(
+                    $subject.field_eq(&$expected),
+                    "{:?}\n{:?}",
+                    &$subject,
+                    $expected
+                );
+            };
+        }
+
+        macro_rules! assert_set_exponent_has_exponent {
+            ($subject:ident) => {
+                assert_eq!($subject.exponent().unwrap(), 2);
+                let _ = $subject.set_exponent(3);
+                assert_eq!($subject.exponent().unwrap(), 3);
+            };
+        }
+
+        #[test]
+        fn annotation_test() {
+            let mut subject = Term::Annotation(subject_annotation());
+            assert_set_exponent_no_exponent!(subject => Term::FactorExponentAnnotation(
+                    FactorExponentAnnotation::new(1, 3, subject_annotation())
+            ));
+        }
+
+        #[test]
+        fn atom_test() {
+            let mut subject = Term::Atom(Atom::Meter);
+            assert_set_exponent_no_exponent!(subject => Term::AtomExponent(AtomExponent::new(Atom::Meter, 3)));
+        }
+
+        #[test]
+        fn atom_annotation_test() {
+            let mut subject =
+                Term::AtomAnnotation(AtomAnnotation::new(Atom::Meter, subject_annotation()));
+
+            assert_set_exponent_no_exponent!(
+                subject => Term::AtomExponentAnnotation(AtomExponentAnnotation::new(
+                        Atom::Meter,
+                        3,
+                        subject_annotation()))
+            );
+        }
+
+        #[test]
+        fn atom_exponent_test() {
+            let mut subject = Term::AtomExponent(AtomExponent::new(Atom::Meter, 2));
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn atom_exponent_annotation_test() {
+            let mut subject = Term::AtomExponentAnnotation(AtomExponentAnnotation::new(
+                Atom::Meter,
+                2,
+                subject_annotation(),
+            ));
+
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn prefix_atom_test() {
+            let mut subject = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
+
+            assert_set_exponent_no_exponent!(
+                subject => Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, 3))
+            );
+        }
+
+        #[test]
+        fn prefix_atom_annotation_test() {
+            let mut subject = Term::PrefixAtomAnnotation(PrefixAtomAnnotation::new(
+                Prefix::Kilo,
+                Atom::Meter,
+                subject_annotation(),
+            ));
+            assert_set_exponent_no_exponent!(
+                subject => Term::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation::new(
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    3,
+                    subject_annotation()
+                ))
+            );
+        }
+
+        #[test]
+        fn prefix_atom_exponent_test() {
+            let mut subject =
+                Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, 2));
+
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn prefix_atom_exponent_annotation_test() {
+            let mut subject =
+                Term::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation::new(
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    2,
+                    subject_annotation(),
+                ));
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn factor_test() {
+            let mut subject = Term::Factor(42);
+            assert_set_exponent_no_exponent!(subject => Term::FactorExponent(FactorExponent::new(42, 3)));
+        }
+
+        #[test]
+        fn factor_annotation_test() {
+            let mut subject =
+                Term::FactorAnnotation(FactorAnnotation::new(42, subject_annotation()));
+            assert_set_exponent_no_exponent!(
+                subject => Term::FactorExponentAnnotation(FactorExponentAnnotation::new(42, 3, subject_annotation()))
+            );
+        }
+
+        #[test]
+        fn factor_exponent_test() {
+            let mut subject = Term::FactorExponent(FactorExponent::new(42, 2));
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn factor_exponent_annotation_test() {
+            let mut subject = Term::FactorExponentAnnotation(FactorExponentAnnotation::new(
+                42,
+                2,
+                subject_annotation(),
+            ));
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn factor_atom_test() {
+            let mut subject = Term::FactorAtom(FactorAtom::new(42, Atom::Meter));
+
+            assert_set_exponent_no_exponent!(
+                subject => Term::FactorAtomExponent(FactorAtomExponent::new(42, Atom::Meter, 3))
+            );
+        }
+
+        #[test]
+        fn factor_atom_annotation_test() {
+            let mut subject = Term::FactorAtomAnnotation(FactorAtomAnnotation::new(
+                42,
+                Atom::Meter,
+                subject_annotation(),
+            ));
+            assert_set_exponent_no_exponent!(
+                subject => Term::FactorAtomExponentAnnotation(
+                    FactorAtomExponentAnnotation::new(42, Atom::Meter, 3, subject_annotation())
+                )
+            );
+        }
+
+        #[test]
+        fn factor_atom_exponent_test() {
+            let mut subject = Term::FactorAtomExponent(FactorAtomExponent::new(42, Atom::Meter, 2));
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn factor_atom_exponent_annotation_test() {
+            let mut subject = Term::FactorAtomExponentAnnotation(
+                FactorAtomExponentAnnotation::new(42, Atom::Meter, 2, subject_annotation()),
+            );
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn factor_prefix_atom_test() {
+            let mut subject =
+                Term::FactorPrefixAtom(FactorPrefixAtom::new(42, Prefix::Kilo, Atom::Meter));
+            assert_set_exponent_no_exponent!(
+                subject => Term::FactorPrefixAtomExponent(FactorPrefixAtomExponent::new(42, Prefix::Kilo, Atom::Meter, 3))
+            );
+        }
+
+        #[test]
+        fn factor_prefix_atom_annotation_test() {
+            let mut subject = Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                subject_annotation(),
+            ));
+            assert_set_exponent_no_exponent!(
+                subject =>  Term::FactorPrefixAtomExponentAnnotation(
+                    FactorPrefixAtomExponentAnnotation::new(42, Prefix::Kilo, Atom::Meter, 3, subject_annotation())
+                )
+            );
+        }
+
+        #[test]
+        fn factor_prefix_atom_exponent_test() {
+            let mut subject = Term::FactorPrefixAtomExponent(FactorPrefixAtomExponent::new(
+                42,
+                Prefix::Kilo,
+                Atom::Meter,
+                2,
+            ));
+            assert_set_exponent_has_exponent!(subject);
+        }
+
+        #[test]
+        fn factor_prefix_atom_exponent_annotation_test() {
+            let mut subject =
+                Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
+                    42,
+                    Prefix::Kilo,
+                    Atom::Meter,
+                    2,
+                    subject_annotation(),
+                ));
+            assert_set_exponent_has_exponent!(subject);
         }
     }
 
