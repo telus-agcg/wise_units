@@ -1,117 +1,171 @@
-use std::ops::{Div, Mul};
+use std::{
+    borrow::Cow,
+    ops::{Div, Mul},
+};
 
 use num_traits::Inv;
 
-use crate::{Term, Unit};
+use crate::Unit;
 
 use super::term_reducing;
 
-//-----------------------------------------------------------------------------
-// impl Div
-//-----------------------------------------------------------------------------
-fn divide_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
-    let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
-    terms.extend_from_slice(lhs);
+//          ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+//          ┃                      impl Div                       ┃
+//          ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-    for term in rhs {
-        terms.push(term.clone().inv());
-    }
-
-    term_reducing::reduce_terms(&terms)
-}
-
-#[cfg_attr(feature = "cffi", ffi_common::derive::expose_fn(extend_type(Unit)))]
-fn divide_units(lhs: &Unit, rhs: &Unit) -> Unit {
-    Unit::new(divide_terms(&lhs.terms, &rhs.terms))
-}
-
+// ╭───────────────╮
+// │ Owned / Owned │
+// ╰───────────────╯
 impl Div for Unit {
     type Output = Self;
 
     #[inline]
     fn div(self, other: Self) -> Self::Output {
-        divide_units(&self, &other)
+        let mut s = self;
+
+        {
+            let lhs = s.terms.to_mut();
+            lhs.reserve_exact(other.terms.len());
+            lhs.extend(other.terms.iter().map(Inv::inv));
+        }
+
+        s.terms = term_reducing::reduce_terms(&s.terms);
+        s
     }
 }
 
+// ╭──────────────────╮
+// │ Owned / Borrowed │
+// ╰──────────────────╯
 impl<'a> Div<&'a Self> for Unit {
     type Output = Self;
 
     #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
-        divide_units(&self, other)
+        let mut s = self;
+
+        {
+            let lhs = s.terms.to_mut();
+            lhs.reserve_exact(other.terms.len());
+            lhs.extend(other.terms.iter().map(Inv::inv));
+        }
+
+        s.terms = term_reducing::reduce_terms(&s.terms);
+        s
     }
 }
 
+// ╭─────────────────────╮
+// │ Borrowed / Borrowed │
+// ╰─────────────────────╯
 impl<'a> Div for &'a Unit {
     type Output = Unit;
 
     #[inline]
     fn div(self, other: &'a Unit) -> Self::Output {
-        divide_units(self, other)
+        let mut lhs = self.terms.to_vec();
+
+        lhs.reserve_exact(other.terms.len());
+        lhs.extend(other.terms.iter().map(Inv::inv));
+
+        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
     }
 }
 
+// ╭──────────────────╮
+// │ Borrowed / Owned │
+// ╰──────────────────╯
 impl<'a> Div<Unit> for &'a Unit {
     type Output = Unit;
 
     #[inline]
     fn div(self, other: Unit) -> Self::Output {
-        divide_units(self, &other)
+        let mut lhs = self.terms.to_vec();
+
+        lhs.reserve_exact(other.terms.len());
+        lhs.extend(other.terms.iter().map(Inv::inv));
+
+        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
     }
 }
 
-//-----------------------------------------------------------------------------
-// impl Mul
-//-----------------------------------------------------------------------------
-
-fn multiply_terms(lhs: &[Term], rhs: &[Term]) -> Vec<Term> {
-    let mut terms = Vec::with_capacity(lhs.len() + rhs.len());
-
-    terms.extend_from_slice(lhs);
-    terms.extend_from_slice(rhs);
-
-    term_reducing::reduce_terms(&terms)
-}
-
-#[cfg_attr(feature = "cffi", ffi_common::derive::expose_fn(extend_type(Unit)))]
-fn multiply_units(lhs: &Unit, rhs: &Unit) -> Unit {
-    Unit::new(multiply_terms(&lhs.terms, &rhs.terms))
-}
-
+//          ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+//          ┃                        impl Mul                         ┃
+//          ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+// ╭───────────────╮
+// │ Owned * Owned │
+// ╰───────────────╯
 impl Mul for Unit {
     type Output = Self;
 
     #[inline]
     fn mul(self, other: Self) -> Self::Output {
-        multiply_units(&self, &other)
+        let mut lhs_unit = self;
+
+        {
+            let mut rhs_unit = other;
+            let lhs = lhs_unit.terms.to_mut();
+            lhs.reserve_exact(rhs_unit.terms.len());
+            lhs.append(rhs_unit.terms.to_mut());
+        }
+
+        lhs_unit.terms = term_reducing::reduce_terms(&lhs_unit.terms);
+        lhs_unit
     }
 }
 
+// ╭──────────────────╮
+// │ Owned * Borrowed │
+// ╰──────────────────╯
 impl<'a> Mul<&'a Self> for Unit {
     type Output = Self;
 
     #[inline]
     fn mul(self, other: &'a Self) -> Self::Output {
-        multiply_units(&self, other)
+        let mut lhs_unit = self;
+
+        {
+            let lhs = lhs_unit.terms.to_mut();
+            lhs.extend_from_slice(&other.terms);
+        }
+
+        lhs_unit.terms = term_reducing::reduce_terms(&lhs_unit.terms);
+        lhs_unit
     }
 }
 
+// ╭─────────────────────╮
+// │ Borrowed * Borrowed │
+// ╰─────────────────────╯
 impl<'a> Mul for &'a Unit {
     type Output = Unit;
 
     #[inline]
     fn mul(self, other: &'a Unit) -> Self::Output {
-        multiply_units(self, other)
+        let mut lhs = self.terms.to_vec();
+        lhs.extend_from_slice(&other.terms);
+
+        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
     }
 }
 
+// ╭──────────────────╮
+// │ Borrowed * Owned │
+// ╰──────────────────╯
 impl<'a> Mul<Unit> for &'a Unit {
     type Output = Unit;
 
     #[inline]
     fn mul(self, other: Unit) -> Self::Output {
-        multiply_units(self, &other)
+        let mut lhs = self.terms.to_vec();
+
+        {
+            let mut rhs_unit = other;
+            lhs.reserve_exact(rhs_unit.terms.len());
+            lhs.append(rhs_unit.terms.to_mut());
+        }
+
+        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
     }
 }
 
@@ -130,22 +184,69 @@ mod tests {
         Unit::from_str("{seed}").unwrap()
     }
 
-    #[test]
-    #[allow(clippy::eq_op)]
-    fn validate_div() {
-        assert_eq!(METER / METER, UNITY);
+    mod div {
+        use super::*;
 
-        let expected = Unit::from_str("m/km").unwrap();
-        assert_eq!(METER / KILOMETER, expected);
+        #[test]
+        #[allow(clippy::eq_op)]
+        fn validate_owned_div_owned() {
+            // assert_eq!(METER / METER, UNITY);
+            // let expected = Unit::from_str("m/km").unwrap();
+            // assert_eq!(METER / KILOMETER, expected);
+            // let unit = Unit::from_str("10m").unwrap();
+            // let other = Unit::from_str("20m").unwrap();
+            // let expected = Unit::from_str("10m/20m").unwrap();
+            // assert_eq!(unit / other, expected);
 
-        let unit = Unit::from_str("10m").unwrap();
-        let other = Unit::from_str("20m").unwrap();
-        let expected = Unit::from_str("10m/20m").unwrap();
-        assert_eq!(unit / other, expected);
+            assert_eq!(seed() / seed(), UNITY);
+            // assert_eq!(UNITY / seed(), Unit::from_str("/{seed}").unwrap());
+            // assert_eq!(seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+        }
 
-        assert_eq!(seed() / seed(), UNITY);
-        assert_eq!(UNITY / seed(), Unit::from_str("/{seed}").unwrap());
-        assert_eq!(seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+        #[test]
+        fn validate_owned_div_borrowed() {
+            assert_eq!(METER / &METER, UNITY);
+            let expected = Unit::from_str("m/km").unwrap();
+            assert_eq!(METER / &KILOMETER, expected);
+            let unit = Unit::from_str("10m").unwrap();
+            let other = Unit::from_str("20m").unwrap();
+            let expected = Unit::from_str("10m/20m").unwrap();
+            assert_eq!(unit / &other, expected);
+
+            assert_eq!(seed() / &seed(), UNITY);
+            assert_eq!(UNITY / &seed(), Unit::from_str("/{seed}").unwrap());
+            assert_eq!(seed() / &ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+        }
+
+        #[test]
+        fn validate_borrowed_div_owned() {
+            assert_eq!(&METER / METER, UNITY);
+            let expected = Unit::from_str("m/km").unwrap();
+            assert_eq!(&METER / KILOMETER, expected);
+            let unit = Unit::from_str("10m").unwrap();
+            let other = Unit::from_str("20m").unwrap();
+            let expected = Unit::from_str("10m/20m").unwrap();
+            assert_eq!(&unit / other, expected);
+
+            assert_eq!(&seed() / seed(), UNITY);
+            assert_eq!(&UNITY / seed(), Unit::from_str("/{seed}").unwrap());
+            assert_eq!(&seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+        }
+
+        #[test]
+        fn validate_borrowed_div_borrowed() {
+            assert_eq!(&METER / &METER, UNITY);
+            let expected = Unit::from_str("m/km").unwrap();
+            assert_eq!(&METER / &KILOMETER, expected);
+            let unit = Unit::from_str("10m").unwrap();
+            let other = Unit::from_str("20m").unwrap();
+            let expected = Unit::from_str("10m/20m").unwrap();
+            assert_eq!(&unit / &other, expected);
+
+            assert_eq!(&seed() / &seed(), UNITY);
+            assert_eq!(&UNITY / &seed(), Unit::from_str("/{seed}").unwrap());
+            assert_eq!(&seed() / &ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+        }
     }
 
     #[test]

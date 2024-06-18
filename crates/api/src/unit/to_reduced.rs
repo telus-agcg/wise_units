@@ -81,18 +81,15 @@ impl ToReduced for Unit {
                     match (outer_term.exponent(), inner_term.exponent()) {
                         (None, None) => (),
                         (None, Some(rhs)) => {
-                            new_term = new_term.assign_exponent(rhs);
+                            let _ = new_term.set_exponent(rhs);
                         }
                         (Some(lhs), None) => {
-                            new_term = new_term.assign_exponent(lhs);
+                            let _ = new_term.set_exponent(lhs);
                         }
                         (Some(lhs), Some(rhs)) => {
                             let x = lhs + rhs;
 
-                            if x == 0 || x == 1 {
-                            } else {
-                                new_term = new_term.assign_exponent(x);
-                            }
+                            let _ = new_term.set_exponent(x);
                         }
                     };
                     terms[i] = Some(Cow::Owned(new_term));
