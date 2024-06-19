@@ -155,7 +155,7 @@ mod tests {
     use std::str::FromStr;
 
     use crate::{
-        testing::const_units::{ACRE, KILOMETER, METER},
+        testing::const_units::{ACRE, KILOMETER, METER, METER_PER_SECOND},
         unit::UNITY,
     };
 
@@ -171,17 +171,17 @@ mod tests {
         #[test]
         #[allow(clippy::eq_op)]
         fn validate_owned_div_owned() {
-            // assert_eq!(METER / METER, UNITY);
-            // let expected = Unit::from_str("m/km").unwrap();
-            // assert_eq!(METER / KILOMETER, expected);
-            // let unit = Unit::from_str("10m").unwrap();
-            // let other = Unit::from_str("20m").unwrap();
-            // let expected = Unit::from_str("10m/20m").unwrap();
-            // assert_eq!(unit / other, expected);
+            assert_eq!(METER / METER, UNITY);
+            let expected = Unit::from_str("m/km").unwrap();
+            assert_eq!(METER / KILOMETER, expected);
+            let unit = Unit::from_str("10m").unwrap();
+            let other = Unit::from_str("20m").unwrap();
+            let expected = Unit::from_str("10m/20m").unwrap();
+            assert_eq!(unit / other, expected);
 
             assert_eq!(seed() / seed(), UNITY);
-            // assert_eq!(UNITY / seed(), Unit::from_str("/{seed}").unwrap());
-            // assert_eq!(seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+            assert_eq!(UNITY / seed(), Unit::from_str("/{seed}").unwrap());
+            assert_eq!(seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
         }
 
         #[test]
@@ -245,5 +245,7 @@ mod tests {
 
         let seed_per_acre = Unit::from_str("{seed}/[acr_us]").unwrap();
         assert_eq!(seed_per_acre * ACRE, seed());
+
+        assert_eq!(METER_PER_SECOND * Unit::from_str("s/m").unwrap(), UNITY);
     }
 }
