@@ -1,7 +1,4 @@
-use std::{
-    borrow::Cow,
-    ops::{Div, Mul},
-};
+use std::ops::{Div, Mul};
 
 use num_traits::Inv;
 
@@ -21,16 +18,11 @@ impl Div for Unit {
 
     #[inline]
     fn div(self, other: Self) -> Self::Output {
-        let mut s = self;
+        let mut lhs = self.terms.to_vec();
+        lhs.reserve_exact(other.terms.len());
+        lhs.extend(other.terms.iter().map(Inv::inv));
 
-        {
-            let lhs = s.terms.to_mut();
-            lhs.reserve_exact(other.terms.len());
-            lhs.extend(other.terms.iter().map(Inv::inv));
-        }
-
-        s.terms = term_reducing::reduce_terms(&s.terms);
-        s
+        Self::new(term_reducing::reduce_terms(lhs))
     }
 }
 
@@ -42,16 +34,12 @@ impl<'a> Div<&'a Self> for Unit {
 
     #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
-        let mut s = self;
+        let mut lhs = self.terms.to_vec();
 
-        {
-            let lhs = s.terms.to_mut();
-            lhs.reserve_exact(other.terms.len());
-            lhs.extend(other.terms.iter().map(Inv::inv));
-        }
+        lhs.reserve_exact(other.terms.len());
+        lhs.extend(other.terms.iter().map(Inv::inv));
 
-        s.terms = term_reducing::reduce_terms(&s.terms);
-        s
+        Self::new(term_reducing::reduce_terms(lhs))
     }
 }
 
@@ -68,7 +56,7 @@ impl<'a> Div for &'a Unit {
         lhs.reserve_exact(other.terms.len());
         lhs.extend(other.terms.iter().map(Inv::inv));
 
-        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
+        Unit::new(term_reducing::reduce_terms(lhs))
     }
 }
 
@@ -85,7 +73,7 @@ impl<'a> Div<Unit> for &'a Unit {
         lhs.reserve_exact(other.terms.len());
         lhs.extend(other.terms.iter().map(Inv::inv));
 
-        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
+        Unit::new(term_reducing::reduce_terms(lhs))
     }
 }
 
@@ -100,17 +88,15 @@ impl Mul for Unit {
 
     #[inline]
     fn mul(self, other: Self) -> Self::Output {
-        let mut lhs_unit = self;
+        let mut lhs = self.terms.to_vec();
 
         {
             let mut rhs_unit = other;
-            let lhs = lhs_unit.terms.to_mut();
             lhs.reserve_exact(rhs_unit.terms.len());
             lhs.append(rhs_unit.terms.to_mut());
         }
 
-        lhs_unit.terms = term_reducing::reduce_terms(&lhs_unit.terms);
-        lhs_unit
+        Self::new(term_reducing::reduce_terms(lhs))
     }
 }
 
@@ -122,15 +108,10 @@ impl<'a> Mul<&'a Self> for Unit {
 
     #[inline]
     fn mul(self, other: &'a Self) -> Self::Output {
-        let mut lhs_unit = self;
+        let mut lhs = self.terms.to_vec();
+        lhs.extend_from_slice(&other.terms);
 
-        {
-            let lhs = lhs_unit.terms.to_mut();
-            lhs.extend_from_slice(&other.terms);
-        }
-
-        lhs_unit.terms = term_reducing::reduce_terms(&lhs_unit.terms);
-        lhs_unit
+        Self::new(term_reducing::reduce_terms(lhs))
     }
 }
 
@@ -145,7 +126,7 @@ impl<'a> Mul for &'a Unit {
         let mut lhs = self.terms.to_vec();
         lhs.extend_from_slice(&other.terms);
 
-        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
+        Unit::new(term_reducing::reduce_terms(lhs))
     }
 }
 
@@ -165,7 +146,7 @@ impl<'a> Mul<Unit> for &'a Unit {
             lhs.append(rhs_unit.terms.to_mut());
         }
 
-        Unit::new(term_reducing::reduce_terms(&Cow::Owned(lhs)))
+        Unit::new(term_reducing::reduce_terms(lhs))
     }
 }
 

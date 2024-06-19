@@ -32,7 +32,14 @@ use crate::{
 
 /// Function used in `Unit` for reducing its `Term`s.
 ///
-pub(super) fn reduce_terms<'b, 'a: 'b>(terms: &'b Cow<'a, [Term]>) -> Cow<'a, [Term]> {
+/// This takes `terms` by value due to how this function sits in relation to `Unit`: any time
+/// `reduce_terms()` is called, we're going from some set of terms to 1) the same set, 2) a set
+/// with some elements removed, or 3) a set without any elements. By taking the `Term`s by value
+/// here instead of references, there's a good chance we can reuse some of those `Term`s in the
+/// result of this call (if we passed a reference/slice instead, we'd have to clone the originals,
+/// and this is most likely to happen).
+///
+pub(super) fn reduce_terms(terms: Vec<Term>) -> Cow<'static, [Term]> {
     let map = reduce_to_map(terms);
 
     // If everything is reduced away, the effective Unit should be "1".
@@ -48,16 +55,17 @@ pub(super) fn reduce_terms<'b, 'a: 'b>(terms: &'b Cow<'a, [Term]>) -> Cow<'a, [T
 /// uniqueness (`atom`, `prefix`, `factor`), and sums those exponents. This is the destructuring
 /// part of `reduce_terms()`.
 ///
-fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm<'_>, Exponent> {
+fn reduce_to_map(terms: Vec<Term>) -> BTreeMap<ComposableTerm, Exponent> {
     let mut map = BTreeMap::new();
 
     for term in terms {
+        let exponent = term.effective_exponent();
         let key = ComposableTerm::from(term);
 
         let _ = map
             .entry(key)
-            .and_modify(|entry| *entry += term.effective_exponent())
-            .or_insert_with(|| term.effective_exponent());
+            .and_modify(|entry| *entry += exponent)
+            .or_insert_with(|| exponent);
     }
 
     // If the summing of an exponent is 0, that means it has been reduced away (so remove it from
@@ -69,37 +77,37 @@ fn reduce_to_map(terms: &[Term]) -> BTreeMap<ComposableTerm<'_>, Exponent> {
 
 /// Internal enum used for reducing `Term`s.
 ///
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord)]
-struct ComposableTerm<'a> {
+#[derive(Debug, Default, PartialEq, Eq, PartialOrd, Ord)]
+struct ComposableTerm {
     factor: Option<Factor>,
     prefix: Option<Prefix>,
     atom: Option<Atom>,
-    annotation: Option<&'a str>,
+    annotation: Option<Annotation>,
 }
 
-impl<'a> ComposableTerm<'a> {
-    const fn set_factor(self, factor: Factor) -> Self {
+impl ComposableTerm {
+    fn set_factor(self, factor: Factor) -> Self {
         Self {
             factor: Some(factor),
             ..self
         }
     }
 
-    const fn set_prefix(self, prefix: Prefix) -> Self {
+    fn set_prefix(self, prefix: Prefix) -> Self {
         Self {
             prefix: Some(prefix),
             ..self
         }
     }
 
-    const fn set_atom(self, atom: Atom) -> Self {
+    fn set_atom(self, atom: Atom) -> Self {
         Self {
             atom: Some(atom),
             ..self
         }
     }
 
-    const fn set_annotation(self, annotation: &'a str) -> Self {
+    fn set_annotation(self, annotation: Annotation) -> Self {
         Self {
             annotation: Some(annotation),
             ..self
@@ -107,22 +115,20 @@ impl<'a> ComposableTerm<'a> {
     }
 }
 
-impl<'a> From<&'a Term> for ComposableTerm<'a> {
-    fn from(term: &'a Term) -> Self {
+impl From<Term> for ComposableTerm {
+    fn from(term: Term) -> Self {
         match term {
-            Term::Annotation(annotation) => Self::default().set_annotation(annotation.as_str()),
+            Term::Annotation(annotation) => Self::default().set_annotation(annotation),
             Term::Atom(atom) | Term::AtomExponent(AtomExponent { atom, .. }) => {
-                Self::default().set_atom(*atom)
+                Self::default().set_atom(atom)
             }
             Term::AtomAnnotation(AtomAnnotation { atom, annotation })
             | Term::AtomExponentAnnotation(AtomExponentAnnotation {
                 atom, annotation, ..
-            }) => Self::default()
-                .set_atom(*atom)
-                .set_annotation(annotation.as_str()),
+            }) => Self::default().set_atom(atom).set_annotation(annotation),
             Term::PrefixAtom(PrefixAtom { prefix, atom })
             | Term::PrefixAtomExponent(PrefixAtomExponent { prefix, atom, .. }) => {
-                Self::default().set_prefix(*prefix).set_atom(*atom)
+                Self::default().set_prefix(prefix).set_atom(atom)
             }
             Term::PrefixAtomAnnotation(PrefixAtomAnnotation {
                 prefix,
@@ -135,22 +141,22 @@ impl<'a> From<&'a Term> for ComposableTerm<'a> {
                 annotation,
                 ..
             }) => Self::default()
-                .set_prefix(*prefix)
-                .set_atom(*atom)
-                .set_annotation(annotation.as_str()),
+                .set_prefix(prefix)
+                .set_atom(atom)
+                .set_annotation(annotation),
             Term::Factor(factor) | Term::FactorExponent(FactorExponent { factor, .. }) => {
-                Self::default().set_factor(*factor)
+                Self::default().set_factor(factor)
             }
             Term::FactorAnnotation(FactorAnnotation { factor, annotation })
             | Term::FactorExponentAnnotation(FactorExponentAnnotation {
                 factor, annotation, ..
             }) => Self::default()
-                .set_factor(*factor)
-                .set_annotation(annotation.as_str()),
+                .set_factor(factor)
+                .set_annotation(annotation),
 
             Term::FactorAtom(FactorAtom { factor, atom })
             | Term::FactorAtomExponent(FactorAtomExponent { factor, atom, .. }) => {
-                Self::default().set_factor(*factor).set_atom(*atom)
+                Self::default().set_factor(factor).set_atom(atom)
             }
             Term::FactorAtomAnnotation(FactorAtomAnnotation {
                 factor,
@@ -163,9 +169,9 @@ impl<'a> From<&'a Term> for ComposableTerm<'a> {
                 annotation,
                 ..
             }) => Self::default()
-                .set_factor(*factor)
-                .set_atom(*atom)
-                .set_annotation(annotation.as_str()),
+                .set_factor(factor)
+                .set_atom(atom)
+                .set_annotation(annotation),
             Term::FactorPrefixAtom(FactorPrefixAtom {
                 factor,
                 prefix,
@@ -177,9 +183,9 @@ impl<'a> From<&'a Term> for ComposableTerm<'a> {
                 atom,
                 ..
             }) => Self::default()
-                .set_factor(*factor)
-                .set_prefix(*prefix)
-                .set_atom(*atom),
+                .set_factor(factor)
+                .set_prefix(prefix)
+                .set_atom(atom),
             Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation {
                 factor,
                 prefix,
@@ -193,43 +199,43 @@ impl<'a> From<&'a Term> for ComposableTerm<'a> {
                 annotation,
                 ..
             }) => Self::default()
-                .set_factor(*factor)
-                .set_prefix(*prefix)
-                .set_atom(*atom)
-                .set_annotation(annotation.as_str()),
+                .set_factor(factor)
+                .set_prefix(prefix)
+                .set_atom(atom)
+                .set_annotation(annotation),
         }
     }
 }
 
 // NOTE: To be clear, this is only for when the `Term` has NO `exponent`.
 //
-impl<'a> From<ComposableTerm<'a>> for Term {
-    fn from(value: ComposableTerm<'a>) -> Self {
+impl From<ComposableTerm> for Term {
+    fn from(value: ComposableTerm) -> Self {
         match (value.factor, value.prefix, value.atom, value.annotation) {
             (None, None, None, None) => unreachable!(),
-            (None, None, None, Some(ann)) => Self::Annotation(Annotation::from(ann)),
+            (None, None, None, Some(ann)) => Self::Annotation(ann),
             (None, None, Some(atom), None) => Self::Atom(atom),
             (None, None, Some(atom), Some(ann)) => {
-                Self::AtomAnnotation(AtomAnnotation::new(atom, Annotation::from(ann)))
+                Self::AtomAnnotation(AtomAnnotation::new(atom, ann))
             }
             (None, Some(_prefix), None, None) => unreachable!(),
             (None, Some(_prefix), None, Some(_ann)) => unreachable!(),
             (None, Some(prefix), Some(atom), None) => {
                 Self::PrefixAtom(PrefixAtom::new(prefix, atom))
             }
-            (None, Some(prefix), Some(atom), Some(ann)) => Self::PrefixAtomAnnotation(
-                PrefixAtomAnnotation::new(prefix, atom, Annotation::from(ann)),
-            ),
+            (None, Some(prefix), Some(atom), Some(ann)) => {
+                Self::PrefixAtomAnnotation(PrefixAtomAnnotation::new(prefix, atom, ann))
+            }
             (Some(factor), None, None, None) => Self::Factor(factor),
             (Some(factor), None, None, Some(ann)) => {
-                Self::FactorAnnotation(FactorAnnotation::new(factor, Annotation::from(ann)))
+                Self::FactorAnnotation(FactorAnnotation::new(factor, ann))
             }
             (Some(factor), None, Some(atom), None) => {
                 Self::FactorAtom(FactorAtom::new(factor, atom))
             }
-            (Some(factor), None, Some(atom), Some(ann)) => Self::FactorAtomAnnotation(
-                FactorAtomAnnotation::new(factor, atom, Annotation::from(ann)),
-            ),
+            (Some(factor), None, Some(atom), Some(ann)) => {
+                Self::FactorAtomAnnotation(FactorAtomAnnotation::new(factor, atom, ann))
+            }
             (Some(_factor), Some(_prefix), None, None) => unreachable!(),
             (Some(_factor), Some(_prefix), None, Some(_ann)) => unreachable!(),
             (Some(factor), Some(prefix), Some(atom), None) => {
@@ -237,27 +243,22 @@ impl<'a> From<ComposableTerm<'a>> for Term {
             }
             (Some(factor), Some(prefix), Some(atom), Some(ann)) => {
                 Self::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation::new(
-                    factor,
-                    prefix,
-                    atom,
-                    Annotation::from(ann),
+                    factor, prefix, atom, ann,
                 ))
             }
         }
     }
 }
 
-type Parts<'a> = (ComposableTerm<'a>, Exponent);
+type Parts = (ComposableTerm, Exponent);
 
-impl<'a> From<Parts<'a>> for Term {
-    fn from(parts: Parts<'a>) -> Self {
+impl From<Parts> for Term {
+    fn from(parts: Parts) -> Self {
         match parts.1 {
             // For anything to the 0th power:
             // - any variant that has an annotation, keep only the annotation
             // - all other variants, return the Unity (1).
-            0 => parts.0.annotation.map_or(UNITY, |annotation| {
-                Self::Annotation(Annotation::from(annotation))
-            }),
+            0 => parts.0.annotation.map_or(UNITY, Self::Annotation),
 
             exponent => {
                 let mut t = Self::from(parts.0);
@@ -274,7 +275,7 @@ mod tests {
 
     #[test]
     fn empty_terms_test() {
-        assert_eq!(reduce_terms(&Cow::Borrowed(&[])), vec![UNITY]);
+        assert_eq!(reduce_terms(vec![]), vec![UNITY]);
     }
 
     #[test]
@@ -287,7 +288,7 @@ mod tests {
                 3,
                 Annotation::from("foo"),
             ));
-        assert_eq!(reduce_terms(&Cow::Borrowed(&[term.clone()])), vec![term]);
+        assert_eq!(reduce_terms(vec![term.clone()]), vec![term]);
     }
 
     // NOTE: The two terms only differ in their `annotation`s here. (and `exponent`, but that field
@@ -312,7 +313,7 @@ mod tests {
                 Annotation::from("bar"),
             ));
         assert_eq!(
-            reduce_terms(&Cow::Borrowed(&[term1.clone(), term2.clone()])),
+            reduce_terms(vec![term1.clone(), term2.clone()]),
             vec![term1, term2]
         );
     }
@@ -337,7 +338,7 @@ mod tests {
             ));
 
         assert_eq!(
-            reduce_terms(&Cow::Borrowed(&[term1, term2])),
+            reduce_terms(vec![term1, term2]),
             vec![Term::FactorPrefixAtomAnnotation(
                 FactorPrefixAtomAnnotation::new(
                     42,
@@ -357,7 +358,7 @@ mod tests {
         let term3 = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
 
         assert_eq!(
-            reduce_terms(&Cow::Borrowed(&[term1, term2, term3])),
+            reduce_terms(vec![term1, term2, term3]),
             vec![Term::PrefixAtomExponent(PrefixAtomExponent::new(
                 Prefix::Kilo,
                 Atom::Meter,
@@ -374,7 +375,7 @@ mod tests {
         let term3 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2));
 
         assert_eq!(
-            reduce_terms(&Cow::Borrowed(&[term1, term2, term3])),
+            reduce_terms(vec![term1, term2, term3]),
             vec![
                 Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter,)),
                 Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2))

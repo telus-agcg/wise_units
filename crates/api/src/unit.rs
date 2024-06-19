@@ -161,7 +161,7 @@ impl Unit {
     #[inline]
     #[must_use]
     pub fn expression_reduced(&self) -> String {
-        let reduced = term_reducing::reduce_terms(&self.terms);
+        let reduced = term_reducing::reduce_terms(self.terms.to_vec());
 
         Self::new(reduced).to_string()
     }

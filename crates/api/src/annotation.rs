@@ -2,7 +2,7 @@ use std::fmt;
 
 use crate::Term;
 
-#[derive(Default, Clone, Debug, PartialEq, Eq)]
+#[derive(Default, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Annotation(String);
 
 impl Annotation {
