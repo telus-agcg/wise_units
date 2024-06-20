@@ -12,6 +12,13 @@ macro_rules! unit {
     };
 }
 
+#[macro_export]
+macro_rules! parse_unit {
+    ($unit_str:expr) => {
+        $crate::Unit::from_str($unit_str).unwrap()
+    };
+}
+
 /// The `term!` macro makes building `Term`s slightly more ergonomic and terse.
 /// It was initially made for testing purposes (since `Term`s are really mainly
 /// used by internal APIs), but since they are used all over the place, it may
