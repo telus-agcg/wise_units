@@ -85,6 +85,17 @@ macro_rules! terms {
     };
 }
 
+#[macro_export]
+macro_rules! assert_field_eq {
+    ($lhs:expr, $rhs:expr $(,)?) => {
+        assert!($crate::FieldEq::field_eq(&$lhs, $rhs));
+    };
+
+    ($lhs:expr, $rhs:expr, $($arg:tt)+) => {
+        assert!($crate::FieldEq::field_eq(&$lhs, $rhs), $($arg)+);
+    };
+}
+
 #[cfg(test)]
 mod tests {
     use crate::{Atom, Prefix, Term};

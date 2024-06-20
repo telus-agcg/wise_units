@@ -13,6 +13,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - New type: `crate::term::Builder`. Intended for internal use only, but had to make public to
   use it in the `term!()` macro.
 - Added `parse_unit!()` macro as a shortcut to `Unit::from_str(foo).unwrap()`.
+- Added `assert_field_eq!()` macro to allow checking exact equality of objects (since current
+  implementation of `PartialEq` does not do this).
 
 ### Changed
 
