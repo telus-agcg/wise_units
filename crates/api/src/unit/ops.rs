@@ -22,7 +22,7 @@ impl Div for Unit {
         lhs.reserve_exact(other.terms.len());
         lhs.extend(other.terms.iter().map(Inv::inv));
 
-        Self::new(term_reducing::reduce_terms(lhs))
+        Self::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -39,7 +39,7 @@ impl<'a> Div<&'a Self> for Unit {
         lhs.reserve_exact(other.terms.len());
         lhs.extend(other.terms.iter().map(Inv::inv));
 
-        Self::new(term_reducing::reduce_terms(lhs))
+        Self::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -56,7 +56,7 @@ impl<'a> Div for &'a Unit {
         lhs.reserve_exact(other.terms.len());
         lhs.extend(other.terms.iter().map(Inv::inv));
 
-        Unit::new(term_reducing::reduce_terms(lhs))
+        Unit::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -73,7 +73,7 @@ impl<'a> Div<Unit> for &'a Unit {
         lhs.reserve_exact(other.terms.len());
         lhs.extend(other.terms.iter().map(Inv::inv));
 
-        Unit::new(term_reducing::reduce_terms(lhs))
+        Unit::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -96,7 +96,7 @@ impl Mul for Unit {
             lhs.append(rhs_unit.terms.to_mut());
         }
 
-        Self::new(term_reducing::reduce_terms(lhs))
+        Self::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -111,7 +111,7 @@ impl<'a> Mul<&'a Self> for Unit {
         let mut lhs = self.terms.to_vec();
         lhs.extend_from_slice(&other.terms);
 
-        Self::new(term_reducing::reduce_terms(lhs))
+        Self::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -126,7 +126,7 @@ impl<'a> Mul for &'a Unit {
         let mut lhs = self.terms.to_vec();
         lhs.extend_from_slice(&other.terms);
 
-        Unit::new(term_reducing::reduce_terms(lhs))
+        Unit::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -146,7 +146,7 @@ impl<'a> Mul<Unit> for &'a Unit {
             lhs.append(rhs_unit.terms.to_mut());
         }
 
-        Unit::new(term_reducing::reduce_terms(lhs))
+        Unit::new(term_reducing::reduce_terms(&lhs))
     }
 }
 
@@ -155,7 +155,7 @@ mod tests {
     use std::str::FromStr;
 
     use crate::{
-        testing::const_units::{ACRE, KILOMETER, METER, METER_PER_SECOND},
+        testing::const_units::{ACRE, KILOMETER, METER, METER_PER_SECOND, PER_SECOND, SECOND},
         unit::UNITY,
     };
 
@@ -168,84 +168,112 @@ mod tests {
     mod div {
         use super::*;
 
-        #[test]
-        #[allow(clippy::eq_op)]
-        fn validate_owned_div_owned() {
-            assert_eq!(METER / METER, UNITY);
-            let expected = Unit::from_str("m/km").unwrap();
-            assert_eq!(METER / KILOMETER, expected);
-            let unit = Unit::from_str("10m").unwrap();
-            let other = Unit::from_str("20m").unwrap();
-            let expected = Unit::from_str("10m/20m").unwrap();
-            assert_eq!(unit / other, expected);
+        macro_rules! test_div {
+            ($test_name:ident: $lhs:expr, $rhs:expr => $expected:expr) => {
+                #[test]
+                fn $test_name() {
+                    // Borrowed / Borrowed
+                    {
+                        let result = &$lhs / &$rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
 
-            assert_eq!(seed() / seed(), UNITY);
-            assert_eq!(UNITY / seed(), Unit::from_str("/{seed}").unwrap());
-            assert_eq!(seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
+                    // Owned / Borrowed
+                    {
+                        let result = $lhs / &$rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
+
+                    // Borrowed / Owned
+                    {
+                        let result = &$lhs / $rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
+
+                    // Owned / Owned
+                    {
+                        let result = $lhs / $rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
+                }
+            };
         }
 
-        #[test]
-        fn validate_owned_div_borrowed() {
-            assert_eq!(METER / &METER, UNITY);
-            let expected = Unit::from_str("m/km").unwrap();
-            assert_eq!(METER / &KILOMETER, expected);
-            let unit = Unit::from_str("10m").unwrap();
-            let other = Unit::from_str("20m").unwrap();
-            let expected = Unit::from_str("10m/20m").unwrap();
-            assert_eq!(unit / &other, expected);
-
-            assert_eq!(seed() / &seed(), UNITY);
-            assert_eq!(UNITY / &seed(), Unit::from_str("/{seed}").unwrap());
-            assert_eq!(seed() / &ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
-        }
-
-        #[test]
-        fn validate_borrowed_div_owned() {
-            assert_eq!(&METER / METER, UNITY);
-            let expected = Unit::from_str("m/km").unwrap();
-            assert_eq!(&METER / KILOMETER, expected);
-            let unit = Unit::from_str("10m").unwrap();
-            let other = Unit::from_str("20m").unwrap();
-            let expected = Unit::from_str("10m/20m").unwrap();
-            assert_eq!(&unit / other, expected);
-
-            assert_eq!(&seed() / seed(), UNITY);
-            assert_eq!(&UNITY / seed(), Unit::from_str("/{seed}").unwrap());
-            assert_eq!(&seed() / ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
-        }
-
-        #[test]
-        fn validate_borrowed_div_borrowed() {
-            assert_eq!(&METER / &METER, UNITY);
-            let expected = Unit::from_str("m/km").unwrap();
-            assert_eq!(&METER / &KILOMETER, expected);
-            let unit = Unit::from_str("10m").unwrap();
-            let other = Unit::from_str("20m").unwrap();
-            let expected = Unit::from_str("10m/20m").unwrap();
-            assert_eq!(&unit / &other, expected);
-
-            assert_eq!(&seed() / &seed(), UNITY);
-            assert_eq!(&UNITY / &seed(), Unit::from_str("/{seed}").unwrap());
-            assert_eq!(&seed() / &ACRE, Unit::from_str("{seed}/[acr_us]").unwrap());
-        }
+        test_div!(test_atom_div_same_atom:
+            METER, METER => UNITY);
+        test_div!(test_atom_div_different_atom:
+            METER, SECOND => METER_PER_SECOND);
+        test_div!(test_atom_div_prefix_same_atom:
+            METER, KILOMETER => parse_unit!("m/km"));
+        test_div!(test_factor_atom_div_factor_same_atom:
+            parse_unit!("10m"), parse_unit!("20m") => parse_unit!("10m/20m"));
+        test_div!(test_nondim_div_same_nondim:
+            seed(), seed() => parse_unit!("{seed}/{seed}"));
+        test_div!(test_unity_div_same_nondim:
+            UNITY, seed() => Unit::new(vec![crate::term::UNITY, term!(factor: 1, exponent: -1, annotation: "seed")]));
+        test_div!(test_nondim_div_atom:
+            seed(), ACRE => parse_unit!("{seed}/[acr_us]"));
+        test_div!(test_atom_div_per_atom:
+            METER, PER_SECOND => parse_unit!("m.s"));
+        test_div!(test_atom_div_per_atom_per_atom:
+            METER, METER_PER_SECOND => parse_unit!("1.s"));
+        test_div!(test_annotatable_div_different_annotatable:
+            parse_unit!("42m{foo}"), parse_unit!("42m{bar}") => parse_unit!("42m{foo}/42m{bar}"));
     }
 
-    #[test]
-    fn validate_mul() {
-        let expected = Unit::from_str("m.km").unwrap();
-        assert_eq!(METER * KILOMETER, expected);
+    mod mul {
+        use super::*;
 
-        let unit = Unit::from_str("10m").unwrap();
-        let other = Unit::from_str("20m").unwrap();
-        let expected = Unit::from_str("10m.20m").unwrap();
-        assert_eq!(unit * other, expected);
+        macro_rules! test_mul {
+            ($test_name:ident: $lhs:expr, $rhs:expr => $expected:expr) => {
+                #[test]
+                fn $test_name() {
+                    // Borrowed / Borrowed
+                    {
+                        let result = &$lhs * &$rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
 
-        let per_seed = Unit::from_str("/{seed}").unwrap();
-        assert_eq!(seed() * &per_seed, UNITY);
+                    // Owned / Borrowed
+                    {
+                        let result = $lhs * &$rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
 
-        let seed_per_acre = Unit::from_str("{seed}/[acr_us]").unwrap();
-        assert_eq!(seed_per_acre * ACRE, seed());
+                    // Borrowed / Owned
+                    {
+                        let result = &$lhs * $rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
 
-        assert_eq!(METER_PER_SECOND * Unit::from_str("s/m").unwrap(), UNITY);
+                    // Owned / Owned
+                    {
+                        let result = $lhs * $rhs;
+                        assert_field_eq!(result, &$expected, "Actual: {:#?}", result);
+                    }
+                }
+            };
+        }
+
+        test_mul!(test_atom_mul_same_atom:
+            METER, METER => parse_unit!["m2"]);
+        test_mul!(test_atom_mul_different_atom:
+            METER, SECOND => parse_unit!["m.s"]);
+        test_mul!(test_atom_mul_prefix_same_atom:
+            METER, KILOMETER => parse_unit!["m.km"]);
+        test_mul!(test_factor_atom_mul_factor_same_atom:
+            parse_unit!("10m"), parse_unit!("20m") => parse_unit!["10m.20m"]);
+        test_mul!(test_nondim_mul_same_nondim:
+            seed(), seed() => unit!(term!(factor: 1, exponent: 2, annotation: "seed")));
+        test_mul!(test_unity_mul_same_nondim:
+            UNITY, seed() => parse_unit!["1.{seed}"]);
+        test_mul!(test_nondim_mul_atom:
+            seed(), ACRE => parse_unit!["{seed}.[acr_us]"]);
+        test_mul!(test_atom_mul_per_atom:
+            METER, PER_SECOND => METER_PER_SECOND);
+        test_mul!(test_atom_mul_per_atom_per_atom:
+            METER, METER_PER_SECOND => parse_unit!["m2/s"]);
+        test_mul!(test_annotatable_mul_different_annotatable:
+            parse_unit!("42m{foo}"), parse_unit!("42m-1{bar}") => parse_unit!("42m{foo}/42m{bar}"));
     }
 }

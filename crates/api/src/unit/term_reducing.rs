@@ -25,15 +25,17 @@ use crate::Term;
 /// result of this call (if we passed a reference/slice instead, we'd have to clone the originals,
 /// and this is most likely to happen).
 ///
-pub(super) fn reduce_terms(terms: Vec<Term>) -> Cow<'static, [Term]> {
+pub(super) fn reduce_terms(terms: &[Term]) -> Cow<'static, [Term]> {
     let mut ids_to_remove = vec![];
-    let mut output = terms.clone();
+    let mut output = vec![];
 
-    for (i, lhs) in output.iter_mut().enumerate() {
+    for (i, lhs) in terms.iter().enumerate() {
         if ids_to_remove.contains(&i) {
             continue;
         }
+
         let mut offset = i + 1;
+        let mut new_term = lhs.clone();
 
         'inner: for (j, rhs) in terms[offset..].iter().enumerate() {
             if ids_to_remove.contains(&(offset + j)) {
@@ -41,21 +43,16 @@ pub(super) fn reduce_terms(terms: Vec<Term>) -> Cow<'static, [Term]> {
             }
 
             if composably_eq(lhs, rhs) {
-                let new_exponent = lhs.effective_exponent() + rhs.effective_exponent();
+                let new_exponent = new_term.effective_exponent() + rhs.effective_exponent();
 
-                let _ = lhs.set_exponent(new_exponent);
+                let _ = new_term.set_exponent(new_exponent);
 
                 ids_to_remove.push(offset);
             }
             offset += 1;
         }
-    }
 
-    ids_to_remove.sort_unstable();
-    ids_to_remove.reverse();
-
-    for id in ids_to_remove {
-        let _ = output.remove(id);
+        output.push(new_term);
     }
 
     // If everything is reduced away, the effective Unit should be "1".
@@ -75,11 +72,22 @@ fn composably_eq(lhs: &Term, rhs: &Term) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use crate::{
+        term::{
+            variants::{
+                FactorPrefixAtomAnnotation, FactorPrefixAtomExponentAnnotation, PrefixAtom,
+                PrefixAtomExponent,
+            },
+            UNITY,
+        },
+        Annotation, Atom, Prefix,
+    };
+
     use super::*;
 
     #[test]
     fn empty_terms_test() {
-        assert_eq!(reduce_terms(vec![]), vec![UNITY]);
+        assert_eq!(reduce_terms(&[]), vec![UNITY]);
     }
 
     #[test]
@@ -92,7 +100,7 @@ mod tests {
                 3,
                 Annotation::from("foo"),
             ));
-        assert_eq!(reduce_terms(vec![term.clone()]), vec![term]);
+        assert_eq!(reduce_terms(&[term.clone()]), vec![term]);
     }
 
     // NOTE: The two terms only differ in their `annotation`s here. (and `exponent`, but that field
@@ -117,7 +125,7 @@ mod tests {
                 Annotation::from("bar"),
             ));
         assert_eq!(
-            reduce_terms(vec![term1.clone(), term2.clone()]),
+            reduce_terms(&[term1.clone(), term2.clone()]),
             vec![term1, term2]
         );
     }
@@ -142,7 +150,7 @@ mod tests {
             ));
 
         assert_eq!(
-            reduce_terms(vec![term1, term2]),
+            reduce_terms(&[term1, term2]),
             vec![Term::FactorPrefixAtomAnnotation(
                 FactorPrefixAtomAnnotation::new(
                     42,
@@ -162,7 +170,7 @@ mod tests {
         let term3 = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
 
         assert_eq!(
-            reduce_terms(vec![term1, term2, term3]),
+            reduce_terms(&[term1, term2, term3]),
             vec![Term::PrefixAtomExponent(PrefixAtomExponent::new(
                 Prefix::Kilo,
                 Atom::Meter,
@@ -179,7 +187,7 @@ mod tests {
         let term3 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2));
 
         assert_eq!(
-            reduce_terms(vec![term1, term2, term3]),
+            reduce_terms(&[term1, term2, term3]),
             vec![
                 Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter,)),
                 Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2))
