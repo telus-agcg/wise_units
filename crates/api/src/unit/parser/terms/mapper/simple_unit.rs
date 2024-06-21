@@ -19,7 +19,7 @@ pub(super) enum SimpleUnit {
     Unity,
 }
 
-impl Visit<TermRule> for SimpleUnit {
+impl Visit<'_, TermRule> for SimpleUnit {
     fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
         let string = pair.as_span().as_str();
 

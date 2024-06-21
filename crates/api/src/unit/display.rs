@@ -57,66 +57,139 @@ fn recompose<'a>(numerators: &[Cow<'a, str>], denominators: &[String]) -> Cow<'a
 
 #[cfg(test)]
 mod tests {
-    use crate::unit::Unit;
+    use crate::{testing::const_units::METER, unit::UNITY};
     use std::str::FromStr;
 
-    #[test]
-    fn validate_display() {
-        let unit = Unit::from_str("1").unwrap();
-        assert_eq!(unit.to_string(), "1");
-
-        let unit = Unit::from_str("m").unwrap();
-        assert_eq!(unit.to_string(), "m");
-
-        let unit = Unit::from_str("M").unwrap();
-        assert_eq!(unit.to_string(), "m");
-
-        let unit = Unit::from_str("{stuff}").unwrap();
-        assert_eq!(unit.to_string(), "{stuff}");
-
-        let unit = Unit::from_str("/{stuff}").unwrap();
-        assert_eq!(unit.to_string(), "/{stuff}");
-
-        let unit = Unit::from_str("m{stuff}").unwrap();
-        assert_eq!(unit.to_string(), "m{stuff}");
-
-        let unit = Unit::from_str("km/10m").unwrap();
-        assert_eq!(unit.to_string(), "km/10m");
-
-        let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.to_string(), "/m");
-
-        let unit = Unit::from_str("m-1{stuff}").unwrap();
-        assert_eq!(unit.to_string(), "/m{stuff}");
-
-        let unit = Unit::from_str("10m").unwrap();
-        assert_eq!(unit.to_string(), "10m");
-
-        let unit = Unit::from_str("10km").unwrap();
-        assert_eq!(unit.to_string(), "10km");
-
-        let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.to_string(), "/10km");
-
-        let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.to_string(), "/km.m2");
-
-        let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.to_string(), "km/m2.cm");
-
-        let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.to_string(), "/km.m2.cm");
-
-        let unit = Unit::from_str("m/s2").unwrap();
-        assert_eq!(unit.to_string(), "m/s2");
-
-        let unit = Unit::from_str("km3/nm2").unwrap();
-        assert_eq!(unit.to_string(), "km3/nm2");
-
-        let unit = Unit::from_str("km3{foo}/nm2{bar}").unwrap();
-        assert_eq!(unit.to_string(), "km3{foo}/nm2{bar}");
-
-        let unit = Unit::from_str("{foo}/{bar}").unwrap();
-        assert_eq!(unit.to_string(), "{foo}/{bar}");
+    macro_rules! test_display {
+        ($test_name:ident: $unit:expr => $expected:expr) => {
+            #[test]
+            fn $test_name() {
+                assert_eq!($unit.to_string(), $expected);
+            }
+        };
     }
+
+    // ╭───────────────────╮
+    // │ Single-term units │
+    // ╰───────────────────╯
+    test_display!(test_annotation: parse_unit!("{stuff}") => "{stuff}");
+    test_display!(test_per_annotation: parse_unit!("/{stuff}") => "/{stuff}");
+
+    test_display!(test_atom: METER => "m");
+    test_display!(test_per_atom: parse_unit!("/m") => "/m");
+    test_display!(test_atom_positive_1_exponent: parse_unit!("m+1") => "m");
+
+    test_display!(test_unity: UNITY => "1");
+    test_display!(test_per_unity: parse_unit!("/1") => "/1");
+
+    test_display!(test_atom_annotation: parse_unit!("m{stuff}") => "m{stuff}");
+    test_display!(test_atom_positive_1_exponent_annotation: parse_unit!("m+1{stuff}") => "m{stuff}");
+    test_display!(test_per_atom_annotation: parse_unit!("/m{stuff}") => "/m{stuff}");
+
+    test_display!(test_atom_exponent: parse_unit!("m2") => "m2");
+    test_display!(test_per_atom_exponent: parse_unit!("/m2") => "/m2");
+    test_display!(test_atom_positive_exponent: parse_unit!("m+2") => "m2");
+    test_display!(test_atom_negative_exponent: parse_unit!("m-2") => "/m2");
+
+    test_display!(test_atom_exponent_annotation: parse_unit!("m2{stuff}") => "m2{stuff}");
+    test_display!(test_per_atom_exponent_annotation: parse_unit!("/m2{stuff}") => "/m2{stuff}");
+    test_display!(test_atom_positive_exponent_annotation: parse_unit!("m+2{stuff}") => "m2{stuff}");
+    test_display!(test_atom_negative_exponent_annotation: parse_unit!("m-2{stuff}") => "/m2{stuff}");
+
+    // Prefix+
+    test_display!(test_prefix_atom: parse_unit!("km") => "km");
+    test_display!(test_per_prefix_atom: parse_unit!("/km") => "/km");
+    test_display!(test_prefix_atom_positive_1_exponent: parse_unit!("km+1") => "km");
+    test_display!(test_prefix_atom_negative_1_exponent: parse_unit!("km-1") => "/km");
+
+    test_display!(test_prefix_atom_annotation: parse_unit!("km{stuff}") => "km{stuff}");
+    test_display!(test_per_prefix_atom_annotation: parse_unit!("/km{stuff}") => "/km{stuff}");
+    test_display!(test_per_prefix_atom_positive_1_exponent_annotation: parse_unit!("km+1{stuff}") => "km{stuff}");
+    test_display!(test_per_prefix_atom_negative_1_exponent_annotation: parse_unit!("km-1{stuff}") => "/km{stuff}");
+
+    test_display!(test_prefix_atom_exponent: parse_unit!("km2") => "km2");
+    test_display!(test_per_prefix_atom_exponent: parse_unit!("/km2") => "/km2");
+    test_display!(test_prefix_atom_negative_exponent: parse_unit!("km-2") => "/km2");
+
+    test_display!(test_prefix_atom_exponent_annotation:
+        parse_unit!("km2{stuff}") => "km2{stuff}");
+    test_display!(test_per_prefix_atom_exponent_annotation:
+        parse_unit!("/km2{stuff}") => "/km2{stuff}");
+    test_display!(test_prefix_atom_positive_exponent_annotation:
+        parse_unit!("km+2{stuff}") => "km2{stuff}");
+    test_display!(test_prefix_atom_negative_exponent_annotation:
+        parse_unit!("km-2{stuff}") => "/km2{stuff}");
+
+    // Factor+
+    test_display!(test_factor: parse_unit!("42") => "42");
+    test_display!(test_per_factor: parse_unit!("/42") => "/42");
+
+    test_display!(test_factor_annotation: parse_unit!("42{stuff}") => "42{stuff}");
+    test_display!(test_per_factor_annotation: parse_unit!("/42{stuff}") => "/42{stuff}");
+
+    test_display!(test_factor_exponent: unit!(term!(factor: 42, exponent: 2)) => "42+2");
+    test_display!(test_per_factor_exponent: unit!(term!(factor: 42, exponent: -2)) => "/42+2");
+
+    test_display!(test_factor_exponent_annotation:
+        unit!(term!(factor: 42, exponent: 2, annotation: "stuff")) => "42+2{stuff}");
+    test_display!(test_per_factor_exponent_annotation:
+        unit!(term!(factor: 42, exponent: -2, annotation: "stuff")) => "/42+2{stuff}");
+
+    test_display!(test_factor_atom: parse_unit!("10m") => "10m");
+    test_display!(test_per_factor_atom: parse_unit!("/10m") => "/10m");
+
+    test_display!(test_factor_atom_annotation: parse_unit!("10m{stuff}") => "10m{stuff}");
+    test_display!(test_per_factor_atom_annotation: parse_unit!("/10m{stuff}") => "/10m{stuff}");
+
+    test_display!(test_factor_atom_exponent: parse_unit!("10m2") => "10m2");
+    test_display!(test_per_factor_atom_exponent: parse_unit!("/10m2") => "/10m2");
+
+    test_display!(test_factor_atom_exponent_annotation:
+        parse_unit!("10m2{stuff}") => "10m2{stuff}");
+    test_display!(test_per_factor_atom_exponent_annotation:
+        parse_unit!("/10m2{stuff}") => "/10m2{stuff}");
+
+    test_display!(test_factor_prefix_atom: parse_unit!("10km") => "10km");
+    test_display!(test_per_factor_prefix_atom: parse_unit!("/10km") => "/10km");
+
+    test_display!(test_factor_prefix_atom_annotation: parse_unit!("10km{stuff}") => "10km{stuff}");
+    test_display!(test_per_factor_prefix_atom_annotation:
+        parse_unit!("/10km{stuff}") => "/10km{stuff}");
+
+    test_display!(test_factor_prefix_atom_exponent:
+        parse_unit!("10km3") => "10km3");
+    test_display!(test_per_factor_prefix_atom_exponent:
+        parse_unit!("/10km3") => "/10km3");
+
+    test_display!(test_factor_prefix_atom_exponent_annotation:
+        parse_unit!("10km3{stuff}") => "10km3{stuff}");
+    test_display!(test_per_factor_prefix_atom_exponent_annotation:
+        parse_unit!("/10km3{stuff}") => "/10km3{stuff}");
+    test_display!(test_factor_prefix_atom_negative_exponent_annotation:
+        parse_unit!("10km-3{stuff}") => "/10km3{stuff}");
+
+    // ╭────────────────╮
+    // │ Two-term units │
+    // ╰────────────────╯
+    // Notice that reduction doesn't happen here.
+    test_display!(test_atom_exponent2_per_atom_exponent1: parse_unit!("m2/m") => "m2/m");
+    test_display!(test_atom_exponent2_dot_atom_exponent_neg1: parse_unit!("m2.m-1") => "m2/m");
+
+    test_display!(test_atom_per_other_atom_exponent: parse_unit!("m/s2") => "m/s2");
+    test_display!(test_atom_dot_other_atom_negative_exponent: parse_unit!("m.s-2") => "m/s2");
+
+    test_display!(test_atom_per_factor_atom: parse_unit!("m/10m") => "m/10m");
+    test_display!(test_prefix_atom_per_factor_atom: parse_unit!("km/10m") => "km/10m");
+    test_display!(test_prefix_atom_negative_exponent_per_atom_exponent: parse_unit!("km-1/m2") => "/km.m2");
+    test_display!(test_prefix_atom_exponent_per_prefix_atom_exponent: parse_unit!("km3/nm2") => "km3/nm2");
+    test_display!(test_paea_per_paea: parse_unit!("km3{foo}/nm2{bar}") => "km3{foo}/nm2{bar}");
+    test_display!(test_annotation_per_same_annotation: parse_unit!("{foo}/{foo}") => "{foo}/{foo}");
+    test_display!(test_annotation_per_different_annotation: parse_unit!("{foo}/{bar}") => "{foo}/{bar}");
+
+    // ╭──────────────────╮
+    // │ Three-term units │
+    // ╰──────────────────╯
+    test_display!(test_pa_per_ae_dot_pa: parse_unit!("km/m2.cm") => "km/m2.cm");
+    test_display!(test_pa_per_anegativee_dot_pa: parse_unit!("km/m-2.cm") => "km.m2/cm");
+    test_display!(test_pa_negative_1_per_ae_dot_pa: parse_unit!("km-1/m2.cm") => "/km.m2.cm");
 }

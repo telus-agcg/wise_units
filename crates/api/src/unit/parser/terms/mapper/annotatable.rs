@@ -27,7 +27,7 @@ pub(super) enum Annotatable {
     Unity,
 }
 
-impl Visit<TermRule> for Annotatable {
+impl Visit<'_, TermRule> for Annotatable {
     fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
         let mut pairs = pair.into_inner();
 
