@@ -161,7 +161,13 @@ impl Unit {
     #[inline]
     #[must_use]
     pub fn expression_reduced(&self) -> String {
-        let reduced = term_reducing::reduce_terms(&self.terms);
+        use crate::FieldEq;
+
+        let mut reduced = term_reducing::reduce_terms(&self.terms);
+
+        if reduced.len() > 1 {
+            reduced.to_mut().retain(|t| !t.field_eq(&term::UNITY));
+        }
 
         Self::new(reduced).to_string()
     }
@@ -185,13 +191,14 @@ impl<'a> TryFrom<&'a str> for Unit {
 
 #[cfg(test)]
 mod tests {
+    use crate::testing::const_units::METER;
+
     use super::*;
     use std::str::FromStr;
 
     #[test]
     fn validate_is_unity() {
-        let unit = UNITY;
-        assert!(unit.is_unity());
+        assert!(UNITY.is_unity());
 
         let unit = Unit::new(Vec::new());
         assert!(!unit.is_unity());
@@ -208,56 +215,23 @@ mod tests {
 
     #[test]
     fn validate_expression_reduced() {
-        let unit = Unit::from_str("m").unwrap();
-        assert_eq!(unit.expression_reduced(), "m");
-
-        let unit = Unit::from_str("M").unwrap();
-        assert_eq!(unit.expression_reduced(), "m");
-
-        let unit = Unit::from_str("km/10m").unwrap();
-        assert_eq!(unit.expression_reduced(), "km/10m");
-
-        let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.expression_reduced(), "/m");
-
-        let unit = Unit::from_str("10m").unwrap();
-        assert_eq!(unit.expression_reduced(), "10m");
-
-        let unit = Unit::from_str("10km").unwrap();
-        assert_eq!(unit.expression_reduced(), "10km");
-
-        let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.expression_reduced(), "/10km");
-
-        let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.expression_reduced(), "/m2.km");
-
-        let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced(), "km/m2.cm");
-
-        let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced(), "/m2.cm.km");
-
-        let unit = Unit::from_str("m/s2").unwrap();
-        assert_eq!(unit.expression_reduced(), "m/s2");
-
-        let unit = Unit::from_str("km3/nm2").unwrap();
-        assert_eq!(unit.expression_reduced(), "km3/nm2");
-
-        let unit = Unit::from_str("Kibit").unwrap();
-        assert_eq!(unit.expression_reduced(), "Kibit");
-
-        let unit = Unit::from_str("KiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "KiBy");
-
-        let unit = Unit::from_str("MiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "MiBy");
-
-        let unit = Unit::from_str("GiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "GiBy");
-
-        let unit = Unit::from_str("TiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "TiBy");
+        assert_eq!(METER.expression_reduced(), "m");
+        assert_eq!(parse_unit!("M").expression_reduced(), "m");
+        assert_eq!(parse_unit!("km/10m").expression_reduced(), "km/10m");
+        assert_eq!(parse_unit!("m-1").expression_reduced(), "/m");
+        assert_eq!(parse_unit!("10m").expression_reduced(), "10m");
+        assert_eq!(parse_unit!("10km").expression_reduced(), "10km");
+        assert_eq!(parse_unit!("10km-1").expression_reduced(), "/10km");
+        assert_eq!(parse_unit!("km-1/m2").expression_reduced(), "/km.m2");
+        assert_eq!(parse_unit!("km/m2.cm").expression_reduced(), "km/m2.cm");
+        assert_eq!(parse_unit!("km-1/m2.cm").expression_reduced(), "/km.m2.cm");
+        assert_eq!(parse_unit!("m/s2").expression_reduced(), "m/s2");
+        assert_eq!(parse_unit!("km3/nm2").expression_reduced(), "km3/nm2");
+        assert_eq!(parse_unit!("Kibit").expression_reduced(), "Kibit");
+        assert_eq!(parse_unit!("KiBy").expression_reduced(), "KiBy");
+        assert_eq!(parse_unit!("MiBy").expression_reduced(), "MiBy");
+        assert_eq!(parse_unit!("GiBy").expression_reduced(), "GiBy");
+        assert_eq!(parse_unit!("TiBy").expression_reduced(), "TiBy");
     }
 
     #[cfg(feature = "cffi")]

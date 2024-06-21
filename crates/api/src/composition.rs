@@ -391,15 +391,9 @@ def_add_dimension!(add_time, time);
 /// which is the `3[the term's exponent]` * `2[the term's atom's length composition]`.
 ///
 /// ```rust
-/// use wise_units::{Atom, Composable, Term};
+/// use wise_units::{Atom, Composable, Term, term::variants::AtomExponent};
 ///
-/// let t = Term {
-///     prefix: None,
-///     atom: Some(Atom::Are),
-///     exponent: Some(3),
-///     factor: None,
-///     annotation: None
-/// };
+/// let t = Term::AtomExponent(AtomExponent::new(Atom::Are, 3));
 ///
 /// assert_eq!(&t.composition().to_string(), "L6");
 /// ```
