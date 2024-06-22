@@ -14,7 +14,7 @@
 //!
 use std::borrow::Cow;
 
-use crate::Term;
+use crate::{FieldEq, Term};
 
 /// Function used in `Unit` for reducing its `Term`s.
 ///
@@ -59,6 +59,9 @@ pub(super) fn reduce_terms(terms: &[Term]) -> Cow<'static, [Term]> {
     if output.is_empty() {
         Cow::Borrowed(crate::term::UNITY_ARRAY_REF)
     } else {
+        if output.len() > 1 {
+            output.retain(|t| !t.field_eq(&crate::term::UNITY));
+        }
         output.into()
     }
 }

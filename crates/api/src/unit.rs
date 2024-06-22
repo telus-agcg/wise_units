@@ -161,13 +161,7 @@ impl Unit {
     #[inline]
     #[must_use]
     pub fn expression_reduced(&self) -> String {
-        use crate::FieldEq;
-
-        let mut reduced = term_reducing::reduce_terms(&self.terms);
-
-        if reduced.len() > 1 {
-            reduced.to_mut().retain(|t| !t.field_eq(&term::UNITY));
-        }
+        let reduced = term_reducing::reduce_terms(&self.terms);
 
         Self::new(reduced).to_string()
     }

@@ -210,13 +210,13 @@ mod tests {
         test_div!(test_nondim_div_same_nondim:
             seed(), seed() => parse_unit!("{seed}/{seed}"));
         test_div!(test_unity_div_same_nondim:
-            UNITY, seed() => Unit::new(vec![crate::term::UNITY, term!(factor: 1, exponent: -1, annotation: "seed")]));
+            UNITY, seed() => Unit::new(vec![term!(factor: 1, exponent: -1, annotation: "seed")]));
         test_div!(test_nondim_div_atom:
             seed(), ACRE => parse_unit!("{seed}/[acr_us]"));
         test_div!(test_atom_div_per_atom:
             METER, PER_SECOND => parse_unit!("m.s"));
         test_div!(test_atom_div_per_atom_per_atom:
-            METER, METER_PER_SECOND => parse_unit!("1.s"));
+            METER, METER_PER_SECOND => parse_unit!("s"));
         test_div!(test_annotatable_div_different_annotatable:
             parse_unit!("42m{foo}"), parse_unit!("42m{bar}") => parse_unit!("42m{foo}/42m{bar}"));
     }
@@ -266,7 +266,7 @@ mod tests {
         test_mul!(test_nondim_mul_same_nondim:
             seed(), seed() => unit!(term!(factor: 1, exponent: 2, annotation: "seed")));
         test_mul!(test_unity_mul_same_nondim:
-            UNITY, seed() => parse_unit!["1.{seed}"]);
+            UNITY, seed() => parse_unit!["{seed}"]);
         test_mul!(test_nondim_mul_atom:
             seed(), ACRE => parse_unit!["{seed}.[acr_us]"]);
         test_mul!(test_atom_mul_per_atom:
