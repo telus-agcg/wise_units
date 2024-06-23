@@ -2,7 +2,10 @@ use std::{fmt, mem};
 
 use num_traits::{Inv, Pow};
 
-use super::{Annotation, Exponent, Factor, FactorExponentAnnotation, PowOutput, SetExponent, Term};
+use super::{
+    Annotation, Exponent, Factor, FactorExponentAnnotation, PowOutput, SetAnnotation, SetExponent,
+    Term,
+};
 
 // ╭──────────────────╮
 // │ FactorAnnotation │
@@ -109,5 +112,16 @@ impl<'a> Inv for &'a mut FactorAnnotation {
 
     fn inv(self) -> Self::Output {
         self.pow(-1).unwrap_rest()
+    }
+}
+
+impl<'a> SetAnnotation for &'a mut FactorAnnotation {
+    type Output = ();
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        self.annotation = annotation.into();
     }
 }

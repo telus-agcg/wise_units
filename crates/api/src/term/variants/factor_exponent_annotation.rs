@@ -3,8 +3,8 @@ use std::{fmt, mem};
 use num_traits::{Inv, Pow};
 
 use super::{
-    Annotation, Exponent, Factor, FactorAnnotation, InvOutput, PowOutput, SetExponent, Term,
-    UnassignExponent,
+    Annotation, Exponent, Factor, FactorAnnotation, InvOutput, PowOutput, SetAnnotation,
+    SetExponent, Term,
 };
 
 // ╭──────────────────────────╮
@@ -54,15 +54,6 @@ impl fmt::Display for FactorExponentAnnotation {
                 )
             }
         }
-    }
-}
-
-impl UnassignExponent for FactorExponentAnnotation {
-    fn unassign_exponent(self) -> Term {
-        Term::FactorAnnotation(FactorAnnotation {
-            factor: self.factor,
-            annotation: self.annotation,
-        })
     }
 }
 
@@ -159,5 +150,16 @@ impl<'a> Inv for &'a mut FactorExponentAnnotation {
             }
             PowOutput::Zero(_) => unreachable!(),
         }
+    }
+}
+
+impl<'a> SetAnnotation for &'a mut FactorExponentAnnotation {
+    type Output = ();
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        self.annotation = annotation.into();
     }
 }

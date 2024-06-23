@@ -5,8 +5,8 @@ use num_traits::{Inv, Pow};
 use crate::{Atom, Prefix};
 
 use super::{
-    Annotation, Exponent, Factor, FactorPrefixAtomAnnotation, InvOutput, PowOutput, SetExponent,
-    Term, UnassignExponent,
+    Annotation, Exponent, Factor, FactorPrefixAtomAnnotation, InvOutput, PowOutput, SetAnnotation,
+    SetExponent, Term,
 };
 
 // ╭────────────────────────────────────╮
@@ -109,17 +109,6 @@ impl SetExponent for FactorPrefixAtomExponentAnnotation {
     }
 }
 
-impl UnassignExponent for FactorPrefixAtomExponentAnnotation {
-    fn unassign_exponent(self) -> Term {
-        Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation {
-            factor: self.factor,
-            prefix: self.prefix,
-            atom: self.atom,
-            annotation: self.annotation,
-        })
-    }
-}
-
 impl Pow<Exponent> for FactorPrefixAtomExponentAnnotation {
     type Output = PowOutput<Annotation, FactorPrefixAtomAnnotation, Self>;
 
@@ -190,5 +179,16 @@ impl<'a> Inv for &'a mut FactorPrefixAtomExponentAnnotation {
             PowOutput::Rest(fpaea) => InvOutput::Rest(fpaea),
             PowOutput::Zero(_) => unreachable!(),
         }
+    }
+}
+
+impl<'a> SetAnnotation for &'a mut FactorPrefixAtomExponentAnnotation {
+    type Output = ();
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        self.annotation = annotation.into();
     }
 }

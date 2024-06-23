@@ -2,11 +2,11 @@ use std::fmt;
 
 use num_traits::{Inv, Pow};
 
-use crate::{Atom, Prefix};
+use crate::{Annotation, Atom, Prefix};
 
 use super::{
-    AssignFactor, Exponent, Factor, FactorPrefixAtom, PowOutput, PrefixAtomExponent, SetExponent,
-    Term,
+    AssignFactor, Exponent, Factor, FactorPrefixAtom, PowOutput, PrefixAtomAnnotation,
+    PrefixAtomExponent, SetAnnotation, SetExponent, Term,
 };
 
 // ╭────────────╮
@@ -109,5 +109,16 @@ impl<'a> Inv for &'a mut PrefixAtom {
 
     fn inv(self) -> Self::Output {
         self.pow(-1).unwrap_rest()
+    }
+}
+
+impl SetAnnotation for PrefixAtom {
+    type Output = PrefixAtomAnnotation;
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        Self::Output::new(self.prefix, self.atom, Annotation::from(annotation))
     }
 }

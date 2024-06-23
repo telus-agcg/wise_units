@@ -5,7 +5,8 @@ use num_traits::{Inv, Pow};
 use crate::Atom;
 
 use super::{
-    Annotation, Exponent, Factor, FactorAtomExponentAnnotation, PowOutput, SetExponent, Term,
+    Annotation, Exponent, Factor, FactorAtomExponentAnnotation, PowOutput, SetAnnotation,
+    SetExponent, Term,
 };
 
 // ╭──────────────────────╮
@@ -119,5 +120,16 @@ impl<'a> Inv for &'a mut FactorAtomAnnotation {
 
     fn inv(self) -> Self::Output {
         self.pow(-1).unwrap_rest()
+    }
+}
+
+impl<'a> SetAnnotation for &'a mut FactorAtomAnnotation {
+    type Output = ();
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        self.annotation = annotation.into();
     }
 }

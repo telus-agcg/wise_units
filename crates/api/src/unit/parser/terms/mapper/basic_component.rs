@@ -1,16 +1,7 @@
 use pest::iterators::Pair;
 
 use crate::{
-    term::{
-        variants::{
-            AtomAnnotation, AtomExponent, AtomExponentAnnotation, FactorAnnotation, FactorAtom,
-            FactorAtomAnnotation, FactorAtomExponent, FactorAtomExponentAnnotation,
-            FactorPrefixAtom, FactorPrefixAtomAnnotation, FactorPrefixAtomExponent,
-            FactorPrefixAtomExponentAnnotation, PrefixAtom, PrefixAtomAnnotation,
-            PrefixAtomExponent, PrefixAtomExponentAnnotation,
-        },
-        Factor,
-    },
+    term::{variants::FactorAnnotation, Factor},
     unit::parser::{terms::term_parser::Rule, Error, Visit},
     Annotation,
 };
@@ -90,112 +81,25 @@ impl Finishable for BasicComponent<'_> {
     fn finish(self) -> Vec<Term> {
         let mut terms: Vec<Term> = Vec::with_capacity(self.terms.len() + 1);
 
-        let self_term = if let Some(annotatable) = self.annotatable {
-            match annotatable {
-                Annotatable::PrefixedWithExponent {
-                    prefix,
-                    atom,
-                    exponent,
-                } => match (self.factor, self.annotation) {
-                    (None, None) => {
-                        Term::PrefixAtomExponent(PrefixAtomExponent::new(prefix, atom, exponent))
-                    }
-                    (None, Some(annotation)) => {
-                        Term::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation::new(
-                            prefix,
-                            atom,
-                            exponent,
-                            Annotation::from(annotation),
-                        ))
-                    }
-                    (Some(factor), None) => Term::FactorPrefixAtomExponent(
-                        FactorPrefixAtomExponent::new(factor, prefix, atom, exponent),
-                    ),
-                    (Some(factor), Some(annotation)) => Term::FactorPrefixAtomExponentAnnotation(
-                        FactorPrefixAtomExponentAnnotation::new(
-                            factor,
-                            prefix,
-                            atom,
-                            exponent,
-                            Annotation::from(annotation),
-                        ),
-                    ),
-                },
-                Annotatable::Prefixed { prefix, atom } => match (self.factor, self.annotation) {
-                    (None, None) => Term::PrefixAtom(PrefixAtom { prefix, atom }),
-                    (None, Some(annotation)) => Term::PrefixAtomAnnotation(
-                        PrefixAtomAnnotation::new(prefix, atom, Annotation::from(annotation)),
-                    ),
-                    (Some(factor), None) => {
-                        Term::FactorPrefixAtom(FactorPrefixAtom::new(factor, prefix, atom))
-                    }
-                    (Some(factor), Some(annotation)) => {
-                        Term::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation::new(
-                            factor,
-                            prefix,
-                            atom,
-                            Annotation::from(annotation),
-                        ))
-                    }
-                },
-                Annotatable::BasicWithExponent { atom, exponent } => {
-                    match (self.factor, self.annotation) {
-                        (None, None) => Term::AtomExponent(AtomExponent { atom, exponent }),
-                        (None, Some(annotation)) => {
-                            Term::AtomExponentAnnotation(AtomExponentAnnotation::new(
-                                atom,
-                                exponent,
-                                Annotation::from(annotation),
-                            ))
-                        }
-                        (Some(factor), None) => Term::FactorAtomExponent(FactorAtomExponent::new(
-                            factor, atom, exponent,
-                        )),
-                        (Some(factor), Some(annotation)) => {
-                            Term::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation::new(
-                                factor,
-                                atom,
-                                exponent,
-                                Annotation::from(annotation),
-                            ))
-                        }
-                    }
-                }
-                Annotatable::Basic { atom } => match (self.factor, self.annotation) {
-                    (None, None) => Term::Atom(atom),
-                    (None, Some(annotation)) => Term::AtomAnnotation(AtomAnnotation::new(
-                        atom,
-                        Annotation::from(annotation),
-                    )),
-                    (Some(factor), None) => Term::FactorAtom(FactorAtom { factor, atom }),
-                    (Some(factor), Some(annotation)) => Term::FactorAtomAnnotation(
-                        FactorAtomAnnotation::new(factor, atom, Annotation::from(annotation)),
-                    ),
-                },
-                Annotatable::Unity => match (self.factor, self.annotation) {
-                    (None, None) => Term::Factor(1),
-                    (None, Some(annotation)) => Term::Annotation(Annotation::from(annotation)),
-                    (Some(factor), None) => {
-                        if factor == 1 {
-                            Term::Factor(factor)
-                        } else {
-                            unreachable!("Parser parsed a unity but also found a factor: {factor}")
-                        }
-                    }
-                    (Some(factor), Some(annotation)) => Term::FactorAnnotation(
-                        FactorAnnotation::new(factor, Annotation::from(annotation)),
-                    ),
-                },
+        let self_term = match (self.factor, self.annotatable, self.annotation) {
+            (None, None, None) => unreachable!("Parsed empty unit string for Term"),
+            (None, None, Some(annotation)) => Term::Annotation(Annotation::from(annotation)),
+            (None, Some(Annotatable(term)), None) => term,
+            (None, Some(Annotatable(mut term)), Some(annotation)) => {
+                let _ = term.set_annotation(annotation);
+                term
             }
-        } else {
-            match (self.factor, self.annotation) {
-                (None, None) => unreachable!("Parsed empty unit string for term"),
-                (None, Some(annotation)) => Term::Annotation(Annotation::from(annotation)),
-                (Some(factor), None) => Term::Factor(factor),
-                (Some(factor), Some(annotation)) => Term::FactorAnnotation(FactorAnnotation::new(
-                    factor,
-                    Annotation::from(annotation),
-                )),
+            (Some(factor), None, None) => Term::Factor(factor),
+            (Some(factor), None, Some(annotation)) => {
+                Term::FactorAnnotation(FactorAnnotation::new(factor, Annotation::from(annotation)))
+            }
+            (Some(factor), Some(Annotatable(mut term)), None) => {
+                let _ = term.set_factor(factor);
+                term
+            }
+            (Some(factor), Some(Annotatable(mut term)), Some(annotation)) => {
+                let _ = term.set_factor(factor).set_annotation(annotation);
+                term
             }
         };
 

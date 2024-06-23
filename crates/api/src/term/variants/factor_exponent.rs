@@ -2,7 +2,12 @@ use std::fmt;
 
 use num_traits::{Inv, Pow};
 
-use super::{Exponent, Factor, InvOutput, PowOutput, SetExponent, Term, UnassignExponent};
+use crate::Annotation;
+
+use super::{
+    Exponent, Factor, FactorExponentAnnotation, InvOutput, PowOutput, SetAnnotation, SetExponent,
+    Term,
+};
 
 // ╭────────────────╮
 // │ FactorExponent │
@@ -17,12 +22,6 @@ impl FactorExponent {
     #[must_use]
     pub const fn new(factor: Factor, exponent: Exponent) -> Self {
         Self { factor, exponent }
-    }
-}
-
-impl UnassignExponent for FactorExponent {
-    fn unassign_exponent(self) -> Term {
-        Term::Factor(self.factor)
     }
 }
 
@@ -110,5 +109,16 @@ impl<'a> Inv for &'a mut FactorExponent {
             PowOutput::Rest(factor_exponent) => InvOutput::Rest(factor_exponent),
             PowOutput::Zero(_) => unreachable!(),
         }
+    }
+}
+
+impl SetAnnotation for FactorExponent {
+    type Output = FactorExponentAnnotation;
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        FactorExponentAnnotation::new(self.factor, self.exponent, Annotation::from(annotation))
     }
 }

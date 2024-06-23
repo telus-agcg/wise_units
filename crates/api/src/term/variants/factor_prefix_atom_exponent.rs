@@ -2,10 +2,11 @@ use std::fmt;
 
 use num_traits::{Inv, Pow};
 
-use crate::{Atom, Prefix};
+use crate::{Annotation, Atom, Prefix};
 
 use super::{
-    Exponent, Factor, FactorPrefixAtom, InvOutput, PowOutput, SetExponent, Term, UnassignExponent,
+    Exponent, Factor, FactorPrefixAtom, FactorPrefixAtomExponentAnnotation, InvOutput, PowOutput,
+    SetAnnotation, SetExponent, Term,
 };
 
 // ╭──────────────────────────╮
@@ -90,16 +91,6 @@ impl SetExponent for FactorPrefixAtomExponent {
     }
 }
 
-impl UnassignExponent for FactorPrefixAtomExponent {
-    fn unassign_exponent(self) -> Term {
-        Term::FactorPrefixAtom(FactorPrefixAtom {
-            factor: self.factor,
-            prefix: self.prefix,
-            atom: self.atom,
-        })
-    }
-}
-
 impl Pow<Exponent> for FactorPrefixAtomExponent {
     type Output = PowOutput<Factor, FactorPrefixAtom, Self>;
 
@@ -143,5 +134,22 @@ impl<'a> Inv for &'a mut FactorPrefixAtomExponent {
             PowOutput::Rest(fpae) => InvOutput::Rest(fpae),
             PowOutput::Zero(_) => unreachable!(),
         }
+    }
+}
+
+impl SetAnnotation for FactorPrefixAtomExponent {
+    type Output = FactorPrefixAtomExponentAnnotation;
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        Self::Output::new(
+            self.factor,
+            self.prefix,
+            self.atom,
+            self.exponent,
+            Annotation::from(annotation),
+        )
     }
 }

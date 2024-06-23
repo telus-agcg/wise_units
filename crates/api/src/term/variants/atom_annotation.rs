@@ -6,7 +6,7 @@ use crate::Atom;
 
 use super::{
     Annotation, AssignFactor, AtomExponentAnnotation, Exponent, Factor, FactorAtomAnnotation,
-    PowOutput, SetExponent, Term,
+    PowOutput, SetAnnotation, SetExponent, Term,
 };
 
 // ╭────────────────╮
@@ -129,5 +129,16 @@ impl<'a> Inv for &'a mut AtomAnnotation {
 
     fn inv(self) -> Self::Output {
         self.pow(-1).unwrap_rest()
+    }
+}
+
+impl<'a> SetAnnotation for &'a mut AtomAnnotation {
+    type Output = ();
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        self.annotation = annotation.into();
     }
 }

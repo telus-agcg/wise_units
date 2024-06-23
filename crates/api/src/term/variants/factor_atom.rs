@@ -2,9 +2,12 @@ use std::fmt;
 
 use num_traits::{Inv, Pow};
 
-use crate::Atom;
+use crate::{Annotation, Atom};
 
-use super::{Exponent, Factor, FactorAtomExponent, PowOutput, SetExponent, Term};
+use super::{
+    Exponent, Factor, FactorAtomAnnotation, FactorAtomExponent, PowOutput, SetAnnotation,
+    SetExponent, Term,
+};
 
 // ╭────────────╮
 // │ FactorAtom │
@@ -89,5 +92,16 @@ impl<'a> Inv for &'a mut FactorAtom {
 
     fn inv(self) -> Self::Output {
         self.pow(-1).unwrap_rest()
+    }
+}
+
+impl SetAnnotation for FactorAtom {
+    type Output = FactorAtomAnnotation;
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>,
+    {
+        FactorAtomAnnotation::new(self.factor, self.atom, Annotation::from(annotation))
     }
 }

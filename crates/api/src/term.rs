@@ -483,6 +483,61 @@ impl Term {
         self
     }
 
+    pub(crate) fn set_annotation<T>(&mut self, new_annotation: T) -> &mut Self
+    where
+        Annotation: From<T>,
+    {
+        match self {
+            Self::Annotation(annotation) => {
+                *annotation = Annotation::from(new_annotation);
+            }
+            Self::Atom(atom) => {
+                *self = AtomAnnotation::new(*atom, Annotation::from(new_annotation)).into();
+            }
+            Self::AtomAnnotation(inner) => {
+                inner.set_annotation(new_annotation);
+            }
+            Self::AtomExponent(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::AtomExponentAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::PrefixAtom(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::PrefixAtomAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::PrefixAtomExponent(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::PrefixAtomExponentAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::FactorAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::FactorAtomExponentAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::FactorAtomAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::FactorExponentAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::FactorPrefixAtomAnnotation(inner) => inner.set_annotation(new_annotation),
+            Self::Factor(factor) => {
+                *self = FactorAnnotation::new(*factor, Annotation::from(new_annotation)).into();
+            }
+            Self::FactorExponent(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::FactorAtom(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::FactorAtomExponent(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::FactorPrefixAtom(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::FactorPrefixAtomExponent(inner) => {
+                *self = inner.set_annotation(new_annotation).into();
+            }
+            Self::FactorPrefixAtomExponentAnnotation(inner) => inner.set_annotation(new_annotation),
+        }
+
+        self
+    }
+
     /// A `Term` is a unity `Term` if represents "1", which technically means
     /// here:
     ///

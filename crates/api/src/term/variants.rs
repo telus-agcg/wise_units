@@ -123,10 +123,12 @@ pub(super) trait SetExponent {
     fn set_exponent(&mut self, exponent: Exponent) -> Self::Output;
 }
 
-/// Trait for doing the opposite of `AssignExponent`.
-///
-pub(crate) trait UnassignExponent {
-    fn unassign_exponent(self) -> Term;
+pub(super) trait SetAnnotation {
+    type Output;
+
+    fn set_annotation<T>(self, annotation: T) -> Self::Output
+    where
+        Annotation: From<T>;
 }
 
 // ╭────────────╮

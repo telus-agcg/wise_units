@@ -1,37 +1,20 @@
 use pest::iterators::Pair;
 
 use crate::{
-    term::Exponent as IExponent,
+    term::UNITY,
     unit::parser::{terms::term_parser::Rule as TermRule, Error, Visit},
+    Term,
 };
 
-use super::{Atom, Exponent, Prefix, SimpleUnit};
+use super::{Exponent, SimpleUnit};
 
-pub(super) enum Annotatable {
-    PrefixedWithExponent {
-        prefix: Prefix,
-        atom: Atom,
-        exponent: IExponent,
-    },
-    Prefixed {
-        prefix: Prefix,
-        atom: Atom,
-    },
-    BasicWithExponent {
-        atom: Atom,
-        exponent: IExponent,
-    },
-    Basic {
-        atom: Atom,
-    },
-    Unity,
-}
+pub(super) struct Annotatable(pub(super) Term);
 
 impl Visit<'_, TermRule> for Annotatable {
     fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
         let mut pairs = pair.into_inner();
 
-        let simple_unit = match pairs.next() {
+        let mut simple_unit = match pairs.next() {
             Some(first) => match first.as_rule() {
                 TermRule::simple_unit => SimpleUnit::visit(first)?,
                 _ => unreachable!(),
@@ -39,29 +22,19 @@ impl Visit<'_, TermRule> for Annotatable {
             None => unreachable!(),
         };
 
-        match simple_unit {
-            SimpleUnit::Prefixed { prefix, atom } => match pairs.next() {
+        if simple_unit.0 == UNITY {
+            Ok(Self(simple_unit.0))
+        } else {
+            match pairs.next() {
                 Some(second) => match second.as_rule() {
-                    TermRule::exponent => Ok(Self::PrefixedWithExponent {
-                        prefix,
-                        atom,
-                        exponent: Exponent::visit(second)?.0,
-                    }),
+                    TermRule::exponent => {
+                        let _ = simple_unit.0.set_exponent(Exponent::visit(second)?.0);
+                        Ok(Self(simple_unit.0))
+                    }
                     _ => unreachable!(),
                 },
-                None => Ok(Self::Prefixed { prefix, atom }),
-            },
-            SimpleUnit::Basic { atom } => match pairs.next() {
-                Some(second) => match second.as_rule() {
-                    TermRule::exponent => Ok(Self::BasicWithExponent {
-                        atom,
-                        exponent: Exponent::visit(second)?.0,
-                    }),
-                    _ => unreachable!(),
-                },
-                None => Ok(Self::Basic { atom }),
-            },
-            SimpleUnit::Unity => Ok(Self::Unity),
+                None => Ok(Self(simple_unit.0)),
+            }
         }
     }
 }
