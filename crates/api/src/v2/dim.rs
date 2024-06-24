@@ -14,8 +14,8 @@ where
     fn dimension(&self) -> D;
 }
 
-/// Trait for determining if two things are dimensionally equal, aka commensurable. Per [Dimensional analysis#Dimensional homogeneity
-/// (commensurability)](https://en.wikipedia.org/wiki/Dimensional_analysis#Dimensional_homogeneity_(commensurability):
+/// Trait for determining if two things are dimensionally equal, aka commensurable. Per [Dimensional
+/// analysis#Dimensional homogeneity (commensurability)](https://en.wikipedia.org/wiki/Dimensional_analysis#Dimensional_homogeneity_(commensurability)):
 ///
 /// > The most basic rule of dimensional analysis is that of dimensional homogeneity.[6]
 /// >   Only commensurable quantities (physical quantities having the same dimension) may be

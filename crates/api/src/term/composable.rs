@@ -2,7 +2,15 @@ use std::borrow::Cow;
 
 use crate::{Composable, Composition};
 
-use super::{variants::*, Term};
+use super::{
+    variants::{
+        AtomAnnotation, AtomExponent, AtomExponentAnnotation, FactorAtom, FactorAtomAnnotation,
+        FactorAtomExponent, FactorAtomExponentAnnotation, FactorPrefixAtom,
+        FactorPrefixAtomAnnotation, FactorPrefixAtomExponent, FactorPrefixAtomExponentAnnotation,
+        PrefixAtom, PrefixAtomAnnotation, PrefixAtomExponent, PrefixAtomExponentAnnotation,
+    },
+    Term,
+};
 
 impl Composable for Term {
     /// Combines the `Composition` from the `Term`'s `Atom` with its own `exponent` to build a

@@ -101,12 +101,12 @@ mod tests {
 
         #[test]
         fn validate_term() {
-            let m = term!(Meter, annotation: "stuff".to_string());
-            let km_stuff = term!(Kilo, Meter, annotation: "stuff".to_string());
+            let m = term!(Meter, annotation: "stuff");
+            let km_stuff = term!(Kilo, Meter, annotation: "stuff");
             assert!(m.is_compatible_with(&km_stuff));
 
             // Different annotation
-            let km_pants = term!(Kilo, Meter, annotation: "pants".to_string());
+            let km_pants = term!(Kilo, Meter, annotation: "pants");
             assert!(!m.is_compatible_with(&km_pants));
 
             // No annotation
@@ -116,12 +116,12 @@ mod tests {
 
         #[test]
         fn validate_terms() {
-            let m = terms![term!(Meter, annotation: "stuff".to_string())];
-            let km_stuff = terms![term!(Kilo, Meter, annotation: "stuff".to_string())];
+            let m = terms![term!(Meter, annotation: "stuff")];
+            let km_stuff = terms![term!(Kilo, Meter, annotation: "stuff")];
             assert!(m.is_compatible_with(&km_stuff));
 
             // Different annotation
-            let km_pants = terms![term!(Kilo, Meter, annotation: "pants".to_string())];
+            let km_pants = terms![term!(Kilo, Meter, annotation: "pants")];
             assert!(!m.is_compatible_with(&km_pants));
 
             // No annotation
@@ -131,12 +131,12 @@ mod tests {
 
         #[test]
         fn validate_atomless_term() {
-            let lhs_tree = term!(annotation: "tree".to_string());
-            let rhs_tree = term!(annotation: "tree".to_string());
+            let lhs_tree = term!(annotation: "tree");
+            let rhs_tree = term!(annotation: "tree");
             assert!(lhs_tree.is_compatible_with(&rhs_tree));
 
             // Different annotation
-            let rhs_plant = term!(annotation: "plant".to_string());
+            let rhs_plant = term!(annotation: "plant");
             assert!(!lhs_tree.is_compatible_with(&rhs_plant));
         }
     }

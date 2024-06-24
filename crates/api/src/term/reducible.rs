@@ -4,7 +4,16 @@ use num_traits::One;
 
 use crate::{reducible::Reducible, Atom, UcumSymbol};
 
-use super::{variants::*, Term};
+use super::{
+    variants::{
+        AtomAnnotation, AtomExponent, AtomExponentAnnotation, FactorAnnotation, FactorAtom,
+        FactorAtomAnnotation, FactorAtomExponent, FactorAtomExponentAnnotation, FactorExponent,
+        FactorExponentAnnotation, FactorPrefixAtom, FactorPrefixAtomAnnotation,
+        FactorPrefixAtomExponent, FactorPrefixAtomExponentAnnotation, PrefixAtom,
+        PrefixAtomAnnotation, PrefixAtomExponent, PrefixAtomExponentAnnotation,
+    },
+    Term,
+};
 
 impl Reducible<f64> for Term {
     fn reduce_value(&self, value: f64) -> f64 {

@@ -20,7 +20,14 @@ pub use builder::Builder;
 
 use crate::{Annotation, Atom, Prefix};
 
-use self::variants::*;
+use self::variants::{
+    AssignFactor, AtomAnnotation, AtomExponent, AtomExponentAnnotation, FactorAnnotation,
+    FactorAtom, FactorAtomAnnotation, FactorAtomExponent, FactorAtomExponentAnnotation,
+    FactorExponent, FactorExponentAnnotation, FactorPrefixAtom, FactorPrefixAtomAnnotation,
+    FactorPrefixAtomExponent, FactorPrefixAtomExponentAnnotation, PowOutput, PrefixAtom,
+    PrefixAtomAnnotation, PrefixAtomExponent, PrefixAtomExponentAnnotation, SetAnnotation,
+    SetExponent,
+};
 
 pub const UNITY: Term = Term::Factor(1);
 pub const UNITY_ARRAY: [Term; 1] = [UNITY];
@@ -374,6 +381,7 @@ impl Term {
         }
     }
 
+    #[allow(clippy::too_many_lines)]
     pub(crate) fn set_exponent(&mut self, exponent: Exponent) -> &mut Self {
         match self {
             Self::Annotation(annotation) => match annotation.set_exponent(exponent) {
@@ -1087,23 +1095,17 @@ mod tests {
         assert_eq!(UNITY.as_cow_str(), "1");
 
         // None | Some(1), None, None, None, Some(ann)
-        assert_eq!(term!(annotation: "hi".to_string()).as_cow_str(), "{hi}");
-        assert_eq!(
-            term!(factor: 1, annotation: "hi".to_string()).as_cow_str(),
-            "{hi}"
-        );
+        assert_eq!(term!(annotation: "hi").as_cow_str(), "{hi}");
+        assert_eq!(term!(factor: 1, annotation: "hi").as_cow_str(), "{hi}");
 
         // None, None, Some(atom), None | Some(1), None
         assert_eq!(term!(Meter).as_cow_str(), "m");
         assert_eq!(term!(Meter, exponent: 1).as_cow_str(), "m");
 
         // None, None, Some(atom), None | Some(1), Some(ann)
+        assert_eq!(term!(Meter, annotation: "hi").as_cow_str(), "m{hi}");
         assert_eq!(
-            term!(Meter, annotation: "hi".to_string()).as_cow_str(),
-            "m{hi}"
-        );
-        assert_eq!(
-            term!(Meter, exponent: 1, annotation: "hi".to_string()).as_cow_str(),
+            term!(Meter, exponent: 1, annotation: "hi").as_cow_str(),
             "m{hi}"
         );
 
@@ -1111,23 +1113,20 @@ mod tests {
         assert_eq!(term!(Meter, exponent: -1).as_cow_str(), "m-1");
 
         assert_eq!(
-            term!(Meter, exponent: 2, annotation: "hi".to_string()).as_cow_str(),
+            term!(Meter, exponent: 2, annotation: "hi").as_cow_str(),
             "m2{hi}"
         );
 
         assert_eq!(term!(Kilo, Meter).as_cow_str(), "km");
 
-        assert_eq!(
-            term!(Kilo, Meter, annotation: "hi".to_string()).as_cow_str(),
-            "km{hi}"
-        );
+        assert_eq!(term!(Kilo, Meter, annotation: "hi").as_cow_str(), "km{hi}");
 
         assert_eq!(
-            term!(Kilo, Meter, exponent: 1, annotation: "hi".to_string()).as_cow_str(),
+            term!(Kilo, Meter, exponent: 1, annotation: "hi").as_cow_str(),
             "km{hi}"
         );
         assert_eq!(
-            term!(Kilo, Meter, exponent: 2, annotation: "hi".to_string()).as_cow_str(),
+            term!(Kilo, Meter, exponent: 2, annotation: "hi").as_cow_str(),
             "km2{hi}"
         );
     }

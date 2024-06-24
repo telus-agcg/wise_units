@@ -6,10 +6,6 @@ use crate::Term;
 pub struct Annotation(String);
 
 impl Annotation {
-    pub(crate) const fn new(inner: String) -> Self {
-        Self(inner)
-    }
-
     pub(crate) fn as_str(&self) -> &str {
         &self.0
     }

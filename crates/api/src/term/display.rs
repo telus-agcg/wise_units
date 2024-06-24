@@ -58,7 +58,7 @@ mod tests {
     );
     validate_display!(
         validate_display_meter_exponent1_annotation,
-        term!(Meter, exponent: -1, annotation: "seed".to_string()),
+        term!(Meter, exponent: -1, annotation: "seed"),
         "m-1{seed}"
     );
     validate_display!(
@@ -68,7 +68,7 @@ mod tests {
     );
     validate_display!(
         validate_display_meter_exponent_factor_annotation,
-        term!(Meter, exponent: -1, factor: 5, annotation: "seed".to_string()),
+        term!(Meter, exponent: -1, factor: 5, annotation: "seed"),
         "5m-1{seed}"
     );
     validate_display!(
@@ -94,7 +94,7 @@ mod tests {
     );
     validate_display!(
         validate_display_kilometer_factor_exponent_annotation,
-        term!(Kilo, Meter, factor: 10, exponent: -1, annotation: "seed".to_string()),
+        term!(Kilo, Meter, factor: 10, exponent: -1, annotation: "seed"),
         "10km-1{seed}"
     );
 }
