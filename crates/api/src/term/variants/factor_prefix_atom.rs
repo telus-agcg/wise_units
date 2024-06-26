@@ -28,6 +28,21 @@ impl FactorPrefixAtom {
             atom,
         }
     }
+
+    #[must_use]
+    pub const fn factor(&self) -> Factor {
+        self.factor
+    }
+
+    #[must_use]
+    pub const fn prefix(&self) -> Prefix {
+        self.prefix
+    }
+
+    #[must_use]
+    pub const fn atom(&self) -> Atom {
+        self.atom
+    }
 }
 
 impl From<FactorPrefixAtom> for Term {

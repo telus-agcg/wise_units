@@ -25,6 +25,16 @@ impl AtomExponent {
     pub const fn new(atom: Atom, exponent: Exponent) -> Self {
         Self { atom, exponent }
     }
+
+    #[must_use]
+    pub const fn atom(&self) -> Atom {
+        self.atom
+    }
+
+    #[must_use]
+    pub const fn exponent(&self) -> i32 {
+        self.exponent
+    }
 }
 
 impl From<AtomExponent> for Term {

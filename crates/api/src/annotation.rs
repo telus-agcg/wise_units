@@ -6,7 +6,8 @@ use crate::Term;
 pub struct Annotation(String);
 
 impl Annotation {
-    pub(crate) fn as_str(&self) -> &str {
+    #[must_use]
+    pub fn as_str(&self) -> &str {
         &self.0
     }
 }

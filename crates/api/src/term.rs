@@ -280,7 +280,7 @@ impl Term {
     }
 
     #[must_use]
-    pub const fn atom(&self) -> Option<&Atom> {
+    pub const fn atom(&self) -> Option<Atom> {
         match self {
             Self::Annotation(_)
             | Self::Factor(_)
@@ -305,7 +305,7 @@ impl Term {
             | Self::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation {
                 atom,
                 ..
-            }) => Some(atom),
+            }) => Some(*atom),
         }
     }
 

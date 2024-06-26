@@ -23,6 +23,16 @@ impl FactorExponent {
     pub const fn new(factor: Factor, exponent: Exponent) -> Self {
         Self { factor, exponent }
     }
+
+    #[must_use]
+    pub const fn factor(&self) -> Factor {
+        self.factor
+    }
+
+    #[must_use]
+    pub const fn exponent(&self) -> Exponent {
+        self.exponent
+    }
 }
 
 impl From<FactorExponent> for Term {

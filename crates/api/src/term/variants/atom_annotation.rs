@@ -25,6 +25,16 @@ impl AtomAnnotation {
     pub const fn new(atom: Atom, annotation: Annotation) -> Self {
         Self { atom, annotation }
     }
+
+    #[must_use]
+    pub const fn atom(&self) -> Atom {
+        self.atom
+    }
+
+    #[must_use]
+    pub const fn annotation(&self) -> &Annotation {
+        &self.annotation
+    }
 }
 
 impl From<AtomAnnotation> for Term {

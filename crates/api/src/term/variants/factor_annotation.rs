@@ -21,6 +21,16 @@ impl FactorAnnotation {
     pub const fn new(factor: Factor, annotation: Annotation) -> Self {
         Self { factor, annotation }
     }
+
+    #[must_use]
+    pub const fn factor(&self) -> Factor {
+        self.factor
+    }
+
+    #[must_use]
+    pub const fn annotation(&self) -> &Annotation {
+        &self.annotation
+    }
 }
 
 impl From<FactorAnnotation> for Term {

@@ -2,7 +2,8 @@ use crate::{reducible::Reducible, ucum_unit::UcumUnit};
 
 impl UcumUnit for super::Term {
     fn is_special(&self) -> bool {
-        self.atom().map_or(false, UcumUnit::is_special)
+        self.atom()
+            .map_or(false, |atom| UcumUnit::is_special(&atom))
     }
 
     /// The UCUM defines "arbitrary units" using three points. First:
@@ -22,13 +23,14 @@ impl UcumUnit for super::Term {
     /// “commensurable with” any > other unit.
     ///
     fn is_arbitrary(&self) -> bool {
-        self.atom().map_or(false, UcumUnit::is_arbitrary)
+        self.atom()
+            .map_or(false, |atom| UcumUnit::is_arbitrary(&atom))
     }
 
     /// A `Term` is metric if it has some `Atom` that is metric.
     ///
     fn is_metric(&self) -> bool {
-        self.atom().map_or(false, UcumUnit::is_metric)
+        self.atom().map_or(false, |atom| UcumUnit::is_metric(&atom))
     }
 
     fn scalar(&self) -> f64 {

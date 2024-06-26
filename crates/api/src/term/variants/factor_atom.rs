@@ -23,6 +23,16 @@ impl FactorAtom {
     pub const fn new(factor: Factor, atom: Atom) -> Self {
         Self { factor, atom }
     }
+
+    #[must_use]
+    pub const fn factor(&self) -> Factor {
+        self.factor
+    }
+
+    #[must_use]
+    pub const fn atom(&self) -> Atom {
+        self.atom
+    }
 }
 
 impl From<FactorAtom> for Term {

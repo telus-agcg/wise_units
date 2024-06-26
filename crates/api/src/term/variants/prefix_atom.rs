@@ -23,6 +23,16 @@ impl PrefixAtom {
     pub const fn new(prefix: Prefix, atom: Atom) -> Self {
         Self { prefix, atom }
     }
+
+    #[must_use]
+    pub const fn prefix(&self) -> Prefix {
+        self.prefix
+    }
+
+    #[must_use]
+    pub const fn atom(&self) -> Atom {
+        self.atom
+    }
 }
 
 impl From<PrefixAtom> for Term {

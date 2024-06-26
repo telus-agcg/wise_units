@@ -28,6 +28,21 @@ impl PrefixAtomAnnotation {
             annotation,
         }
     }
+
+    #[must_use]
+    pub const fn prefix(&self) -> Prefix {
+        self.prefix
+    }
+
+    #[must_use]
+    pub const fn atom(&self) -> Atom {
+        self.atom
+    }
+
+    #[must_use]
+    pub const fn annotation(&self) -> &Annotation {
+        &self.annotation
+    }
 }
 
 impl From<PrefixAtomAnnotation> for Term {

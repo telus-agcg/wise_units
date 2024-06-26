@@ -35,6 +35,26 @@ impl FactorAtomExponentAnnotation {
             annotation,
         }
     }
+
+    #[must_use]
+    pub const fn factor(&self) -> Factor {
+        self.factor
+    }
+
+    #[must_use]
+    pub const fn atom(&self) -> Atom {
+        self.atom
+    }
+
+    #[must_use]
+    pub const fn exponent(&self) -> Exponent {
+        self.exponent
+    }
+
+    #[must_use]
+    pub const fn annotation(&self) -> &Annotation {
+        &self.annotation
+    }
 }
 
 impl From<FactorAtomExponentAnnotation> for Term {
