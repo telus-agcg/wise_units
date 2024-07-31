@@ -1,8 +1,8 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use super::{Exponent, Term};
 
-pub(crate) type AnnotationComposition<'a> = HashMap<&'a str, Exponent>;
+pub(crate) type AnnotationComposition<'a> = BTreeMap<&'a str, Exponent>;
 
 /// Similar to `Composable`, this is only to allow for checking compatibility on `Unit`s that have
 /// annotations. For those cases, we want to be able to ensure that, for example, `m{foo}` is not

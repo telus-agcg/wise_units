@@ -41,8 +41,17 @@ impl IsCompatibleWith for Term {
 
 impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
-        self.composition() == rhs.composition()
-            && self.annotation_composition() == rhs.annotation_composition()
+        if self.composition() != rhs.composition() {
+            return false;
+        }
+
+        // TODO: Since we only care about keys when both sides have annotations, we probably don't
+        // need to return the exponents map from `annotation_composition()`.
+        match (self.annotation_composition(), rhs.annotation_composition()) {
+            (None, None) => true,
+            (None, Some(_)) | (Some(_), None) => false,
+            (Some(l), Some(r)) => l.keys().eq(r.keys()),
+        }
     }
 }
 
