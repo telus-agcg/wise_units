@@ -185,7 +185,7 @@ impl<'a> TryFrom<&'a str> for Unit {
 
 #[cfg(test)]
 mod tests {
-    use crate::testing::const_units::METER;
+    use crate::testing::const_units::l1::METER;
 
     use super::*;
     use std::str::FromStr;

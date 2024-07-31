@@ -82,7 +82,9 @@ mod tests {
 
     use crate::{
         as_fraction::AsFraction,
-        testing::const_units::{GRAM_METER, METER, METER_PER_SECOND, PER_SECOND},
+        testing::const_units::{
+            l1::METER, l1m1::GRAM_METER, l1t_1::METER_PER_SECOND, t_1::PER_SECOND,
+        },
     };
 
     use super::Unit;
@@ -124,7 +126,7 @@ mod tests {
     }
 
     mod denominator {
-        use crate::testing::const_units::{PER_GRAM_METER, SECOND};
+        use crate::testing::const_units::{l_1m_1::PER_GRAM_METER, t1::SECOND};
 
         use super::*;
 

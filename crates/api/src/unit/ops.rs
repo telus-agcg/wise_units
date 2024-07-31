@@ -155,7 +155,13 @@ mod tests {
     use std::str::FromStr;
 
     use crate::{
-        testing::const_units::{ACRE, KILOMETER, METER, METER_PER_SECOND, PER_SECOND, SECOND},
+        testing::const_units::{
+            l1::{KILOMETER, METER},
+            l1t_1::METER_PER_SECOND,
+            l2::ACRE,
+            t1::SECOND,
+            t_1::PER_SECOND,
+        },
         unit::UNITY,
     };
 
