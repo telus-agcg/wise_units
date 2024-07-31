@@ -1,148 +1,10 @@
 #![allow(clippy::large_enum_variant)]
 #![allow(clippy::result_large_err)]
+mod add_sub;
+mod neg;
 
-use crate::{convertible::Convertible, error::Error, measurement::Measurement};
-use std::ops::{Add, Div, Mul, Neg, Sub};
-
-// ╭──────────╮
-// │ impl Neg │
-// ╰──────────╯
-impl Neg for Measurement {
-    type Output = Self;
-
-    fn neg(self) -> Self::Output {
-        Self {
-            value: self.value.neg(),
-            unit: self.unit,
-        }
-    }
-}
-
-impl<'a> Neg for &'a Measurement {
-    type Output = Measurement;
-
-    fn neg(self) -> Self::Output {
-        Measurement {
-            value: self.value.neg(),
-            unit: self.unit.clone(),
-        }
-    }
-}
-
-impl<'a> Neg for &'a mut Measurement {
-    type Output = Self;
-
-    fn neg(self) -> Self::Output {
-        self.value = self.value.neg();
-        self
-    }
-}
-
-//-----------------------------------------------------------------------------
-// impl Add
-//-----------------------------------------------------------------------------
-#[cfg_attr(
-    feature = "cffi",
-    ffi_common::derive::expose_fn(extend_type(Measurement))
-)]
-fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
-    let rhs_converted = rhs.convert_to(&lhs.unit)?;
-    let new_value = lhs.value + rhs_converted.value;
-
-    Ok(Measurement {
-        value: new_value,
-        unit: lhs.unit.clone(),
-    })
-}
-
-impl Add for Measurement {
-    type Output = Result<Self, Error>;
-
-    #[inline]
-    fn add(self, other: Self) -> Self::Output {
-        add_measurements(&self, &other)
-    }
-}
-
-impl<'a> Add<&'a Self> for Measurement {
-    type Output = Result<Self, Error>;
-
-    #[inline]
-    fn add(self, other: &'a Self) -> Self::Output {
-        add_measurements(&self, other)
-    }
-}
-
-impl<'a> Add for &'a Measurement {
-    type Output = Result<Measurement, Error>;
-
-    #[inline]
-    fn add(self, other: &'a Measurement) -> Self::Output {
-        add_measurements(self, other)
-    }
-}
-
-impl<'a> Add<Measurement> for &'a Measurement {
-    type Output = Result<Measurement, Error>;
-
-    #[inline]
-    fn add(self, other: Measurement) -> Self::Output {
-        add_measurements(self, &other)
-    }
-}
-
-//-----------------------------------------------------------------------------
-// impl Sub
-//-----------------------------------------------------------------------------
-#[cfg_attr(
-    feature = "cffi",
-    ffi_common::derive::expose_fn(extend_type(Measurement))
-)]
-fn sub_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
-    let rhs_converted = rhs.convert_to(&lhs.unit)?;
-    let new_value = lhs.value - rhs_converted.value;
-
-    Ok(Measurement {
-        value: new_value,
-        unit: lhs.unit.clone(),
-    })
-}
-
-impl Sub for Measurement {
-    type Output = Result<Self, Error>;
-
-    #[inline]
-    fn sub(self, other: Self) -> Self::Output {
-        sub_measurements(&self, &other)
-    }
-}
-
-impl<'a> Sub<&'a Self> for Measurement {
-    type Output = Result<Self, Error>;
-
-    #[inline]
-    fn sub(self, other: &'a Self) -> Self::Output {
-        sub_measurements(&self, other)
-    }
-}
-
-impl<'a> Sub for &'a Measurement {
-    type Output = Result<Measurement, Error>;
-
-    #[inline]
-    fn sub(self, other: &'a Measurement) -> Self::Output {
-        sub_measurements(self, other)
-    }
-}
-
-impl<'a> Sub<Measurement> for &'a Measurement {
-    type Output = Result<Measurement, Error>;
-
-    #[inline]
-    fn sub(self, other: Measurement) -> Self::Output {
-        sub_measurements(self, &other)
-    }
-}
+use crate::{convertible::Convertible, measurement::Measurement};
+use std::ops::{Div, Mul};
 
 //-----------------------------------------------------------------------------
 // impl Mul
@@ -320,7 +182,7 @@ impl<'a> Div<f64> for &'a Measurement {
 
 #[cfg(test)]
 mod tests {
-    use crate::measurement::Measurement;
+    use crate::{measurement::Measurement, Unit};
 
     macro_rules! validate_op {
         ($result:expr, $expected:expr) => {
@@ -359,105 +221,6 @@ mod tests {
             validate_owned_borrowed($lhs.clone(), &$rhs);
             validate_owned_owned($lhs, $rhs);
         };
-    }
-
-    mod neg {
-        use std::ops::Neg;
-
-        #[test]
-        fn owned_test() {
-            let subject = measurement!(10.0, "L");
-            assert_eq!(Neg::neg(subject), measurement!(-10.0, "L"));
-
-            let subject = measurement!(-10.0, "L");
-            assert_eq!(Neg::neg(subject), measurement!(10.0, "L"));
-        }
-
-        #[test]
-        fn borrowed_test() {
-            let subject = measurement!(10.0, "L");
-            assert_eq!(Neg::neg(&subject), measurement!(-10.0, "L"));
-
-            let subject = measurement!(-10.0, "L");
-            assert_eq!(Neg::neg(&subject), measurement!(10.0, "L"));
-        }
-
-        #[test]
-        fn mut_borrowed_test() {
-            let mut subject = measurement!(10.0, "L");
-            let _ = Neg::neg(&mut subject);
-            assert_eq!(subject, measurement!(-10.0, "L"));
-
-            let mut subject = measurement!(-10.0, "L");
-            let _ = Neg::neg(&mut subject);
-            assert_eq!(subject, measurement!(10.0, "L"));
-        }
-    } /* neg */
-
-    mod add {
-        use crate::Unit;
-
-        use super::*;
-
-        #[test]
-        fn validate_add_owned() {
-            let m1 = Measurement::try_new(1.0, "m").unwrap();
-            let m2 = Measurement::try_new(2.0, "m").unwrap();
-            let expected = Measurement::try_new(3.0, "m").unwrap();
-
-            assert_eq!((m1 + m2).unwrap(), expected);
-        }
-
-        #[test]
-        fn validate_add_borrowed() {
-            let m1 = Measurement::try_new(1.0, "m").unwrap();
-            let m2 = Measurement::try_new(2.0, "m").unwrap();
-            let expected = Measurement::try_new(3.0, "m").unwrap();
-
-            assert_eq!((&m1 + &m2).unwrap(), expected);
-        }
-
-        #[test]
-        fn validate_add_owned_and_borrowed() {
-            let m1 = Measurement::try_new(1.0, "m").unwrap();
-            let m2 = Measurement::try_new(2.0, "m").unwrap();
-            let expected = Measurement::try_new(3.0, "m").unwrap();
-
-            assert_eq!((m1 + &m2).unwrap(), expected);
-        }
-
-        #[test]
-        fn validate_add_borrowed_and_owned() {
-            let m1 = Measurement::try_new(1.0, "m").unwrap();
-            let m2 = Measurement::try_new(2.0, "m").unwrap();
-            let expected = Measurement::try_new(3.0, "m").unwrap();
-
-            assert_eq!((&m1 + m2).unwrap(), expected);
-        }
-
-        #[test]
-        fn validate_add_arbitrary() {
-            let term_tree = term!(annotation: "tree");
-            let term_tree2 = term!(annotation: "tree");
-            let expected_term_tree = term!(annotation: "tree");
-            let m1 = Measurement::new(10.0, Unit::new(vec![term_tree]));
-            let m2 = Measurement::new(7.0, Unit::new(vec![term_tree2]));
-            let expected = Measurement::new(17.0, Unit::new(vec![expected_term_tree]));
-
-            assert_eq!((&m1 + m2).unwrap(), expected);
-        }
-
-        #[test]
-        fn validate_sub_arbitrary() {
-            let term_tree = term!(annotation: "tree");
-            let term_tree2 = term!(annotation: "tree");
-            let expected_term_tree = term!(annotation: "tree");
-            let m1 = Measurement::new(10.0, Unit::new(vec![term_tree]));
-            let m2 = Measurement::new(7.0, Unit::new(vec![term_tree2]));
-            let expected = Measurement::new(3.0, Unit::new(vec![expected_term_tree]));
-
-            assert_eq!((&m1 - m2).unwrap(), expected);
-        }
     }
 
     mod sub {
@@ -678,5 +441,17 @@ mod tests {
 
             assert_eq!(m.div(5.0), expected);
         }
+    }
+
+    #[test]
+    fn validate_sub_arbitrary() {
+        let term_tree = term!(annotation: "tree");
+        let term_tree2 = term!(annotation: "tree");
+        let expected_term_tree = term!(annotation: "tree");
+        let m1 = Measurement::new(10.0, Unit::new(vec![term_tree]));
+        let m2 = Measurement::new(7.0, Unit::new(vec![term_tree2]));
+        let expected = Measurement::new(3.0, Unit::new(vec![expected_term_tree]));
+
+        assert_eq!((&m1 - m2).unwrap(), expected);
     }
 }

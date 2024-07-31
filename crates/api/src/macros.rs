@@ -8,7 +8,7 @@ macro_rules! measurement {
 #[macro_export]
 macro_rules! unit {
     ($($term:expr),+) => {
-        $crate::Unit::new(vec![$($term)+])
+        $crate::Unit::new(vec![$($term),+])
     };
 }
 
