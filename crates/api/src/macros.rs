@@ -15,7 +15,7 @@ macro_rules! unit {
 #[macro_export]
 macro_rules! parse_unit {
     ($unit_str:expr) => {
-        $crate::Unit::from_str($unit_str).unwrap()
+        <$crate::Unit as std::str::FromStr>::from_str($unit_str).unwrap()
     };
 }
 

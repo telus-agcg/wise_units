@@ -57,8 +57,7 @@ fn recompose<'a>(numerators: &[Cow<'a, str>], denominators: &[String]) -> Cow<'a
 
 #[cfg(test)]
 mod tests {
-    use crate::{testing::const_units::METER, unit::UNITY};
-    use std::str::FromStr;
+    use crate::{testing::const_units::l1::METER, unit::UNITY};
 
     macro_rules! test_display {
         ($test_name:ident: $unit:expr => $expected:expr) => {
