@@ -165,6 +165,18 @@ impl Unit {
 
         Self::new(reduced).to_string()
     }
+
+    pub fn numerator_terms(&self) -> impl Iterator<Item = &Term> {
+        self.terms
+            .iter()
+            .filter(|term| !term.effective_exponent().is_negative())
+    }
+
+    pub fn denominator_terms(&self) -> impl Iterator<Item = &Term> {
+        self.terms
+            .iter()
+            .filter(|term| term.effective_exponent().is_negative())
+    }
 }
 
 // TODO: This is silly; remove.

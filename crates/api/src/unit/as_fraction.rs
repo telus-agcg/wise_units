@@ -43,12 +43,7 @@ impl AsFraction for Unit {
 
     #[inline]
     fn numerator(&self) -> Self::Numerator {
-        let positive_terms: Vec<Term> = self
-            .terms
-            .iter()
-            .filter(|term| term.effective_exponent().is_positive())
-            .cloned()
-            .collect();
+        let positive_terms: Vec<Term> = self.numerator_terms().cloned().collect();
 
         if positive_terms.is_empty() {
             None
@@ -59,14 +54,7 @@ impl AsFraction for Unit {
 
     #[inline]
     fn denominator(&self) -> Self::Denominator {
-        let negative_terms: Vec<Term> = self
-            .terms
-            .iter()
-            .filter_map(|term| match term.exponent() {
-                Some(e) if e.is_negative() => Some(term.clone().inv()),
-                _ => None,
-            })
-            .collect();
+        let negative_terms: Vec<Term> = self.denominator_terms().map(Inv::inv).collect();
 
         if negative_terms.is_empty() {
             None
