@@ -55,3 +55,5 @@ pub use crate::{
     prefix::Prefix, property::Property, term::Term, ucum_symbol::UcumSymbol, ucum_unit::UcumUnit,
     unit::Unit,
 };
+
+pub use num_traits;
