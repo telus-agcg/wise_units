@@ -13,15 +13,15 @@ pub struct Params {
 }
 
 #[debug_handler]
-pub async fn add(Json(params): Json<Params>) -> Result<impl IntoResponse> {
-    debug!("Adding {} + {}", &params.lhs, &params.rhs);
+pub async fn sub(Json(params): Json<Params>) -> Result<impl IntoResponse> {
+    debug!("Subtracting {} - {}", &params.lhs, &params.rhs);
 
-    match params.lhs + params.rhs {
+    match params.lhs - params.rhs {
         Ok(result) => format::json(result),
         Err(e) => format::json(e),
     }
 }
 
 pub fn routes() -> Routes {
-    Routes::new().prefix("add").add("/", post(add))
+    Routes::new().prefix("sub").add("/", post(sub))
 }
