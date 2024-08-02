@@ -9,10 +9,10 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-wise_units.path = "../api"
+wise_units = { path = "../api", features = ["serde"] }
 loco-rs = { version = "0.6.2", default-features = false, features = ["cli"] }
-serde = "*"
-serde_json = "*"
+serde = "1.0"
+serde_json = { version = "1.0", features = ["preserve_order"] }
 eyre = "*"
 tokio = { version = "1.33.0", default-features = false }
 async-trait = "0.1.74"
