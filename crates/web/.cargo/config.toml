@@ -1,2 +1,3 @@
 [alias]
 loco = "run --"
+locoer = "run --release --"
