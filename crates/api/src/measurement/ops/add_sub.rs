@@ -128,67 +128,79 @@ mod tests {
     use super::*;
 
     macro_rules! validate_add {
-        ($lhs:expr, $rhs:expr, $expected:expr) => {
+        ($lhs:expr, $rhs:expr, $expected:expr) => {{
+            let lhs = $lhs;
+            let rhs = $rhs;
+
             // borrowed + borrowed
-            pretty_assertions::assert_eq!((&$lhs + &$rhs).unwrap(), $expected);
+            pretty_assertions::assert_eq!((&lhs + &rhs).unwrap(), $expected);
 
             // borrowed + owned
-            pretty_assertions::assert_eq!((&$lhs + $rhs.clone()).unwrap(), $expected);
+            pretty_assertions::assert_eq!((&lhs + rhs.clone()).unwrap(), $expected);
 
             // owned + borrowed
-            pretty_assertions::assert_eq!(($lhs.clone() + &$rhs).unwrap(), $expected);
+            pretty_assertions::assert_eq!((lhs.clone() + &rhs).unwrap(), $expected);
 
             // owned + owned
-            pretty_assertions::assert_eq!(($lhs + $rhs).unwrap(), $expected);
-        };
+            pretty_assertions::assert_eq!((lhs + rhs).unwrap(), $expected);
+        }};
     }
 
     macro_rules! validate_add_error {
-        ($lhs:expr, $rhs:expr) => {
+        ($lhs:expr, $rhs:expr) => {{
+            let lhs = $lhs;
+            let rhs = $rhs;
+
             // borrowed + borrowed
-            assert!((&$lhs + &$rhs).is_err());
+            assert!((&lhs + &rhs).is_err());
 
             // borrowed + owned
-            assert!((&$lhs + $rhs.clone()).is_err());
+            assert!((&lhs + rhs.clone()).is_err());
 
             // owned + borrowed
-            assert!(($lhs.clone() + &$rhs).is_err());
+            assert!((lhs.clone() + &rhs).is_err());
 
             // owned + owned
-            assert!(($lhs + $rhs).is_err());
-        };
+            assert!((lhs + rhs).is_err());
+        }};
     }
 
     macro_rules! validate_sub {
-        ($lhs:expr, $rhs:expr, $expected:expr) => {
+        ($lhs:expr, $rhs:expr, $expected:expr) => {{
+            let lhs = $lhs;
+            let rhs = $rhs;
+
             // borrowed - borrowed
-            pretty_assertions::assert_eq!((&$lhs - &$rhs).unwrap(), $expected);
+            pretty_assertions::assert_eq!((&lhs - &rhs).unwrap(), $expected);
 
             // borrowed - owned
-            pretty_assertions::assert_eq!((&$lhs - $rhs.clone()).unwrap(), $expected);
+            pretty_assertions::assert_eq!((&lhs - rhs.clone()).unwrap(), $expected);
 
             // owned - borrowed
-            pretty_assertions::assert_eq!(($lhs.clone() - &$rhs).unwrap(), $expected);
+            pretty_assertions::assert_eq!((lhs.clone() - &rhs).unwrap(), $expected);
 
             // owned - owned
-            pretty_assertions::assert_eq!(($lhs - $rhs).unwrap(), $expected);
-        };
+            pretty_assertions::assert_eq!((lhs - rhs).unwrap(), $expected);
+        }};
     }
 
     macro_rules! validate_sub_error {
-        ($lhs:expr, $rhs:expr) => {
+        ($lhs:expr, $rhs:expr) => {{
+            let lhs = $lhs;
+            let rhs = $rhs;
+
             // borrowed - borrowed
-            assert!((&$lhs + &$rhs).is_err());
+            assert!((&lhs + &rhs).is_err());
 
             // borrowed - owned
-            assert!((&$lhs + $rhs.clone()).is_err());
+            assert!((&lhs + rhs.clone()).is_err());
 
             // owned - borrowed
-            assert!(($lhs.clone() + &$rhs).is_err());
+            assert!((lhs.clone() + &rhs).is_err());
 
             // owned - owned
-            assert!(($lhs + $rhs).is_err());
-        };
+            assert!((lhs + rhs).is_err());
+        }};
     }
 
     const ONE_METER_SQUARED: Measurement = Measurement::new(1.0, METER_SQUARED);
@@ -1371,6 +1383,75 @@ mod tests {
 
     mod factor_atom_annotation {
         use super::*;
+
+        #[test]
+        fn validate_same_factor_same_atom_same_annotation() {
+            let lhs = Measurement::new(1.0, parse_unit!("2g{tree}"));
+            let rhs = Measurement::new(2.0, parse_unit!("2g{tree}"));
+
+            validate_add!(
+                lhs.clone(),
+                rhs.clone(),
+                Measurement::new(3.0, parse_unit!("2g{tree}"))
+            );
+            validate_sub!(lhs, rhs, Measurement::new(-1.0, parse_unit!("2g{tree}")));
+        }
+
+        #[test]
+        fn validate_same_factor_same_atom_different_annotation() {
+            let lhs = Measurement::new(1.0, unit!(term!(Gram, factor: 2, annotation: "seed")));
+            let rhs = Measurement::new(2.0, unit!(term!(Gram, factor: 2, annotation: "tree")));
+
+            validate_add_error!(lhs.clone(), rhs.clone());
+            validate_sub_error!(lhs, rhs);
+        }
+
+        #[test]
+        fn validate_factor_different_atom_same_dimension_same_annotation() {
+            let lhs = Measurement::new(1.0, unit!(term!(Gram, factor: 2, annotation: "seed")));
+            let rhs = Measurement::new(
+                2.0,
+                unit!(term!(PoundAvoirdupois,factor: 3,  annotation: "seed")),
+            );
+
+            validate_add!(
+                lhs.clone(),
+                rhs.clone(),
+                Measurement::new(
+                    1361.77711,
+                    unit!(term!(Gram,factor: 2,  annotation: "seed"))
+                )
+            );
+            validate_sub!(
+                lhs,
+                rhs,
+                Measurement::new(
+                    -1359.77711,
+                    unit!(term!(Gram,factor: 2,  annotation: "seed"))
+                )
+            );
+        }
+
+        #[test]
+        fn validate_different_factor_different_atom_same_dimension_different_annotation() {
+            let lhs = Measurement::new(1.0, unit!(term!(Gram, factor: 2, annotation: "seed")));
+            let rhs = Measurement::new(
+                2.0,
+                unit!(term!(PoundAvoirdupois, factor: 3, annotation: "tree")),
+            );
+
+            validate_add_error!(lhs.clone(), rhs.clone());
+            validate_sub_error!(lhs, rhs);
+        }
+
+        #[test]
+        fn validate_same_factor_different_atom_different_dimension_same_annotation() {
+            let lhs = Measurement::new(1.0, unit!(term!(Gram, factor: 2, annotation: "seed")));
+            let rhs = Measurement::new(2.0, unit!(term!(Meter, factor: 2, annotation: "seed")));
+
+            validate_add_error!(lhs.clone(), rhs.clone());
+            validate_sub_error!(lhs, rhs);
+        }
     }
 
     mod factor_atom_exponent {
@@ -1379,6 +1460,35 @@ mod tests {
 
     mod factor_atom_exponent_annotation {
         use super::*;
+
+        #[test]
+        fn validate_different_factor_same_atom_same_exponent_same_annotation() {
+            let lhs = Measurement::new(
+                1.0,
+                unit!(term!(Second, factor: 2, exponent: 2, annotation: "wind")),
+            );
+            let rhs = Measurement::new(
+                1.0,
+                unit!(term!(Second, factor: 3, exponent: 2, annotation: "wind")),
+            );
+
+            validate_add!(
+                lhs.clone(),
+                rhs.clone(),
+                Measurement::new(
+                    3.25,
+                    unit!(term!(Second, factor:2, exponent: 2, annotation: "wind"))
+                )
+            );
+            validate_sub!(
+                lhs,
+                rhs,
+                Measurement::new(
+                    -1.25,
+                    unit!(term!(Second, factor:2, exponent: 2, annotation: "wind"))
+                )
+            );
+        }
     }
 
     mod factor_prefix_atom {
@@ -1387,6 +1497,84 @@ mod tests {
 
     mod factor_prefix_atom_annotation {
         use super::*;
+
+        #[test]
+        fn validate_same_factor_same_prefix_same_atom_same_annotation() {
+            let lhs = Measurement::new(1.0, parse_unit!("2kg{tree}"));
+            let rhs = Measurement::new(2.0, parse_unit!("2kg{tree}"));
+
+            validate_add!(
+                lhs.clone(),
+                rhs.clone(),
+                Measurement::new(3.0, parse_unit!("2kg{tree}"))
+            );
+            validate_sub!(lhs, rhs, Measurement::new(-1.0, parse_unit!("2kg{tree}")));
+        }
+
+        #[test]
+        fn validate_same_factor_same_prefix_same_atom_different_annotation() {
+            let lhs =
+                Measurement::new(1.0, unit!(term!(Kilo, Gram, factor: 2, annotation: "seed")));
+            let rhs =
+                Measurement::new(2.0, unit!(term!(Kilo, Gram, factor: 2, annotation: "tree")));
+
+            validate_add_error!(lhs.clone(), rhs.clone());
+            validate_sub_error!(lhs, rhs);
+        }
+
+        #[test]
+        fn validate_factor_prefix_different_atom_same_dimension_same_annotation() {
+            let lhs =
+                Measurement::new(1.0, unit!(term!(Kilo, Gram, factor: 2, annotation: "seed")));
+            let rhs = Measurement::new(
+                2.0,
+                unit!(term!(Nano, Tonne,factor: 2,  annotation: "seed")),
+            );
+
+            validate_add!(
+                lhs.clone(),
+                rhs.clone(),
+                Measurement::new(
+                    1.000_002,
+                    unit!(term!(Kilo, Gram,factor: 2,  annotation: "seed"))
+                )
+            );
+            validate_sub!(
+                lhs,
+                rhs,
+                Measurement::new(
+                    0.999_998,
+                    unit!(term!(Kilo, Gram,factor: 2,  annotation: "seed"))
+                )
+            );
+        }
+
+        #[test]
+        fn validate_different_factor_different_prefix_different_atom_same_dimension_different_annotation(
+        ) {
+            let lhs =
+                Measurement::new(1.0, unit!(term!(Kilo, Gram, factor: 2, annotation: "seed")));
+            let rhs = Measurement::new(
+                2.0,
+                unit!(term!(Nano, Tonne, factor: 3, annotation: "tree")),
+            );
+
+            validate_add_error!(lhs.clone(), rhs.clone());
+            validate_sub_error!(lhs, rhs);
+        }
+
+        #[test]
+        fn validate_same_factor_same_prefix_different_atom_different_dimension_same_annotation() {
+            let lhs =
+                Measurement::new(1.0, unit!(term!(Kilo, Gram, factor: 2, annotation: "seed")));
+            let rhs = Measurement::new(
+                2.0,
+                unit!(term!(Kilo, Meter, factor: 2, annotation: "seed")),
+            );
+
+            validate_add_error!(lhs.clone(), rhs.clone());
+            validate_sub_error!(lhs, rhs);
+        }
     }
 
     mod factor_prefix_atom_exponent {
