@@ -40,7 +40,15 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `Term::exponent_is_negative()`
   - `Term::factor_and_is_not_one()`
   - `Term::factor_as_u32()`
+- Removed derive of `Ord` on `Atom`. The `PartialOrd` implementation is now manually implemented
+  instead of derived, and in some cases `Atom`s cannot be compared (ex. different
+  dimensions), so deriving `Ord` before was a mistake.
 - Removed `is_compatible_with::DefaultCompatibility` trait.
+
+### Fixed
+
+- `Atom` derived `PartialOrd`, which means it did not check to see if it's comparable to the
+  other `Atom`; it now checks for compatibility.
 
 ## [0.23.0] — 2024-05-30
 
