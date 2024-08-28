@@ -12,6 +12,7 @@ use crate::{convertible::Convertible, error::Error, measurement::Measurement};
     feature = "cffi",
     ffi_common::derive::expose_fn(extend_type(Measurement))
 )]
+#[allow(clippy::result_large_err)]
 fn add_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
     let rhs_converted = rhs.convert_to(&lhs.unit)?;
     let new_value = lhs.value + rhs_converted.value;
@@ -65,6 +66,7 @@ impl<'a> Add<Measurement> for &'a Measurement {
     feature = "cffi",
     ffi_common::derive::expose_fn(extend_type(Measurement))
 )]
+#[allow(clippy::result_large_err)]
 fn sub_measurements(lhs: &Measurement, rhs: &Measurement) -> Result<Measurement, Error> {
     let rhs_converted = rhs.convert_to(&lhs.unit)?;
     let new_value = lhs.value - rhs_converted.value;

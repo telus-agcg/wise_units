@@ -146,6 +146,48 @@ impl Unit {
         self.to_string()
     }
 
+    /// If the unit terms are a fraction and can be reduced, this returns a new
+    /// `Unit` with those terms. Ex. terms that would normally render
+    /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
+    ///
+    /// ```rust
+    /// use wise_units::{Unit, parse_unit};
+    ///
+    /// let u = parse_unit!("[acr_us].[in_i]/[acr_us]");
+    /// assert_eq!(u.simplify(), parse_unit!("[in_i]"));
+    /// ```
+    ///
+    #[must_use]
+    pub fn simplify(&self) -> Self {
+        fn reduce_head_tail(remaining_terms: &[Term]) -> Option<(Term, term_reducing::WhatToKeep)> {
+            if let Some((head, tail)) = remaining_terms.split_first() {
+                Some((
+                    head.clone(),
+                    term_reducing::simplify_one_to_many(head, tail),
+                ))
+            } else {
+                None
+            }
+        }
+
+        let mut output: Vec<Term> = Vec::new();
+
+        if let Some((lhs, what_to_keep)) = reduce_head_tail(&self.terms) {
+            if what_to_keep.keep_lhs {
+                output.push(lhs);
+            }
+
+            output.extend(what_to_keep.new_terms);
+
+            Self::new(term_reducing::compare_and_cancel(
+                &output,
+                what_to_keep.kept_terms,
+            ))
+        } else {
+            self.clone()
+        }
+    }
+
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
@@ -161,9 +203,7 @@ impl Unit {
     #[inline]
     #[must_use]
     pub fn expression_reduced(&self) -> String {
-        let reduced = term_reducing::reduce_terms(&self.terms);
-
-        Self::new(reduced).to_string()
+        self.simplify().to_string()
     }
 
     pub fn numerator_terms(&self) -> impl Iterator<Item = &Term> {
@@ -232,6 +272,7 @@ mod tests {
     #[test]
     fn validate_expression_reduced() {
         assert_eq!(METER.expression_reduced(), "m");
+        assert_eq!(UNITY.expression_reduced(), "1");
         assert_eq!(parse_unit!("M").expression_reduced(), "m");
         assert_eq!(parse_unit!("km/10m").expression_reduced(), "km/10m");
         assert_eq!(parse_unit!("m-1").expression_reduced(), "/m");
@@ -248,6 +289,25 @@ mod tests {
         assert_eq!(parse_unit!("MiBy").expression_reduced(), "MiBy");
         assert_eq!(parse_unit!("GiBy").expression_reduced(), "GiBy");
         assert_eq!(parse_unit!("TiBy").expression_reduced(), "TiBy");
+
+        assert_eq!(parse_unit!("42km3{foo}").expression_reduced(), "42km3{foo}");
+        assert_eq!(
+            parse_unit!("42km3{foo}.42kg2{bar}").expression_reduced(),
+            "42km3{foo}.42kg2{bar}"
+        );
+        assert_eq!(
+            parse_unit!("42km3{foo}/42km2{foo}").expression_reduced(),
+            "42km{foo}"
+        );
+        assert_eq!(parse_unit!("km3.km/km2").expression_reduced(), "km2");
+        assert_eq!(
+            parse_unit!("{meow}/m2.g/{meow}").expression_reduced(),
+            "1+2{meow}/m2.g"
+        );
+        assert_eq!(
+            parse_unit!("{meow}/m2/g/{meow}").expression_reduced(),
+            "g/m2"
+        );
     }
 
     #[cfg(feature = "cffi")]

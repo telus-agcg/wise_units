@@ -16,6 +16,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Added `assert_field_eq!()` macro to allow checking exact equality of objects (since current
   implementation of `PartialEq` does not do this).
 - `Composition` now derives `Ord`.
+- `Unit::simplify()`, extracted from the (redesigned) innards of `Unit::expression_reduced()`.
 
 ### Changed
 

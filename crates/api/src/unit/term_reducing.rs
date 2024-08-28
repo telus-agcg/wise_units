@@ -15,71 +15,9 @@
 use std::borrow::Cow;
 
 use crate::{
-    composable::ComposablyEq,
     term::term_reduce::{ReducedTerm, TermReduce},
     FieldEq, Term,
 };
-
-/// Function used in `Unit` for reducing its `Term`s.
-///
-/// This takes `terms` by value due to how this function sits in relation to `Unit`: any time
-/// `reduce_terms()` is called, we're going from some set of terms to 1) the same set, 2) a set
-/// with some elements removed, or 3) a set without any elements. By taking the `Term`s by value
-/// here instead of references, there's a good chance we can reuse some of those `Term`s in the
-/// result of this call (if we passed a reference/slice instead, we'd have to clone the originals,
-/// and this is most likely to happen).
-///
-pub(super) fn reduce_terms(terms: &[Term]) -> Cow<'static, [Term]> {
-    let mut ids_to_remove = vec![];
-    let mut output = vec![];
-
-    'outer: for (i, lhs) in terms.iter().enumerate() {
-        if ids_to_remove.contains(&i) {
-            continue;
-        }
-
-        let mut offset = i + 1;
-        let mut new_term = lhs.clone();
-
-        'inner: for (j, rhs) in terms[offset..].iter().enumerate() {
-            if ids_to_remove.contains(&(offset + j)) {
-                continue 'inner;
-            }
-
-            match lhs.composably_eq(rhs) {
-                Some(0) => {
-                    ids_to_remove.push(i);
-                    ids_to_remove.push(offset);
-                    continue 'outer;
-                }
-                Some(exponent) => {
-                    let _ = new_term.set_exponent(exponent);
-
-                    ids_to_remove.push(offset);
-                }
-                None => (),
-            }
-
-            offset += 1;
-        }
-
-        output.push(new_term);
-    }
-
-    cleanup(output)
-}
-
-fn cleanup(mut output: Vec<Term>) -> Cow<'static, [Term]> {
-    // If everything is reduced away, the effective Unit should be "1".
-    if output.is_empty() {
-        Cow::Borrowed(crate::term::UNITY_ARRAY_REF)
-    } else {
-        if output.len() > 1 {
-            output.retain(|t| !t.field_eq(&crate::term::UNITY));
-        }
-        output.into()
-    }
-}
 
 /// This is the algorithm for determining if & how to combine or cancel out Terms when multiplying
 /// and dividing Units/Measurements.
@@ -87,12 +25,25 @@ fn cleanup(mut output: Vec<Term>) -> Cow<'static, [Term]> {
 /// * `lhs_terms`: The `Term`s from the left-hand side of the operation.
 /// * `rhs_terms`: The `Term`s from the right-hand side of the operation.
 ///
-pub(super) fn meow(lhs_terms: &[Term], rhs_terms: Vec<Term>) -> Cow<'static, [Term]> {
+pub(super) fn compare_and_cancel(lhs_terms: &[Term], rhs_terms: Vec<Term>) -> Cow<'static, [Term]> {
+    fn cleanup(mut output: Vec<Term>) -> Cow<'static, [Term]> {
+        // If everything is reduced away, the effective Unit should be "1".
+        if output.is_empty() {
+            Cow::Borrowed(crate::term::UNITY_ARRAY_REF)
+        } else {
+            if output.len() > 1 {
+                output.retain(|t| !t.field_eq(&crate::term::UNITY));
+            }
+            output.into()
+        }
+    }
     let mut output: Vec<Term> = vec![];
     let mut remaining_rhs = rhs_terms;
 
+    // Iterate through all LHS terms, comparing them to RHS terms, reducing away or combining Terms
+    // as needed.
     for lhs in lhs_terms {
-        let what_to_keep = lhs_single_rhs(lhs, &remaining_rhs);
+        let what_to_keep = simplify_one_to_many(lhs, &remaining_rhs);
 
         if what_to_keep.keep_lhs {
             output.push(lhs.clone());
@@ -107,16 +58,30 @@ pub(super) fn meow(lhs_terms: &[Term], rhs_terms: Vec<Term>) -> Cow<'static, [Te
         }
     }
 
+    // `remaining_rhs` are the RHS Terms that couldn't be combined with any LHS ones.
     output.extend_from_slice(&remaining_rhs);
 
     cleanup(output)
 }
 
-#[derive(Debug)]
-struct WhatToKeep {
-    keep_lhs: bool,
-    new_terms: Vec<Term>,
-    kept_terms: Vec<Term>,
+/// Helps gather information about what to keep, what got reduced, etc., when comparing a LHS Term
+/// to the remaining RHS Terms.
+///
+#[derive(Debug, PartialEq)]
+pub(super) struct WhatToKeep {
+    /// If `true`, the `LHS` term that was passed in should be kept.
+    ///
+    pub(super) keep_lhs: bool,
+
+    /// These are `Term`s that were combined from other terms. Ex. `m3` and `m-2` combined becomes
+    /// `m`.
+    ///
+    pub(super) new_terms: Vec<Term>,
+
+    /// These are RHS `Term`s that did not get reduced away (because they're not comparable to the
+    /// LHS in this context).
+    ///
+    pub(super) kept_terms: Vec<Term>,
 }
 
 impl Default for WhatToKeep {
@@ -129,21 +94,31 @@ impl Default for WhatToKeep {
     }
 }
 
-// TODO: Change back to Cow
-fn lhs_single_rhs(lhs: &Term, rhs_terms: &[Term]) -> WhatToKeep {
+pub(super) fn simplify_one_to_many(lhs: &Term, rhs_terms: &[Term]) -> WhatToKeep {
     let mut what_to_keep = WhatToKeep::default();
 
     for (i, rhs) in rhs_terms.iter().enumerate() {
         match lhs.term_reduce(rhs) {
             ReducedTerm::ReducedToTerm(new_term) => {
-                what_to_keep.new_terms.push(new_term);
                 what_to_keep.keep_lhs = false;
 
-                if let Some(things) = rhs_terms.get((i + 1)..) {
-                    what_to_keep.kept_terms.extend_from_slice(things);
+                match rhs_terms.get((i + 1)..) {
+                    Some(things) if !things.is_empty() => {
+                        let wtk = simplify_one_to_many(&new_term, things);
+
+                        if wtk.keep_lhs {
+                            what_to_keep.new_terms.push(new_term);
+                        }
+
+                        what_to_keep.new_terms.extend(wtk.new_terms);
+                        what_to_keep.kept_terms.extend(wtk.kept_terms);
+                    }
+                    _ => {
+                        what_to_keep.new_terms.push(new_term);
+                    }
                 }
 
-                break;
+                return what_to_keep;
             }
             ReducedTerm::ReducedAway => {
                 what_to_keep.keep_lhs = false;
@@ -151,7 +126,7 @@ fn lhs_single_rhs(lhs: &Term, rhs_terms: &[Term]) -> WhatToKeep {
                 if let Some(things) = rhs_terms.get((i + 1)..) {
                     what_to_keep.kept_terms.extend_from_slice(things);
                 }
-                break;
+                return what_to_keep;
             }
             ReducedTerm::NotReducible => {
                 what_to_keep.kept_terms.push(rhs.clone());
@@ -164,126 +139,95 @@ fn lhs_single_rhs(lhs: &Term, rhs_terms: &[Term]) -> WhatToKeep {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        term::{
-            variants::{
-                FactorPrefixAtomAnnotation, FactorPrefixAtomExponentAnnotation, PrefixAtom,
-                PrefixAtomExponent,
-            },
-            UNITY,
-        },
-        Annotation, Atom, Prefix,
-    };
+    use crate::term::UNITY;
 
     use super::*;
 
-    #[test]
-    fn empty_terms_test() {
-        assert_eq!(reduce_terms(&[]), vec![UNITY]);
-    }
+    const METER: Term = Term::Atom(crate::atom::Atom::Meter);
 
-    #[test]
-    fn single_term_test() {
-        let term =
-            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
-                42,
-                Prefix::Kilo,
-                Atom::Meter,
-                3,
-                Annotation::from("foo"),
-            ));
-        assert_eq!(reduce_terms(&[term.clone()]), vec![term]);
-    }
+    mod compare_one_to_many {
+        use super::*;
 
-    // NOTE: The two terms only differ in their `annotation`s here. (and `exponent`, but that field
-    // isn't used in grouping terms);
-    //
-    #[test]
-    fn two_unrelated_term_test() {
-        let term1 =
-            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
-                42,
-                Prefix::Kilo,
-                Atom::Meter,
-                3,
-                Annotation::from("foo"),
-            ));
-        let term2 =
-            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
-                42,
-                Prefix::Kilo,
-                Atom::Gram,
-                2,
-                Annotation::from("bar"),
-            ));
-        assert_eq!(
-            reduce_terms(&[term1.clone(), term2.clone()]),
-            vec![term1, term2]
+        macro_rules! test_compare_one_to_many {
+            ($test_name:ident, $lhs:expr, $rhs:expr, $expected:expr) => {
+                #[test]
+                fn $test_name() {
+                    pretty_assertions::assert_eq!(simplify_one_to_many($lhs, $rhs), $expected);
+                }
+            };
+        }
+
+        test_compare_one_to_many!(
+            test_unity_vs_empty_slice,
+            &UNITY,
+            &[],
+            WhatToKeep::default()
         );
-    }
 
-    #[test]
-    fn two_related_term_test() {
-        let term1 =
-            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
-                42,
-                Prefix::Kilo,
-                Atom::Meter,
-                3,
-                Annotation::from("foo"),
-            ));
-        let term2 =
-            Term::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation::new(
-                42,
-                Prefix::Kilo,
-                Atom::Meter,
-                -2,
-                Annotation::from("foo"),
-            ));
-
-        assert_eq!(
-            reduce_terms(&[term1, term2]),
-            vec![Term::FactorPrefixAtomAnnotation(
-                FactorPrefixAtomAnnotation::new(
-                    42,
-                    Prefix::Kilo,
-                    Atom::Meter,
-                    Annotation::from("foo")
-                )
-            )]
+        test_compare_one_to_many!(
+            test_meter_vs_meter,
+            &METER,
+            &[METER],
+            WhatToKeep {
+                keep_lhs: false,
+                new_terms: vec![term!(Meter, exponent: 2)],
+                kept_terms: vec![]
+            }
         );
-    }
 
-    #[test]
-    fn three_related_term_test() {
-        let term1 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, 3));
-        let term2 =
-            Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, -2));
-        let term3 = Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter));
-
-        assert_eq!(
-            reduce_terms(&[term1, term2, term3]),
-            vec![Term::PrefixAtomExponent(PrefixAtomExponent::new(
-                Prefix::Kilo,
-                Atom::Meter,
-                2
-            ))]
+        test_compare_one_to_many!(
+            test_meter_vs_meter_minus_1,
+            &METER,
+            &[term!(Meter, exponent: -1)],
+            WhatToKeep {
+                keep_lhs: false,
+                new_terms: vec![],
+                kept_terms: vec![]
+            }
         );
-    }
 
-    #[test]
-    fn three_term_two_related_test() {
-        let term1 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, 3));
-        let term2 =
-            Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Meter, -2));
-        let term3 = Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2));
+        test_compare_one_to_many!(
+            test_meter_vs_meter_minus_2,
+            &METER,
+            &[term!(Meter, exponent: -2)],
+            WhatToKeep {
+                keep_lhs: false,
+                new_terms: vec![term!(Meter, exponent: -1)],
+                kept_terms: vec![]
+            }
+        );
 
-        assert_eq!(
-            reduce_terms(&[term1, term2, term3]),
-            vec![
-                Term::PrefixAtom(PrefixAtom::new(Prefix::Kilo, Atom::Meter,)),
-                Term::PrefixAtomExponent(PrefixAtomExponent::new(Prefix::Kilo, Atom::Gram, 2))
-            ]
+        test_compare_one_to_many!(
+            test_unity_vs_meter,
+            &UNITY,
+            &[METER],
+            WhatToKeep {
+                keep_lhs: true,
+                new_terms: vec![],
+                kept_terms: vec![METER]
+            }
+        );
+
+        test_compare_one_to_many!(
+            test_meter_vs_gram,
+            &METER,
+            &[term!(Gram)],
+            WhatToKeep {
+                keep_lhs: true,
+                new_terms: vec![],
+                kept_terms: vec![term!(Gram)]
+            }
+        );
+
+        test_compare_one_to_many!(
+            test_meter_vs_meter_meter_meter,
+            &METER,
+            &[METER, METER, METER],
+            WhatToKeep {
+                keep_lhs: false,
+                new_terms: vec![term!(Meter, exponent: 4)],
+                kept_terms: vec![]
+            }
         );
     }
 }

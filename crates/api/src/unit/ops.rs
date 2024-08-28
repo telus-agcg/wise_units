@@ -18,7 +18,7 @@ impl Div for Unit {
 
     #[inline]
     fn div(self, other: Self) -> Self::Output {
-        Self::new(term_reducing::meow(
+        Self::new(term_reducing::compare_and_cancel(
             &self.terms,
             other.terms.iter().map(Inv::inv).collect(),
         ))
@@ -33,9 +33,9 @@ impl<'a> Div<&'a Self> for Unit {
 
     #[inline]
     fn div(self, other: &'a Self) -> Self::Output {
-        Self::new(term_reducing::meow(
+        Self::new(term_reducing::compare_and_cancel(
             &self.terms,
-            other.terms.into_iter().map(Inv::inv).collect(),
+            other.terms.iter().map(Inv::inv).collect(),
         ))
     }
 }
@@ -48,9 +48,9 @@ impl<'a> Div for &'a Unit {
 
     #[inline]
     fn div(self, other: &'a Unit) -> Self::Output {
-        Unit::new(term_reducing::meow(
+        Unit::new(term_reducing::compare_and_cancel(
             &self.terms,
-            other.terms.into_iter().map(Inv::inv).collect(),
+            other.terms.iter().map(Inv::inv).collect(),
         ))
     }
 }
@@ -63,9 +63,9 @@ impl<'a> Div<Unit> for &'a Unit {
 
     #[inline]
     fn div(self, other: Unit) -> Self::Output {
-        Unit::new(term_reducing::meow(
+        Unit::new(term_reducing::compare_and_cancel(
             &self.terms,
-            other.terms.into_iter().map(Inv::inv).collect(),
+            other.terms.iter().map(Inv::inv).collect(),
         ))
     }
 }
@@ -81,7 +81,10 @@ impl Mul for Unit {
 
     #[inline]
     fn mul(self, other: Self) -> Self::Output {
-        Self::new(term_reducing::meow(&self.terms, other.terms.to_vec()))
+        Self::new(term_reducing::compare_and_cancel(
+            &self.terms,
+            other.terms.to_vec(),
+        ))
     }
 }
 
@@ -93,7 +96,10 @@ impl<'a> Mul<&'a Self> for Unit {
 
     #[inline]
     fn mul(self, other: &'a Self) -> Self::Output {
-        Self::new(term_reducing::meow(&self.terms, other.terms.to_vec()))
+        Self::new(term_reducing::compare_and_cancel(
+            &self.terms,
+            other.terms.to_vec(),
+        ))
     }
 }
 
@@ -105,7 +111,10 @@ impl<'a> Mul for &'a Unit {
 
     #[inline]
     fn mul(self, other: &'a Unit) -> Self::Output {
-        Unit::new(term_reducing::meow(&self.terms, other.terms.to_vec()))
+        Unit::new(term_reducing::compare_and_cancel(
+            &self.terms,
+            other.terms.to_vec(),
+        ))
     }
 }
 
@@ -117,7 +126,10 @@ impl<'a> Mul<Unit> for &'a Unit {
 
     #[inline]
     fn mul(self, other: Unit) -> Self::Output {
-        Unit::new(term_reducing::meow(&self.terms, other.terms.to_vec()))
+        Unit::new(term_reducing::compare_and_cancel(
+            &self.terms,
+            other.terms.to_vec(),
+        ))
     }
 }
 
@@ -185,7 +197,7 @@ mod tests {
         test_div!(test_factor_atom_div_factor_same_atom:
             parse_unit!("10m"), parse_unit!("20m") => parse_unit!("10m/20m"));
         test_div!(test_nondim_div_same_nondim:
-            seed(), seed() => parse_unit!("{seed}"));
+            seed(), seed() => UNITY);
         test_div!(test_unity_div_same_nondim:
             UNITY, seed() => Unit::new(vec![term!(factor: 1, exponent: -1, annotation: "seed")]));
         test_div!(test_nondim_div_atom:

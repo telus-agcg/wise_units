@@ -9,18 +9,18 @@ impl UcumUnit for super::Term {
     /// The UCUM defines "arbitrary units" using three points. First:
     ///
     /// > units whose meaning entirely depends on the measurement procedure
-    /// (assay). These units > have no general meaning in relation with any
-    /// other unit in the SI.
+    /// > (assay). These units > have no general meaning in relation with any
+    /// > other unit in the SI.
     ///
     /// Second:
     ///
     /// > An arbitrary unit has no further definition in the semantic framework
-    /// of The Unified Code > for Units of Measure.
+    /// > of The Unified Code > for Units of Measure.
     ///
     /// Third:
     ///
     /// > Arbitrary units are not “of any specific dimension” and are not
-    /// “commensurable with” any > other unit.
+    /// > “commensurable with” any > other unit.
     ///
     fn is_arbitrary(&self) -> bool {
         self.atom()

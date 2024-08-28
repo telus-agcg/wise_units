@@ -17,7 +17,7 @@ use super::{
 // ╰────────────────╯
 /// Ex. "g{sucrose}"
 ///
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct AtomAnnotation {
     pub(crate) atom: Atom,
     pub(crate) annotation: Annotation,

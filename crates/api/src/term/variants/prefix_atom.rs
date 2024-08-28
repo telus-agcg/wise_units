@@ -15,7 +15,7 @@ use super::{
 // ╭────────────╮
 // │ PrefixAtom │
 // ╰────────────╯
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct PrefixAtom {
     pub(crate) prefix: Prefix,
     pub(crate) atom: Atom,

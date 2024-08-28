@@ -17,7 +17,7 @@ use super::{
 // ╰────────────────────────╯
 /// Ex. "m2{peaches}"
 ///
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct AtomExponentAnnotation {
     pub(crate) atom: Atom,
     pub(crate) exponent: Exponent,

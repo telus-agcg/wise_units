@@ -15,7 +15,7 @@ use super::{
 // ╭────────────╮
 // │ FactorAtom │
 // ╰────────────╯
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct FactorAtom {
     pub(crate) factor: Factor,
     pub(crate) atom: Atom,

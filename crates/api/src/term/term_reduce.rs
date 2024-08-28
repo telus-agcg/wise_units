@@ -15,7 +15,7 @@ pub(crate) trait TermReduce: crate::composable::ComposablyEq<Term> {
     fn term_reduce(&self, rhs: &Term) -> ReducedTerm {
         match self.composably_eq(rhs) {
             Some(0) => ReducedTerm::ReducedAway,
-            Some(exponent) => ReducedTerm::ReducedToTerm(self.build(exponent).into()),
+            Some(exponent) => ReducedTerm::ReducedToTerm(self.build(exponent)),
             None => ReducedTerm::NotReducible,
         }
     }

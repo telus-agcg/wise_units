@@ -9,7 +9,7 @@ use crate::{
     Composable, IsCompatibleWith, Term,
 };
 
-#[derive(Default, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Default, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Annotation(String);
 
 impl Annotation {

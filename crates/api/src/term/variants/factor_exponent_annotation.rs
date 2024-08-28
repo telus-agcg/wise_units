@@ -14,7 +14,7 @@ use super::{
 // ╭──────────────────────────╮
 // │ FactorExponentAnnotation │
 // ╰──────────────────────────╯
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct FactorExponentAnnotation {
     pub(crate) factor: Factor,
     pub(crate) exponent: Exponent,

@@ -17,7 +17,7 @@ use super::{
 // ╰──────────────╯
 /// Ex. "m2"
 ///
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct AtomExponent {
     pub(crate) atom: Atom,
     pub(crate) exponent: Exponent,

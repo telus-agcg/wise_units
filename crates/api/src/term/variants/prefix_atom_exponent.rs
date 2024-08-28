@@ -15,7 +15,7 @@ use super::{
 // ╭────────────────────╮
 // │ PrefixAtomExponent │
 // ╰────────────────────╯
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct PrefixAtomExponent {
     pub(crate) prefix: Prefix,
     pub(crate) atom: Atom,
