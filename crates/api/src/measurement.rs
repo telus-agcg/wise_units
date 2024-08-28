@@ -272,7 +272,6 @@ mod tests {
             assert!(measurement.is_err());
         }
 
-        #[allow(box_pointers)]
         #[test]
         fn validate_bincode_serde() {
             let expected_measurement = Measurement::try_new(123.4, "100cm456{stuff}/g4").unwrap();

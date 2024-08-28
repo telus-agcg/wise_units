@@ -315,6 +315,8 @@ impl Composition {
             && self.time.is_none()
     }
 
+    /// Does this `Composition` represent a dimensionless unit?
+    ///
     #[must_use]
     pub const fn is_dimless(&self) -> bool {
         self.is_empty()

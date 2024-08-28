@@ -9,14 +9,36 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- `crate::Annotation` now wraps `String`s inside `Term`s.
+- New type: `crate::Annotation` now wraps `String`s inside `Term`s.
 - New type: `crate::term::Builder`. Intended for internal use only, but had to make public to
   use it in the `term!()` macro.
-- Added `parse_unit!()` macro as a shortcut to `Unit::from_str(foo).unwrap()`.
-- Added `assert_field_eq!()` macro to allow checking exact equality of objects (since current
-  implementation of `PartialEq` does not do this).
-- `Composition` now derives `Ord`.
+- New types: `crate::term::variants`:
+  - `AtomAnnotation`
+  - `AtomExponent`
+  - `AtomExponentAnnotation`
+  - `FactorAnnotation`
+  - `FactorAtom`
+  - `FactorAtomAnnotation`
+  - `FactorAtomExponent`
+  - `FactorAtomExponentAnnotation`
+  - `FactorExponent`
+  - `FactorExponentAnnotation`
+  - `FactorPrefixAtom`
+  - `FactorPrefixAtomAnnotation`
+  - `FactorPrefixAtomExponent`
+  - `FactorPrefixAtomExponentAnnotation`
+  - `PrefixAtom`
+  - `PrefixAtomAnnotation`
+  - `PrefixAtomExponent`
+  - `PrefixAtomExponentAnnotation`
 - `Unit::simplify()`, extracted from the (redesigned) innards of `Unit::expression_reduced()`.
+- Added `parse_unit!()` macro as a shortcut to `Unit::from_str(foo).unwrap()`.
+- Added two macros to allow checking exact equality of objects (since current
+  implementation of `PartialEq` does not do this):
+  - `assert_field_eq!()`
+  - `pretty_assert_field_eq!()`
+- `Composition` now derives `Ord`.
+- Added `impl From<Factor> for Term` and `impl From<Atom> for Term`.
 
 ### Changed
 
@@ -28,6 +50,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Term::is_unity()` is now `const`.
 - `impl Default for Term` now returns `term::UNITY` instead of a `Term` with 0 fields set.
 - `term!()` can now take, for `annotation`, any `T: ToString`.
+- The `term` module is now `pub`.
 - `IsCompatibleWith` now has default implementation that compares the `Composition` of the LHS and
   RHS types. As a result, `IsCompatibleWith` now also requires both sides `impl Composable`.
 - (Internal) `AnnotationComposition` now uses `&str` instead of `String` when determining an

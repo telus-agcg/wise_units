@@ -15,7 +15,6 @@ use std::{os::raw::c_char, str::FromStr};
 ///
 /// `ptr` is dereferenced, so make sure it's not null!
 ///
-#[allow(box_pointers)]
 #[no_mangle]
 pub unsafe extern "C" fn unit_init(required_expression: *const c_char) -> *const Unit {
     let string = core::string::string_from_c(required_expression);
@@ -28,7 +27,6 @@ pub unsafe extern "C" fn unit_init(required_expression: *const c_char) -> *const
 ///
 /// `ptr` is dereferenced, so make sure it's not null!
 ///
-#[allow(box_pointers)]
 #[no_mangle]
 pub unsafe extern "C" fn clone_unit(ptr: *const Unit) -> *const Unit {
     Box::into_raw(Box::new((*ptr).clone()))

@@ -297,7 +297,7 @@ mod tests {
     // ╭─────────────────────────────────╮
     // │ Negative testing macros section │
     // ╰─────────────────────────────────╯
-    macro_rules! validate_is_error {
+    macro_rules! should_error {
         ($test_name:ident, $lhs_unit:expr, $rhs_unit:expr) => {
             #[test]
             fn $test_name() {
@@ -310,10 +310,10 @@ mod tests {
         };
     }
 
-    macro_rules! validate_different_atom_different_dimension {
+    macro_rules! should_err_different_atom_different_dimension {
         ($lhs_unit:expr, $rhs_unit:expr) => {
-            validate_is_error!(
-                validate_different_atom_different_dimension,
+            should_error!(
+                should_err_different_atom_different_dimension,
                 $lhs_unit,
                 $rhs_unit
             );
@@ -323,19 +323,23 @@ mod tests {
     /// Macro for validating that a LHS unit that's all the same as the RHS, _except_ for the
     /// annotation, cannot be added or subtracted.
     ///
-    macro_rules! validate_same_unit_different_annotation {
+    macro_rules! should_err_same_unit_different_annotation {
         ($lhs_unit:expr, $rhs_unit:expr) => {
-            validate_is_error!(
-                validate_same_unit_different_annotation,
+            should_error!(
+                should_err_same_unit_different_annotation,
                 $lhs_unit,
                 $rhs_unit
             );
         };
     }
 
-    macro_rules! validate_same_unit_different_exponent {
+    macro_rules! should_err_same_unit_different_exponent {
         ($lhs_unit:expr, $rhs_unit:expr) => {
-            validate_is_error!(validate_same_unit_different_exponent, $lhs_unit, $rhs_unit);
+            should_error!(
+                should_err_same_unit_different_exponent,
+                $lhs_unit,
+                $rhs_unit
+            );
         };
     }
 
@@ -411,10 +415,7 @@ mod tests {
             sub_values: 0.0, 0.0
         );
 
-        validate_same_unit_different_annotation!(
-            unit!(term!(annotation: "tree")),
-            unit!(term!(annotation: "pants"))
-        );
+        should_err_same_unit_different_annotation!(parse_unit!("{tree}"), parse_unit!("{pants}"));
     }
 
     mod atom {
@@ -446,8 +447,8 @@ mod tests {
             sub_values: 0.999, -999.0
         );
 
-        validate_different_atom_different_dimension!(METER, GRAM);
-        validate_same_unit_different_exponent!(METER, METER_SQUARED);
+        should_err_different_atom_different_dimension!(METER, GRAM);
+        should_err_same_unit_different_exponent!(METER, METER_SQUARED);
     }
 
     mod atom_annotation {
@@ -480,17 +481,14 @@ mod tests {
             sub_values: 0.999, -999.0
         );
 
-        validate_same_unit_different_annotation!(
-            unit!(term!(Gram, annotation: "seed")),
-            unit!(term!(Gram, annotation: "tree"))
-        );
+        should_err_same_unit_different_annotation!(parse_unit!("g{seed}"), parse_unit!("g{tree}"));
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("g{seed}"),
             parse_unit!("m{seed}")
         );
 
-        validate_same_unit_different_exponent!(parse_unit!("g{seed}"), parse_unit!("g2{seed}"));
+        should_err_same_unit_different_exponent!(parse_unit!("g{seed}"), parse_unit!("g2{seed}"));
     }
 
     mod atom_exponent {
@@ -522,8 +520,8 @@ mod tests {
             sub_values: 0.999, -999.0
         );
 
-        validate_different_atom_different_dimension!(METER_SQUARED, SECOND_SQUARED);
-        validate_same_unit_different_exponent!(METER_SQUARED, METER_CUBED);
+        should_err_different_atom_different_dimension!(METER_SQUARED, SECOND_SQUARED);
+        should_err_same_unit_different_exponent!(METER_SQUARED, METER_CUBED);
     }
 
     mod atom_exponent_annotation {
@@ -555,15 +553,18 @@ mod tests {
             sub_values: 0.999, -999.0
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("s2{wind}"),
             parse_unit!("g2{wind}")
         );
 
-        validate_same_unit_different_annotation!(parse_unit!("s2{wind}"), parse_unit!("s2{earth}"));
-        validate_same_unit_different_exponent!(parse_unit!("s2{wind}"), parse_unit!("s3{wind}"));
+        should_err_same_unit_different_annotation!(
+            parse_unit!("s2{wind}"),
+            parse_unit!("s2{earth}")
+        );
+        should_err_same_unit_different_exponent!(parse_unit!("s2{wind}"), parse_unit!("s3{wind}"));
 
-        validate_is_error!(
+        should_error!(
             validate_different_atom_same_dimension_same_exponent_different_annotation,
             parse_unit!("s2{wind}"),
             parse_unit!("min2{fire}")
@@ -600,8 +601,8 @@ mod tests {
             sub_values: -1.0, 0.5
         );
 
-        validate_different_atom_different_dimension!(KILOMETER, KILOGRAM);
-        validate_same_unit_different_exponent!(KILOMETER, parse_unit!("km2"));
+        should_err_different_atom_different_dimension!(KILOMETER, KILOGRAM);
+        should_err_same_unit_different_exponent!(KILOMETER, parse_unit!("km2"));
 
         #[test]
         fn validate_different_prefix_different_atom_same_dimension() {
@@ -632,19 +633,22 @@ mod tests {
         );
 
         validate_same_unit_different_factor!(
-            parse_unit!("kg2"), parse_unit!("2kg2"),
+            parse_unit!("kg2{stuff}"), parse_unit!("2kg2{stuff}"),
             add_values:  5.0, 1.25,
             sub_values: -3.0, 0.75
         );
 
-        validate_same_unit_different_annotation!(parse_unit!("kg{tree}"), parse_unit!("kg{pants}"));
+        should_err_same_unit_different_annotation!(
+            parse_unit!("kg{tree}"),
+            parse_unit!("kg{pants}")
+        );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("Mg{tree}"),
             parse_unit!("cm{tree}")
         );
 
-        validate_same_unit_different_exponent!(parse_unit!("kg{tree}"), parse_unit!("kg2{tree}"));
+        should_err_same_unit_different_exponent!(parse_unit!("kg{tree}"), parse_unit!("kg2{tree}"));
     }
 
     // NOTE: There are 0 dimless atoms that are also metric, thus no dimless tests here.
@@ -677,8 +681,8 @@ mod tests {
             sub_values: -3.0, 0.75
         );
 
-        validate_different_atom_different_dimension!(YOCTOPARSEC_SQUARED, CENTIGRAM_SQUARED);
-        validate_same_unit_different_exponent!(DECIMETER_SQUARED, DECIMETER_CUBED);
+        should_err_different_atom_different_dimension!(YOCTOPARSEC_SQUARED, CENTIGRAM_SQUARED);
+        should_err_same_unit_different_exponent!(DECIMETER_SQUARED, DECIMETER_CUBED);
     }
 
     // NOTE: There are 0 dimless atoms that are also metric, thus no dimless tests here.
@@ -711,17 +715,20 @@ mod tests {
             sub_values: -3.0, 0.75
         );
 
-        validate_same_unit_different_annotation!(
+        should_err_same_unit_different_annotation!(
             parse_unit!("kg2{tree}"),
             parse_unit!("kg2{pants}")
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("kg2{seed}"),
             parse_unit!("km2{seed}")
         );
 
-        validate_same_unit_different_exponent!(parse_unit!("kg2{seed}"), parse_unit!("kg3{seed}"));
+        should_err_same_unit_different_exponent!(
+            parse_unit!("kg2{seed}"),
+            parse_unit!("kg3{seed}")
+        );
     }
 
     mod factor {
@@ -749,22 +756,22 @@ mod tests {
             sub_values: -1.0, 0.5
         );
 
-        validate_different_atom_different_dimension!(parse_unit!("2"), parse_unit!("2g"));
-        validate_same_unit_different_annotation!(parse_unit!("2"), parse_unit!("{thing}"));
+        should_err_different_atom_different_dimension!(parse_unit!("2"), parse_unit!("2g"));
+        should_err_same_unit_different_annotation!(parse_unit!("2"), parse_unit!("{thing}"));
 
-        validate_is_error!(
+        should_error!(
             validate_factor_and_dimensioned_atom,
             parse_unit!("2"),
             METER
         );
 
-        validate_is_error!(
+        should_error!(
             validate_factor_and_factor_annotation,
             parse_unit!("2"),
             parse_unit!("3{thing}")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_factor_and_factor_exponent_annotation,
             parse_unit!("2"),
             unit!(term!(factor: 2, exponent: 2, annotation: "meow"))
@@ -803,44 +810,44 @@ mod tests {
             sub_values: 0.5, -1.0
         );
 
-        validate_same_unit_different_annotation!(parse_unit!("2{seed}"), parse_unit!("2{plant}"));
+        should_err_same_unit_different_annotation!(parse_unit!("2{seed}"), parse_unit!("2{plant}"));
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("2{seed}"),
             parse_unit!("2g{seed}")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_different_factor_different_annotation,
             parse_unit!("2{seed}"),
             parse_unit!("3{plant}")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_factor_annotation_and_factor,
             parse_unit!("3{thing}"),
             parse_unit!("2")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_factor_annotation_and_factor_exponent,
             parse_unit!("2{stuff}"),
             unit!(term!(factor: 2, exponent: 2))
         );
 
-        validate_is_error!(
+        should_error!(
             validate_factor_annotation_and_dimensionless_atom,
             parse_unit!("2{stuff}"),
             unit!(term!(PartsPerThousand))
         );
 
-        validate_is_error!(
+        should_error!(
             validate_factor_annotation_and_dimensionless_atom_different_annotation,
             parse_unit!("2{stuff}"),
             parse_unit!("[ppth]{things}")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_factor_annotation_and_dimensioned_atom,
             parse_unit!("2{cat}"),
             METER
@@ -878,24 +885,24 @@ mod tests {
             sub_values: 0.999_75, -3999.0
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             unit!(term!(factor: 2, exponent: 2)),
             unit!(term!(Gram, factor: 2, exponent: 2))
         );
 
-        validate_is_error!(
+        should_error!(
             validate_with_annotation,
             unit!(term!(factor: 2, exponent: 3)),
             parse_unit!("{thing}")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_with_factor_exponent_annotation,
             unit!(term!(factor: 2, exponent: 3)),
             unit!(term!(factor: 2, exponent: 3, annotation: "thing"))
         );
 
-        validate_is_error!(
+        should_error!(
             validate_with_dimensioned_atom,
             unit!(term!(factor: 2, exponent: 3)),
             METER
@@ -931,17 +938,17 @@ mod tests {
             sub_values: -5.75, 0.851_851_851_851_851_8
         );
 
-        validate_same_unit_different_annotation!(
+        should_err_same_unit_different_annotation!(
             unit!(term!(factor: 2, exponent: 2, annotation: "seed")),
             unit!(term!(factor: 2, exponent: 2, annotation: "plant"))
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             unit!(term!(factor: 2, exponent: 2, annotation: "seed")),
             unit!(term!(Gram, factor: 2, exponent: 2, annotation: "seed"))
         );
 
-        validate_is_error!(
+        should_error!(
             validate_with_factor,
             unit!(term!(factor: 2, exponent: 2, annotation: "seed")),
             parse_unit!("2")
@@ -977,8 +984,8 @@ mod tests {
             sub_values: 0.998, -499.0
         );
 
-        validate_different_atom_different_dimension!(parse_unit!("2g"), parse_unit!("2m"));
-        validate_same_unit_different_exponent!(parse_unit!("2L"), parse_unit!("2L2"));
+        should_err_different_atom_different_dimension!(parse_unit!("2g"), parse_unit!("2m"));
+        should_err_same_unit_different_exponent!(parse_unit!("2L"), parse_unit!("2L2"));
     }
 
     mod factor_atom_annotation {
@@ -1010,25 +1017,25 @@ mod tests {
             sub_values: 0.998, -499.0
         );
 
-        validate_same_unit_different_annotation!(
-            unit!(term!(Gram, factor: 2, annotation: "seed")),
-            unit!(term!(Gram, factor: 2, annotation: "tree"))
+        should_err_same_unit_different_annotation!(
+            parse_unit!("2g{seed}"),
+            parse_unit!("2g{tree}")
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("2g{tree}"),
             parse_unit!("2m{tree}")
         );
 
-        validate_same_unit_different_exponent!(parse_unit!("2g{tree}"), parse_unit!("2g2{tree}"));
+        should_err_same_unit_different_exponent!(parse_unit!("2g{tree}"), parse_unit!("2g2{tree}"));
 
-        validate_is_error!(
+        should_error!(
             validate_different_factor_different_atom_same_dimension_different_annotation,
             parse_unit!("2g{seed}"),
             parse_unit!("2[lb_av]{tree}")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_same_factor_different_atom_different_dimension_same_annotation,
             parse_unit!("2g{seed}"),
             parse_unit!("2m{tree}")
@@ -1071,10 +1078,10 @@ mod tests {
             sub_values: -249.0, 0.996
         );
 
-        validate_different_atom_different_dimension!(parse_unit!("2g2"), parse_unit!("2m2"));
-        validate_same_unit_different_exponent!(parse_unit!("2m2"), parse_unit!("2m3"));
+        should_err_different_atom_different_dimension!(parse_unit!("2g2"), parse_unit!("2m2"));
+        should_err_same_unit_different_exponent!(parse_unit!("2m2"), parse_unit!("2m3"));
 
-        validate_is_error!(
+        should_error!(
             validate_different_atom_different_dimension_same_exponent,
             parse_unit!("2m2"),
             parse_unit!("2s2")
@@ -1087,7 +1094,7 @@ mod tests {
         validate_same_unit!(parse_unit!("2m2{stuff}"));
 
         validate_same_unit_different_atom_same_dimension!(
-            parse_unit!("2[in_i]2"), parse_unit!("2[ft_i]2"),
+            parse_unit!("2[in_i]2{stuff}"), parse_unit!("2[ft_i]2{stuff}"),
             add_values:  145.0, 1.006_944_444_444_444_4,
             sub_values: -143.0, 0.993_055_555_555_555_6
         );
@@ -1110,17 +1117,17 @@ mod tests {
             sub_values: 0.998, -499.0
         );
 
-        validate_same_unit_different_annotation!(
+        should_err_same_unit_different_annotation!(
             parse_unit!("2m2{stuff}"),
             parse_unit!("2m2{things}")
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("2g2{stuff}"),
             parse_unit!("2m2{stuff}")
         );
 
-        validate_same_unit_different_exponent!(
+        should_err_same_unit_different_exponent!(
             parse_unit!("2m2{stuff}"),
             parse_unit!("2m3{stuff}")
         );
@@ -1144,13 +1151,13 @@ mod tests {
         );
 
         validate_same_unit_different_factor!(
-            parse_unit!("2m2{stuff}"), parse_unit!("4m2{stuff}"),
+            parse_unit!("2m2"), parse_unit!("4m2"),
             add_values:  5.0, 1.25,
             sub_values: -3.0, 0.75
         );
 
-        validate_different_atom_different_dimension!(parse_unit!("2km"), parse_unit!("2kg"));
-        validate_same_unit_different_exponent!(parse_unit!("2km"), parse_unit!("2km2"));
+        should_err_different_atom_different_dimension!(parse_unit!("2km"), parse_unit!("2kg"));
+        should_err_same_unit_different_exponent!(parse_unit!("2km"), parse_unit!("2km2"));
     }
 
     // NOTE: There are 0 dimless atoms that are also metric, thus no dimless tests here.
@@ -1184,24 +1191,27 @@ mod tests {
             sub_values: 0.999_999, -999_999.0
         );
 
-        validate_same_unit_different_annotation!(
+        should_err_same_unit_different_annotation!(
             parse_unit!("2kg{stuff}"),
             parse_unit!("2kg{things}")
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("2km{foo}"),
             parse_unit!("2kg{foo}")
         );
 
-        validate_same_unit_different_exponent!(parse_unit!("2kg{tree}"), parse_unit!("2kg2{tree}"));
+        should_err_same_unit_different_exponent!(
+            parse_unit!("2kg{tree}"),
+            parse_unit!("2kg2{tree}")
+        );
 
-        validate_is_error!(
+        should_error!(
             validate_different_factor_different_prefix_different_atom_same_dimension_different_annotation,
             parse_unit!("2kg{seed}"), parse_unit!("3nt{tree}")
         );
 
-        validate_is_error!(
+        should_error!(
             validate_same_factor_same_prefix_different_atom_different_dimension_same_annotation,
             parse_unit!("2kg{seed}"),
             parse_unit!("2km{seed}")
@@ -1215,9 +1225,9 @@ mod tests {
         validate_same_unit!(parse_unit!("2cm2"));
 
         validate_same_unit_different_atom_same_dimension!(
-            parse_unit!("2cg{goop}"), parse_unit!("2nt{goop}"),
-            add_values: 1.1, 11.0,
-            sub_values: 0.9, -9.0
+            parse_unit!("2cg2"), parse_unit!("2nt2"),
+            add_values: 1.01, 101.0,
+            sub_values: 0.99, -99.0
         );
 
         validate_same_unit_different_prefix!(
@@ -1246,10 +1256,10 @@ mod tests {
             sub_values: -249.0, 0.996
         );
 
-        validate_different_atom_different_dimension!(parse_unit!("2km2"), parse_unit!("2kg2"));
-        validate_same_unit_different_exponent!(parse_unit!("2kg2"), parse_unit!("2kg3"));
+        should_err_different_atom_different_dimension!(parse_unit!("2km2"), parse_unit!("2kg2"));
+        should_err_same_unit_different_exponent!(parse_unit!("2kg2"), parse_unit!("2kg3"));
 
-        validate_is_error!(
+        should_error!(
             validate_different_atom_different_dimension_same_exponent,
             parse_unit!("2km2"),
             parse_unit!("2ms2")
@@ -1280,15 +1290,18 @@ mod tests {
             sub_values: -3.0, 0.75
         );
 
-        validate_same_unit_different_annotation!(
+        should_err_same_unit_different_annotation!(
             parse_unit!("2cm2{stuff}"),
             parse_unit!("2cm2{things}")
         );
 
-        validate_different_atom_different_dimension!(
+        should_err_different_atom_different_dimension!(
             parse_unit!("2km2{foo}"),
             parse_unit!("2kg2{foo}")
         );
-        validate_same_unit_different_exponent!(parse_unit!("2kg2{foo}"), parse_unit!("2kg3{foo}"));
+        should_err_same_unit_different_exponent!(
+            parse_unit!("2kg2{foo}"),
+            parse_unit!("2kg3{foo}")
+        );
     }
 }

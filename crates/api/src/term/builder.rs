@@ -11,6 +11,10 @@ use super::{
     Exponent, Factor,
 };
 
+/// A builder for `Term`s. An alternative for building a `Term` is the `term!()` macro. Note that
+/// it allows you to construct invalid `Term`s (ex. a `Term` with only a `Prefix` is invalid), and
+/// thus the onus is put on you to call this correctly.
+///
 #[derive(Default, Debug)]
 pub struct Builder {
     factor: Option<Factor>,
@@ -21,6 +25,8 @@ pub struct Builder {
 }
 
 impl Builder {
+    /// Set the `factor` of the `Term`.
+    ///
     #[must_use]
     pub fn factor(self, factor: Factor) -> Self {
         Self {
@@ -29,6 +35,8 @@ impl Builder {
         }
     }
 
+    /// Set the `prefix` of the `Term`.
+    ///
     #[must_use]
     pub fn prefix(self, prefix: Prefix) -> Self {
         Self {
@@ -37,6 +45,8 @@ impl Builder {
         }
     }
 
+    /// Set the `atom` of the `Term`.
+    ///
     #[must_use]
     pub fn atom(self, atom: Atom) -> Self {
         Self {
@@ -45,6 +55,8 @@ impl Builder {
         }
     }
 
+    /// Set the `exponent` of the `Term`.
+    ///
     #[must_use]
     pub fn exponent(self, exponent: Exponent) -> Self {
         Self {
@@ -53,6 +65,8 @@ impl Builder {
         }
     }
 
+    /// Set the `annotation` of the `Term`.
+    ///
     #[must_use]
     pub fn annotation<T>(self, annotation: T) -> Self
     where

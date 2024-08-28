@@ -1,6 +1,5 @@
 #![deny(unused_extern_crates)]
 #![warn(
-    box_pointers,
     clippy::all,
     clippy::correctness,
     clippy::nursery,

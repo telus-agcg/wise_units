@@ -12,12 +12,10 @@ use crate::{convertible::Convertible, measurement::Measurement};
 fn mul_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
     let converted_rhs = rhs.convert_to(&lhs.unit);
     let actual_rhs = converted_rhs.as_ref().unwrap_or(rhs);
-    let new_value = lhs.value * actual_rhs.value;
-    let new_unit = &lhs.unit * &actual_rhs.unit;
 
     Measurement {
-        value: new_value,
-        unit: new_unit,
+        value: lhs.value * actual_rhs.value,
+        unit: &lhs.unit * &actual_rhs.unit,
     }
 }
 
@@ -129,12 +127,10 @@ impl<'a> Mul<f64> for &'a Measurement {
 fn div_measurements(lhs: &Measurement, rhs: &Measurement) -> Measurement {
     let converted_rhs = rhs.convert_to(&lhs.unit);
     let actual_rhs = converted_rhs.as_ref().unwrap_or(rhs);
-    let new_value = lhs.value / actual_rhs.value;
-    let new_unit = &lhs.unit / &actual_rhs.unit;
 
     Measurement {
-        value: new_value,
-        unit: new_unit,
+        value: lhs.value / actual_rhs.value,
+        unit: &lhs.unit / &actual_rhs.unit,
     }
 }
 

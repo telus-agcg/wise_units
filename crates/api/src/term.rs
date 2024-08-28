@@ -150,6 +150,9 @@ pub enum Term {
 }
 
 impl Term {
+    /// While this constructor allows for some basic cases, it's a remnant of old design; you
+    /// should consider using `term::Builder` instead.
+    ///
     /// # Panics
     ///
     /// Since it's invalid, in practice, this panics if you pass only a `prefix`.
@@ -172,6 +175,8 @@ impl Term {
         UNITY
     }
 
+    /// Returns the value of the `Term`'s factor, if it has one.
+    ///
     #[must_use]
     pub const fn factor(&self) -> Option<Factor> {
         match self {
@@ -250,6 +255,8 @@ impl Term {
         self
     }
 
+    /// Returns the value of the `Term`'s `Prefix`, if it has one.
+    ///
     #[must_use]
     pub const fn prefix(&self) -> Option<Prefix> {
         match self {
@@ -280,6 +287,8 @@ impl Term {
         }
     }
 
+    /// Returns the value of the `Term`'s `Atom`, if it has one.
+    ///
     #[must_use]
     pub const fn atom(&self) -> Option<Atom> {
         match self {
@@ -310,6 +319,8 @@ impl Term {
         }
     }
 
+    /// Returns the value of the `Term`'s `Exponent`, if it has one.
+    ///
     #[must_use]
     pub const fn exponent(&self) -> Option<Exponent> {
         match self {
@@ -346,40 +357,6 @@ impl Term {
 
     pub(crate) fn effective_exponent(&self) -> Exponent {
         self.exponent().unwrap_or(1)
-    }
-
-    #[must_use]
-    pub fn annotation(&self) -> Option<&str> {
-        match self {
-            Self::Atom(_)
-            | Self::AtomExponent { .. }
-            | Self::PrefixAtom { .. }
-            | Self::PrefixAtomExponent { .. }
-            | Self::Factor(_)
-            | Self::FactorAtom { .. }
-            | Self::FactorExponent { .. }
-            | Self::FactorAtomExponent { .. }
-            | Self::FactorPrefixAtom { .. }
-            | Self::FactorPrefixAtomExponent { .. } => None,
-            Self::Annotation(annotation)
-            | Self::AtomAnnotation(AtomAnnotation { annotation, .. })
-            | Self::AtomExponentAnnotation(AtomExponentAnnotation { annotation, .. })
-            | Self::PrefixAtomAnnotation(PrefixAtomAnnotation { annotation, .. })
-            | Self::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation {
-                annotation, ..
-            })
-            | Self::FactorAnnotation(FactorAnnotation { annotation, .. })
-            | Self::FactorExponentAnnotation(FactorExponentAnnotation { annotation, .. })
-            | Self::FactorAtomAnnotation(FactorAtomAnnotation { annotation, .. })
-            | Self::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation {
-                annotation, ..
-            })
-            | Self::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation { annotation, .. })
-            | Self::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation {
-                annotation,
-                ..
-            }) => Some(annotation.as_str()),
-        }
     }
 
     #[allow(clippy::too_many_lines)]
@@ -490,6 +467,42 @@ impl Term {
         }
 
         self
+    }
+
+    /// Returns the value of the `Term`'s `Annotation`, if it has one.
+    ///
+    #[must_use]
+    pub fn annotation(&self) -> Option<&str> {
+        match self {
+            Self::Atom(_)
+            | Self::AtomExponent { .. }
+            | Self::PrefixAtom { .. }
+            | Self::PrefixAtomExponent { .. }
+            | Self::Factor(_)
+            | Self::FactorAtom { .. }
+            | Self::FactorExponent { .. }
+            | Self::FactorAtomExponent { .. }
+            | Self::FactorPrefixAtom { .. }
+            | Self::FactorPrefixAtomExponent { .. } => None,
+            Self::Annotation(annotation)
+            | Self::AtomAnnotation(AtomAnnotation { annotation, .. })
+            | Self::AtomExponentAnnotation(AtomExponentAnnotation { annotation, .. })
+            | Self::PrefixAtomAnnotation(PrefixAtomAnnotation { annotation, .. })
+            | Self::PrefixAtomExponentAnnotation(PrefixAtomExponentAnnotation {
+                annotation, ..
+            })
+            | Self::FactorAnnotation(FactorAnnotation { annotation, .. })
+            | Self::FactorExponentAnnotation(FactorExponentAnnotation { annotation, .. })
+            | Self::FactorAtomAnnotation(FactorAtomAnnotation { annotation, .. })
+            | Self::FactorAtomExponentAnnotation(FactorAtomExponentAnnotation {
+                annotation, ..
+            })
+            | Self::FactorPrefixAtomAnnotation(FactorPrefixAtomAnnotation { annotation, .. })
+            | Self::FactorPrefixAtomExponentAnnotation(FactorPrefixAtomExponentAnnotation {
+                annotation,
+                ..
+            }) => Some(annotation.as_str()),
+        }
     }
 
     pub(crate) fn set_annotation<T>(&mut self, new_annotation: T) -> &mut Self
@@ -2030,6 +2043,220 @@ mod tests {
                     })
                 );
             }
+        }
+    }
+
+    mod set_annotation {
+        use super::*;
+
+        macro_rules! test_non_annotation {
+            ($subject_variant:ident, $expected_variant:ident, $($params:tt)+) => {
+                let mut subject = Term::$subject_variant($subject_variant {
+                    $($params)+
+                });
+                let _ = subject.set_annotation("bar");
+
+                if let Term::$expected_variant($expected_variant { annotation, .. }) = subject {
+                    assert_eq!(annotation.as_str(), "bar");
+                } else {
+                    panic!("Unexpected type! {:#?}", subject);
+                }
+            }
+        }
+
+        macro_rules! test_annotation {
+            ($subject_variant:ident, $($params:tt)+) => {
+                let mut subject = Term::$subject_variant($subject_variant {
+                    annotation: "foo".into(),
+                    $($params)+
+                });
+                let _ = subject.set_annotation("bar");
+
+                if let Term::$subject_variant($subject_variant { annotation, .. }) = subject {
+                    assert_eq!(annotation.as_str(), "bar");
+                } else {
+                    panic!("Unexpected type! {:#?}", subject);
+                }
+            }
+        }
+
+        #[test]
+        fn annotation_test() {
+            let mut subject = Term::Annotation("foo".into());
+            let _ = subject.set_annotation("bar");
+
+            assert_eq!(subject, Term::Annotation("bar".into()));
+        }
+
+        #[test]
+        fn atom_test() {
+            let mut subject = Term::Atom(Atom::Meter);
+            let _ = subject.set_annotation("bar");
+
+            assert_eq!(
+                subject,
+                Term::AtomAnnotation(AtomAnnotation::new(Atom::Meter, "bar".into()))
+            );
+        }
+
+        #[test]
+        fn atom_annotation_test() {
+            test_annotation!(AtomAnnotation, atom: Atom::Meter);
+        }
+
+        #[test]
+        fn atom_exponent_test() {
+            test_non_annotation!(AtomExponent, AtomExponentAnnotation, atom: Atom::Meter, exponent: 2);
+        }
+
+        #[test]
+        fn atom_exponent_annotation_test() {
+            test_annotation!(AtomExponentAnnotation, atom: Atom::Meter, exponent: 2);
+        }
+
+        #[test]
+        fn prefix_atom_test() {
+            test_non_annotation!(PrefixAtom, PrefixAtomAnnotation, prefix: Prefix::Yocto, atom: Atom::Meter);
+        }
+
+        #[test]
+        fn prefix_atom_annotation_test() {
+            test_annotation!(PrefixAtomAnnotation, prefix: Prefix::Yocto, atom: Atom::Meter);
+        }
+
+        #[test]
+        fn prefix_atom_exponent_test() {
+            test_non_annotation!(
+                PrefixAtomExponent,
+                PrefixAtomExponentAnnotation,
+                prefix: Prefix::Yocto,
+                atom: Atom::Meter,
+                exponent: 2
+            );
+        }
+
+        #[test]
+        fn prefix_atom_exponent_annotation_test() {
+            test_annotation!(PrefixAtomExponentAnnotation,
+                prefix: Prefix::Yocto,
+                atom: Atom::Meter,
+                exponent: 2
+            );
+        }
+
+        #[test]
+        fn factor_test() {
+            let mut subject = Term::Factor(2);
+            let _ = subject.set_annotation("bar");
+
+            if let Term::FactorAnnotation(FactorAnnotation { annotation, .. }) = subject {
+                assert_eq!(annotation.as_str(), "bar");
+            } else {
+                panic!("Unexpected type! {subject:#?}");
+            }
+        }
+
+        #[test]
+        fn factor_annotation_test() {
+            test_annotation!(FactorAnnotation, factor: 2);
+        }
+
+        #[test]
+        fn factor_exponent_test() {
+            test_non_annotation!(
+                FactorExponent,
+                FactorExponentAnnotation,
+                factor: 4,
+                exponent: 2
+            );
+        }
+
+        #[test]
+        fn factor_exponent_annotation_test() {
+            test_annotation!(FactorExponentAnnotation,
+                factor: 4,
+                exponent: 2
+            );
+        }
+
+        #[test]
+        fn factor_atom_test() {
+            test_non_annotation!(
+                FactorAtom,
+                FactorAtomAnnotation,
+                factor: 4,
+                atom: Atom::Meter,
+            );
+        }
+
+        #[test]
+        fn factor_atom_annotation_test() {
+            test_annotation!(FactorAtomAnnotation,
+                factor: 4,
+                atom: Atom::Meter,
+            );
+        }
+
+        #[test]
+        fn factor_atom_exponent_test() {
+            test_non_annotation!(
+                FactorAtomExponent,
+                FactorAtomExponentAnnotation,
+                factor: 4,
+                atom: Atom::Meter,
+                exponent: 2
+            );
+        }
+
+        #[test]
+        fn factor_atom_exponent_annotation_test() {
+            test_annotation!(FactorAtomExponentAnnotation,
+                factor: 4,
+                atom: Atom::Meter,
+                exponent: 2
+            );
+        }
+
+        #[test]
+        fn factor_prefix_atom_test() {
+            test_non_annotation!(
+                FactorPrefixAtom,
+                FactorPrefixAtomAnnotation,
+                factor: 4,
+                prefix: Prefix::Yocto,
+                atom: Atom::Meter,
+            );
+        }
+
+        #[test]
+        fn factor_prefix_atom_annotation_test() {
+            test_annotation!(FactorPrefixAtomAnnotation,
+                factor: 4,
+                prefix: Prefix::Yocto,
+                atom: Atom::Meter,
+            );
+        }
+
+        #[test]
+        fn factor_prefix_atom_exponent_test() {
+            test_non_annotation!(
+                FactorPrefixAtomExponent,
+                FactorPrefixAtomExponentAnnotation,
+                factor: 4,
+                prefix: Prefix::Yocto,
+                atom: Atom::Meter,
+                exponent: 2
+            );
+        }
+
+        #[test]
+        fn factor_prefix_atom_exponent_annotation_test() {
+            test_annotation!(FactorPrefixAtomExponentAnnotation,
+                factor: 4,
+                prefix: Prefix::Yocto,
+                atom: Atom::Meter,
+                exponent: 2
+            );
         }
     }
 

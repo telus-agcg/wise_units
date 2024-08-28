@@ -1,3 +1,7 @@
+/// Defining `Term` as an `enum` gives us better control over the behavior of operations on `Unit`s
+/// given certain `Term` variants. The structs that represent those variants are defined here,
+/// along with some `traits` that help defining similar functionality across those types.
+///
 mod atom_annotation;
 mod atom_exponent;
 mod atom_exponent_annotation;
@@ -43,6 +47,10 @@ use super::{Annotation, Exponent, Factor, Term};
 // ╭────────╮
 // │ Traits │
 // ╰────────╯
+/// A helper trait for defining behavior of `Term` variants when it comes to defining `Pow`
+/// behavior for each variant. All variants have different behavior for when `self.pow(0)`,
+/// `self.pow(1)`, and `self.pow(42`. This type makes it cleaner to define that behavior.
+///
 pub enum PowOutput<Z, O, R> {
     Zero(Z),
     One(O),
@@ -50,11 +58,18 @@ pub enum PowOutput<Z, O, R> {
 }
 
 impl<Z, O, R> PowOutput<Z, O, R> {
+    /// Like `Option::unwrap_err()` or `Result::unwrap_err()` it returns the contents of
+    /// `PowOutput::Rest` or panics if `PowOutput` is of a different variant.
+    ///
+    /// # Panics
+    ///
+    /// This panics if `self` is `PowOutput::Zero` or `PowOutput::One`.
+    ///
     pub fn unwrap_rest(self) -> R {
         if let Self::Rest(inner) = self {
             inner
         } else {
-            unreachable!()
+            panic!("Unwrapped PowOutput but no Rest variant value exists");
         }
     }
 }
@@ -72,6 +87,12 @@ where
     }
 }
 
+/// A helper traits for defining behavior of `Term` variants when it comes to defining `Inv`
+/// behavior for each variant. This helps in cases where the result of `self.inv()` results in an
+/// `exponent` of `1`--in many cases, we want to alter the variant of the `Term` to use
+/// a non-`Exponent` variant. For example, if a `Term::AtomExponent` calls `pow(x)` and the
+/// resulting exponent is 1, the new `Term` should be `Term::Atom`.
+///
 pub enum InvOutput<O, R> {
     One(O),
     Rest(R),

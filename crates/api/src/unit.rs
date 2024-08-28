@@ -206,12 +206,17 @@ impl Unit {
         self.simplify().to_string()
     }
 
+    /// Convenience method for just getting internal `Terms` that have a non-negative exponent.
+    /// Used internally by `AsFraction`.
+    ///
     pub fn numerator_terms(&self) -> impl Iterator<Item = &Term> {
         self.terms
             .iter()
             .filter(|term| !term.effective_exponent().is_negative())
     }
 
+    /// Convenience method for just getting internal `Terms` that have a negative exponent.
+    ///
     pub fn denominator_terms(&self) -> impl Iterator<Item = &Term> {
         self.terms
             .iter()

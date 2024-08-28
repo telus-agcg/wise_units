@@ -98,7 +98,6 @@ mod tests {
         assert!(unit.is_err());
     }
 
-    #[allow(box_pointers)]
     #[test]
     fn validate_serde_bincode() {
         let expected_unit = expected_unit();
