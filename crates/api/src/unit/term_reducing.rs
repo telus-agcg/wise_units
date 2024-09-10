@@ -51,15 +51,30 @@ pub(super) fn compare_and_cancel(lhs_terms: &[Term], rhs_terms: Vec<Term>) -> Co
 
         output.extend(what_to_keep.new_terms);
         remaining_rhs = what_to_keep.kept_terms;
-
-        // Break if there is nothing left on the RHS to compare the LHS to.
-        if remaining_rhs.is_empty() {
-            break;
-        }
     }
 
     // `remaining_rhs` are the RHS Terms that couldn't be combined with any LHS ones.
     output.extend_from_slice(&remaining_rhs);
+
+    let output = if output.len() > 1 {
+        let what_to_keep = simplify_one_to_many(&output[0], &output[1..]);
+
+        match (what_to_keep.keep_lhs, what_to_keep.made_new_terms()) {
+            (true, true) => {
+                let mut new_output = vec![output[0].clone()];
+                new_output.extend(what_to_keep.into_terms());
+                new_output
+            }
+            (true, false) => output,
+            (false, true) => what_to_keep.into_terms(),
+            (false, false) => {
+                // NOTE: Shouldn't be able to get here...
+                what_to_keep.into_terms()
+            }
+        }
+    } else {
+        output
+    };
 
     cleanup(output)
 }
@@ -84,6 +99,19 @@ pub(super) struct WhatToKeep {
     pub(super) kept_terms: Vec<Term>,
 }
 
+impl WhatToKeep {
+    pub(super) fn made_new_terms(&self) -> bool {
+        !self.new_terms.is_empty()
+    }
+
+    pub(super) fn into_terms(self) -> Vec<Term> {
+        let mut output = self.kept_terms;
+        output.extend(self.new_terms);
+
+        output
+    }
+}
+
 impl Default for WhatToKeep {
     fn default() -> Self {
         Self {
@@ -103,8 +131,8 @@ pub(super) fn simplify_one_to_many(lhs: &Term, rhs_terms: &[Term]) -> WhatToKeep
                 what_to_keep.keep_lhs = false;
 
                 match rhs_terms.get((i + 1)..) {
-                    Some(things) if !things.is_empty() => {
-                        let wtk = simplify_one_to_many(&new_term, things);
+                    Some(remaining_rhs) if !remaining_rhs.is_empty() => {
+                        let wtk = simplify_one_to_many(&new_term, remaining_rhs);
 
                         if wtk.keep_lhs {
                             what_to_keep.new_terms.push(new_term);

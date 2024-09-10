@@ -264,5 +264,7 @@ mod tests {
             METER, METER_PER_SECOND => parse_unit!["m2/s"]);
         test_mul!(test_annotatable_mul_different_annotatable:
             parse_unit!("42m{foo}"), parse_unit!("42m-1{bar}") => parse_unit!("42m{foo}/42m{bar}"));
+        test_mul!(test_volume_per_volume_mul_volume_per_area:
+            parse_unit!("m3/m3"), parse_unit!("m3/m2") => parse_unit!("m"));
     }
 }

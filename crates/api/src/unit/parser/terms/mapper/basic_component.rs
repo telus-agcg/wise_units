@@ -1,7 +1,7 @@
 use pest::iterators::Pair;
 
 use crate::{
-    term::{variants::FactorAnnotation, Factor},
+    term::{variants::FactorAnnotation, Factor, UNITY},
     unit::parser::{terms::term_parser::Rule, Error, Visit},
     Annotation,
 };
@@ -82,7 +82,7 @@ impl Finishable for BasicComponent<'_> {
         let mut terms: Vec<Term> = Vec::with_capacity(self.terms.len() + 1);
 
         let self_term = match (self.factor, self.annotatable, self.annotation) {
-            (None, None, None) => unreachable!("Parsed empty unit string for Term"),
+            (None, None, None) => UNITY,
             (None, None, Some(annotation)) => Term::Annotation(Annotation::from(annotation)),
             (None, Some(Annotatable(term)), None) => term,
             (None, Some(Annotatable(mut term)), Some(annotation)) => {

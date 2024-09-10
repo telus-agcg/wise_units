@@ -971,5 +971,16 @@ mod tests {
                 term!(Meter, exponent: 2)
             )
         );
+
+        // VolumePerVolume * VolumePerArea
+        validate_ok!(
+            volume_per_volume_and_volume_per_area,
+            parse_unit!("m3/m3"), parse_unit!("m3/m2"),
+            mul_values: 2.0, 2.0,
+            mul_unit: parse_unit!("m"),
+            div_values: 0.5, 2.0,
+            div_unit1: parse_unit!("/m"),
+            div_unit2: parse_unit!("m")
+        );
     }
 }
