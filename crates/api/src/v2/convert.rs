@@ -14,7 +14,7 @@ pub trait ToFraction<N = Option<Self>, D = Option<Self>, F = (N, D)> {
 ///
 /// The differences with this trait compared to `Convertible<RHS>` are:
 /// 1. it doesn't require the output to be a `Result` like the original does. This allows for
-/// implementing for types that can guarantee a conversion.
+///    implementing for types that can guarantee a conversion.
 /// 2. it can be implemented for multiple output types.
 ///
 #[allow(clippy::module_name_repetitions)]

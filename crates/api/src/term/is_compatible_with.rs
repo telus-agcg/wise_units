@@ -35,14 +35,45 @@ use super::annotation_composable::AnnotationComposable;
 ///
 impl IsCompatibleWith for Term {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
-        self.composition() == rhs.composition() && self.annotation == rhs.annotation
+        match self {
+            Self::Annotation(inner) => inner.is_compatible_with(rhs),
+            Self::Atom(inner) => inner.is_compatible_with(rhs),
+            Self::AtomAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::AtomExponent(inner) => inner.is_compatible_with(rhs),
+            Self::AtomExponentAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::PrefixAtom(inner) => inner.is_compatible_with(rhs),
+            Self::PrefixAtomAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::PrefixAtomExponent(inner) => inner.is_compatible_with(rhs),
+            Self::PrefixAtomExponentAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::Factor(_) => rhs.composition().is_dimless() && rhs.annotation().is_none(),
+            Self::FactorAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::FactorExponent(inner) => inner.is_compatible_with(rhs),
+            Self::FactorExponentAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::FactorAtom(inner) => inner.is_compatible_with(rhs),
+            Self::FactorAtomAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::FactorAtomExponent(inner) => inner.is_compatible_with(rhs),
+            Self::FactorAtomExponentAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::FactorPrefixAtom(inner) => inner.is_compatible_with(rhs),
+            Self::FactorPrefixAtomAnnotation(inner) => inner.is_compatible_with(rhs),
+            Self::FactorPrefixAtomExponent(inner) => inner.is_compatible_with(rhs),
+            Self::FactorPrefixAtomExponentAnnotation(inner) => inner.is_compatible_with(rhs),
+        }
     }
 }
 
 impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
-        self.composition() == rhs.composition()
-            && self.annotation_composition() == rhs.annotation_composition()
+        if self.composition() != rhs.composition() {
+            return false;
+        }
+
+        // TODO: Since we only care about keys when both sides have annotations, we probably don't
+        // need to return the exponents map from `annotation_composition()`.
+        match (self.annotation_composition(), rhs.annotation_composition()) {
+            (None, None) => true,
+            (None, Some(_)) | (Some(_), None) => false,
+            (Some(l), Some(r)) => l.keys().eq(r.keys()),
+        }
     }
 }
 
@@ -101,12 +132,12 @@ mod tests {
 
         #[test]
         fn validate_term() {
-            let m = term!(Meter, annotation: "stuff".to_string());
-            let km_stuff = term!(Kilo, Meter, annotation: "stuff".to_string());
+            let m = term!(Meter, annotation: "stuff");
+            let km_stuff = term!(Kilo, Meter, annotation: "stuff");
             assert!(m.is_compatible_with(&km_stuff));
 
             // Different annotation
-            let km_pants = term!(Kilo, Meter, annotation: "pants".to_string());
+            let km_pants = term!(Kilo, Meter, annotation: "pants");
             assert!(!m.is_compatible_with(&km_pants));
 
             // No annotation
@@ -116,12 +147,12 @@ mod tests {
 
         #[test]
         fn validate_terms() {
-            let m = terms![term!(Meter, annotation: "stuff".to_string())];
-            let km_stuff = terms![term!(Kilo, Meter, annotation: "stuff".to_string())];
+            let m = terms![term!(Meter, annotation: "stuff")];
+            let km_stuff = terms![term!(Kilo, Meter, annotation: "stuff")];
             assert!(m.is_compatible_with(&km_stuff));
 
             // Different annotation
-            let km_pants = terms![term!(Kilo, Meter, annotation: "pants".to_string())];
+            let km_pants = terms![term!(Kilo, Meter, annotation: "pants")];
             assert!(!m.is_compatible_with(&km_pants));
 
             // No annotation
@@ -131,12 +162,12 @@ mod tests {
 
         #[test]
         fn validate_atomless_term() {
-            let lhs_tree = term!(annotation: "tree".to_string());
-            let rhs_tree = term!(annotation: "tree".to_string());
+            let lhs_tree = term!(annotation: "tree");
+            let rhs_tree = term!(annotation: "tree");
             assert!(lhs_tree.is_compatible_with(&rhs_tree));
 
             // Different annotation
-            let rhs_plant = term!(annotation: "plant".to_string());
+            let rhs_plant = term!(annotation: "plant");
             assert!(!lhs_tree.is_compatible_with(&rhs_plant));
         }
     }

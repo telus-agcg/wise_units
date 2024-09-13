@@ -24,13 +24,13 @@ pub(crate) fn parse(expression: &str) -> Result<Vec<Term>, Error> {
     }
 }
 
-trait Visit<R> {
-    fn visit(pair: Pair<'_, R>) -> Result<Self, Error>
+trait Visit<'a, R> {
+    fn visit(pair: Pair<'a, R>) -> Result<Self, Error>
     where
         Self: Sized;
 }
 
-impl Visit<SymbolRule> for Prefix {
+impl Visit<'_, SymbolRule> for Prefix {
     fn visit(pair: Pair<'_, SymbolRule>) -> Result<Self, Error> {
         let prefix = match pair.as_rule() {
             SymbolRule::pri_atto | SymbolRule::sec_atto => Self::Atto,
@@ -68,7 +68,7 @@ impl Visit<SymbolRule> for Prefix {
 // TODO: Move to atom_generator.
 //
 #[allow(clippy::too_many_lines)]
-impl Visit<SymbolRule> for Atom {
+impl Visit<'_, SymbolRule> for Atom {
     fn visit(pair: Pair<'_, SymbolRule>) -> Result<Self, Error> {
         let atom = match pair.as_rule() {
             SymbolRule::pri_acre_british | SymbolRule::sec_acre_british => Self::AcreBritish,

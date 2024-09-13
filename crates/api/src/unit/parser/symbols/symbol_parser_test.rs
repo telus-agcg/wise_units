@@ -1,6 +1,5 @@
 //! These tests are for the dynamically generated `symbol_parser` module.
 //!
-#![cfg(test)]
 #![allow(clippy::cognitive_complexity, non_fmt_panics)]
 
 use pest::{consumes_to, fails_with, parses_to, Parser};

@@ -65,7 +65,7 @@ pub const SPECIFIC_HEAT: Composition =
 ///
 /// For more info, see [https://en.wikipedia.org/wiki/Dimensional_analysis](https://en.wikipedia.org/wiki/Dimensional_analysis).
 ///
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Hash, Default)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 pub struct Composition {
     electric_charge: Option<Exponent>,
     length: Option<Exponent>,
@@ -314,6 +314,13 @@ impl Composition {
             && self.temperature.is_none()
             && self.time.is_none()
     }
+
+    /// Does this `Composition` represent a dimensionless unit?
+    ///
+    #[must_use]
+    pub const fn is_dimless(&self) -> bool {
+        self.is_empty()
+    }
 }
 
 // ╭──────────────╮
@@ -391,15 +398,9 @@ def_add_dimension!(add_time, time);
 /// which is the `3[the term's exponent]` * `2[the term's atom's length composition]`.
 ///
 /// ```rust
-/// use wise_units::{Atom, Composable, Term};
+/// use wise_units::{Atom, Composable, Term, term::variants::AtomExponent};
 ///
-/// let t = Term {
-///     prefix: None,
-///     atom: Some(Atom::Are),
-///     exponent: Some(3),
-///     factor: None,
-///     annotation: None
-/// };
+/// let t = Term::AtomExponent(AtomExponent::new(Atom::Are, 3));
 ///
 /// assert_eq!(&t.composition().to_string(), "L6");
 /// ```

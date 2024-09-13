@@ -146,6 +146,48 @@ impl Unit {
         self.to_string()
     }
 
+    /// If the unit terms are a fraction and can be reduced, this returns a new
+    /// `Unit` with those terms. Ex. terms that would normally render
+    /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
+    ///
+    /// ```rust
+    /// use wise_units::{Unit, parse_unit};
+    ///
+    /// let u = parse_unit!("[acr_us].[in_i]/[acr_us]");
+    /// assert_eq!(u.simplify(), parse_unit!("[in_i]"));
+    /// ```
+    ///
+    #[must_use]
+    pub fn simplify(&self) -> Self {
+        fn reduce_head_tail(remaining_terms: &[Term]) -> Option<(Term, term_reducing::WhatToKeep)> {
+            if let Some((head, tail)) = remaining_terms.split_first() {
+                Some((
+                    head.clone(),
+                    term_reducing::simplify_one_to_many(head, tail),
+                ))
+            } else {
+                None
+            }
+        }
+
+        let mut output: Vec<Term> = Vec::new();
+
+        if let Some((lhs, what_to_keep)) = reduce_head_tail(&self.terms) {
+            if what_to_keep.keep_lhs {
+                output.push(lhs);
+            }
+
+            output.extend(what_to_keep.new_terms);
+
+            Self::new(term_reducing::compare_and_cancel(
+                &output,
+                what_to_keep.kept_terms,
+            ))
+        } else {
+            self.clone()
+        }
+    }
+
     /// If the unit terms are a fraction and can be reduced, this returns those
     /// as a string. Ex. terms that would normally render
     /// `[acr_us].[in_i]/[acr_us]` would simply render `[in_i]`.
@@ -161,9 +203,34 @@ impl Unit {
     #[inline]
     #[must_use]
     pub fn expression_reduced(&self) -> String {
-        let reduced = term_reducing::reduce_terms(&self.terms);
+        self.simplify().to_string()
+    }
 
-        Self::new(reduced).to_string()
+    /// Convenience method for just getting internal `Terms` that have a non-negative exponent.
+    /// Used internally by `AsFraction`.
+    ///
+    pub fn numerator_terms(&self) -> impl Iterator<Item = &Term> {
+        self.terms
+            .iter()
+            .filter(|term| !term.effective_exponent().is_negative())
+    }
+
+    /// Convenience method for just getting internal `Terms` that have a negative exponent.
+    ///
+    pub fn denominator_terms(&self) -> impl Iterator<Item = &Term> {
+        self.terms
+            .iter()
+            .filter(|term| term.effective_exponent().is_negative())
+    }
+
+    /// Intended for comparing `Unit`s or `Measurements`, when the order of the `Term`s in a `Unit`
+    /// don't hold order (they're not sorted) after some operations. This allows tests to sort them
+    /// and thus tests to have valid expectations.
+    ///
+    #[cfg(test)]
+    pub(crate) fn sort_terms(&mut self) -> &mut Self {
+        self.terms.to_mut().sort_by_key(ToString::to_string);
+        self
     }
 }
 
@@ -185,13 +252,14 @@ impl<'a> TryFrom<&'a str> for Unit {
 
 #[cfg(test)]
 mod tests {
+    use crate::testing::const_units::l1::METER;
+
     use super::*;
     use std::str::FromStr;
 
     #[test]
     fn validate_is_unity() {
-        let unit = UNITY;
-        assert!(unit.is_unity());
+        assert!(UNITY.is_unity());
 
         let unit = Unit::new(Vec::new());
         assert!(!unit.is_unity());
@@ -208,56 +276,43 @@ mod tests {
 
     #[test]
     fn validate_expression_reduced() {
-        let unit = Unit::from_str("m").unwrap();
-        assert_eq!(unit.expression_reduced(), "m");
+        assert_eq!(METER.expression_reduced(), "m");
+        assert_eq!(UNITY.expression_reduced(), "1");
+        assert_eq!(parse_unit!("M").expression_reduced(), "m");
+        assert_eq!(parse_unit!("km/10m").expression_reduced(), "km/10m");
+        assert_eq!(parse_unit!("m-1").expression_reduced(), "/m");
+        assert_eq!(parse_unit!("10m").expression_reduced(), "10m");
+        assert_eq!(parse_unit!("10km").expression_reduced(), "10km");
+        assert_eq!(parse_unit!("10km-1").expression_reduced(), "/10km");
+        assert_eq!(parse_unit!("km-1/m2").expression_reduced(), "/km.m2");
+        assert_eq!(parse_unit!("km/m2.cm").expression_reduced(), "km/m2.cm");
+        assert_eq!(parse_unit!("km-1/m2.cm").expression_reduced(), "/km.m2.cm");
+        assert_eq!(parse_unit!("m/s2").expression_reduced(), "m/s2");
+        assert_eq!(parse_unit!("km3/nm2").expression_reduced(), "km3/nm2");
+        assert_eq!(parse_unit!("Kibit").expression_reduced(), "Kibit");
+        assert_eq!(parse_unit!("KiBy").expression_reduced(), "KiBy");
+        assert_eq!(parse_unit!("MiBy").expression_reduced(), "MiBy");
+        assert_eq!(parse_unit!("GiBy").expression_reduced(), "GiBy");
+        assert_eq!(parse_unit!("TiBy").expression_reduced(), "TiBy");
 
-        let unit = Unit::from_str("M").unwrap();
-        assert_eq!(unit.expression_reduced(), "m");
-
-        let unit = Unit::from_str("km/10m").unwrap();
-        assert_eq!(unit.expression_reduced(), "km/10m");
-
-        let unit = Unit::from_str("m-1").unwrap();
-        assert_eq!(unit.expression_reduced(), "/m");
-
-        let unit = Unit::from_str("10m").unwrap();
-        assert_eq!(unit.expression_reduced(), "10m");
-
-        let unit = Unit::from_str("10km").unwrap();
-        assert_eq!(unit.expression_reduced(), "10km");
-
-        let unit = Unit::from_str("10km-1").unwrap();
-        assert_eq!(unit.expression_reduced(), "/10km");
-
-        let unit = Unit::from_str("km-1/m2").unwrap();
-        assert_eq!(unit.expression_reduced(), "/m2.km");
-
-        let unit = Unit::from_str("km/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced(), "km/m2.cm");
-
-        let unit = Unit::from_str("km-1/m2.cm").unwrap();
-        assert_eq!(unit.expression_reduced(), "/m2.cm.km");
-
-        let unit = Unit::from_str("m/s2").unwrap();
-        assert_eq!(unit.expression_reduced(), "m/s2");
-
-        let unit = Unit::from_str("km3/nm2").unwrap();
-        assert_eq!(unit.expression_reduced(), "km3/nm2");
-
-        let unit = Unit::from_str("Kibit").unwrap();
-        assert_eq!(unit.expression_reduced(), "Kibit");
-
-        let unit = Unit::from_str("KiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "KiBy");
-
-        let unit = Unit::from_str("MiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "MiBy");
-
-        let unit = Unit::from_str("GiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "GiBy");
-
-        let unit = Unit::from_str("TiBy").unwrap();
-        assert_eq!(unit.expression_reduced(), "TiBy");
+        assert_eq!(parse_unit!("42km3{foo}").expression_reduced(), "42km3{foo}");
+        assert_eq!(
+            parse_unit!("42km3{foo}.42kg2{bar}").expression_reduced(),
+            "42km3{foo}.42kg2{bar}"
+        );
+        assert_eq!(
+            parse_unit!("42km3{foo}/42km2{foo}").expression_reduced(),
+            "42km{foo}"
+        );
+        assert_eq!(parse_unit!("km3.km/km2").expression_reduced(), "km2");
+        assert_eq!(
+            parse_unit!("{meow}/m2.g/{meow}").expression_reduced(),
+            "1+2{meow}/m2.g"
+        );
+        assert_eq!(
+            parse_unit!("{meow}/m2/g/{meow}").expression_reduced(),
+            "g/m2"
+        );
     }
 
     #[cfg(feature = "cffi")]

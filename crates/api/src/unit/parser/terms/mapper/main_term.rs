@@ -12,7 +12,7 @@ pub(super) struct MainTerm {
     pub(super) terms: Vec<Term>,
 }
 
-impl Visit<Rule> for MainTerm {
+impl Visit<'_, Rule> for MainTerm {
     fn visit(pair: Pair<'_, Rule>) -> Result<Self, Error> {
         let mut pairs = pair.into_inner();
 

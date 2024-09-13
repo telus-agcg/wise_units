@@ -5,6 +5,75 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+
+- New type: `crate::Annotation` now wraps `String`s inside `Term`s.
+- New type: `crate::term::Builder`. Intended for internal use only, but had to make public to
+  use it in the `term!()` macro.
+- New types: `crate::term::variants`:
+  - `AtomAnnotation`
+  - `AtomExponent`
+  - `AtomExponentAnnotation`
+  - `FactorAnnotation`
+  - `FactorAtom`
+  - `FactorAtomAnnotation`
+  - `FactorAtomExponent`
+  - `FactorAtomExponentAnnotation`
+  - `FactorExponent`
+  - `FactorExponentAnnotation`
+  - `FactorPrefixAtom`
+  - `FactorPrefixAtomAnnotation`
+  - `FactorPrefixAtomExponent`
+  - `FactorPrefixAtomExponentAnnotation`
+  - `PrefixAtom`
+  - `PrefixAtomAnnotation`
+  - `PrefixAtomExponent`
+  - `PrefixAtomExponentAnnotation`
+- `Unit::simplify()`, extracted from the (redesigned) innards of `Unit::expression_reduced()`.
+- Added `parse_unit!()` macro as a shortcut to `Unit::from_str(foo).unwrap()`.
+- Added two macros to allow checking exact equality of objects (since current
+  implementation of `PartialEq` does not do this):
+  - `assert_field_eq!()`
+  - `pretty_assert_field_eq!()`
+- `Composition` now derives `Ord`.
+- Added `impl From<Factor> for Term` and `impl From<Atom> for Term`.
+
+### Changed
+
+- `Term` refactored from `struct` to `enum` to represent only valid combinations of `factor`,
+  `prefix`, `atom`, `exponent`, and `annotation`.
+- `Term` fields (`factor`, `prefix`, `atom`, `exponent`, `annotation`) now only accessible
+  via accessor method.
+- `Term::new()` panics if passed only a `Prefix` (and no `Atom`).
+- `Term::is_unity()` is now `const`.
+- `impl Default for Term` now returns `term::UNITY` instead of a `Term` with 0 fields set.
+- `term!()` can now take, for `annotation`, any `T: ToString`.
+- The `term` module is now `pub`.
+- `IsCompatibleWith` now has default implementation that compares the `Composition` of the LHS and
+  RHS types. As a result, `IsCompatibleWith` now also requires both sides `impl Composable`.
+- (Internal) `AnnotationComposition` now uses `&str` instead of `String` when determining an
+  annotated `Term`'s composition.
+
+### Removed
+
+- `Term::has_value()` removed because this behavior is now encoded in the type.
+- Removed because was initially erroneously made `pub`, but now no longer used:
+  - `Term::exponent_is_positive()`
+  - `Term::exponent_is_negative()`
+  - `Term::factor_and_is_not_one()`
+  - `Term::factor_as_u32()`
+- Removed derive of `Ord` on `Atom`. The `PartialOrd` implementation is now manually implemented
+  instead of derived, and in some cases `Atom`s cannot be compared (ex. different
+  dimensions), so deriving `Ord` before was a mistake.
+- Removed `is_compatible_with::DefaultCompatibility` trait.
+
+### Fixed
+
+- `Atom` derived `PartialOrd`, which means it did not check to see if it's comparable to the
+  other `Atom`; it now checks for compatibility.
+
 ## [0.23.0] — 2024-05-30
 
 ### Added
