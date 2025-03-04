@@ -61,7 +61,7 @@ impl IsCompatibleWith for Term {
     }
 }
 
-impl<'a> IsCompatibleWith for Cow<'a, [Term]> {
+impl IsCompatibleWith for Cow<'_, [Term]> {
     fn is_compatible_with(&self, rhs: &Self) -> bool {
         if self.composition() != rhs.composition() {
             return false;

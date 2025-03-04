@@ -39,6 +39,7 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `pretty_assert_field_eq!()`
 - `Composition` now derives `Ord`.
 - Added `impl From<Factor> for Term` and `impl From<Atom> for Term`.
+- Added `v2::ops::CommensurableOrd` and implemented for `Atom`, `Term`, `Unit`, `Measurement`.
 
 ### Changed
 
