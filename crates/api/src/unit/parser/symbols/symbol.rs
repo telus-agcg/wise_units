@@ -15,7 +15,7 @@ pub(crate) enum Symbol {
     Unity,
 }
 
-impl Visit<Rule> for Symbol {
+impl Visit<'_, Rule> for Symbol {
     fn visit(pair: Pair<'_, Rule>) -> Result<Self, Error> {
         let mut pairs = pair.into_inner();
 

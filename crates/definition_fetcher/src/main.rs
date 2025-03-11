@@ -1,7 +1,6 @@
 #![forbid(unused_imports)]
 #![deny(unused_extern_crates)]
 #![warn(
-    box_pointers,
     future_incompatible,
     missing_copy_implementations,
     nonstandard_style,

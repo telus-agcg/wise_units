@@ -13,7 +13,9 @@ mod definition;
 mod display;
 mod function_set;
 mod hash;
+mod is_compatible_with;
 mod partial_eq;
+mod partial_ord;
 mod reducible;
 
 #[cfg(feature = "v2")]
@@ -22,10 +24,7 @@ mod v2;
 #[cfg(test)]
 mod atom_test;
 
-use crate::{
-    is_compatible_with::DefaultCompatibility, reducible::Reducible, Classification, Property,
-    UcumSymbol, UcumUnit, Unit,
-};
+use crate::{reducible::Reducible, Classification, Property, UcumSymbol, UcumUnit, Unit};
 
 #[allow(clippy::wildcard_imports)]
 use self::{
@@ -33,7 +32,7 @@ use self::{
     function_set::FunctionSet,
 };
 
-#[derive(Clone, Copy, Debug, Eq, PartialOrd, Ord)]
+#[derive(Clone, Copy, Debug, Eq)]
 pub enum Atom {
     Meter,
     Second,
@@ -2781,4 +2780,3 @@ impl UcumUnit for Atom {
         )
     }
 }
-impl DefaultCompatibility for Atom {}

@@ -1,19 +1,20 @@
 [package]
 name = "wise_units-ffi"
-version = "0.23.0"
+version = "0.24.0"
 description = "FFI wrapper for wise_units"
-repository = "https://github.com/agrian-inc/wise_units"
+repository = "https://github.com/telus-agcg/wise_units"
 license = "MIT"
-authors = ["Nicholas Smillie <nicholas@agrian.com>"]
+authors = ["Nicholas Smillie <nicholas@telusagcg.com>"]
 edition = "2021"
 publish = ["agrian-registry"]
 
 [dependencies]
 ffi_common.workspace = true
-wise_units = { version = "0.23", registry = "agrian-registry" }
+wise_units = { version = "0.24", registry = "agrian-registry" }
+# wise_units = { path = "../api" }
 
 [build-dependencies]
-cbindgen = "0.26.0"
+cbindgen = "0.27.0"
 
 [dev-dependencies]
 approx.workspace = true

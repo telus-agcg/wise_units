@@ -9,7 +9,7 @@ use super::Digits;
 
 pub(super) struct Exponent(pub(super) term::Exponent);
 
-impl Visit<TermRule> for Exponent {
+impl Visit<'_, TermRule> for Exponent {
     fn visit(pair: Pair<'_, TermRule>) -> Result<Self, Error> {
         let mut pairs = pair.into_inner();
 

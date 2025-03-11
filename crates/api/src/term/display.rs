@@ -10,7 +10,10 @@ impl fmt::Display for Term {
 
 #[cfg(test)]
 mod tests {
-    use crate::{term::UNITY, Term};
+    use crate::{
+        term::{FactorAnnotation, UNITY},
+        Annotation, Term,
+    };
 
     macro_rules! validate_display {
         ($test_name:ident, $term:expr, $output:expr) => {
@@ -30,23 +33,20 @@ mod tests {
         };
     }
 
-    validate_display!(validate_display_empty, "");
+    validate_display!(validate_display_default, "1");
     validate_display!(
         validate_display_empty_annotation,
-        {
-            let mut t = Term::new(None, None);
-            t.annotation = Some("seed".to_string());
-            t
-        },
+        Term::Annotation(Annotation::from("seed")),
         "{seed}"
     );
     validate_display!(validate_display_unity, UNITY, "1");
     validate_display!(
         validate_display_unity_annotation,
         {
-            let mut t = UNITY;
-            t.annotation = Some("seed".to_string());
-            t
+            Term::FactorAnnotation(FactorAnnotation {
+                factor: 1,
+                annotation: Annotation::from("seed"),
+            })
         },
         "{seed}"
     );
@@ -58,7 +58,7 @@ mod tests {
     );
     validate_display!(
         validate_display_meter_exponent1_annotation,
-        term!(Meter, exponent: -1, annotation: "seed".to_string()),
+        term!(Meter, exponent: -1, annotation: "seed"),
         "m-1{seed}"
     );
     validate_display!(
@@ -68,7 +68,7 @@ mod tests {
     );
     validate_display!(
         validate_display_meter_exponent_factor_annotation,
-        term!(Meter, exponent: -1, factor: 5, annotation: "seed".to_string()),
+        term!(Meter, exponent: -1, factor: 5, annotation: "seed"),
         "5m-1{seed}"
     );
     validate_display!(
@@ -94,7 +94,7 @@ mod tests {
     );
     validate_display!(
         validate_display_kilometer_factor_exponent_annotation,
-        term!(Kilo, Meter, factor: 10, exponent: -1, annotation: "seed".to_string()),
+        term!(Kilo, Meter, factor: 10, exponent: -1, annotation: "seed"),
         "10km-1{seed}"
     );
 }

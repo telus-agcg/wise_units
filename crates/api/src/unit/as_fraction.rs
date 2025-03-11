@@ -18,17 +18,15 @@ impl AsFraction for Unit {
         let mut parts = Parts::default();
 
         for term in &*self.terms {
-            match term.exponent {
-                Some(e) => {
-                    if e.is_negative() {
-                        parts.denominators.push(term.inv());
+            match term.exponent() {
+                Some(exponent) => {
+                    if exponent.is_negative() {
+                        parts.denominators.push(term.clone().inv());
                     } else {
                         parts.numerators.push(term.clone());
                     }
                 }
-                None => {
-                    parts.numerators.push(term.clone());
-                }
+                None => parts.numerators.push(term.clone()),
             }
         }
 
@@ -45,12 +43,7 @@ impl AsFraction for Unit {
 
     #[inline]
     fn numerator(&self) -> Self::Numerator {
-        let positive_terms: Vec<Term> = self
-            .terms
-            .iter()
-            .filter(|term| term.exponent.unwrap_or(1).is_positive())
-            .cloned()
-            .collect();
+        let positive_terms: Vec<Term> = self.numerator_terms().cloned().collect();
 
         if positive_terms.is_empty() {
             None
@@ -61,14 +54,7 @@ impl AsFraction for Unit {
 
     #[inline]
     fn denominator(&self) -> Self::Denominator {
-        let negative_terms: Vec<Term> = self
-            .terms
-            .iter()
-            .filter_map(|term| match term.exponent {
-                Some(e) if e.is_negative() => Some(term.inv()),
-                _ => None,
-            })
-            .collect();
+        let negative_terms: Vec<Term> = self.denominator_terms().map(Inv::inv).collect();
 
         if negative_terms.is_empty() {
             None
@@ -84,7 +70,9 @@ mod tests {
 
     use crate::{
         as_fraction::AsFraction,
-        testing::const_units::{GRAM_METER, METER, METER_PER_SECOND, PER_SECOND},
+        testing::const_units::{
+            l1::METER, l1m1::GRAM_METER, l1t_1::METER_PER_SECOND, t_1::PER_SECOND,
+        },
     };
 
     use super::Unit;
@@ -126,7 +114,7 @@ mod tests {
     }
 
     mod denominator {
-        use crate::testing::const_units::{PER_GRAM_METER, SECOND};
+        use crate::testing::const_units::{l_1m_1::PER_GRAM_METER, t1::SECOND};
 
         use super::*;
 
